@@ -44,7 +44,8 @@ function main(){
             }
         })
     }
-    
+
+    // CHQ: found where the code to save progress is
     async function saveToDB(id, data) {
     
         return new Promise(async (resolve, reject) => {
@@ -25237,13 +25238,17 @@ function BeeSwarmSimulator(DATA){
             }
         }
         
+        // CHQ: keys to press for certain displays
         document.onkeydown=function(e){
-            
+           
             out.keys[e.key.toLowerCase()]=true
             out.clickedKeys[e.key.toLowerCase()]=true
-            
+           
             if(e.key==='i') inventoryButton.onclick()
             if(e.key==='q') questButton.onclick()
+             if(e.key==='b') beesButton.onclick()
+            if(e.key==='n') beequipButton.onclick()
+            if(e.key==='p') settingsButton.onclick()
 
             if(player.currentMachineTrigger&&e.key==='e') player.currentMachineTrigger.func(player)
         }
