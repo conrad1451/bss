@@ -25241,16 +25241,25 @@ function BeeSwarmSimulator(DATA){
         
         // CHQ: keys to press for certain displays
         document.onkeydown=function(e){
+
+            // 38 - up arrow
+            // 40 - down
+            // 37 - left
+            // 39 - right
            
             out.keys[e.key.toLowerCase()]=true
             out.clickedKeys[e.key.toLowerCase()]=true
 
             // CHQ: test to see if any of these correspond to the up arrow
-            if(e.key==='up') inventoryButton.onclick()
+            // if(e.key==='up') inventoryButton.onclick()
             // 70 should be the key for 'f'
             // if(e.key===70) inventoryButton.onclick()
-            if(e.key==='uparrow') questButton.onclick()
-            if(e.key==='upArrow') beesButton.onclick()
+
+            if(e.keyCode == '38') inventoryButton.onclick()
+            
+            if(e.keyCode == '40') questButton.onclick()
+            
+            if(e.keyCode == '37') beesButton.onclick()
             if(e.key==='n') beequipButton.onclick()
             if(e.key==='p') settingsButton.onclick()
 
