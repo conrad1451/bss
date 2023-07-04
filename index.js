@@ -25244,12 +25244,13 @@ function BeeSwarmSimulator(DATA){
            
             out.keys[e.key.toLowerCase()]=true
             out.clickedKeys[e.key.toLowerCase()]=true
-           
-            if(e.key==='i') inventoryButton.onclick()
+
+            // CHQ: test to see if any of these correspond to the up arrow
+            if(e.key==='up') inventoryButton.onclick()
             // 70 should be the key for 'f'
             // if(e.key===70) inventoryButton.onclick()
-            if(e.key==='q') questButton.onclick()
-            if(e.key==='b') beesButton.onclick()
+            if(e.key==='uparrow') questButton.onclick()
+            if(e.key==='upArrow') beesButton.onclick()
             if(e.key==='n') beequipButton.onclick()
             if(e.key==='p') settingsButton.onclick()
 
