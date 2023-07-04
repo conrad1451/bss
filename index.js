@@ -25214,8 +25214,9 @@ function BeeSwarmSimulator(DATA){
                 
             } else {
                 
-                if(!player.pointerLocked)
-                    uiCanvas.requestPointerLock()
+                // CHQ: Maybe this will stop the automatic mouse grab
+                // if(!player.pointerLocked)
+                    // uiCanvas.requestPointerLock()
             }
             
         }
@@ -25246,7 +25247,7 @@ function BeeSwarmSimulator(DATA){
            
             if(e.key==='i') inventoryButton.onclick()
             if(e.key==='q') questButton.onclick()
-             if(e.key==='b') beesButton.onclick()
+            if(e.key==='b') beesButton.onclick()
             if(e.key==='n') beequipButton.onclick()
             if(e.key==='p') settingsButton.onclick()
 
@@ -30008,7 +30009,8 @@ function BeeSwarmSimulator(DATA){
         
     },false)
 
-    uiCanvas.requestPointerLock()
+    // CHQ: Maybe this will stop the automatic mouse grab
+    // uiCanvas.requestPointerLock()
 
     window.setInterval(()=>{SAVE_GAME();player.addMessage('Game Autosaved!')},30000)
 
