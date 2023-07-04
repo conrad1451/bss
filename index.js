@@ -25233,7 +25233,7 @@ function BeeSwarmSimulator(DATA){
             out.mouseY=e.y
             
             if(player.pointerLocked){
-                // CHQ: disabling the rotation movement to see what occurs
+                // CHQ: disabling the camera panning based on mouse capture
                 // player.yaw+=e.movementX*player.sensitivity
                 // player.pitch=MATH.constrain(player.pitch-e.movementY*player.sensitivity,-MATH.HALF_PI,MATH.HALF_PI)
             }
@@ -25245,9 +25245,9 @@ function BeeSwarmSimulator(DATA){
             out.keys[e.key.toLowerCase()]=true
             out.clickedKeys[e.key.toLowerCase()]=true
            
-            // if(e.key==='i') inventoryButton.onclick()
+            if(e.key==='i') inventoryButton.onclick()
             // 70 should be the key for 'f'
-            if(e.key===70) inventoryButton.onclick()
+            // if(e.key===70) inventoryButton.onclick()
             if(e.key==='q') questButton.onclick()
             if(e.key==='b') beesButton.onclick()
             if(e.key==='n') beequipButton.onclick()
