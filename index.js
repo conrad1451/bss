@@ -25250,16 +25250,28 @@ function BeeSwarmSimulator(DATA){
             out.keys[e.key.toLowerCase()]=true
             out.clickedKeys[e.key.toLowerCase()]=true
 
-            // CHQ: test to see if any of these correspond to the up arrow
-            // if(e.key==='up') inventoryButton.onclick()
-            // 70 should be the key for 'f'
-            // if(e.key===70) inventoryButton.onclick()
-
-            if(e.keyCode == '38') inventoryButton.onclick()
+            if(e.keyCode == '38')
+            {
+                player.pitch-=0.01;
+            }
+            else if(e.keyCode == '40')
+            {
+                player.pitch+=0.01;
+            }
+            if(e.keyCode == '37')
+            {
+                player.yaw-=0.01;
+            }
+            else if(e.keyCode == '39')
+            {
+                player.yaw+=0.01;
+            }
+             
+             
+            if(e.key==='i') inventoryButton.onclick()
+            if(e.key==='q') questButton.onclick()
+            if(e.key==='b') beesButton.onclick()
             
-            if(e.keyCode == '40') questButton.onclick()
-            
-            if(e.keyCode == '37') beesButton.onclick()
             if(e.key==='n') beequipButton.onclick()
             if(e.key==='p') settingsButton.onclick()
 
