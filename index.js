@@ -25233,9 +25233,9 @@ function BeeSwarmSimulator(DATA){
             out.mouseY=e.y
             
             if(player.pointerLocked){
-                
-                player.yaw+=e.movementX*player.sensitivity
-                player.pitch=MATH.constrain(player.pitch-e.movementY*player.sensitivity,-MATH.HALF_PI,MATH.HALF_PI)
+                // CHQ: disabling the rotation movement to see what occurs
+                // player.yaw+=e.movementX*player.sensitivity
+                // player.pitch=MATH.constrain(player.pitch-e.movementY*player.sensitivity,-MATH.HALF_PI,MATH.HALF_PI)
             }
         }
         
