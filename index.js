@@ -25215,9 +25215,10 @@ function BeeSwarmSimulator(DATA){
                 }
                 
             } else {
-                
-                if(!player.pointerLocked)
-                    uiCanvas.requestPointerLock()
+
+                // CHQ: stop the pointer lock, which intereferes with menu selection
+                // if(!player.pointerLocked)
+                    // uiCanvas.requestPointerLock()
             }
             
         }
@@ -30034,7 +30035,9 @@ function BeeSwarmSimulator(DATA){
         
     },false)
 
-    uiCanvas.requestPointerLock()
+
+    // CHQ: stop the pointer lock, which intereferes with menu selection
+    // uiCanvas.requestPointerLock()
 
     window.setInterval(()=>{SAVE_GAME();player.addMessage('Game Autosaved!')},30000)
 
