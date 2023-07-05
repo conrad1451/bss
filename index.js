@@ -508,7 +508,7 @@ function BeeSwarmSimulator(DATA){
         itemSVGCode[name]='<svg style="width:70px;height:70px;transform:SCALE">'+(itemSVGCode[name][itemSVGCode[name].length-1]).substr(0,itemSVGCode[name][itemSVGCode[name].length-1].indexOf('</svg>'))+'<title>'+MATH.doGrammar(name)+'</title></svg>'
     }
 
-    // CHQ: hartbarSlots are activated by mouse - one must click and drag mouse to respective location
+    // CHQ: hotbarSlots are activated by mouse - one must click and drag mouse to respective location
     for(let i in hotbarSlots){
         
         hotbarSlots[i].onmousedown=function(){
@@ -25214,9 +25214,8 @@ function BeeSwarmSimulator(DATA){
                 
             } else {
                 
-                // CHQ: Maybe this will stop the automatic mouse grab
-                // if(!player.pointerLocked)
-                    // uiCanvas.requestPointerLock()
+                if(!player.pointerLocked)
+                    uiCanvas.requestPointerLock()
             }
             
         }
@@ -30033,8 +30032,7 @@ function BeeSwarmSimulator(DATA){
         
     },false)
 
-    // CHQ: Maybe this will stop the automatic mouse grab
-    // uiCanvas.requestPointerLock()
+    uiCanvas.requestPointerLock()
 
     window.setInterval(()=>{SAVE_GAME();player.addMessage('Game Autosaved!')},30000)
 
