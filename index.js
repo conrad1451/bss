@@ -25122,6 +25122,8 @@ function BeeSwarmSimulator(DATA){
     }
 
     let user=(function(out){
+
+        let cameraRotationSpeed = 0.12;
         
         out.mouseX=0
         out.mouseY=0
@@ -25251,19 +25253,19 @@ function BeeSwarmSimulator(DATA){
 
             if(e.keyCode == '38')
             {
-                player.pitch-=0.01;
+                player.pitch-=(cameraRotationSpeed/2);
             }
             else if(e.keyCode == '40')
             {
-                player.pitch+=0.01;
+                player.pitch+=(cameraRotationSpeed/2);
             }
             if(e.keyCode == '37')
             {
-                player.yaw-=0.01;
+                player.yaw-=cameraRotationSpeed;
             }
             else if(e.keyCode == '39')
             {
-                player.yaw+=0.01;
+                player.yaw+=cameraRotationSpeed;
             }
              
              
