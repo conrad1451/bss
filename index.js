@@ -726,7 +726,7 @@ function BeeSwarmSimulator(DATA){
                 
                 SAVE_GAME()
                 player.addMessage('Game Saved!')
-                console.log('\n\n\n\n\nGame manually saved on ' + Date.now()+'\n\n\n\n\n')
+                console.log('\n\n\n\n\nGame manually saved on ' + Date.now()+'\n\n\n\n\n');
             }
 
             document.getElementById('resetChar').onclick=function(){
@@ -30040,7 +30040,7 @@ function BeeSwarmSimulator(DATA){
     // CHQ: stop the pointer lock, which intereferes with menu selection
     // uiCanvas.requestPointerLock()
 
-    window.setInterval(()=>{SAVE_GAME();player.addMessage('Game Autosaved!'); console.log('\n\n\n\n\nGame automatically saved on ' + Date.now()+'\n\n\n\n\n')},30000)
+    window.setInterval(()=>{SAVE_GAME();player.addMessage('Game Autosaved!'); console.log('\n\n\n\n\nGame automatically saved on ' + Date.now()+'\n\n\n\n\n');},30000)
 
     function setGlobalPuffshroomSpawn(){
 
