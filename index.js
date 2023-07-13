@@ -1820,7 +1820,7 @@ function BeeSwarmSimulator(DATA){
                     boots:'gummyBoots',
                     belt:'petalBelt',
                     backpack:'coconutCanister',
-                    mask:'rageMask',
+                    mask:'realRageMask',
                     leftGuard:'crimsonGuard',
                     rightGuard:'cobaltGuard',
                     glider:'glider',
@@ -1970,7 +1970,7 @@ function BeeSwarmSimulator(DATA){
                     boots:'gummyBoots',
                     belt:'petalBelt',
                     backpack:'coconutCanister',
-                    mask:'rageMask',
+                    mask:'realRageMask',
                     leftGuard:'crimsonGuard',
                     rightGuard:'cobaltGuard',
                     glider:'glider',
@@ -24912,7 +24912,7 @@ function BeeSwarmSimulator(DATA){
 
             items:[{
 
-                name:'rageMask',
+                name:'realRageMask',
                 slot:'mask',
                 viewMatrix:[-57,2.5,-11.5,-MATH.HALF_PI,0],
                 displayPos:[-61.5,2.5,-11.5],
