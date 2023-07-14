@@ -290,7 +290,7 @@ window.playerGear={
         }
     },
 
-    biscuitAmulet:{
+    moonAmulet:{
         
         mesh:function(box,cylinder,sphere,star){
 
@@ -512,7 +512,7 @@ window.playerGear={
 
             },
             desc:'A playful hat that keeps the sun out of your eyes.<br><br>x1.2 pollen<br>x1.05 bee ability rate<br>+10% defense<br>x1.1 jump power',
-            cost:['2500000 honey','15 gumdrops','10 pineapple','1 biscuit'],
+            cost:['2500000 honey','15 gumdrops','10 pineapple','1 moonCharm'],
         },
 
         beekeeperMask:{
@@ -636,7 +636,7 @@ window.playerGear={
                 player.addEffect('bubbleBombsPassive')
 
             },
-            desc:'Enhance your blue pollen gathering.<br><br>x2 capacity<br>x1.6 blue pollen<br>+20% instant blue conversion<br>x2 bubble pollen<br>x1.15 bee ability rate<br>+30% defense<br>+Passive: Bubble Bombs',
+            desc:'Harness the power of the sea to enhance your blue pollen gathering.<br><br>x2 capacity<br>x1.6 blue pollen<br>+20% instant blue conversion<br>x2 bubble pollen<br>x1.15 bee ability rate<br>+30% defense<br>+Passive: Bubble Bombs',
             cost:['50000000 honey','30 blueExtract','15 oil','5 glue','300 blueberry'],
         },
         
@@ -717,7 +717,7 @@ window.playerGear={
             cost:['5000000000 honey','250 blueExtract','1 diamondEgg','75 glitter','100 oil'],
         },
         
-        rageMask:{
+        demonMask:{
             
             mesh:function(box,cylinder,sphere){
                 
@@ -747,7 +747,7 @@ window.playerGear={
                 player.addEffect('xFlamePassive')
                 player.addEffect('ignitePassive')
             },
-            desc:'Become extremely powerful.<br><br>x2 capacity<br>x1.75 red field capacity<br>x1.75 red pollen<br>+50% instant flame conversion<br>x2 flame pollen<br>x1.25 bee attack<br>+35% defense<br>+20% bee ability rate<br>+Passive: X Flame<br>+Passive: Ignite',
+            desc:'Embrace hate to take on the form of a Demon Bee. Become both extremely unpleasant and powerful.<br><br>x2 capacity<br>x1.75 red field capacity<br>x1.75 red pollen<br>+50% instant flame conversion<br>x2 flame pollen<br>x1.25 bee attack<br>+35% defense<br>+20% bee ability rate<br>+Passive: X Flame<br>+Passive: Ignite',
             cost:['5000000000 honey','350 stinger','250 redExtract','100 enzymes','75 glue'],
         },
     },
@@ -1453,7 +1453,7 @@ window.playerGear={
                 stats.beeSpeed*=1.07
             },
             desc:'A right shoulder pad crafted by a Hasty Bee.<br><br>+15,000 capacity<br>x1.07 movespeed<br>x1.07 bee speed',
-            cost:['100000 honey','1 biscuit'],
+            cost:['100000 honey','1 moonCharm'],
         },
 
         braveGuard:{
@@ -1491,7 +1491,7 @@ window.playerGear={
                 stats.instantBlueConversion=window.applyPercentage(stats.instantBlueConversion,0.03)
             },
             desc:'A durable pad worn on the right shoulder of blue beekeepers.<br><br>+25,000 capacity<br>x1.1 blue pollen<br>x1.1 convert rate<br>+3% instant blue conversion<br>+1 blue bee attack',
-            cost:['1000000 honey','30 blueberry','1 royalJelly','1 biscuit'],
+            cost:['1000000 honey','30 blueberry','1 royalJelly','1 moonCharm'],
         },
 
         eliteBlueGuard:{
@@ -1514,7 +1514,7 @@ window.playerGear={
                 stats.criticalPower+=0.5
             },
             desc:'A blue guard reserved for the most dedicated blue beekeepers.<br><br>+75,000 capacity<br>x1.15 blue pollen<br>x1.15 convert rate<br>+5% instant blue conversion<br>+50% critical power<br>+1 blue bee attack',
-            cost:['3500000 honey','1 blueExtract','50 blueberry','3 royalJelly','3 biscuit'],
+            cost:['3500000 honey','1 blueExtract','50 blueberry','3 royalJelly','3 moonCharm'],
         },
 
         buckoGuard:{
@@ -1537,7 +1537,7 @@ window.playerGear={
                 stats.criticalPower+=0.75
             },
             desc:'A piece of armor forged by the leader of blue bees!<br><br>+150,000 capacity<br>x1.25 blue pollen<br>x1.25 convert rate<br>+10% instant blue conversion<br>+75% critical power<br>+2 blue bee attack',
-            cost:['20000000 honey','5 blueExtract','100 blueberry','1 glue','5 biscuit'],
+            cost:['20000000 honey','5 blueExtract','100 blueberry','1 glue','5 moonCharm'],
         },
 
         cobaltGuard:{
