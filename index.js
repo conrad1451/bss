@@ -385,14 +385,14 @@ function BeeSwarmSimulator(DATA){
     let blenderRecipes=[
         
         {item:'gumdrops',req:[['pineapple',1],['strawberry',1],['blueberry',1],['sunflowerSeed',1]]},
-        {item:'biscuit',req:[['royalJelly',1],['pineapple',2],['gumdrops',2]]},
+        {item:'moonCharm',req:[['royalJelly',1],['pineapple',2],['gumdrops',2]]},
         {item:'redExtract',req:[['strawberry',35],['royalJelly',5]]},
         {item:'blueExtract',req:[['blueberry',35],['royalJelly',5]]},
         {item:'enzymes',req:[['pineapple',35],['royalJelly',5]]},
         {item:'oil',req:[['sunflowerSeed',35],['royalJelly',5]]},
         {item:'glue',req:[['gumdrops',10],['royalJelly',5]]},
         {item:'tropicalDrink',req:[['coconut',5],['oil',1],['enzymes',1]]},
-        {item:'glitter',req:[['biscuit',5],['magicBean',1]]},
+        {item:'glitter',req:[['moonCharm',5],['magicBean',1]]},
         {item:'starJelly',req:[['royalJelly',75],['glitter',3]]},
         {item:'purplePotion',req:[['neonberry',3],['redExtract',1],['blueExtract',1],['glue',1]]},
         {item:'superSmoothie',req:[['neonberry',3],['starJelly',1],['purplePotion',1],['tropicalDrink',2]]},
@@ -416,10 +416,10 @@ function BeeSwarmSimulator(DATA){
         {item:'sunflowerSeed',rewardType:'honey',rewardAmount:1.5},
         {item:'bitterberry',rewardType:'winds',rewardAmount:1},
         {item:'neonberry',rewardType:'winds',rewardAmount:1},
-        {item:'biscuit',rewardType:'winds',rewardAmount:1},
+        {item:'moonCharm',rewardType:'winds',rewardAmount:1},
         {item:'royalJelly',rewardType:'honey',rewardAmount:2},
         {item:'starJelly',rewardType:'winds',rewardAmount:6},
-        {item:'biscuit',rewardType:'winds',rewardAmount:1},
+        {item:'moonCharm',rewardType:'winds',rewardAmount:1},
         {item:'starTreat',rewardType:'winds',rewardAmount:14},
         {item:'atomicTreat',rewardType:'winds',rewardAmount:6},
         {item:'ticket',rewardType:'winds',rewardAmount:1.1},
@@ -725,26 +725,8 @@ function BeeSwarmSimulator(DATA){
             document.getElementById('saveGame').onclick=function(){
                 
                 SAVE_GAME()
-                  // gives you your current date
-  const today = new Date();
-  const yyyy = today.getFullYear();
-  let mm = today.getMonth() + 1; // Months start at 0!
-  let dd = today.getDate();
-
-  if (dd < 10) dd = "0" + dd;
-  if (mm < 10) mm = "0" + mm;
-
-  const formattedToday = dd + "/" + mm + "/" + yyyy;
-  console.log(formattedToday, "in", "dd/mm/yyyy");
-
-                
                 player.addMessage('Game Saved!')
-
-
-                let timeMsecSinceStart = Date.now();
-                let curTime = new Date(timeMsecSinceStart).toString(); // "Sat Sep 13 275760 00:00:00 GMT+0000 (Coordinated Universal Time)"
-        
-                console.error('\n\n\n\n\nGame manually saved on ' +curTime +'\n\n\n\n\n');
+                console.error('\n\n\n\n\nGame manually saved on ' + Date.now()+'\n\n\n\n\n');
             }
 
             document.getElementById('resetChar').onclick=function(){
@@ -899,7 +881,7 @@ function BeeSwarmSimulator(DATA){
             }
         },
 
-        realRage_killbrick:{
+        demon_killbrick:{
 
             minX:-45-20,maxX:-45+20,minY:-10,maxY:-5,minZ:-20-15,maxZ:-20+15,contactFunc:function(player){player.health=-Infinity}
         },
@@ -1089,7 +1071,7 @@ function BeeSwarmSimulator(DATA){
             minX:29-2,maxX:29+2,minY:27,maxY:32,minZ:90,maxZ:93
         },
 
-        realRage_shop:{
+        demon_shop:{
             
             minX:-62,maxX:-57,minY:0,maxY:5,minZ:-11.5-3,maxZ:-11.5+3
         },
@@ -1248,11 +1230,11 @@ function BeeSwarmSimulator(DATA){
             
             isMachine:true,requirements:function(player){
                 
-                if(items.biscuit.amount<50) return 'You need 50 moon charms to create a moon amulet!'
+                if(items.moonCharm.amount<50) return 'You need 50 moon charms to create a moon amulet!'
 
             },minX:-15-4.5*0.5,maxX:-15+4.5*0.5,minY:11,maxY:18,minZ:60.5-2,maxZ:60.5+2,message:'Generate Moon Amulet<br>(50 Moon Charms)',func:function(player){
                 
-                items.biscuit.amount-=50
+                items.moonCharm.amount-=50
                 player.updateInventory()
 
                 let amulet=[]
@@ -1838,7 +1820,7 @@ function BeeSwarmSimulator(DATA){
                     boots:'gummyBoots',
                     belt:'petalBelt',
                     backpack:'coconutCanister',
-                    mask:'realRageMask',
+                    mask:'demonMask',
                     leftGuard:'crimsonGuard',
                     rightGuard:'cobaltGuard',
                     glider:'glider',
@@ -1970,7 +1952,7 @@ function BeeSwarmSimulator(DATA){
                 player.addSlot('lion')
                 player.addSlot('lion',0)
                 player.addSlot('shy',0)
-                player.addSlot('realRage',0)
+                player.addSlot('demon',0)
                 player.addSlot('diamond')
                 player.addSlot('carpenter',0)
                 player.addSlot('carpenter',0)
@@ -1988,7 +1970,7 @@ function BeeSwarmSimulator(DATA){
                     boots:'gummyBoots',
                     belt:'petalBelt',
                     backpack:'coconutCanister',
-                    mask:'realRageMask',
+                    mask:'demonMask',
                     leftGuard:'crimsonGuard',
                     rightGuard:'cobaltGuard',
                     glider:'glider',
@@ -2563,7 +2545,7 @@ function BeeSwarmSimulator(DATA){
             u:128*14/2048,v:256/2048,meshPartId:0,gatherSpeed:4,gatherAmount:10,speed:14,convertSpeed:4,convertAmount:1000,attack:1,energy:20,tokens:['blueBomb_'],rarity:'legendary',color:'blue',description:"This affectionate bee was raised by cats. It becomes a better worker as it warms up to you",giftedHiveBonus:{oper:'*',stat:'convertRate',num:1.5},particles:function(bee){ParticleRenderer.add({x:bee.pos[0]+MATH.random(-0.5,0.5),y:bee.pos[1]+MATH.random(-0.5,0.5),z:bee.pos[2]+MATH.random(-0.5,0.5),vx:0,vy:0,vz:0,grav:0,size:MATH.random(15,70),col:[1,1,1],life:0.25,rotVel:MATH.random(-6,6),alpha:1})},favoriteTreat:'blueberry'
         },
         
-        realRage:{
+        demon:{
             
             u:128*15/2048,v:256/2048,meshPartId:11,gatherSpeed:4,gatherAmount:35,speed:10.5,convertSpeed:4,convertAmount:60,attack:8,energy:20,tokens:['redBomb','redBomb_'],rarity:'legendary',color:'red',description:"A powerful bee with magical powers fueled by pure hatred.",giftedHiveBonus:{oper:'+',stat:'instantBombConversion',num:0.15},gatheringPassive:function(bee){if(Math.random()<(bee.gifted?0.75:0.55)){objects.explosions.push(new Explosion({col:[1,0.5,0],pos:[Math.round(bee.pos[0]),bee.pos[1]-0.225,Math.round(bee.pos[2])],life:0.5,size:1.5,speed:0.5,aftershock:0.01,height:0.01}));objects.flames.push(new Flame(player.fieldIn,bee.flowerCollecting[0],bee.flowerCollecting[1]))}},particles:function(bee){ParticleRenderer.add({x:bee.pos[0],y:bee.pos[1],z:bee.pos[2],vx:MATH.random(-0.3,0.3),vy:MATH.random(-0.3,0.3),vz:MATH.random(-0.3,0.3),grav:0,size:MATH.random(80,130),col:[1,MATH.random(0.4,0.7),0],life:1.5,rotVel:MATH.random(-3,3),alpha:2.5})},favoriteTreat:'pineapple'
         },
@@ -8115,7 +8097,7 @@ function BeeSwarmSimulator(DATA){
             }
         },
         
-        biscuit:{
+        moonCharm:{
             
             canUseOnSlot:(slot)=>{
                 
@@ -8134,7 +8116,7 @@ function BeeSwarmSimulator(DATA){
                 //           amount the player specified and the amount that the user actually has
                 howManyToFeed.onmousemove=feedAmount.oninput=function(){
                     let a=feedAmount.value
-                    feedAmount.value=MATH.constrain(a,1,items.biscuit.amount)
+                    feedAmount.value=MATH.constrain(a,1,items.moonCharm.amount)
                 }
                 
                 document.getElementById('cancelFeeding').onclick=function(){
@@ -8145,8 +8127,8 @@ function BeeSwarmSimulator(DATA){
                     howManyToFeed.style.display='none'
                     
                     let amount=feedAmount.value
-                    items.biscuit.amount-=amount
-                    player.stats.biscuit+=Number(amount)
+                    items.moonCharm.amount-=amount
+                    player.stats.moonCharm+=Number(amount)
                     player.updateInventory()
                     
                     let addedBond=amount*250*player.bondFromTreats|0
@@ -12192,16 +12174,16 @@ function BeeSwarmSimulator(DATA){
                             case 'spider':
 
                                 amountOfTokens+=7
-                                dropTable=['treat','treat','treat','pineapple','sunflowerSeed','gumdrops','treat','treat','treat','pineapple','sunflowerSeed','gumdrops','glue','enzymes','oil','fieldDice','ticket','ticket','royalJelly','ticket','royalJelly','biscuit','biscuit','magicBean','magicBean','magicBean','magicBean','microConverter','microConverter','microConverter']
-                                dropAmountTable={treat:[1,1,1,1,5,5,5,10,10,15],enzymes:[1,1,1,1,1,1,1,2,2,3],oil:[1,1,1,1,1,1,1,2,2,3],fieldDice:[1,1,1,1,1,2,2,3],glue:[1,1,1,1,1,1,3,3,5],pineapple:[1,1,1,1,1,1,1,3,3,3,5,5,10],sunflowerSeed:[1,1,1,1,1,1,1,3,3,3,5,5,10],gumdrops:[1,1,1,1,1,1,1,5,5,10],ticket:[1,1,1,1,1,1,1,1,3,3,5],royalJelly:[1,1,1,1,1,1,1,3,3,5],biscuit:[1,1,1,1,3,3,5],magicBean:[1,1,1,1,1,1,2,2,3,5],microConverter:[1,1,1,1,3,5]}
+                                dropTable=['treat','treat','treat','pineapple','sunflowerSeed','gumdrops','treat','treat','treat','pineapple','sunflowerSeed','gumdrops','glue','enzymes','oil','fieldDice','ticket','ticket','royalJelly','ticket','royalJelly','moonCharm','moonCharm','magicBean','magicBean','magicBean','magicBean','microConverter','microConverter','microConverter']
+                                dropAmountTable={treat:[1,1,1,1,5,5,5,10,10,15],enzymes:[1,1,1,1,1,1,1,2,2,3],oil:[1,1,1,1,1,1,1,2,2,3],fieldDice:[1,1,1,1,1,2,2,3],glue:[1,1,1,1,1,1,3,3,5],pineapple:[1,1,1,1,1,1,1,3,3,3,5,5,10],sunflowerSeed:[1,1,1,1,1,1,1,3,3,3,5,5,10],gumdrops:[1,1,1,1,1,1,1,5,5,10],ticket:[1,1,1,1,1,1,1,1,3,3,5],royalJelly:[1,1,1,1,1,1,1,3,3,5],moonCharm:[1,1,1,1,3,3,5],magicBean:[1,1,1,1,1,1,2,2,3,5],microConverter:[1,1,1,1,3,5]}
 
                             break
 
                             case 'werewolf':
 
                                 amountOfTokens+=9
-                                dropTable=['treat','treat','treat','pineapple','sunflowerSeed','gumdrops','treat','treat','treat','pineapple','sunflowerSeed','gumdrops','gumdrops','glue','enzymes','oil','fieldDice','fieldDice','smoothDice','treat','treat','treat','pineapple','sunflowerSeed','gumdrops','treat','treat','treat','pineapple','sunflowerSeed','gumdrops','glue','glue','enzymes','oil','fieldDice','fieldDice','smoothDice','loadedDice','ticket','royalJelly','ticket','royalJelly','ticket','ticket','royalJelly','antPass','biscuit','biscuit','magicBean','microConverter','microConverter','microConverter','microConverter']
-                                dropAmountTable={treat:[1,1,1,1,5,5,5,15,20,35],enzymes:[1,1,1,1,1,1,1,2,2,3],oil:[1,1,1,1,1,1,1,2,2,3],fieldDice:[1,1,1,1,1,2,2,3],smoothDice:[1,1,1,1,1,1,1,1,1,1,3],loadedDice:[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,3],glue:[1,1,1,1,1,1,1,3,3,5,10,15],pineapple:[1,1,1,1,1,1,3,3,3,5,5,10,15,25],sunflowerSeed:[1,1,1,1,1,1,3,3,3,5,5,10,15,25],gumdrops:[1,1,1,1,1,1,5,5,5,10,10,15],ticket:[1,1,1,1,1,1,3,3,5,10],royalJelly:[1,1,1,1,1,1,3,3,5,10,15],antPass:[1],biscuit:[1,1,1,1,3,3,5],magicBean:[1,1,1,1,1,2,2,3,5],microConverter:[1,1,1,1,3,5]}
+                                dropTable=['treat','treat','treat','pineapple','sunflowerSeed','gumdrops','treat','treat','treat','pineapple','sunflowerSeed','gumdrops','gumdrops','glue','enzymes','oil','fieldDice','fieldDice','smoothDice','treat','treat','treat','pineapple','sunflowerSeed','gumdrops','treat','treat','treat','pineapple','sunflowerSeed','gumdrops','glue','glue','enzymes','oil','fieldDice','fieldDice','smoothDice','loadedDice','ticket','royalJelly','ticket','royalJelly','ticket','ticket','royalJelly','antPass','moonCharm','moonCharm','magicBean','microConverter','microConverter','microConverter','microConverter']
+                                dropAmountTable={treat:[1,1,1,1,5,5,5,15,20,35],enzymes:[1,1,1,1,1,1,1,2,2,3],oil:[1,1,1,1,1,1,1,2,2,3],fieldDice:[1,1,1,1,1,2,2,3],smoothDice:[1,1,1,1,1,1,1,1,1,1,3],loadedDice:[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,3],glue:[1,1,1,1,1,1,1,3,3,5,10,15],pineapple:[1,1,1,1,1,1,3,3,3,5,5,10,15,25],sunflowerSeed:[1,1,1,1,1,1,3,3,3,5,5,10,15,25],gumdrops:[1,1,1,1,1,1,5,5,5,10,10,15],ticket:[1,1,1,1,1,1,3,3,5,10],royalJelly:[1,1,1,1,1,1,3,3,5,10,15],antPass:[1],moonCharm:[1,1,1,1,3,3,5],magicBean:[1,1,1,1,1,2,2,3,5],microConverter:[1,1,1,1,3,5]}
 
                             break
 
@@ -12225,8 +12207,8 @@ function BeeSwarmSimulator(DATA){
 
                                 amountOfTokens+=12
 
-                                dropTable=['treat','treat','treat','treat','treat','redExtract','blueExtract','redExtract','blueExtract','redExtract','blueExtract','gumdrops','ticket','royalJelly','gumdrops','ticket','royalJelly','gumdrops','ticket','royalJelly','microConverter','microConverter','microConverter','fieldDice','fieldDice','fieldDice','smoothDice','smoothDice','loadedDice','antPass','biscuit','antPass','biscuit','oil','enzymes','glitter','glue','purplePotion','roboPass','magicBean','magicBean','magicBean','magicBean']
-                                dropAmountTable={treat:[15,15,15,20,25,25,25,50,50,50,50,100,100,100,150,150,175,175,250,350,500],redExtract:[1,1,1,1,1,1,1,3,3,3,5,5,10],blueExtract:[1,1,1,1,1,1,1,3,3,3,5,5,10],gumdrops:[3,3,3,3,5,5,5,15,15,25],ticket:[1,1,1,1,3,3,3,5,5,10],royalJelly:[1,1,3,3,3,3,3,5,5,10],microConverter:[1,1,1,1,1,3,3,5],fieldDice:[1,1,1,1,1,3,3,5],smoothDice:[1,1,1,1,1,1,2,2,2,3],loadedDice:[1],antPass:[1,1,1,1,1,3,3,3,5],biscuit:[3,3,3,3,5,5,5,15,15,25],oil:[1,1,1,1,1,3,3,5],enzymes:[1,1,1,1,1,3,3,5],glitter:[1,1,1,1,1,3,3,5],glue:[1,1,1,1,1,3,3,5],purplePotion:[1],roboPass:[1,1,1,2],magicBean:[1,1,1,1,1,2,2,3,3,4,5]}
+                                dropTable=['treat','treat','treat','treat','treat','redExtract','blueExtract','redExtract','blueExtract','redExtract','blueExtract','gumdrops','ticket','royalJelly','gumdrops','ticket','royalJelly','gumdrops','ticket','royalJelly','microConverter','microConverter','microConverter','fieldDice','fieldDice','fieldDice','smoothDice','smoothDice','loadedDice','antPass','moonCharm','antPass','moonCharm','oil','enzymes','glitter','glue','purplePotion','roboPass','magicBean','magicBean','magicBean','magicBean']
+                                dropAmountTable={treat:[15,15,15,20,25,25,25,50,50,50,50,100,100,100,150,150,175,175,250,350,500],redExtract:[1,1,1,1,1,1,1,3,3,3,5,5,10],blueExtract:[1,1,1,1,1,1,1,3,3,3,5,5,10],gumdrops:[3,3,3,3,5,5,5,15,15,25],ticket:[1,1,1,1,3,3,3,5,5,10],royalJelly:[1,1,3,3,3,3,3,5,5,10],microConverter:[1,1,1,1,1,3,3,5],fieldDice:[1,1,1,1,1,3,3,5],smoothDice:[1,1,1,1,1,1,2,2,2,3],loadedDice:[1],antPass:[1,1,1,1,1,3,3,3,5],moonCharm:[3,3,3,3,5,5,5,15,15,25],oil:[1,1,1,1,1,3,3,5],enzymes:[1,1,1,1,1,3,3,5],glitter:[1,1,1,1,1,3,3,5],glue:[1,1,1,1,1,3,3,5],purplePotion:[1],roboPass:[1,1,1,2],magicBean:[1,1,1,1,1,2,2,3,3,4,5]}
 
                                 if(Math.random()<0.5){
 
@@ -12252,9 +12234,9 @@ function BeeSwarmSimulator(DATA){
 
                                 amountOfTokens+=14
 
-                                dropTable=['treat','treat','treat','treat','treat','sunflowerSeed','sunflowerSeed','pineapple','pineapple','redExtract','blueExtract','redExtract','blueExtract','redExtract','blueExtract','gumdrops','ticket','royalJelly','gumdrops','ticket','royalJelly','gumdrops','ticket','royalJelly','microConverter','microConverter','microConverter','fieldDice','fieldDice','fieldDice','smoothDice','smoothDice','loadedDice','antPass','biscuit','antPass','biscuit','oil','enzymes','glitter','glue','loadedDice','purplePotion','superSmoothie','roboPass','magicBean','magicBean','magicBean','magicBean','magicBean']
+                                dropTable=['treat','treat','treat','treat','treat','sunflowerSeed','sunflowerSeed','pineapple','pineapple','redExtract','blueExtract','redExtract','blueExtract','redExtract','blueExtract','gumdrops','ticket','royalJelly','gumdrops','ticket','royalJelly','gumdrops','ticket','royalJelly','microConverter','microConverter','microConverter','fieldDice','fieldDice','fieldDice','smoothDice','smoothDice','loadedDice','antPass','moonCharm','antPass','moonCharm','oil','enzymes','glitter','glue','loadedDice','purplePotion','superSmoothie','roboPass','magicBean','magicBean','magicBean','magicBean','magicBean']
                                 dropTable=[...dropTable,...dropTable,'giftedSilverEgg','giftedGoldEgg','giftedDiamondEgg']
-                                dropAmountTable={treat:[25,25,25,50,50,50,100,100,250,500,1000,5000,10000],sunflowerSeed:[10,10,15,15,20,20,25,50],pineapple:[10,10,15,15,20,20,25,50],redExtract:[1,1,1,1,1,1,1,3,3,3,5,5,10],blueExtract:[1,1,1,1,1,1,1,3,3,3,5,5,10],gumdrops:[3,3,3,3,5,5,5,15,15,25],ticket:[1,1,1,1,3,3,3,5,5,10],royalJelly:[1,1,3,3,3,3,3,5,5,10],microConverter:[1,1,1,1,1,3,3,5],fieldDice:[1,1,1,1,1,3,3,5],smoothDice:[1,1,1,1,1,1,2,2,2,3],loadedDice:[1],antPass:[1,1,1,1,1,3,3,3,5],biscuit:[3,3,3,3,5,5,5,15,15,25],oil:[1,1,1,1,1,3,3,5],enzymes:[1,1,1,1,1,3,3,5],glitter:[1,1,1,1,1,3,3,5],glue:[1,1,1,1,1,3,3,5],loadedDice:[1],purplePotion:[1],superSmoothie:[1],giftedSilverEgg:[1],giftedGoldEgg:[1],giftedDiamondEgg:[1],roboPass:[1,1,1,1,1,2,2,3],magicBean:[1,1,1,3,3,5]}
+                                dropAmountTable={treat:[25,25,25,50,50,50,100,100,250,500,1000,5000,10000],sunflowerSeed:[10,10,15,15,20,20,25,50],pineapple:[10,10,15,15,20,20,25,50],redExtract:[1,1,1,1,1,1,1,3,3,3,5,5,10],blueExtract:[1,1,1,1,1,1,1,3,3,3,5,5,10],gumdrops:[3,3,3,3,5,5,5,15,15,25],ticket:[1,1,1,1,3,3,3,5,5,10],royalJelly:[1,1,3,3,3,3,3,5,5,10],microConverter:[1,1,1,1,1,3,3,5],fieldDice:[1,1,1,1,1,3,3,5],smoothDice:[1,1,1,1,1,1,2,2,2,3],loadedDice:[1],antPass:[1,1,1,1,1,3,3,3,5],moonCharm:[3,3,3,3,5,5,5,15,15,25],oil:[1,1,1,1,1,3,3,5],enzymes:[1,1,1,1,1,3,3,5],glitter:[1,1,1,1,1,3,3,5],glue:[1,1,1,1,1,3,3,5],loadedDice:[1],purplePotion:[1],superSmoothie:[1],giftedSilverEgg:[1],giftedGoldEgg:[1],giftedDiamondEgg:[1],roboPass:[1,1,1,1,1,2,2,3],magicBean:[1,1,1,3,3,5]}
 
                             break
                         }
@@ -14018,7 +14000,7 @@ function BeeSwarmSimulator(DATA){
 
             if(!isAllWaitingAir){
 
-                let tt='biscuit'
+                let tt='moonCharm'
 
                 if(Math.random()<0.07) tt=Math.random()<0.1?'starJelly':'glitter'
 
@@ -16520,7 +16502,7 @@ function BeeSwarmSimulator(DATA){
 
             dropTable.splice(dropTable.indexOf('smoothDice'),1)
             dropTable.splice(dropTable.indexOf('loadedDice'),1)
-            dropTable.splice(dropTable.indexOf('biscuit'),1)
+            dropTable.splice(dropTable.indexOf('moonCharm'),1)
             dropTable.splice(dropTable.indexOf('turpentine'),1)
 
             if(this.field!=='CoconutField'){
@@ -17294,13 +17276,13 @@ function BeeSwarmSimulator(DATA){
 
             if(this.type==='moon'){
 
-                dropTable=['treat','biscuit']
-                dropRates.biscuit=4
+                dropTable=['treat','moonCharm']
+                dropRates.moonCharm=4
                 dropRates.treat=1
 
             } else {
 
-                dropTable.splice(dropTable.indexOf('biscuit'),1)
+                dropTable.splice(dropTable.indexOf('moonCharm'),1)
             }
 
             let totalChance=0
@@ -22298,7 +22280,7 @@ function BeeSwarmSimulator(DATA){
                     case 'bubble':passive=['Gathering Bubbbles',"Has a 35%(50% if gifted) to summon a bubble when collecting.<br><br>Bubbles last for 10s. When popped, they collect 10B/6W/2R pollen and replenish 33 flowers. Pollen collected is multiplied by 10% per gifted blue bee type."]
                     break
 
-                    case 'realRage':passive=['Gathering Flames',"Has a 55%(75% if gifted) to summon a flame when collecting.<br><br>Flames last for 3s, collecting 10R/4W/1B pollen from 9 nearby flowers every second. Pollen collected is multiplied by 4% per red bee(8% is gifted). Flames also deal 15 damage to mobs every second. Standing in flames grant Flame Heat, lasting for 20s, and giving up to x2 red pollen and x1.2 bee attack."]
+                    case 'demon':passive=['Gathering Flames',"Has a 55%(75% if gifted) to summon a flame when collecting.<br><br>Flames last for 3s, collecting 10R/4W/1B pollen from 9 nearby flowers every second. Pollen collected is multiplied by 4% per red bee(8% is gifted). Flames also deal 15 damage to mobs every second. Standing in flames grant Flame Heat, lasting for 20s, and giving up to x2 red pollen and x1.2 bee attack."]
                     break
 
                     case 'diamond':passive=['Shimmering Honey',"Whenever this bee converts at the hive, it grants 40% bonus honey (+3% per level). This bonus is doubled if the bee is gifted."]
@@ -24780,7 +24762,7 @@ function BeeSwarmSimulator(DATA){
                 name:'comfortingVial',
                 slot:'item',
                 viewMatrix:[-98,26,121-2,Math.PI,0],
-                cost:[n=>Math.floor(Math.min(Math.pow(1.125,n)*1000000,1000000000000))+' honey','5 ticket','5 biscuit'],
+                cost:[n=>Math.floor(Math.min(Math.pow(1.125,n)*1000000,1000000000000))+' honey','5 ticket','5 moonCharm'],
                 desc:'Instantly grants 1h of Comforting nectar.'
             },{
 
@@ -24926,18 +24908,18 @@ function BeeSwarmSimulator(DATA){
             currentIndex:0,message:'View Diamond Mask'
         },
 
-        realRage:{
+        demon:{
 
             items:[{
 
-                name:'realRageMask',
+                name:'demonMask',
                 slot:'mask',
                 viewMatrix:[-57,2.5,-11.5,-MATH.HALF_PI,0],
                 displayPos:[-61.5,2.5,-11.5],
                 displayRot:[0,90,-20],
                 displayScale:[1.5,1.5,1.5],
             }],
-            currentIndex:0,message:'View realRage Mask'
+            currentIndex:0,message:'View Demon Mask'
         },
 
         ticketTent:{
@@ -25219,7 +25201,7 @@ function BeeSwarmSimulator(DATA){
                                 
                                 items[player.itemDragging].cooldown=TIME
                                 player.addMessage('-1 '+MATH.doGrammar(player.itemDragging))
-                                if(['treat','atomicTreat','starTreat','pineapple','sunflowerSeed','blueberry','strawberry','biscuit','bitterberry','neonberry'].indexOf(player.itemDragging)<0) player.stats[player.itemDragging]++
+                                if(['treat','atomicTreat','starTreat','pineapple','sunflowerSeed','blueberry','strawberry','moonCharm','bitterberry','neonberry'].indexOf(player.itemDragging)<0) player.stats[player.itemDragging]++
                             }
                             
                             player.updateInventory()
@@ -30058,16 +30040,7 @@ function BeeSwarmSimulator(DATA){
     // CHQ: stop the pointer lock, which intereferes with menu selection
     // uiCanvas.requestPointerLock()
 
-    window.setInterval(()=>{
-        SAVE_GAME();
-        player.addMessage('Game Autosaved!'); 
-
-        let saveInterval = 30;
-        let theSeconds = 1000;
-
-                        let timeMsecSinceStart = Date.now();
-                let curTime = new Date(timeMsecSinceStart).toString(); // "Sat Sep 13 275760 00:00:00 GMT+0000 (Coordinated Universal Time)"
-        console.error('\n\n\n\n\nGame automatically saved on ' +curTime +'\n\n\n\n\n');},saveInterval*theSeconds)
+    window.setInterval(()=>{SAVE_GAME();player.addMessage('Game Autosaved!'); console.error('\n\n\n\n\nGame automatically saved on ' + Date.now()+'\n\n\n\n\n');},30000)
 
     function setGlobalPuffshroomSpawn(){
 
