@@ -735,7 +735,7 @@ function BeeSwarmSimulator(DATA){
                   if (mm < 10) mm = "0" + mm;
                 
                   const formattedToday = dd + "/" + mm + "/" + yyyy;
-                  console.log(formattedToday, "in", "dd/mm/yyyy");
+                  //console.error(formattedToday, "in", "dd/mm/yyyy");
 
                 player.addMessage('Game Saved!')
                let timeMsecSinceStart = Date.now();
