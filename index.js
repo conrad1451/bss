@@ -725,8 +725,23 @@ function BeeSwarmSimulator(DATA){
             document.getElementById('saveGame').onclick=function(){
                 
                 SAVE_GAME()
+                  // gives you your current date
+                  const today = new Date();
+                  const yyyy = today.getFullYear();
+                  let mm = today.getMonth() + 1; // Months start at 0!
+                  let dd = today.getDate();
+                
+                  if (dd < 10) dd = "0" + dd;
+                  if (mm < 10) mm = "0" + mm;
+                
+                  const formattedToday = dd + "/" + mm + "/" + yyyy;
+                  console.log(formattedToday, "in", "dd/mm/yyyy");
+
                 player.addMessage('Game Saved!')
-                console.error('\n\n\n\n\nGame manually saved on ' + Date.now()+'\n\n\n\n\n');
+               let timeMsecSinceStart = Date.now();
+                let curTime = new Date(timeMsecSinceStart).toString(); // "Sat Sep 13 275760 00:00:00 GMT+0000 (Coordinated Universal Time)"
+
+                console.error('\n\n\n\n\nGame manually saved on ' +curTime +'\n\n\n\n\n');
             }
 
             document.getElementById('resetChar').onclick=function(){
@@ -30040,7 +30055,16 @@ function BeeSwarmSimulator(DATA){
     // CHQ: stop the pointer lock, which intereferes with menu selection
     // uiCanvas.requestPointerLock()
 
-    window.setInterval(()=>{SAVE_GAME();player.addMessage('Game Autosaved!'); console.error('\n\n\n\n\nGame automatically saved on ' + Date.now()+'\n\n\n\n\n');},30000)
+    window.setInterval(()=>{
+        SAVE_GAME();
+        player.addMessage('Game Autosaved!'); 
+
+        let saveInterval = 30;
+        let theSeconds = 1000;
+
+                        let timeMsecSinceStart = Date.now();
+                let curTime = new Date(timeMsecSinceStart).toString(); // "Sat Sep 13 275760 00:00:00 GMT+0000 (Coordinated Universal Time)"
+        console.error('\n\n\n\n\nGame automatically saved on ' +curTime +'\n\n\n\n\n');},saveInterval*theSeconds)
 
     function setGlobalPuffshroomSpawn(){
 
