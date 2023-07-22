@@ -1227,7 +1227,7 @@ function BeeSwarmSimulator(DATA){
             }
         },
 
-        moon_amulet_generator:{
+        biscuit_amulet_generator:{
             
             isMachine:true,requirements:function(player){
                 
