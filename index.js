@@ -1231,9 +1231,9 @@ function BeeSwarmSimulator(DATA){
             
             isMachine:true,requirements:function(player){
                 
-                if(items.biscuit.amount<50) return 'You need 50 moon charms to create a moon amulet!'
+                if(items.biscuit.amount<50) return 'You need 50 biscuits to create a biscuit amulet!'
 
-            },minX:-15-4.5*0.5,maxX:-15+4.5*0.5,minY:11,maxY:18,minZ:60.5-2,maxZ:60.5+2,message:'Generate Moon Amulet<br>(50 Moon Charms)',func:function(player){
+            },minX:-15-4.5*0.5,maxX:-15+4.5*0.5,minY:11,maxY:18,minZ:60.5-2,maxZ:60.5+2,message:'Generate biscuit amulet<br>(50 biscuits)',func:function(player){
                 
                 items.biscuit.amount-=50
                 player.updateInventory()
@@ -8109,7 +8109,7 @@ function BeeSwarmSimulator(DATA){
                 
                 howManyToFeed.style.display='block'
                 feedAmount.value=1
-                howManyMessage.innerHTML='How many moon charms will you feed to '+MATH.doGrammar(player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.type)+' Bee?'
+                howManyMessage.innerHTML='How many biscuits will you feed to '+MATH.doGrammar(player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.type)+' Bee?'
                 document.getElementById('feedUntilGifted').style.display='none'
 
                 // CHQ: Limit the amount of treats fed to what the player actually have in inventory. 
