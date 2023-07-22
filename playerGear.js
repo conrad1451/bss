@@ -290,7 +290,7 @@ window.playerGear={
         }
     },
 
-    moonAmulet:{
+    biscuitAmulet:{
         
         mesh:function(box,cylinder,sphere,star){
 
