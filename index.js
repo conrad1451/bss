@@ -8130,7 +8130,7 @@ function BeeSwarmSimulator(DATA){
             }
         },
         
-        moonCharm:{
+        biscuit:{
             
             canUseOnSlot:(slot)=>{
                 
@@ -8141,7 +8141,7 @@ function BeeSwarmSimulator(DATA){
                 
                 howManyToFeed.style.display='block'
                 feedAmount.value=1
-                howManyMessage.innerHTML='How many moon charms will you feed to '+MATH.doGrammar(player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.type)+' Bee?'
+                howManyMessage.innerHTML='How many biscuits will you feed to '+MATH.doGrammar(player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.type)+' Bee?'
                 document.getElementById('feedUntilGifted').style.display='none'
 
                 // CHQ: Limit the amount of treats fed to what the player actually have in inventory. 
@@ -8149,7 +8149,8 @@ function BeeSwarmSimulator(DATA){
                 //           amount the player specified and the amount that the user actually has
                 howManyToFeed.onmousemove=feedAmount.oninput=function(){
                     let a=feedAmount.value
-                    feedAmount.value=MATH.constrain(a,1,items.moonCharm.amount)
+                    // feedAmount.value=MATH.constrain(a,1,items.moonCharm.amount)
+                    feedAmount.value=MATH.constrain(a,1,items.biscuit.amount)
                 }
                 
                 document.getElementById('cancelFeeding').onclick=function(){
@@ -8160,8 +8161,10 @@ function BeeSwarmSimulator(DATA){
                     howManyToFeed.style.display='none'
                     
                     let amount=feedAmount.value
-                    items.moonCharm.amount-=amount
-                    player.stats.moonCharm+=Number(amount)
+                    // items.moonCharm.amount-=amount
+                    items.biscuit.amount-=amount
+                    // player.stats.moonCharm+=Number(amount)
+                    player.stats.biscuit+=Number(amount)
                     player.updateInventory()
                     
                     let addedBond=amount*250*player.bondFromTreats|0
@@ -16538,7 +16541,7 @@ function BeeSwarmSimulator(DATA){
 
             dropTable.splice(dropTable.indexOf('smoothDice'),1)
             dropTable.splice(dropTable.indexOf('loadedDice'),1)
-            dropTable.splice(dropTable.indexOf('moonCharm'),1)
+            // dropTable.splice(dropTable.indexOf('moonCharm'),1)
             dropTable.splice(dropTable.indexOf('turpentine'),1)
 
             if(this.field!=='CoconutField'){
@@ -17312,13 +17315,13 @@ function BeeSwarmSimulator(DATA){
 
             if(this.type==='moon'){
 
-                dropTable=['treat','moonCharm']
-                dropRates.moonCharm=4
-                dropRates.treat=1
+                // dropTable=['treat','moonCharm']
+                // dropRates.moonCharm=4
+                // dropRates.treat=1
 
             } else {
 
-                dropTable.splice(dropTable.indexOf('moonCharm'),1)
+                // dropTable.splice(dropTable.indexOf('moonCharm'),1)
             }
 
             let totalChance=0
@@ -25274,7 +25277,7 @@ function BeeSwarmSimulator(DATA){
                                 
                                 items[player.itemDragging].cooldown=TIME
                                 player.addMessage('-1 '+MATH.doGrammar(player.itemDragging))
-                                if(['treat','atomicTreat','starTreat','pineapple','sunflowerSeed','blueberry','strawberry','moonCharm','bitterberry','neonberry'].indexOf(player.itemDragging)<0) player.stats[player.itemDragging]++
+                                if(['treat','atomicTreat','starTreat','pineapple','sunflowerSeed','blueberry','strawberry','bitterberry','neonberry'].indexOf(player.itemDragging)<0) player.stats[player.itemDragging]++
                             }
                             
                             player.updateInventory()
