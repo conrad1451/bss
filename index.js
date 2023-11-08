@@ -22726,7 +22726,7 @@ function BeeSwarmSimulator(DATA){
                 
                 pages[1].innerHTML=out.quests.length?'':"<div style='text-align:center;font-size:17px;color:rgb(0,0,0,0.5)'><br>(You have no quests)</div>"
                 
-                if(false)
+                if(out.showTheQuests)
                 {
                   for(let i in out.quests){
                     
