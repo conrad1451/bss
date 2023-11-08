@@ -22726,11 +22726,13 @@ function BeeSwarmSimulator(DATA){
                 
                 pages[1].innerHTML=out.quests.length?'':"<div style='text-align:center;font-size:17px;color:rgb(0,0,0,0.5)'><br>(You have no quests)</div>"
                 
-                if(out.showTheQuests === true)
+                // if(out.showTheQuests === true)
+                if(true)
                 {
-                  for(let i in out.quests){
-                    
-                    pages[1].innerHTML+=`<div style='background-color:${out.quests[i].completed?"rgb(0,"+(Math.sin(TIME*5)*20+215)+",0)":"rgb(240,240,240)"};font-size:17px;text-align:center;margin-top:-16px;border-radius:3px;margin-bottom:20px'><p style='margin-bottom:5px'>${out.quests[i].name}</p>${(function(){
+                    for(let i in out.quests)
+                    {
+                        pages[1].innerHTML+=`<div style='background-color:${out.quests[i].completed?"rgb(0,"+(Math.sin(TIME*5)*20+215)+",0)":"rgb(240,240,240)"};font-size:17px;text-align:center;margin-top:-16px;border-radius:3px;margin-bottom:20px'><p style='margin-bottom:5px'>${out.quests[i].name}</p>${
+                        (function(){
                         
                         let s='',isCompleted=true
                         
@@ -22745,7 +22747,7 @@ function BeeSwarmSimulator(DATA){
                                 isCompleted=false
                             }
 
-                            let c=MATH.doStatGrammar(out.quests[i].req[j][0])+' '+MATH.addCommas(out.quests[i].req[j][1].toString())+' '+(out.quests[i].req[j][1]>1&&MATH.doStatGrammar(out.quests[i].req[j][0])==='Defeat'?MATH.doPlural(MATH.doGrammar(out.quests[i].req[j][0])):MATH.doGrammar(out.quests[i].req[j][0]))+'<br>('+(MATH.constrain((out.stats[out.quests[i].req[j][0]]-out.quests[i].req[j][2])/out.quests[i].req[j][1],0,1)*100).toFixed(0)
+                            let c=MATH.doStatGrammar(out.quests[i].req[j][0]) + ' '+MATH.addCommas(out.quests[i].req[j][1].toString())+' '+'dddddddd'+'<br>('+(MATH.constrain((out.stats[out.quests[i].req[j][0]]-out.quests[i].req[j][2])/out.quests[i].req[j][1],0,1)*100).toFixed(0)
 
                             s+="<div style='border-radius:3px;width:190px;margin-top:0px;margin-bottom:5px;background-color:rgb(255,0,0);color:black;font-family:calibri;font-size:13px;margin-left:5px;position:relative;'><div style='position:absolute;left:0px;top:0px;border-radius:2px;right:"+(190-Math.min(((out.stats[out.quests[i].req[j][0]]-out.quests[i].req[j][2])/out.quests[i].req[j][1])*190,190))+"px;bottom:0px;background-color:rgb(0,250,0);'></div><div style='position:absolute;left:0px;top:0px;border-radius:2px;right:0px;bottom:0px'>"+c+"%)</div><u style='color:rgb(0,0,0,0)'>"+c+"</u></div>"
                             
@@ -22755,9 +22757,8 @@ function BeeSwarmSimulator(DATA){
                         NPCs[out.quests[i].NPC].activeQuest=!isCompleted
                         
                         return s+'<p style="font-size:2px"><br></p>'
-                        
                     })()}</div>`
-                }  
+                 }  
                 }
                 
             }
