@@ -2,7 +2,7 @@ function main(){
 // edits coming
     //IndexedDB code from Willard
     async function createDatabase() {
-    
+     
         return await new Promise(async (resolve, reject) => {
     
             let request = window.indexedDB.open("IndexedDB_BeeSwarmSimulator", 1)
