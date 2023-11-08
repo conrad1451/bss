@@ -22747,7 +22747,11 @@ function BeeSwarmSimulator(DATA){
                                 isCompleted=false
                             }
 
-                            let c=MATH.doStatGrammar(out.quests[i].req[j][0]) + ' '+MATH.addCommas(out.quests[i].req[j][1].toString())+' '+'dddddddd'+'<br>('+(MATH.constrain((out.stats[out.quests[i].req[j][0]]-out.quests[i].req[j][2])/out.quests[i].req[j][1],0,1)*100).toFixed(0)
+                            let taskAction = MATH.doStatGrammar(out.quests[i].req[j][0])
+                            let taskAmount = MATH.addCommas(out.quests[i].req[j][1].toString())
+                            let taskFocus = 'ANOTHER TEST'
+
+                            let c= taskAction+ ' '+taskAmount+' '+taskFocus+'<br>('+(MATH.constrain((out.stats[out.quests[i].req[j][0]]-out.quests[i].req[j][2])/out.quests[i].req[j][1],0,1)*100).toFixed(0)
 
                             s+="<div style='border-radius:3px;width:190px;margin-top:0px;margin-bottom:5px;background-color:rgb(255,0,0);color:black;font-family:calibri;font-size:13px;margin-left:5px;position:relative;'><div style='position:absolute;left:0px;top:0px;border-radius:2px;right:"+(190-Math.min(((out.stats[out.quests[i].req[j][0]]-out.quests[i].req[j][2])/out.quests[i].req[j][1])*190,190))+"px;bottom:0px;background-color:rgb(0,250,0);'></div><div style='position:absolute;left:0px;top:0px;border-radius:2px;right:0px;bottom:0px'>"+c+"%)</div><u style='color:rgb(0,0,0,0)'>"+c+"</u></div>"
                             
