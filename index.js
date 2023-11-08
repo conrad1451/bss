@@ -22749,7 +22749,7 @@ function BeeSwarmSimulator(DATA){
 
                             let taskAction = MATH.doStatGrammar(out.quests[i].req[j][0])
                             let taskAmount = MATH.addCommas(out.quests[i].req[j][1].toString())
-                            let taskFocus = 'ANOTHER TEST'
+                            let taskFocus =  out.quests[i].req[j][1]>1&&MATH.doStatGrammar(out.quests[i].req[j][0])==='Defeat'?MATH.doPlural(MATH.doGrammar(out.quests[i].req[j][0])):MATH.doGrammar(out.quests[i].req[j][0])
 
                             let c= taskAction+ ' '+taskAmount+' '+taskFocus+'<br>('+(MATH.constrain((out.stats[out.quests[i].req[j][0]]-out.quests[i].req[j][2])/out.quests[i].req[j][1],0,1)*100).toFixed(0)
 
