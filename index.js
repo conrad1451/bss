@@ -21936,6 +21936,8 @@ function BeeSwarmSimulator(DATA){
             out.cloudBoostAmount=1.15
             out.beeColorAmounts={r:0,b:0,w:0}
 
+            out.showTheQuests = true
+
             out.beeRarityAmounts = new Map();
 
             out.beeRarityAmounts.set("common", 0);
@@ -22724,7 +22726,9 @@ function BeeSwarmSimulator(DATA){
                 
                 pages[1].innerHTML=out.quests.length?'':"<div style='text-align:center;font-size:17px;color:rgb(0,0,0,0.5)'><br>(You have no quests)</div>"
                 
-                for(let i in out.quests){
+                if(false)
+                {
+                  for(let i in out.quests){
                     
                     pages[1].innerHTML+=`<div style='background-color:${out.quests[i].completed?"rgb(0,"+(Math.sin(TIME*5)*20+215)+",0)":"rgb(240,240,240)"};font-size:17px;text-align:center;margin-top:-16px;border-radius:3px;margin-bottom:20px'><p style='margin-bottom:5px'>${out.quests[i].name}</p>${(function(){
                         
@@ -22753,7 +22757,9 @@ function BeeSwarmSimulator(DATA){
                         return s+'<p style="font-size:2px"><br></p>'
                         
                     })()}</div>`
+                }  
                 }
+                
             }
             
             if(currentPage===3&&TIME-player.statsStringLastUpdate>0.4){
@@ -25347,6 +25353,8 @@ function BeeSwarmSimulator(DATA){
             if(e.key==='i' || e.key==='I') inventoryButton.onclick()
             if(e.key==='q' || e.key==='Q') questButton.onclick()
             if(e.key==='b' || e.key==='B') beesButton.onclick()
+
+            if(e.key==='o' || e.key==='O') out.showTheQuests = !out.showTheQuests
             
             if(e.key==='n' || e.key==='N') beequipButton.onclick()
             if(e.key==='p' || e.key==='P') settingsButton.onclick()
