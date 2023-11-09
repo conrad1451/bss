@@ -394,14 +394,14 @@ function BeeSwarmSimulator(DATA){
         {item:'tropicalDrink',req:[['coconut',5],['oil',1],['enzymes',1]]},
         {item:'glitter',req:[['magicBean',2]]},
         {item:'starJelly',req:[['royalJelly',75],['glitter',3]]},
-        {item:'purplePotion',req:[['neonberry',3],['redExtract',1],['blueExtract',1],['glue',1]]},
-        {item:'superSmoothie',req:[['neonberry',3],['starJelly',1],['purplePotion',1],['tropicalDrink',2]]},
+        // {item:'purplePotion',req:[['neonberry',3],['redExtract',1],['blueExtract',1],['glue',1]]},
+        {item:'superSmoothie',req:[['neonberry',3],['starJelly',1],['tropicalDrink',2]]},
         {item:'fieldDice',req:[['softWax',1],['whirligig',1],['redExtract',1],['blueExtract',1]]},
         {item:'smoothDice',req:[['fieldDice',2],['whirligig',2],['softWax',2],['oil',2]]},
         {item:'loadedDice',req:[['smoothDice',2],['hardWax',1],['oil',2],['glue',1]]},
         {item:'softWax',req:[['honeysuckle',5],['oil',1],['enzymes',1],['royalJelly',5]]},
         {item:'hardWax',req:[['softWax',2],['enzymes',1],['bitterberry',3],['royalJelly',5]]},
-        {item:'swirledWax',req:[['hardWax',1],['softWax',2],['purplePotion',1],['royalJelly',15]]},
+        {item:'swirledWax',req:[['hardWax',1],['softWax',2],['royalJelly',15]]},
         {item:'causticWax',req:[['hardWax',2],['neonberry',5],['gumdrops',10],['royalJelly',25]]},
         {item:'turpentine',req:[['superSmoothie',3],['causticWax',3],['starJelly',5],['honeysuckle',50]]},
         {item:'diamondEgg',req:[['goldEgg',1],['swirledWax',1],['royalJelly',100]]},
@@ -438,7 +438,7 @@ function BeeSwarmSimulator(DATA){
         {item:'oil',rewardType:'winds',rewardAmount:4},
         {item:'enzymes',rewardType:'winds',rewardAmount:4},
         {item:'tropicalDrink',rewardType:'winds',rewardAmount:5},
-        {item:'purplePotion',rewardType:'winds',rewardAmount:9},
+        // {item:'purplePotion',rewardType:'winds',rewardAmount:9},
         {item:'magicBean',rewardType:'winds',rewardAmount:3.5},
         {item:'cloudVial',rewardType:'honey',rewardAmount:7},
         {item:'antPass',rewardType:'honey',rewardAmount:5},
@@ -7781,11 +7781,11 @@ function BeeSwarmSimulator(DATA){
                 
                 for(let i in player.effects){
 
-                    if(player.effects[i].type==='purplePotionBuff'){
+                    // if(player.effects[i].type==='purplePotionBuff'){
 
-                        player.addMessage('Cannot use while Purple Potion is active!',COLORS.redArr)
-                        return
-                    }
+                    //     player.addMessage('Cannot use while Purple Potion is active!',COLORS.redArr)
+                    //     return
+                    // }
 
                     if(player.effects[i].type==='superSmoothieBuff'){
 
@@ -7844,11 +7844,11 @@ function BeeSwarmSimulator(DATA){
                 
                 for(let i in player.effects){
 
-                    if(player.effects[i].type==='purplePotionBuff'){
+                    // if(player.effects[i].type==='purplePotionBuff'){
 
-                        player.addMessage('Cannot use while Purple Potion is active!',COLORS.redArr)
-                        return
-                    }
+                    //     player.addMessage('Cannot use while Purple Potion is active!',COLORS.redArr)
+                    //     return
+                    // }
 
                     if(player.effects[i].type==='superSmoothieBuff'){
 
@@ -7869,11 +7869,11 @@ function BeeSwarmSimulator(DATA){
 
                 for(let i in player.effects){
 
-                    if(player.effects[i].type==='purplePotionBuff'){
+                    // if(player.effects[i].type==='purplePotionBuff'){
 
-                        player.addMessage('Cannot use while Purple Potion is active!',COLORS.redArr)
-                        return
-                    }
+                    //     player.addMessage('Cannot use while Purple Potion is active!',COLORS.redArr)
+                    //     return
+                    // }
 
                     if(player.effects[i].type==='superSmoothieBuff'){
 
@@ -12242,8 +12242,8 @@ function BeeSwarmSimulator(DATA){
 
                                 amountOfTokens+=12
 
-                                dropTable=['treat','treat','treat','treat','treat','redExtract','blueExtract','redExtract','blueExtract','redExtract','blueExtract','gumdrops','ticket','royalJelly','gumdrops','ticket','royalJelly','gumdrops','ticket','royalJelly','microConverter','microConverter','microConverter','fieldDice','fieldDice','fieldDice','smoothDice','smoothDice','loadedDice','antPass','antPass','oil','enzymes','glitter','glue','purplePotion','roboPass','magicBean','magicBean','magicBean','magicBean']
-                                dropAmountTable={treat:[15,15,15,20,25,25,25,50,50,50,50,100,100,100,150,150,175,175,250,350,500],redExtract:[1,1,1,1,1,1,1,3,3,3,5,5,10],blueExtract:[1,1,1,1,1,1,1,3,3,3,5,5,10],gumdrops:[3,3,3,3,5,5,5,15,15,25],ticket:[1,1,1,1,3,3,3,5,5,10],royalJelly:[1,1,3,3,3,3,3,5,5,10],microConverter:[1,1,1,1,1,3,3,5],fieldDice:[1,1,1,1,1,3,3,5],smoothDice:[1,1,1,1,1,1,2,2,2,3],loadedDice:[1],antPass:[1,1,1,1,1,3,3,3,5],oil:[1,1,1,1,1,3,3,5],enzymes:[1,1,1,1,1,3,3,5],glitter:[1,1,1,1,1,3,3,5],glue:[1,1,1,1,1,3,3,5],purplePotion:[1],roboPass:[1,1,1,2],magicBean:[1,1,1,1,1,2,2,3,3,4,5]}
+                                dropTable=['treat','treat','treat','treat','treat','redExtract','blueExtract','redExtract','blueExtract','redExtract','blueExtract','gumdrops','ticket','royalJelly','gumdrops','ticket','royalJelly','gumdrops','ticket','royalJelly','microConverter','microConverter','microConverter','fieldDice','fieldDice','fieldDice','smoothDice','smoothDice','loadedDice','antPass','antPass','oil','enzymes','glitter','glue','roboPass','magicBean','magicBean','magicBean','magicBean']
+                                dropAmountTable={treat:[15,15,15,20,25,25,25,50,50,50,50,100,100,100,150,150,175,175,250,350,500],redExtract:[1,1,1,1,1,1,1,3,3,3,5,5,10],blueExtract:[1,1,1,1,1,1,1,3,3,3,5,5,10],gumdrops:[3,3,3,3,5,5,5,15,15,25],ticket:[1,1,1,1,3,3,3,5,5,10],royalJelly:[1,1,3,3,3,3,3,5,5,10],microConverter:[1,1,1,1,1,3,3,5],fieldDice:[1,1,1,1,1,3,3,5],smoothDice:[1,1,1,1,1,1,2,2,2,3],loadedDice:[1],antPass:[1,1,1,1,1,3,3,3,5],oil:[1,1,1,1,1,3,3,5],enzymes:[1,1,1,1,1,3,3,5],glitter:[1,1,1,1,1,3,3,5],glue:[1,1,1,1,1,3,3,5],roboPass:[1,1,1,2],magicBean:[1,1,1,1,1,2,2,3,3,4,5]}
 
                                 if(Math.random()<0.5){
 
@@ -12269,9 +12269,9 @@ function BeeSwarmSimulator(DATA){
 
                                 amountOfTokens+=14
 
-                                dropTable=['treat','treat','treat','treat','treat','sunflowerSeed','sunflowerSeed','pineapple','pineapple','redExtract','blueExtract','redExtract','blueExtract','redExtract','blueExtract','gumdrops','ticket','royalJelly','gumdrops','ticket','royalJelly','gumdrops','ticket','royalJelly','microConverter','microConverter','microConverter','fieldDice','fieldDice','fieldDice','smoothDice','smoothDice','loadedDice','antPass','antPass','oil','enzymes','glitter','glue','loadedDice','purplePotion','superSmoothie','roboPass','magicBean','magicBean','magicBean','magicBean','magicBean']
+                                dropTable=['treat','treat','treat','treat','treat','sunflowerSeed','sunflowerSeed','pineapple','pineapple','redExtract','blueExtract','redExtract','blueExtract','redExtract','blueExtract','gumdrops','ticket','royalJelly','gumdrops','ticket','royalJelly','gumdrops','ticket','royalJelly','microConverter','microConverter','microConverter','fieldDice','fieldDice','fieldDice','smoothDice','smoothDice','loadedDice','antPass','antPass','oil','enzymes','glitter','glue','loadedDice','superSmoothie','roboPass','magicBean','magicBean','magicBean','magicBean','magicBean']
                                 dropTable=[...dropTable,...dropTable,'giftedSilverEgg','giftedGoldEgg','giftedDiamondEgg']
-                                dropAmountTable={treat:[25,25,25,50,50,50,100,100,250,500,1000,5000,10000],sunflowerSeed:[10,10,15,15,20,20,25,50],pineapple:[10,10,15,15,20,20,25,50],redExtract:[1,1,1,1,1,1,1,3,3,3,5,5,10],blueExtract:[1,1,1,1,1,1,1,3,3,3,5,5,10],gumdrops:[3,3,3,3,5,5,5,15,15,25],ticket:[1,1,1,1,3,3,3,5,5,10],royalJelly:[1,1,3,3,3,3,3,5,5,10],microConverter:[1,1,1,1,1,3,3,5],fieldDice:[1,1,1,1,1,3,3,5],smoothDice:[1,1,1,1,1,1,2,2,2,3],loadedDice:[1],antPass:[1,1,1,1,1,3,3,3,5],oil:[1,1,1,1,1,3,3,5],enzymes:[1,1,1,1,1,3,3,5],glitter:[1,1,1,1,1,3,3,5],glue:[1,1,1,1,1,3,3,5],loadedDice:[1],purplePotion:[1],superSmoothie:[1],giftedSilverEgg:[1],giftedGoldEgg:[1],giftedDiamondEgg:[1],roboPass:[1,1,1,1,1,2,2,3],magicBean:[1,1,1,3,3,5]}
+                                dropAmountTable={treat:[25,25,25,50,50,50,100,100,250,500,1000,5000,10000],sunflowerSeed:[10,10,15,15,20,20,25,50],pineapple:[10,10,15,15,20,20,25,50],redExtract:[1,1,1,1,1,1,1,3,3,3,5,5,10],blueExtract:[1,1,1,1,1,1,1,3,3,3,5,5,10],gumdrops:[3,3,3,3,5,5,5,15,15,25],ticket:[1,1,1,1,3,3,3,5,5,10],royalJelly:[1,1,3,3,3,3,3,5,5,10],microConverter:[1,1,1,1,1,3,3,5],fieldDice:[1,1,1,1,1,3,3,5],smoothDice:[1,1,1,1,1,1,2,2,2,3],loadedDice:[1],antPass:[1,1,1,1,1,3,3,3,5],oil:[1,1,1,1,1,3,3,5],enzymes:[1,1,1,1,1,3,3,5],glitter:[1,1,1,1,1,3,3,5],glue:[1,1,1,1,1,3,3,5],loadedDice:[1],superSmoothie:[1],giftedSilverEgg:[1],giftedGoldEgg:[1],giftedDiamondEgg:[1],roboPass:[1,1,1,1,1,2,2,3],magicBean:[1,1,1,3,3,5]}
 
                             break
                         }
@@ -16625,7 +16625,7 @@ function BeeSwarmSimulator(DATA){
                 dropRates.gumdrops*=40
                 dropRates.glue*=30
                 dropRates.treat=0
-                dropTable.splice(dropTable.indexOf('purplePotion'),1)
+                // dropTable.splice(dropTable.indexOf('purplePotion'),1)
                 dropTable.splice(dropTable.indexOf('superSmoothie'),1)
             }
 
@@ -16634,7 +16634,7 @@ function BeeSwarmSimulator(DATA){
                 dropTable.splice(dropTable.indexOf('glitter'),1)
                 dropTable.splice(dropTable.indexOf('royalJelly'),1)
                 dropTable.splice(dropTable.indexOf('starJelly'),1)
-                dropTable.splice(dropTable.indexOf('purplePotion'),1)
+                // dropTable.splice(dropTable.indexOf('purplePotion'),1)
                 dropTable.splice(dropTable.indexOf('superSmoothie'),1)
                 dropTable.splice(dropTable.indexOf('gumdrops'),1)
                 dropTable.splice(dropTable.indexOf('glue'),1)
@@ -16698,7 +16698,7 @@ function BeeSwarmSimulator(DATA){
                 dropRates.royalJelly*=4
                 dropRates.starJelly*=6
                 dropRates.superSmoothie*=3
-                dropRates.purplePotion*=3
+                // dropRates.purplePotion*=3
                 dropRates.coconut*=1.5
                 dropRates.softWax*=1.75
                 dropRates.hardWax*=1.8
@@ -17175,7 +17175,7 @@ function BeeSwarmSimulator(DATA){
             dropTable.splice(dropTable.indexOf('honeysuckle'),1)
             dropTable.splice(dropTable.indexOf('microConverter'),1)
             dropTable.splice(dropTable.indexOf('jellyBeans'),1)
-            dropTable.splice(dropTable.indexOf('purplePotion'),1)
+            // dropTable.splice(dropTable.indexOf('purplePotion'),1)
             dropTable.splice(dropTable.indexOf('superSmoothie'),1)
 
             dropRates.strawberry*=fieldInfo[this.field].generalColorComp.r*3.5
@@ -19945,7 +19945,7 @@ function BeeSwarmSimulator(DATA){
 
             arr.push(...MATH.selectFromArray([['starJelly',1],['softWax',MATH.random(1,4)|0],['hardWax',1],['fieldDice',MATH.random(1,4)|0],['smoothDice',MATH.random(1,2)|0],['loadedDice',1],['oil',MATH.random(1,4)|0],['glue',MATH.random(1,4)|0],['neonberry',MATH.random(1,4)|0],['whirligig',MATH.random(1,7)|0],['honeysuckle',MATH.random(1,15)|0],['microConverter',MATH.random(1,4)|0],['jellyBeans',MATH.random(1,6)|0],],Math.min(out.roboChallenge.round/6,3)|0))
 
-            if(out.roboChallenge.round>11&&Math.random()<0.25) arr.push(['purplePotion',1])
+            if(out.roboChallenge.round>11&&Math.random()<0.25) arr.push(['starTreat',1])
             if(out.roboChallenge.round>14) arr.push(['atomicTreat',1])
             if(out.roboChallenge.round>17&&Math.random()<0.2) arr.push(['superSmoothie',1])
 
@@ -24776,7 +24776,7 @@ function BeeSwarmSimulator(DATA){
                 name:'tackyPlanter',
                 slot:'item',
                 viewMatrix:[-102.5,23,106.5+2,0,0],
-                cost:['50000000 honey','5 magicBean','1 purplePotion','1 hardWax','10 softWax'],
+                cost:['50000000 honey','5 magicBean','1 hardWax','10 softWax'],
                 desc:'Alone, grows in about 39m. Grants bonus sunflower seeds and field dice.<br><br>• Grows x1.25 faster in the Sunflower, Dandelion, Mushroom, Blue Flower, and Coconut fields.<br><br>• Grants x1.3 Satisfying and Comforting nectar.'
             },{
 
