@@ -24840,46 +24840,6 @@ function BeeSwarmSimulator(DATA){
                 viewMatrix:[-107.25,23,121-2,Math.PI,0],
                 cost:['15000000 honey','10 ticket','10 honeysuckle'],
                 desc:'Bees drink *whatever* is in this coffee mug for a boost of energy!<br><br>Stats and potential of each beequip are randomly generated.'
-            },{
-
-                amountPurchased:0,maxPurchasedAmount:Infinity,
-                name:'comfortingVial',
-                slot:'item',
-                viewMatrix:[-98,26,121-2,Math.PI,0],
-                cost:[n=>Math.floor(Math.min(Math.pow(1.125,n)*1000000,1000000000000))+' honey','7 ticket'],
-                desc:'Instantly grants 1h of Comforting nectar.'
-            },{
-
-                amountPurchased:0,maxPurchasedAmount:Infinity,
-                name:'invigoratingVial',
-                slot:'item',
-                viewMatrix:[-100.25,26,121-2,Math.PI,0],
-                cost:[n=>Math.floor(Math.min(Math.pow(1.125,n)*1000000,1000000000000))+' honey','5 ticket','1 redExtract'],
-                desc:'Instantly grants 1h of Invigoration nectar.'
-            },{
-
-                amountPurchased:0,maxPurchasedAmount:Infinity,
-                name:'motivatingVial',
-                slot:'item',
-                viewMatrix:[-102.5,26,121-2,Math.PI,0],
-                cost:[n=>Math.floor(Math.min(Math.pow(1.125,n)*1000000,1000000000000))+' honey','5 ticket','14 sunflowerSeed'],
-                desc:'Instantly grants 1h of Motivating nectar.'
-            },{
-
-                amountPurchased:0,maxPurchasedAmount:Infinity,
-                name:'refreshingVial',
-                slot:'item',
-                viewMatrix:[-104.75,26,121-2,Math.PI,0],
-                cost:[n=>Math.floor(Math.min(Math.pow(1.125,n)*1000000,1000000000000))+' honey','5 ticket','1 enzymes'],
-                desc:'Instantly grants 1h of Refreshing nectar.'
-            },{
-
-                amountPurchased:0,maxPurchasedAmount:Infinity,
-                name:'satisfyingVial',
-                slot:'item',
-                viewMatrix:[-107,26,121-2,Math.PI,0],
-                cost:[n=>Math.floor(Math.min(Math.pow(1.125,n)*1000000,1000000000000))+' honey','5 ticket','7 gumdrops'],
-                desc:'Instantly grants 1h of Satisfying nectar.'
             }],
             currentIndex:0,message:'Explore Beequip Shop'
         },
