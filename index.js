@@ -23,19 +23,61 @@ function main() {
   }
 
   async function loadFromDB(id) {
+    // 1. The function is defined as 'async' so it can use 'await'.
+    //    It takes a single optional argument 'id'.
+
     return await new Promise(async (resolve, reject) => {
+      // 2. It returns a new Promise. This allows the calling code to use
+      //    .then() and .catch() or 'await' the result.
+      //    The inner function is also 'async' because it uses 'await'.
+
       let db = await createDatabase();
+      // 3. It calls an assumed asynchronous function 'createDatabase()' which
+      //    is responsible for opening the IndexedDB connection. The 'await'
+      //    pauses execution until the database connection is established.
+
       let trans = db.transaction("worlds", "readwrite");
+      // 4. It starts a new transaction on the database.
+      //    - The transaction is scoped to the "worlds" object store.
+      //    - The mode is "readwrite". Although the code only reads, it's possible
+      //      that "readwrite" was chosen for a reason (e.g., to be flexible
+      //      or to have a single transaction for a sequence of operations).
+      //      A "readonly" transaction would have been sufficient for just reading.
+
       let store = trans.objectStore("worlds");
+      // 5. It gets a reference to the "worlds" object store, which is where the
+      //    actual data is stored.
+
       let req = id ? store.get(id) : store.getAll();
+      // 6. This is a ternary operator that determines which IndexedDB method to call.
+      //    - If an 'id' is passed to the function, it calls `store.get(id)`. This
+      //      fetches a single record with a primary key matching the provided 'id'.
+      //    - If 'id' is undefined or `null` (falsy), it calls `store.getAll()`.
+      //      This fetches all records from the object store.
 
       req.onsuccess = function (e) {
+        // 7. This is the event handler for a successful request.
+        //    When the request to get data from the store completes successfully,
+        //    this function is executed.
         resolve(req.result);
+        // 8. The Promise is resolved with the result of the request.
+        //    - If `store.get(id)` was called, `req.result` will be the single record object.
+        //    - If `store.getAll()` was called, `req.result` will be an array of all record objects.
         db.close();
+        // 9. The database connection is explicitly closed.
       };
+
       req.onerror = function (e) {
+        // 10. This is the event handler for a failed request (e.g., a connection error).
+        //     When the request fails, this function is executed.
         resolve(null);
+        // 11. The Promise is resolved with `null`. This is a somewhat unusual choice.
+        //     Typically, an error handler would 'reject' the Promise with the error
+        //     object (`reject(e.target.error)`), allowing the caller to use a `.catch()` block.
+        //     Resolving with `null` means the caller needs to explicitly check for a `null`
+        //     return value to know if an error occurred.
         db.close();
+        // 12. The database connection is explicitly closed.
       };
     });
   }
@@ -70,7 +112,7 @@ function main() {
       };
     });
   }
-  
+
   const fetchGame = async (apiURL) => {
     // setLoading(true); // Set loading to true on every fetch attempt
     // setError(null); // Clear any previous errors
@@ -50677,9 +50719,9 @@ function BeeSwarmSimulator(DATA) {
     let code = GENERATE_SAVE_CODE();
 
     if (saveLocationChoice === 1) {
-        fetchGame("https://bssbackendgo.onrender.com/gamecheckpoints")
+      fetchGame("https://bssbackendgo.onrender.com/gamecheckpoints");
     } else {
-        console.error(code);
+      console.error(code);
     }
 
     saveToDB(DATA.id, {
