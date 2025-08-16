@@ -46,8 +46,14 @@ export const SaveSelectMenu = ({
   isLoading, // ✅ Added isLoading prop
   userId, // ✅ Added userId prop
   deleteFromBackend, // ✅ Added delete function
+  handleExportSave,
+  setCurrentGame,
+  setView,
+  setModal,
+  importCode,
+  setImportCode = { setImportCode },
 }) => {
-  const [importCode, setImportCode] = useState("");
+  //   const [importCode, setImportCode] = useState("");
   const [showImport, setShowImport] = useState(false);
 
   return (

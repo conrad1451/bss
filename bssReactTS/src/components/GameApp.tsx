@@ -23,38 +23,10 @@ const GameApp = () => {
   // === Constants and State ===
   // Placeholder URL for your Go backend.
   // IMPORTANT: Replace this with your deployed backend URL.
-  const API_BASE_URL = import.meta.env.API_BASE_URL;
 
   const [view, setView] = useState("mainMenu"); // 'mainMenu', 'selectMenu', 'game'
-  // const [saves, setSaves] = useState([]);
-  // const [userId, setUserId] = useState(null);
-  // const [isLoading, setIsLoading] = useState(true);
+
   const [currentGame, setCurrentGame] = useState(null);
-  // const [modal, setModal] = useState({
-  //   isOpen: false,
-  //   title: "",
-  //   message: "",
-  //   onConfirm: null,
-  // });
-
-  // // === User ID Initialization ===
-  // useEffect(() => {
-  //   // Retrieve or create a unique user ID
-  //   let currentUserId = localStorage.getItem("bss_user_id");
-  //   if (!currentUserId) {
-  //     currentUserId = crypto.randomUUID();
-  //     localStorage.setItem("bss_user_id", currentUserId);
-  //   }
-  //   setUserId(currentUserId);
-  // }, []);
-
-  // // === Effects for Data Loading ===
-  // useEffect(() => {
-  //   if (userId) {
-  //     fetchSaves();
-  //   }
-  // }, [userId, fetchSaves]);
-
   // === Game Logic Handlers ===
   const handleNewGame = async () => {
     const newGameData = {
@@ -211,10 +183,16 @@ const GameApp = () => {
           <SaveSelectMenu
             theHandleNewGame={handleNewGame}
             theHandleImportGame={handleImportGame}
-            saves={saves} // ✅ Pass the list of saves
-            isLoading={isLoading} // ✅ Pass the loading state
-            userId={userId} // ✅ Pass the user ID
-            deleteFromBackend={deleteFromBackend} // ✅ Pass the delete function
+            saves={saves}
+            isLoading={isLoading}
+            userId={userId}
+            deleteFromBackend={deleteFromBackend}
+            handleExportSave={handleExportSave}
+            setCurrentGame={setCurrentGame}
+            setView={setView}
+            setModal={setModal}
+            importCode={importCode}
+            setImportCode={setImportCode}
           />
         );
       case "game":
