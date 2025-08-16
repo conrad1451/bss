@@ -1,7 +1,7 @@
 // SelectionMenu.tsx
 
 import React, { useState, useEffect, useCallback } from "react";
-const SaveCard = ({ save, onPlay, onDelete, onExport, onRename }) => {
+export const SaveCard = ({ save, onPlay, onDelete, onExport, onRename }) => {
   return (
     <div className="flex items-center p-4 bg-yellow-200 rounded-lg border-2 border-yellow-500 shadow-md">
       <div className="flex-1">
@@ -37,7 +37,16 @@ const SaveCard = ({ save, onPlay, onDelete, onExport, onRename }) => {
   );
 };
 
-export const SaveSelectMenu = (theHandleNewGame, theHandleImportGame) => {
+// CHQ: Gemini AI updated props
+// SelectionMenu.tsx - updated to accept new props
+export const SaveSelectMenu = ({
+  theHandleNewGame,
+  theHandleImportGame,
+  saves, // ✅ Added saves prop
+  isLoading, // ✅ Added isLoading prop
+  userId, // ✅ Added userId prop
+  deleteFromBackend, // ✅ Added delete function
+}) => {
   const [importCode, setImportCode] = useState("");
   const [showImport, setShowImport] = useState(false);
 
@@ -75,7 +84,7 @@ export const SaveSelectMenu = (theHandleNewGame, theHandleImportGame) => {
             rows="4"
           ></textarea>
           <button
-            onClick={theHandleImportGame}
+            onClick={() => theHandleImportGame(importCode)} // ✅ Pass importCode to the handler
             className="mt-2 w-full bg-purple-600 text-white font-bold py-2 rounded-lg transition-all duration-300 hover:bg-purple-700"
           >
             Import
