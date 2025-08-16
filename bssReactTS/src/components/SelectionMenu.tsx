@@ -1,59 +1,97 @@
 // SelectionMenu.tsx
 
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState } from "react";
+
+// The SaveCard component has been updated to include renaming functionality.
 export const SaveCard = ({ save, onPlay, onDelete, onExport, onRename }) => {
+  // CHQ: Gemini AI added new states and handler
+  const [isRenaming, setIsRenaming] = useState(false);
+  const [newName, setNewName] = useState(save.data.name);
+
+  const handleRename = () => {
+    // Call the onRename prop with the new name
+    onRename(newName);
+    setIsRenaming(false);
+  };
+
+  //   CHQ: Gemini AI added text fields and button connected to onrename
   return (
     <div className="flex items-center p-4 bg-yellow-200 rounded-lg border-2 border-yellow-500 shadow-md">
       <div className="flex-1">
-        <p className="text-xl font-bold bg-transparent border-b border-yellow-500 w-full pb-1">
-          {`Game Checkpoint #${save.id}`}
-        </p>
+        {isRenaming ? (
+          <input
+            type="text"
+            value={newName}
+            onChange={(e) => setNewName(e.target.value)}
+            className="text-xl font-bold bg-transparent border-b border-yellow-500 w-full pb-1 focus:outline-none focus:ring-2 focus:ring-yellow-500 rounded-md px-2"
+          />
+        ) : (
+          <p className="text-xl font-bold bg-transparent border-b border-yellow-500 w-full pb-1">
+            {save.data.name}
+          </p>
+        )}
         <p className="text-sm text-gray-600 mt-1">
-          Last Saved: {new Date().toLocaleDateString()}{" "}
-          {new Date().toLocaleTimeString()}
+          Last Saved: {new Date(save.data.lastSaved).toLocaleDateString()}{" "}
+          {new Date(save.data.lastSaved).toLocaleTimeString()}
         </p>
       </div>
       <div className="flex space-x-2 ml-4">
-        <button
-          onClick={onPlay}
-          className="bg-green-500 text-white font-bold py-2 px-4 rounded-lg transition-all duration-300 hover:bg-green-600"
-        >
-          Play
-        </button>
-        <button
-          onClick={onExport}
-          className="bg-purple-500 text-white font-bold py-2 px-4 rounded-lg transition-all duration-300 hover:bg-purple-600"
-        >
-          Export
-        </button>
-        <button
-          onClick={onDelete}
-          className="bg-red-500 text-white font-bold py-2 px-4 rounded-lg transition-all duration-300 hover:bg-red-600"
-        >
-          Delete
-        </button>
+        {isRenaming ? (
+          <button
+            onClick={handleRename}
+            className="bg-blue-500 text-white font-bold py-2 px-4 rounded-lg transition-all duration-300 hover:bg-blue-600"
+          >
+            Save
+          </button>
+        ) : (
+          <>
+            <button
+              onClick={onPlay}
+              className="bg-green-500 text-white font-bold py-2 px-4 rounded-lg transition-all duration-300 hover:bg-green-600"
+            >
+              Play
+            </button>
+            <button
+              onClick={() => setIsRenaming(true)}
+              className="bg-gray-500 text-white font-bold py-2 px-4 rounded-lg transition-all duration-300 hover:bg-gray-600"
+            >
+              Rename
+            </button>
+            <button
+              onClick={onExport}
+              className="bg-purple-500 text-white font-bold py-2 px-4 rounded-lg transition-all duration-300 hover:bg-purple-600"
+            >
+              Export
+            </button>
+            <button
+              onClick={onDelete}
+              className="bg-red-500 text-white font-bold py-2 px-4 rounded-lg transition-all duration-300 hover:bg-red-600"
+            >
+              Delete
+            </button>
+          </>
+        )}
       </div>
     </div>
   );
 };
 
-// CHQ: Gemini AI updated props
 // SelectionMenu.tsx - updated to accept new props
 export const SaveSelectMenu = ({
   theHandleNewGame,
   theHandleImportGame,
-  saves, // ✅ Added saves prop
-  isLoading, // ✅ Added isLoading prop
-  userId, // ✅ Added userId prop
-  deleteFromBackend, // ✅ Added delete function
+  saves,
+  isLoading,
+  userId,
+  deleteFromBackend,
   handleExportSave,
+  saveToBackend,
   setCurrentGame,
   setView,
   setModal,
   importCode,
-  setImportCode = { setImportCode },
+  setImportCode, // ✅ Correctly destructured prop
 }) => {
-  //   const [importCode, setImportCode] = useState("");
   const [showImport, setShowImport] = useState(false);
 
   return (
@@ -90,7 +128,7 @@ export const SaveSelectMenu = ({
             rows="4"
           ></textarea>
           <button
-            onClick={() => theHandleImportGame(importCode)} // ✅ Pass importCode to the handler
+            onClick={theHandleImportGame}
             className="mt-2 w-full bg-purple-600 text-white font-bold py-2 rounded-lg transition-all duration-300 hover:bg-purple-700"
           >
             Import
