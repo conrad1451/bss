@@ -8,6 +8,36 @@ import { SaveSelectMenu } from "./SelectionMenu";
 // import { saveToBackend } from "../hooks/useGameData";
 import { useGameData } from "../hooks/useGameData";
 
+// This is a placeholder for the modal component.
+// In a real application, you would make this a more robust component.
+const Modal = ({ isOpen, title, message, onConfirm, onCancel }) => {
+  if (!isOpen) {
+    return null;
+  }
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+      <div className="bg-white p-6 rounded-lg shadow-xl max-w-sm w-full mx-4">
+        <h3 className="text-xl font-bold mb-2">{title}</h3>
+        <p className="text-gray-700 mb-4">{message}</p>
+        <div className="flex justify-end space-x-2">
+          <button
+            onClick={onCancel}
+            className="px-4 py-2 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400"
+          >
+            Cancel
+          </button>
+          <button
+            onClick={onConfirm}
+            className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
+          >
+            Confirm
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 // Main application component
 const GameApp = () => {
   const {
@@ -137,38 +167,6 @@ const GameApp = () => {
       console.error("No clipboard support available.");
       fallbackCopyTextToClipboard(saveCode);
     }
-  };
-
-  // === Components ===
-
-  const Modal = ({ isOpen, title, message, onConfirm }) => {
-    if (!isOpen) return null;
-    return (
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50">
-        <div className="bg-white rounded-lg p-6 shadow-xl w-full max-w-sm">
-          <h3 className="text-xl font-bold mb-2 text-gray-800">{title}</h3>
-          <p className="text-gray-600 mb-4">{message}</p>
-          <div className="flex justify-end space-x-2">
-            {onConfirm && (
-              <button
-                onClick={onConfirm}
-                className="bg-blue-500 text-white font-bold py-2 px-4 rounded-lg transition-all duration-300 hover:bg-blue-600"
-              >
-                OK
-              </button>
-            )}
-            {!onConfirm && (
-              <button
-                onClick={() => setModal({ isOpen: false })}
-                className="bg-blue-500 text-white font-bold py-2 px-4 rounded-lg transition-all duration-300 hover:bg-blue-600"
-              >
-                Close
-              </button>
-            )}
-          </div>
-        </div>
-      </div>
-    );
   };
 
   // Main render based on the current view state

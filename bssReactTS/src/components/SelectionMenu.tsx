@@ -90,7 +90,7 @@ export const SaveSelectMenu = ({
   setView,
   setModal,
   importCode,
-  setImportCode, // ✅ Correctly destructured prop
+  setImportCode,
 }) => {
   const [showImport, setShowImport] = useState(false);
 
@@ -159,6 +159,7 @@ export const SaveSelectMenu = ({
                     deleteFromBackend(save.id);
                     setModal({ isOpen: false });
                   },
+                  onCancel: () => setModal({ isOpen: false }),
                 })
               }
               onExport={() =>

@@ -1,5 +1,4 @@
 // GameComponent.tsx
-
 export const GameComponent = ({ gameData, onExit }) => {
   return (
     <div className="flex flex-col items-center justify-center p-8 bg-gray-100 rounded-xl shadow-lg w-full max-w-4xl mx-auto">
@@ -7,7 +6,7 @@ export const GameComponent = ({ gameData, onExit }) => {
         Welcome to the Game!
       </h1>
       <p className="text-lg text-gray-700 mb-6">You're playing a saved game.</p>
-      <div className="bg-white p-6 rounded-lg shadow-inner w-full text-left font-mono text-sm">
+      <div className="bg-white p-6 rounded-lg shadow-inner w-full text-left font-mono text-sm overflow-x-auto">
         <pre>{JSON.stringify(JSON.parse(gameData.saveCode), null, 2)}</pre>
       </div>
       <button
