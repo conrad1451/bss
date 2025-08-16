@@ -256,7 +256,8 @@ const GameApp = () => {
   const renderContent = () => {
     switch (view) {
       case "mainMenu":
-        return <MainMenu callckFctn={setView("selectMenu")} />;
+        // CHQ: Gemini AI debugged the function call to remove infinite render
+        return <MainMenu callckFctn={() => setView("selectMenu")} />;
       case "selectMenu":
         return (
           <SaveSelectMenu
@@ -272,7 +273,8 @@ const GameApp = () => {
           />
         );
       default:
-        return <MainMenu callckFctn={setView("selectMenu")} />;
+        // CHQ: Gemini AI debugged the function call to remove infinite render
+        return <MainMenu callckFctn={() => setView("selectMenu")} />;
     }
   };
 
