@@ -1,20 +1,92 @@
 // hooks/useGameData.ts
 import { useState, useEffect, useCallback } from "react";
-// ... (rest of your functions from GameApp.tsx)
-// ... (modal state, fetchSaves, deleteFromBackend, saveToBackend)
 
 export const useGameData = () => {
+  // === Constants and State ===
+  // IMPORTANT: This variable should be defined here, as it's a hook dependency
+  const API_BASE_URL = import.meta.env.API_BASE_URL;
+
   const [saves, setSaves] = useState([]);
   const [userId, setUserId] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [modal, setModal] = useState({ isOpen: false });
 
-  // Function to save or update a game
+  // === User ID Initialization ===
+  useEffect(() => {
+    let currentUserId = localStorage.getItem("bss_user_id");
+    if (!currentUserId) {
+      currentUserId = crypto.randomUUID();
+      localStorage.setItem("bss_user_id", currentUserId);
+    }
+    setUserId(currentUserId);
+  }, []);
+
+  // === Backend API Functions ===
+  const fetchSaves = useCallback(async () => {
+    if (!userId) return;
+    setIsLoading(true);
+    try {
+      const response = await fetch(API_BASE_URL, { method: "GET" });
+      if (!response.ok) {
+        throw new Error("Failed to fetch saves");
+      }
+      const allSaves = await response.json();
+      const userSaves = allSaves
+        .filter((save) => save.user_name === userId)
+        .map((save) => ({
+          id: save.id,
+          data: {
+            name: `Game #${save.id}`,
+            lastSaved: Date.now(),
+            saveCode: save.checkpoint_data,
+          },
+        }));
+
+      userSaves.sort((a, b) => b.id - a.id);
+      setSaves(userSaves);
+    } catch (error) {
+      console.error("Error fetching saves:", error);
+      setModal({
+        isOpen: true,
+        title: "Data Error",
+        message:
+          "Failed to fetch saved games from the backend. Please check your API URL.",
+        onConfirm: () => setModal({ isOpen: false }),
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  }, [userId, API_BASE_URL]);
+
+  const deleteFromBackend = useCallback(
+    async (saveId) => {
+      if (!userId) return;
+      try {
+        const response = await fetch(`${API_BASE_URL}/${saveId}`, {
+          method: "DELETE",
+        });
+        if (!response.ok) {
+          throw new Error("Failed to delete save");
+        }
+        await fetchSaves();
+      } catch (error) {
+        console.error("Error deleting document:", error);
+        setModal({
+          isOpen: true,
+          title: "Delete Error",
+          message: "Failed to delete the game. Please try again.",
+          onConfirm: () => setModal({ isOpen: false }),
+        });
+      }
+    },
+    [userId, fetchSaves, API_BASE_URL]
+  );
+
+  // The saveToBackend function from your original code
   const saveToBackend = useCallback(
     async (saveId, data) => {
       if (!userId) return false;
 
-      // Prepare the payload for the backend
       const payload = {
         user_name: userId,
         checkpoint_data: data.saveCode,
@@ -23,14 +95,12 @@ export const useGameData = () => {
       try {
         let response;
         if (saveId) {
-          // Update existing save with PUT request
           response = await fetch(`${API_BASE_URL}/${saveId}`, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(payload),
           });
         } else {
-          // Create a new save with POST request
           response = await fetch(API_BASE_URL, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -43,7 +113,7 @@ export const useGameData = () => {
         }
 
         await response.json();
-        await fetchSaves(); // Refresh the list of saves
+        await fetchSaves();
         return true;
       } catch (error) {
         console.error("Error saving document:", error);
@@ -57,8 +127,15 @@ export const useGameData = () => {
         return false;
       }
     },
-    [userId, fetchSaves]
+    [userId, fetchSaves, API_BASE_URL]
   );
+
+  // === Effect for Initial Data Loading ===
+  useEffect(() => {
+    if (userId) {
+      fetchSaves();
+    }
+  }, [userId, fetchSaves]);
 
   return {
     saves,
