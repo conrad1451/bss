@@ -5,8 +5,8 @@ import React, { useState } from "react";
 // The SaveCard component has been updated to include renaming functionality.
 export const SaveCard = ({ save, onPlay, onDelete, onExport, onRename }) => {
   // CHQ: Gemini AI added new states and handler
-  const [isRenaming, setIsRenaming] = useState(false);
-  const [newName, setNewName] = useState(save.data.name);
+  const [isRenaming, setIsRenaming] = useState<boolean>(false);
+  const [newName, setNewName] = useState<string>(save.data.name);
 
   const handleRename = () => {
     // Call the onRename prop with the new name
