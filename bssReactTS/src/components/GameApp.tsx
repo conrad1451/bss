@@ -5,9 +5,21 @@ import React, { useState, useEffect, useCallback } from "react";
 import { MainMenu } from "./MainMenu";
 import { GameComponent } from "./GameComponent";
 import { SaveSelectMenu } from "./SelectionMenu";
-import { saveToBackend } from "../hooks/useStoreData";
+// import { saveToBackend } from "../hooks/useGameData";
+import { useGameData } from "../hooks/useGameData";
+
 // Main application component
 const GameApp = () => {
+  const {
+    saves,
+    userId,
+    isLoading,
+    modal,
+    setModal,
+    fetchSaves,
+    saveToBackend,
+    deleteFromBackend,
+  } = useGameData();
   // === Constants and State ===
   // Placeholder URL for your Go backend.
   // IMPORTANT: Replace this with your deployed backend URL.
@@ -259,10 +271,15 @@ const GameApp = () => {
         // CHQ: Gemini AI debugged the function call to remove infinite render
         return <MainMenu callckFctn={() => setView("selectMenu")} />;
       case "selectMenu":
+        // CHQ: Gemini AI passed down missing props into SaveSelectMenu
         return (
           <SaveSelectMenu
             theHandleNewGame={handleNewGame}
-            theHandleImportGame={() => handleImportGame(importCode)}
+            theHandleImportGame={handleImportGame}
+            saves={saves} // ✅ Pass the list of saves
+            isLoading={isLoading} // ✅ Pass the loading state
+            userId={userId} // ✅ Pass the user ID
+            deleteFromBackend={deleteFromBackend} // ✅ Pass the delete function
           />
         );
       case "game":
