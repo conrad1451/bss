@@ -16,10 +16,21 @@ import Box from "@mui/material/Box";
  * A placeholder component for the main game.
  * All game logic and UI will be rendered within this component.
  */
-const GameApp = () => {
+const GameApp = (props: {
+  button1Text: string;
+  callckFctn: () => void | Promise<void>;
+}) => {
   return (
     <div className="flex flex-col items-center justify-center p-8 bg-gray-100 rounded-xl shadow-lg w-full max-w-lg mx-auto text-center">
       <h1 className="text-3xl font-bold mb-4 text-gray-800">Gameplay Area</h1>
+
+      {/* Button to start playing the game */}
+      <button
+        onClick={props.callckFctn}
+        className="w-full bg-yellow-500 text-white font-bold py-3 px-6 rounded-lg text-lg transition-all duration-300 hover:bg-yellow-600 shadow-md transform hover:scale-105"
+      >
+        {props.button1Text}
+      </button>
       <p className="text-gray-600">
         This is where the Bee Swarm Simulator game will be built.
       </p>
@@ -171,7 +182,12 @@ function FirstApp() {
         />
 
         {/* Route for the main game itself */}
-        <Route path="/gameplay" element={<GameApp />} />
+        <Route
+          path="/gameplay"
+          element={
+            <GameApp button1Text={"Go Back"} callckFctn={() => navigate("/")} />
+          }
+        />
       </Routes>
     </div>
   );

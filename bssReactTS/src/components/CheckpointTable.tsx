@@ -350,7 +350,7 @@ const CheckpointTable = (props: {
   };
 
   // Handler for adding a new student via a POST request
-  const handleNewStudentSubmit = async (event: React.FormEvent) => {
+  const handleNewCheckpointSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     setLoading(true);
     setErrorMessage(null);
@@ -422,26 +422,26 @@ const CheckpointTable = (props: {
   //   };
 
   // Handler to open the delete confirmation modal
-  const handleDeleteStudent = (student: RowPage) => {
+  const handleDeleteCheckpoint = (checkpoint: RowPage) => {
     handleCloseActionModal(); // Close the action modal first
 
     // Now use the hook to show the delete confirmation modal
     confirmationModal.showConfirmation(
-      `Are you sure you want to delete user ${student.myID} - ${student.Username}? This action cannot be undone.`,
-      confirmDeleteStudent,
-      student,
+      `Are you sure you want to delete checkpoint ${checkpoint.myID} - ${checkpoint.Username}? This action cannot be undone.`,
+      confirmDeleteCheckpoint,
+      checkpoint,
       "delete"
     );
   };
 
   // Handler to confirm delete and make the API call
-  const confirmDeleteStudent = async (
+  const confirmDeleteCheckpoint = async (
     dataPayload: RowPage | ConfirmUpdateProps
   ) => {
     // Corrected type to match ConfirmationData
-    const studentToDelete = dataPayload as RowPage;
+    const checkpointToDelete = dataPayload as RowPage;
 
-    if (!studentToDelete) {
+    if (!checkpointToDelete) {
       console.warn("No student selected for deletion.");
       return;
     }
@@ -454,7 +454,7 @@ const CheckpointTable = (props: {
       //  import.meta.env.VITE_API_URL || import.meta.env.VITE_API_URL_LOCALHOST;
       const BASE_URL = apiURL;
       const sessionToken = props.theToken;
-      const response = await fetch(`${BASE_URL}/${studentToDelete.myID}`, {
+      const response = await fetch(`${BASE_URL}/${checkpointToDelete.myID}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${sessionToken}`,
@@ -467,16 +467,18 @@ const CheckpointTable = (props: {
       }
 
       console.log(
-        `Student with ID ${studentToDelete.myID} deleted successfully.`
+        `Checkpoint with ID ${checkpointToDelete.myID} deleted successfully.`
       );
-      setSuccessMessage("Student deleted successfully!");
+      setSuccessMessage("Checkpoint deleted successfully!");
       setRawTableData((prevData) =>
-        prevData.filter((student) => student.myID !== studentToDelete.myID)
+        prevData.filter(
+          (checkpoint) => checkpoint.myID !== checkpointToDelete.myID
+        )
       );
     } catch (error: any) {
-      console.error("Error deleting student:", error);
+      console.error("Error deleting checkpoint:", error);
       setErrorMessage(
-        error.message || "Failed to delete student. Please try again."
+        error.message || "Failed to delete checkpoint. Please try again."
       );
     } finally {
       setLoading(false);
@@ -660,7 +662,7 @@ const CheckpointTable = (props: {
                 loading={loading}
                 successMessage={successMessage}
                 errorMessage={errorMessage}
-                onNewStudentSubmit={handleNewStudentSubmit}
+                onNewCheckpointSubmit={handleNewCheckpointSubmit}
               />
             </Table>
           </TableContainer>
@@ -673,7 +675,7 @@ const CheckpointTable = (props: {
         onClose={handleCloseActionModal}
         student={selectedStudentForActions}
         // onEdit={handleEditStudent}
-        onDelete={handleDeleteStudent}
+        onDelete={handleDeleteCheckpoint}
       />
 
       {/* Update Confirmation Modal (now controlled by the hook) */}
