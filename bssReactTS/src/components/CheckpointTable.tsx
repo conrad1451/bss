@@ -1,7 +1,7 @@
 // CheckpointTable.tsx
 
 import React, { useState, useEffect } from "react";
-import { idGenerator } from "../utils/idGenerator";
+// import { idGenerator } from "../utils/idGenerator";
 import {
   Table,
   TableContainer,
@@ -18,12 +18,14 @@ import { useColumnVisibilityMiniTable } from "../hooks/useColumnVisibility";
 import { useConfirmationModal } from "../hooks/useConfirmationModule";
 import { ColumnVisibilityControlModal } from "./ColumnVisibilityModule";
 import { TableHeaderCells, TableBodyRows } from "./TableSubcomponents";
+
 import type {
   RowPage,
   ConfirmUpdateProps,
   ApiResponse,
 } from "../utils/dataTypes";
 import { allColumnKeys } from "../utils/dataTypes";
+// import type CheckpointsDisplay from "./CheckpointsDisplay";
 
 // Simple icon components for the collapse button
 const MyChevronRightIcon = () => {
@@ -35,11 +37,11 @@ const MyExpandMoreIcon = () => {
 };
 
 // New component for the Edit/Delete action modal
-const StudentActionModal = (props: {
+const CheckpointActionModal = (props: {
   open: boolean;
   onClose: () => void;
   student: RowPage | null;
-  onEdit: (student: RowPage) => void;
+  //   onEdit: (student: RowPage) => void;
   onDelete: (student: RowPage) => void;
 }) => {
   if (!props.student) return null;
@@ -64,10 +66,11 @@ const StudentActionModal = (props: {
         }}
       >
         <Typography variant="h6" component="h2">
-          Actions for {props.student.FirstName} {props.student.LastName} (ID:{" "}
-          {props.student.myID})
+          {/* Actions for {props.student.FirstName} {props.student.LastName} (ID:{" "}
+          {props.student.myID}) */}
+          Actions for checkpoint
         </Typography>
-        <Button
+        {/* <Button
           variant="contained"
           disabled={true}
           onClick={() => props.onEdit(props.student!)}
@@ -78,7 +81,7 @@ const StudentActionModal = (props: {
           }}
         >
           Edit
-        </Button>
+        </Button> */}
         <Button
           variant="outlined"
           color="error"
@@ -294,7 +297,7 @@ const CheckpointTable = (props: {
 
   // Filter out any rows that have invalid data before passing to hooks
   const initialTableDataForHooks = rawTableData.filter(
-    (row) => row && row.FirstName && row.FirstName.trim() !== ""
+    (row) => row && row.Username && row.Username.trim() !== ""
   );
 
   // Custom hooks for table functionality
@@ -313,10 +316,8 @@ const CheckpointTable = (props: {
   const [isTableCollapsed, setIsTableCollapsed] = useState(false);
 
   // State variables for the "Add New Student" form
-  const [myFirstName, setMyFirstName] = useState("");
-  const [myLastName, setMyLastName] = useState("");
-  const [myEmail, setMyEmail] = useState("");
-  const [myMajor, setMyMajor] = useState("");
+  const [myUsername, setMyUsername] = useState("");
+  const [myCheckpointData, setMyCheckpointData] = useState("");
 
   // State for API call feedback
   const [loading, setLoading] = useState(false);
@@ -332,7 +333,7 @@ const CheckpointTable = (props: {
   const [updateEmail, setUpdateEmail] = useState("");
   const [updateMajor, setUpdateMajor] = useState("");
 
-  const newMyID: number = idGenerator(rawTableData);
+  //   const newMyID: number = idGenerator(rawTableData);
   const apiURL = props.theChoice;
 
   // Handler to open the action modal for a specific student
@@ -362,10 +363,8 @@ const CheckpointTable = (props: {
       const sessionToken = props.theToken;
       const formData = {
         // id: newMyID,
-        first_name: myFirstName,
-        last_name: myLastName,
-        email: myEmail,
-        major: myMajor,
+        Username: myUsername,
+        CheckpointData: myCheckpointData,
       };
 
       const response = await fetch(`${BASE_URL}`, {
@@ -388,18 +387,13 @@ const CheckpointTable = (props: {
       setRawTableData((prevData) => [
         ...prevData,
         {
-          myID: newMyID,
-          FirstName: myFirstName,
-          LastName: myLastName,
-          Email: myEmail,
-          Major: myMajor,
+          Username: myUsername,
+          CheckpointData: myCheckpointData,
         } as RowPage,
       ]);
 
-      setMyFirstName("");
-      setMyLastName("");
-      setMyEmail("");
-      setMyMajor("");
+      setMyCheckpointData("");
+      setMyUsername("");
     } catch (error: any) {
       console.error("Error in database:", error);
       setErrorMessage(
@@ -411,21 +405,21 @@ const CheckpointTable = (props: {
   };
 
   // Handler to open the update confirmation modal
-  const handleEditStudent = (student: RowPage) => {
-    setUpdateFirstName(student.FirstName);
-    setUpdateLastName(student.LastName);
-    setUpdateEmail(student.Email);
-    setUpdateMajor(student.Major || "");
-    handleCloseActionModal(); // Close the action modal first
+  //   const handleEditStudent = (student: RowPage) => {
+  //     setUpdateFirstName(student.FirstName);
+  //     setUpdateLastName(student.LastName);
+  //     setUpdateEmail(student.Email);
+  //     setUpdateMajor(student.Major || "");
+  //     handleCloseActionModal(); // Close the action modal first
 
-    // Now use the hook to show the update confirmation modal
-    confirmationModal.showConfirmation(
-      `Are you sure you want to update student ID ${student.myID}?`,
-      confirmUpdateStudent,
-      student,
-      "update"
-    );
-  };
+  //     // Now use the hook to show the update confirmation modal
+  //     confirmationModal.showConfirmation(
+  //       `Are you sure you want to update student ID ${student.myID}?`,
+  //       confirmUpdateStudent,
+  //       student,
+  //       "update"
+  //     );
+  //   };
 
   // Handler to open the delete confirmation modal
   const handleDeleteStudent = (student: RowPage) => {
@@ -433,7 +427,7 @@ const CheckpointTable = (props: {
 
     // Now use the hook to show the delete confirmation modal
     confirmationModal.showConfirmation(
-      `Are you sure you want to delete student ID ${student.myID} - ${student.FirstName} ${student.LastName}? This action cannot be undone.`,
+      `Are you sure you want to delete user ${student.myID} - ${student.Username}? This action cannot be undone.`,
       confirmDeleteStudent,
       student,
       "delete"
@@ -490,116 +484,116 @@ const CheckpointTable = (props: {
   };
 
   // Handler to confirm update and make the API call
-  const confirmUpdateStudent = async (
-    dataPayload: ConfirmUpdateProps | RowPage
-  ) => {
-    const studentToUpdate = dataPayload as RowPage;
+  //   const confirmUpdateStudent = async (
+  //     dataPayload: ConfirmUpdateProps | RowPage
+  //   ) => {
+  //     const studentToUpdate = dataPayload as RowPage;
 
-    // Create a new payload with only the fields that have been changed
-    const updatePayload: {
-      first_name?: string;
-      last_name?: string;
-      email?: string;
-      major?: string | null;
-    } = {};
+  //     // Create a new payload with only the fields that have been changed
+  //     const updatePayload: {
+  //       first_name?: string;
+  //       last_name?: string;
+  //       email?: string;
+  //       major?: string | null;
+  //     } = {};
 
-    // Check which fields were actually changed and add them to the payload.
-    // The user's input fields (`update...`) contain the potential new values.
-    if (
-      updateFirstName.trim() !== "" &&
-      updateFirstName !== studentToUpdate.FirstName
-    ) {
-      updatePayload.first_name = updateFirstName;
-    }
-    if (
-      updateLastName.trim() !== "" &&
-      updateLastName !== studentToUpdate.LastName
-    ) {
-      updatePayload.last_name = updateLastName;
-    }
-    if (updateEmail.trim() !== "" && updateEmail !== studentToUpdate.Email) {
-      updatePayload.email = updateEmail;
-    }
-    const newMajor = updateMajor.trim() === "" ? null : updateMajor;
-    if (newMajor !== (studentToUpdate.Major || null)) {
-      updatePayload.major = newMajor;
-    }
+  //     // Check which fields were actually changed and add them to the payload.
+  //     // The user's input fields (`update...`) contain the potential new values.
+  //     if (
+  //       updateFirstName.trim() !== "" &&
+  //       updateFirstName !== studentToUpdate.FirstName
+  //     ) {
+  //       updatePayload.first_name = updateFirstName;
+  //     }
+  //     if (
+  //       updateLastName.trim() !== "" &&
+  //       updateLastName !== studentToUpdate.LastName
+  //     ) {
+  //       updatePayload.last_name = updateLastName;
+  //     }
+  //     if (updateEmail.trim() !== "" && updateEmail !== studentToUpdate.Email) {
+  //       updatePayload.email = updateEmail;
+  //     }
+  //     const newMajor = updateMajor.trim() === "" ? null : updateMajor;
+  //     if (newMajor !== (studentToUpdate.Major || null)) {
+  //       updatePayload.major = newMajor;
+  //     }
 
-    if (Object.keys(updatePayload).length === 0) {
-      setErrorMessage("No changes detected. Nothing to update.");
-      setLoading(false);
-      return;
-    }
+  //     if (Object.keys(updatePayload).length === 0) {
+  //       setErrorMessage("No changes detected. Nothing to update.");
+  //       setLoading(false);
+  //       return;
+  //     }
 
-    setLoading(true);
-    setErrorMessage(null);
-    setSuccessMessage(null);
+  //     setLoading(true);
+  //     setErrorMessage(null);
+  //     setSuccessMessage(null);
 
-    try {
-      //  import.meta.env.VITE_API_URL || import.meta.env.VITE_API_URL_LOCALHOST;
-      const BASE_URL = apiURL;
-      const sessionToken = props.theToken;
-      // The method is now "PATCH" as the server requires a partial payload.
-      const response = await fetch(`${BASE_URL}/${studentToUpdate.myID}`, {
-        method: "PATCH", // Changed back to "PATCH" from "PUT"
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${sessionToken}`,
-        },
-        body: JSON.stringify(updatePayload), // Now sending only the changed fields
-      });
+  //     try {
+  //       //  import.meta.env.VITE_API_URL || import.meta.env.VITE_API_URL_LOCALHOST;
+  //       const BASE_URL = apiURL;
+  //       const sessionToken = props.theToken;
+  //       // The method is now "PATCH" as the server requires a partial payload.
+  //       const response = await fetch(`${BASE_URL}/${studentToUpdate.myID}`, {
+  //         method: "PATCH", // Changed back to "PATCH" from "PUT"
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //           Authorization: `Bearer ${sessionToken}`,
+  //         },
+  //         body: JSON.stringify(updatePayload), // Now sending only the changed fields
+  //       });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Server error during update");
-      }
+  //       if (!response.ok) {
+  //         const errorData = await response.json();
+  //         throw new Error(errorData.message || "Server error during update");
+  //       }
 
-      const result: ApiResponse = await response.json();
-      console.log("Student updated successfully:", result);
-      setSuccessMessage("Student updated successfully!");
+  //       const result: ApiResponse = await response.json();
+  //       console.log("Student updated successfully:", result);
+  //       setSuccessMessage("Student updated successfully!");
 
-      // New and improved logic for updating local state
-      // Create an object with the new values using the correct local PascalCase keys
-      const updatedLocalData = {
-        ...(updatePayload.first_name !== undefined && {
-          FirstName: updatePayload.first_name,
-        }),
-        ...(updatePayload.last_name !== undefined && {
-          LastName: updatePayload.last_name,
-        }),
-        ...(updatePayload.email !== undefined && {
-          Email: updatePayload.email,
-        }),
-        ...(updatePayload.major !== undefined && {
-          Major: updatePayload.major,
-        }),
-      };
+  //       // New and improved logic for updating local state
+  //       // Create an object with the new values using the correct local PascalCase keys
+  //       const updatedLocalData = {
+  //         ...(updatePayload.first_name !== undefined && {
+  //           FirstName: updatePayload.first_name,
+  //         }),
+  //         ...(updatePayload.last_name !== undefined && {
+  //           LastName: updatePayload.last_name,
+  //         }),
+  //         ...(updatePayload.email !== undefined && {
+  //           Email: updatePayload.email,
+  //         }),
+  //         ...(updatePayload.major !== undefined && {
+  //           Major: updatePayload.major,
+  //         }),
+  //       };
 
-      // Update the local state by merging the old student data with the new values
-      setRawTableData((prevData) =>
-        prevData.map((student) =>
-          student.myID === studentToUpdate.myID
-            ? {
-                ...student,
-                ...updatedLocalData,
-              }
-            : student
-        )
-      );
+  //       // Update the local state by merging the old student data with the new values
+  //       setRawTableData((prevData) =>
+  //         prevData.map((student) =>
+  //           student.myID === studentToUpdate.myID
+  //             ? {
+  //                 ...student,
+  //                 ...updatedLocalData,
+  //               }
+  //             : student
+  //         )
+  //       );
 
-      setUpdateFirstName("");
-      setUpdateLastName("");
-      setUpdateEmail("");
-      setUpdateMajor("");
-    } catch (error: any) {
-      console.error("Error updating student:", error);
-      setErrorMessage(
-        error.message || "Failed to update student. Please try again."
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
+  //       setUpdateFirstName("");
+  //       setUpdateLastName("");
+  //       setUpdateEmail("");
+  //       setUpdateMajor("");
+  //     } catch (error: any) {
+  //       console.error("Error updating student:", error);
+  //       setErrorMessage(
+  //         error.message || "Failed to update student. Please try again."
+  //       );
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
 
   return (
     <Box sx={{ width: "100%", overflowX: "auto" }}>
@@ -658,15 +652,11 @@ const CheckpointTable = (props: {
                 visibleColumns={visibleColumns}
                 theColumnKeys={allColumnKeys}
                 onOpenActionModal={handleOpenActionModal}
-                myId={newMyID}
-                myFirstName={myFirstName}
-                setMyFirstName={setMyFirstName}
-                myLastName={myLastName}
-                setMyLastName={setMyLastName}
-                myEmail={myEmail}
-                setMyEmail={setMyEmail}
-                myMajor={myMajor}
-                setMyMajor={setMyMajor}
+                // myId={newMyID}
+                myUsername={myUsername}
+                setMyUsername={setMyUsername}
+                myCheckpointData={myCheckpointData}
+                setMyCheckpointData={setMyCheckpointData}
                 loading={loading}
                 successMessage={successMessage}
                 errorMessage={errorMessage}
@@ -678,11 +668,11 @@ const CheckpointTable = (props: {
       </Paper>
 
       {/* Action Modal (Edit/Delete) */}
-      <StudentActionModal
+      <CheckpointActionModal
         open={isActionModalOpen}
         onClose={handleCloseActionModal}
         student={selectedStudentForActions}
-        onEdit={handleEditStudent}
+        // onEdit={handleEditStudent}
         onDelete={handleDeleteStudent}
       />
 

@@ -3,11 +3,11 @@
 // import React from "react";
 // import { useStudents } from "../hooks/useStudents";
 import { useGameData } from "../hooks/useGameData";
-import StudentTable from "./StudentTable";
+import CheckpointTable from "./CheckpointTable";
 // import { apiPicker } from "../services/apiPicker";
 
 import { Box, Button, Typography } from "@mui/material"; // Import necessary MUI components
-import type { RowPage } from "../utils/dataTypes"; // Import both
+// import type { RowPage } from "../utils/dataTypes"; // Import both
 import { transformCheckpointRecordToRowPage } from "../utils/dataTransforms";
 
 // Define the prop type for EmptyDatabase for better type safety
@@ -76,22 +76,22 @@ const CheckpointsDisplay = (props: {
   }
 
   // Sample data, now explicitly typed as RowPage[] to match StudentTable's expectation
-  const studentSampleData: RowPage[] = [
-    {
-      myID: 101,
-      FirstName: "Steven",
-      LastName: "Okang",
-      Email: "steveokang@gmail.com",
-      Major: "Computer Science",
-    },
-    {
-      myID: 102,
-      FirstName: "Kwame",
-      LastName: "Kingston",
-      Email: "kwamekingston@gmail.com",
-      Major: "Electrical Engineering",
-    },
-  ];
+  // const studentSampleData: RowPage[] = [
+  //   {
+  //     myID: 101,
+  //     FirstName: "Steven",
+  //     LastName: "Okang",
+  //     Email: "steveokang@gmail.com",
+  //     Major: "Computer Science",
+  //   },
+  //   {
+  //     myID: 102,
+  //     FirstName: "Kwame",
+  //     LastName: "Kingston",
+  //     Email: "kwamekingston@gmail.com",
+  //     Major: "Electrical Engineering",
+  //   },
+  // ];
 
   // --- Prepare the data for StudentTable based on 'useSampleData' flag ---
   // let dataForTable: RowPage[];
@@ -123,7 +123,7 @@ const CheckpointsDisplay = (props: {
       ) : // Render StudentTable with the prepared data (either transformed real data or sample data)
 
       props.theChoice === 1 || props.theChoice === 2 ? (
-        <StudentTable
+        <CheckpointTable
           thePages={dataForTable}
           theChoice={API_BASE_URL}
           theToken={props.theSessionToken}
