@@ -1,4 +1,4 @@
-// GameApp.tsx
+// GameAppAlt.tsx
 
 import React, { useState, useEffect, useCallback } from "react";
 
@@ -39,17 +39,29 @@ const Modal = ({ isOpen, title, message, onConfirm, onCancel }) => {
 };
 
 // Main application component
-const GameApp = () => {
-  const {
-    saves,
-    userId,
-    isLoading,
-    modal,
-    setModal,
-    fetchSaves,
-    saveToBackend,
-    deleteFromBackend,
-  } = useGameData();
+// const GameAppAlt = () => {
+
+const GameAppAlt = (props: {
+  mySessionToken: string;
+  button1Text: string;
+  callckFctn: () => void | Promise<void>;
+}) => {
+  // const {
+  //   saves,
+  //   userId,
+  //   isLoading,
+  //   modal,
+  //   setModal,
+  //   fetchSaves,
+  //   saveToBackend,
+  //   deleteFromBackend,
+  // } = useGameData();
+  const API_BASE_URL: string = import.meta.env.API_BASE_URL;
+
+  const { checkpoints, loading, error, refetchCheckpoints } = useGameData(
+    API_BASE_URL,
+    props.mySessionToken
+  );
   // === Constants and State ===
   // Placeholder URL for your Go backend.
   // IMPORTANT: Replace this with your deployed backend URL.
@@ -174,24 +186,25 @@ const GameApp = () => {
     switch (view) {
       case "mainMenu":
         // CHQ: Gemini AI debugged the function call to remove infinite render
-        return <MainMenu callckFctn={() => setView("selectMenu")} />;
+        return <MainMenu callckFctn={setView("selectMenu")} />;
       case "selectMenu":
         // CHQ: Gemini AI passed down missing props into SaveSelectMenu
         return (
-          <SaveSelectMenu
-            theHandleNewGame={handleNewGame}
-            theHandleImportGame={handleImportGame}
-            saves={saves}
-            isLoading={isLoading}
-            userId={userId}
-            deleteFromBackend={deleteFromBackend}
-            handleExportSave={handleExportSave}
-            setCurrentGame={setCurrentGame}
-            setView={setView}
-            setModal={setModal}
-            importCode={importCode}
-            setImportCode={setImportCode}
-          />
+          // <SaveSelectMenu
+          //   theHandleNewGame={handleNewGame}
+          //   theHandleImportGame={handleImportGame}
+          //   saves={saves}
+          //   isLoading={isLoading}
+          //   userId={userId}
+          //   deleteFromBackend={deleteFromBackend}
+          //   handleExportSave={handleExportSave}
+          //   setCurrentGame={setCurrentGame}
+          //   setView={setView}
+          //   setModal={setModal}
+          //   importCode={importCode}
+          //   setImportCode={setImportCode}
+          // />
+          <h1>testme</h1>
         );
       case "game":
         return (
@@ -214,4 +227,4 @@ const GameApp = () => {
   );
 };
 
-export default GameApp;
+export default GameAppAlt;
