@@ -32,18 +32,12 @@ const EmptyDatabase = (props: EmptyDatabaseProps) => {
   );
 };
 
-// CHQ: Gemini AI renamed and refactored this.
 //      It split a single functional component into a hook and a component
-// const CheckpointsDisplay = (props: { theChoice: number; myToken: string }) => {
-// const CheckpointsDisplay = (props: { theChoice: number; myUserID: string }) => {
-const CheckpointsDisplay = (props: {
-  theChoice: number;
-  theSessionToken: string;
-}) => {
-  const API_BASE_URL = import.meta.env.API_BASE_URL;
+const CheckpointsDisplay = (props: { theSessionToken: string }) => {
+  const apiURL: string = import.meta.env.VITE_API_BASE_URL;
 
   const { checkpoints, loading, error, refetchCheckpoints } = useGameData(
-    API_BASE_URL,
+    apiURL,
     props.theSessionToken
   );
   // console.log("props.myToken");
@@ -105,8 +99,10 @@ const CheckpointsDisplay = (props: {
   const dataForTable = transformCheckpointRecordToRowPage(checkpoints);
 
   // --- END DATA PREPARATION ---
-  // const isHidingEmptyDatabase = true;
-  const isHidingEmptyDatabase = false;
+
+  //The CheckpointTable will always render, even when there's no data.
+  const isHidingEmptyDatabase = true;
+  // const isHidingEmptyDatabase = false;
   return (
     <Box sx={{ p: 2 }}>
       <Typography variant="h4" gutterBottom>
@@ -115,21 +111,14 @@ const CheckpointsDisplay = (props: {
 
       {/* FIXME: add breakpoints here to debug why empty table does not show when there is no data */}
       {/* Show EmptyDatabase component if no error, no real checkpoints, AND not using sample data */}
-      {!error &&
-      dataForTable.length === 0 &&
-      !useSampleData &&
-      isHidingEmptyDatabase ? (
+      {dataForTable.length === 0 ? (
         <EmptyDatabase theRefetchOfCheckpoints={refetchCheckpoints} />
-      ) : // Render StudentTable with the prepared data (either transformed real data or sample data)
-
-      props.theChoice === 1 || props.theChoice === 2 ? (
+      ) : (
         <CheckpointTable
           thePages={dataForTable}
-          theChoice={API_BASE_URL}
+          theChoice={apiURL} // Corrected API variable name
           theToken={props.theSessionToken}
         />
-      ) : (
-        <h3>There has been some sort of error!</h3>
       )}
     </Box>
   );

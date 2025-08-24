@@ -3,6 +3,7 @@
 import { useCallback } from "react";
 
 import { Descope, useDescope, useSession, useUser } from "@descope/react-sdk";
+import { getSessionToken } from "@descope/react-sdk"; // CHQ: suggested by Descope AI
 
 import DescopeLandingPage from "./DescopeLoginLandingPage";
 
@@ -20,9 +21,16 @@ const DescopeAuth = () => {
   }
 
   if (isAuthenticated) {
+    // CHQ: Gemini AI had getSessionToken called here and passed
+    //      into DescopeLandingPage to eliminate race conditions
+    const sessionToken = getSessionToken();
     return (
       <>
-        <DescopeLandingPage theUser={user} theHandleLogout={handleLogout} />
+        <DescopeLandingPage
+          theUser={user}
+          theHandleLogout={handleLogout}
+          theSessionToken={sessionToken}
+        />
       </>
     );
   }

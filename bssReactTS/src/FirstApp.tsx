@@ -8,15 +8,15 @@ import {
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 
-// CHQ: Gemini AI refactored
-// Since all components need to be in a single file for the app to be runnable
-// in this environment, they are defined below instead of being imported.
+import CheckpointsDisplay from "./components/CheckpointsDisplay";
 
 /**
  * A placeholder component for the main game.
  * All game logic and UI will be rendered within this component.
  */
+
 const GameApp = (props: {
+  mySessionToken: string;
   button1Text: string;
   callckFctn: () => void | Promise<void>;
 }) => {
@@ -34,6 +34,7 @@ const GameApp = (props: {
       <p className="text-gray-600">
         This is where the Bee Swarm Simulator game will be built.
       </p>
+      <CheckpointsDisplay theSessionToken={props.mySessionToken} />
     </div>
   );
 };
@@ -155,7 +156,7 @@ const HomePage = () => {
 };
 
 // The main application component that handles routing
-function FirstApp() {
+const FirstApp = (props: { mySessionToken: string }) => {
   const navigate = useNavigate();
 
   return (
@@ -185,19 +186,23 @@ function FirstApp() {
         <Route
           path="/gameplay"
           element={
-            <GameApp button1Text={"Go Back"} callckFctn={() => navigate("/")} />
+            <GameApp
+              mySessionToken={props.mySessionToken}
+              button1Text={"Go Back"}
+              callckFctn={() => navigate("/")}
+            />
           }
         />
       </Routes>
     </div>
   );
-}
+};
 
 // Wrap the app with the Router to enable navigation
-export default function AppWrapper() {
+export default function AppWrapper(props: { sessionToken: string }) {
   return (
     <Router>
-      <FirstApp />
+      <FirstApp mySessionToken={props.sessionToken} />
     </Router>
   );
 }
