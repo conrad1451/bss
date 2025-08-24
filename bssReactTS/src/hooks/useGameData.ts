@@ -49,16 +49,20 @@ export const useGameData = (
 
   useEffect(() => {
     const fetchCheckpoints = async () => {
-      setLoading(true); // Set loading to true on every fetch attempt
-      setError(null); // Clear any previous errors
+      // Add a guard clause to prevent the API call if the token is invalid or missing.
+      if (!theSessionToken) {
+        console.warn("Session token is not available. Aborting API call.");
+        setLoading(false);
+        return;
+      }
 
-      // console.log("theUserID is:");
-      // console.log(theUserID);
+      setLoading(true);
+      setError(null);
 
       if (!apiURL) {
-        setError("api url is not defined in environment variables.");
+        setError("API URL is not defined in environment variables.");
         setLoading(false);
-        console.error("api url is not set.");
+        console.error("API URL is not set.");
         return;
       }
 
@@ -74,13 +78,9 @@ export const useGameData = (
         const data: CheckPointRecord[] = await response.json();
         setCheckpoints(data);
       } catch (e: any) {
-        // CHQ: Gemini AI created conditional for error type handling
-        // Check if 'e' is an instance of the built-in Error class.
         if (e instanceof Error) {
-          // If it is, you can safely access its 'message' property.
           setError(e.message);
         } else {
-          // If it's not an Error object, you can set a generic message.
           setError("An unknown error occurred.");
         }
         console.error("Failed to fetch checkpoints:", e);
@@ -89,10 +89,10 @@ export const useGameData = (
       }
     };
     fetchCheckpoints();
-  }, [apiURL, headers, triggerRefetch]); // Re-run effect when triggerRefetch changes
+  }, [apiURL, headers, triggerRefetch, theSessionToken]); // Add theSessionToken to dependencies
 
   const refetchCheckpoints = () => {
-    setTriggerRefetch((prev) => prev + 1); // Increment to trigger refetch
+    setTriggerRefetch((prev) => prev + 1);
   };
 
   return { checkpoints, loading, error, refetchCheckpoints };

@@ -25,7 +25,6 @@ import type {
   ApiResponse,
 } from "../utils/dataTypes";
 import { allColumnKeys } from "../utils/dataTypes";
-// import type CheckpointsDisplay from "./CheckpointsDisplay";
 
 // Simple icon components for the collapse button
 const MyChevronRightIcon = () => {
@@ -392,6 +391,8 @@ const CheckpointTable = (props: {
         } as RowPage,
       ]);
 
+      // setRawTableData((prevData) => [...prevData, result.data as RowPage]);
+
       setMyCheckpointData("");
       setMyUsername("");
     } catch (error: any) {
@@ -425,13 +426,19 @@ const CheckpointTable = (props: {
   const handleDeleteCheckpoint = (checkpoint: RowPage) => {
     handleCloseActionModal(); // Close the action modal first
 
-    // Now use the hook to show the delete confirmation modal
-    confirmationModal.showConfirmation(
-      `Are you sure you want to delete checkpoint ${checkpoint.myID} - ${checkpoint.Username}? This action cannot be undone.`,
-      confirmDeleteCheckpoint,
-      checkpoint,
-      "delete"
-    );
+    // if(checkpoint.myID?)
+    if (checkpoint.myID !== null && checkpoint.myID !== undefined) {
+      // Now use the hook to show the delete confirmation modal
+      confirmationModal.showConfirmation(
+        // `Are you sure you want to delete the checkpoint for ${checkpoint.Username}? This action cannot be undone.`,
+
+        `Are you sure you want to delete checkpoint ${checkpoint.myID} - ${checkpoint.Username}? This action cannot be undone.`,
+        confirmDeleteCheckpoint,
+        checkpoint,
+        "delete"
+      );
+      // } else {
+    }
   };
 
   // Handler to confirm delete and make the API call
