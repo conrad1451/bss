@@ -1,41 +1,27 @@
 // DescopeLoginLandingPage.tsx
 
 import LoginDashboard from "../../components/accountAccessPages/LoginDashboard";
-// import { getSessionToken } from "@descope/react-sdk"; // CHQ: suggested by Descope AI
 
-interface DescopeUser {
-  name?: string; // Assuming 'name' is a property in the user object. Adjust as needed.
-  // [key: string]: any; // To allow other potential properties
-}
+// import type { DescopeUser, LandingPageProps } from "../../utils/dataTypes";
 
-interface LandingPageProps {
-  theUser: DescopeUser;
-  theHandleLogout: () => void;
-  theSessionToken: string;
-}
+import type { LandingPageProps } from "../../utils/dataTypes";
+// interface DescopeUser {
+//   name?: string;
+// }
 
 const DescopeLandingPage = (props: LandingPageProps) => {
-  // CHQ: Gemini AI generated check for user existence before setting sessiontoken
-
-  // Check if a user object exists. If it doesn't, we can assume the session is not yet active.
-  // The token will be non-null when theUser is a valid object.
-  if (!props.theUser) {
-    // You could return a loading indicator here.
+  // This guard clause is essential. It prevents the component from rendering
+  // its children before a valid session token is available.
+  if (!props.theSessionToken) {
+    // You can return a loading state or a simple message.
     return <div>Loading...</div>;
   }
-
-  // const sessionToken = getSessionToken();
-
   return (
     <>
-      {/* <p>Hello {props.theUser.name}</p> */}
-      <p>Hello {props.theUser?.name}</p>{" "}
-      {/* Using optional chaining in case name is not always present */}
+      <p>Hello {props.theUser?.name}</p>
       <div>My Private Component</div>
-      {/* <LoginDashboard /> */}
-      {/* <LoginDashboard sessionToken={sessionToken} /> */}
+      {/* Now, you can safely pass the token, knowing it is valid. */}
       <LoginDashboard sessionToken={props.theSessionToken} />
-      {/* <FormToMongo /> */}
       <button onClick={props.theHandleLogout}>Logout</button>
     </>
   );

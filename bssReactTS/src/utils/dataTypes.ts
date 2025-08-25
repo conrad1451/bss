@@ -9,6 +9,12 @@ export interface RowPage {
   playerID: string;
 }
 
+export interface LandingPageProps {
+  theUser: DescopeUser;
+  theHandleLogout: () => void;
+  theSessionToken: string;
+}
+
 export interface DescopeUser {
   name: string;
   email: string;

@@ -1,3 +1,4 @@
+// FirstApp.tsx
 import React from "react";
 import {
   BrowserRouter as Router,
@@ -20,6 +21,17 @@ const GameApp = (props: {
   button1Text: string;
   callckFctn: () => void | Promise<void>;
 }) => {
+  // CHQ: Gemini AI added check to API call
+  // Essential check to prevent the API call with a bad token
+  if (!props.mySessionToken) {
+    console.log(
+      "GameApp: Session token is not available. Displaying loading state."
+    );
+    return <div>Loading game data...</div>;
+  }
+
+  console.log("session token is " + props.mySessionToken);
+
   return (
     <div className="flex flex-col items-center justify-center p-8 bg-gray-100 rounded-xl shadow-lg w-full max-w-lg mx-auto text-center">
       <h1 className="text-3xl font-bold mb-4 text-gray-800">Gameplay Area</h1>
