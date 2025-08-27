@@ -1,3 +1,5 @@
+// ColumnVisibilityModule.tsx
+
 import type { ColumnVisibility } from "../utils/dataTypes";
 
 import {
