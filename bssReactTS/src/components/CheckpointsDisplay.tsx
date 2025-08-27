@@ -96,8 +96,9 @@ const CheckpointsDisplay = () => {
   //   dataForTable = transformCheckpointRecordToRowPage(checkpoints);
   // }
 
+  console.log("Raw API checkpoints:", checkpoints);
   const dataForTable = transformCheckpointRecordToRowPage(checkpoints);
-
+  console.log("Transformed data for table:", dataForTable);
   // --- END DATA PREPARATION ---
 
   //The CheckpointTable will always render, even when there's no data.
