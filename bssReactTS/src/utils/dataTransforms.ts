@@ -83,22 +83,19 @@ export const transformCheckpointRecordToRowPage = (
 
   // Map each checkpoint record to the RowPage format
   return checkpoints.map((record) => {
-    // return {
-    //   myID: record.id,
-    //   Username: record.user_name,
-    //   CheckpointData: record.checkpoint_data,
-    //   CreatedAt: record.created_at,
-    //   LastEditedAt: record.last_edited_at,
-    //   playerID: "testagain",
-    // };
+    // CHQ: Gemini AI created the check to handle playerID
+    // Correctly handle the player_id object
+    const playerID = record.player_id.Valid ? record.player_id.String : null;
+
     return {
       myID: record.id,
       Username: record.user_name,
       CheckpointData: record.checkpoint_data,
+      // CheckpointData: String("record.checkpoint_data"),
+      // CheckpointData: "ddd",
       CreatedAt: record.created_at,
       LastEditedAt: record.last_edited_at,
-      playerID: record.player_id,
-      // playerID: "testagain",
+      playerID: playerID === null ? "N/A" : playerID, // CHQ: I added ternary to control display
     };
   });
 };

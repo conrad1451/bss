@@ -315,7 +315,8 @@ const CheckpointTable = (props: {
 
   // State variables for the "Add New Student" form
   const [myUsername, setMyUsername] = useState("");
-  const [myCheckpointData, setMyCheckpointData] = useState<string>("");
+  const [myCheckpointData, setMyCheckpointData] = useState("");
+  //   const [myCheckpointData, setMyCheckpointData] = useState<string>("");
 
   // State for API call feedback
   const [loading, setLoading] = useState(false);

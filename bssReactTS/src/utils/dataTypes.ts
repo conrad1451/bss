@@ -35,7 +35,8 @@ export interface CheckPointRecordAlt {
   checkpoint_data: string;
   created_at: Date;
   last_edited_at: Date;
-  player_id: string;
+  // player_id: string;
+  player_id: { String: string; Valid: boolean };
 }
 
 export interface Item {
