@@ -2,7 +2,11 @@
 
 // import type { Item } from "./dataTypes";
 
-import type { RowPage } from "./dataTypes";
+import type {
+  RowPage,
+  CheckPointRecord,
+  CheckPointRecordAlt,
+} from "./dataTypes";
 
 export function displayDate(curDate: Date) {
   return curDate instanceof Date
@@ -45,7 +49,9 @@ export function createCustomTableData(
   };
 }
 
-export const transformCheckpointRecordToRowPage = (pages: any): RowPage[] => {
+export const transformCheckpointRecordToRowPageOld = (
+  pages: any
+): RowPage[] => {
   // Add this check! If 'pages' is null or not an array, return an empty array.
   if (!Array.isArray(pages)) {
     return [];
@@ -63,6 +69,39 @@ export const transformCheckpointRecordToRowPage = (pages: any): RowPage[] => {
       page.playerID
     )
   );
+};
+
+export const transformCheckpointRecordToRowPage = (
+  // checkpoints: CheckPointRecord[]
+
+  checkpoints: CheckPointRecordAlt[]
+): RowPage[] => {
+  // Check for an empty or invalid input array
+
+  if (!checkpoints || !Array.isArray(checkpoints)) {
+    console.error("Invalid input for transformation.");
+
+    return [];
+  }
+
+  // Map each checkpoint record to the RowPage format
+
+  return checkpoints.map((record) => {
+    // CHQ: Gemini AI created the check to handle playerID
+    // Correctly handle the player_id object
+    const playerID = record.player_id.Valid ? record.player_id.String : null;
+
+    return {
+      myID: record.id,
+      Username: record.user_name,
+      CheckpointData: record.checkpoint_data,
+      // CheckpointData: String("record.checkpoint_data"),
+      // CheckpointData: "ddd",
+      CreatedAt: record.created_at,
+      LastEditedAt: record.last_edited_at,
+      playerID: playerID === null ? "N/A" : playerID, // CHQ: I added ternary to control display
+    };
+  });
 };
 
 /**
