@@ -1,9 +1,10 @@
 // hooks/useGameData.ts
 import { useState, useEffect, useMemo, useCallback } from "react";
-import type { CheckPointRecord } from "../utils/dataTypes";
+import type { CheckPointRecord, CheckPointRecordAlt } from "../utils/dataTypes";
 
 interface UseCheckPointsResult {
-  checkpoints: CheckPointRecord[];
+  checkpoints: CheckPointRecordAlt[];
+  // checkpoints: CheckPointRecord[];
   loading: boolean;
   error: string | null;
   refetchCheckpoints: () => void;
@@ -11,8 +12,8 @@ interface UseCheckPointsResult {
 
 export const useGameData = (theApiURL: string): UseCheckPointsResult => {
   const apiURL = theApiURL;
-
-  const [checkpoints, setCheckpoints] = useState<CheckPointRecord[]>([]);
+  const [checkpoints, setCheckpoints] = useState<CheckPointRecordAlt[]>([]);
+  // const [checkpoints, setCheckpoints] = useState<CheckPointRecord[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [triggerRefetch, setTriggerRefetch] = useState(0);
@@ -40,7 +41,8 @@ export const useGameData = (theApiURL: string): UseCheckPointsResult => {
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-      const data: CheckPointRecord[] = await response.json();
+      const data: CheckPointRecordAlt[] = await response.json();
+      // const data: CheckPointRecord[] = await response.json();
       setCheckpoints(data);
     } catch (e: any) {
       if (e instanceof Error) {

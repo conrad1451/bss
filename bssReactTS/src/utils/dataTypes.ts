@@ -10,9 +10,9 @@ export interface RowPage {
 }
 
 export interface LandingPageProps {
-  theUser: DescopeUser;
+  // theUser: DescopeUser;
   theHandleLogout: () => void;
-  theSessionToken: string;
+  // theSessionToken: string;
 }
 
 export interface DescopeUser {
@@ -27,6 +27,15 @@ export interface CheckPointRecord {
   CreatedAt: string;
   LastEditedAt: string;
   playerID: string;
+}
+
+export interface CheckPointRecordAlt {
+  id: number;
+  user_name: string;
+  checkpoint_data: string;
+  created_at: Date;
+  last_edited_at: Date;
+  // playerID: string;
 }
 
 export interface Item {
