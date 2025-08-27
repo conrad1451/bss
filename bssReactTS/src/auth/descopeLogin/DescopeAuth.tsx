@@ -35,7 +35,8 @@ function updateUIBasedOnPermissions(user: DescopeUser) {
     const elements = document.querySelectorAll(
       `[data-permission="${permission}"]`
     );
-    const shouldDisplay = checkPermission(user, permission);
+    // const shouldDisplay = checkPermission(user, permission);
+    const shouldDisplay = true;
     elements.forEach((element) => {
       // CHQ: Gemini AI added check for the element being an HTMLElement before trying to access 'style' property
       if (element instanceof HTMLElement) {
@@ -127,13 +128,14 @@ const DescopeAuth = () => {
   if (isAuthenticated) {
     // CHQ: Gemini AI had getSessionToken called here and passed
     //      into DescopeLandingPage to eliminate race conditions
-    const sessionToken = getSessionToken();
+    // const sessionToken = getSessionToken();
     return (
       <>
         <DescopeLandingPage
-          theUser={user}
+          // theUser={user}
+          // theUser={UserResponse}
           theHandleLogout={handleLogout}
-          theSessionToken={sessionToken}
+          // theSessionToken={sessionToken}
         />
       </>
     );
