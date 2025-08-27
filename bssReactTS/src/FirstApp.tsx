@@ -17,20 +17,11 @@ import CheckpointsDisplay from "./components/CheckpointsDisplay";
  */
 
 const GameApp = (props: {
-  mySessionToken: string;
   button1Text: string;
   callckFctn: () => void | Promise<void>;
 }) => {
   // CHQ: Gemini AI added check to API call
   // Essential check to prevent the API call with a bad token
-  if (!props.mySessionToken) {
-    console.log(
-      "GameApp: Session token is not available. Displaying loading state."
-    );
-    return <div>Loading game data...</div>;
-  }
-
-  console.log("session token is " + props.mySessionToken);
 
   return (
     <div className="flex flex-col items-center justify-center p-8 bg-gray-100 rounded-xl shadow-lg w-full max-w-lg mx-auto text-center">
@@ -46,7 +37,8 @@ const GameApp = (props: {
       <p className="text-gray-600">
         This is where the Bee Swarm Simulator game will be built.
       </p>
-      <CheckpointsDisplay theSessionToken={props.mySessionToken} />
+      <CheckpointsDisplay />
+      {/* <CheckpointsDisplay theAPIURL="CheckpointsDisplay" /> */}
     </div>
   );
 };
@@ -168,7 +160,7 @@ const HomePage = () => {
 };
 
 // The main application component that handles routing
-const FirstApp = (props: { mySessionToken: string }) => {
+const FirstApp = () => {
   const navigate = useNavigate();
 
   return (
@@ -198,11 +190,7 @@ const FirstApp = (props: { mySessionToken: string }) => {
         <Route
           path="/gameplay"
           element={
-            <GameApp
-              mySessionToken={props.mySessionToken}
-              button1Text={"Go Back"}
-              callckFctn={() => navigate("/")}
-            />
+            <GameApp button1Text={"Go Back"} callckFctn={() => navigate("/")} />
           }
         />
       </Routes>
@@ -211,10 +199,10 @@ const FirstApp = (props: { mySessionToken: string }) => {
 };
 
 // Wrap the app with the Router to enable navigation
-export default function AppWrapper(props: { sessionToken: string }) {
+export default function AppWrapper() {
   return (
     <Router>
-      <FirstApp mySessionToken={props.sessionToken} />
+      <FirstApp />
     </Router>
   );
 }

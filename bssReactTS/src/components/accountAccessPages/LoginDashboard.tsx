@@ -23,7 +23,7 @@ const LoginDashboard = (props: { sessionToken: string }) => {
     <>
       {myChoice === "GamePortal" ? (
         // <FirstApp />
-        <AppWrapper sessionToken={props.sessionToken} />
+        <AppWrapper />
       ) : myChoice === "NotionForm" ? (
         <SamplePage />
       ) : (

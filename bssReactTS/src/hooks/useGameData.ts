@@ -9,10 +9,7 @@ interface UseCheckPointsResult {
   refetchCheckpoints: () => void;
 }
 
-export const useGameData = (
-  theApiURL: string,
-  theSessionToken: string
-): UseCheckPointsResult => {
+export const useGameData = (theApiURL: string): UseCheckPointsResult => {
   const apiURL = theApiURL;
 
   const [checkpoints, setCheckpoints] = useState<CheckPointRecord[]>([]);
@@ -24,11 +21,6 @@ export const useGameData = (
   // Use useCallback to create a memoized function that has access to the latest token
   const fetchCheckpoints = useCallback(async () => {
     // Add a guard clause to prevent the API call if the token is invalid or missing.
-    if (!theSessionToken) {
-      console.warn("Session token is not available. Aborting API call.");
-      setLoading(false);
-      return;
-    }
 
     setLoading(true);
     setError(null);
@@ -44,9 +36,6 @@ export const useGameData = (
       const response = await fetch(apiURL, {
         method: "GET",
         mode: "cors",
-        headers: {
-          Authorization: `Bearer ${theSessionToken}`,
-        },
       });
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -63,7 +52,7 @@ export const useGameData = (
     } finally {
       setLoading(false);
     }
-  }, [apiURL, theSessionToken]); // the `fetchCheckpoints` function depends on these values
+  }, [apiURL]); // the `fetchCheckpoints` function depends on these values
 
   useEffect(() => {
     // Call the memoized fetch function inside useEffect

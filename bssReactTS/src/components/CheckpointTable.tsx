@@ -284,8 +284,7 @@ const DeletionConfirmationModal = (props: {
 // Main CheckpointTable component
 const CheckpointTable = (props: {
   thePages: RowPage[];
-  theChoice: string;
-  theToken: string;
+  theDataSource: string;
 }) => {
   const [rawTableData, setRawTableData] = useState<RowPage[]>(props.thePages);
 
@@ -333,7 +332,7 @@ const CheckpointTable = (props: {
   const [updateMajor, setUpdateMajor] = useState("");
 
   //   const newMyID: number = idGenerator(rawTableData);
-  const apiURL = props.theChoice;
+  const apiURL = props.theDataSource;
 
   // Handler to open the action modal for a specific student
   const [isActionModalOpen, setIsActionModalOpen] = useState(false);
@@ -359,7 +358,6 @@ const CheckpointTable = (props: {
       // const BASE_URL =
       //   import.meta.env.VITE_API_URL || import.meta.env.VITE_API_URL_LOCALHOST;
       const BASE_URL = apiURL;
-      const sessionToken = props.theToken;
       const formData = {
         // id: newMyID,
         Username: myUsername,
@@ -370,7 +368,7 @@ const CheckpointTable = (props: {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${sessionToken}`,
+          // Authorization: `Bearer ${sessionToken}`,
         },
         body: JSON.stringify(formData),
       });
@@ -460,11 +458,11 @@ const CheckpointTable = (props: {
     try {
       //  import.meta.env.VITE_API_URL || import.meta.env.VITE_API_URL_LOCALHOST;
       const BASE_URL = apiURL;
-      const sessionToken = props.theToken;
+      // const sessionToken = props.theToken;
       const response = await fetch(`${BASE_URL}/${checkpointToDelete.myID}`, {
         method: "DELETE",
         headers: {
-          Authorization: `Bearer ${sessionToken}`,
+          // Authorization: `Bearer ${sessionToken}`,
         },
       });
 

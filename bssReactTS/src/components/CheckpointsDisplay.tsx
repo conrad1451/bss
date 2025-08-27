@@ -33,13 +33,13 @@ const EmptyDatabase = (props: EmptyDatabaseProps) => {
 };
 
 //      It split a single functional component into a hook and a component
-const CheckpointsDisplay = (props: { theSessionToken: string }) => {
-  const apiURL: string = import.meta.env.VITE_API_BASE_URL;
+const CheckpointsDisplay = () => {
+  // const CheckpointsDisplay = (props: { theAPIURL: string }) => {
+  // const apiURL: string = props.theAPIURL;
+  const apiURL: string = import.meta.env.VITE_API_BASE_URL_OLD;
 
-  const { checkpoints, loading, error, refetchCheckpoints } = useGameData(
-    apiURL,
-    props.theSessionToken
-  );
+  const { checkpoints, loading, error, refetchCheckpoints } =
+    useGameData(apiURL);
   // console.log("props.myToken");
   // console.log(props.myToken);
 
@@ -116,8 +116,7 @@ const CheckpointsDisplay = (props: { theSessionToken: string }) => {
       ) : (
         <CheckpointTable
           thePages={dataForTable}
-          theChoice={apiURL} // Corrected API variable name
-          theToken={props.theSessionToken}
+          theDataSource={apiURL} // Corrected API variable name
         />
       )}
     </Box>
