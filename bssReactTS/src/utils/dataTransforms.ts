@@ -97,7 +97,8 @@ export const transformCheckpointRecordToRowPage = (
       CheckpointData: record.checkpoint_data,
       CreatedAt: record.created_at,
       LastEditedAt: record.last_edited_at,
-      playerID: "testagain",
+      playerID: record.player_id,
+      // playerID: "testagain",
     };
   });
 };
