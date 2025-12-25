@@ -1,6 +1,8 @@
 // hooks/useGameData.ts
-import { useState, useEffect, useMemo, useCallback } from "react";
-import type { CheckPointRecord, CheckPointRecordAlt } from "../utils/dataTypes";
+// import { useState, useEffect, useMemo, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
+// import type { CheckPointRecord, CheckPointRecordAlt } from "../utils/dataTypes";
+import type { CheckPointRecordAlt } from "../utils/dataTypes";
 
 interface UseCheckPointsResult {
   checkpoints: CheckPointRecordAlt[];
