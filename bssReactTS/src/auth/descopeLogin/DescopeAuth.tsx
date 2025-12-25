@@ -112,7 +112,8 @@ const Buttons = (props: { theSetChoice: (input: number) => void }) => {
 
 const DescopeAuth = () => {
   const { isAuthenticated, isSessionLoading } = useSession();
-  const { user, isUserLoading } = useUser();
+  const { isUserLoading } = useUser();
+  // const { user, isUserLoading } = useUser();
   const { logout } = useDescope();
   const [choice, setChoice] = useState(0);
 
@@ -131,7 +132,7 @@ const DescopeAuth = () => {
     return (
       <>
         <DescopeLandingPage
-          theUser={user}
+          // theUser={user}
           theHandleLogout={handleLogout}
           theSessionToken={sessionToken}
         />

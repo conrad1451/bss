@@ -18,7 +18,7 @@ const DescopeLandingPage = (props: LandingPageProps) => {
   }
   return (
     <>
-      <p>Hello {props.theUser?.name}</p>
+      {/* <p>Hello {props.theUser?.name}</p> */}
       <div>My Private Component</div>
       {/* Now, you can safely pass the token, knowing it is valid. */}
       <LoginDashboard sessionToken={props.theSessionToken} />

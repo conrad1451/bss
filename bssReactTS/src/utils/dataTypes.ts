@@ -12,7 +12,7 @@ export interface RowPage {
 export interface LandingPageProps {
   // theUser: DescopeUser;
   theHandleLogout: () => void;
-  // theSessionToken: string;
+  theSessionToken: string;
 }
 
 export interface DescopeUser {
