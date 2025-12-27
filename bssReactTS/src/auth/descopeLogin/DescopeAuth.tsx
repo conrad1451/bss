@@ -1,6 +1,6 @@
 // DescopeAuth.tsx
 
-import { useState, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 import { Descope, useDescope, useSession, useUser } from "@descope/react-sdk";
 import { getSessionToken } from "@descope/react-sdk"; // CHQ: suggested by Descope AI
@@ -11,6 +11,8 @@ import Box from "@mui/material/Box";
 import DescopeLandingPage from "./DescopeLoginLandingPage";
 
 import type { DescopeUser } from "../../utils/dataTypes";
+
+import ChooseUsername from "../ChooseUsername";
 
 function checkPermission(user: DescopeUser, permission: string) {
   const hasPlayerRole =
@@ -48,7 +50,8 @@ function updateUIBasedOnPermissions(user: DescopeUser) {
 const UserLoginRegister = () => {
   return (
     <Descope
-      flowId="sign-up-or-in"
+      // flowId="sign-up-or-in"
+      flowId="sign-up-or-in-username"
       onSuccess={(e) => {
         console.log(e.detail.user?.name);
         console.log(e.detail.user?.email);
@@ -117,6 +120,36 @@ const DescopeAuth = () => {
   const { logout } = useDescope();
   const [choice, setChoice] = useState(0);
 
+  // CHQ: ChatGPT added two states
+  const [me, setMe] = useState<null | { username: string | null }>(null);
+  const [meLoading, setMeLoading] = useState(false);
+
+  // CHQ: ChatGPT added useEffect for new endpoint
+  useEffect(() => {
+    if (!isAuthenticated) return;
+
+    setMeLoading(true);
+
+    const apiURL: string = import.meta.env.VITE_API_BASE_URL + "/me";
+
+    fetch(apiURL, {
+      credentials: "include",
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error("me failed");
+        return res.json();
+      })
+      .then((data) => {
+        setMe(data);
+      })
+      .catch(() => {
+        setMe(null);
+      })
+      .finally(() => {
+        setMeLoading(false);
+      });
+  }, [isAuthenticated]);
+
   const handleLogout = useCallback(() => {
     logout();
   }, [logout]);
@@ -125,18 +158,47 @@ const DescopeAuth = () => {
     return <p>Loading...</p>;
   }
 
+  // if (isAuthenticated) {
+  //   // CHQ: Gemini AI had getSessionToken called here and passed
+  //   //      into DescopeLandingPage to eliminate race conditions
+  //   const sessionToken = getSessionToken();
+  //   return (
+  //     <>
+  //       <DescopeLandingPage
+  //         // theUser={user}
+  //         theHandleLogout={handleLogout}
+  //         theSessionToken={sessionToken}
+  //       />
+  //     </>
+  //   );
+  // }
+
+  // CHQ: ChatGPT modified this block to account for authenticated
+  //      users without a username vs users ready to go
   if (isAuthenticated) {
-    // CHQ: Gemini AI had getSessionToken called here and passed
-    //      into DescopeLandingPage to eliminate race conditions
+    if (meLoading || me === null) {
+      return <p>Loading profile…</p>;
+    }
+
+    // // CHQ: ChatGPT: USER IS AUTHENTICATED BUT HAS NO USERNAME
+    if (!me.username) {
+      return (
+        <ChooseUsername
+          onSuccess={() => {
+            // re-fetch /me
+            setMe(null);
+          }}
+        />
+      );
+    }
+
+    // CHQ: ChatGPT: FULLY READY USER
     const sessionToken = getSessionToken();
     return (
-      <>
-        <DescopeLandingPage
-          // theUser={user}
-          theHandleLogout={handleLogout}
-          theSessionToken={sessionToken}
-        />
-      </>
+      <DescopeLandingPage
+        theHandleLogout={handleLogout}
+        theSessionToken={sessionToken}
+      />
     );
   }
 
