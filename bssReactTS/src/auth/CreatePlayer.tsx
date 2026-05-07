@@ -26,7 +26,8 @@ const CreatePlayer = ({ onSuccess }: Props) => {
     }
 
     setLoading(true);
-    const apiURL = import.meta.env.VITE_API_BASE_URL + "/players";
+    // CHQ: Claude AI fixed the missing /api from the url
+    const apiURL = import.meta.env.VITE_API_BASE_URL + "/api/players";
 
     try {
       const res = await fetch(apiURL, {

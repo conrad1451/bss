@@ -22,7 +22,8 @@ const ChooseUsername = ({ onSuccess }: Props) => {
       return;
     }
     setLoading(true);
-    const apiURL: string = import.meta.env.VITE_API_BASE_URL + "/username";
+    // CHQ: Claude AI fixed the missing /api from the url
+    const apiURL: string = import.meta.env.VITE_API_BASE_URL + "/api/username";
     try {
       const res = await fetch(apiURL, {
         method: "POST",

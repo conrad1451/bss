@@ -123,7 +123,7 @@ const DescopeAuth = () => {
     if (!isAuthenticated) return;
 
     setMeLoading(true);
-    const apiURL: string = import.meta.env.VITE_API_BASE_URL + "/me";
+    const apiURL: string = import.meta.env.VITE_API_BASE_URL + "/api/me";
 
     fetch(apiURL, {
       headers: {
@@ -183,8 +183,9 @@ const DescopeAuth = () => {
       return <ChooseUsername onSuccess={() => setRefreshMe((r) => r + 1)} />;
     }
 
+    // CHQ: Claude AI fixed with check for players
     // step 2 — no players
-    if (me.players.length === 0) {
+    if (!me.players || me.players.length === 0) {
       return <CreatePlayer onSuccess={() => setRefreshMe((r) => r + 1)} />;
     }
 
