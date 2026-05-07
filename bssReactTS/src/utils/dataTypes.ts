@@ -9,17 +9,6 @@ export interface RowPage {
   playerID: string;
 }
 
-export interface LandingPageProps {
-  // theUser: DescopeUser;
-  theHandleLogout: () => void;
-  theSessionToken: string;
-}
-
-export interface DescopeUser {
-  name: string;
-  email: string;
-  roleNames?: string[]; // The `roleNames` property is an optional array of strings
-}
 export interface CheckPointRecord {
   id: number;
   Username: string;
@@ -52,11 +41,6 @@ export interface ConfirmUpdateProps {
   Username: string;
   CheckpointData: string;
   //   playerID: string;
-}
-
-export interface ApiResponse {
-  message: string;
-  // ... other properties
 }
 
 export interface TableBodyRowsProps {
@@ -94,11 +78,64 @@ export interface ColumnVisibilityMiniTable {
   playerID: boolean;
 }
 
+// --- Core API types ---
+export interface User {
+  user_id: number;
+  username: string | null;
+  players: Player[];
+}
+
+export interface Player {
+  id: number;
+  user_id: number;
+  playername: string | null;
+  created_at: string;
+}
+
+export interface Checkpoint {
+  id: number;
+  player_id: number;
+  title: string;
+  data: string;
+  created_at: string;
+  updated_at: string;
+}
+
+// --- Auth ---
+export interface LandingPageProps {
+  theHandleLogout: () => void;
+  theSessionToken: string;
+}
+
+export interface DescopeUser {
+  name: string;
+  email: string;
+  roleNames?: string[];
+}
+
+// --- API responses ---
+export interface ApiResponse {
+  message: string;
+}
+
+export interface SuccessResponse {
+  success: boolean;
+  message?: string;
+}
+
+// --- Table/UI types ---
+export interface ColumnVisibility {
+  id: boolean;
+  title: boolean;
+  data: boolean;
+  created_at: boolean;
+  updated_at: boolean;
+}
+
 export const allColumnKeys: Array<keyof ColumnVisibility> = [
-  "myID",
-  "Username",
-  "CheckpointData",
-  "CreatedAt",
-  "LastEditedAt",
-  "playerID",
+  "id",
+  "title",
+  "data",
+  "created_at",
+  "updated_at",
 ];

@@ -1,18 +1,26 @@
-// DescopeAuth.tsx
+// src/auth/descopeLogin/DescopeAuth.tsx
 
 import { useState, useEffect, useCallback } from "react";
 
-import { Descope, useDescope, useSession, useUser } from "@descope/react-sdk";
-import { getSessionToken } from "@descope/react-sdk"; // CHQ: suggested by Descope AI
+import {
+  Descope,
+  useDescope,
+  useSession,
+  useUser,
+  getSessionToken,
+} from "@descope/react-sdk";
 
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 
 import DescopeLandingPage from "./DescopeLoginLandingPage";
 
-import type { DescopeUser } from "../../utils/dataTypes";
+import type { DescopeUser, Player } from "../../utils/dataTypes";
 
 import ChooseUsername from "../ChooseUsername";
+
+import CreatePlayer from "../CreatePlayer";
+import PlayerSelection from "../PlayerSelection";
 
 function checkPermission(user: DescopeUser, permission: string) {
   const hasPlayerRole =
@@ -35,7 +43,7 @@ function updateUIBasedOnPermissions(user: DescopeUser) {
   const permissions = ["create", "update", "delete", "publish"];
   permissions.forEach((permission) => {
     const elements = document.querySelectorAll(
-      `[data-permission="${permission}"]`
+      `[data-permission="${permission}"]`,
     );
     const shouldDisplay = checkPermission(user, permission);
     elements.forEach((element) => {
@@ -47,28 +55,16 @@ function updateUIBasedOnPermissions(user: DescopeUser) {
   });
 }
 
-const UserLoginRegister = () => {
-  return (
-    <Descope
-      // flowId="sign-up-or-in"
-      flowId="sign-up-or-in-username"
-      onSuccess={(e) => {
-        console.log(e.detail.user?.name);
-        console.log(e.detail.user?.email);
-
-        // Check if e.detail.user is not undefined before calling the function.
-        if (e.detail.user) {
-          updateUIBasedOnPermissions(e.detail.user as DescopeUser);
-        }
-      }}
-      onError={(err) => {
-        console.log("Error!", err);
-        alert("Error: " + err.detail.errorMessage);
-        console.log("Could not log in");
-      }}
-    />
-  );
-};
+const UserLoginRegister = () => (
+  <Descope
+    flowId="sign-up-or-in-no-username"
+    onSuccess={(e) => console.log(e.detail.user)}
+    onError={(err) => {
+      console.log("Error!", err);
+      alert("Error: " + err.detail.errorMessage);
+    }}
+  />
+);
 
 const UserSignIn = () => {
   return (
@@ -95,23 +91,16 @@ const UserSignIn = () => {
   );
 };
 
-const Buttons = (props: { theSetChoice: (input: number) => void }) => {
-  return (
-    <Box sx={{ display: "flex", gap: 2, justifyContent: "center", mb: 2 }}>
-      {/* <Button variant="contained" onClick={() => props.theSetChoice(1)}>
-        Go to Guest sign in
-      </Button> */}
-
-      <Button variant="contained" onClick={() => props.theSetChoice(2)}>
-        Go to User sign in
-      </Button>
-
-      <Button variant="contained" onClick={() => props.theSetChoice(3)}>
-        Go to Admin sign in
-      </Button>
-    </Box>
-  );
-};
+const Buttons = (props: { theSetChoice: (input: number) => void }) => (
+  <Box sx={{ display: "flex", gap: 2, justifyContent: "center", mb: 2 }}>
+    <Button variant="contained" onClick={() => props.theSetChoice(2)}>
+      Go to User sign in
+    </Button>
+    <Button variant="contained" onClick={() => props.theSetChoice(3)}>
+      Go to Admin sign in
+    </Button>
+  </Box>
+);
 
 const DescopeAuth = () => {
   const { isAuthenticated, isSessionLoading } = useSession();
@@ -119,21 +108,27 @@ const DescopeAuth = () => {
   // const { user, isUserLoading } = useUser();
   const { logout } = useDescope();
   const [choice, setChoice] = useState(0);
+  const [refreshMe, setRefreshMe] = useState(0);
 
-  // CHQ: ChatGPT added two states
-  const [me, setMe] = useState<null | { username: string | null }>(null);
+  const [me, setMe] = useState<null | {
+    user_id: number;
+    username: string | null;
+    players: Player[];
+  }>(null);
   const [meLoading, setMeLoading] = useState(false);
+  const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null);
 
   // CHQ: ChatGPT added useEffect for new endpoint
   useEffect(() => {
     if (!isAuthenticated) return;
 
     setMeLoading(true);
-
     const apiURL: string = import.meta.env.VITE_API_BASE_URL + "/me";
 
     fetch(apiURL, {
-      credentials: "include",
+      headers: {
+        Authorization: `Bearer ${getSessionToken()}`,
+      },
     })
       .then((res) => {
         if (!res.ok) throw new Error("me failed");
@@ -141,14 +136,16 @@ const DescopeAuth = () => {
       })
       .then((data) => {
         setMe(data);
+        // auto-select if exactly one player
+        if (data.players?.length === 1) {
+          setSelectedPlayer(data.players[0]);
+        } else {
+          setSelectedPlayer(null);
+        }
       })
-      .catch(() => {
-        setMe(null);
-      })
-      .finally(() => {
-        setMeLoading(false);
-      });
-  }, [isAuthenticated]);
+      .catch(() => setMe(null))
+      .finally(() => setMeLoading(false));
+  }, [isAuthenticated, refreshMe]);
 
   const handleLogout = useCallback(() => {
     logout();
@@ -181,23 +178,34 @@ const DescopeAuth = () => {
     }
 
     // // CHQ: ChatGPT: USER IS AUTHENTICATED BUT HAS NO USERNAME
+    // step 1 — no username
     if (!me.username) {
+      return <ChooseUsername onSuccess={() => setRefreshMe((r) => r + 1)} />;
+    }
+
+    // step 2 — no players
+    if (me.players.length === 0) {
+      return <CreatePlayer onSuccess={() => setRefreshMe((r) => r + 1)} />;
+    }
+
+    // step 3 — multiple players, none selected
+    if (me.players.length > 1 && !selectedPlayer) {
       return (
-        <ChooseUsername
-          onSuccess={() => {
-            // re-fetch /me
-            setMe(null);
-          }}
+        <PlayerSelection
+          players={me.players}
+          onSelect={(player) => setSelectedPlayer(player)}
+          onPlayerCreated={() => setRefreshMe((r) => r + 1)}
         />
       );
     }
 
-    // CHQ: ChatGPT: FULLY READY USER
+    // step 4 — player selected (or auto-selected), go to game
     const sessionToken = getSessionToken();
     return (
       <DescopeLandingPage
         theHandleLogout={handleLogout}
         theSessionToken={sessionToken}
+        theSelectedPlayer={selectedPlayer!}
       />
     );
   }
@@ -217,11 +225,8 @@ const DescopeAuth = () => {
     <div>
       <h1>Sign In</h1>
       <Buttons theSetChoice={setChoice} />
-      {/* {choice === 1 && <GuestLogin />} */}
       {choice === 2 && <UserLoginRegister />}
       {choice === 3 && <UserSignIn />}
-
-      {/* UserSignIn */}
     </div>
   );
 };

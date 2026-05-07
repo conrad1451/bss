@@ -11,6 +11,8 @@ import Box from "@mui/material/Box";
 
 import CheckpointsDisplay from "./components/CheckpointsDisplay";
 
+import type { Player } from "./utils/dataTypes";
+
 /**
  * A placeholder component for the main game.
  * All game logic and UI will be rendered within this component.
@@ -18,35 +20,46 @@ import CheckpointsDisplay from "./components/CheckpointsDisplay";
 
 const GameApp = (props: {
   mySessionToken: string;
+  selectedPlayer: Player;
   button1Text: string;
   callckFctn: () => void | Promise<void>;
 }) => {
+  const { mySessionToken, selectedPlayer, button1Text, callckFctn } = props;
+
   // CHQ: Gemini AI added check to API call
   // Essential check to prevent the API call with a bad token
-  if (!props.mySessionToken) {
+  if (!mySessionToken) {
     console.log(
-      "GameApp: Session token is not available. Displaying loading state."
+      "GameApp: Session token is not available. Displaying loading state.",
     );
     return <div>Loading game data...</div>;
   }
 
-  console.log("session token is " + props.mySessionToken);
+  console.log("session token is " + mySessionToken);
 
   return (
     <div className="flex flex-col items-center justify-center p-8 bg-gray-100 rounded-xl shadow-lg w-full max-w-lg mx-auto text-center">
       <h1 className="text-3xl font-bold mb-4 text-gray-800">Gameplay Area</h1>
 
       {/* Button to start playing the game */}
-      <button
-        onClick={props.callckFctn}
+
+      <p>Playing as: {selectedPlayer.playername}</p>
+      <button onClick={callckFctn}>{button1Text}</button>
+      <CheckpointsDisplay
+        theSessionToken={mySessionToken}
+        selectedPlayer={selectedPlayer}
+      />
+
+      {/* <button
+        onClick={callckFctn}
         className="w-full bg-yellow-500 text-white font-bold py-3 px-6 rounded-lg text-lg transition-all duration-300 hover:bg-yellow-600 shadow-md transform hover:scale-105"
       >
-        {props.button1Text}
+        {button1Text}
       </button>
       <p className="text-gray-600">
         This is where the Bee Swarm Simulator game will be built.
       </p>
-      <CheckpointsDisplay theSessionToken={props.mySessionToken} />
+      <CheckpointsDisplay theSessionToken={mySessionToken} /> */}
     </div>
   );
 };
@@ -168,7 +181,11 @@ const HomePage = () => {
 };
 
 // The main application component that handles routing
-const FirstApp = (props: { mySessionToken: string }) => {
+const FirstApp = (props: {
+  mySessionToken: string;
+  selectedPlayer: Player;
+}) => {
+  const { mySessionToken, selectedPlayer } = props;
   const navigate = useNavigate();
 
   return (
@@ -199,7 +216,8 @@ const FirstApp = (props: { mySessionToken: string }) => {
           path="/gameplay"
           element={
             <GameApp
-              mySessionToken={props.mySessionToken}
+              mySessionToken={mySessionToken}
+              selectedPlayer={selectedPlayer}
               button1Text={"Go Back"}
               callckFctn={() => navigate("/")}
             />
@@ -211,10 +229,14 @@ const FirstApp = (props: { mySessionToken: string }) => {
 };
 
 // Wrap the app with the Router to enable navigation
-export default function AppWrapper(props: { sessionToken: string }) {
+export default function AppWrapper(props: {
+  sessionToken: string;
+  selectedPlayer: Player;
+}) {
+  const { sessionToken, selectedPlayer } = props;
   return (
     <Router>
-      <FirstApp mySessionToken={props.sessionToken} />
+      <FirstApp mySessionToken={sessionToken} selectedPlayer={selectedPlayer} />
     </Router>
   );
 }

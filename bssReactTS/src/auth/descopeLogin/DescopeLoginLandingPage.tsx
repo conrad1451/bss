@@ -1,15 +1,13 @@
-// DescopeLoginLandingPage.tsx
+// src/auth/descopeLogin/DescopeLoginLandingPage.tsx
 
 import LoginDashboard from "../../components/accountAccessPages/LoginDashboard";
+import type { LandingPageProps, Player } from "../../utils/dataTypes";
 
-// import type { DescopeUser, LandingPageProps } from "../../utils/dataTypes";
+type Props = LandingPageProps & {
+  theSelectedPlayer: Player;
+};
 
-import type { LandingPageProps } from "../../utils/dataTypes";
-// interface DescopeUser {
-//   name?: string;
-// }
-
-const DescopeLandingPage = (props: LandingPageProps) => {
+const DescopeLandingPage = (props: Props) => {
   // This guard clause is essential. It prevents the component from rendering
   // its children before a valid session token is available.
   if (!props.theSessionToken) {
@@ -21,7 +19,10 @@ const DescopeLandingPage = (props: LandingPageProps) => {
       {/* <p>Hello {props.theUser?.name}</p> */}
       <div>My Private Component</div>
       {/* Now, you can safely pass the token, knowing it is valid. */}
-      <LoginDashboard sessionToken={props.theSessionToken} />
+      <LoginDashboard
+        sessionToken={props.theSessionToken}
+        selectedPlayer={props.theSelectedPlayer}
+      />
       <button onClick={props.theHandleLogout}>Logout</button>
     </>
   );

@@ -10,6 +10,8 @@ import { Box, Button, Typography } from "@mui/material"; // Import necessary MUI
 // import type { RowPage } from "../utils/dataTypes"; // Import both
 import { transformCheckpointRecordToRowPage } from "../utils/dataTransforms";
 
+import type { Player } from "../utils/dataTypes";
+
 // Define the prop type for EmptyDatabase for better type safety
 interface EmptyDatabaseProps {
   theRefetchOfCheckpoints: () => void;
@@ -33,13 +35,14 @@ const EmptyDatabase = (props: EmptyDatabaseProps) => {
 };
 
 //      It split a single functional component into a hook and a component
-const CheckpointsDisplay = (props: { theSessionToken: string }) => {
-  const apiURL: string =
-    import.meta.env.VITE_API_BASE_URL + "/api/gamecheckpoints";
-
+const CheckpointsDisplay = (props: {
+  theSessionToken: string;
+  selectedPlayer: Player;
+}) => {
+  const apiURL = `${import.meta.env.VITE_API_BASE_URL}/api/players/${props.selectedPlayer.id}/checkpoints`;
   const { checkpoints, loading, error, refetchCheckpoints } = useGameData(
     apiURL,
-    props.theSessionToken
+    props.theSessionToken,
   );
   // console.log("props.myToken");
   // console.log(props.myToken);

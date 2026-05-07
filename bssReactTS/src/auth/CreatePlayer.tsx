@@ -1,28 +1,33 @@
-// src/auth/ChooseUsername.tsx
-// CHQ: Gemini AI created
+// src/auth/CreatePlayer.tsx
 import { useState } from "react";
 import { getSessionToken } from "@descope/react-sdk";
+import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
+
 type Props = {
   onSuccess: () => void;
 };
-const ChooseUsername = ({ onSuccess }: Props) => {
-  const [username, setUsername] = useState("");
+
+const CreatePlayer = ({ onSuccess }: Props) => {
+  const [playername, setPlayername] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+
   const submit = async () => {
     if (loading) return;
     setError(null);
-    const normalized = username.trim();
+
+    const normalized = playername.trim();
     if (!normalized) {
-      setError("Username is required");
+      setError("Playername is required");
       return;
     }
+
     setLoading(true);
-    const apiURL: string = import.meta.env.VITE_API_BASE_URL + "/username";
+    const apiURL = import.meta.env.VITE_API_BASE_URL + "/players";
+
     try {
       const res = await fetch(apiURL, {
         method: "POST",
@@ -30,21 +35,21 @@ const ChooseUsername = ({ onSuccess }: Props) => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${getSessionToken()}`,
         },
-        // body: JSON.stringify({ username }),
-        body: JSON.stringify({ username: normalized }),
+        body: JSON.stringify({ playername: normalized }),
       });
-      if (res.status === 401) {
-        setError("Session expired. Please sign in again.");
+
+      if (res.status === 409) {
+        setError("Playername already taken");
         return;
       }
-      if (res.status === 409) {
-        setError("Username already taken");
+      if (res.status === 403) {
+        setError("Player limit reached");
         return;
       }
       if (!res.ok) {
         throw new Error("Unexpected error");
       }
-      // ✅ success — tell parent to refetch /me
+
       onSuccess();
     } catch {
       setError("Something went wrong. Try again.");
@@ -52,6 +57,7 @@ const ChooseUsername = ({ onSuccess }: Props) => {
       setLoading(false);
     }
   };
+
   return (
     <Box
       sx={{
@@ -63,12 +69,12 @@ const ChooseUsername = ({ onSuccess }: Props) => {
         gap: 2,
       }}
     >
-      <Typography variant="h5">Choose a username</Typography>
+      <Typography variant="h5">Create your first character</Typography>
       <TextField
-        label="Username"
-        value={username}
+        label="Character name"
+        value={playername}
         onChange={(e) => {
-          setUsername(e.target.value);
+          setPlayername(e.target.value);
           if (error) setError(null);
         }}
         error={!!error}
@@ -78,11 +84,12 @@ const ChooseUsername = ({ onSuccess }: Props) => {
       <Button
         variant="contained"
         onClick={submit}
-        disabled={loading || !username.trim()}
+        disabled={loading || !playername.trim()}
       >
-        {loading ? "Saving…" : "Continue"}
+        {loading ? "Creating…" : "Create Character"}
       </Button>
     </Box>
   );
 };
-export default ChooseUsername;
+
+export default CreatePlayer;
