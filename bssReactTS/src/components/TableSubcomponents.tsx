@@ -19,32 +19,12 @@ import {
   // Select,
   // MenuItem,
   IconButton,
-  TextField, // Added TextField for better input control in modals
 } from "@mui/material";
 
 // import { useTableFilters } from "../hooks/useTableFilters";
 import { useTableSorting } from "../hooks/useTableSorting";
 
-import { displayDate } from "../utils/dataTransforms";
-
-import type {
-  //   RowPage,
-  WebFormProps,
-  //   ConfirmUpdateProps,
-  //   ApiResponse,
-  ColumnVisibility,
-  TableBodyRowsProps,
-} from "../utils/dataTypes";
-
-const WebForm: React.FC<WebFormProps> = ({ onSubmit }) => {
-  return (
-    <form onSubmit={onSubmit}>
-      {" "}
-      {/* Pass the onSubmit handler directly */}
-      <button type="submit">Submit data to database</button>
-    </form>
-  );
-};
+import type { ColumnVisibility, TableBodyRowsProps } from "../utils/dataTypes";
 
 export const TableHeaderCells = (props: {
   visibleColumns: ColumnVisibility;
@@ -54,11 +34,7 @@ export const TableHeaderCells = (props: {
 }) => {
   const { visibleColumns, sortProps, sortHandlers, theColumnKeys } = props;
 
-  type SortableTableColumns =
-    | "Username"
-    | "CreatedAt"
-    | "LastEditedAt"
-    | "playerID";
+  type SortableTableColumns = "title" | "created_at" | "updated_at";
   return (
     <TableHead>
       <TableRow>
@@ -71,10 +47,9 @@ export const TableHeaderCells = (props: {
                 </Typography>
                 {(
                   [
-                    "Username",
-                    "CreatedAt",
-                    "LastEditedAt",
-                    "playerID",
+                    "title",
+                    "created_at",
+                    "updated_at",
                   ] as SortableTableColumns[]
                 ).includes(colName as SortableTableColumns) && (
                   <>
@@ -157,113 +132,34 @@ export const TableHeaderCells = (props: {
 };
 
 export const TableBodyRows = (props: TableBodyRowsProps) => {
-  const {
-    data,
-    theColumnKeys,
-    visibleColumns,
-    onOpenActionModal,
-    myUsername,
-    setMyUsername,
-    myCheckpointData,
-    setMyCheckpointData,
-    loading,
-    successMessage,
-    errorMessage,
-    onNewCheckpointSubmit,
-  } = props;
+  const { data, theColumnKeys, visibleColumns, onOpenActionModal } = props;
   return (
     <TableBody>
       {data.map((row) => (
-        <TableRow key={row.myID}>
+        <TableRow key={row.id}>
           {theColumnKeys.map((colName) =>
             visibleColumns[colName] ? (
               <TableCell key={colName}>
-                {colName === "myID" && row.myID}
-                {colName === "Username" && row.Username}
-                {colName === "CreatedAt" && displayDate(row.CreatedAt)}
-                {colName === "LastEditedAt" && displayDate(row.LastEditedAt)}
-                {colName === "playerID" && row.playerID}
+                {colName === "id" && row.id}
+                {colName === "title" && row.title}
+                {colName === "data" && row.data}
+                {colName === "created_at" && row.created_at}
+                {colName === "updated_at" && row.updated_at}
+                {/* {colName === "created_at" && displayDate(row.created_at)}
+                {colName === "updated_at" && displayDate(row.updated_at)} */}
               </TableCell>
             ) : null,
           )}
-          {/* TableCell for Actions button for existing rows */}
           <TableCell>
             <IconButton
               aria-label="actions"
-              onClick={() => onOpenActionModal(row)} // Pass the entire row data
+              onClick={() => onOpenActionModal(row)}
             >
               <MoreVertIcon />
             </IconButton>
           </TableCell>
         </TableRow>
       ))}
-      {/* New Row for adding a student */}
-      <TableRow>
-        {theColumnKeys.map((colName) =>
-          visibleColumns[colName] ? (
-            <TableCell key={colName}>
-              <Box sx={{ display: "flex", alignItems: "center" }}>
-                {/* // CHQ: Gemini AI changed empty div to TextField for each field */}
-                <Typography variant="subtitle2" sx={{ mr: 1 }}>
-                  {colName === "Username" ? (
-                    <TextField
-                      type="text"
-                      value={myUsername}
-                      onChange={(e) => setMyUsername(e.target.value)}
-                      placeholder="First Name"
-                      size="small"
-                      variant="outlined"
-                    />
-                  ) : colName === "CheckpointData" ? (
-                    <TextField
-                      type="text"
-                      value={myCheckpointData}
-                      onChange={(e) => setMyCheckpointData(e.target.value)}
-                      placeholder="Last Name"
-                      size="small"
-                      variant="outlined"
-                    />
-                  ) : (
-                    // ) : colName === "myID" ? (
-                    //   <>{myId}</>
-                    ""
-                  )}
-                </Typography>
-              </Box>
-            </TableCell>
-          ) : null,
-        )}
-        {/* Cell for the WebForm in the new student row */}
-        <TableCell>
-          <div>
-            {loading && <p>Loading...</p>}
-            {successMessage && (
-              <p style={{ color: "green" }}>{successMessage}</p>
-            )}
-            {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
-            <WebForm onSubmit={onNewCheckpointSubmit} />{" "}
-            {/* Pass the submit handler */}
-          </div>
-        </TableCell>
-      </TableRow>
-      {/* Footer row (Count of checkpoints saved) */}
-      <TableRow>
-        {theColumnKeys.map((colName) =>
-          visibleColumns[colName] ? (
-            <TableCell key={colName}>
-              <Box sx={{ display: "flex", alignItems: "center" }}>
-                <Typography variant="subtitle2" sx={{ mr: 1 }}>
-                  {colName === "Username"
-                    ? "Count of checkpoints saved: " + String(data.length)
-                    : ""}
-                </Typography>
-              </Box>
-            </TableCell>
-          ) : null,
-        )}
-        {/* Empty cell for the actions column in the footer row */}
-        <TableCell></TableCell>
-      </TableRow>
     </TableBody>
   );
 };

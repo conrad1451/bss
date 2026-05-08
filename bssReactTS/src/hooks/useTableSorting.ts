@@ -1,31 +1,28 @@
 // useTableSorting.tsx
 import { useState, useMemo } from "react";
 
-import type { RowPage } from "../utils/dataTypes";
+// CHQ: Claude AI replaced RowPage with Checkpoint
+import type { Checkpoint } from "../utils/dataTypes";
 
 // CHQ: Gemini AI added
-type SortableStringKeys =
-  | "Username"
-  | "CreatedAt"
-  | "LastEditedAt"
-  | "playerID";
+type SortableStringKeys = "id" | "title" | "data" | "created_at" | "updated_at";
 
 // CHQ: Gemini AI refactored from a specific comparator for first names to that for strings
 /**
- * Generic comparator function for sorting RowPage objects by a specified string property.
+ * Generic comparator function for sorting Checkpoint objects by a specified string property.
  * Handles case-insensitive comparison and null/undefined values.
  *
- * @param a - First RowPage object.
- * @param b - Second RowPage object.
+ * @param a - First Checkpoint object.
+ * @param b - Second Checkpoint object.
  * @param columnKey - The key of the string property to sort by (e.g., "FirstName", "Email").
  * @param direction - Sort direction ("asc" or "desc").
  * @returns -1 if a < b, 1 if a > b, 0 if equal, based on direction.
  */
 function sortByStringComparator(
-  a: RowPage,
-  b: RowPage,
+  a: Checkpoint,
+  b: Checkpoint,
   columnKey: SortableStringKeys,
-  direction: "asc" | "desc"
+  direction: "asc" | "desc",
 ): number {
   // Get values, convert to lowercase strings, handle null/undefined by treating as empty strings
   const valA = (a[columnKey] || "").toString().toLowerCase();
@@ -47,18 +44,18 @@ function sortByStringComparator(
  * It takes filtered data and returns the sorted data, along with
  * sort properties and handler functions to control the sorting.
  *
- * @param filteredData The array of RowPage objects after filtering has been applied.
+ * @param filteredData The array of Checkpoint objects after filtering has been applied.
  * @returns An object containing:
- * - sortedData: The RowPage[] array after sorting has been applied.
+ * - sortedData: The Checkpoint[] array after sorting has been applied.
  * - sortProps: An object containing all the state variables for sorting (e.g., current sort directions).
  * - sortHandlers: An object containing all the functions to change sort states.
  */
-export const useTableSorting = (filteredData: RowPage[]) => {
+export const useTableSorting = (filteredData: Checkpoint[]) => {
   // State for the currently sorted column
   const [sortColumn, setSortColumn] = useState<SortableStringKeys | null>(null);
   // State for the sort direction of the current column
   const [sortDirection, setSortDirection] = useState<"asc" | "desc" | null>(
-    null
+    null,
   );
 
   // CHQ: Gemini AI added the setSortColumn to null
@@ -97,7 +94,7 @@ export const useTableSorting = (filteredData: RowPage[]) => {
 
     if (sortColumn && sortDirection) {
       sortableData.sort((a, b) =>
-        sortByStringComparator(a, b, sortColumn, sortDirection)
+        sortByStringComparator(a, b, sortColumn, sortDirection),
       );
     }
 

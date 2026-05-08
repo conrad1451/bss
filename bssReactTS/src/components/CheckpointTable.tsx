@@ -19,11 +19,7 @@ import { useConfirmationModal } from "../hooks/useConfirmationModule";
 import { ColumnVisibilityControlModal } from "./ColumnVisibilityModule";
 import { TableHeaderCells, TableBodyRows } from "./TableSubcomponents";
 
-import type {
-  RowPage,
-  ConfirmUpdateProps,
-  ApiResponse,
-} from "../utils/dataTypes";
+import type { Checkpoint, ApiResponse } from "../utils/dataTypes";
 import { allColumnKeys } from "../utils/dataTypes";
 
 // Simple icon components for the collapse button
@@ -35,17 +31,15 @@ const MyExpandMoreIcon = () => {
   return <>🔽</>;
 };
 
-// New component for the Edit/Delete action modal
+// CHQ: Claude AI refactored
 const CheckpointActionModal = (props: {
   open: boolean;
   onClose: () => void;
-  student: RowPage | null;
-  //   onEdit: (student: RowPage) => void;
-  onDelete: (student: RowPage) => void;
+  checkpoint: Checkpoint | null;
+  onDelete: (checkpoint: Checkpoint) => void;
 }) => {
-  const { student, open, onClose, onDelete } = props;
-
-  if (!student) return null;
+  const { checkpoint, open, onClose, onDelete } = props;
+  if (!checkpoint) return null;
 
   return (
     <Modal open={open} onClose={onClose}>
@@ -108,130 +102,91 @@ const CheckpointActionModal = (props: {
   );
 };
 
-// Update Confirmation Modal component, now controlled by the hook
-const UpdateConfirmationModal = (props: {
-  open: boolean;
-  onClose: () => void;
-  onConfirm: () => void;
-  message: string;
-  loading: boolean;
-  successMessage: string | null;
-  errorMessage: string | null;
-  currentFirstName: string;
-  setCurrentFirstName: (value: string) => void;
-  currentLastName: string;
-  setCurrentLastName: (value: string) => void;
-  currentEmail: string;
-  setCurrentEmail: (value: string) => void;
-  currentMajor: string;
-  setCurrentMajor: (value: string) => void;
-}) => {
-  const {
-    open,
-    onClose,
-    onConfirm,
-    message,
-    currentFirstName,
-    setCurrentFirstName,
-    currentLastName,
-    setCurrentLastName,
-    currentEmail,
-    setCurrentEmail,
-    currentMajor,
-    setCurrentMajor,
-    loading,
-    successMessage,
-    errorMessage,
-  } = props;
+// // Update Confirmation Modal component, now controlled by the hook
+// const UpdateConfirmationModal = (props: {
+//   open: boolean;
+//   onClose: () => void;
+//   onConfirm: () => void;
+//   message: string;
+//   loading: boolean;
+//   successMessage: string | null;
+//   errorMessage: string | null;
+//   currentCheckpointData: string;
+//   setCheckpointData: (value: string) => void;
+// }) => {
+//   const {
+//     open,
+//     onClose,
+//     onConfirm,
+//     message,
+//     currentCheckpointData,
+//     setCheckpointData,
+//     loading,
+//     successMessage,
+//     errorMessage,
+//   } = props;
 
-  return (
-    <Modal open={open} onClose={onClose}>
-      <Box
-        sx={{
-          position: "absolute",
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%, -50%)",
-          width: { xs: "90%", sm: 400 },
-          bgcolor: "background.paper",
-          border: "2px solid #000",
-          boxShadow: 24,
-          p: 4,
-          display: "flex",
-          flexDirection: "column",
-          gap: 2,
-          borderRadius: "8px",
-        }}
-      >
-        <Typography variant="h6" component="h2">
-          Confirmation
-        </Typography>
-        <Typography>{message}</Typography>
+//   return (
+//     <Modal open={open} onClose={onClose}>
+//       <Box
+//         sx={{
+//           position: "absolute",
+//           top: "50%",
+//           left: "50%",
+//           transform: "translate(-50%, -50%)",
+//           width: { xs: "90%", sm: 400 },
+//           bgcolor: "background.paper",
+//           border: "2px solid #000",
+//           boxShadow: 24,
+//           p: 4,
+//           display: "flex",
+//           flexDirection: "column",
+//           gap: 2,
+//           borderRadius: "8px",
+//         }}
+//       >
+//         <Typography variant="h6" component="h2">
+//           Confirmation
+//         </Typography>
+//         <Typography>{message}</Typography>
 
-        <Box sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 2 }}>
-          <TextField
-            label="First Name"
-            type="text"
-            value={currentFirstName}
-            onChange={(e) => setCurrentFirstName(e.target.value)}
-            placeholder="First Name"
-            size="small"
-            variant="outlined"
-          />
-          <TextField
-            label="Last Name"
-            type="text"
-            value={currentLastName}
-            onChange={(e) => setCurrentLastName(e.target.value)}
-            placeholder="Last Name"
-            size="small"
-            variant="outlined"
-          />
-          <TextField
-            label="Email"
-            type="email"
-            value={currentEmail}
-            onChange={(e) => setCurrentEmail(e.target.value)}
-            placeholder="Email"
-            size="small"
-            variant="outlined"
-          />
-          <TextField
-            label="Major"
-            type="text"
-            value={currentMajor}
-            onChange={(e) => setCurrentMajor(e.target.value)}
-            placeholder="Major"
-            size="small"
-            variant="outlined"
-          />
-        </Box>
-        {loading && <p>Loading...</p>}
-        {successMessage && <p style={{ color: "green" }}>{successMessage}</p>}
-        {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
-        <Box sx={{ display: "flex", justifyContent: "space-around", mt: 2 }}>
-          <Button
-            variant="contained"
-            color="info"
-            onClick={onConfirm}
-            sx={{ borderRadius: "8px" }}
-            disabled={loading}
-          >
-            Confirm Update
-          </Button>
-          <Button
-            variant="outlined"
-            onClick={onClose}
-            sx={{ borderRadius: "8px" }}
-            disabled={loading}
-          >
-            Cancel
-          </Button>
-        </Box>
-      </Box>
-    </Modal>
-  );
-};
+//         <Box sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 2 }}>
+//           <TextField
+//             label="First Name"
+//             type="text"
+//             value={currentCheckpointData}
+//             onChange={(e) => setCheckpointData(e.target.value)}
+//             placeholder="First Name"
+//             size="small"
+//             variant="outlined"
+//           />
+//         </Box>
+//         {loading && <p>Loading...</p>}
+//         {successMessage && <p style={{ color: "green" }}>{successMessage}</p>}
+//         {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
+//         <Box sx={{ display: "flex", justifyContent: "space-around", mt: 2 }}>
+//           <Button
+//             variant="contained"
+//             color="info"
+//             onClick={onConfirm}
+//             sx={{ borderRadius: "8px" }}
+//             disabled={loading}
+//           >
+//             Confirm Update
+//           </Button>
+//           <Button
+//             variant="outlined"
+//             onClick={onClose}
+//             sx={{ borderRadius: "8px" }}
+//             disabled={loading}
+//           >
+//             Cancel
+//           </Button>
+//         </Box>
+//       </Box>
+//     </Modal>
+//   );
+// };
 
 // Deletion Confirmation Modal component, now controlled by the hook
 const DeletionConfirmationModal = (props: {
@@ -305,13 +260,13 @@ const DeletionConfirmationModal = (props: {
 
 // Main CheckpointTable component
 const CheckpointTable = (props: {
-  thePages: RowPage[];
+  thePages: Checkpoint[];
   theChoice: string;
   theToken: string;
 }) => {
   const { thePages, theChoice, theToken } = props;
 
-  const [rawTableData, setRawTableData] = useState<RowPage[]>(thePages);
+  const [rawTableData, setRawTableData] = useState<Checkpoint[]>(thePages);
 
   // Sync local state with props whenever thePages changes
   useEffect(() => {
@@ -319,9 +274,11 @@ const CheckpointTable = (props: {
   }, [thePages]);
 
   // Filter out any rows that have invalid data before passing to hooks
-  const initialTableDataForHooks = rawTableData.filter(
-    (row) => row && row.Username && row.Username.trim() !== "",
-  );
+  // const initialTableDataForHooks = rawTableData.filter(
+  //   (row) => row && row.Username && row.Username.trim() !== "",
+  // );
+
+  const initialTableDataForHooks = rawTableData;
 
   // Custom hooks for table functionality
   const [isColumnModalOpen, setIsColumnModalOpen] = useState(false);
@@ -350,26 +307,26 @@ const CheckpointTable = (props: {
   // Use the new confirmation hook
   const confirmationModal = useConfirmationModal();
 
-  // States for the update modal's input fields (now controlled by the main component)
-  const [updateFirstName, setUpdateFirstName] = useState("");
-  const [updateLastName, setUpdateLastName] = useState("");
-  const [updateEmail, setUpdateEmail] = useState("");
-  const [updateMajor, setUpdateMajor] = useState("");
+  // // States for the update modal's input fields (now controlled by the main component)
+  // const [updateFirstName, setUpdateFirstName] = useState("");
+  // const [updateLastName, setUpdateLastName] = useState("");
+  // const [updateEmail, setUpdateEmail] = useState("");
+  // const [updateMajor, setUpdateMajor] = useState("");
 
   //   const newMyID: number = idGenerator(rawTableData);
   const apiURL = theChoice;
 
   // Handler to open the action modal for a specific student
   const [isActionModalOpen, setIsActionModalOpen] = useState(false);
-  const [selectedStudentForActions, setSelectedStudentForActions] =
-    useState<RowPage | null>(null);
-  const handleOpenActionModal = (student: RowPage) => {
-    setSelectedStudentForActions(student);
+  const [selectedCheckpointForActions, setSelectedCheckpointForActions] =
+    useState<Checkpoint | null>(null);
+  const handleOpenActionModal = (student: Checkpoint) => {
+    setSelectedCheckpointForActions(student);
     setIsActionModalOpen(true);
   };
   const handleCloseActionModal = () => {
     setIsActionModalOpen(false);
-    setSelectedStudentForActions(null);
+    setSelectedCheckpointForActions(null);
   };
 
   // Handler for adding a new student via a POST request
@@ -446,49 +403,35 @@ const CheckpointTable = (props: {
   //     );
   //   };
 
+  // CHQ: Claude AI updated this
   // Handler to open the delete confirmation modal
-  const handleDeleteCheckpoint = (checkpoint: RowPage) => {
-    handleCloseActionModal(); // Close the action modal first
-
-    // if(checkpoint.myID?)
-    if (checkpoint.myID !== null && checkpoint.myID !== undefined) {
-      // Now use the hook to show the delete confirmation modal
+  const handleDeleteCheckpoint = (checkpoint: Checkpoint) => {
+    handleCloseActionModal();
+    if (checkpoint.id !== null && checkpoint.id !== undefined) {
       confirmationModal.showConfirmation(
-        // `Are you sure you want to delete the checkpoint for ${checkpoint.Username}? This action cannot be undone.`,
-
-        `Are you sure you want to delete checkpoint ${checkpoint.myID} - ${checkpoint.Username}? This action cannot be undone.`,
+        `Are you sure you want to delete checkpoint ${checkpoint.id} - ${checkpoint.title}? This action cannot be undone.`,
         confirmDeleteCheckpoint,
         checkpoint,
         "delete",
       );
-      // } else {
     }
   };
 
+  // CHQ: Claude AI updated this
   // Handler to confirm delete and make the API call
-  const confirmDeleteCheckpoint = async (
-    dataPayload: RowPage | ConfirmUpdateProps,
-  ) => {
-    // Corrected type to match ConfirmationData
-    const checkpointToDelete = dataPayload as RowPage;
-
-    if (!checkpointToDelete) {
-      console.warn("No student selected for deletion.");
-      return;
-    }
+  const confirmDeleteCheckpoint = async (dataPayload: Checkpoint) => {
+    const checkpointToDelete = dataPayload as Checkpoint;
+    if (!checkpointToDelete) return;
 
     setLoading(true);
     setErrorMessage(null);
     setSuccessMessage(null);
 
     try {
-      //  import.meta.env.VITE_API_URL || import.meta.env.VITE_API_URL_LOCALHOST;
-      const BASE_URL = apiURL;
-      const sessionToken = theToken;
-      const response = await fetch(`${BASE_URL}/${checkpointToDelete.myID}`, {
+      const response = await fetch(`${apiURL}/${checkpointToDelete.id}`, {
         method: "DELETE",
         headers: {
-          Authorization: `Bearer ${sessionToken}`,
+          Authorization: `Bearer ${theToken}`,
         },
       });
 
@@ -497,20 +440,12 @@ const CheckpointTable = (props: {
         throw new Error(errorData.message || "Server error");
       }
 
-      console.log(
-        `Checkpoint with ID ${checkpointToDelete.myID} deleted successfully.`,
-      );
       setSuccessMessage("Checkpoint deleted successfully!");
       setRawTableData((prevData) =>
-        prevData.filter(
-          (checkpoint) => checkpoint.myID !== checkpointToDelete.myID,
-        ),
+        prevData.filter((cp) => cp.id !== checkpointToDelete.id),
       );
     } catch (error: any) {
-      console.error("Error deleting checkpoint:", error);
-      setErrorMessage(
-        error.message || "Failed to delete checkpoint. Please try again.",
-      );
+      setErrorMessage(error.message || "Failed to delete checkpoint.");
     } finally {
       setLoading(false);
     }
@@ -680,20 +615,12 @@ const CheckpointTable = (props: {
                 sortHandlers={sortHandlers}
                 theColumnKeys={allColumnKeys}
               />
+              {/* CHQ: Claude AI removed unused props */}
               <TableBodyRows
                 data={sortedData}
                 visibleColumns={visibleColumns}
                 theColumnKeys={allColumnKeys}
                 onOpenActionModal={handleOpenActionModal}
-                // myId={newMyID}
-                myUsername={myUsername}
-                setMyUsername={setMyUsername}
-                myCheckpointData={myCheckpointData}
-                setMyCheckpointData={setMyCheckpointData}
-                loading={loading}
-                successMessage={successMessage}
-                errorMessage={errorMessage}
-                onNewCheckpointSubmit={handleNewCheckpointSubmit}
               />
             </Table>
           </TableContainer>
@@ -704,31 +631,25 @@ const CheckpointTable = (props: {
       <CheckpointActionModal
         open={isActionModalOpen}
         onClose={handleCloseActionModal}
-        student={selectedStudentForActions}
+        checkpoint={selectedCheckpointForActions}
         // onEdit={handleEditStudent}
         onDelete={handleDeleteCheckpoint}
       />
 
       {/* Update Confirmation Modal (now controlled by the hook) */}
-      {confirmationModal.confirmationType === "update" && (
+      {/* {confirmationModal.confirmationType === "update" && (
         <UpdateConfirmationModal
           open={confirmationModal.isOpen}
           onClose={confirmationModal.cancelAction}
           onConfirm={confirmationModal.confirmAction}
           message={confirmationModal.message}
-          currentFirstName={updateFirstName}
-          setCurrentFirstName={setUpdateFirstName}
-          currentLastName={updateLastName}
-          setCurrentLastName={setUpdateLastName}
-          currentEmail={updateEmail}
-          setCurrentEmail={setUpdateEmail}
-          currentMajor={updateMajor}
-          setCurrentMajor={setUpdateMajor}
+          currentCheckpointData={updateFirstName}
+          setCheckpointData={setUpdateFirstName}
           loading={loading}
           successMessage={successMessage}
           errorMessage={errorMessage}
         />
-      )}
+      )} */}
 
       {/* Deletion Confirmation Modal (now controlled by the hook) */}
       {confirmationModal.confirmationType === "delete" && (
