@@ -9,7 +9,6 @@ import {
   Button,
   Box,
   Typography,
-  TextField,
 } from "@mui/material";
 import Modal from "@mui/material/Modal";
 import { useTableFilters } from "../hooks/useTableFilters";
@@ -19,7 +18,7 @@ import { useConfirmationModal } from "../hooks/useConfirmationModule";
 import { ColumnVisibilityControlModal } from "./ColumnVisibilityModule";
 import { TableHeaderCells, TableBodyRows } from "./TableSubcomponents";
 
-import type { Checkpoint, ApiResponse } from "../utils/dataTypes";
+import type { Checkpoint } from "../utils/dataTypes";
 import { allColumnKeys } from "../utils/dataTypes";
 
 // Simple icon components for the collapse button
@@ -65,22 +64,11 @@ const CheckpointActionModal = (props: {
           {student.myID}) */}
           Actions for checkpoint
         </Typography>
-        {/* <Button
-          variant="contained"
-          disabled={true}
-          onClick={() => onEdit(student!)}
-          sx={{
-            bgcolor: "primary.main",
-            "&:hover": { bgcolor: "primary.dark" },
-            borderRadius: "8px",
-          }}
-        >
-          Edit
-        </Button> */}
+
         <Button
           variant="outlined"
           color="error"
-          onClick={() => onDelete(student!)}
+          onClick={() => onDelete(checkpoint!)}
           sx={{
             borderColor: "error.main",
             color: "error.main",
@@ -295,10 +283,6 @@ const CheckpointTable = (props: {
   // State for the table collapse functionality
   const [isTableCollapsed, setIsTableCollapsed] = useState(false);
 
-  // State variables for the "Add New Student" form
-  const [myUsername, setMyUsername] = useState("");
-  const [myCheckpointData, setMyCheckpointData] = useState("");
-
   // State for API call feedback
   const [loading, setLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
@@ -327,63 +311,6 @@ const CheckpointTable = (props: {
   const handleCloseActionModal = () => {
     setIsActionModalOpen(false);
     setSelectedCheckpointForActions(null);
-  };
-
-  // Handler for adding a new student via a POST request
-  const handleNewCheckpointSubmit = async (event: React.FormEvent) => {
-    event.preventDefault();
-    setLoading(true);
-    setErrorMessage(null);
-    setSuccessMessage(null);
-
-    try {
-      // const BASE_URL =
-      //   import.meta.env.VITE_API_URL || import.meta.env.VITE_API_URL_LOCALHOST;
-      const BASE_URL = apiURL;
-      const sessionToken = theToken;
-      const formData = {
-        // id: newMyID,
-        Username: myUsername,
-        CheckpointData: myCheckpointData,
-      };
-
-      const response = await fetch(`${BASE_URL}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${sessionToken}`,
-        },
-        body: JSON.stringify(formData),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Server error");
-      }
-
-      const result: ApiResponse = await response.json();
-      console.log("Data sent to database successfully:", result);
-      setSuccessMessage("Data sent to database successfully!");
-      setRawTableData((prevData) => [
-        ...prevData,
-        {
-          Username: myUsername,
-          CheckpointData: myCheckpointData,
-        } as RowPage,
-      ]);
-
-      // setRawTableData((prevData) => [...prevData, result.data as RowPage]);
-
-      setMyCheckpointData("");
-      setMyUsername("");
-    } catch (error: any) {
-      console.error("Error in database:", error);
-      setErrorMessage(
-        error.message || "Failed to send data to database. Please try again.",
-      );
-    } finally {
-      setLoading(false);
-    }
   };
 
   // Handler to open the update confirmation modal
@@ -577,7 +504,7 @@ const CheckpointTable = (props: {
           }}
         >
           <Typography variant="h5" component="div">
-            Student Data
+            Checkpoint Data
           </Typography>
           <Box sx={{ display: "flex", gap: 1 }}>
             <Button
@@ -608,7 +535,7 @@ const CheckpointTable = (props: {
 
         {!isTableCollapsed && (
           <TableContainer>
-            <Table stickyHeader aria-label="student table">
+            <Table stickyHeader aria-label="checkpoint table">
               <TableHeaderCells
                 visibleColumns={visibleColumns}
                 sortProps={sortProps}
