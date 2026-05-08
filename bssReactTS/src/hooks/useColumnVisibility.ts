@@ -8,41 +8,39 @@ import type {
 
 // --- Default and Preset Column Visibility Settings ---
 export const defaultColumnVisibility: ColumnVisibility = {
-  myID: true,
-  Username: true,
-  CheckpointData: true,
-  CreatedAt: true,
-  LastEditedAt: true,
-  playerID: true,
+  id: true,
+  // player_id: true,
+  title: true,
+  data: true,
+  created_at: true,
+  updated_at: true,
 };
 
 export const smartphoneVisibility: ColumnVisibility = {
-  myID: true,
-  Username: true,
-  CheckpointData: true,
-  CreatedAt: true,
-  LastEditedAt: true,
-  playerID: true,
+  id: true,
+  // player_id: true,
+  title: true,
+  data: true,
+  created_at: true,
+  updated_at: true,
 };
 
 export const defaultColumnVisibilityMiniTable: ColumnVisibilityMiniTable = {
-  myID: true,
-  Qty: true,
-  Username: true,
-  CheckpointData: true,
-  CreatedAt: true,
-  LastEditedAt: true,
-  playerID: true,
+  id: true,
+  // player_id: true,
+  title: true,
+  data: true,
+  created_at: true,
+  updated_at: true,
 };
 
 export const smartphoneVisibilityMiniTable: ColumnVisibilityMiniTable = {
-  myID: true,
-  Qty: true,
-  Username: true,
-  CheckpointData: true,
-  CreatedAt: true,
-  LastEditedAt: true,
-  playerID: true,
+  id: true,
+  // player_id: true,
+  title: true,
+  data: true,
+  created_at: true,
+  updated_at: true,
 };
 export const visibilityPresetsMiniTable: Map<
   string,
@@ -74,7 +72,7 @@ visibilityPresetsMiniTable.set("smartphone", smartphoneVisibilityMiniTable); // 
  * - presets: The map of available visibility presets.
  */
 export const useColumnVisibility = (
-  initialPresetKey: keyof typeof visibilityPresets | string = "default"
+  initialPresetKey: keyof typeof visibilityPresets | string = "default",
 ) => {
   // Use a functional update for useState to ensure we get the correct initial state
   const [visibleColumns, setVisibleColumns] = useState<ColumnVisibility>(() => {
@@ -115,7 +113,7 @@ export const useColumnVisibility = (
       setVisibleColumns(preset);
     } else {
       console.warn(
-        `Preset "${String(presetKey)}" not found. Applying default visibility.`
+        `Preset "${String(presetKey)}" not found. Applying default visibility.`,
       );
       setVisibleColumns(defaultColumnVisibility);
     }
@@ -138,7 +136,9 @@ export const useColumnVisibility = (
 };
 
 export const useColumnVisibilityMiniTable = (
-  initialPresetKey: keyof typeof visibilityPresetsMiniTable | string = "default"
+  initialPresetKey:
+    | keyof typeof visibilityPresetsMiniTable
+    | string = "default",
 ) => {
   // Use a functional update for useState to ensure we get the correct initial state
   const [visibleColumns, setVisibleColumns] =
@@ -176,14 +176,14 @@ export const useColumnVisibilityMiniTable = (
    * @param presetKey The key of the preset to apply (e.g., "smartphone", "companyInfo").
    */
   const setPresetVisibility = (
-    presetKey: keyof typeof visibilityPresetsMiniTable
+    presetKey: keyof typeof visibilityPresetsMiniTable,
   ) => {
     const preset = visibilityPresetsMiniTable.get(String(presetKey));
     if (preset) {
       setVisibleColumns(preset);
     } else {
       console.warn(
-        `Preset "${String(presetKey)}" not found. Applying default visibility.`
+        `Preset "${String(presetKey)}" not found. Applying default visibility.`,
       );
       setVisibleColumns(defaultColumnVisibilityMiniTable);
     }

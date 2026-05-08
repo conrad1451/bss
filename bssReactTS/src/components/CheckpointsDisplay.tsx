@@ -8,7 +8,7 @@ import CheckpointTable from "./CheckpointTable";
 
 import { Box, Button, Typography } from "@mui/material"; // Import necessary MUI components
 // import type { RowPage } from "../utils/dataTypes"; // Import both
-import { transformCheckpointRecordToRowPage } from "../utils/dataTransforms";
+// import { transformCheckpointRecordToRowPage } from "../utils/dataTransforms";
 
 import type { Player } from "../utils/dataTypes";
 
@@ -104,7 +104,7 @@ const CheckpointsDisplay = (props: {
   // }
 
   console.log("Raw API checkpoints:", checkpoints);
-  const dataForTable = transformCheckpointRecordToRowPage(checkpoints);
+  const dataForTable = checkpoints;
   console.log("Transformed data for table:", dataForTable);
   // --- END DATA PREPARATION ---
 

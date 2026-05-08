@@ -1,13 +1,5 @@
 // dataTransforms.ts
 
-// import type { Item } from "./dataTypes";
-
-import type {
-  RowPage,
-  CheckPointRecord,
-  CheckPointRecordAlt,
-} from "./dataTypes";
-
 export function displayDate(curDate: Date) {
   return curDate instanceof Date
     ? curDate.toLocaleDateString("en-US", {
@@ -19,90 +11,90 @@ export function displayDate(curDate: Date) {
         // second: "2-digit",
       })
     : curDate
-    ? // Attempt to parse the string into a Date object
-      new Date(curDate).toLocaleDateString("en-US", {
-        year: "numeric",
-        month: "long", // Use 'long' for the full month name
-        day: "2-digit",
-        hour: "2-digit",
-        minute: "2-digit",
-        // second: "2-digit",
-      })
-    : "-";
+      ? // Attempt to parse the string into a Date object
+        new Date(curDate).toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "long", // Use 'long' for the full month name
+          day: "2-digit",
+          hour: "2-digit",
+          minute: "2-digit",
+          // second: "2-digit",
+        })
+      : "-";
 }
 
-export function createCustomTableData(
-  myID: number,
-  Username: string,
-  CheckpointData: string,
-  CreatedAt: Date,
-  LastEditedAt: Date,
-  playerID: string
-): RowPage {
-  return {
-    myID,
-    Username,
-    CheckpointData,
-    CreatedAt,
-    LastEditedAt,
-    playerID,
-  };
-}
+// export function createCustomTableData(
+//   myID: number,
+//   Username: string,
+//   CheckpointData: string,
+//   CreatedAt: Date,
+//   LastEditedAt: Date,
+//   playerID: string
+// ): RowPage {
+//   return {
+//     myID,
+//     Username,
+//     CheckpointData,
+//     CreatedAt,
+//     LastEditedAt,
+//     playerID,
+//   };
+// }
 
-export const transformCheckpointRecordToRowPageOld = (
-  pages: any
-): RowPage[] => {
-  // Add this check! If 'pages' is null or not an array, return an empty array.
-  if (!Array.isArray(pages)) {
-    return [];
-  }
+// export const transformCheckpointRecordToRowPageOld = (
+//   pages: any
+// ): RowPage[] => {
+//   // Add this check! If 'pages' is null or not an array, return an empty array.
+//   if (!Array.isArray(pages)) {
+//     return [];
+//   }
 
-  // Your existing .map() logic will go here
+//   // Your existing .map() logic will go here
 
-  return pages.map((page) =>
-    createCustomTableData(
-      page.id,
-      page.Username,
-      page.checkpointdata,
-      page.CreatedAt,
-      page.LastEditedAt,
-      page.playerID
-    )
-  );
-};
+//   return pages.map((page) =>
+//     createCustomTableData(
+//       page.id,
+//       page.Username,
+//       page.checkpointdata,
+//       page.CreatedAt,
+//       page.LastEditedAt,
+//       page.playerID
+//     )
+//   );
+// };
 
-export const transformCheckpointRecordToRowPage = (
-  // checkpoints: CheckPointRecord[]
+// export const transformCheckpointRecordToRowPage = (
+//   // checkpoints: CheckPointRecord[]
 
-  checkpoints: CheckPointRecordAlt[]
-): RowPage[] => {
-  // Check for an empty or invalid input array
+//   checkpoints: CheckPointRecordAlt[]
+// ): RowPage[] => {
+//   // Check for an empty or invalid input array
 
-  if (!checkpoints || !Array.isArray(checkpoints)) {
-    console.error("Invalid input for transformation.");
+//   if (!checkpoints || !Array.isArray(checkpoints)) {
+//     console.error("Invalid input for transformation.");
 
-    return [];
-  }
+//     return [];
+//   }
 
-  // Map each checkpoint record to the RowPage format
+//   // Map each checkpoint record to the RowPage format
 
-  return checkpoints.map((record) => {
-    // CHQ: Gemini AI created the check to handle playerID
-    // Correctly handle the player_id object
-    const playerID = record.player_id.Valid ? record.player_id.String : null;
+//   return checkpoints.map((record) => {
+//     // CHQ: Gemini AI created the check to handle playerID
+//     // Correctly handle the player_id object
+//     const playerID = record.player_id.Valid ? record.player_id.String : null;
 
-    return {
-      myID: record.id,
-      Username: record.user_name,
-      CheckpointData: record.checkpoint_data,
-      // CheckpointData: String("record.checkpoint_data"),
-      // CheckpointData: "ddd",
-      CreatedAt: record.created_at,
-      LastEditedAt: record.last_edited_at,
-      playerID: playerID === null ? "N/A" : playerID, // CHQ: I added ternary to control display
-    };
-  });
-};
+//     return {
+//       myID: record.id,
+//       Username: record.user_name,
+//       CheckpointData: record.checkpoint_data,
+//       // CheckpointData: String("record.checkpoint_data"),
+//       // CheckpointData: "ddd",
+//       CreatedAt: record.created_at,
+//       LastEditedAt: record.last_edited_at,
+//       playerID: playerID === null ? "N/A" : playerID, // CHQ: I added ternary to control display
+//     };
+//   });
+// };
 
 /**
  * Generates a list of unique property values from an array of RowPage objects,

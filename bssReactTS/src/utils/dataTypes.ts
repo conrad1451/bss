@@ -1,48 +1,5 @@
 // dataTypes.ts
 
-// export interface RowPage {
-//   myID: number;
-//   Username: string;
-//   CheckpointData: string;
-//   CreatedAt: Date;
-//   LastEditedAt: Date;
-//   playerID: string;
-// }
-
-// export interface CheckPointRecord {
-//   id: number;
-//   Username: string;
-//   CheckpointData: string;
-//   CreatedAt: string;
-//   LastEditedAt: string;
-//   playerID: string;
-// }
-// export interface CheckPointRecordAlt {
-//   id: number;
-//   user_name: string;
-//   checkpoint_data: string;
-//   created_at: Date;
-//   last_edited_at: Date;
-//   // player_id: string;
-//   player_id: { String: string; Valid: boolean };
-// }
-
-// export interface Item {
-//   id: number;
-//   value: string;
-// }
-
-// // --- WebFormProps & WebForm Component ---
-// export interface WebFormProps {
-//   onSubmit: (event: React.FormEvent) => Promise<void>;
-// }
-
-// export interface ConfirmUpdateProps {
-//   Username: string;
-//   CheckpointData: string;
-//   //   playerID: string;
-// }
-
 // CHQ: Claude AI rewrote
 export interface TableBodyRowsProps {
   data: Checkpoint[];
@@ -133,7 +90,7 @@ export interface SuccessResponse {
 // --- Table/UI types ---
 export interface ColumnVisibilityMiniTable {
   id: boolean;
-  player_id: boolean;
+  // player_id: boolean;
   title: boolean;
   data: boolean;
   created_at: boolean;
@@ -141,6 +98,7 @@ export interface ColumnVisibilityMiniTable {
 }
 export interface ColumnVisibility {
   id: boolean;
+  // player_id: boolean;
   title: boolean;
   data: boolean;
   created_at: boolean;
@@ -149,6 +107,7 @@ export interface ColumnVisibility {
 
 export const allColumnKeys: Array<keyof ColumnVisibility> = [
   "id",
+  // "player_id",
   "title",
   "data",
   "created_at",

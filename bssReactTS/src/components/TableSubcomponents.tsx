@@ -1,5 +1,5 @@
 // TableSubcomponents.tsx
-
+import React from "react";
 import MoreVertIcon from "@mui/icons-material/MoreVert"; // Icon for the action button
 
 import {
@@ -133,6 +133,9 @@ export const TableHeaderCells = (props: {
 
 export const TableBodyRows = (props: TableBodyRowsProps) => {
   const { data, theColumnKeys, visibleColumns, onOpenActionModal } = props;
+  console.log("TableBodyRows data:", data);
+  console.log("TableBodyRows theColumnKeys:", theColumnKeys);
+  console.log("TableBodyRows visibleColumns:", visibleColumns);
   return (
     <TableBody>
       {data.map((row) => (
@@ -140,15 +143,21 @@ export const TableBodyRows = (props: TableBodyRowsProps) => {
           {theColumnKeys.map((colName) =>
             visibleColumns[colName] ? (
               <TableCell key={colName}>
-                {colName === "id" && row.id}
-                {colName === "title" && row.title}
-                {colName === "data" && row.data}
-                {colName === "created_at" && row.created_at}
-                {colName === "updated_at" && row.updated_at}
-                {/* {colName === "created_at" && displayDate(row.created_at)}
-                {colName === "updated_at" && displayDate(row.updated_at)} */}
+                {colName === "id"
+                  ? row.id
+                  : colName === "title"
+                    ? row.title
+                    : colName === "data"
+                      ? row.data
+                      : colName === "created_at"
+                        ? row.created_at
+                        : colName === "updated_at"
+                          ? row.updated_at
+                          : null}
               </TableCell>
-            ) : null,
+            ) : (
+              <React.Fragment key={colName} />
+            ),
           )}
           <TableCell>
             <IconButton
