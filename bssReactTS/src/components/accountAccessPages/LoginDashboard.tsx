@@ -6,14 +6,12 @@ const LoginDashboard = (props: {
   sessionToken: string;
   selectedPlayer: Player;
 }) => {
-  if (!props.sessionToken)
-    return <div>Please log in to access the game portal.</div>;
+  const { sessionToken, selectedPlayer } = props;
+
+  if (!sessionToken) return <div>Please log in to access the game portal.</div>;
 
   return (
-    <AppWrapper
-      sessionToken={props.sessionToken}
-      selectedPlayer={props.selectedPlayer}
-    />
+    <AppWrapper sessionToken={sessionToken} selectedPlayer={selectedPlayer} />
   );
 };
 

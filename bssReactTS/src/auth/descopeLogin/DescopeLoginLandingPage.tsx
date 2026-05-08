@@ -8,22 +8,24 @@ type Props = LandingPageProps & {
 };
 
 const DescopeLandingPage = (props: Props) => {
+  const { theSessionToken, theSelectedPlayer, theHandleLogout } = props;
+
   // This guard clause is essential. It prevents the component from rendering
   // its children before a valid session token is available.
-  if (!props.theSessionToken) {
+  if (!theSessionToken) {
     // You can return a loading state or a simple message.
     return <div>Loading...</div>;
   }
   return (
     <>
-      {/* <p>Hello {props.theUser?.name}</p> */}
+      {/* <p>Hello {theUser?.name}</p> */}
       <div>My Private Component</div>
       {/* Now, you can safely pass the token, knowing it is valid. */}
       <LoginDashboard
-        sessionToken={props.theSessionToken}
-        selectedPlayer={props.theSelectedPlayer}
+        sessionToken={theSessionToken}
+        selectedPlayer={theSelectedPlayer}
       />
-      <button onClick={props.theHandleLogout}>Logout</button>
+      <button onClick={theHandleLogout}>Logout</button>
     </>
   );
 };

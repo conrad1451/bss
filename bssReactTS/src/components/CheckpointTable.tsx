@@ -43,10 +43,12 @@ const CheckpointActionModal = (props: {
   //   onEdit: (student: RowPage) => void;
   onDelete: (student: RowPage) => void;
 }) => {
-  if (!props.student) return null;
+  const { student, open, onClose, onDelete } = props;
+
+  if (!student) return null;
 
   return (
-    <Modal open={props.open} onClose={props.onClose}>
+    <Modal open={open} onClose={onClose}>
       <Box
         sx={{
           position: "absolute",
@@ -65,14 +67,14 @@ const CheckpointActionModal = (props: {
         }}
       >
         <Typography variant="h6" component="h2">
-          {/* Actions for {props.student.FirstName} {props.student.LastName} (ID:{" "}
-          {props.student.myID}) */}
+          {/* Actions for {student.FirstName} {student.LastName} (ID:{" "}
+          {student.myID}) */}
           Actions for checkpoint
         </Typography>
         {/* <Button
           variant="contained"
           disabled={true}
-          onClick={() => props.onEdit(props.student!)}
+          onClick={() => onEdit(student!)}
           sx={{
             bgcolor: "primary.main",
             "&:hover": { bgcolor: "primary.dark" },
@@ -84,7 +86,7 @@ const CheckpointActionModal = (props: {
         <Button
           variant="outlined"
           color="error"
-          onClick={() => props.onDelete(props.student!)}
+          onClick={() => onDelete(student!)}
           sx={{
             borderColor: "error.main",
             color: "error.main",
@@ -95,7 +97,7 @@ const CheckpointActionModal = (props: {
           Delete
         </Button>
         <Button
-          onClick={props.onClose}
+          onClick={onClose}
           variant="text"
           sx={{ mt: 1, borderRadius: "8px" }}
         >
@@ -124,8 +126,26 @@ const UpdateConfirmationModal = (props: {
   currentMajor: string;
   setCurrentMajor: (value: string) => void;
 }) => {
+  const {
+    open,
+    onClose,
+    onConfirm,
+    message,
+    currentFirstName,
+    setCurrentFirstName,
+    currentLastName,
+    setCurrentLastName,
+    currentEmail,
+    setCurrentEmail,
+    currentMajor,
+    setCurrentMajor,
+    loading,
+    successMessage,
+    errorMessage,
+  } = props;
+
   return (
-    <Modal open={props.open} onClose={props.onClose}>
+    <Modal open={open} onClose={onClose}>
       <Box
         sx={{
           position: "absolute",
@@ -146,14 +166,14 @@ const UpdateConfirmationModal = (props: {
         <Typography variant="h6" component="h2">
           Confirmation
         </Typography>
-        <Typography>{props.message}</Typography>
+        <Typography>{message}</Typography>
 
         <Box sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 2 }}>
           <TextField
             label="First Name"
             type="text"
-            value={props.currentFirstName}
-            onChange={(e) => props.setCurrentFirstName(e.target.value)}
+            value={currentFirstName}
+            onChange={(e) => setCurrentFirstName(e.target.value)}
             placeholder="First Name"
             size="small"
             variant="outlined"
@@ -161,8 +181,8 @@ const UpdateConfirmationModal = (props: {
           <TextField
             label="Last Name"
             type="text"
-            value={props.currentLastName}
-            onChange={(e) => props.setCurrentLastName(e.target.value)}
+            value={currentLastName}
+            onChange={(e) => setCurrentLastName(e.target.value)}
             placeholder="Last Name"
             size="small"
             variant="outlined"
@@ -170,8 +190,8 @@ const UpdateConfirmationModal = (props: {
           <TextField
             label="Email"
             type="email"
-            value={props.currentEmail}
-            onChange={(e) => props.setCurrentEmail(e.target.value)}
+            value={currentEmail}
+            onChange={(e) => setCurrentEmail(e.target.value)}
             placeholder="Email"
             size="small"
             variant="outlined"
@@ -179,35 +199,31 @@ const UpdateConfirmationModal = (props: {
           <TextField
             label="Major"
             type="text"
-            value={props.currentMajor}
-            onChange={(e) => props.setCurrentMajor(e.target.value)}
+            value={currentMajor}
+            onChange={(e) => setCurrentMajor(e.target.value)}
             placeholder="Major"
             size="small"
             variant="outlined"
           />
         </Box>
-        {props.loading && <p>Loading...</p>}
-        {props.successMessage && (
-          <p style={{ color: "green" }}>{props.successMessage}</p>
-        )}
-        {props.errorMessage && (
-          <p style={{ color: "red" }}>{props.errorMessage}</p>
-        )}
+        {loading && <p>Loading...</p>}
+        {successMessage && <p style={{ color: "green" }}>{successMessage}</p>}
+        {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
         <Box sx={{ display: "flex", justifyContent: "space-around", mt: 2 }}>
           <Button
             variant="contained"
             color="info"
-            onClick={props.onConfirm}
+            onClick={onConfirm}
             sx={{ borderRadius: "8px" }}
-            disabled={props.loading}
+            disabled={loading}
           >
             Confirm Update
           </Button>
           <Button
             variant="outlined"
-            onClick={props.onClose}
+            onClick={onClose}
             sx={{ borderRadius: "8px" }}
-            disabled={props.loading}
+            disabled={loading}
           >
             Cancel
           </Button>
@@ -227,8 +243,18 @@ const DeletionConfirmationModal = (props: {
   successMessage: string | null;
   errorMessage: string | null;
 }) => {
+  const {
+    open,
+    onClose,
+    onConfirm,
+    message,
+    loading,
+    successMessage,
+    errorMessage,
+  } = props;
+
   return (
-    <Modal open={props.open} onClose={props.onClose}>
+    <Modal open={open} onClose={onClose}>
       <Box
         sx={{
           position: "absolute",
@@ -249,29 +275,25 @@ const DeletionConfirmationModal = (props: {
         <Typography variant="h6" component="h2">
           Confirmation
         </Typography>
-        <Typography>{props.message}</Typography>
-        {props.loading && <p>Loading...</p>}
-        {props.successMessage && (
-          <p style={{ color: "green" }}>{props.successMessage}</p>
-        )}
-        {props.errorMessage && (
-          <p style={{ color: "red" }}>{props.errorMessage}</p>
-        )}
+        <Typography>{message}</Typography>
+        {loading && <p>Loading...</p>}
+        {successMessage && <p style={{ color: "green" }}>{successMessage}</p>}
+        {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
         <Box sx={{ display: "flex", justifyContent: "space-around", mt: 2 }}>
           <Button
             variant="contained"
             color="error"
-            onClick={props.onConfirm}
+            onClick={onConfirm}
             sx={{ borderRadius: "8px" }}
-            disabled={props.loading}
+            disabled={loading}
           >
             Confirm Delete
           </Button>
           <Button
             variant="outlined"
-            onClick={props.onClose}
+            onClick={onClose}
             sx={{ borderRadius: "8px" }}
-            disabled={props.loading}
+            disabled={loading}
           >
             Cancel
           </Button>
@@ -287,16 +309,18 @@ const CheckpointTable = (props: {
   theChoice: string;
   theToken: string;
 }) => {
-  const [rawTableData, setRawTableData] = useState<RowPage[]>(props.thePages);
+  const { thePages, theChoice, theToken } = props;
 
-  // Sync local state with props whenever props.thePages changes
+  const [rawTableData, setRawTableData] = useState<RowPage[]>(thePages);
+
+  // Sync local state with props whenever thePages changes
   useEffect(() => {
-    setRawTableData(props.thePages);
-  }, [props.thePages]);
+    setRawTableData(thePages);
+  }, [thePages]);
 
   // Filter out any rows that have invalid data before passing to hooks
   const initialTableDataForHooks = rawTableData.filter(
-    (row) => row && row.Username && row.Username.trim() !== ""
+    (row) => row && row.Username && row.Username.trim() !== "",
   );
 
   // Custom hooks for table functionality
@@ -333,7 +357,7 @@ const CheckpointTable = (props: {
   const [updateMajor, setUpdateMajor] = useState("");
 
   //   const newMyID: number = idGenerator(rawTableData);
-  const apiURL = props.theChoice;
+  const apiURL = theChoice;
 
   // Handler to open the action modal for a specific student
   const [isActionModalOpen, setIsActionModalOpen] = useState(false);
@@ -359,7 +383,7 @@ const CheckpointTable = (props: {
       // const BASE_URL =
       //   import.meta.env.VITE_API_URL || import.meta.env.VITE_API_URL_LOCALHOST;
       const BASE_URL = apiURL;
-      const sessionToken = props.theToken;
+      const sessionToken = theToken;
       const formData = {
         // id: newMyID,
         Username: myUsername,
@@ -398,7 +422,7 @@ const CheckpointTable = (props: {
     } catch (error: any) {
       console.error("Error in database:", error);
       setErrorMessage(
-        error.message || "Failed to send data to database. Please try again."
+        error.message || "Failed to send data to database. Please try again.",
       );
     } finally {
       setLoading(false);
@@ -435,7 +459,7 @@ const CheckpointTable = (props: {
         `Are you sure you want to delete checkpoint ${checkpoint.myID} - ${checkpoint.Username}? This action cannot be undone.`,
         confirmDeleteCheckpoint,
         checkpoint,
-        "delete"
+        "delete",
       );
       // } else {
     }
@@ -443,7 +467,7 @@ const CheckpointTable = (props: {
 
   // Handler to confirm delete and make the API call
   const confirmDeleteCheckpoint = async (
-    dataPayload: RowPage | ConfirmUpdateProps
+    dataPayload: RowPage | ConfirmUpdateProps,
   ) => {
     // Corrected type to match ConfirmationData
     const checkpointToDelete = dataPayload as RowPage;
@@ -460,7 +484,7 @@ const CheckpointTable = (props: {
     try {
       //  import.meta.env.VITE_API_URL || import.meta.env.VITE_API_URL_LOCALHOST;
       const BASE_URL = apiURL;
-      const sessionToken = props.theToken;
+      const sessionToken = theToken;
       const response = await fetch(`${BASE_URL}/${checkpointToDelete.myID}`, {
         method: "DELETE",
         headers: {
@@ -474,18 +498,18 @@ const CheckpointTable = (props: {
       }
 
       console.log(
-        `Checkpoint with ID ${checkpointToDelete.myID} deleted successfully.`
+        `Checkpoint with ID ${checkpointToDelete.myID} deleted successfully.`,
       );
       setSuccessMessage("Checkpoint deleted successfully!");
       setRawTableData((prevData) =>
         prevData.filter(
-          (checkpoint) => checkpoint.myID !== checkpointToDelete.myID
-        )
+          (checkpoint) => checkpoint.myID !== checkpointToDelete.myID,
+        ),
       );
     } catch (error: any) {
       console.error("Error deleting checkpoint:", error);
       setErrorMessage(
-        error.message || "Failed to delete checkpoint. Please try again."
+        error.message || "Failed to delete checkpoint. Please try again.",
       );
     } finally {
       setLoading(false);
@@ -541,7 +565,7 @@ const CheckpointTable = (props: {
   //     try {
   //       //  import.meta.env.VITE_API_URL || import.meta.env.VITE_API_URL_LOCALHOST;
   //       const BASE_URL = apiURL;
-  //       const sessionToken = props.theToken;
+  //       const sessionToken = theToken;
   //       // The method is now "PATCH" as the server requires a partial payload.
   //       const response = await fetch(`${BASE_URL}/${studentToUpdate.myID}`, {
   //         method: "PATCH", // Changed back to "PATCH" from "PUT"

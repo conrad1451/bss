@@ -91,16 +91,19 @@ const UserSignIn = () => {
   );
 };
 
-const Buttons = (props: { theSetChoice: (input: number) => void }) => (
-  <Box sx={{ display: "flex", gap: 2, justifyContent: "center", mb: 2 }}>
-    <Button variant="contained" onClick={() => props.theSetChoice(2)}>
-      Go to User sign in
-    </Button>
-    <Button variant="contained" onClick={() => props.theSetChoice(3)}>
-      Go to Admin sign in
-    </Button>
-  </Box>
-);
+const Buttons = (props: { theSetChoice: (input: number) => void }) => {
+  const { theSetChoice } = props;
+  return (
+    <Box sx={{ display: "flex", gap: 2, justifyContent: "center", mb: 2 }}>
+      <Button variant="contained" onClick={() => theSetChoice(2)}>
+        Go to User sign in
+      </Button>
+      <Button variant="contained" onClick={() => theSetChoice(3)}>
+        Go to Admin sign in
+      </Button>
+    </Box>
+  );
+};
 
 const DescopeAuth = () => {
   const { isAuthenticated, isSessionLoading } = useSession();

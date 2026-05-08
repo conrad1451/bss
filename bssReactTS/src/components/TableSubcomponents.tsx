@@ -52,6 +52,8 @@ export const TableHeaderCells = (props: {
   sortHandlers: ReturnType<typeof useTableSorting>["sortHandlers"];
   theColumnKeys: Array<keyof ColumnVisibility>;
 }) => {
+  const { visibleColumns, sortProps, sortHandlers, theColumnKeys } = props;
+
   type SortableTableColumns =
     | "Username"
     | "CreatedAt"
@@ -60,8 +62,8 @@ export const TableHeaderCells = (props: {
   return (
     <TableHead>
       <TableRow>
-        {props.theColumnKeys.map((colName) =>
-          props.visibleColumns[colName] ? (
+        {theColumnKeys.map((colName) =>
+          visibleColumns[colName] ? (
             <TableCell key={colName}>
               <Box sx={{ display: "flex", alignItems: "center" }}>
                 <Typography variant="subtitle2" sx={{ mr: 1 }}>
@@ -78,13 +80,11 @@ export const TableHeaderCells = (props: {
                   <>
                     <Button
                       onClick={() =>
-                        props.sortHandlers.handleSort(
-                          colName as SortableTableColumns
-                        )
+                        sortHandlers.handleSort(colName as SortableTableColumns)
                       }
                       title={
-                        props.sortProps.sortColumn === colName &&
-                        props.sortProps.sortDirection === "asc"
+                        sortProps.sortColumn === colName &&
+                        sortProps.sortDirection === "asc"
                           ? "Current: Ascending. Click to sort Descending."
                           : "Click to sort Ascending."
                       }
@@ -93,26 +93,24 @@ export const TableHeaderCells = (props: {
                         p: "2px",
                         // Only show the up arrow if not currently sorted ascending
                         visibility:
-                          props.sortProps.sortColumn === colName &&
-                          props.sortProps.sortDirection === "asc"
+                          sortProps.sortColumn === colName &&
+                          sortProps.sortDirection === "asc"
                             ? "visible" // Show if currently ascending
                             : "visible", // Always visible to allow sorting
                       }}
                     >
-                      {props.sortProps.sortColumn === colName &&
-                      props.sortProps.sortDirection === "asc"
+                      {sortProps.sortColumn === colName &&
+                      sortProps.sortDirection === "asc"
                         ? "▲"
                         : "⬆️"}
                     </Button>
                     <Button
                       onClick={() =>
-                        props.sortHandlers.handleSort(
-                          colName as SortableTableColumns
-                        )
+                        sortHandlers.handleSort(colName as SortableTableColumns)
                       }
                       title={
-                        props.sortProps.sortColumn === colName &&
-                        props.sortProps.sortDirection === "desc"
+                        sortProps.sortColumn === colName &&
+                        sortProps.sortDirection === "desc"
                           ? "Current: Descending. Click to reset sort."
                           : "Click to sort Descending."
                       }
@@ -121,22 +119,22 @@ export const TableHeaderCells = (props: {
                         p: "2px",
                         // Only show the down arrow if not currently sorted descending
                         visibility:
-                          props.sortProps.sortColumn === colName &&
-                          props.sortProps.sortDirection === "desc"
+                          sortProps.sortColumn === colName &&
+                          sortProps.sortDirection === "desc"
                             ? "visible" // Show if currently descending
                             : "visible", // Always visible to allow sorting
                       }}
                     >
-                      {props.sortProps.sortColumn === colName &&
-                      props.sortProps.sortDirection === "desc"
+                      {sortProps.sortColumn === colName &&
+                      sortProps.sortDirection === "desc"
                         ? "▼"
                         : "⬇️"}
                     </Button>
 
-                    {props.sortProps.sortColumn === colName &&
-                      props.sortProps.sortDirection && (
+                    {sortProps.sortColumn === colName &&
+                      sortProps.sortDirection && (
                         <Button
-                          onClick={props.sortHandlers.resetSort}
+                          onClick={sortHandlers.resetSort}
                           title="Reset All Sorts"
                           sx={{ minWidth: "auto", p: "2px" }}
                         >
@@ -147,7 +145,7 @@ export const TableHeaderCells = (props: {
                 )}
               </Box>
             </TableCell>
-          ) : null
+          ) : null,
         )}
         {/* New TableCell for Actions header */}
         <TableCell>
@@ -159,12 +157,26 @@ export const TableHeaderCells = (props: {
 };
 
 export const TableBodyRows = (props: TableBodyRowsProps) => {
+  const {
+    data,
+    theColumnKeys,
+    visibleColumns,
+    onOpenActionModal,
+    myUsername,
+    setMyUsername,
+    myCheckpointData,
+    setMyCheckpointData,
+    loading,
+    successMessage,
+    errorMessage,
+    onNewCheckpointSubmit,
+  } = props;
   return (
     <TableBody>
-      {props.data.map((row) => (
+      {data.map((row) => (
         <TableRow key={row.myID}>
-          {props.theColumnKeys.map((colName) =>
-            props.visibleColumns[colName] ? (
+          {theColumnKeys.map((colName) =>
+            visibleColumns[colName] ? (
               <TableCell key={colName}>
                 {colName === "myID" && row.myID}
                 {colName === "Username" && row.Username}
@@ -172,13 +184,13 @@ export const TableBodyRows = (props: TableBodyRowsProps) => {
                 {colName === "LastEditedAt" && displayDate(row.LastEditedAt)}
                 {colName === "playerID" && row.playerID}
               </TableCell>
-            ) : null
+            ) : null,
           )}
           {/* TableCell for Actions button for existing rows */}
           <TableCell>
             <IconButton
               aria-label="actions"
-              onClick={() => props.onOpenActionModal(row)} // Pass the entire row data
+              onClick={() => onOpenActionModal(row)} // Pass the entire row data
             >
               <MoreVertIcon />
             </IconButton>
@@ -187,8 +199,8 @@ export const TableBodyRows = (props: TableBodyRowsProps) => {
       ))}
       {/* New Row for adding a student */}
       <TableRow>
-        {props.theColumnKeys.map((colName) =>
-          props.visibleColumns[colName] ? (
+        {theColumnKeys.map((colName) =>
+          visibleColumns[colName] ? (
             <TableCell key={colName}>
               <Box sx={{ display: "flex", alignItems: "center" }}>
                 {/* // CHQ: Gemini AI changed empty div to TextField for each field */}
@@ -196,8 +208,8 @@ export const TableBodyRows = (props: TableBodyRowsProps) => {
                   {colName === "Username" ? (
                     <TextField
                       type="text"
-                      value={props.myUsername}
-                      onChange={(e) => props.setMyUsername(e.target.value)}
+                      value={myUsername}
+                      onChange={(e) => setMyUsername(e.target.value)}
                       placeholder="First Name"
                       size="small"
                       variant="outlined"
@@ -205,53 +217,49 @@ export const TableBodyRows = (props: TableBodyRowsProps) => {
                   ) : colName === "CheckpointData" ? (
                     <TextField
                       type="text"
-                      value={props.myCheckpointData}
-                      onChange={(e) =>
-                        props.setMyCheckpointData(e.target.value)
-                      }
+                      value={myCheckpointData}
+                      onChange={(e) => setMyCheckpointData(e.target.value)}
                       placeholder="Last Name"
                       size="small"
                       variant="outlined"
                     />
                   ) : (
                     // ) : colName === "myID" ? (
-                    //   <>{props.myId}</>
+                    //   <>{myId}</>
                     ""
                   )}
                 </Typography>
               </Box>
             </TableCell>
-          ) : null
+          ) : null,
         )}
         {/* Cell for the WebForm in the new student row */}
         <TableCell>
           <div>
-            {props.loading && <p>Loading...</p>}
-            {props.successMessage && (
-              <p style={{ color: "green" }}>{props.successMessage}</p>
+            {loading && <p>Loading...</p>}
+            {successMessage && (
+              <p style={{ color: "green" }}>{successMessage}</p>
             )}
-            {props.errorMessage && (
-              <p style={{ color: "red" }}>{props.errorMessage}</p>
-            )}
-            <WebForm onSubmit={props.onNewCheckpointSubmit} />{" "}
+            {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
+            <WebForm onSubmit={onNewCheckpointSubmit} />{" "}
             {/* Pass the submit handler */}
           </div>
         </TableCell>
       </TableRow>
       {/* Footer row (Count of checkpoints saved) */}
       <TableRow>
-        {props.theColumnKeys.map((colName) =>
-          props.visibleColumns[colName] ? (
+        {theColumnKeys.map((colName) =>
+          visibleColumns[colName] ? (
             <TableCell key={colName}>
               <Box sx={{ display: "flex", alignItems: "center" }}>
                 <Typography variant="subtitle2" sx={{ mr: 1 }}>
                   {colName === "Username"
-                    ? "Count of checkpoints saved: " + String(props.data.length)
+                    ? "Count of checkpoints saved: " + String(data.length)
                     : ""}
                 </Typography>
               </Box>
             </TableCell>
-          ) : null
+          ) : null,
         )}
         {/* Empty cell for the actions column in the footer row */}
         <TableCell></TableCell>

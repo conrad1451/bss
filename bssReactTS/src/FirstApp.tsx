@@ -58,14 +58,14 @@ const GameApp = (props: {
       }),
     };
 
-    const apiURL = `${import.meta.env.VITE_API_BASE_URL}/api/players/${props.selectedPlayer.id}/checkpoints`;
+    const apiURL = `${import.meta.env.VITE_API_BASE_URL}/api/players/${selectedPlayer.id}/checkpoints`;
 
     try {
       const res = await fetch(apiURL, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${props.mySessionToken}`,
+          Authorization: `Bearer ${mySessionToken}`,
         },
         body: JSON.stringify({ title, data }),
       });
@@ -79,7 +79,7 @@ const GameApp = (props: {
     }
   };
 
-  if (!props.mySessionToken) return <div>Loading game data...</div>;
+  if (!mySessionToken) return <div>Loading game data...</div>;
 
   // CHQ: Gemini AI added check to API call
   // Essential check to prevent the API call with a bad token
@@ -146,6 +146,7 @@ export const InstructionsPage = (props: {
   buttonText: string;
   callckFctn: () => void | Promise<void>;
 }) => {
+  const { buttonText, callckFctn } = props;
   return (
     // The main container for the entire page, centered and styled with Tailwind.
     <div className="flex flex-col items-center justify-center p-8 bg-gray-100 rounded-xl shadow-lg w-full max-w-lg mx-auto">
@@ -161,10 +162,10 @@ export const InstructionsPage = (props: {
 
       {/* Button to start playing the game */}
       <button
-        onClick={props.callckFctn}
+        onClick={callckFctn}
         className="w-full bg-yellow-500 text-white font-bold py-3 px-6 rounded-lg text-lg transition-all duration-300 hover:bg-yellow-600 shadow-md transform hover:scale-105"
       >
-        {props.buttonText}
+        {buttonText}
       </button>
 
       {/* Container for the game instructions */}

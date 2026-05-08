@@ -18,6 +18,7 @@ interface EmptyDatabaseProps {
 }
 
 const EmptyDatabase = (props: EmptyDatabaseProps) => {
+  const { theRefetchOfCheckpoints } = props;
   return (
     <Box sx={{ mt: 2 }}>
       <Typography variant="body1">
@@ -25,7 +26,7 @@ const EmptyDatabase = (props: EmptyDatabaseProps) => {
       </Typography>
       <Button
         variant="contained"
-        onClick={props.theRefetchOfCheckpoints}
+        onClick={theRefetchOfCheckpoints}
         sx={{ mt: 2 }}
       >
         Refresh Checkpoints
@@ -39,13 +40,15 @@ const CheckpointsDisplay = (props: {
   theSessionToken: string;
   selectedPlayer: Player;
 }) => {
-  const apiURL = `${import.meta.env.VITE_API_BASE_URL}/api/players/${props.selectedPlayer.id}/checkpoints`;
+  const { theSessionToken, selectedPlayer } = props;
+
+  const apiURL = `${import.meta.env.VITE_API_BASE_URL}/api/players/${selectedPlayer.id}/checkpoints`;
   const { checkpoints, loading, error, refetchCheckpoints } = useGameData(
     apiURL,
-    props.theSessionToken,
+    theSessionToken,
   );
-  // console.log("props.myToken");
-  // console.log(props.myToken);
+  // console.log("myToken");
+  // console.log(myToken);
 
   // Set this to `false` to use real data from the API
 
@@ -122,7 +125,7 @@ const CheckpointsDisplay = (props: {
         <CheckpointTable
           thePages={dataForTable}
           theChoice={apiURL} // Corrected API variable name
-          theToken={props.theSessionToken}
+          theToken={theSessionToken}
         />
       )}
     </Box>

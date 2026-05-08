@@ -33,15 +33,17 @@ const ColumnVisibilityToggles = (props: {
   handleToggleColumn: (event: React.ChangeEvent<HTMLInputElement>) => void;
   theColumnKeys: Array<keyof ColumnVisibility>;
 }) => {
+  const { visibleColumns, handleToggleColumn, theColumnKeys } = props;
+
   return (
     <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
-      {props.theColumnKeys.map((colName) => (
+      {theColumnKeys.map((colName) => (
         <FormControlLabel
           key={colName}
           control={
             <Switch
-              checked={props.visibleColumns[colName]}
-              onChange={props.handleToggleColumn}
+              checked={visibleColumns[colName]}
+              onChange={handleToggleColumn}
               name={colName}
             />
           }
@@ -61,8 +63,17 @@ export const ColumnVisibilityControlModal = (props: {
   onReset: () => void;
   presets: Map<string, ColumnVisibility>;
 }) => {
+  const {
+    open,
+    onClose,
+    onSelectPreset,
+    visibleColumns,
+    onToggle,
+    onReset,
+    presets,
+  } = props;
   return (
-    <Modal open={props.open} onClose={props.onClose}>
+    <Modal open={open} onClose={onClose}>
       <Box
         sx={{
           position: "absolute",
@@ -89,15 +100,15 @@ export const ColumnVisibilityControlModal = (props: {
               value=""
               label="Presets"
               onChange={(e) =>
-                props.onSelectPreset(
-                  e.target.value as keyof typeof visibilityPresetsMiniTable
+                onSelectPreset(
+                  e.target.value as keyof typeof visibilityPresetsMiniTable,
                 )
               }
             >
               <MenuItem value="">
                 <em>None (Select Preset)</em>
               </MenuItem>
-              {[...props.presets.keys()].map((key) => (
+              {[...presets.keys()].map((key) => (
                 <MenuItem key={key} value={key}>
                   {key.charAt(0).toUpperCase() +
                     key.slice(1).replace(/([A-Z])/g, " $1")}{" "}
@@ -105,7 +116,7 @@ export const ColumnVisibilityControlModal = (props: {
               ))}
             </Select>
           </FormControl>
-          <Button onClick={props.onReset} variant="outlined" sx={{ mt: 1 }}>
+          <Button onClick={onReset} variant="outlined" sx={{ mt: 1 }}>
             Reset to Default
           </Button>
         </Box>
@@ -114,12 +125,12 @@ export const ColumnVisibilityControlModal = (props: {
           Toggle Individual Columns:
         </Typography>
         <ColumnVisibilityToggles
-          visibleColumns={props.visibleColumns}
-          handleToggleColumn={props.onToggle}
+          visibleColumns={visibleColumns}
+          handleToggleColumn={onToggle}
           theColumnKeys={allColumnKeys}
         />
 
-        <Button onClick={props.onClose} variant="contained" sx={{ mt: 3 }}>
+        <Button onClick={onClose} variant="contained" sx={{ mt: 3 }}>
           Close
         </Button>
       </Box>
