@@ -30,6 +30,7 @@ const GameApp = (props: {
   const [saving, setSaving] = useState(false);
   const [saveMessage, setSaveMessage] = useState<string | null>(null);
 
+  // CHQ: Claude AI added saveCheckpoint function
   const saveCheckpoint = async () => {
     if (saving) return;
     setSaving(true);
@@ -100,6 +101,7 @@ const GameApp = (props: {
       <p>Playing as: {selectedPlayer.playername}</p>
       <button onClick={callckFctn}>{button1Text}</button>
 
+      {/* CHQ: Claude AI added saveCheckpoint button */}
       <button
         onClick={saveCheckpoint}
         disabled={saving}
