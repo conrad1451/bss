@@ -1,5 +1,6 @@
 // FirstApp.tsx
-import React from "react";
+import React, { useState } from "react";
+
 import {
   BrowserRouter as Router,
   Route,
@@ -26,6 +27,59 @@ const GameApp = (props: {
 }) => {
   const { mySessionToken, selectedPlayer, button1Text, callckFctn } = props;
 
+  const [saving, setSaving] = useState(false);
+  const [saveMessage, setSaveMessage] = useState<string | null>(null);
+
+  const saveCheckpoint = async () => {
+    if (saving) return;
+    setSaving(true);
+    setSaveMessage(null);
+
+    const now = new Date();
+    const title = `Save - ${now.toLocaleString("en-US", {
+      month: "long",
+      day: "numeric",
+      year: "numeric",
+      hour: "numeric",
+      minute: "2-digit",
+      timeZoneName: "short",
+    })}`;
+
+    const data = {
+      saved_at: now.toLocaleString("en-US", {
+        month: "long",
+        day: "numeric",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        timeZoneName: "short",
+      }),
+    };
+
+    const apiURL = `${import.meta.env.VITE_API_BASE_URL}/api/players/${props.selectedPlayer.id}/checkpoints`;
+
+    try {
+      const res = await fetch(apiURL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${props.mySessionToken}`,
+        },
+        body: JSON.stringify({ title, data }),
+      });
+
+      if (!res.ok) throw new Error("Failed to save");
+      setSaveMessage("Checkpoint saved!");
+    } catch {
+      setSaveMessage("Failed to save checkpoint.");
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  if (!props.mySessionToken) return <div>Loading game data...</div>;
+
   // CHQ: Gemini AI added check to API call
   // Essential check to prevent the API call with a bad token
   if (!mySessionToken) {
@@ -45,6 +99,23 @@ const GameApp = (props: {
 
       <p>Playing as: {selectedPlayer.playername}</p>
       <button onClick={callckFctn}>{button1Text}</button>
+
+      <button
+        onClick={saveCheckpoint}
+        disabled={saving}
+        className="w-full bg-green-500 text-white font-bold py-3 px-6 rounded-lg text-lg mt-4 transition-all duration-300 hover:bg-green-600 shadow-md transform hover:scale-105"
+      >
+        {saving ? "Saving…" : "Save Checkpoint"}
+      </button>
+
+      {saveMessage && (
+        <p className="mt-2 text-sm text-gray-600">{saveMessage}</p>
+      )}
+
+      <p className="text-gray-600">
+        This is where the Bee Swarm Simulator game will be built.
+      </p>
+
       <CheckpointsDisplay
         theSessionToken={mySessionToken}
         selectedPlayer={selectedPlayer}
