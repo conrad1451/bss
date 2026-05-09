@@ -1,4 +1,29 @@
+import { beeInfo } from "./data/bees.js";
+import { effects } from "./data/effects.js";
+import { upgrades } from "./data/upgrades.js";
 // import { blenderRecipes, windShrineDonations } from "./recipes";
+
+import { createField } from "./engine/world.js";
+import { fieldDefinitions } from "./data/fieldData.js";
+
+function initGameWorld(gameState) {
+  fieldDefinitions.forEach((f) => {
+    createField(
+      f.name,
+      f.x,
+      f.y,
+      f.z,
+      f.w,
+      f.l,
+      f.colorLogic,
+      f.levelLogic,
+      f.composition,
+      f.nectar,
+      gameState,
+      internalAddFlowerFunction, // Pass the function that builds flower meshes
+    );
+  });
+}
 
 function main() {
   // edits coming
@@ -165,7 +190,7 @@ function main() {
     let w = window.open();
     w.document.open();
     w.document.write(
-      "<!doctype html><html>" + document.querySelector("html").innerHTML
+      "<!doctype html><html>" + document.querySelector("html").innerHTML,
     );
     w.document.close();
   };
@@ -189,7 +214,7 @@ function main() {
 
     document.getElementById("createImportedGame").onclick = function () {
       alert(
-        "\nTo import a game, you'll need a string containing the saved data of the game. Copy the string, and then use CTRL+V in this program to start the game.\n\nAn invalid code will create an error message. There is a chance errors in the save code are not detected and pass through. This may corrupt the game, resulting in crashes."
+        "\nTo import a game, you'll need a string containing the saved data of the game. Copy the string, and then use CTRL+V in this program to start the game.\n\nAn invalid code will create an error message. There is a chance errors in the save code are not detected and pass through. This may corrupt the game, resulting in crashes.",
       );
     };
 
@@ -242,7 +267,7 @@ function main() {
             confirm(
               '\nDo you really want to delete save "' +
                 res[index].data.name +
-                '"?'
+                '"?',
             )
           ) {
             deleteSaveConfirmation = false;
@@ -270,7 +295,7 @@ function main() {
               alert(
                 '\nThe save code for save "' +
                   res[index].data.name +
-                  '" has been copied to your clipboard.'
+                  '" has been copied to your clipboard.',
               );
             })
             .catch((e) => {
@@ -293,7 +318,7 @@ function main() {
               alert(
                 '\nThere was an error copying the save code for save "' +
                   res[index].data.name +
-                  '" to your clipboard. The code has been printed at the bottom of the page instead.'
+                  '" to your clipboard. The code has been printed at the bottom of the page instead.',
               );
             });
         };
@@ -385,7 +410,7 @@ function main() {
   };
 
   document.getElementById("info_mainBack").onclick = document.getElementById(
-    "select_mainBack"
+    "select_mainBack",
   ).onclick = function () {
     document.getElementById("mainInfoMenu").style.display = "none";
     document.getElementById("mainSelectMenu").style.display = "none";
@@ -423,7 +448,7 @@ function BeeSwarmSimulator(DATA) {
 
   if (!gl) {
     alert(
-      "WebGL2 is not supported. Switch to a compatiable browser or computer to play."
+      "WebGL2 is not supported. Switch to a compatiable browser or computer to play.",
     );
     return;
   }
@@ -460,37 +485,37 @@ function BeeSwarmSimulator(DATA) {
 
     staticGeometryProgram = createProgram(
       "static_geometry_vsh",
-      "static_geometry_fsh"
+      "static_geometry_fsh",
     );
     dynamicGeometryProgram = createProgram(
       "dynamic_geometry_vsh",
-      "dynamic_geometry_fsh"
+      "dynamic_geometry_fsh",
     );
     tokenGeometryProgram = createProgram(
       "token_geometry_vsh",
-      "token_geometry_fsh"
+      "token_geometry_fsh",
     );
     flowerGeometryProgram = createProgram(
       "flower_geometry_vsh",
-      "flower_geometry_fsh"
+      "flower_geometry_fsh",
     );
     beeGeometryProgram = createProgram("bee_geometry_vsh", "bee_geometry_fsh");
     particleRendererProgram = createProgram(
       "particle_renderer_vsh",
-      "particle_renderer_fsh"
+      "particle_renderer_fsh",
     );
     explosionRendererProgram = createProgram(
       "explosion_renderer_vsh",
-      "explosion_renderer_fsh"
+      "explosion_renderer_fsh",
     );
     textRendererProgram = createProgram(
       "text_renderer_vsh",
-      "text_renderer_fsh"
+      "text_renderer_fsh",
     );
     mobRendererProgram = createProgram("mob_renderer_vsh", "mob_renderer_fsh");
     trailRendererProgram = createProgram(
       "trail_renderer_vsh",
-      "trail_renderer_fsh"
+      "trail_renderer_fsh",
     );
 
     glCache = initGlCache({});
@@ -536,7 +561,7 @@ function BeeSwarmSimulator(DATA) {
   gl.cullFace(gl.BACK);
 
   let passiveActivationPopup = document.getElementById(
-    "passiveActivationPopup"
+    "passiveActivationPopup",
   );
   let pollenAmount = document.getElementById("pollenAmount");
   let honeyAmount = document.getElementById("honeyAmount");
@@ -574,7 +599,7 @@ function BeeSwarmSimulator(DATA) {
         name + "_description"
       ][j].substring(
         itemSVGCode[name + "_description"][j].indexOf(">") + 1,
-        itemSVGCode[name + "_description"][j].indexOf("<")
+        itemSVGCode[name + "_description"][j].indexOf("<"),
       );
     }
 
@@ -588,7 +613,7 @@ function BeeSwarmSimulator(DATA) {
       '<svg style="width:70px;height:70px;transform:SCALE">' +
       itemSVGCode[name][itemSVGCode[name].length - 1].substr(
         0,
-        itemSVGCode[name][itemSVGCode[name].length - 1].indexOf("</svg>")
+        itemSVGCode[name][itemSVGCode[name].length - 1].indexOf("</svg>"),
       ) +
       "<title>" +
       MATH.doGrammar(name) +
@@ -601,7 +626,7 @@ function BeeSwarmSimulator(DATA) {
       if (player.itemDragging && items[player.itemDragging].canUseOnSlot) {
         player.addMessage(
           "This item cannot be put into the hotbar!",
-          COLORS.redArr
+          COLORS.redArr,
         );
         return;
       }
@@ -613,7 +638,7 @@ function BeeSwarmSimulator(DATA) {
         hotbarSlots[i].innerHTML =
           itemSVGCode[player.itemDragging].replace(
             "SCALE",
-            "scale(0.512,0.512);margin-left:-18px;margin-top:-19px"
+            "scale(0.512,0.512);margin-left:-18px;margin-top:-19px",
           ) +
           "<div style='font-size:9px;text-align:right;margin-top:-30px'>x" +
           items[player.itemDragging].amount +
@@ -709,10 +734,10 @@ function BeeSwarmSimulator(DATA) {
               "Item is on a cooldown of " +
                 MATH.doTime(
                   items[hotbarSlots[i].itemType].maxCooldown -
-                    (TIME - items[hotbarSlots[i].itemType].cooldown)
+                    (TIME - items[hotbarSlots[i].itemType].cooldown),
                 ) +
                 "!",
-              COLORS.redArr
+              COLORS.redArr,
             );
           }
         }
@@ -841,7 +866,7 @@ function BeeSwarmSimulator(DATA) {
         SAVE_GAME(1);
         player.addMessage("Game Saved!");
         console.error(
-          "\n\n\n\n\nGame manually saved on " + Date.now() + "\n\n\n\n\n"
+          "\n\n\n\n\nGame manually saved on " + Date.now() + "\n\n\n\n\n",
         );
       };
 
@@ -932,7 +957,7 @@ function BeeSwarmSimulator(DATA) {
             MATH.doTime(
               5 * 60 -
                 (Date.now() - player.extraInfo.windShrineDonate) * 0.001 +
-                ""
+                "",
             ) +
             ")"
           );
@@ -1006,7 +1031,7 @@ function BeeSwarmSimulator(DATA) {
           ],
           COLORS.honey,
           1,
-          "⇆"
+          "⇆",
         );
         player.honey += (player.pollen * player.honeyPerPollen) | 0;
         player.pollen = 0;
@@ -1557,7 +1582,7 @@ function BeeSwarmSimulator(DATA) {
           ],
           COLORS.honey,
           1,
-          "⇆"
+          "⇆",
         );
         player.honey += Math.ceil(player.pollen * player.honeyPerPollen);
         player.pollen = 0;
@@ -1591,7 +1616,7 @@ function BeeSwarmSimulator(DATA) {
           ],
           COLORS.honey,
           1,
-          "⇆"
+          "⇆",
         );
         player.honey += Math.ceil(player.pollen * player.honeyPerPollen);
         player.pollen = 0;
@@ -1625,7 +1650,7 @@ function BeeSwarmSimulator(DATA) {
           ],
           COLORS.honey,
           1,
-          "⇆"
+          "⇆",
         );
         player.honey += Math.ceil(player.pollen * player.honeyPerPollen);
         player.pollen = 0;
@@ -1669,7 +1694,7 @@ function BeeSwarmSimulator(DATA) {
           ).replace("0 ", " "),
           "*" +
             Math.min(1 + player.stats.moonAmulets * 0.03, 1.75).toFixed(2) +
-            " convertRate"
+            " convertRate",
         );
 
         let g = Math.min(player.stats.moonAmulets, 25);
@@ -1678,7 +1703,7 @@ function BeeSwarmSimulator(DATA) {
           amulet.push(
             "*" +
               MATH.random(1.01 + g * 0.001, 1.02 + g * 0.002).toFixed(2) +
-              " nectarMultiplier"
+              " nectarMultiplier",
           );
         }
 
@@ -1686,7 +1711,7 @@ function BeeSwarmSimulator(DATA) {
           amulet.push(
             "*" +
               MATH.random(1.02 + g * 0.01, 1.08 + g * 0.02).toFixed(2) +
-              " lootLuck"
+              " lootLuck",
           );
         }
 
@@ -1694,11 +1719,11 @@ function BeeSwarmSimulator(DATA) {
           amulet.push(
             "*" +
               MATH.random(1.05 + 25 * 0.007, 1.15 + g * 0.014).toFixed(2) +
-              " whitePollen"
+              " whitePollen",
           );
         } else {
           amulet.push(
-            "*" + MATH.random(1.03, 1.1).toFixed(2) + " bondFromTreats"
+            "*" + MATH.random(1.03, 1.1).toFixed(2) + " bondFromTreats",
           );
         }
 
@@ -1721,8 +1746,8 @@ function BeeSwarmSimulator(DATA) {
                 MATH.random(1.01 + g * 0.001, 1.02 + g * 0.001).toFixed(2) +
                 " honeyPerPollen",
             ],
-            g === 25 && Math.random() < 0.333 ? 2 : 1
-          )
+            g === 25 && Math.random() < 0.333 ? 2 : 1,
+          ),
         );
 
         player.showGeneratedAmulet("moonAmulet", amulet);
@@ -1780,8 +1805,8 @@ function BeeSwarmSimulator(DATA) {
               "+" + MATH.random(0.01, 0.05).toFixed(2) + " beeAbilityRate",
               "+" + MATH.random(0.01, 0.05).toFixed(2) + " criticalChance",
             ],
-            2
-          )
+            2,
+          ),
         );
 
         player.showGeneratedAmulet("bronzeStarAmulet", amulet);
@@ -1839,8 +1864,8 @@ function BeeSwarmSimulator(DATA) {
               "+" + MATH.random(0.01, 0.05).toFixed(2) + " beeAbilityRate",
               "+" + MATH.random(0.01, 0.05).toFixed(2) + " criticalChance",
             ],
-            3
-          )
+            3,
+          ),
         );
 
         player.showGeneratedAmulet("silverStarAmulet", amulet);
@@ -1898,8 +1923,8 @@ function BeeSwarmSimulator(DATA) {
               "+" + MATH.random(0.01, 0.05).toFixed(2) + " beeAbilityRate",
               "+" + MATH.random(0.01, 0.05).toFixed(2) + " criticalChance",
             ],
-            4
-          )
+            4,
+          ),
         );
 
         player.showGeneratedAmulet("goldStarAmulet", amulet);
@@ -1957,8 +1982,8 @@ function BeeSwarmSimulator(DATA) {
               "+" + MATH.random(0.01, 0.05).toFixed(2) + " beeAbilityRate",
               "+" + MATH.random(0.01, 0.05).toFixed(2) + " criticalChance",
             ],
-            5
-          )
+            5,
+          ),
         );
 
         if (Math.random() < 0.5) {
@@ -2021,8 +2046,8 @@ function BeeSwarmSimulator(DATA) {
               "+" + MATH.random(0.01, 0.08).toFixed(2) + " beeAbilityRate",
               "+" + MATH.random(0.01, 0.08).toFixed(2) + " criticalChance",
             ],
-            5
-          )
+            5,
+          ),
         );
 
         let gotten = [
@@ -2070,7 +2095,7 @@ function BeeSwarmSimulator(DATA) {
             MATH.doTime(
               60 * 60 -
                 (Date.now() - player.extraInfo.strawberryDispenser) * 0.001 +
-                ""
+                "",
             ) +
             ")"
           );
@@ -2099,7 +2124,7 @@ function BeeSwarmSimulator(DATA) {
         player.updateInventory();
         player.addMessage("+" + MATH.addCommas(1000 * numBees + "") + " Honey");
         player.addMessage(
-          "+" + MATH.addCommas(numBees + 3 + "") + " Strawberries"
+          "+" + MATH.addCommas(numBees + 3 + "") + " Strawberries",
         );
         player.addMessage('Activated x10 "Red Boost"');
         player.addMessage('Activated x5 "Haste"');
@@ -2117,7 +2142,7 @@ function BeeSwarmSimulator(DATA) {
             MATH.doTime(
               60 * 60 -
                 (Date.now() - player.extraInfo.blueberryDispenser) * 0.001 +
-                ""
+                "",
             ) +
             ")"
           );
@@ -2146,7 +2171,7 @@ function BeeSwarmSimulator(DATA) {
         player.updateInventory();
         player.addMessage("+" + MATH.addCommas(1000 * numBees + "") + " Honey");
         player.addMessage(
-          "+" + MATH.addCommas(numBees + 3 + "") + " Blueberries"
+          "+" + MATH.addCommas(numBees + 3 + "") + " Blueberries",
         );
         player.addMessage('Activated x10 "Blue Boost"');
         player.addMessage('Activated x5 "Haste"');
@@ -2165,7 +2190,7 @@ function BeeSwarmSimulator(DATA) {
             MATH.doTime(
               60 * 60 -
                 (Date.now() - player.extraInfo.treatDispenser) * 0.001 +
-                ""
+                "",
             ) +
             ")"
           );
@@ -2194,10 +2219,10 @@ function BeeSwarmSimulator(DATA) {
         player.updateInventory();
         player.addMessage("+" + MATH.addCommas(250 * numBees + "") + " Honey");
         player.addMessage(
-          "+" + MATH.addCommas(objects.bees.length * 4 + 10 + "") + " Treats"
+          "+" + MATH.addCommas(objects.bees.length * 4 + 10 + "") + " Treats",
         );
         player.addMessage(
-          "+" + MATH.addCommas(numBees + 3 + "") + " Pineapples"
+          "+" + MATH.addCommas(numBees + 3 + "") + " Pineapples",
         );
         player.addMessage('Activated x5 "Haste"');
       },
@@ -2214,7 +2239,7 @@ function BeeSwarmSimulator(DATA) {
             MATH.doTime(
               60 * 60 -
                 (Date.now() - player.extraInfo.honeyDispenser) * 0.001 +
-                ""
+                "",
             ) +
             ")"
           );
@@ -2238,9 +2263,9 @@ function BeeSwarmSimulator(DATA) {
             MATH.addCommas(
               objects.bees.length * objects.bees.length * objects.bees.length +
                 100 +
-                ""
+                "",
             ) +
-            " Honey"
+            " Honey",
         );
         player.addMessage('Activated x5 "Haste"');
       },
@@ -2281,7 +2306,7 @@ function BeeSwarmSimulator(DATA) {
             MATH.doTime(
               6 * 60 * 60 -
                 (Date.now() - player.extraInfo.glueDispenser) * 0.001 +
-                ""
+                "",
             ) +
             ")"
           );
@@ -2317,7 +2342,7 @@ function BeeSwarmSimulator(DATA) {
             MATH.doTime(
               20 * 60 -
                 (Date.now() - player.extraInfo.antPassDispenser) * 0.001 +
-                ""
+                "",
             ) +
             ")"
           );
@@ -2355,7 +2380,7 @@ function BeeSwarmSimulator(DATA) {
               2 * 60 * 60 -
                 (Date.now() - player.extraInfo.giftedRoyalJellyDispenser) *
                   0.001 +
-                ""
+                "",
             ) +
             ")"
           );
@@ -2468,7 +2493,7 @@ function BeeSwarmSimulator(DATA) {
             MATH.doTime(
               2 * 60 * 60 -
                 (Date.now() - player.extraInfo.sproutSummoner) * 0.001 +
-                ""
+                "",
             ) +
             ")"
           );
@@ -2511,7 +2536,7 @@ function BeeSwarmSimulator(DATA) {
             supreme: [30, 220, 90],
             gummy: [230, 70, 230],
             moon: [140, 200, 230],
-          }[type]
+          }[type],
         );
 
         objects.mobs.push(new Sprout(f, type));
@@ -2529,7 +2554,7 @@ function BeeSwarmSimulator(DATA) {
             MATH.doTime(
               30 * 60 -
                 (Date.now() - player.extraInfo.fieldBooster) * 0.001 +
-                ""
+                "",
             ) +
             ")"
           );
@@ -2564,14 +2589,14 @@ function BeeSwarmSimulator(DATA) {
           false,
           false,
           undefined,
-          am
+          am,
         );
         player.addMessage(
           "Activated x" +
             am +
             ' "' +
             MATH.doGrammar(f[0].toLowerCase() + f.substring(1, f.length)) +
-            ' Boost"'
+            ' Boost"',
         );
       },
     },
@@ -2588,7 +2613,7 @@ function BeeSwarmSimulator(DATA) {
             MATH.doTime(
               30 * 60 -
                 (Date.now() - player.extraInfo.redFieldBooster) * 0.001 +
-                ""
+                "",
             ) +
             ")"
           );
@@ -2615,14 +2640,14 @@ function BeeSwarmSimulator(DATA) {
           false,
           false,
           undefined,
-          am
+          am,
         );
         player.addMessage(
           "Activated x" +
             am +
             ' "' +
             MATH.doGrammar(f[0].toLowerCase() + f.substring(1, f.length)) +
-            ' Boost"'
+            ' Boost"',
         );
       },
     },
@@ -2639,7 +2664,7 @@ function BeeSwarmSimulator(DATA) {
             MATH.doTime(
               30 * 60 -
                 (Date.now() - player.extraInfo.blueFieldBooster) * 0.001 +
-                ""
+                "",
             ) +
             ")"
           );
@@ -2666,14 +2691,14 @@ function BeeSwarmSimulator(DATA) {
           false,
           false,
           undefined,
-          am
+          am,
         );
         player.addMessage(
           "Activated x" +
             am +
             ' "' +
             MATH.doGrammar(f[0].toLowerCase() + f.substring(1, f.length)) +
-            ' Boost"'
+            ' Boost"',
         );
       },
     },
@@ -3182,7 +3207,7 @@ function BeeSwarmSimulator(DATA) {
         let amulet = [];
 
         amulet.push(
-          "*" + MATH.random(1.5, 1.6).toFixed(2) + " capacityMultiplier"
+          "*" + MATH.random(1.5, 1.6).toFixed(2) + " capacityMultiplier",
         );
         amulet.push("*" + MATH.random(1.1, 1.15).toFixed(2) + " beeAttack");
 
@@ -3194,35 +3219,37 @@ function BeeSwarmSimulator(DATA) {
               MATH.random(1.2, 1.3).toFixed(2) +
               " " +
               ["red", "blue", "white"][(Math.random() * 3) | 0] +
-              "Pollen"
+              "Pollen",
           );
         }
 
         if (Math.random() < 0.333) {
           amulet.push(
-            "+" + MATH.random(0.07, 0.13).toFixed(2) + " instantRedConversion"
+            "+" + MATH.random(0.07, 0.13).toFixed(2) + " instantRedConversion",
           );
         } else if (Math.random() < 0.5) {
           amulet.push(
-            "+" + MATH.random(0.07, 0.13).toFixed(2) + " instantWhiteConversion"
+            "+" +
+              MATH.random(0.07, 0.13).toFixed(2) +
+              " instantWhiteConversion",
           );
         } else {
           amulet.push(
-            "+" + MATH.random(0.07, 0.13).toFixed(2) + " instantBlueConversion"
+            "+" + MATH.random(0.07, 0.13).toFixed(2) + " instantBlueConversion",
           );
         }
 
         if (Math.random() < 0.333) {
           amulet.push(
-            "*" + MATH.random(1.07, 1.15).toFixed(2) + " flamePollen"
+            "*" + MATH.random(1.07, 1.15).toFixed(2) + " flamePollen",
           );
         } else if (Math.random() < 0.5) {
           amulet.push(
-            "*" + MATH.random(1.07, 1.15).toFixed(2) + " bubblePollen"
+            "*" + MATH.random(1.07, 1.15).toFixed(2) + " bubblePollen",
           );
         } else {
           amulet.push(
-            "*" + MATH.random(1.04, 1.08).toFixed(2) + " markDuration"
+            "*" + MATH.random(1.04, 1.08).toFixed(2) + " markDuration",
           );
         }
 
@@ -3231,17 +3258,17 @@ function BeeSwarmSimulator(DATA) {
             amulet.push("*1.05 nectarMultiplier");
           } else {
             amulet.push(
-              "*" + MATH.random(1.35, 1.6).toFixed(2) + " honeyFromTokens"
+              "*" + MATH.random(1.35, 1.6).toFixed(2) + " honeyFromTokens",
             );
           }
         } else {
           if (Math.random() < 0.5) {
             amulet.push(
-              "*" + MATH.random(1.08, 1.15).toFixed(2) + " superCritPower"
+              "*" + MATH.random(1.08, 1.15).toFixed(2) + " superCritPower",
             );
           } else {
             amulet.push(
-              "*" + MATH.random(1.2, 1.3).toFixed(2) + " tokenLifespan"
+              "*" + MATH.random(1.2, 1.3).toFixed(2) + " tokenLifespan",
             );
           }
         }
@@ -3269,11 +3296,11 @@ function BeeSwarmSimulator(DATA) {
           amulet.push(
             "+1 redBeeAttack",
             "+1 blueBeeAttack",
-            "+1 whiteBeeAttack"
+            "+1 whiteBeeAttack",
           );
         } else {
           amulet.push(
-            Math.random() < 0.5 ? "+1 redBeeAttack" : "+1 blueBeeAttack"
+            Math.random() < 0.5 ? "+1 redBeeAttack" : "+1 blueBeeAttack",
           );
         }
 
@@ -3285,8 +3312,8 @@ function BeeSwarmSimulator(DATA) {
               "*" + MATH.random(1.05, 1.2).toFixed(2) + " redPollen",
               "*" + MATH.random(1.05, 1.15).toFixed(2) + " whitePollen",
             ],
-            2
-          )
+            2,
+          ),
         );
 
         player.showGeneratedAmulet("kingBeetleAmulet", amulet);
@@ -3312,7 +3339,7 @@ function BeeSwarmSimulator(DATA) {
           "*1." + (g + 1) + " capacityMultiplier",
           "*" +
             MATH.random(1.05 + g * 0.15, 1.15 + g * 0.15).toFixed(2) +
-            " convertRate"
+            " convertRate",
         );
 
         amulet.push(
@@ -3341,8 +3368,8 @@ function BeeSwarmSimulator(DATA) {
                 MATH.random(1.03 + g * 0.05, 1.1 + g * 0.05).toFixed(2) +
                 " pollenFromBees",
             ],
-            g + 1
-          )
+            g + 1,
+          ),
         );
 
         player.showGeneratedAmulet(t + "AntAmulet", amulet);
@@ -3389,13 +3416,13 @@ function BeeSwarmSimulator(DATA) {
                 MATH.random(1.01 + g * 0.01, 1.05 + g * 0.015).toFixed(2) +
                 " honeyFromTokens",
             ],
-            (g * 0.5 + 2) | 0
-          )
+            (g * 0.5 + 2) | 0,
+          ),
         );
 
         player.showGeneratedAmulet(
           ["bronze", "silver", "gold", "diamond", "supreme"][g] + "SnailAmulet",
-          amulet
+          amulet,
         );
       },
     };
@@ -3403,6420 +3430,9 @@ function BeeSwarmSimulator(DATA) {
 
   let hoverText = document.getElementById("hoverText");
 
-  let beeInfo = {
-    basic: {
-      u: 0,
-      v: 0,
-      meshPartId: 0,
-      gatherSpeed: 4,
-      gatherAmount: 10,
-      speed: 14,
-      convertSpeed: 4,
-      convertAmount: 80,
-      attack: 1,
-      energy: 20,
-      favoriteTreat: "sunflowerSeed",
-      rarity: "common",
-      color: "white",
-      description: "An ordinary bee. Well rounded and hard working!",
-      giftedHiveBonus: {
-        oper: "*",
-        stat: "redPollen,bluePollen,whitePollen",
-        num: 1.2,
-      },
-    },
+  // FIXME: here goes bssinfo
 
-    looker: {
-      u: 128 / 2048,
-      v: 0,
-      meshPartId: 0,
-      gatherSpeed: 4,
-      gatherAmount: 13,
-      speed: 14,
-      tokens: ["focus"],
-      convertSpeed: 4,
-      convertAmount: 160,
-      attack: 1,
-      attackTokens: ["focus"],
-      energy: 20,
-      favoriteTreat: "sunflowerSeed",
-      rarity: "rare",
-      color: "white",
-      description:
-        "This silent bee is always watching and gaining valuable insights.",
-      giftedHiveBonus: { oper: "+", stat: "criticalPower", num: 0.25 },
-    },
-
-    music: {
-      u: 256 / 2048,
-      v: 0,
-      meshPartId: 5,
-      gatherSpeed: 4,
-      gatherAmount: 16,
-      speed: 16.1,
-      tokens: ["focus", "melody", "link"],
-      convertSpeed: 4,
-      convertAmount: 240,
-      attack: 1,
-      attackTokens: ["focus", "melody", "link"],
-      energy: 20,
-      favoriteTreat: "blueberry",
-      rarity: "legendary",
-      color: "white",
-      description:
-        "This bee's buzz is so beautiful it can bring anyone to tears. It uses this gift to motivate others.",
-      giftedHiveBonus: { oper: "*", stat: "pollenFromBees", num: 1.25 },
-    },
-
-    fire: {
-      u: (256 + 128) / 2048,
-      v: 0,
-      meshPartId: 0,
-      gatherSpeed: 4,
-      gatherAmount: 10,
-      speed: 11.5,
-      gatheringPassive: function (bee) {
-        if (Math.random() < (bee.gifted ? 0.5 : 0.35)) {
-          objects.explosions.push(
-            new Explosion({
-              col: [1, 0.5, 0],
-              pos: [
-                Math.round(bee.pos[0]),
-                bee.pos[1] - 0.225,
-                Math.round(bee.pos[2]),
-              ],
-              life: 0.5,
-              size: 1.5,
-              speed: 0.5,
-              aftershock: 0.01,
-              height: 0.01,
-            })
-          );
-          objects.flames.push(
-            new Flame(
-              player.fieldIn,
-              bee.flowerCollecting[0],
-              bee.flowerCollecting[1]
-            )
-          );
-        }
-      },
-      particles: function (bee) {
-        ParticleRenderer.add({
-          x: bee.pos[0],
-          y: bee.pos[1],
-          z: bee.pos[2],
-          vx: MATH.random(-0.3, 0.3),
-          vy: MATH.random(-0.3, 0.3),
-          vz: MATH.random(-0.3, 0.3),
-          grav: 0,
-          size: MATH.random(80, 120),
-          col: [player.isNight, MATH.random(0.4, 0.7) * player.isNight, 0],
-          life: 1.5,
-          rotVel: MATH.random(-3, 3),
-          alpha: 2.5,
-        });
-      },
-      convertSpeed: 4,
-      convertAmount: 80,
-      attack: 4,
-      tokens: ["redBomb"],
-      energy: 25,
-      favoriteTreat: "pineapple",
-      rarity: "epic",
-      color: "red",
-      description:
-        "As an egg, this bee was accidentally left in the trunk of a car in the middle of the summer for over 3 days!",
-      giftedHiveBonus: { oper: "*", stat: "flamePollen", num: 1.5 },
-    },
-
-    bubble: {
-      u: (256 + 256) / 2048,
-      v: 0,
-      meshPartId: 0,
-      gatherSpeed: 4,
-      gatherAmount: 10,
-      speed: 16.1,
-      gatheringPassive: function (bee) {
-        if (Math.random() < (bee.gifted ? 0.5 : 0.35)) {
-          objects.bubbles.push(
-            new Bubble(
-              player.fieldIn,
-              bee.flowerCollecting[0],
-              bee.flowerCollecting[1]
-            )
-          );
-        }
-      },
-      particles: function (bee) {
-        ParticleRenderer.add({
-          x: bee.pos[0],
-          y: bee.pos[1],
-          z: bee.pos[2],
-          vx: MATH.random(-0.3, 0.3),
-          vy: MATH.random(-0.3, 0.3),
-          vz: MATH.random(-0.3, 0.3),
-          grav: 0,
-          size: MATH.random(35, 70),
-          col: [
-            MATH.random(0.1, 0.3) * player.isNight,
-            MATH.random(0.4, 0.6) * player.isNight,
-            MATH.random(0.8, 1) * player.isNight,
-          ],
-          life: 1.5,
-          rotVel: MATH.random(-3, 3),
-          alpha: 2.5,
-        });
-      },
-      convertSpeed: 4,
-      convertAmount: 160,
-      attack: 3,
-      tokens: ["blueBomb"],
-      energy: 20,
-      favoriteTreat: "blueberry",
-      rarity: "epic",
-      color: "blue",
-      description:
-        "As a larva, this bee lived in the ocean. It loves Blue flowers cause they remind it of home.",
-      giftedHiveBonus: { oper: "*", stat: "bubblePollen", num: 1.5 },
-    },
-
-    hasty: {
-      u: (128 * 5) / 2048,
-      v: 0,
-      meshPartId: 0,
-      gatherSpeed: 3,
-      gatherAmount: 10,
-      speed: 19.6,
-      tokens: ["haste"],
-      convertSpeed: 3,
-      convertAmount: 80,
-      attack: 1,
-      attackTokens: ["haste"],
-      energy: 20,
-      favoriteTreat: "pineapple",
-      rarity: "rare",
-      color: "white",
-      description:
-        "A quick bee who always zips arounds. Sometimes it even makes YOU move faster.",
-      giftedHiveBonus: { oper: "*", stat: "walkSpeed", num: 1.1 },
-    },
-
-    bomber: {
-      u: (128 * 6) / 2048,
-      v: 0,
-      meshPartId: 0,
-      gatherSpeed: 4,
-      gatherAmount: 10,
-      speed: 15.4,
-      tokens: ["whiteBomb"],
-      convertSpeed: 4,
-      convertAmount: 120,
-      attack: 2,
-      energy: 20,
-      favoriteTreat: "sunflowerSeed",
-      rarity: "rare",
-      color: "white",
-      description:
-        "This crafty bee makes bombs which collect pollen from all nearby flowers.",
-      giftedHiveBonus: {
-        oper: "*",
-        stat: "redBombPollen,blueBombPollen,whiteBombPollen",
-        num: 1.25,
-      },
-    },
-
-    fuzzy: {
-      u: (128 * 7) / 2048,
-      v: 0,
-      meshPartId: 7,
-      gatherSpeed: 6,
-      gatherAmount: 100,
-      speed: 11.9,
-      convertSpeed: 6,
-      convertAmount: 40,
-      attack: 3,
-      energy: 50,
-      gatheringPassive: function (bee) {
-        let fs = [
-          [0, 0],
-          [-1, -1],
-          [1, -1],
-          [1, 1],
-          [-1, 1],
-          [0, 1],
-          [0, -1],
-          [1, 0],
-          [-1, 0],
-          [0, 2],
-          [2, 0],
-          [0, -2],
-          [-2, 0],
-        ];
-
-        let f = fieldInfo[player.fieldIn];
-
-        for (let i = 0, l = MATH.random(-1 + bee.level * 0.05, 6); i < l; i++) {
-          let r = (Math.random() * fs.length) | 0;
-          let x = fs[r][0] + bee.flowerCollecting[0],
-            z = fs[r][1] + bee.flowerCollecting[1];
-
-          fs.splice(r, 1);
-
-          if (x >= 0 && x < f.width && z >= 0 && z < f.length) {
-            updateFlower(
-              player.fieldIn,
-              x,
-              z,
-              function (f) {
-                if (f.level < 5) {
-                  f.level++;
-                  f.pollinationTimer = 1;
-                } else {
-                  f.height = 1;
-                }
-              },
-              true,
-              false,
-              true
-            );
-
-            for (let j = 0; j < 6; j++) {
-              ParticleRenderer.add({
-                x: x + f.x,
-                y: f.y + 0.5,
-                z: z + f.z,
-                vx: MATH.random(-1, 1),
-                vy: Math.random() * 2,
-                vz: MATH.random(-1, 1),
-                grav: -3,
-                size: 100,
-                col: [
-                  player.isNight,
-                  player.isNight,
-                  MATH.random(0.6, 1) * player.isNight,
-                ],
-                life: 2.5,
-                rotVel: MATH.random(-3, 3),
-                alpha: 2,
-              });
-            }
-          }
-        }
-      },
-      particles: function (bee) {
-        ParticleRenderer.add({
-          x: bee.pos[0],
-          y: bee.pos[1],
-          z: bee.pos[2],
-          vx: MATH.random(-1, 1),
-          vy: MATH.random(0.5, 1.4),
-          vz: MATH.random(-1, 1),
-          grav: -3,
-          size: MATH.random(25, 60),
-          col: [
-            player.isNight,
-            player.isNight,
-            MATH.random(0.6, 1) * player.isNight,
-          ],
-          life: 0.75,
-          rotVel: MATH.random(-3, 3),
-          alpha: 10,
-        });
-      },
-      tokens: ["pollenHaze*", "fuzzBomb", "whiteBomb_"],
-      favoriteTreat: "pineapple",
-      rarity: "mythic",
-      color: "white",
-      description:
-        "This unkempt ball of fluff is actually a bee. Its fur aids in the pollination of flowers.",
-      giftedHiveBonus: { oper: "*", stat: "whiteBombPollen", num: 1.1 },
-    },
-
-    stubborn: {
-      u: (128 * 8) / 2048,
-      v: 0,
-      meshPartId: 0,
-      gatherSpeed: 4,
-      gatherAmount: 10,
-      speed: 11.9,
-      tokens: ["pollenMarkToken"],
-      convertSpeed: 3,
-      convertAmount: 80,
-      attack: 2,
-      energy: 20,
-      favoriteTreat: "strawberry",
-      rarity: "rare",
-      color: "white",
-      description:
-        "A hardheaded bee who can't be bossed around. It tells others where to go.",
-      giftedHiveBonus: { oper: "*", stat: "tokenLifespan", num: 1.25 },
-    },
-
-    spicy: {
-      u: (128 * 9) / 2048,
-      v: 0,
-      meshPartId: 4,
-      gatherSpeed: 4,
-      gatherAmount: 14,
-      speed: 14,
-      convertSpeed: 2,
-      convertAmount: 200,
-      tokens: ["inferno", "flameFuel*"],
-      attack: 5,
-      attackTokens: ["inferno", "flameFuel*", "rage"],
-      energy: 20,
-      particles: function (bee) {
-        if (player.flameHeatStack) {
-          ParticleRenderer.add({
-            x: bee.pos[0],
-            y: bee.pos[1],
-            z: bee.pos[2],
-            vx: MATH.random(-0.7, 0.7),
-            vy: MATH.random(-0.3, 0.3),
-            vz: MATH.random(-0.7, 0.7),
-            grav: 1.25,
-            size: 110,
-            col: [player.isNight, player.isNight, player.isNight],
-            life: 1.5,
-            rotVel: MATH.random(-3, 3),
-            alpha: (player.flameHeatStack - 1) * 2,
-          });
-        }
-      },
-      favoriteTreat: "strawberry",
-      rarity: "mythic",
-      color: "red",
-      description:
-        "Some like it hot - this bee likes it scorching. Even the honey it makes is spicy.",
-      giftedHiveBonus: { oper: "*", stat: "flameLife", num: 1.25 },
-    },
-
-    vector: {
-      u: 1280 / 2048,
-      v: 0,
-      meshPartId: 2,
-      gatherSpeed: 4,
-      gatherAmount: 18,
-      speed: 16.24,
-      convertSpeed: 2.72,
-      convertAmount: 144,
-      tokens: ["pollenMarkToken", "markSurge*", "triangulate"],
-      attack: 5,
-      energy: 45.6,
-      favoriteTreat: "pineapple",
-      rarity: "mythic",
-      color: "white",
-      description:
-        "A bee brought to life by an extremely complex trigonometric equation.",
-      giftedHiveBonus: { oper: "*", stat: "markDuration", num: 1.15 },
-    },
-
-    tadpole: {
-      u: (128 * 11) / 2048,
-      v: 0,
-      meshPartId: 0,
-      gatherSpeed: 6,
-      gatherAmount: 10,
-      speed: 11.2,
-      convertSpeed: 4,
-      convertAmount: 120,
-      tokens: ["summonFrog", "blueBoost", "babyLove*"],
-      attack: 0.5,
-      energy: 10,
-      gatheringPassive: function (bee) {
-        if (Math.random() < (bee.gifted ? 0.75 : 0.55)) {
-          objects.bubbles.push(
-            new Bubble(
-              player.fieldIn,
-              bee.flowerCollecting[0],
-              bee.flowerCollecting[1]
-            )
-          );
-        }
-      },
-      favoriteTreat: "blueberry",
-      rarity: "mythic",
-      color: "blue",
-      description:
-        "A tiny amphibious bee who wants to become a frog when it grows up.",
-      giftedHiveBonus: { oper: "*", stat: "bluePollen", num: 1.1 },
-      trails: [
-        {
-          length: 8,
-          size: 0.14,
-          color: [29 / 215, 133 / 215, 72 / 215, 1],
-          skipFrame: 3,
-          skipAdd: 3,
-          vertical: true,
-        },
-      ],
-    },
-
-    buoyant: {
-      u: (128 * 12) / 2048,
-      v: 0,
-      meshPartId: 3,
-      gatherSpeed: 5,
-      gatherAmount: 15,
-      speed: 14,
-      convertSpeed: 3,
-      convertAmount: 150,
-      tokens: ["inflateBalloons", "surpriseParty*", "blueBomb_"],
-      attack: 5,
-      energy: 60,
-      favoriteTreat: "blueberry",
-      rarity: "mythic",
-      color: "blue",
-      description:
-        "Just like a balloon, nothing can keep this bee down. It's always ready to party.",
-      giftedHiveBonus: { oper: "*", stat: "capacityMultiplier", num: 1.2 },
-    },
-
-    gummy: {
-      u: (128 * 13) / 2048,
-      v: 0,
-      meshPartId: 0,
-      gatherSpeed: 4,
-      gatherAmount: 10,
-      speed: 14,
-      convertSpeed: 4,
-      convertAmount: 700,
-      tokens: ["gummyBlob", "gummyBarrage", "whiteBoost"],
-      attack: 3,
-      energy: 50,
-      rarity: "event",
-      color: "white",
-      description:
-        "A squishy bee who's sweet as sugar. Covers flowers in goo to grant you bonus honey!",
-      giftedHiveBonus: { oper: "*", stat: "honeyPerPollen", num: 1.05 },
-    },
-
-    precise: {
-      u: (128 * 14) / 2048,
-      v: 0,
-      meshPartId: 1,
-      gatherSpeed: 4,
-      gatherAmount: 20,
-      speed: 11.2,
-      convertSpeed: 4,
-      convertAmount: 130,
-      tokens: ["targetPractice", "redBomb_"],
-      attack: 8,
-      energy: 40,
-      attackTokens: ["targetPractice"],
-      favoriteTreat: "sunflowerSeed",
-      rarity: "mythic",
-      color: "red",
-      description:
-        "This sharpshooting bee is always on point and expects the same of you.",
-      giftedHiveBonus: { oper: "+", stat: "superCritChance", num: 0.05 },
-      trails: [
-        {
-          length: 4,
-          size: 0.25,
-          triangle: true,
-          color: [219 / 255, 72 / 255, 92 / 255, 1],
-          skipFrame: 5,
-          skipAdd: 5,
-        },
-      ],
-    },
-
-    rage: {
-      u: (128 * 15) / 2048,
-      v: 0,
-      meshPartId: 0,
-      gatherSpeed: 4,
-      gatherAmount: 10,
-      speed: 15.4,
-      convertSpeed: 4,
-      convertAmount: 80,
-      attack: 4,
-      tokens: ["link"],
-      energy: 20,
-      attackTokens: ["rage", "link"],
-      favoriteTreat: "strawberry",
-      rarity: "epic",
-      color: "red",
-      description:
-        "A very angry bee who has been wronged its whole life. It harnesses its rage to become more powerful.",
-      giftedHiveBonus: {
-        oper: "+",
-        stat: "whiteBeeAttack,redBeeAttack,blueBeeAttack",
-        num: 1,
-      },
-    },
-
-    crimson: {
-      u: (128 * 0) / 2048,
-      v: 256 / 2048,
-      meshPartId: 20,
-      gatherSpeed: 4,
-      gatherAmount: 10,
-      speed: 18.2,
-      convertSpeed: 3,
-      convertAmount: 120,
-      tokens: ["redPulse", "redBombSync"],
-      attack: 6,
-      energy: 35,
-      rarity: "event",
-      color: "red",
-      description:
-        "A superhero and defender of all things Red! Together with Cobalt Bee it works to unite bees of all colors.",
-      giftedHiveBonus: { oper: "+", stat: "instantRedConversion", num: 0.1 },
-      trails: [
-        {
-          length: 7,
-          size: 0.2,
-          triangle: true,
-          color: [1, 0, 0, 1],
-          skipFrame: 3,
-          skipAdd: 3,
-          beeOffset: -0.05,
-        },
-        {
-          length: 7,
-          size: 0.075,
-          triangle: true,
-          color: [1, 1, 1, 1],
-          skipFrame: 3,
-          skipAdd: 3,
-          beeOffset: 0.05,
-        },
-      ],
-    },
-
-    cobalt: {
-      u: (128 * 1) / 2048,
-      v: 256 / 2048,
-      meshPartId: 20,
-      gatherSpeed: 4,
-      gatherAmount: 10,
-      speed: 18.2,
-      convertSpeed: 3,
-      convertAmount: 120,
-      tokens: ["bluePulse", "blueBombSync"],
-      attack: 6,
-      energy: 35,
-      rarity: "event",
-      color: "blue",
-      description:
-        "A superhero and defender of all things Blue! Together with Crimson Bee it works to unite bees of all colors.",
-      giftedHiveBonus: { oper: "+", stat: "instantBlueConversion", num: 0.1 },
-      trails: [
-        {
-          length: 7,
-          size: 0.2,
-          triangle: true,
-          color: [0, 0, 1, 1],
-          skipFrame: 3,
-          skipAdd: 3,
-          beeOffset: -0.05,
-        },
-        {
-          length: 7,
-          size: 0.075,
-          triangle: true,
-          color: [1, 1, 1, 1],
-          skipFrame: 3,
-          skipAdd: 3,
-          beeOffset: 0.05,
-        },
-      ],
-    },
-
-    photon: {
-      u: (128 * 2) / 2048,
-      v: 256 / 2048,
-      meshPartId: 6,
-      gatherSpeed: 2,
-      gatherAmount: 20,
-      speed: 21,
-      convertSpeed: 2,
-      convertAmount: 240,
-      tokens: ["beamStorm", "haste", "whiteBoost"],
-      attackTokens: ["haste"],
-      attack: 3,
-      energy: Infinity,
-      rarity: "event",
-      color: "white",
-      description:
-        "An entity made of pure light temporarily taking on the form of a bee.",
-      giftedHiveBonus: {
-        oper: "+",
-        stat: "instantWhiteConversion,instantBlueConversion,instantRedConversion",
-        num: 0.05,
-      },
-      trails: [
-        {
-          length: 10,
-          size: 0.25,
-          color: [1, 1, 0, 0.5],
-          skipFrame: 2,
-          skipAdd: 2,
-        },
-      ],
-    },
-
-    bumble: {
-      u: (128 * 3) / 2048,
-      v: 256 / 2048,
-      meshPartId: 0,
-      gatherSpeed: 4,
-      gatherAmount: 18,
-      speed: 10.5,
-      tokens: ["blueBomb"],
-      convertSpeed: 4,
-      convertAmount: 80,
-      attack: 1,
-      attackTokens: [],
-      energy: 50,
-      favoriteTreat: "blueberry",
-      rarity: "rare",
-      color: "blue",
-      description:
-        "A mellow fellow who moves a little slow, but works harder and longer than others.",
-      giftedHiveBonus: { oper: "*", stat: "capacityMultiplier", num: 1.1 },
-    },
-
-    rascal: {
-      u: (128 * 4) / 2048,
-      v: 256 / 2048,
-      meshPartId: 0,
-      gatherSpeed: 4,
-      gatherAmount: 10,
-      speed: 16.1,
-      tokens: ["redBomb"],
-      convertSpeed: 4,
-      convertAmount: 80,
-      attack: 3,
-      attackTokens: [],
-      energy: 20,
-      favoriteTreat: "strawberry",
-      rarity: "rare",
-      color: "red",
-      description:
-        "A mischevious bee who moves quick and hits hard. Keep an eye out on this one!",
-      giftedHiveBonus: { oper: "*", stat: "redBombPollen", num: 1.3 },
-    },
-
-    cool: {
-      u: (128 * 5) / 2048,
-      v: 256 / 2048,
-      meshPartId: 0,
-      gatherSpeed: 3,
-      gatherAmount: 10,
-      speed: 14,
-      tokens: ["blueBoost"],
-      convertSpeed: 4,
-      convertAmount: 80,
-      attack: 2,
-      attackTokens: [],
-      energy: 20,
-      favoriteTreat: "blueberry",
-      rarity: "rare",
-      color: "blue",
-      description:
-        "A sarcastic bee who's a little better than the others. Sometimes boosts pollen from blue flowers.",
-      giftedHiveBonus: { oper: "*", stat: "bluePollen", num: 1.15 },
-    },
-
-    rad: {
-      u: (128 * 6) / 2048,
-      v: 256 / 2048,
-      meshPartId: 0,
-      gatherSpeed: 4,
-      gatherAmount: 13,
-      speed: 14,
-      tokens: ["redBomb"],
-      convertSpeed: 3,
-      convertAmount: 80,
-      attack: 1,
-      attackTokens: [],
-      energy: 20,
-      favoriteTreat: "strawberry",
-      rarity: "rare",
-      color: "red",
-      description:
-        "A stylish bee with a taste for red flowers. Everyone wants to be this bee.",
-      giftedHiveBonus: { oper: "*", stat: "redPollen", num: 1.15 },
-    },
-
-    brave: {
-      u: (128 * 7) / 2048,
-      v: 256 / 2048,
-      meshPartId: 0,
-      gatherSpeed: 4,
-      gatherAmount: 10,
-      speed: 16.8,
-      convertSpeed: 4,
-      convertAmount: 200,
-      attack: 5,
-      energy: 30,
-      favoriteTreat: "pineapple",
-      rarity: "rare",
-      color: "white",
-      description: "This loyal bee will do anything to protect its owner.",
-      giftedHiveBonus: {
-        oper: "+",
-        stat: "whiteBeeAttack,redBeeAttack,blueBeeAttack",
-        num: 1,
-      },
-    },
-
-    windy: {
-      u: (128 * 8) / 2048,
-      v: 256 / 2048,
-      meshPartId: 0,
-      gatherSpeed: 3,
-      gatherAmount: 10,
-      speed: 19.6,
-      convertSpeed: 2,
-      convertAmount: 180,
-      tokens: ["whiteBoost", "rainCloud", "tornado"],
-      attackTokens: [],
-      attack: 3,
-      energy: 20,
-      rarity: "event",
-      color: "white",
-      description:
-        "An ethereal bee as powerful and unpredictable as the weather.",
-      giftedHiveBonus: { oper: "+", stat: "instantWhiteConversion", num: 0.15 },
-      trails: [
-        {
-          length: 15,
-          size: 0.4,
-          color: [0.5, 0.5, 0.5, 0.4],
-          skipFrame: 4,
-          skipAdd: 4,
-        },
-        {
-          length: 15,
-          size: 0.4,
-          color: [0.5, 0.5, 0.5, 0.4],
-          skipFrame: 4,
-          skipAdd: 4,
-          vertical: true,
-        },
-      ],
-    },
-
-    bucko: {
-      u: (128 * 9) / 2048,
-      v: 256 / 2048,
-      meshPartId: 8,
-      gatherSpeed: 4,
-      gatherAmount: 17,
-      speed: 15.4,
-      convertSpeed: 3,
-      convertAmount: 80,
-      attack: 5,
-      energy: 30,
-      tokens: ["blueBoost"],
-      favoriteTreat: "blueberry",
-      rarity: "epic",
-      color: "blue",
-      description:
-        "Leader of the blue bees, and a long time rival of Riley Bee. It's tenacity is it's greatest strength.",
-      giftedHiveBonus: { oper: "*", stat: "blueFieldCapacity", num: 1.25 },
-    },
-
-    riley: {
-      u: (128 * 10) / 2048,
-      v: 256 / 2048,
-      meshPartId: 8,
-      gatherSpeed: 2,
-      gatherAmount: 10,
-      speed: 15.4,
-      convertSpeed: 4,
-      convertAmount: 140,
-      attack: 5,
-      energy: 25,
-      tokens: ["redBoost"],
-      favoriteTreat: "strawberry",
-      rarity: "epic",
-      color: "red",
-      description:
-        "Leader of the red bees, and a long time rival of Bucko Bee. It's fiery nature has elevated it above the rest.",
-      giftedHiveBonus: { oper: "*", stat: "redFieldCapacity", num: 1.25 },
-    },
-
-    commander: {
-      u: (128 * 11) / 2048,
-      v: 256 / 2048,
-      meshPartId: 9,
-      gatherSpeed: 4,
-      gatherAmount: 15,
-      speed: 14,
-      convertSpeed: 4,
-      convertAmount: 80,
-      attack: 4,
-      energy: 30,
-      tokens: ["focus", "whiteBomb"],
-      attackTokens: ["focus"],
-      favoriteTreat: "sunflowerSeed",
-      rarity: "epic",
-      color: "white",
-      description:
-        "A strong, no-nonsense bee who stays level headed when things get rough.",
-      giftedHiveBonus: { oper: "+", stat: "criticalChance", num: 0.03 },
-    },
-
-    honey: {
-      u: (128 * 12) / 2048,
-      v: 256 / 2048,
-      meshPartId: 0,
-      gatherSpeed: 4,
-      gatherAmount: 10,
-      speed: 14,
-      convertSpeed: 2,
-      convertAmount: 360,
-      attack: 1,
-      energy: 20,
-      tokens: ["honeyMarkToken"],
-      favoriteTreat: "sunflowerSeed",
-      rarity: "epic",
-      color: "white",
-      description:
-        "A satisfied bee always full with the finest honey. If you're lucky it will share some.",
-      giftedHiveBonus: { oper: "*", stat: "honeyFromTokens", num: 1.5 },
-    },
-
-    tabby: {
-      u: (128 * 13) / 2048,
-      v: 256 / 2048,
-      meshPartId: 10,
-      gatherSpeed: 4,
-      gatherAmount: 10,
-      speed: 16.1,
-      convertSpeed: 3,
-      convertAmount: 160,
-      attack: 4,
-      energy: 28,
-      tokens: ["scratch", "tabbyLove"],
-      attackTokens: ["tabbyLove"],
-      rarity: "event",
-      color: "white",
-      description:
-        "This affectionate bee was raised by cats. It becomes a better worker as it warms up to you",
-      giftedHiveBonus: { oper: "+", stat: "criticalPower", num: 0.5 },
-    },
-
-    diamond: {
-      u: (128 * 14) / 2048,
-      v: 256 / 2048,
-      meshPartId: 0,
-      gatherSpeed: 4,
-      gatherAmount: 10,
-      speed: 14,
-      convertSpeed: 4,
-      convertAmount: 1000,
-      attack: 1,
-      energy: 20,
-      tokens: ["blueBomb_"],
-      rarity: "legendary",
-      color: "blue",
-      description:
-        "This affectionate bee was raised by cats. It becomes a better worker as it warms up to you",
-      giftedHiveBonus: { oper: "*", stat: "convertRate", num: 1.5 },
-      particles: function (bee) {
-        ParticleRenderer.add({
-          x: bee.pos[0] + MATH.random(-0.5, 0.5),
-          y: bee.pos[1] + MATH.random(-0.5, 0.5),
-          z: bee.pos[2] + MATH.random(-0.5, 0.5),
-          vx: 0,
-          vy: 0,
-          vz: 0,
-          grav: 0,
-          size: MATH.random(15, 70),
-          col: [1, 1, 1],
-          life: 0.25,
-          rotVel: MATH.random(-6, 6),
-          alpha: 1,
-        });
-      },
-      favoriteTreat: "blueberry",
-    },
-
-    demon: {
-      u: (128 * 15) / 2048,
-      v: 256 / 2048,
-      meshPartId: 11,
-      gatherSpeed: 4,
-      gatherAmount: 35,
-      speed: 10.5,
-      convertSpeed: 4,
-      convertAmount: 60,
-      attack: 8,
-      energy: 20,
-      tokens: ["redBomb", "redBomb_"],
-      rarity: "legendary",
-      color: "red",
-      description: "A powerful bee with magical powers fueled by pure hatred.",
-      giftedHiveBonus: { oper: "+", stat: "instantBombConversion", num: 0.15 },
-      gatheringPassive: function (bee) {
-        if (Math.random() < (bee.gifted ? 0.75 : 0.55)) {
-          objects.explosions.push(
-            new Explosion({
-              col: [1, 0.5, 0],
-              pos: [
-                Math.round(bee.pos[0]),
-                bee.pos[1] - 0.225,
-                Math.round(bee.pos[2]),
-              ],
-              life: 0.5,
-              size: 1.5,
-              speed: 0.5,
-              aftershock: 0.01,
-              height: 0.01,
-            })
-          );
-          objects.flames.push(
-            new Flame(
-              player.fieldIn,
-              bee.flowerCollecting[0],
-              bee.flowerCollecting[1]
-            )
-          );
-        }
-      },
-      particles: function (bee) {
-        ParticleRenderer.add({
-          x: bee.pos[0],
-          y: bee.pos[1],
-          z: bee.pos[2],
-          vx: MATH.random(-0.3, 0.3),
-          vy: MATH.random(-0.3, 0.3),
-          vz: MATH.random(-0.3, 0.3),
-          grav: 0,
-          size: MATH.random(80, 130),
-          col: [1, MATH.random(0.4, 0.7), 0],
-          life: 1.5,
-          rotVel: MATH.random(-3, 3),
-          alpha: 2.5,
-        });
-      },
-      favoriteTreat: "pineapple",
-    },
-
-    carpenter: {
-      u: (128 * 0) / 2048,
-      v: (256 * 2) / 2048,
-      meshPartId: 12,
-      gatherSpeed: 3,
-      gatherAmount: 10,
-      speed: 11.2,
-      convertSpeed: 4,
-      convertAmount: 120,
-      attack: 4,
-      energy: 25,
-      tokens: ["pollenMarkToken", "honeyMarkToken"],
-      rarity: "legendary",
-      color: "white",
-      description:
-        "A bee with a knack for construction. It built its own body out of wood.",
-      giftedHiveBonus: { oper: "*", stat: "pollenFromTools", num: 1.25 },
-      favoriteTreat: "sunflowerSeed",
-    },
-
-    lion: {
-      u: (128 * 1) / 2048,
-      v: (256 * 2) / 2048,
-      meshPartId: 13,
-      gatherSpeed: 4,
-      gatherAmount: 20,
-      speed: 19.6,
-      convertSpeed: 2,
-      convertAmount: 160,
-      attack: 9,
-      energy: 60,
-      tokens: ["whiteBomb_"],
-      rarity: "legendary",
-      color: "white",
-      description:
-        "Half lion, half bee. This is the king of both the jungle and bee hive.",
-      giftedHiveBonus: { oper: "+", stat: "whiteBeeAttack", num: 2 },
-      favoriteTreat: "pineapple",
-    },
-
-    ninja: {
-      u: (128 * 2) / 2048,
-      v: (256 * 2) / 2048,
-      meshPartId: 0,
-      gatherSpeed: 2,
-      gatherAmount: 10,
-      speed: 21,
-      convertSpeed: 2,
-      convertAmount: 80,
-      attack: 4,
-      energy: 20,
-      tokens: ["haste", "blueBomb_"],
-      rarity: "legendary",
-      color: "white",
-      description:
-        "This bee trained vigorously for years to become the swiftest bee that has ever lived.",
-      giftedHiveBonus: { oper: "*", stat: "beeSpeed", num: 1.05 },
-      favoriteTreat: "sunflowerSeed",
-    },
-
-    shy: {
-      u: (128 * 3) / 2048,
-      v: (256 * 2) / 2048,
-      meshPartId: 0,
-      gatherSpeed: 2,
-      gatherAmount: 10,
-      speed: 18.2,
-      convertSpeed: 4,
-      convertAmount: 320,
-      attack: 2,
-      energy: 40,
-      tokens: ["redBoost", "redBomb_"],
-      rarity: "legendary",
-      color: "white",
-      description:
-        "This talented bee doesn't like to socialize, it just wants to work and be left alone.",
-      giftedHiveBonus: { oper: "*", stat: "redBeeAbilityRate", num: 1.15 },
-      favoriteTreat: "sunflowerSeed",
-      particles: function (bee) {
-        if (Math.random() < 0.2) {
-          ParticleRenderer.add({
-            x: bee.pos[0],
-            y: bee.pos[1],
-            z: bee.pos[2],
-            vx: MATH.random(-0.1, 0.1),
-            vy: MATH.random(-0.1, 0.1),
-            vz: MATH.random(-0.1, 0.1),
-            grav: 0,
-            size: MATH.random(200, 350),
-            col: [0.6, 0.6, 0.6],
-            life: 1.5,
-            rotVel: MATH.random(-2, 2),
-            alpha: 0.25,
-          });
-        }
-      },
-    },
-
-    demo: {
-      u: (128 * 4) / 2048,
-      v: (256 * 2) / 2048,
-      meshPartId: 0,
-      gatherSpeed: 4,
-      gatherAmount: 10,
-      speed: 16.8,
-      convertSpeed: 4,
-      convertAmount: 200,
-      attack: 3,
-      energy: 20,
-      tokens: ["whiteBomb_"],
-      rarity: "epic",
-      color: "white",
-      description:
-        "An elite Bomber Bee who has worked its way up the ranks. It is an expert in explosives.",
-      giftedHiveBonus: { oper: "*", stat: "whiteBombPollen", num: 1.3 },
-      favoriteTreat: "sunflowerSeed",
-    },
-
-    exhausted: {
-      u: (128 * 5) / 2048,
-      v: (256 * 2) / 2048,
-      meshPartId: 0,
-      gatherSpeed: 4.6,
-      gatherAmount: 10,
-      speed: 10.5,
-      convertSpeed: 4,
-      convertAmount: 240,
-      attack: 1,
-      energy: Infinity,
-      tokens: ["whiteBomb", "link"],
-      rarity: "epic",
-      color: "white",
-      description:
-        "This bee suffers from insomnia. It moves slowly, but it never has to sleep.",
-      giftedHiveBonus: { oper: "*", stat: "whiteFieldCapacity", num: 1.2 },
-      favoriteTreat: "pineapple",
-    },
-
-    shocked: {
-      u: (128 * 6) / 2048,
-      v: (256 * 2) / 2048,
-      meshPartId: 0,
-      gatherSpeed: 4,
-      gatherAmount: 10,
-      speed: 19.6,
-      convertSpeed: 2,
-      convertAmount: 80,
-      attack: 2,
-      energy: Infinity,
-      tokens: ["haste", "link"],
-      rarity: "epic",
-      color: "white",
-      description:
-        "This bee is startled by everything it comes across. It has learned special talents to cope.",
-      giftedHiveBonus: { oper: "*", stat: "whitePollen", num: 1.25 },
-      favoriteTreat: "pineapple",
-    },
-
-    frosty: {
-      u: (128 * 7) / 2048,
-      v: (256 * 2) / 2048,
-      meshPartId: 14,
-      gatherSpeed: 4,
-      gatherAmount: 10,
-      speed: 11.2,
-      convertSpeed: 4,
-      convertAmount: 80,
-      attack: 1,
-      energy: 25,
-      tokens: ["blueBoost", "blueBomb_"],
-      rarity: "epic",
-      color: "white",
-      description:
-        "A bee made of snow. It magically came to life after someone put a top hat on its head.",
-      giftedHiveBonus: { oper: "*", stat: "blueBombPollen", num: 1.3 },
-      favoriteTreat: "blueberry",
-    },
-
-    baby: {
-      u: (128 * 8) / 2048,
-      v: (256 * 2) / 2048,
-      meshPartId: 0,
-      gatherSpeed: 5,
-      gatherAmount: 10,
-      speed: 10.5,
-      convertSpeed: 5,
-      convertAmount: 80,
-      attack: 0,
-      energy: 15,
-      tokens: ["babyLove"],
-      rarity: "legendary",
-      color: "white",
-      description:
-        "This little bee isn't very good at bee tasks yet, but it's guaranteed to bring you joy (and luck).",
-      giftedHiveBonus: { oper: "*", stat: "lootLuck", num: 1.25 },
-      favoriteTreat: "strawberry",
-    },
-
-    vicious: {
-      u: (128 * 9) / 2048,
-      v: (256 * 2) / 2048,
-      meshPartId: 15,
-      gatherSpeed: 4,
-      gatherAmount: 10,
-      speed: 17.5,
-      convertSpeed: 4,
-      convertAmount: 80,
-      attack: 8,
-      energy: 50,
-      tokens: ["blueBomb_"],
-      attackTokens: ["impale"],
-      rarity: "event",
-      color: "blue",
-      description:
-        "This cold-blooded bee takes great pleasure in inflicting pain.",
-      giftedHiveBonus: { oper: "*", stat: "monsterRespawnTime", num: 1.15 },
-    },
-
-    bear: {
-      u: (128 * 10) / 2048,
-      v: (256 * 2) / 2048,
-      meshPartId: 16,
-      gatherSpeed: 2,
-      gatherAmount: 15,
-      speed: 14,
-      convertSpeed: 2,
-      convertAmount: 200,
-      attack: 5,
-      energy: 35,
-      tokens: ["bearMorphToken"],
-      attackTokens: [],
-      rarity: "event",
-      color: "white",
-      description:
-        "A friendly bee who periodically transforms you into a bear!",
-      giftedHiveBonus: {
-        oper: "*",
-        stat: "redPollen,bluePollen,whitePollen",
-        num: 1.1,
-      },
-    },
-
-    puppy: {
-      u: (128 * 11) / 2048,
-      v: (256 * 2) / 2048,
-      meshPartId: 17,
-      gatherSpeed: 4,
-      gatherAmount: 25,
-      speed: 16.1,
-      convertSpeed: 4,
-      convertAmount: 280,
-      attack: 2,
-      energy: 40,
-      tokens: ["fetch", "puppyLove"],
-      attackTokens: ["puppyLove"],
-      rarity: "event",
-      color: "white",
-      description:
-        "A playful bee who tries to be his best, but still is so bad for its price that you shouldn't buy it. Seriously.",
-      giftedHiveBonus: { oper: "*", stat: "bondFromTreats", num: 1.2 },
-    },
-
-    festive: {
-      u: (128 * 12) / 2048,
-      v: (256 * 2) / 2048,
-      meshPartId: 18,
-      gatherSpeed: 4,
-      gatherAmount: 40,
-      speed: 16.1,
-      convertSpeed: 1,
-      convertAmount: 150,
-      attack: 1,
-      energy: 20,
-      tokens: ["festiveGifts", "redBomb_", "honeyMarkToken"],
-      attackTokens: [],
-      rarity: "event",
-      color: "red",
-      description:
-        "A jolly bee who loves giving gifts! It's purely motivated by the joy of others.",
-      giftedHiveBonus: { oper: "*", stat: "redPollen", num: 1.15 },
-    },
-
-    digital: {
-      u: (128 * 13) / 2048,
-      v: (256 * 2) / 2048,
-      meshPartId: 19,
-      gatherSpeed: 4,
-      gatherAmount: 10,
-      speed: 11.9,
-      convertSpeed: 4,
-      convertAmount: 80,
-      attack: 1,
-      energy: 20,
-      tokens: ["glitch", "mapCorruption*"],
-      attackTokens: ["mindHack"],
-      rarity: "event",
-      color: "white",
-      description:
-        "A virtual bee with a malfunctioning AI. It corrupts the game itself.",
-      giftedHiveBonus: {
-        oper: "+",
-        stat: "abilityDuplicationChance",
-        num: 0.01,
-      },
-    },
-  };
-
-  let effects = {
-    scienceEnhancement: {
-      u: 0,
-      v: 0,
-      svg: document.getElementById("scienceEnhancement"),
-      cooldown: document.getElementById("scienceEnhancement_cooldown"),
-      amount: document.getElementById("scienceEnhancement_amount"),
-      maxCooldown: Infinity,
-      maxAmount: 1000,
-      tokenLife: 16,
-
-      update: (amount, player) => {
-        player.convertRate *= amount * 0.1 + 1;
-      },
-
-      getMessage: (amount) => {
-        return "Science Enhancement\nx" + (amount * 0.1 + 1) + " convert rate";
-      },
-    },
-
-    polarPower: {
-      u: 0,
-      v: 0,
-      svg: document.getElementById("polarPower"),
-      cooldown: document.getElementById("polarPower_cooldown"),
-      amount: document.getElementById("polarPower_amount"),
-      maxCooldown: Infinity,
-      maxAmount: Infinity,
-      tokenLife: 16,
-
-      update: (amount, player) => {
-        player.beeEnergy *= amount * 0.05 + 1;
-      },
-
-      getMessage: (amount) => {
-        return "Polar Power\nx" + (amount * 0.05 + 1) + " bee energy";
-      },
-    },
-
-    dandelionFieldBoost: {
-      u: 0,
-      v: 0,
-      svg: document.getElementById("dandelionFieldBoost"),
-      cooldown: document.getElementById("dandelionFieldBoost_cooldown"),
-      amount: document.getElementById("dandelionFieldBoost_amount"),
-      maxCooldown: 15 * 60,
-      maxAmount: 4,
-      tokenLife: 4,
-
-      update: (amount, player) => {
-        if (player.fieldIn === "DandelionField") {
-          player.redPollen *= amount * 0.75 + 1;
-          player.whitePollen *= amount * 0.75 + 1;
-          player.bluePollen *= amount * 0.75 + 1;
-        }
-      },
-
-      getMessage: (amount) => {
-        return (
-          "Dandelion Field Boost\nx" +
-          (amount * 0.75 + 1) +
-          " pollen in dandelion field"
-        );
-      },
-    },
-
-    sunflowerFieldBoost: {
-      u: 0,
-      v: 0,
-      svg: document.getElementById("sunflowerFieldBoost"),
-      cooldown: document.getElementById("sunflowerFieldBoost_cooldown"),
-      amount: document.getElementById("sunflowerFieldBoost_amount"),
-      maxCooldown: 15 * 60,
-      maxAmount: 4,
-      tokenLife: 4,
-
-      update: (amount, player) => {
-        if (player.fieldIn === "SunflowerField") {
-          player.redPollen *= amount * 0.75 + 1;
-          player.whitePollen *= amount * 0.75 + 1;
-          player.bluePollen *= amount * 0.75 + 1;
-        }
-      },
-
-      getMessage: (amount) => {
-        return (
-          "Sunflower Field Boost\nx" +
-          (amount * 0.75 + 1) +
-          " pollen in sunflower field"
-        );
-      },
-    },
-
-    blueFlowerFieldBoost: {
-      u: 0,
-      v: 0,
-      svg: document.getElementById("blueFlowerFieldBoost"),
-      cooldown: document.getElementById("blueFlowerFieldBoost_cooldown"),
-      amount: document.getElementById("blueFlowerFieldBoost_amount"),
-      maxCooldown: 15 * 60,
-      maxAmount: 4,
-      tokenLife: 4,
-
-      update: (amount, player) => {
-        if (player.fieldIn === "BlueFlowerField") {
-          player.redPollen *= amount * 0.75 + 1;
-          player.whitePollen *= amount * 0.75 + 1;
-          player.bluePollen *= amount * 0.75 + 1;
-        }
-      },
-
-      getMessage: (amount) => {
-        return (
-          "Blue Flower Field Boost\nx" +
-          (amount * 0.75 + 1) +
-          " pollen in blue flower field"
-        );
-      },
-    },
-
-    mushroomFieldBoost: {
-      u: 0,
-      v: 0,
-      svg: document.getElementById("mushroomFieldBoost"),
-      cooldown: document.getElementById("mushroomFieldBoost_cooldown"),
-      amount: document.getElementById("mushroomFieldBoost_amount"),
-      maxCooldown: 15 * 60,
-      maxAmount: 4,
-      tokenLife: 4,
-
-      update: (amount, player) => {
-        if (player.fieldIn === "MushroomField") {
-          player.redPollen *= amount * 0.75 + 1;
-          player.whitePollen *= amount * 0.75 + 1;
-          player.bluePollen *= amount * 0.75 + 1;
-        }
-      },
-
-      getMessage: (amount) => {
-        return (
-          "Mushroom Field Boost\nx" +
-          (amount * 0.75 + 1) +
-          " pollen in mushroom field"
-        );
-      },
-    },
-
-    cloverFieldBoost: {
-      u: 0,
-      v: 0,
-      svg: document.getElementById("cloverFieldBoost"),
-      cooldown: document.getElementById("cloverFieldBoost_cooldown"),
-      amount: document.getElementById("cloverFieldBoost_amount"),
-      maxCooldown: 15 * 60,
-      maxAmount: 4,
-      tokenLife: 4,
-
-      update: (amount, player) => {
-        if (player.fieldIn === "CloverField") {
-          player.redPollen *= amount * 0.75 + 1;
-          player.whitePollen *= amount * 0.75 + 1;
-          player.bluePollen *= amount * 0.75 + 1;
-        }
-      },
-
-      getMessage: (amount) => {
-        return (
-          "Clover Field Boost\nx" +
-          (amount * 0.75 + 1) +
-          " pollen in clover field"
-        );
-      },
-    },
-
-    strawberryFieldBoost: {
-      u: 0,
-      v: 0,
-      svg: document.getElementById("strawberryFieldBoost"),
-      cooldown: document.getElementById("strawberryFieldBoost_cooldown"),
-      amount: document.getElementById("strawberryFieldBoost_amount"),
-      maxCooldown: 15 * 60,
-      maxAmount: 4,
-      tokenLife: 4,
-
-      update: (amount, player) => {
-        if (player.fieldIn === "StrawberryField") {
-          player.redPollen *= amount * 0.75 + 1;
-          player.whitePollen *= amount * 0.75 + 1;
-          player.bluePollen *= amount * 0.75 + 1;
-        }
-      },
-
-      getMessage: (amount) => {
-        return (
-          "Strawberry Field Boost\nx" +
-          (amount * 0.75 + 1) +
-          " pollen in strawberry field"
-        );
-      },
-    },
-
-    spiderFieldBoost: {
-      u: 0,
-      v: 0,
-      svg: document.getElementById("spiderFieldBoost"),
-      cooldown: document.getElementById("spiderFieldBoost_cooldown"),
-      amount: document.getElementById("spiderFieldBoost_amount"),
-      maxCooldown: 15 * 60,
-      maxAmount: 4,
-      tokenLife: 4,
-
-      update: (amount, player) => {
-        if (player.fieldIn === "SpiderField") {
-          player.redPollen *= amount * 0.75 + 1;
-          player.whitePollen *= amount * 0.75 + 1;
-          player.bluePollen *= amount * 0.75 + 1;
-        }
-      },
-
-      getMessage: (amount) => {
-        return (
-          "Spider Field Boost\nx" +
-          (amount * 0.75 + 1) +
-          " pollen in spider field"
-        );
-      },
-    },
-
-    bambooFieldBoost: {
-      u: 0,
-      v: 0,
-      svg: document.getElementById("bambooFieldBoost"),
-      cooldown: document.getElementById("bambooFieldBoost_cooldown"),
-      amount: document.getElementById("bambooFieldBoost_amount"),
-      maxCooldown: 15 * 60,
-      maxAmount: 4,
-      tokenLife: 4,
-
-      update: (amount, player) => {
-        if (player.fieldIn === "BambooField") {
-          player.redPollen *= amount * 0.75 + 1;
-          player.whitePollen *= amount * 0.75 + 1;
-          player.bluePollen *= amount * 0.75 + 1;
-        }
-      },
-
-      getMessage: (amount) => {
-        return (
-          "Bamboo Field Boost\nx" +
-          (amount * 0.75 + 1) +
-          " pollen in bamboo field"
-        );
-      },
-    },
-
-    pineapplePatchBoost: {
-      u: 0,
-      v: 0,
-      svg: document.getElementById("pineapplePatchBoost"),
-      cooldown: document.getElementById("pineapplePatchBoost_cooldown"),
-      amount: document.getElementById("pineapplePatchBoost_amount"),
-      maxCooldown: 15 * 60,
-      maxAmount: 4,
-      tokenLife: 4,
-
-      update: (amount, player) => {
-        if (player.fieldIn === "PineapplePatch") {
-          player.redPollen *= amount * 0.75 + 1;
-          player.whitePollen *= amount * 0.75 + 1;
-          player.bluePollen *= amount * 0.75 + 1;
-        }
-      },
-
-      getMessage: (amount) => {
-        return (
-          "Pineapple Patch Boost\nx" +
-          (amount * 0.75 + 1) +
-          " pollen in pineapple patch"
-        );
-      },
-    },
-
-    stumpFieldBoost: {
-      u: 0,
-      v: 0,
-      svg: document.getElementById("stumpFieldBoost"),
-      cooldown: document.getElementById("stumpFieldBoost_cooldown"),
-      amount: document.getElementById("stumpFieldBoost_amount"),
-      maxCooldown: 15 * 60,
-      maxAmount: 4,
-      tokenLife: 4,
-
-      update: (amount, player) => {
-        if (player.fieldIn === "StumpField") {
-          player.redPollen *= amount * 0.75 + 1;
-          player.whitePollen *= amount * 0.75 + 1;
-          player.bluePollen *= amount * 0.75 + 1;
-        }
-      },
-
-      getMessage: (amount) => {
-        return (
-          "Stump Field Boost\nx" +
-          (amount * 0.75 + 1) +
-          " pollen in stump field"
-        );
-      },
-    },
-
-    cactusFieldBoost: {
-      u: 0,
-      v: 0,
-      svg: document.getElementById("cactusFieldBoost"),
-      cooldown: document.getElementById("cactusFieldBoost_cooldown"),
-      amount: document.getElementById("cactusFieldBoost_amount"),
-      maxCooldown: 15 * 60,
-      maxAmount: 4,
-      tokenLife: 4,
-
-      update: (amount, player) => {
-        if (player.fieldIn === "CactusField") {
-          player.redPollen *= amount * 0.75 + 1;
-          player.whitePollen *= amount * 0.75 + 1;
-          player.bluePollen *= amount * 0.75 + 1;
-        }
-      },
-
-      getMessage: (amount) => {
-        return (
-          "Cactus Field Boost\nx" +
-          (amount * 0.75 + 1) +
-          " pollen in cactus field"
-        );
-      },
-    },
-
-    pumpkinPatchBoost: {
-      u: 0,
-      v: 0,
-      svg: document.getElementById("pumpkinPatchBoost"),
-      cooldown: document.getElementById("pumpkinPatchBoost_cooldown"),
-      amount: document.getElementById("pumpkinPatchBoost_amount"),
-      maxCooldown: 15 * 60,
-      maxAmount: 4,
-      tokenLife: 4,
-
-      update: (amount, player) => {
-        if (player.fieldIn === "PumpkinPatch") {
-          player.redPollen *= amount * 0.75 + 1;
-          player.whitePollen *= amount * 0.75 + 1;
-          player.bluePollen *= amount * 0.75 + 1;
-        }
-      },
-
-      getMessage: (amount) => {
-        return (
-          "Pumpkin Patch Boost\nx" +
-          (amount * 0.75 + 1) +
-          " pollen in pumpkin patch"
-        );
-      },
-    },
-
-    pineTreeForestBoost: {
-      u: 0,
-      v: 0,
-      svg: document.getElementById("pineTreeForestBoost"),
-      cooldown: document.getElementById("pineTreeForestBoost_cooldown"),
-      amount: document.getElementById("pineTreeForestBoost_amount"),
-      maxCooldown: 15 * 60,
-      maxAmount: 4,
-      tokenLife: 4,
-
-      update: (amount, player) => {
-        if (player.fieldIn === "PineTreeForest") {
-          player.redPollen *= amount * 0.75 + 1;
-          player.whitePollen *= amount * 0.75 + 1;
-          player.bluePollen *= amount * 0.75 + 1;
-        }
-      },
-
-      getMessage: (amount) => {
-        return (
-          "Pine Tree Forest Boost\nx" +
-          (amount * 0.75 + 1) +
-          " pollen in pine tree forest"
-        );
-      },
-    },
-
-    roseFieldBoost: {
-      u: 0,
-      v: 0,
-      svg: document.getElementById("roseFieldBoost"),
-      cooldown: document.getElementById("roseFieldBoost_cooldown"),
-      amount: document.getElementById("roseFieldBoost_amount"),
-      maxCooldown: 15 * 60,
-      maxAmount: 4,
-      tokenLife: 4,
-
-      update: (amount, player) => {
-        if (player.fieldIn === "RoseField") {
-          player.redPollen *= amount * 0.75 + 1;
-          player.whitePollen *= amount * 0.75 + 1;
-          player.bluePollen *= amount * 0.75 + 1;
-        }
-      },
-
-      getMessage: (amount) => {
-        return (
-          "Rose Field Boost\nx" + (amount * 0.75 + 1) + " pollen in rose field"
-        );
-      },
-    },
-
-    mountainTopFieldBoost: {
-      u: 0,
-      v: 0,
-      svg: document.getElementById("mountainTopFieldBoost"),
-      cooldown: document.getElementById("mountainTopFieldBoost_cooldown"),
-      amount: document.getElementById("mountainTopFieldBoost_amount"),
-      maxCooldown: 15 * 60,
-      maxAmount: 4,
-      tokenLife: 4,
-
-      update: (amount, player) => {
-        if (player.fieldIn === "MountainTopField") {
-          player.redPollen *= amount * 0.75 + 1;
-          player.whitePollen *= amount * 0.75 + 1;
-          player.bluePollen *= amount * 0.75 + 1;
-        }
-      },
-
-      getMessage: (amount) => {
-        return (
-          "Mountain Top Field Boost\nx" +
-          (amount * 0.75 + 1) +
-          " pollen in mountain top field"
-        );
-      },
-    },
-
-    coconutFieldBoost: {
-      u: 0,
-      v: 0,
-      svg: document.getElementById("coconutFieldBoost"),
-      cooldown: document.getElementById("coconutFieldBoost_cooldown"),
-      amount: document.getElementById("coconutFieldBoost_amount"),
-      maxCooldown: 15 * 60,
-      maxAmount: 4,
-      tokenLife: 4,
-
-      update: (amount, player) => {
-        if (player.fieldIn === "CoconutField") {
-          player.redPollen *= amount * 0.75 + 1;
-          player.whitePollen *= amount * 0.75 + 1;
-          player.bluePollen *= amount * 0.75 + 1;
-        }
-      },
-
-      getMessage: (amount) => {
-        return (
-          "Coconut Field Boost\nx" +
-          (amount * 0.75 + 1) +
-          " pollen in coconut field"
-        );
-      },
-    },
-
-    pepperPatchBoost: {
-      u: 0,
-      v: 0,
-      svg: document.getElementById("pepperPatchBoost"),
-      cooldown: document.getElementById("pepperPatchBoost_cooldown"),
-      amount: document.getElementById("pepperPatchBoost_amount"),
-      maxCooldown: 15 * 60,
-      maxAmount: 4,
-      tokenLife: 4,
-
-      update: (amount, player) => {
-        if (player.fieldIn === "PepperPatch") {
-          player.redPollen *= amount * 0.75 + 1;
-          player.whitePollen *= amount * 0.75 + 1;
-          player.bluePollen *= amount * 0.75 + 1;
-        }
-      },
-
-      getMessage: (amount) => {
-        return (
-          "Pepper Patch Boost\nx" +
-          (amount * 0.75 + 1) +
-          " pollen in pepper patch"
-        );
-      },
-    },
-
-    dandelionFieldWinds: {
-      u: (128 * 6) / 2048,
-      v: (128 * 6) / 2048,
-      svg: document.getElementById("dandelionFieldWinds"),
-      cooldown: document.getElementById("dandelionFieldWinds_cooldown"),
-      amount: document.getElementById("dandelionFieldWinds_amount"),
-      maxCooldown: 30 * 60,
-      maxAmount: 15,
-      tokenLife: 4,
-
-      update: (amount, player) => {
-        if (player.fieldIn === "DandelionField") {
-          player.redPollen *= (amount - 1) * 0.03 + 1.15;
-          player.whitePollen *= (amount - 1) * 0.03 + 1.15;
-          player.bluePollen *= (amount - 1) * 0.03 + 1.15;
-          player.instantRedConversion = MATH.applyPercentage(
-            player.instantRedConversion,
-            (amount - 1) * 0.05 + 0.1
-          );
-          player.instantBlueConversion = MATH.applyPercentage(
-            player.instantBlueConversion,
-            (amount - 1) * 0.05 + 0.1
-          );
-          player.instantWhiteConversion = MATH.applyPercentage(
-            player.instantWhiteConversion,
-            (amount - 1) * 0.05 + 0.1
-          );
-        }
-      },
-
-      getMessage: (amount) => {
-        return (
-          "Dandelion Field Winds\nx" +
-          ((amount - 1) * 0.03 + 1.15).toFixed(2) +
-          " pollen in dandelion field" +
-          "\n+" +
-          ((amount - 1) * 5 + 1) +
-          "% instant conversion in dandelion field"
-        );
-      },
-    },
-
-    sunflowerFieldWinds: {
-      u: (128 * 6) / 2048,
-      v: (128 * 6) / 2048,
-      svg: document.getElementById("sunflowerFieldWinds"),
-      cooldown: document.getElementById("sunflowerFieldWinds_cooldown"),
-      amount: document.getElementById("sunflowerFieldWinds_amount"),
-      maxCooldown: 30 * 60,
-      maxAmount: 15,
-      tokenLife: 4,
-
-      update: (amount, player) => {
-        if (player.fieldIn === "SunflowerField") {
-          player.redPollen *= (amount - 1) * 0.03 + 1.15;
-          player.whitePollen *= (amount - 1) * 0.03 + 1.15;
-          player.bluePollen *= (amount - 1) * 0.03 + 1.15;
-          player.instantRedConversion = MATH.applyPercentage(
-            player.instantRedConversion,
-            (amount - 1) * 0.05 + 0.1
-          );
-          player.instantBlueConversion = MATH.applyPercentage(
-            player.instantBlueConversion,
-            (amount - 1) * 0.05 + 0.1
-          );
-          player.instantWhiteConversion = MATH.applyPercentage(
-            player.instantWhiteConversion,
-            (amount - 1) * 0.05 + 0.1
-          );
-        }
-      },
-
-      getMessage: (amount) => {
-        return (
-          "Sunflower Field Winds\nx" +
-          ((amount - 1) * 0.03 + 1.15).toFixed(2) +
-          " pollen in sunflower field" +
-          "\n+" +
-          ((amount - 1) * 5 + 1) +
-          "% instant conversion in sunflower field"
-        );
-      },
-    },
-
-    blueFlowerFieldWinds: {
-      u: (128 * 6) / 2048,
-      v: (128 * 6) / 2048,
-      svg: document.getElementById("blueFlowerFieldWinds"),
-      cooldown: document.getElementById("blueFlowerFieldWinds_cooldown"),
-      amount: document.getElementById("blueFlowerFieldWinds_amount"),
-      maxCooldown: 30 * 60,
-      maxAmount: 15,
-      tokenLife: 4,
-
-      update: (amount, player) => {
-        if (player.fieldIn === "BlueFlowerField") {
-          player.redPollen *= (amount - 1) * 0.03 + 1.15;
-          player.whitePollen *= (amount - 1) * 0.03 + 1.15;
-          player.bluePollen *= (amount - 1) * 0.03 + 1.15;
-          player.instantRedConversion = MATH.applyPercentage(
-            player.instantRedConversion,
-            (amount - 1) * 0.05 + 0.1
-          );
-          player.instantBlueConversion = MATH.applyPercentage(
-            player.instantBlueConversion,
-            (amount - 1) * 0.05 + 0.1
-          );
-          player.instantWhiteConversion = MATH.applyPercentage(
-            player.instantWhiteConversion,
-            (amount - 1) * 0.05 + 0.1
-          );
-        }
-      },
-
-      getMessage: (amount) => {
-        return (
-          "Blue Flower Field Winds\nx" +
-          ((amount - 1) * 0.03 + 1.15).toFixed(2) +
-          " pollen in blue flower field" +
-          "\n+" +
-          ((amount - 1) * 5 + 1) +
-          "% instant conversion in blue flower field"
-        );
-      },
-    },
-
-    mushroomFieldWinds: {
-      u: (128 * 6) / 2048,
-      v: (128 * 6) / 2048,
-      svg: document.getElementById("mushroomFieldWinds"),
-      cooldown: document.getElementById("mushroomFieldWinds_cooldown"),
-      amount: document.getElementById("mushroomFieldWinds_amount"),
-      maxCooldown: 30 * 60,
-      maxAmount: 15,
-      tokenLife: 4,
-
-      update: (amount, player) => {
-        if (player.fieldIn === "MushroomField") {
-          player.redPollen *= (amount - 1) * 0.03 + 1.15;
-          player.whitePollen *= (amount - 1) * 0.03 + 1.15;
-          player.bluePollen *= (amount - 1) * 0.03 + 1.15;
-          player.instantRedConversion = MATH.applyPercentage(
-            player.instantRedConversion,
-            (amount - 1) * 0.05 + 0.1
-          );
-          player.instantBlueConversion = MATH.applyPercentage(
-            player.instantBlueConversion,
-            (amount - 1) * 0.05 + 0.1
-          );
-          player.instantWhiteConversion = MATH.applyPercentage(
-            player.instantWhiteConversion,
-            (amount - 1) * 0.05 + 0.1
-          );
-        }
-      },
-
-      getMessage: (amount) => {
-        return (
-          "Mushroom Field Winds\nx" +
-          ((amount - 1) * 0.03 + 1.15).toFixed(2) +
-          " pollen in mushroom field" +
-          "\n+" +
-          ((amount - 1) * 5 + 1) +
-          "% instant conversion in mushroom field"
-        );
-      },
-    },
-
-    cloverFieldWinds: {
-      u: (128 * 6) / 2048,
-      v: (128 * 6) / 2048,
-      svg: document.getElementById("cloverFieldWinds"),
-      cooldown: document.getElementById("cloverFieldWinds_cooldown"),
-      amount: document.getElementById("cloverFieldWinds_amount"),
-      maxCooldown: 30 * 60,
-      maxAmount: 15,
-      tokenLife: 4,
-
-      update: (amount, player) => {
-        if (player.fieldIn === "CloverField") {
-          player.redPollen *= (amount - 1) * 0.03 + 1.15;
-          player.whitePollen *= (amount - 1) * 0.03 + 1.15;
-          player.bluePollen *= (amount - 1) * 0.03 + 1.15;
-          player.instantRedConversion = MATH.applyPercentage(
-            player.instantRedConversion,
-            (amount - 1) * 0.05 + 0.1
-          );
-          player.instantBlueConversion = MATH.applyPercentage(
-            player.instantBlueConversion,
-            (amount - 1) * 0.05 + 0.1
-          );
-          player.instantWhiteConversion = MATH.applyPercentage(
-            player.instantWhiteConversion,
-            (amount - 1) * 0.05 + 0.1
-          );
-        }
-      },
-
-      getMessage: (amount) => {
-        return (
-          "Clover Field Winds\nx" +
-          ((amount - 1) * 0.03 + 1.15).toFixed(2) +
-          " pollen in clover field" +
-          "\n+" +
-          ((amount - 1) * 5 + 1) +
-          "% instant conversion in clover field"
-        );
-      },
-    },
-
-    strawberryFieldWinds: {
-      u: (128 * 6) / 2048,
-      v: (128 * 6) / 2048,
-      svg: document.getElementById("strawberryFieldWinds"),
-      cooldown: document.getElementById("strawberryFieldWinds_cooldown"),
-      amount: document.getElementById("strawberryFieldWinds_amount"),
-      maxCooldown: 30 * 60,
-      maxAmount: 15,
-      tokenLife: 4,
-
-      update: (amount, player) => {
-        if (player.fieldIn === "StrawberryField") {
-          player.redPollen *= (amount - 1) * 0.03 + 1.15;
-          player.whitePollen *= (amount - 1) * 0.03 + 1.15;
-          player.bluePollen *= (amount - 1) * 0.03 + 1.15;
-          player.instantRedConversion = MATH.applyPercentage(
-            player.instantRedConversion,
-            (amount - 1) * 0.05 + 0.1
-          );
-          player.instantBlueConversion = MATH.applyPercentage(
-            player.instantBlueConversion,
-            (amount - 1) * 0.05 + 0.1
-          );
-          player.instantWhiteConversion = MATH.applyPercentage(
-            player.instantWhiteConversion,
-            (amount - 1) * 0.05 + 0.1
-          );
-        }
-      },
-
-      getMessage: (amount) => {
-        return (
-          "Strawberry Field Winds\nx" +
-          ((amount - 1) * 0.03 + 1.15).toFixed(2) +
-          " pollen in strawberry field" +
-          "\n+" +
-          ((amount - 1) * 5 + 1) +
-          "% instant conversion in strawberry field"
-        );
-      },
-    },
-
-    spiderFieldWinds: {
-      u: (128 * 6) / 2048,
-      v: (128 * 6) / 2048,
-      svg: document.getElementById("spiderFieldWinds"),
-      cooldown: document.getElementById("spiderFieldWinds_cooldown"),
-      amount: document.getElementById("spiderFieldWinds_amount"),
-      maxCooldown: 30 * 60,
-      maxAmount: 15,
-      tokenLife: 4,
-
-      update: (amount, player) => {
-        if (player.fieldIn === "SpiderField") {
-          player.redPollen *= (amount - 1) * 0.03 + 1.15;
-          player.whitePollen *= (amount - 1) * 0.03 + 1.15;
-          player.bluePollen *= (amount - 1) * 0.03 + 1.15;
-          player.instantRedConversion = MATH.applyPercentage(
-            player.instantRedConversion,
-            (amount - 1) * 0.05 + 0.1
-          );
-          player.instantBlueConversion = MATH.applyPercentage(
-            player.instantBlueConversion,
-            (amount - 1) * 0.05 + 0.1
-          );
-          player.instantWhiteConversion = MATH.applyPercentage(
-            player.instantWhiteConversion,
-            (amount - 1) * 0.05 + 0.1
-          );
-        }
-      },
-
-      getMessage: (amount) => {
-        return (
-          "Spider Field Winds\nx" +
-          ((amount - 1) * 0.03 + 1.15).toFixed(2) +
-          " pollen in spider field" +
-          "\n+" +
-          ((amount - 1) * 5 + 1) +
-          "% instant conversion in spider field"
-        );
-      },
-    },
-
-    bambooFieldWinds: {
-      u: (128 * 6) / 2048,
-      v: (128 * 6) / 2048,
-      svg: document.getElementById("bambooFieldWinds"),
-      cooldown: document.getElementById("bambooFieldWinds_cooldown"),
-      amount: document.getElementById("bambooFieldWinds_amount"),
-      maxCooldown: 30 * 60,
-      maxAmount: 15,
-      tokenLife: 4,
-
-      update: (amount, player) => {
-        if (player.fieldIn === "BambooField") {
-          player.redPollen *= (amount - 1) * 0.03 + 1.15;
-          player.whitePollen *= (amount - 1) * 0.03 + 1.15;
-          player.bluePollen *= (amount - 1) * 0.03 + 1.15;
-          player.instantRedConversion = MATH.applyPercentage(
-            player.instantRedConversion,
-            (amount - 1) * 0.05 + 0.1
-          );
-          player.instantBlueConversion = MATH.applyPercentage(
-            player.instantBlueConversion,
-            (amount - 1) * 0.05 + 0.1
-          );
-          player.instantWhiteConversion = MATH.applyPercentage(
-            player.instantWhiteConversion,
-            (amount - 1) * 0.05 + 0.1
-          );
-        }
-      },
-
-      getMessage: (amount) => {
-        return (
-          "Bamboo Field Winds\nx" +
-          ((amount - 1) * 0.03 + 1.15).toFixed(2) +
-          " pollen in bamboo field" +
-          "\n+" +
-          ((amount - 1) * 5 + 1) +
-          "% instant conversion in bamboo field"
-        );
-      },
-    },
-
-    pineapplePatchWinds: {
-      u: (128 * 6) / 2048,
-      v: (128 * 6) / 2048,
-      svg: document.getElementById("pineapplePatchWinds"),
-      cooldown: document.getElementById("pineapplePatchWinds_cooldown"),
-      amount: document.getElementById("pineapplePatchWinds_amount"),
-      maxCooldown: 30 * 60,
-      maxAmount: 15,
-      tokenLife: 4,
-
-      update: (amount, player) => {
-        if (player.fieldIn === "PineapplePatch") {
-          player.redPollen *= (amount - 1) * 0.03 + 1.15;
-          player.whitePollen *= (amount - 1) * 0.03 + 1.15;
-          player.bluePollen *= (amount - 1) * 0.03 + 1.15;
-          player.instantRedConversion = MATH.applyPercentage(
-            player.instantRedConversion,
-            (amount - 1) * 0.05 + 0.1
-          );
-          player.instantBlueConversion = MATH.applyPercentage(
-            player.instantBlueConversion,
-            (amount - 1) * 0.05 + 0.1
-          );
-          player.instantWhiteConversion = MATH.applyPercentage(
-            player.instantWhiteConversion,
-            (amount - 1) * 0.05 + 0.1
-          );
-        }
-      },
-
-      getMessage: (amount) => {
-        return (
-          "Pineapple Patch Winds\nx" +
-          ((amount - 1) * 0.03 + 1.15).toFixed(2) +
-          " pollen in pineapple patch" +
-          "\n+" +
-          ((amount - 1) * 5 + 1) +
-          "% instant conversion in pineapple patch"
-        );
-      },
-    },
-
-    stumpFieldWinds: {
-      u: (128 * 6) / 2048,
-      v: (128 * 6) / 2048,
-      svg: document.getElementById("stumpFieldWinds"),
-      cooldown: document.getElementById("stumpFieldWinds_cooldown"),
-      amount: document.getElementById("stumpFieldWinds_amount"),
-      maxCooldown: 30 * 60,
-      maxAmount: 15,
-      tokenLife: 4,
-
-      update: (amount, player) => {
-        if (player.fieldIn === "StumpField") {
-          player.redPollen *= (amount - 1) * 0.03 + 1.15;
-          player.whitePollen *= (amount - 1) * 0.03 + 1.15;
-          player.bluePollen *= (amount - 1) * 0.03 + 1.15;
-          player.instantRedConversion = MATH.applyPercentage(
-            player.instantRedConversion,
-            (amount - 1) * 0.05 + 0.1
-          );
-          player.instantBlueConversion = MATH.applyPercentage(
-            player.instantBlueConversion,
-            (amount - 1) * 0.05 + 0.1
-          );
-          player.instantWhiteConversion = MATH.applyPercentage(
-            player.instantWhiteConversion,
-            (amount - 1) * 0.05 + 0.1
-          );
-        }
-      },
-
-      getMessage: (amount) => {
-        return (
-          "Stump Field Winds\nx" +
-          ((amount - 1) * 0.03 + 1.15).toFixed(2) +
-          " pollen in stump field" +
-          "\n+" +
-          ((amount - 1) * 5 + 1) +
-          "% instant conversion in stump field"
-        );
-      },
-    },
-
-    cactusFieldWinds: {
-      u: (128 * 6) / 2048,
-      v: (128 * 6) / 2048,
-      svg: document.getElementById("cactusFieldWinds"),
-      cooldown: document.getElementById("cactusFieldWinds_cooldown"),
-      amount: document.getElementById("cactusFieldWinds_amount"),
-      maxCooldown: 30 * 60,
-      maxAmount: 15,
-      tokenLife: 4,
-
-      update: (amount, player) => {
-        if (player.fieldIn === "CactusField") {
-          player.redPollen *= (amount - 1) * 0.03 + 1.15;
-          player.whitePollen *= (amount - 1) * 0.03 + 1.15;
-          player.bluePollen *= (amount - 1) * 0.03 + 1.15;
-          player.instantRedConversion = MATH.applyPercentage(
-            player.instantRedConversion,
-            (amount - 1) * 0.05 + 0.1
-          );
-          player.instantBlueConversion = MATH.applyPercentage(
-            player.instantBlueConversion,
-            (amount - 1) * 0.05 + 0.1
-          );
-          player.instantWhiteConversion = MATH.applyPercentage(
-            player.instantWhiteConversion,
-            (amount - 1) * 0.05 + 0.1
-          );
-        }
-      },
-
-      getMessage: (amount) => {
-        return (
-          "Cactus Field Winds\nx" +
-          ((amount - 1) * 0.03 + 1.15).toFixed(2) +
-          " pollen in cactus field" +
-          "\n+" +
-          ((amount - 1) * 5 + 1) +
-          "% instant conversion in cactus field"
-        );
-      },
-    },
-
-    pumpkinPatchWinds: {
-      u: (128 * 6) / 2048,
-      v: (128 * 6) / 2048,
-      svg: document.getElementById("pumpkinPatchWinds"),
-      cooldown: document.getElementById("pumpkinPatchWinds_cooldown"),
-      amount: document.getElementById("pumpkinPatchWinds_amount"),
-      maxCooldown: 30 * 60,
-      maxAmount: 15,
-      tokenLife: 4,
-
-      update: (amount, player) => {
-        if (player.fieldIn === "PumpkinPatch") {
-          player.redPollen *= (amount - 1) * 0.03 + 1.15;
-          player.whitePollen *= (amount - 1) * 0.03 + 1.15;
-          player.bluePollen *= (amount - 1) * 0.03 + 1.15;
-          player.instantRedConversion = MATH.applyPercentage(
-            player.instantRedConversion,
-            (amount - 1) * 0.05 + 0.1
-          );
-          player.instantBlueConversion = MATH.applyPercentage(
-            player.instantBlueConversion,
-            (amount - 1) * 0.05 + 0.1
-          );
-          player.instantWhiteConversion = MATH.applyPercentage(
-            player.instantWhiteConversion,
-            (amount - 1) * 0.05 + 0.1
-          );
-        }
-      },
-
-      getMessage: (amount) => {
-        return (
-          "Pumpkin Patch Winds\nx" +
-          ((amount - 1) * 0.03 + 1.15).toFixed(2) +
-          " pollen in pumpkin patch" +
-          "\n+" +
-          ((amount - 1) * 5 + 1) +
-          "% instant conversion in pumpkin patch"
-        );
-      },
-    },
-
-    pineTreeForestWinds: {
-      u: (128 * 6) / 2048,
-      v: (128 * 6) / 2048,
-      svg: document.getElementById("pineTreeForestWinds"),
-      cooldown: document.getElementById("pineTreeForestWinds_cooldown"),
-      amount: document.getElementById("pineTreeForestWinds_amount"),
-      maxCooldown: 30 * 60,
-      maxAmount: 15,
-      tokenLife: 4,
-
-      update: (amount, player) => {
-        if (player.fieldIn === "PineTreeForest") {
-          player.redPollen *= (amount - 1) * 0.03 + 1.15;
-          player.whitePollen *= (amount - 1) * 0.03 + 1.15;
-          player.bluePollen *= (amount - 1) * 0.03 + 1.15;
-          player.instantRedConversion = MATH.applyPercentage(
-            player.instantRedConversion,
-            (amount - 1) * 0.05 + 0.1
-          );
-          player.instantBlueConversion = MATH.applyPercentage(
-            player.instantBlueConversion,
-            (amount - 1) * 0.05 + 0.1
-          );
-          player.instantWhiteConversion = MATH.applyPercentage(
-            player.instantWhiteConversion,
-            (amount - 1) * 0.05 + 0.1
-          );
-        }
-      },
-
-      getMessage: (amount) => {
-        return (
-          "Pine Tree Forest Winds\nx" +
-          ((amount - 1) * 0.03 + 1.15).toFixed(2) +
-          " pollen in pine tree forest" +
-          "\n+" +
-          ((amount - 1) * 5 + 1) +
-          "% instant conversion in pine tree forest"
-        );
-      },
-    },
-
-    roseFieldWinds: {
-      u: (128 * 6) / 2048,
-      v: (128 * 6) / 2048,
-      svg: document.getElementById("roseFieldWinds"),
-      cooldown: document.getElementById("roseFieldWinds_cooldown"),
-      amount: document.getElementById("roseFieldWinds_amount"),
-      maxCooldown: 30 * 60,
-      maxAmount: 15,
-      tokenLife: 4,
-
-      update: (amount, player) => {
-        if (player.fieldIn === "RoseField") {
-          player.redPollen *= (amount - 1) * 0.03 + 1.15;
-          player.whitePollen *= (amount - 1) * 0.03 + 1.15;
-          player.bluePollen *= (amount - 1) * 0.03 + 1.15;
-          player.instantRedConversion = MATH.applyPercentage(
-            player.instantRedConversion,
-            (amount - 1) * 0.05 + 0.1
-          );
-          player.instantBlueConversion = MATH.applyPercentage(
-            player.instantBlueConversion,
-            (amount - 1) * 0.05 + 0.1
-          );
-          player.instantWhiteConversion = MATH.applyPercentage(
-            player.instantWhiteConversion,
-            (amount - 1) * 0.05 + 0.1
-          );
-        }
-      },
-
-      getMessage: (amount) => {
-        return (
-          "Rose Field Winds\nx" +
-          ((amount - 1) * 0.03 + 1.15).toFixed(2) +
-          " pollen in rose field" +
-          "\n+" +
-          ((amount - 1) * 5 + 1) +
-          "% instant conversion in rose field"
-        );
-      },
-    },
-
-    mountainTopFieldWinds: {
-      u: (128 * 6) / 2048,
-      v: (128 * 6) / 2048,
-      svg: document.getElementById("mountainTopFieldWinds"),
-      cooldown: document.getElementById("mountainTopFieldWinds_cooldown"),
-      amount: document.getElementById("mountainTopFieldWinds_amount"),
-      maxCooldown: 30 * 60,
-      maxAmount: 15,
-      tokenLife: 4,
-
-      update: (amount, player) => {
-        if (player.fieldIn === "MountainTopField") {
-          player.redPollen *= (amount - 1) * 0.03 + 1.15;
-          player.whitePollen *= (amount - 1) * 0.03 + 1.15;
-          player.bluePollen *= (amount - 1) * 0.03 + 1.15;
-          player.instantRedConversion = MATH.applyPercentage(
-            player.instantRedConversion,
-            (amount - 1) * 0.05 + 0.1
-          );
-          player.instantBlueConversion = MATH.applyPercentage(
-            player.instantBlueConversion,
-            (amount - 1) * 0.05 + 0.1
-          );
-          player.instantWhiteConversion = MATH.applyPercentage(
-            player.instantWhiteConversion,
-            (amount - 1) * 0.05 + 0.1
-          );
-        }
-      },
-
-      getMessage: (amount) => {
-        return (
-          "Mountain Top Field Winds\nx" +
-          ((amount - 1) * 0.03 + 1.15).toFixed(2) +
-          " pollen in mountain top field" +
-          "\n+" +
-          ((amount - 1) * 5 + 1) +
-          "% instant conversion in mountain top field"
-        );
-      },
-    },
-
-    coconutFieldWinds: {
-      u: (128 * 6) / 2048,
-      v: (128 * 6) / 2048,
-      svg: document.getElementById("coconutFieldWinds"),
-      cooldown: document.getElementById("coconutFieldWinds_cooldown"),
-      amount: document.getElementById("coconutFieldWinds_amount"),
-      maxCooldown: 30 * 60,
-      maxAmount: 15,
-      tokenLife: 4,
-
-      update: (amount, player) => {
-        if (player.fieldIn === "CoconutField") {
-          player.redPollen *= (amount - 1) * 0.03 + 1.15;
-          player.whitePollen *= (amount - 1) * 0.03 + 1.15;
-          player.bluePollen *= (amount - 1) * 0.03 + 1.15;
-          player.instantRedConversion = MATH.applyPercentage(
-            player.instantRedConversion,
-            (amount - 1) * 0.05 + 0.1
-          );
-          player.instantBlueConversion = MATH.applyPercentage(
-            player.instantBlueConversion,
-            (amount - 1) * 0.05 + 0.1
-          );
-          player.instantWhiteConversion = MATH.applyPercentage(
-            player.instantWhiteConversion,
-            (amount - 1) * 0.05 + 0.1
-          );
-        }
-      },
-
-      getMessage: (amount) => {
-        return (
-          "Coconut Field Winds\nx" +
-          ((amount - 1) * 0.03 + 1.15).toFixed(2) +
-          " pollen in coconut field" +
-          "\n+" +
-          ((amount - 1) * 5 + 1) +
-          "% instant conversion in coconut field"
-        );
-      },
-    },
-
-    pepperPatchWinds: {
-      u: (128 * 6) / 2048,
-      v: (128 * 6) / 2048,
-      svg: document.getElementById("pepperPatchWinds"),
-      cooldown: document.getElementById("pepperPatchWinds_cooldown"),
-      amount: document.getElementById("pepperPatchWinds_amount"),
-      maxCooldown: 30 * 60,
-      maxAmount: 15,
-      tokenLife: 4,
-
-      update: (amount, player) => {
-        if (player.fieldIn === "PepperPatch") {
-          player.redPollen *= (amount - 1) * 0.03 + 1.15;
-          player.whitePollen *= (amount - 1) * 0.03 + 1.15;
-          player.bluePollen *= (amount - 1) * 0.03 + 1.15;
-          player.instantRedConversion = MATH.applyPercentage(
-            player.instantRedConversion,
-            (amount - 1) * 0.05 + 0.1
-          );
-          player.instantBlueConversion = MATH.applyPercentage(
-            player.instantBlueConversion,
-            (amount - 1) * 0.05 + 0.1
-          );
-          player.instantWhiteConversion = MATH.applyPercentage(
-            player.instantWhiteConversion,
-            (amount - 1) * 0.05 + 0.1
-          );
-        }
-      },
-
-      getMessage: (amount) => {
-        return (
-          "Pepper Patch Winds\nx" +
-          ((amount - 1) * 0.03 + 1.15).toFixed(2) +
-          " pollen in pepper patch" +
-          "\n+" +
-          ((amount - 1) * 5 + 1) +
-          "% instant conversion in pepper patch"
-        );
-      },
-    },
-
-    haste: {
-      desc: "Grants x1.1 walkspeed for 25s. Stacks up to 10x, for a maximum of x2 walkspeed.",
-      trialCooldown: 15,
-      trialRate: 0.5,
-      statsToAddTo: ["hasteTokens"],
-      u: 0,
-      v: 0,
-      svg: document.getElementById("haste"),
-      cooldown: document.getElementById("haste_cooldown"),
-      amount: document.getElementById("haste_amount"),
-      maxCooldown: 25,
-      maxAmount: 10,
-      tokenLife: 4,
-
-      update: (amount, player) => {
-        player.walkSpeed *= player.roboChallenge
-          ? amount * 0.02 + 1
-          : amount * 0.075 + 1;
-        player.hasteStacks = amount;
-      },
-
-      getMessage: (amount) => {
-        return (
-          "Haste\nx" +
-          (player.roboChallenge
-            ? amount * 0.02 + 1
-            : amount * 0.075 + 1
-          ).toFixed(1) +
-          " walkspeed" +
-          (player.roboChallenge ? "\n\n(nerfed due to Robo Challenge!)" : "")
-        );
-      },
-    },
-
-    haste_: {
-      svg: document.getElementById("haste_"),
-      cooldown: document.getElementById("haste__cooldown"),
-      amount: document.getElementById("haste__amount"),
-      maxCooldown: 60,
-      maxAmount: 1,
-
-      update: (amount, player) => {
-        player.walkSpeed *= 1.5;
-      },
-
-      getMessage: (amount) => {
-        return "Haste+\nx1.5 walkspeed";
-      },
-    },
-
-    focus: {
-      desc: "Grants +3% critical chance for 20s. Stacks up to 10x, for a maximum of +30% critical chance.<br><br>Critical chance increases the chance of a critical hit, multiplying pollen collected or damage dealt by your critical power(x2 without any extra buffs).",
-      trialCooldown: 20,
-      trialRate: 0.5,
-      statsToAddTo: ["focusTokens", "battleTokens"],
-      u: 128 / 2048,
-      v: 0,
-      svg: document.getElementById("focus"),
-      cooldown: document.getElementById("focus_cooldown"),
-      amount: document.getElementById("focus_amount"),
-      maxCooldown: 20,
-      maxAmount: 10,
-      tokenLife: 4,
-
-      update: (amount, player) => {
-        player.criticalChance += 0.03 * amount;
-      },
-
-      getMessage: (amount) => {
-        return "Focus\n" + amount * 3 + "% critical chance";
-      },
-    },
-
-    melody: {
-      desc: "Grants +100% critical power for 30s.",
-      trialCooldown: 35,
-      trialRate: 0.35,
-      statsToAddTo: ["melodyTokens", "battleTokens"],
-      u: 256 / 2048,
-      v: 0,
-      svg: document.getElementById("melody"),
-      cooldown: document.getElementById("melody_cooldown"),
-      amount: document.getElementById("melody_amount"),
-      maxCooldown: 30,
-      maxAmount: 1,
-      tokenLife: 8,
-
-      update: (amount, player) => {
-        player.criticalPower += 1;
-      },
-
-      getMessage: (amount) => {
-        return "Melody\n+100% critical power";
-      },
-    },
-
-    link: {
-      desc: "Collects all ability tokens and certain types of loot tokens.",
-      trialCooldown: 20,
-      trialRate: 0.75,
-      statsToAddTo: ["battleTokens", "linkTokens"],
-      u: (128 * 3) / 2048,
-      v: 0,
-      canBeLinked: false,
-      tokenLife: 4,
-
-      func: function () {
-        for (let i in objects.tokens) {
-          if (
-            objects.tokens[i].canBeLinked &&
-            !(objects.tokens[i] instanceof DupedToken)
-          ) {
-            objects.tokens[i].collect();
-          }
-        }
-      },
-      backupFunc: function () {
-        for (let i in objects.tokens) {
-          if (
-            objects.tokens[i].canBeLinked &&
-            !(objects.tokens[i] instanceof DupedToken)
-          ) {
-            objects.tokens[i].collect();
-          }
-        }
-      },
-    },
-
-    bombCombo: {
-      u: (128 * 4) / 2048,
-      v: 0,
-      svg: document.getElementById("bombCombo"),
-      cooldown: document.getElementById("bombCombo_cooldown"),
-      amount: document.getElementById("bombCombo_amount"),
-      maxCooldown: 5,
-      maxAmount: 10,
-      tokenLife: 4,
-
-      update: (amount, player) => {
-        player.redBombPollen *= amount * 0.2 + 1;
-        player.whiteBombPollen *= amount * 0.2 + 1;
-        player.blueBombPollen *= amount * 0.2 + 1;
-      },
-
-      getMessage: (amount) => {
-        return "Bomb Combo\nx" + (amount * 0.2 + 1).toFixed(1) + " bomb power";
-      },
-    },
-
-    whiteBomb: {
-      desc: "Collects 7 pollen from 29 nearby flowers. Pollen is multipled by +10% per bee lvl.",
-      trialCooldown: 15,
-      trialRate: 0.3,
-      statsToAddTo: ["bombTokens"],
-      u: (128 * 4) / 2048,
-      v: 0,
-      tokenLife: 4,
-
-      func: function (params) {
-        if (player.fieldIn === params.field) {
-          let b = (params.bee.level - 1) * 0.1 + 1;
-
-          collectPollen({
-            x: params.x,
-            z: params.z,
-            pattern: [
-              [-2, 0],
-              [-1, -1],
-              [-1, 0],
-              [-1, 1],
-              [0, -2],
-              [0, -1],
-              [0, 0],
-              [0, 1],
-              [0, 2],
-              [1, -1],
-              [1, 0],
-              [1, 1],
-              [2, 0],
-            ],
-            amount: 7,
-            stackOffset: 0.4 + Math.random() * 0.5,
-            multiplier: b * player.whiteBombPollen,
-            instantConversion: player.instantBombConversion,
-          });
-
-          objects.explosions.push(
-            new Explosion({
-              col: [1, 1, 1],
-              pos: [
-                fieldInfo[params.field].x + params.x,
-                fieldInfo[params.field].y + 0.5,
-                fieldInfo[params.field].z + params.z,
-              ],
-              life: 0.3,
-              size: 4,
-              speed: 0.35,
-              aftershock: 0.05,
-            })
-          );
-        }
-
-        player.addEffect("bombCombo");
-      },
-    },
-
-    redBomb: {
-      desc: "Collects 10 red pollen from 29 nearby flowers. Pollen is multipled by +10% per bee lvl.",
-      trialCooldown: 15,
-      trialRate: 0.3,
-      statsToAddTo: ["redBombTokens", "redAbilityTokens", "bombTokens"],
-      u: (128 * 5) / 2048,
-      v: 0,
-      tokenLife: 4,
-
-      func: function (params) {
-        if (player.fieldIn === params.field) {
-          let b = (params.bee.level - 1) * 0.1 + 1;
-
-          collectPollen({
-            x: params.x,
-            z: params.z,
-            pattern: [
-              [-2, 0],
-              [-1, -1],
-              [-1, 0],
-              [-1, 1],
-              [0, -2],
-              [0, -1],
-              [0, 0],
-              [0, 1],
-              [0, 2],
-              [1, -1],
-              [1, 0],
-              [1, 1],
-              [2, 0],
-            ],
-            amount: {
-              r: 10,
-              w: player.redBombSync ? 7.5 : 0,
-              b: player.redBombSync && player.blueBombSync ? 5 : 0,
-            },
-            stackOffset: 0.4 + Math.random() * 0.5,
-            multiplier: b * player.redBombPollen,
-            instantConversion: player.instantBombConversion,
-          });
-
-          objects.explosions.push(
-            new Explosion({
-              col: [1, 0, 0],
-              pos: [
-                fieldInfo[params.field].x + params.x,
-                fieldInfo[params.field].y + 0.5,
-                fieldInfo[params.field].z + params.z,
-              ],
-              life: 0.3,
-              size: 4,
-              speed: 0.35,
-              aftershock: 0.05,
-            })
-          );
-        }
-
-        player.addEffect("bombCombo");
-      },
-    },
-
-    blueBomb: {
-      desc: "Collects 10 blue pollen from 29 nearby flowers. Pollen is multipled by +10% per bee lvl.",
-      trialCooldown: 15,
-      trialRate: 0.3,
-      statsToAddTo: ["blueBombTokens", "blueAbilityTokens", "bombTokens"],
-      u: (128 * 6) / 2048,
-      v: 0,
-      tokenLife: 4,
-
-      func: function (params) {
-        if (player.fieldIn === params.field) {
-          let b = (params.bee.level - 1) * 0.1 + 1;
-
-          collectPollen({
-            x: params.x,
-            z: params.z,
-            pattern: [
-              [-2, 0],
-              [-1, -1],
-              [-1, 0],
-              [-1, 1],
-              [0, -2],
-              [0, -1],
-              [0, 0],
-              [0, 1],
-              [0, 2],
-              [1, -1],
-              [1, 0],
-              [1, 1],
-              [2, 0],
-            ],
-            amount: {
-              r: player.blueBombSync && player.redBombSync ? 5 : 0,
-              w: player.blueBombSync ? 7.5 : 0,
-              b: 10,
-            },
-            stackOffset: 0.4 + Math.random() * 0.5,
-            multiplier: b * player.blueBombPollen,
-            instantConversion: player.instantBombConversion,
-          });
-
-          objects.explosions.push(
-            new Explosion({
-              col: [0, 0, 1],
-              pos: [
-                fieldInfo[params.field].x + params.x,
-                fieldInfo[params.field].y + 0.5,
-                fieldInfo[params.field].z + params.z,
-              ],
-              life: 0.3,
-              size: 4,
-              speed: 0.35,
-              aftershock: 0.05,
-            })
-          );
-        }
-
-        player.addEffect("bombCombo");
-      },
-    },
-
-    whiteBomb_: {
-      desc: "Collects 10 pollen from 49 nearby flowers. Pollen is multipled by +15% per bee lvl.",
-      trialCooldown: 15,
-      trialRate: 0.4,
-      statsToAddTo: ["bombTokens"],
-      u: (128 * 7) / 2048,
-      v: 0,
-      tokenLife: 4,
-
-      func: function (params) {
-        if (player.fieldIn === params.field) {
-          let b = (params.bee.level - 1) * 0.15 + 1;
-
-          collectPollen({
-            x: params.x,
-            z: params.z,
-            pattern: [
-              [-3, 0],
-              [-2, -2],
-              [-2, -1],
-              [-2, 0],
-              [-2, 1],
-              [-2, 2],
-              [-1, -2],
-              [-1, -1],
-              [-1, 0],
-              [-1, 1],
-              [-1, 2],
-              [0, -3],
-              [0, -2],
-              [0, -1],
-              [0, 0],
-              [0, 1],
-              [0, 2],
-              [0, 3],
-              [1, -2],
-              [1, -1],
-              [1, 0],
-              [1, 1],
-              [1, 2],
-              [2, -2],
-              [2, -1],
-              [2, 0],
-              [2, 1],
-              [2, 2],
-              [3, 0],
-            ],
-            amount: 10,
-            stackHeight: 0.4 + Math.random() * 0.5,
-            multiplier: b * player.whiteBombPollen,
-            instantConversion: player.instantBombConversion,
-          });
-
-          objects.explosions.push(
-            new Explosion({
-              col: [1, 1, 1],
-              pos: [
-                fieldInfo[params.field].x + params.x,
-                fieldInfo[params.field].y + 0.5,
-                fieldInfo[params.field].z + params.z,
-              ],
-              life: 0.3,
-              size: 4,
-              speed: 0.35,
-              aftershock: 0.05,
-            })
-          );
-        }
-
-        player.addEffect("bombCombo");
-      },
-    },
-
-    redBomb_: {
-      desc: "Collects 12.5 red pollen from 49 nearby flowers. Pollen is multipled by +20% per bee lvl.",
-      trialCooldown: 20,
-      trialRate: 0.3,
-      statsToAddTo: ["redBombTokens", "redAbilityTokens", "bombTokens"],
-      u: 0,
-      v: 128 / 2048,
-      tokenLife: 4,
-
-      func: function (params) {
-        if (player.fieldIn === params.field) {
-          let b = (params.bee.level - 1) * 0.2 + 1;
-
-          collectPollen({
-            x: params.x,
-            z: params.z,
-            pattern: [
-              [-3, 0],
-              [-2, -2],
-              [-2, -1],
-              [-2, 0],
-              [-2, 1],
-              [-2, 2],
-              [-1, -2],
-              [-1, -1],
-              [-1, 0],
-              [-1, 1],
-              [-1, 2],
-              [0, -3],
-              [0, -2],
-              [0, -1],
-              [0, 0],
-              [0, 1],
-              [0, 2],
-              [0, 3],
-              [1, -2],
-              [1, -1],
-              [1, 0],
-              [1, 1],
-              [1, 2],
-              [2, -2],
-              [2, -1],
-              [2, 0],
-              [2, 1],
-              [2, 2],
-              [3, 0],
-            ],
-            amount: {
-              r: 12.5,
-              w: player.redBombSync ? 10 : 0,
-              b: player.redBombSync && player.blueBombSync ? 7.5 : 0,
-            },
-            stackHeight: 0.4 + Math.random() * 0.5,
-            multiplier: b * player.redBombPollen,
-            instantConversion: player.instantBombConversion,
-          });
-
-          objects.explosions.push(
-            new Explosion({
-              col: [1, 0, 0],
-              pos: [
-                fieldInfo[params.field].x + params.x,
-                fieldInfo[params.field].y + 0.5,
-                fieldInfo[params.field].z + params.z,
-              ],
-              life: 0.3,
-              size: 4,
-              speed: 0.35,
-              aftershock: 0.05,
-            })
-          );
-        }
-
-        player.addEffect("bombCombo");
-      },
-    },
-
-    blueBomb_: {
-      desc: "Collects 12.5 blue pollen from 49 nearby flowers. Pollen is multipled by +20% per bee lvl.",
-      trialCooldown: 20,
-      trialRate: 0.3,
-      statsToAddTo: ["blueBombTokens", "blueAbilityTokens", "bombTokens"],
-      u: 128 / 2048,
-      v: 128 / 2048,
-      tokenLife: 4,
-
-      func: function (params) {
-        if (player.fieldIn === params.field) {
-          let b = (params.bee.level - 1) * 0.2 + 1;
-
-          collectPollen({
-            x: params.x,
-            z: params.z,
-            pattern: [
-              [-3, 0],
-              [-2, -2],
-              [-2, -1],
-              [-2, 0],
-              [-2, 1],
-              [-2, 2],
-              [-1, -2],
-              [-1, -1],
-              [-1, 0],
-              [-1, 1],
-              [-1, 2],
-              [0, -3],
-              [0, -2],
-              [0, -1],
-              [0, 0],
-              [0, 1],
-              [0, 2],
-              [0, 3],
-              [1, -2],
-              [1, -1],
-              [1, 0],
-              [1, 1],
-              [1, 2],
-              [2, -2],
-              [2, -1],
-              [2, 0],
-              [2, 1],
-              [2, 2],
-              [3, 0],
-            ],
-            amount: {
-              b: 12.5,
-              w: player.blueBombSync ? 10 : 0,
-              r: player.blueBombSync && player.redBombSync ? 7.5 : 0,
-            },
-            stackHeight: 0.4 + Math.random() * 0.5,
-            multiplier: b * player.blueBombPollen,
-          });
-
-          objects.explosions.push(
-            new Explosion({
-              col: [0, 0, 1],
-              pos: [
-                fieldInfo[params.field].x + params.x,
-                fieldInfo[params.field].y + 0.5,
-                fieldInfo[params.field].z + params.z,
-              ],
-              life: 0.3,
-              size: 4,
-              speed: 0.35,
-              aftershock: 0.05,
-              instantConversion: player.instantBombConversion,
-            })
-          );
-        }
-
-        player.addEffect("bombCombo");
-      },
-    },
-
-    blueBoost: {
-      desc: "Grants x1.1 blue pollen for 25s. Stacks up to 10x, for a maximum of x2 blue pollen.",
-      trialCooldown: 20,
-      trialRate: 0.4,
-      statsToAddTo: [
-        "blueBoostTokens",
-        "blueAbilityTokens",
-        "boostTokens",
-        "markOrBoostTokens",
-      ],
-      u: (128 * 2) / 2048,
-      v: 128 / 2048,
-      svg: document.getElementById("blueBoost"),
-      cooldown: document.getElementById("blueBoost_cooldown"),
-      amount: document.getElementById("blueBoost_amount"),
-      maxCooldown: 25,
-      maxAmount: 10,
-      tokenLife: 4,
-
-      update: (amount, player) => {
-        player.bluePollen *= amount * 0.1 + 1;
-      },
-
-      getMessage: (amount) => {
-        return "Blue Boost\nx" + (amount * 0.1 + 1).toFixed(1) + " blue pollen";
-      },
-    },
-
-    redBoost: {
-      desc: "Grants x1.1 red pollen for 25s. Stacks up to 10x, for a maximum of x2 red pollen.",
-      trialCooldown: 20,
-      trialRate: 0.4,
-      statsToAddTo: [
-        "redBoostTokens",
-        "redAbilityTokens",
-        "boostTokens",
-        "markOrBoostTokens",
-      ],
-      u: (128 * 3) / 2048,
-      v: 128 / 2048,
-      svg: document.getElementById("redBoost"),
-      cooldown: document.getElementById("redBoost_cooldown"),
-      amount: document.getElementById("redBoost_amount"),
-      maxCooldown: 25,
-      maxAmount: 10,
-      tokenLife: 4,
-
-      update: (amount, player) => {
-        player.redPollen *= amount * 0.1 + 1;
-      },
-
-      getMessage: (amount) => {
-        return "Red Boost\nx" + (amount * 0.1 + 1).toFixed(1) + " red pollen";
-      },
-    },
-
-    whiteBoost: {
-      desc: "Grants x1.1 white pollen for 25s. Stacks up to 10x, for a maximum of x2 white pollen.",
-      trialCooldown: 15,
-      trialRate: 0.5,
-      statsToAddTo: ["boostTokens", "markOrBoostTokens"],
-      u: (128 * 4) / 2048,
-      v: 128 / 2048,
-      svg: document.getElementById("whiteBoost"),
-      cooldown: document.getElementById("whiteBoost_cooldown"),
-      amount: document.getElementById("whiteBoost_amount"),
-      maxCooldown: 25,
-      maxAmount: 10,
-      tokenLife: 4,
-
-      update: (amount, player) => {
-        player.whitePollen *= amount * 0.1 + 1;
-      },
-
-      getMessage: (amount) => {
-        return (
-          "White Boost\nx" + (amount * 0.1 + 1).toFixed(1) + " white pollen"
-        );
-      },
-    },
-
-    babyLove: {
-      desc: "Grants x1.5 pollen and +50% loot luck for 30s.",
-      trialCooldown: 30,
-      trialRate: 0.4,
-      u: (128 * 1) / 2048,
-      v: (256 * 4) / 2048,
-      svg: document.getElementById("babyLove"),
-      cooldown: document.getElementById("babyLove_cooldown"),
-      amount: document.getElementById("babyLove_amount"),
-      maxCooldown: 30,
-      maxAmount: 1,
-      tokenLife: 8,
-
-      update: (amount, player) => {
-        player.redPollen *= 1.5;
-        player.whitePollen *= 1.5;
-        player.bluePollen *= 1.5;
-        player.lootLuck *= 1.5;
-      },
-
-      getMessage: (amount) => {
-        return "Baby Love\nx1.5 pollen\nx1.5 loot luck";
-      },
-    },
-
-    inspire: {
-      trialCooldown: 60,
-      trialRate: 0.0075,
-      statsToAddTo: ["inspireTokens"],
-      u: (128 * 2) / 2048,
-      v: (256 * 4) / 2048,
-      svg: document.getElementById("inspire"),
-      cooldown: document.getElementById("inspire_cooldown"),
-      amount: document.getElementById("inspire_amount"),
-      maxCooldown: 5,
-      maxAmount: 50,
-      tokenLife: 4,
-
-      update: (amount, player) => {
-        player.redPollen *= amount * 0.25 + 1;
-        player.whitePollen *= amount * 0.25 + 1;
-        player.bluePollen *= amount * 0.25 + 1;
-      },
-
-      getMessage: (amount) => {
-        return "Inspire\nx" + (amount * 0.25 + 1).toFixed(2) + " pollen";
-      },
-    },
-
-    rage: {
-      desc: "Grants +1 bee attack for 30s. Stacks up to 3x, for a maximum of +3 bee attack.",
-      trialCooldown: 25,
-      trialRate: 0.8,
-      statsToAddTo: ["rageTokens", "battleTokens", "redAbilityTokens"],
-      u: (128 * 6) / 2048,
-      v: (256 * 2) / 2048,
-      svg: document.getElementById("rage"),
-      cooldown: document.getElementById("rage_cooldown"),
-      amount: document.getElementById("rage_amount"),
-      maxCooldown: 30,
-      maxAmount: 3,
-      tokenLife: 24,
-
-      update: (amount, player) => {
-        player.whiteBeeAttack += amount;
-        player.blueBeeAttack += amount;
-        player.redBeeAttack += amount;
-      },
-
-      getMessage: (amount) => {
-        return "Rage\n+" + amount + " bee attack";
-      },
-    },
-
-    flameHeat: {
-      u: (128 * 5) / 2048,
-      v: 128 / 2048,
-      svg: document.getElementById("flameHeat"),
-      cooldown: document.getElementById("flameHeat_cooldown"),
-      amount: document.getElementById("flameHeat_amount"),
-      maxCooldown: 20,
-      tokenLife: 4,
-      amountFromCooldown: true,
-
-      update: (amount, player) => {
-        player.redPollen *= amount * 0.75 + 1;
-        player.beeAttack *= amount * 0.2 + 1;
-        player.flameHeatStack = amount + 1;
-        player.flameHeatStackApplied = amount * 0.5 + 1;
-      },
-
-      getMessage: (amount) => {
-        return (
-          "Flame Heat\nx" +
-          (amount * 0.75 + 1).toFixed(2) +
-          "  red pollen\nx" +
-          (amount * 0.2 + 1).toFixed(2) +
-          " bee attack"
-        );
-      },
-    },
-
-    darkHeat: {
-      u: (128 * 5) / 2048,
-      v: 128 / 2048,
-      svg: document.getElementById("darkHeat"),
-      cooldown: document.getElementById("darkHeat_cooldown"),
-      amount: document.getElementById("darkHeat_amount"),
-      maxCooldown: 0,
-      tokenLife: 4,
-      maxAmount: 100,
-
-      update: (amount, player) => {
-        player.superCritPower *= amount * 0.06 + 1;
-        player.instantRedConversion = MATH.applyPercentage(
-          player.instantRedConversion,
-          amount * 0.0025
-        );
-        player.beeAttack *= amount * 0.02 + 1;
-      },
-
-      getMessage: (amount) => {
-        return (
-          "Dark Heat\nx" +
-          (amount * 0.06 + 1).toFixed(2) +
-          " super-crit power\n+" +
-          ((amount * 0.25) | 0) +
-          "% instant red conversion\nx" +
-          (amount * 0.02 + 1) +
-          " bee attack"
-        );
-      },
-    },
-
-    pollenMarkToken: {
-      desc: "Marks a random spot on the field with a radius of 5 flowers for 7s(+0.2s per bee lvl).<br><br>Standing in the mark grants x1.15 pollen. Stacks up to 3x, for a maximum of x1.45 pollen.",
-      trialCooldown: 20,
-      trialRate: 0.4,
-      statsToAddTo: ["markTokens", "markOrBoostTokens"],
-      u: (128 * 6) / 2048,
-      v: 128 / 2048,
-      tokenLife: 8,
-
-      func: function (params) {
-        if (player.fieldIn === params.field) {
-          objects.marks.push(
-            new Mark(
-              params.field,
-              (MATH.random(0.2, 0.8) * fieldInfo[params.field].width) | 0,
-              (MATH.random(0.2, 0.8) * fieldInfo[params.field].length) | 0,
-              "pollenMark",
-              params.bee.level
-            )
-          );
-        }
-      },
-    },
-
-    honeyMarkToken: {
-      desc: "Marks a random spot on the field with a radius of 5 flowers for 7s(+0.2s per bee lvl).<br><br>Standing in the mark converts 3x the average convert amount of all your bees, and grants x1.25 convert rate. Stacks up to 3x.",
-      trialCooldown: 17.5,
-      trialRate: 0.5,
-      statsToAddTo: ["markTokens", "markOrBoostTokens"],
-      u: (128 * 7) / 2048,
-      v: 128 / 2048,
-      tokenLife: 8,
-
-      func: function (params) {
-        objects.marks.push(
-          new Mark(
-            params.field,
-            (MATH.random(0.2, 0.8) * fieldInfo[params.field].width) | 0,
-            (MATH.random(0.2, 0.8) * fieldInfo[params.field].length) | 0,
-            "honeyMark",
-            params.bee.level
-          )
-        );
-      },
-    },
-
-    preciseMarkToken: {
-      trialCooldown: 30,
-      trialRate: 0.5,
-      statsToAddTo: ["markTokens", "markOrBoostTokens"],
-      u: (128 * 0) / 2048,
-      v: (128 * 8) / 2048,
-      tokenLife: 8,
-
-      func: function (params) {},
-    },
-
-    pollenMark: {
-      u: 0,
-      v: 0,
-      svg: document.getElementById("pollenMark"),
-      cooldown: document.getElementById("pollenMark_cooldown"),
-      amount: document.getElementById("pollenMark_amount"),
-      maxCooldown: 0,
-      tokenLife: 4,
-      maxAmount: 3,
-
-      update: (amount, player) => {
-        let a = amount * 0.15 + 1;
-        player.whitePollen *= a;
-        player.redPollen *= a;
-        player.bluePollen *= a;
-      },
-
-      getMessage: (amount) => {
-        return "Pollen Mark\nx" + (amount * 0.15 + 1) + " pollen";
-      },
-    },
-
-    honeyMark: {
-      u: 0,
-      v: 0,
-      svg: document.getElementById("honeyMark"),
-      cooldown: document.getElementById("honeyMark_cooldown"),
-      amount: document.getElementById("honeyMark_amount"),
-      maxCooldown: 0,
-      tokenLife: 4,
-      maxAmount: 3,
-
-      update: (amount, player) => {
-        player.convertRate *= amount * 0.25 + 1;
-      },
-
-      getMessage: (amount) => {
-        return (
-          "Honey Mark\nConverts 3x the average of all your bee's convert amount of pollen.\nx" +
-          (amount * 0.25 + 1) +
-          " convert rate"
-        );
-      },
-    },
-
-    preciseMark: {
-      u: 0,
-      v: 0,
-      svg: document.getElementById("preciseMark"),
-      cooldown: document.getElementById("preciseMark_cooldown"),
-      amount: document.getElementById("preciseMark_amount"),
-      maxCooldown: 0,
-      tokenLife: 4,
-      maxAmount: 3,
-
-      update: (amount, player) => {
-        player.criticalChance += amount * 0.07;
-        player.superCritChance += amount * 0.07;
-      },
-
-      getMessage: (amount) => {
-        return (
-          "Precise Mark\n+" +
-          amount * 7 +
-          "% critical chance\n+" +
-          amount * 7 +
-          "% super-crit chance"
-        );
-      },
-    },
-
-    inferno: {
-      desc: "Summons 4 flames and 2 temporary Fire Bees that last for 15s(+1s per lvl). The Fire Bees are gifted if this bee is gifted.<br><br>Flames last for 3s, collecting 10R/4W/1B pollen from 9 nearby flowers every second. Pollen collected is multiplied by 4% per red bee(8% is gifted). Flames also deal 15 damage to mobs every second. Standing in flames grant Flame Heat, lasting for 20s, and giving up to x2 red pollen and x1.2 bee attack.",
-      trialCooldown: 20,
-      trialRate: 0.5,
-      statsToAddTo: ["redAbilityTokens", "battleTokens"],
-      u: 0,
-      v: 256 / 2048,
-      tokenLife: 4,
-
-      func: function (params) {
-        if (player.fieldIn === params.field) {
-          if (
-            params.x >= 0 &&
-            params.x < fieldInfo[params.field].width &&
-            params.z - 1 >= 0 &&
-            params.z - 1 < fieldInfo[params.field].length
-          ) {
-            objects.flames.push(
-              new Flame(params.field, params.x, params.z - 1)
-            );
-          }
-
-          if (
-            params.x >= 0 &&
-            params.x < fieldInfo[params.field].width &&
-            params.z + 1 >= 0 &&
-            params.z + 1 < fieldInfo[params.field].length
-          ) {
-            objects.flames.push(
-              new Flame(params.field, params.x, params.z + 1)
-            );
-          }
-
-          if (
-            params.x - 1 >= 0 &&
-            params.x - 1 < fieldInfo[params.field].width &&
-            params.z >= 0 &&
-            params.z < fieldInfo[params.field].length
-          ) {
-            objects.flames.push(
-              new Flame(params.field, params.x - 1, params.z)
-            );
-          }
-
-          if (
-            params.x + 1 >= 0 &&
-            params.x + 1 < fieldInfo[params.field].width &&
-            params.z >= 0 &&
-            params.z < fieldInfo[params.field].length
-          ) {
-            objects.flames.push(
-              new Flame(params.field, params.x + 1, params.z)
-            );
-          }
-
-          objects.tempBees.push(
-            new TempBee(
-              [
-                fieldInfo[params.field].x + params.x,
-                fieldInfo[params.field].y + 0.5,
-                fieldInfo[params.field].z + params.z,
-              ],
-              "fire",
-              Math.max(params.bee.level - 2, 1),
-              15 + params.bee.level,
-              params.bee.gifted
-            )
-          );
-
-          objects.tempBees.push(
-            new TempBee(
-              [
-                fieldInfo[params.field].x + params.x,
-                fieldInfo[params.field].y + 0.5,
-                fieldInfo[params.field].z + params.z,
-              ],
-              "fire",
-              Math.max(params.bee.level - 2, 1),
-              15 + params.bee.level,
-              params.bee.gifted
-            )
-          );
-
-          objects.explosions.push(
-            new Explosion({
-              col: [1, 0.5, 0],
-              pos: [
-                fieldInfo[params.field].x + params.x,
-                fieldInfo[params.field].y + 0.5,
-                fieldInfo[params.field].z + params.z,
-              ],
-              life: 0.5,
-              size: 5,
-              speed: 0.25,
-              aftershock: 0.005,
-            })
-          );
-        }
-      },
-      backupFunc: function (params) {
-        objects.tempBees.push(
-          new TempBee(
-            params.pos,
-            "fire",
-            Math.max(params.bee.level - 2, 1),
-            15 + params.bee.level,
-            params.bee.gifted
-          )
-        );
-
-        objects.flames.push(
-          new Flame(params.pos[0] - 1, params.pos[1], params.pos[2], true)
-        );
-        objects.flames.push(
-          new Flame(params.pos[0] + 1, params.pos[1], params.pos[2], true)
-        );
-        objects.flames.push(
-          new Flame(params.pos[0], params.pos[1], params.pos[2] + 1, true)
-        );
-        objects.flames.push(
-          new Flame(params.pos[0], params.pos[1], params.pos[2] - 1, true)
-        );
-      },
-    },
-
-    flameFuel: {
-      desc: "For 15s, tosses oil onto new flames, increasing it's lifespan by x1.5 and makes it convert 2% of your hive's convert total of pollen into honey.",
-      trialCooldown: 30,
-      trialRate: 0.3,
-      u: 128 / 2048,
-      v: 256 / 2048,
-      svg: document.getElementById("flameFuel"),
-      cooldown: document.getElementById("flameFuel_cooldown"),
-      amount: document.getElementById("flameFuel_amount"),
-      maxCooldown: 15,
-      maxAmount: 1,
-      tokenLife: 4,
-
-      update: (amount, player) => {
-        player.flameFuel = true;
-      },
-
-      getMessage: (amount) => {
-        return "Flame Fuel\nx1.5 flame life";
-      },
-    },
-
-    markSurge: {
-      desc: "Makes all active marks surge, collecting pollen and increasing it's lifespan by +1s(+0.1s per bee lvl). Marks can only surge 5 times.<br><br>Marks collect 7(13 if the mark is a Precise Mark) pollen from all flowers inside their radius. Pollen collected is multiplied by +10% per bee lvl.<br><br>• If the mark is a Honey Mark, it instantly converts all collected pollen.<br><br>• If the mark is a Precise Mark, it will always critical hit.",
-      trialCooldown: 20,
-      trialRate: 0.25,
-      u: 256 / 2048,
-      v: 256 / 2048,
-      tokenLife: 4,
-
-      func: function () {
-        for (let i in objects.marks) {
-          objects.marks[i].surge((i / objects.marks.length) * 0.5);
-        }
-      },
-    },
-
-    triangulate: {
-      desc: "Draws a triangle between the token, the bee, and you. The bee will travel away from both points, maximizing the triangle's area. After 3s, all tokens inside the triangle is collected, pollen is collected, and marks inside the triangle surge.<br><br>10(+2 per bee lvl) pollen is collected from each flower inside the triangle.<br><br>• If the triangle contains a mark, it gains x1.5 pollen.<br><br>• If the triangle contains a Pollen Mark, it gains x2 white pollen.<br><br>• If the triangle contains a Honey Mark, it gains +50% instant conversion.<br><br>• If the triangle contains a Precise Mark, it always critical hits.",
-      trialCooldown: 20,
-      trialRate: 0.25,
-      u: (128 * 7) / 2048,
-      v: (256 * 2) / 2048,
-      tokenLife: 4,
-
-      func: function (params) {
-        if (player.fieldIn === params.field) {
-          params.bee.startTriangulate([
-            fieldInfo[params.field].x + params.x,
-            fieldInfo[params.field].y + 0.75,
-            fieldInfo[params.field].z + params.z,
-          ]);
-          objects.triangulates.push(
-            new Triangulate(params.bee, [
-              fieldInfo[params.field].x + params.x,
-              fieldInfo[params.field].y + 0.75,
-              fieldInfo[params.field].z + params.z,
-            ])
-          );
-        }
-
-        player.addEffect("bombCombo");
-      },
-    },
-
-    pollenHaze: {
-      desc: "Summons a haze over the field, lasting for 30s. Every 0.07s, a flower is pollinated. If the flower is already at it's maximum pollination, it is replenished.<br><br>When a flower is pollinated, it moves up a tier. Flowers can be at the single, double, triple, large, or star tier. Pollen from the flower is multiplied based on it's tier, and higher tier flowers deplete slower. Over time, flowers naturally downgrade to it's original tier.",
-      trialCooldown: 150,
-      trialRate: 1,
-      u: 0,
-      v: (256 * 2.5) / 2048,
-      tokenLife: 8,
-
-      func: function (params) {
-        if (player.fieldIn === params.field) {
-          if (!fieldInfo[params.field].haze.start) {
-            objects.explosions.push(
-              new Explosion({
-                col: [1, 1, 0],
-                pos: [
-                  (fieldInfo[params.field].width - 1) * 0.5 +
-                    fieldInfo[params.field].x,
-                  fieldInfo[params.field].y + 0.75,
-                  (fieldInfo[params.field].length - 1) * 0.5 +
-                    fieldInfo[params.field].z,
-                ],
-                life: 30,
-                size:
-                  (fieldInfo[params.field].width +
-                    fieldInfo[params.field].length) *
-                  0.5 *
-                  1.5,
-                speed: 0.1,
-                aftershock: 0,
-                maxAlpha: 0.15,
-                backface: true,
-                primitive: "cylinder_explosions",
-                height:
-                  8 /
-                  ((fieldInfo[params.field].width +
-                    fieldInfo[params.field].length) *
-                    0.5 *
-                    1.5),
-              })
-            );
-          }
-
-          fieldInfo[params.field].haze = { start: TIME, delay: TIME };
-        }
-      },
-    },
-
-    fuzzBomb: {
-      desc: "Summons 2(+1 per 5 bee lvls) fuzz bombs rolling around the field, lasting for 5s(+0.25s per bee lvl). Touching them collects 15W/10R/10B pollen from 25 nearby flowers and pollinates them. If the flower is already at it's maximum pollination, it is replenished.<br><br>When a flower is pollinated, it moves up a tier. Flowers can be at the single, double, triple, large, or star tier. Pollen from the flower is multiplied based on it's tier, and higher tier flowers deplete slower. Over time, flowers naturally downgrade to it's original tier.",
-      trialCooldown: 25,
-      trialRate: 0.5,
-      u: 128 / 2048,
-      v: (256 * 2.5) / 2048,
-      tokenLife: 4,
-
-      func: function (params) {
-        if (player.fieldIn === params.field) {
-          for (let i = 0; i < 2 + ((params.bee.level * 0.2) | 0); i++) {
-            objects.fuzzBombs.push(
-              new FuzzBomb(params.field, params.bee.level)
-            );
-          }
-        }
-      },
-    },
-
-    precision: {
-      u: (128 * 5) / 2048,
-      v: (256 * 2) / 2048,
-      svg: document.getElementById("precision"),
-      cooldown: document.getElementById("precision_cooldown"),
-      amount: document.getElementById("precision_amount"),
-      maxCooldown: 60,
-      tokenLife: 4,
-      maxAmount: 10,
-
-      update: (amount, player) => {
-        player.superCritChance += amount * 0.02;
-      },
-
-      getMessage: (amount) => {
-        return "Precision\n+" + amount * 2 + "% super-crit chance";
-      },
-    },
-
-    summonFrog: {
-      desc: "Summons a frog on the field, lasting for 25s(+1s per bee lvl). If the bee is gifted, this has a 10%(+2% per bee lvl) chance to spawn a gifted frog instead.<br><br>Frogs hop around the field, creating bubbles every 2nd and 3rd jump. Frogs also collect nearby tokens, and creates another bubble when they do.<br><br>Gifted frogs have a higher chance to collect tokens can do so from further away.<br><br>Bubbles last for 10s. When popped, they collect 10B/6W/2R pollen and replenish 33 flowers. Pollen collected is multiplied by 10% per gifted blue bee type.",
-      trialCooldown: 30,
-      trialRate: 0.33,
-      statsToAddTo: ["blueAbilityTokens", "battleTokens"],
-      u: (128 * 3) / 2048,
-      v: 256 / 2048,
-      tokenLife: 4,
-
-      func: function (params) {
-        if (params.field === player.fieldIn) {
-          objects.mobs.push(
-            new Frog(params.field, params.x, params.z, params.bee)
-          );
-        }
-      },
-    },
-
-    inflateBalloons: {
-      desc: "Summons a balloon on the field, lasting for 20s(+1s per bee lvl), and with a capacity scaling off of the bee's lvl and the player's capacity. This also inflates existing balloons by 1%(+0.1% per bee lvl) of their capacity.<br><br>Ballons hover around the field, absorbing and storing pollen collected under them. If the pollen is blue, it is multiplied by 25%, otherwise, by 10%.<br><br>Standing under balloons grant Balloon Aura, giving x1.02 pollen and honey from tokens. Stacks up to 10x, for a maximum of x1.2 pollen and honey from tokens.<br><br>After filling up, ballons float back to the hive, filling up the hive balloon. Converting the hive balloon grants the Balloon Blessing buff, boosting capacity and honey at hive. If the new Balloon Blessing is higher than the previous one, it replaces the old buff, otherwise, it refreshes it. The hive balloon deflates over time, depending on your capacity relative to it.<br><br>Balloons can be inflated a maximum of 4(+1 per 4 bee lvls)(+4 if the field contains at least 50% blue flowers)(+2 if the field contains at least 50% white flowers) times.<br><br>If the bee is gifted, balloons have a 10%(+1% per bee lvl) to become golden. Golden balloons have x1.35 more capacity, turn bubbles into golden bubbles, and are more effective with Tidal Surge.<br><br>Golden bubbles collect x1.5 pollen, has a 25% chance to spawn a honey token worth 50% of the collected pollen. Also contributes 2x as much to Pop Star, Bubble Bloat, Tide Power, and 3x as much to Tidal Surge.",
-      trialCooldown: 30,
-      trialRate: 0.25,
-      statsToAddTo: ["blueAbilityTokens"],
-      u: (128 * 4) / 2048,
-      v: 256 / 2048,
-      tokenLife: 4,
-
-      func: function (params) {
-        if (params.field === player.fieldIn) {
-          for (let i in objects.balloons) {
-            let b = objects.balloons[i];
-
-            if (b.state === "float" && b.inflateCounter > 0) {
-              b.inflateCounter--;
-
-              b.pollen += b.cap * (0.01 + params.bee.level * 0.001);
-              objects.explosions.push(
-                new ReverseExplosion({
-                  col: b.golden ? [0.9, 0.9, 0] : [0, 0, 0.8],
-                  pos: b.pos,
-                  life: 0.75,
-                  size: b.displaySize + 1,
-                  alpha: 0.9,
-                  height: 1,
-                  primitive: "explosions",
-                  transformHeight: true,
-                })
-              );
-            }
-          }
-
-          objects.balloons.push(
-            new Balloon(
-              params.field,
-              params.x,
-              params.z,
-              params.bee.gifted &&
-                Math.random() < 0.1 + params.bee.level * 0.01,
-              params.bee.level - 1
-            )
-          );
-        }
-      },
-    },
-
-    surpriseParty: {
-      desc: "Makes all active balloons on the field create random ability tokens and summons a golden balloon.<br><br>Golden balloons have x1.35 more capacity, turn bubbles into golden bubbles, and are more effective with Tidal Surge.<br><br>Golden bubbles collect x1.5 pollen, has a 25% chance to spawn a honey token worth 50% of the collected pollen. Also contributes 2x as much to Pop Star, Bubble Bloat, Tide Power, and 3x as much to Tidal Surge.",
-      trialCooldown: 150,
-      trialRate: 0.05,
-      statsToAddTo: ["blueAbilityTokens"],
-      u: (128 * 5) / 2048,
-      v: 256 / 2048,
-      tokenLife: 4,
-
-      func: function (params) {
-        if (params.field === player.fieldIn) {
-          for (let i = objects.balloons.length; i--; ) {
-            let b = objects.balloons[i];
-
-            if (b.state === "float") {
-              let type = [
-                "focus",
-                "melody",
-                "haste",
-                "whiteBomb",
-                "link",
-                "blueBomb",
-                "whiteBomb_",
-                "blueBomb_",
-                "whiteBoost",
-                "blueBoost",
-                "pollenMarkToken",
-                "honeyMarkToken",
-              ];
-
-              type = type[(Math.random() * type.length) | 0];
-
-              objects.tokens.push(
-                new Token(
-                  effects[type].tokenLife,
-                  [b.pos[0], Math.round(params.bee.pos) + 0.5, b.pos[2]],
-                  type,
-                  { field: b.field, x: b.x, z: b.z, bee: params.bee }
-                )
-              );
-              objects.explosions.push(
-                new ReverseExplosion({
-                  col: [0, 1, 0.4],
-                  pos: b.pos,
-                  life: 0.75,
-                  size: b.displaySize + 1,
-                  alpha: 0.9,
-                  height: 1,
-                  primitive: "explosions",
-                  transformHeight: true,
-                })
-              );
-            }
-          }
-
-          objects.balloons.push(
-            new Balloon(
-              params.field,
-              params.x,
-              params.z,
-              true,
-              params.bee.level
-            )
-          );
-        }
-      },
-    },
-
-    balloonAura: {
-      u: 0,
-      v: 0,
-      svg: document.getElementById("balloonAura"),
-      cooldown: document.getElementById("balloonAura_cooldown"),
-      amount: document.getElementById("balloonAura_amount"),
-      maxCooldown: 0,
-      tokenLife: 4,
-      maxAmount: 10,
-
-      update: (amount, player) => {
-        let a = amount * 0.02 + 1;
-        player.bluePollen *= a;
-        player.redPollen *= a;
-        player.whitePollen *= a;
-        player.honeyFromTokens *= a;
-      },
-
-      getMessage: (amount) => {
-        return (
-          "Balloon Aura\nx" +
-          (amount * 0.02 + 1) +
-          " pollen\nx" +
-          (amount * 0.02 + 1) +
-          " honey from tokens"
-        );
-      },
-    },
-
-    balloonBlessing: {
-      u: 0,
-      v: 0,
-      svg: document.getElementById("balloonBlessing"),
-      cooldown: document.getElementById("balloonBlessing_cooldown"),
-      amount: document.getElementById("balloonBlessing_amount"),
-      maxCooldown: 60 * 60,
-      tokenLife: 4,
-      maxAmount: 10000,
-
-      update: (amount, player) => {
-        player.capacity *= amount * 0.02 + 1;
-        player.honeyAtHive *= amount * 0.015 + 1;
-        player.buoyantBeeAttack *= Math.min(amount * 0.02 + 1, 3);
-      },
-
-      getMessage: (amount) => {
-        return (
-          "Balloon Blessing\nx" +
-          (amount * 0.02 + 1).toFixed(2) +
-          " capacity\nx" +
-          (amount * 0.015 + 1).toFixed(3) +
-          " honey at hive\nx" +
-          Math.min(amount * 0.02 + 1, 3).toFixed(2) +
-          " buoyant bee attack"
-        );
-      },
-    },
-
-    gummyBlob: {
-      desc: "Drops a blob of goo onto the field, covering nearby flowers with a radius of 2(4 if the bee is gifted) and replenishing them.",
-      trialCooldown: 10,
-      trialRate: 0.6,
-      u: (128 * 6) / 2048,
-      v: 256 / 2048,
-      tokenLife: 8,
-
-      func: function (params) {
-        player.stats.gummyMorph += 3;
-
-        if (params.field === player.fieldIn) {
-          let r = params.bee.gifted ? 4 : 2,
-            f = function (f) {
-              f.goo = 1;
-              f.height = 1;
-            };
-
-          for (let x = -r; x <= r; x++) {
-            let _x = x + params.x;
-
-            for (let z = -r; z <= r; z++) {
-              let _z = z + params.z;
-
-              if (
-                Math.abs(_x - params.x) + Math.abs(_z - params.z) <= r &&
-                _x >= 0 &&
-                _x < fieldInfo[params.field].width &&
-                _z >= 0 &&
-                _z < fieldInfo[params.field].length
-              ) {
-                updateFlower(params.field, _x, _z, f, true, true, false);
-              }
-            }
-          }
-
-          objects.explosions.push(
-            new Explosion({
-              col: [1, 0.2, 1],
-              pos: [
-                fieldInfo[params.field].x + params.x,
-                fieldInfo[params.field].y + 0.5,
-                fieldInfo[params.field].z + params.z,
-              ],
-              life: 0.75,
-              size: r,
-              speed: 0.5,
-              aftershock: 0.005,
-              height: 0.3,
-            })
-          );
-        }
-      },
-    },
-
-    gummyBarrage: {
-      desc: "Drops several blobs of goo onto the field, covering nearby flowers and replenishing them.",
-      trialCooldown: 15,
-      trialRate: 0.6,
-      u: (128 * 7) / 2048,
-      v: 256 / 2048,
-      tokenLife: 8,
-
-      func: function (params) {
-        player.stats.gummyMorph += 3;
-
-        if (params.field === player.fieldIn) {
-          for (let i = 0, l = MATH.random(2, 5) | 0; i < l; i++) {
-            let r = MATH.random(2, 5) | 0,
-              f = function (f) {
-                f.goo = 1;
-                f.height = 1;
-              },
-              ox = (Math.random() * fieldInfo[params.field].width) | 0,
-              oz = (Math.random() * fieldInfo[params.field].length) | 0;
-
-            for (let x = -r; x <= r; x++) {
-              let _x = x + ox;
-
-              for (let z = -r; z <= r; z++) {
-                let _z = z + oz;
-
-                if (
-                  Math.abs(_x - ox) + Math.abs(_z - oz) <= r &&
-                  _x >= 0 &&
-                  _x < fieldInfo[params.field].width &&
-                  _z >= 0 &&
-                  _z < fieldInfo[params.field].length
-                ) {
-                  updateFlower(params.field, _x, _z, f, true, true, false);
-                }
-              }
-            }
-
-            objects.explosions.push(
-              new Explosion({
-                col: [1, 0.2, 1],
-                pos: [
-                  fieldInfo[params.field].x + ox,
-                  fieldInfo[params.field].y + 0.5,
-                  fieldInfo[params.field].z + oz,
-                ],
-                life: 0.75,
-                size: r * 1.5,
-                speed: 0.5,
-                aftershock: 0.005,
-                height: 0.3,
-              })
-            );
-          }
-        }
-      },
-    },
-
-    targetPractice: {
-      desc: "Causes the bee to fly up, projecting 3 targets onto the field for 4s. Running over a target activates it. After 4s, the bee shoots the targets.<br><br>• Unactivated targets create a red boost token when shot<br><br>• If an activated target is shot, it will create a focus token and collect 50%(+5% per bee lvl) of the bee's attack from 49 flowers. The shot can gain up to 50% instant conversion and x3 pollen based on your Flame Heat.<br><br>• If all 3 targets are shot, all ability tokens will be collected and 1 of the targets will summon a red boost, focus, and precision token. Precision grants +2% super-crit chance and stacks up to 10x, giving a maximum of +20% super-crit chance.<br><br>• If the player stands under a target as it is shot, all ability tokens are collected and Flame Heat is consumed to convert 50% of the hive's convert total plus 15 times the bee's convert amount. The amount of pollen converted scales up to x10 with Flame Heat.<br><br>• If the bee is gifted, 1 of the targets are highlighted in purple. Activating this target but not all 3 will summon a Precise Mark for 15s(+0.2 per bee lvl) with a radius of 7 flowers. Standing in the Precise Mark grants +7% critical and super-crit chance, stacking up to 3x, for a maximum of +21% critical and super-crit chance.<br><br>Super-crit chance increases the chance of a super-crit happening if the hit is a critical hit, multiplying pollen collected or damage dealt by your critical power and super-crit power(x2 super-crit power without any extra buffs, x4 in total).",
-      trialCooldown: 22.5,
-      trialRate: 0.25,
-      statsToAddTo: ["redAbilityTokens", "battleTokens"],
-      u: (128 * 4) / 2048,
-      v: (256 * 2) / 2048,
-      tokenLife: 8,
-
-      func: function (params) {
-        if (
-          params.field === player.fieldIn &&
-          player.fieldIn &&
-          !player.attacked.length &&
-          params.bee.state !== "shootTargetPractice" &&
-          params.bee.state !== "moveToTargetPractice"
-        ) {
-          params.bee.startTargetPractice();
-        } else {
-          player.addEffect("precision");
-          player.addEffect("focus");
-          player.stats.focusTokens++;
-          player.addEffect("redBoost");
-          player.stats.redBoostTokens++;
-        }
-      },
-    },
-
-    glueBuff: {
-      u: 0,
-      v: 0,
-      svg: document.getElementById("glueBuff"),
-      cooldown: document.getElementById("glueBuff_cooldown"),
-      amount: document.getElementById("glueBuff_amount"),
-      maxCooldown: 10 * 60,
-      maxAmount: 1,
-      tokenLife: 4,
-
-      update: (amount, player) => {
-        player.pollenFromTools *= 1.25;
-        player.pollenFromBees *= 1.25;
-      },
-
-      getMessage: (amount) => {
-        return "Glue\nx1.25 pollen from bees\nx1.25 pollen from tools";
-      },
-    },
-
-    oilBuff: {
-      u: 0,
-      v: 0,
-      svg: document.getElementById("oilBuff"),
-      cooldown: document.getElementById("oilBuff_cooldown"),
-      amount: document.getElementById("oilBuff_amount"),
-      maxCooldown: 10 * 60,
-      maxAmount: 1,
-      tokenLife: 4,
-
-      update: (amount, player) => {
-        player.walkSpeed *= 1.05;
-        player.beeSpeed *= 1.05;
-      },
-
-      getMessage: (amount) => {
-        return "Oil\nx1.05 bee speed\nx1.05 walkspeed";
-      },
-    },
-
-    enzymesBuff: {
-      u: 0,
-      v: 0,
-      svg: document.getElementById("enzymesBuff"),
-      cooldown: document.getElementById("enzymesBuff_cooldown"),
-      amount: document.getElementById("enzymesBuff_amount"),
-      maxCooldown: 10 * 60,
-      maxAmount: 1,
-      tokenLife: 4,
-
-      update: (amount, player) => {
-        player.convertRate *= 1.5;
-        player.instantRedConversion = MATH.applyPercentage(
-          player.instantRedConversion,
-          0.12
-        );
-        player.instantWhiteConversion = MATH.applyPercentage(
-          player.instantWhiteConversion,
-          0.12
-        );
-        player.instantBlueConversion = MATH.applyPercentage(
-          player.instantBlueConversion,
-          0.12
-        );
-      },
-
-      getMessage: (amount) => {
-        return "Enzymes\nx1.5 convert rate\n+12% instant conversion";
-      },
-    },
-
-    redExtractBuff: {
-      u: 0,
-      v: 0,
-      svg: document.getElementById("redExtractBuff"),
-      cooldown: document.getElementById("redExtractBuff_cooldown"),
-      amount: document.getElementById("redExtractBuff_amount"),
-      maxCooldown: 10 * 60,
-      maxAmount: 1,
-      tokenLife: 4,
-
-      update: (amount, player) => {
-        player.redPollen *= 1.25;
-      },
-
-      getMessage: (amount) => {
-        return "Red Extract\nx1.25 red pollen";
-      },
-    },
-
-    blueExtractBuff: {
-      u: 0,
-      v: 0,
-      svg: document.getElementById("blueExtractBuff"),
-      cooldown: document.getElementById("blueExtractBuff_cooldown"),
-      amount: document.getElementById("blueExtractBuff_amount"),
-      maxCooldown: 10 * 60,
-      maxAmount: 1,
-      tokenLife: 4,
-
-      update: (amount, player) => {
-        player.bluePollen *= 1.25;
-      },
-
-      getMessage: (amount) => {
-        return "Blue Extract\nx1.25 blue pollen";
-      },
-    },
-
-    tropicalDrinkBuff: {
-      u: 0,
-      v: 0,
-      svg: document.getElementById("tropicalDrinkBuff"),
-      cooldown: document.getElementById("tropicalDrinkBuff_cooldown"),
-      amount: document.getElementById("tropicalDrinkBuff_amount"),
-      maxCooldown: 10 * 60,
-      maxAmount: 1,
-      tokenLife: 4,
-
-      update: (amount, player) => {
-        player.whitePollen *= 1.25;
-        player.criticalChance += 0.05;
-      },
-
-      getMessage: (amount) => {
-        return "Tropical Drink\nx1.25 white pollen\n+5% critical chance";
-      },
-    },
-
-    purplePotionBuff: {
-      u: 0,
-      v: 0,
-      svg: document.getElementById("purplePotionBuff"),
-      cooldown: document.getElementById("purplePotionBuff_cooldown"),
-      amount: document.getElementById("purplePotionBuff_amount"),
-      maxCooldown: 10 * 60,
-      maxAmount: 1,
-      tokenLife: 4,
-
-      update: (amount, player) => {
-        player.capacity *= 1.25;
-        player.redPollen *= 1.5;
-        player.bluePollen *= 1.5;
-        player.pollenFromTools *= 1.3;
-        player.pollenFromBees *= 1.3;
-      },
-
-      getMessage: (amount) => {
-        return "Purple Potion\nx1.25 capacity\nx1.5 pollen\nx1.3 pollen from tools\nx1.3 pollen from bees";
-      },
-    },
-
-    superSmoothieBuff: {
-      u: 0,
-      v: 0,
-      svg: document.getElementById("superSmoothieBuff"),
-      cooldown: document.getElementById("superSmoothieBuff_cooldown"),
-      amount: document.getElementById("superSmoothieBuff_amount"),
-      maxCooldown: 20 * 60,
-      maxAmount: 1,
-      tokenLife: 4,
-
-      update: (amount, player) => {
-        player.capacity *= 1.5;
-        player.whitePollen *= 1.6;
-        player.redPollen *= 1.6;
-        player.bluePollen *= 1.6;
-        player.pollenFromBees *= 1.4;
-        player.pollenFromTools *= 1.4;
-        player.convertRate *= 2;
-        player.honeyAtHive *= 1.1;
-        player.instantRedConversion = MATH.applyPercentage(
-          player.instantRedConversion,
-          0.17
-        );
-        player.instantWhiteConversion = MATH.applyPercentage(
-          player.instantWhiteConversion,
-          0.17
-        );
-        player.instantBlueConversion = MATH.applyPercentage(
-          player.instantBlueConversion,
-          0.17
-        );
-        player.walkSpeed *= 1.05;
-        player.beeSpeed *= 1.1;
-        player.criticalChance += 0.07;
-        player.superCritChance += 0.01;
-      },
-
-      getMessage: (amount) => {
-        return "Super Smoothie\nx1.5 capacity\nx1.6 pollen\nx1.4 pollen from bees\nx1.4 pollen from tools\nx2 convert rate\nx1.1 honey at hive\n+17% instant conversion\n+7% critical chance\nx1.05 walkspeed\nx1.1 bee speed\n+1% super-crit chance";
-      },
-    },
-
-    stingerBuff: {
-      u: 0,
-      v: 0,
-      svg: document.getElementById("stingerBuff"),
-      cooldown: document.getElementById("stingerBuff_cooldown"),
-      amount: document.getElementById("stingerBuff_amount"),
-      maxCooldown: 45,
-      maxAmount: 1,
-      tokenLife: 4,
-
-      update: (amount, player) => {
-        player.beeAttack *= 1.5;
-      },
-
-      getMessage: (amount) => {
-        return "Stinger\nx1.5 bee attack";
-      },
-    },
-
-    popStarAura: {
-      svg: document.getElementById("popStarAura"),
-      cooldown: document.getElementById("popStarAura_cooldown"),
-      amount: document.getElementById("popStarAura_amount"),
-      maxCooldown: 45,
-      maxAmount: 1,
-
-      update: (amount, player) => {
-        player.bluePollen *= Math.min(player.popStarSize * 0.0125 + 2, 5);
-        player.instantBlueConversion = MATH.applyPercentage(
-          player.instantBlueConversion,
-          0.05
-        );
-        player.bubblePollen *= 1.25;
-      },
-
-      getMessage: (amount) => {
-        return (
-          "Pop Star Aura\nx" +
-          Math.min(player.popStarSize * 0.0125 + 2, 5) +
-          " blue pollen\n+5% instant blue conversion\nx1.25 bubble pollen"
-        );
-      },
-    },
-
-    scorchingStarAura: {
-      svg: document.getElementById("scorchingStarAura"),
-      cooldown: document.getElementById("scorchingStarAura_cooldown"),
-      amount: document.getElementById("scorchingStarAura_amount"),
-      maxCooldown: 45,
-      maxAmount: 1,
-
-      update: (amount, player) => {
-        player.redPollen *= Math.min(player.scorchingStarSize * 0.00035 + 2, 5);
-        player.convertRate *= Math.min(
-          player.scorchingStarSize * 0.00035 + 2,
-          5
-        );
-        player.beeAttack *= Math.min(
-          player.scorchingStarSize * 0.00015 + 1,
-          1.5
-        );
-        player.instantRedConversion = MATH.applyPercentage(
-          player.instantRedConversion,
-          0.2
-        );
-      },
-
-      getMessage: (amount) => {
-        return (
-          "Scorching Star Aura\nx" +
-          Math.min(player.scorchingStarSize * 0.00035 + 2, 5).toFixed(2) +
-          " red pollen\nx" +
-          Math.min(player.scorchingStarSize * 0.00035 + 2, 5).toFixed(2) +
-          " convert rate\nx" +
-          Math.min(player.scorchingStarSize * 0.00015 + 1, 1.5).toFixed(2) +
-          " bee attack\n+20% instant red conversion"
-        );
-      },
-    },
-
-    gummyStarAura: {
-      svg: document.getElementById("gummyStarAura"),
-      cooldown: document.getElementById("gummyStarAura_cooldown"),
-      amount: document.getElementById("gummyStarAura_amount"),
-      maxCooldown: 45,
-      maxAmount: 1,
-
-      update: (amount, player) => {
-        player.goo *= Math.min(player.gummyStarSize * 0.0000000003 + 1, 2);
-        player.whitePollen *= Math.min(
-          player.gummyStarSize * 0.0000000002 + 1,
-          2
-        );
-        player.instantWhiteConversion = MATH.applyPercentage(
-          player.instantWhiteConversion,
-          0.2
-        );
-      },
-
-      getMessage: (amount) => {
-        return (
-          "Gummy Star Aura\nx" +
-          Math.min(player.gummyStarSize * 0.0000000003 + 1, 2).toFixed(2) +
-          " goo\nx" +
-          Math.min(player.gummyStarSize * 0.0000000002 + 1, 2).toFixed(2) +
-          " white pollen\n+20% instant white conversion"
-        );
-      },
-    },
-
-    bubbleBloat: {
-      u: (128 * 5) / 2048,
-      v: 128 / 2048,
-      svg: document.getElementById("bubbleBloat"),
-      cooldown: document.getElementById("bubbleBloat_cooldown"),
-      amount: document.getElementById("bubbleBloat_amount"),
-      maxCooldown: 60 * 60,
-      tokenLife: 4,
-      amountFromCooldown: true,
-
-      update: (amount, player) => {
-        player.convertRateAtHive *= (amount * 6 + 1).toFixed(2);
-        player.blueFieldCapacity *= (amount * 5 + 1).toFixed(2);
-      },
-
-      getMessage: (amount) => {
-        return (
-          "Bubble Bloat\nx" +
-          (amount * 6 + 1).toFixed(2) +
-          " convert rate at hive\nx" +
-          (amount * 5 + 1).toFixed(2) +
-          " blue field capacity"
-        );
-      },
-    },
-
-    gummyBall: {
-      u: (128 * 5) / 2048,
-      v: 128 / 2048,
-      svg: document.getElementById("gummyBall"),
-      cooldown: document.getElementById("gummyBall_cooldown"),
-      amount: document.getElementById("gummyBall_amount"),
-      maxCooldown: 180,
-      tokenLife: 4,
-      amountFromCooldown: true,
-
-      update: (amount, player) => {
-        player.gummyBallSize *= amount * 1.5 + 1;
-        player.whitePollen *= amount * 0.15 + 1;
-
-        if (amount >= 0.99 && player.fieldIn) {
-          player.addEffect("gummyBall", -amount);
-          objects.mobs.push(new GummyBall());
-        }
-      },
-
-      getMessage: (amount) => {
-        return (
-          "Gummyball\nx" +
-          (amount * 1.5 + 1).toFixed(2) +
-          " gummyball size\nx" +
-          (amount * 0.2 + 1).toFixed(2) +
-          " white pollen"
-        );
-      },
-    },
-
-    gummyBallCombo: {
-      u: 0,
-      v: 0,
-      svg: document.getElementById("gummyBallCombo"),
-      cooldown: document.getElementById("gummyBallCombo_cooldown"),
-      amount: document.getElementById("gummyBallCombo_amount"),
-      maxCooldown: 10,
-      maxAmount: 1000,
-      tokenLife: 4,
-
-      update: (amount, player) => {
-        player.goo *= MATH.lerp(1, 2, amount * 0.001);
-        player.whitePollen *= 1.1;
-      },
-
-      getMessage: (amount) => {
-        return (
-          "Gummyball Combo\nx" +
-          MATH.lerp(1, 2, amount * 0.001).toFixed(2) +
-          " goo\nx1.1 white pollen"
-        );
-      },
-    },
-
-    guidingStarAura: {
-      u: 0,
-      v: 0,
-      svg: document.getElementById("guidingStarAura"),
-      cooldown: document.getElementById("guidingStarAura_cooldown"),
-      amount: document.getElementById("guidingStarAura_amount"),
-      maxCooldown: 0,
-      tokenLife: 4,
-      maxAmount: 1,
-
-      update: (amount, player) => {
-        player.whitePollen *= 2;
-        player.redPollen *= 2;
-        player.bluePollen *= 2;
-        player.capacity *= 2;
-      },
-
-      getMessage: (amount) => {
-        return "Guiding Star Aura\nx2 pollen\nx2 capacity";
-      },
-    },
-
-    popStarPassive: {
-      isPassive: true,
-      svg: document.getElementById("popStarPassive"),
-      cooldown: document.getElementById("popStarPassive_cooldown"),
-      amount: document.getElementById("popStarPassive_amount"),
-      maxCooldown: 60,
-      triggerVal: 30,
-      triggerType: "blueBombTokens",
-      currentVal: 0,
-      currentCooldown: 0,
-      startVal: 0,
-
-      activate() {
-        objects.mobs.push(new PopStar());
-      },
-
-      getMessage: (amount) => {
-        return "Pop Star\nEvery 30 blue bomb tokens summons a Pop Star, lasting for 45s, and applies 1m of bubble bloat. It grows for every bubble popped, x1.25 bubble pollen, 20% instant blue conversion, and up to x5 blue pollen. Upon summoning, it also applies 30s of Bubble Bloat. Popping a bubble while the star is active gives 1s(2s if golden) of Bubble Bloat, up to 1h. Bubble Bloat gives up to x6 convert rate and x6 blue field capacity. When the Pop Star disappears, it spawns 1 bubble for every 10 of the star's size, with an extra 5. Cooldown: 1m";
-      },
-    },
-
-    scorchingStarPassive: {
-      isPassive: true,
-      svg: document.getElementById("scorchingStarPassive"),
-      cooldown: document.getElementById("scorchingStarPassive_cooldown"),
-      amount: document.getElementById("scorchingStarPassive_amount"),
-      maxCooldown: 60,
-      triggerVal: 15,
-      triggerType: "redBoostTokens",
-      currentVal: 0,
-      currentCooldown: 0,
-      startVal: 0,
-
-      activate() {
-        objects.mobs.push(new ScorchingStar());
-      },
-
-      getMessage: (amount) => {
-        return "Scorching Star\nEvery 15 red boost tokens summons a Scorching Star, lasting for 45s. It grows by 75(100 if dark) every second for every flame nearby. It grants up to x5 red pollen, x5 convert rate, x1.5 bee attack, and +20% instant red conversion. Cooldown: 1m";
-      },
-    },
-
-    gummyStarPassive: {
-      isPassive: true,
-      svg: document.getElementById("gummyStarPassive"),
-      cooldown: document.getElementById("gummyStarPassive_cooldown"),
-      amount: document.getElementById("gummyStarPassive_amount"),
-      maxCooldown: 60,
-      triggerVal: 25,
-      triggerType: "gummyStar",
-      currentVal: 0,
-      currentCooldown: 0,
-      startVal: 0,
-
-      activate() {
-        objects.mobs.push(new GummyStar());
-      },
-
-      getMessage: (amount) => {
-        return "Gummy Star\nEvery gumdrop used or after 20 gumdrops has a 9% chance to summon a Gummy Star, lasting for 45s. It grows based on how much goo you collect, giving up to x2 goo and x2 white pollen, while always giving +15% instant white conversion and +15% instant goo conversion. After disappearing, it spreads 20(+the amount of digits in the star's size) honey tokens, with a total value of approximately 1,000(+7.5% of the star's size). Cooldown: 1m";
-      },
-    },
-
-    guidingStarPassive: {
-      isPassive: true,
-      svg: document.getElementById("guidingStarPassive"),
-      cooldown: document.getElementById("guidingStarPassive_cooldown"),
-      amount: document.getElementById("guidingStarPassive_amount"),
-      maxCooldown: 60 * 5,
-      triggerVal: 250,
-      triggerType: "boostTokens",
-      currentVal: 0,
-      currentCooldown: 0,
-      startVal: 0,
-
-      activate() {
-        let f = [];
-
-        for (let i in fieldInfo) {
-          f.push(i);
-        }
-
-        for (let i in objects.mobs) {
-          let o = objects.mobs[i];
-
-          if (o.guidingstarinstance) {
-            if (f.indexOf(o.field) > -1) {
-              f.splice(f.indexOf(o.field), 1);
-            }
-          }
-        }
-
-        if (f.length) {
-          f = f[(Math.random() * f.length) | 0];
-          objects.mobs.push(new GuidingStar(f));
-          player.addMessage("⭐Guiding Star on " + MATH.doGrammar(f) + "!⭐");
-        }
-      },
-
-      getMessage: (amount) => {
-        return "Guiding Star\nEvery 250th boost token summons a guiding star over a random field, granting x2.5 capacity and pollen for 10m. Cooldown: 5m";
-      },
-    },
-
-    starShowerPassive: {
-      isPassive: true,
-      svg: document.getElementById("starShowerPassive"),
-      cooldown: document.getElementById("starShowerPassive_cooldown"),
-      amount: document.getElementById("starShowerPassive_amount"),
-      maxCooldown: 25,
-      triggerVal: 35,
-      triggerType: "markOrBoostTokens",
-      currentVal: 0,
-      currentCooldown: 0,
-      startVal: 0,
-
-      activate() {
-        if (player.fieldIn) {
-          objects.mobs.push(new StarShower(player.fieldIn));
-        }
-      },
-
-      getMessage: (amount) => {
-        return "Every 35 mark or boost tokens summons 10 falling stars on the field. Falling stars collect 30 pollen from 5 flowers and instantly converts it. Catching a falling star converts 10% of your convert total from your bag, and grants a stack of inspire. Cooldown: 25s";
-      },
-    },
-
-    starSawPassive: {
-      isPassive: true,
-      svg: document.getElementById("starSawPassive"),
-      cooldown: document.getElementById("starSawPassive_cooldown"),
-      amount: document.getElementById("starSawPassive_amount"),
-      maxCooldown: 40,
-      triggerVal: 2,
-      triggerType: "stingerUsed",
-      currentVal: 0,
-      currentCooldown: 0,
-      startVal: 0,
-
-      activate() {
-        items.stinger.amount++;
-        player.updateInventory();
-        player.addMessage("+1 Stinger (from Star Saw Refund)");
-        objects.mobs.push(new StarSaw());
-      },
-
-      getMessage: (amount) => {
-        return "Every 2nd stinger used is refunded and summons a star saw for 45s. The star circles you, damaging mobs by 30% of your attack total, popping bubbles, fuzz bombs, collecting tokens, and collecting and converting 5(+0.05 per attack total) pollen from 5 flowers every 0.1s. The star saw also converts pollen from your backpack equal to the amount it collects. Cooldown: 40s";
-      },
-    },
-
-    petalStormPassive: {
-      isPassive: true,
-      svg: document.getElementById("petalStormPassive"),
-      cooldown: document.getElementById("petalStormPassive_cooldown"),
-      amount: document.getElementById("petalStormPassive_amount"),
-      maxCooldown: 30,
-      triggerVal: 30,
-      triggerType: "boostTokens",
-      currentVal: 0,
-      currentCooldown: 0,
-      startVal: 0,
-
-      activate() {
-        for (let i = 0; i < 30; i++) {
-          window.setTimeout(function () {
-            objects.mobs.push(
-              new PetalShuriken(
-                [
-                  player.body.position.x,
-                  player.body.position.y + 0.25,
-                  player.body.position.z,
-                ],
-                [Math.cos(i * 0.75), 0, Math.sin(i * 0.75)]
-              )
-            );
-          }, 1000 * i * 0.15);
-        }
-      },
-
-      getMessage: (amount) => {
-        return "Every 30th boost token shoots 30 petal shurikens in all directions. Petal shurikens collects tokens and causes bees to convert pollen.";
-      },
-    },
-
-    tidePower: {
-      u: 0,
-      v: 0,
-      svg: document.getElementById("tidePower"),
-      cooldown: document.getElementById("tidePower_cooldown"),
-      amount: document.getElementById("tidePower_amount"),
-      maxCooldown: 20,
-      maxAmount: 500,
-
-      update: (amount, player) => {
-        player.collectorSpeed *= amount * 0.00175 + 1;
-        player.tidePower *= amount * 0.0025 + 1;
-
-        if (amount >= 500) {
-          player.addEffect("tidalSurge", 1);
-          player.addEffect("tidePower", false, false, 0);
-          player.addEffect("tideBlessing", 25 / (4 * 60 * 60));
-        }
-      },
-
-      getMessage: (amount) => {
-        return (
-          "Tide Power\nx" +
-          (amount * 0.00175 + 1).toFixed(3) +
-          " collector speed\nx" +
-          (amount * 0.0025 + 1).toFixed(3) +
-          " wave size"
-        );
-      },
-    },
-
-    tidalSurge: {
-      u: (128 * 5) / 2048,
-      v: 128 / 2048,
-      svg: document.getElementById("tidalSurge"),
-      cooldown: document.getElementById("tidalSurge_cooldown"),
-      amount: document.getElementById("tidalSurge_amount"),
-      maxCooldown: 10,
-      tokenLife: 4,
-      amountFromCooldown: true,
-
-      update: (amount, player) => {
-        player.collectorSpeed = 3;
-        player.tidalSurge = true;
-        player.addEffect("tidePower", false, false, 0);
-      },
-
-      getMessage: (amount) => {
-        return "Tidal Surge\nx5 collector speed";
-      },
-    },
-
-    tideBlessing: {
-      u: (128 * 5) / 2048,
-      v: 128 / 2048,
-      svg: document.getElementById("tideBlessing"),
-      cooldown: document.getElementById("tideBlessing_cooldown"),
-      amount: document.getElementById("tideBlessing_amount"),
-      maxCooldown: 4 * 60 * 60,
-      tokenLife: 4,
-      amountFromCooldown: true,
-
-      update: (amount, player) => {
-        player.bluePollen *= amount * 0.15 + 1;
-        player.honeyFromTokens *= amount * 0.15 + 1;
-        player.convertRateAtHive *= amount * 0.15 + 1;
-        player.pollenFromTools *= amount * 0.15 + 1;
-        player.pollenFromBees *= amount * 0.15 + 1;
-      },
-
-      getMessage: (amount) => {
-        return (
-          "Tidal Blessing\nx" +
-          (amount * 0.15 + 1).toFixed(2) +
-          " blue pollen\nx" +
-          (amount * 0.15 + 1).toFixed(2) +
-          " convert rate at hive\nx" +
-          (amount * 0.15 + 1).toFixed(2) +
-          " honey from tokens\nx" +
-          (amount * 0.15 + 1).toFixed(2) +
-          " pollen from tools\nx" +
-          (amount * 0.15 + 1).toFixed(2) +
-          " pollen from bees"
-        );
-      },
-    },
-
-    coconutShield: {
-      u: (128 * 6) / 2048,
-      v: (256 * 2) / 2048,
-      svg: document.getElementById("coconutShield"),
-      cooldown: document.getElementById("coconutShield_cooldown"),
-      amount: document.getElementById("coconutShield_amount"),
-      maxCooldown: 10,
-      maxAmount: 1,
-
-      update: (amount, player) => {
-        player.beeAttack *= 1.25;
-        player.defense = 1;
-      },
-
-      getMessage: (amount) => {
-        return "Coconut Shield\n+100% defense\nx1.25 bee attack";
-      },
-    },
-
-    coconutSurge: {
-      u: (128 * 6) / 2048,
-      v: (256 * 2) / 2048,
-      svg: document.getElementById("coconutSurge"),
-      cooldown: document.getElementById("coconutSurge_cooldown"),
-      amount: document.getElementById("coconutSurge_amount"),
-      maxCooldown: 2,
-      maxAmount: 1,
-
-      update: (amount, player) => {
-        player.walkSpeed *= 1.15;
-        player.beeSpeed *= 1.5;
-      },
-
-      getMessage: (amount) => {
-        return "Coconut Surge\nx1.15 walkspeed\nx1.5 bee speed";
-      },
-    },
-
-    conversionBoost: {
-      u: (128 * 6) / 2048,
-      v: (256 * 2) / 2048,
-      svg: document.getElementById("conversionBoost"),
-      cooldown: document.getElementById("conversionBoost_cooldown"),
-      amount: document.getElementById("conversionBoost_amount"),
-      maxCooldown: 30 * 60,
-      maxAmount: 1,
-
-      update: (amount, player) => {
-        player.convertRate *= 2;
-      },
-
-      getMessage: (amount) => {
-        return "Conversion Boost\nx2 convert rate";
-      },
-    },
-
-    gummyMorph: {
-      u: (128 * 6) / 2048,
-      v: (256 * 2) / 2048,
-      svg: document.getElementById("gummyMorph"),
-      cooldown: document.getElementById("gummyMorph_cooldown"),
-      amount: document.getElementById("gummyMorph_amount"),
-      maxCooldown: 10,
-      maxAmount: 1,
-
-      update: (amount, player) => {
-        player.goo *= 1.75;
-        player.instantRedConversion = 1;
-        player.instantWhiteConversion = 1;
-        player.instantBlueConversion = 1;
-        player.walkSpeed *= 1.1;
-        player.jumpPower *= 1.2;
-      },
-
-      getMessage: (amount) => {
-        return "Gummy Morph\nx1.75 goo\n+100% instant conversion\nx1.1 walkspeed\nx1.2 jump power";
-      },
-    },
-
-    focusPulserPassive: {
-      isPassive: true,
-      svg: document.getElementById("focusPulserPassive"),
-      cooldown: document.getElementById("focusPulserPassive_cooldown"),
-      amount: document.getElementById("focusPulserPassive_amount"),
-      maxCooldown: 20,
-      triggerVal: 25,
-      triggerType: "focusTokens",
-      currentVal: 0,
-      currentCooldown: 0,
-      startVal: 0,
-
-      activate() {
-        objects.mobs.push(new Pulse("red"));
-      },
-
-      getMessage: (amount) => {
-        return "Focus Pulser\nEvery 25 focus tokens collected activates a red pulse, hopping to every red bee twice, collecting pollen. Pollen collection increases with each hop. Cooldown: 20s";
-      },
-    },
-
-    hastePulserPassive: {
-      isPassive: true,
-      svg: document.getElementById("hastePulserPassive"),
-      cooldown: document.getElementById("hastePulserPassive_cooldown"),
-      amount: document.getElementById("hastePulserPassive_amount"),
-      maxCooldown: 20,
-      triggerVal: 25,
-      triggerType: "hasteTokens",
-      currentVal: 0,
-      currentCooldown: 0,
-      startVal: 0,
-
-      activate() {
-        objects.mobs.push(new Pulse("blue"));
-      },
-
-      getMessage: (amount) => {
-        return "Haste Pulser\nEvery 25 haste tokens collected activates a blue pulse, hopping to every blue bee twice, collecting pollen. Pollen collection increases with each hop. Cooldown: 20s";
-      },
-    },
-
-    inspireCoconutsPassive: {
-      isPassive: true,
-      svg: document.getElementById("inspireCoconutsPassive"),
-      cooldown: document.getElementById("inspireCoconutsPassive_cooldown"),
-      amount: document.getElementById("inspireCoconutsPassive_amount"),
-      maxCooldown: 0.5,
-      triggerVal: 5,
-      triggerType: "inspireTokens",
-      currentVal: 0,
-      currentCooldown: 0,
-      startVal: 0,
-
-      activate() {
-        if (player.fieldIn) {
-          for (let i = 0; i < 5; i++) {
-            objects.mobs.push(
-              new Coconut(
-                (Math.random() * fieldInfo[player.fieldIn].width) | 0,
-                (Math.random() * fieldInfo[player.fieldIn].length) | 0,
-                i * 0.4
-              )
-            );
-          }
-        }
-      },
-
-      getMessage: (amount) => {
-        return "Inspire Coconuts\nEvery 5 inspire tokens collected summons 5 falling coconuts which collect pollen when the land. Standing under the coconut instantly converts the player's convert total into honey tokens.";
-      },
-    },
-
-    emergencyCoconutShieldPassive: {
-      isPassive: true,
-      svg: document.getElementById("emergencyCoconutShieldPassive"),
-      cooldown: document.getElementById(
-        "emergencyCoconutShieldPassive_cooldown"
-      ),
-      amount: document.getElementById("emergencyCoconutShieldPassive_amount"),
-      maxCooldown: 60,
-      triggerVal: 1,
-      triggerType: "coconutShield",
-      currentVal: 0,
-      currentCooldown: 0,
-      startVal: 0,
-
-      activate() {
-        if (player.fieldIn) {
-          for (let i = 0; i < 5; i++) {
-            objects.mobs.push(
-              new Coconut(
-                (Math.random() * fieldInfo[player.fieldIn].width) | 0,
-                (Math.random() * fieldInfo[player.fieldIn].length) | 0,
-                i * 0.4
-              )
-            );
-          }
-        }
-
-        player.addEffect("coconutShield");
-      },
-
-      getMessage: (amount) => {
-        return "Emergency Coconut Shield\nTaking damage from a monster will activate a shield, granting 100% defense, x1.25 bee attack and will drop 5 falling coconuts if in a field. Cooldown: 1m";
-      },
-    },
-
-    coconutHastePassive: {
-      isPassive: true,
-      svg: document.getElementById("coconutHastePassive"),
-      cooldown: document.getElementById("coconutHastePassive_cooldown"),
-      amount: document.getElementById("coconutHastePassive_amount"),
-      maxCooldown: 1,
-      triggerVal: 1,
-      triggerType: "fallingCoconuts",
-      currentVal: 0,
-      currentCooldown: 0,
-      startVal: 0,
-
-      activate() {
-        player.addEffect("haste");
-        player.addEffect("coconutSurge");
-      },
-
-      getMessage: (amount) => {
-        return 'Coconut Haste\nCatching a falling coconut will apply a stack of "Haste" and grant "Coconut Surge", giving x1.2 walkspeed and x1.5 bee speed for 2s.';
-      },
-    },
-
-    xFlamePassive: {
-      isPassive: true,
-      svg: document.getElementById("xFlamePassive"),
-      cooldown: document.getElementById("xFlamePassive_cooldown"),
-      amount: document.getElementById("xFlamePassive_amount"),
-      maxCooldown: 25,
-      triggerVal: 20,
-      triggerType: "battleTokens",
-      currentVal: 0,
-      currentCooldown: 0,
-      startVal: 0,
-
-      activate() {
-        let dirs = [
-          [-1, 1],
-          [1, -1],
-          [-1, -1],
-          [1, 1],
-        ];
-
-        if (player.fieldIn && !player.attacked.length) {
-          objects.flames.push(
-            new Flame(player.fieldIn, player.flowerIn.x, player.flowerIn.z)
-          );
-
-          for (let j in dirs) {
-            for (let i = 1; i < 8; i++) {
-              let x = dirs[j][0] * i + player.flowerIn.x,
-                z = dirs[j][1] * i + player.flowerIn.z;
-
-              if (
-                x >= 0 &&
-                x < fieldInfo[player.fieldIn].width &&
-                z >= 0 &&
-                z < fieldInfo[player.fieldIn].length
-              )
-                objects.flames.push(new Flame(player.fieldIn, x, z));
-            }
-          }
-        } else {
-          objects.flames.push(
-            new Flame(
-              player.body.position.x,
-              player.body.position.y,
-              player.body.position.z,
-              true
-            )
-          );
-
-          for (let j in dirs) {
-            for (let i = 1; i < 8; i++) {
-              let x = dirs[j][0] * i,
-                z = dirs[j][1] * i;
-
-              objects.flames.push(
-                new Flame(
-                  player.body.position.x + x,
-                  player.body.position.y,
-                  player.body.position.z + z,
-                  true
-                )
-              );
-            }
-          }
-        }
-      },
-
-      getMessage: (amount) => {
-        return "X Flame\nEvery 20 battle tokens collected summons 29 flames in an X shape, lasting for 3 secs. Each flame collects 6R/3W/1B pollen from nearby flowers and deals 15 damage to nearby enemies every sec. Cooldown: 15s";
-      },
-    },
-
-    ignitePassive: {
-      isPassive: true,
-      svg: document.getElementById("ignitePassive"),
-      cooldown: document.getElementById("ignitePassive_cooldown"),
-      amount: document.getElementById("ignitePassive_amount"),
-      maxCooldown: 0.5,
-      triggerVal: 10,
-      triggerType: "redAbilityTokens",
-      currentVal: 0,
-      currentCooldown: 0,
-      startVal: 0,
-
-      activate() {
-        let dirs = [
-          [-1, 0],
-          [0, -1],
-          [0, 1],
-          [1, 0],
-        ];
-
-        if (player.fieldIn && !player.attacked.length) {
-          objects.flames.push(
-            new Flame(player.fieldIn, player.flowerIn.x, player.flowerIn.z)
-          );
-
-          for (let j in dirs) {
-            for (let i = 1; i < 2; i++) {
-              let x = dirs[j][0] * i + player.flowerIn.x,
-                z = dirs[j][1] * i + player.flowerIn.z;
-
-              if (
-                x >= 0 &&
-                x < fieldInfo[player.fieldIn].width &&
-                z >= 0 &&
-                z < fieldInfo[player.fieldIn].length
-              )
-                objects.flames.push(new Flame(player.fieldIn, x, z));
-            }
-          }
-        } else {
-          objects.flames.push(
-            new Flame(
-              player.body.position.x,
-              player.body.position.y,
-              player.body.position.z,
-              true
-            )
-          );
-
-          for (let j in dirs) {
-            for (let i = 1; i < 2; i++) {
-              let x = dirs[j][0] * i,
-                z = dirs[j][1] * i;
-
-              objects.flames.push(
-                new Flame(
-                  player.body.position.x + x,
-                  player.body.position.y,
-                  player.body.position.z + z,
-                  true
-                )
-              );
-            }
-          }
-        }
-      },
-
-      getMessage: (amount) => {
-        return "Ignite\nEvery 10 red ability tokens collected summons 5 flames in a + shape, lasting for 3 secs. Each flame collects 9R/5W/2B pollen from nearby flowers and deals 15 damage to nearby enemies every sec.";
-      },
-    },
-
-    bubbleBombsPassive: {
-      isPassive: true,
-      svg: document.getElementById("bubbleBombsPassive"),
-      cooldown: document.getElementById("bubbleBombsPassive_cooldown"),
-      amount: document.getElementById("bubbleBombsPassive_amount"),
-      maxCooldown: 0.5,
-      triggerVal: 10,
-      triggerType: "bombTokens",
-      currentVal: 0,
-      currentCooldown: 0,
-      startVal: 0,
-
-      activate() {
-        if (player.fieldIn) {
-          for (let i = 0; i < 3; i++) {
-            objects.bubbles.push(
-              new Bubble(
-                player.fieldIn,
-                (Math.random() * fieldInfo[player.fieldIn].width) | 0,
-                (Math.random() * fieldInfo[player.fieldIn].length) | 0
-              )
-            );
-          }
-        }
-      },
-
-      getMessage: (amount) => {
-        return "Bubble Bombs\nEvery 10 blue bomb tokens collected summons 3 bubbles around the field, lasting for 10 secs. Each bubble collects 2R/6W/10B pollen from nearby flowers and replenish them when popped.";
-      },
-    },
-
-    coinScatterPassive: {
-      isPassive: true,
-      svg: document.getElementById("coinScatterPassive"),
-      cooldown: document.getElementById("coinScatterPassive_cooldown"),
-      amount: document.getElementById("coinScatterPassive_amount"),
-      maxCooldown: 45,
-      triggerVal: 20,
-      triggerType: "markTokens",
-      currentVal: 0,
-      currentCooldown: 0,
-      startVal: 0,
-
-      activate() {
-        if (player.fieldIn) {
-          let amc = Math.min(Math.ceil(player.convertTotal * 3), player.pollen);
-
-          if (amc <= 0) {
-            return;
-          }
-
-          player.pollen -= amc;
-
-          let amountPerToken = Math.ceil(amc / 24);
-
-          for (let i = 0; i < 24; i++) {
-            objects.tokens.push(
-              new LootToken(
-                30,
-                [
-                  fieldInfo[player.fieldIn].x +
-                    ((Math.random() * fieldInfo[player.fieldIn].width) | 0),
-                  fieldInfo[player.fieldIn].y + 1,
-                  fieldInfo[player.fieldIn].z +
-                    ((Math.random() * fieldInfo[player.fieldIn].length) | 0),
-                ],
-                "honey",
-                amountPerToken,
-                false,
-                "Coin Scatter"
-              )
-            );
-          }
-        }
-      },
-
-      getMessage: (amount) => {
-        return "Coin Scatter\nConverts 300% of the player's convert total into 24 honey tokens, which are scattered randomly in the field. Cooldown: 45s";
-      },
-    },
-
-    diamondDrainPassive: {
-      isPassive: true,
-      svg: document.getElementById("diamondDrainPassive"),
-      cooldown: document.getElementById("diamondDrainPassive_cooldown"),
-      amount: document.getElementById("diamondDrainPassive_amount"),
-      maxCooldown: 35,
-      triggerVal: 35,
-      triggerType: "blueAbilityTokens",
-      currentVal: 0,
-      currentCooldown: 0,
-      startVal: 0,
-
-      activate() {
-        if (player.fieldIn) {
-          objects.mobs.push(new DrainingDiamond());
-
-          for (let i = 0; i < 15; i++) {
-            updateFlower(
-              player.fieldIn,
-              (Math.random() * fieldInfo[player.fieldIn].width) | 0,
-              (Math.random() * fieldInfo[player.fieldIn].length) | 0,
-              function (f) {
-                if (f.level < 5) {
-                  f.level++;
-                  f.pollinationTimer = 1;
-                } else {
-                  f.height = 1;
-                }
-
-                for (let j = 0; j < 6; j++) {
-                  ParticleRenderer.add({
-                    x: f.x + fieldInfo[player.fieldIn].x,
-                    y: fieldInfo[player.fieldIn].y + 0.5,
-                    z: f.z + fieldInfo[player.fieldIn].z,
-                    vx: MATH.random(-1, 1),
-                    vy: Math.random() * 2,
-                    vz: MATH.random(-1, 1),
-                    grav: -3,
-                    size: 100,
-                    col: [1, 1, MATH.random(0.6, 1)],
-                    life: 2.5,
-                    rotVel: MATH.random(-3, 3),
-                    alpha: 2,
-                  });
-                }
-              },
-              true,
-              false,
-              true
-            );
-          }
-        }
-      },
-
-      getMessage: (amount) => {
-        return "Diamond Drain\nEvery 35th blue ability token summons a diamond that converts your convert total of pollen into honey. Honey converted is multiplied by 2x, and the diamond pollinates 15 flowers in the field. Cooldown: 35s";
-      },
-    },
-
-    gummyMorphPassive: {
-      isPassive: true,
-      svg: document.getElementById("gummyMorphPassive"),
-      cooldown: document.getElementById("gummyMorphPassive_cooldown"),
-      amount: document.getElementById("gummyMorphPassive_amount"),
-      maxCooldown: 25,
-      triggerVal: 30,
-      triggerType: "gummyMorph",
-      currentVal: 0,
-      currentCooldown: 0,
-      startVal: 0,
-
-      activate() {
-        player.addEffect("gummyMorph");
-
-        if (player.fieldIn) {
-          let func = function (f) {
-            f.goo = 1;
-            f.height = 1;
-          };
-
-          for (let i in flowers[player.fieldIn]) {
-            for (let j in flowers[player.fieldIn][i]) {
-              updateFlower(player.fieldIn, j, i, func, true, true, false);
-            }
-          }
-        }
-      },
-
-      getMessage: (amount) => {
-        return "Gummy Morph\nEvery 10 gummy bee tokens or 30 gumdrops used covers the field in goo and grants x1.75 goo, 100% instant goo conversion, +30 walkspeed and +3 jump power for 10s. Cooldown: 25s";
-      },
-    },
-
-    redPulse: {
-      desc: "Activates a red pulse, hopping to every red bee twice, collecting 4(+0.5 for every hop) pollen from 25 flowers. Pollen collection increases with each hop. If the player owns a Cobalt Bee, a blue pulse is fired as well.",
-      trialCooldown: 25,
-      trialRate: 0.6,
-      statsToAddTo: ["redAbilityTokens"],
-      u: (128 * 1) / 2048,
-      v: (128 * 6) / 2048,
-      tokenLife: 12,
-
-      func: function (params) {
-        objects.mobs.push(new Pulse("red"));
-
-        if (player.ownsCobaltBee) {
-          objects.mobs.push(new Pulse("blue"));
-        }
-      },
-    },
-
-    bluePulse: {
-      desc: "Activates a blue pulse, hopping to every red bee twice, collecting 4(+0.5 for every hop) pollen from 25 flowers. Pollen collection increases with each hop. If the player owns a Crimson Bee, a red pulse is fired as well.",
-      trialCooldown: 25,
-      trialRate: 0.6,
-      statsToAddTo: ["blueAbilityTokens"],
-      u: (128 * 2) / 2048,
-      v: (128 * 6) / 2048,
-      tokenLife: 12,
-
-      func: function (params) {
-        objects.mobs.push(new Pulse("blue"));
-
-        if (player.ownsCrimsonBee) {
-          objects.mobs.push(new Pulse("red"));
-        }
-      },
-    },
-
-    redBombSync: {
-      desc: "Allows red bombs to collect 7.5(10 if Red Bomb+) pollen from white flowers. If blue bomb sync is active, applies to blue flowers as well, collecting 5(7.5 if Red Bomb+) blue pollen.",
-      trialCooldown: 35,
-      trialRate: 0.7,
-      statsToAddTo: ["redAbilityTokens", "redBombTokens"],
-      u: (128 * 3) / 2048,
-      v: (128 * 6) / 2048,
-      svg: document.getElementById("redBombSync"),
-      cooldown: document.getElementById("redBombSync_cooldown"),
-      amount: document.getElementById("redBombSync_amount"),
-      maxCooldown: 25,
-      maxAmount: 1,
-      tokenLife: 24,
-
-      update: (amount, player) => {
-        player.redBombSync = true;
-      },
-
-      getMessage: (amount) => {
-        return "Red Bomb Sync\nAllows red bombs to collect from white flowers. If blue bomb sync is active, applies to blue flowers aswell.";
-      },
-    },
-
-    blueBombSync: {
-      desc: "Allows blue bombs to collect 7.5(10 if Blue Bomb+) pollen from white flowers. If red bomb sync is active, applies to red flowers as well, collecting 5(7.5 if Blue Bomb+) red pollen.",
-      trialCooldown: 35,
-      trialRate: 0.7,
-      statsToAddTo: ["blueAbilityTokens", "blueBombTokens"],
-      u: (128 * 4) / 2048,
-      v: (128 * 6) / 2048,
-      svg: document.getElementById("blueBombSync"),
-      cooldown: document.getElementById("blueBombSync_cooldown"),
-      amount: document.getElementById("blueBombSync_amount"),
-      maxCooldown: 25,
-      maxAmount: 1,
-      tokenLife: 24,
-
-      update: (amount, player) => {
-        player.blueBombSync = true;
-      },
-
-      getMessage: (amount) => {
-        return "Blue Bomb Sync\nAllows blue bombs to collect from white flowers. If red bomb sync is active, applies to red flowers aswell.";
-      },
-    },
-
-    beamStorm: {
-      desc: "Summons 25(+2 per bee lvl) beams of light, each collecting all pollen from a patch of flowers. If this bee is gifted, the pollen is instantly converted.",
-      trialCooldown: 30,
-      trialRate: 0.4,
-      statsToAddTo: [],
-      u: (128 * 5) / 2048,
-      v: (128 * 6) / 2048,
-      tokenLife: 12,
-
-      func: function (params) {
-        if (player.fieldIn) {
-          player.beamStormRayData = [];
-
-          for (let i = 0; i < 25 + params.bee.level * 2; i++) {
-            objects.mobs.push(new Beam(params, i * 0.075, player.fieldIn));
-          }
-        }
-      },
-    },
-
-    rainCloud: {
-      desc: "Applies a stack of White Boost and summons a cloud in a field, lasting for 60s(+5s per bee lvl). There is a 25% chance of the cloud spawning in your current field, or else a random field is chosen.<br><br>Clouds float around the field, replenishing flowers. Standing under a cloud grants Cloud Boost, granting x1.15(x1.25 if you own a gifted windy bee) pollen for 7.5s.",
-      trialCooldown: 60,
-      trialRate: 0.5,
-      statsToAddTo: [],
-      u: (128 * 6) / 2048,
-      v: (128 * 6) / 2048,
-      tokenLife: 24,
-
-      func: function (params) {
-        player.addEffect("whiteBoost");
-
-        let f = Math.random() < 0.25 && player.fieldIn ? player.fieldIn : 0;
-
-        if (!f) {
-          f = [];
-
-          for (let i in fieldInfo) {
-            f.push(i);
-          }
-
-          f = f[(Math.random() * f.length) | 0];
-        }
-
-        objects.mobs.push(
-          new Cloud(
-            f,
-            (Math.random() * fieldInfo[f].width) | 0,
-            (Math.random() * fieldInfo[f].length) | 0,
-            60 + params.bee.level * 5
-          )
-        );
-
-        player.addMessage(
-          "☁️Your windy bee made a cloud in the " + MATH.doGrammar(f) + "!☁️"
-        );
-      },
-    },
-
-    tornado: {
-      desc: "Applies a stack of White Boost and summons a tornado in the field, lasting for 7.5s(+0.5s per bee lvl)(+1s per haste stack). The tornado is improved based on the amount of haste stacks you had when it was summoned.<br><br>The tornado moves around at the speed of 1(+0.05 per bee lvl)(+0.25 per haste stack) flowers per second, picking up tokens, popping bubbles and fuzz bombs, and also collects 7 pollen from 21 flowers every 0.25s.",
-      trialCooldown: 75,
-      trialRate: 0.5,
-      statsToAddTo: [],
-      u: (128 * 7) / 2048,
-      v: (128 * 6) / 2048,
-      tokenLife: 24,
-
-      func: function (params) {
-        player.addEffect("whiteBoost");
-
-        if (player.fieldIn) {
-          objects.mobs.push(new Tornado(params.bee.level));
-        }
-      },
-    },
-
-    cloudBoost: {
-      u: (128 * 5) / 2048,
-      v: 128 / 2048,
-      svg: document.getElementById("cloudBoost"),
-      cooldown: document.getElementById("cloudBoost_cooldown"),
-      amount: document.getElementById("cloudBoost_amount"),
-      maxCooldown: 7.5,
-      tokenLife: 4,
-      amountFromCooldown: true,
-
-      update: (amount, player) => {
-        player.redPollen *= player.cloudBoostAmount;
-        player.bluePollen *= player.cloudBoostAmount;
-        player.whitePollen *= player.cloudBoostAmount;
-      },
-
-      getMessage: (amount) => {
-        return (
-          "Cloud Boost\nx" +
-          player.cloudBoostAmount +
-          "  pollen" +
-          (player.cloudBoostAmount > 1.25
-            ? "(you have gifted windy bee, so x1.25, not x1.15)"
-            : "")
-        );
-      },
-    },
-
-    scratch: {
-      desc: "Collects 40(+1.5 per bee lvl) pollen from 12 flowers.",
-      trialCooldown: 35,
-      trialRate: 0.333,
-      statsToAddTo: [],
-      u: (128 * 4) / 2048,
-      v: (128 * 7) / 2048,
-      tokenLife: 12,
-
-      func: function (params) {
-        if (player.fieldIn) {
-          objects.mobs.push(new Scratch(params.bee, params.x, params.z));
-        }
-      },
-    },
-
-    tabbyLove: {
-      desc: 'Grants x1.04 Tabby Bee convert rate, Tabby Bee gather amount, and pollen from "Scratch". Stacks up to 250x, for a maximum of x11 Tabby Bee convert rate, Tabby Bee gather amount, and pollen from Scratch.',
-      trialCooldown: 65,
-      trialRate: 0.9,
-      statsToAddTo: [],
-      u: (128 * 5) / 2048,
-      v: (128 * 7) / 2048,
-      svg: document.getElementById("tabbyLove"),
-      cooldown: document.getElementById("tabbyLove_cooldown"),
-      amount: document.getElementById("tabbyLove_amount"),
-      maxCooldown: Infinity,
-      maxAmount: 250,
-      tokenLife: 16,
-
-      update: (amount, player) => {
-        player.tabbyLoveStacks = amount * 0.04 + 1;
-      },
-
-      getMessage: (amount) => {
-        return (
-          "Tabby Love\nx" +
-          player.tabbyLoveStacks +
-          " Tabby Bee convert rate\nx" +
-          player.tabbyLoveStacks +
-          " Tabby Bee gather amount\nx" +
-          player.tabbyLoveStacks +
-          ' pollen from "Scratch"'
-        );
-      },
-    },
-
-    impale: {
-      desc: "Summons a spike per bee lvl, attacking a random enemy. Each spike deals damage equal to 5% of the enemy's health + the bee's attack. The damage is heavily reduced is past 1,000, and can vary between x0.74 to x1.35. Multiple spikes targeting an enemy reduces damage by up to 75%.",
-      trialCooldown: 35,
-      trialRate: 0.8,
-      statsToAddTo: ["blueAbilityTokens", "attackTokens"],
-      u: (128 * 6) / 2048,
-      v: (128 * 9) / 2048,
-      tokenLife: 24,
-
-      func: function (params) {
-        for (let i = 0; i < params.bee.level; i++) {
-          window.setTimeout(function () {
-            objects.mobs.push(new Spike(params.bee));
-          }, 300 * i);
-        }
-      },
-    },
-
-    comfortingNectar: {
-      u: (128 * 5) / 2048,
-      v: 128 / 2048,
-      hideAmount: true,
-      svg: document.getElementById("comfortingNectar"),
-      cooldown: document.getElementById("comfortingNectar_cooldown"),
-      amount: document.getElementById("comfortingNectar_amount"),
-      maxCooldown: 60 * 60 * 6,
-      tokenLife: 4,
-      amountFromCooldown: true,
-
-      update: (amount, player) => {
-        player.whiteConvertRate *= (amount * 0.9 + 1.1).toFixed(2);
-        player.bluePollen *= (amount * 0.45 + 1.05).toFixed(2);
-        player.convertRateAtHive *= (amount * 0.9 + 1.1).toFixed(2);
-        player.honeyPerPollen *= (amount * 0.04 + 1.01).toFixed(2);
-      },
-
-      getMessage: (amount) => {
-        return (
-          "Comforting Nectar\nx" +
-          (amount * 0.9 + 1.1).toFixed(2) +
-          " white bee convert rate\nx" +
-          (amount * 0.45 + 1.05).toFixed(2) +
-          " blue pollen\nx" +
-          (amount * 0.9 + 1.1).toFixed(2) +
-          " convert rate at hive\nx" +
-          (amount * 0.04 + 1.01).toFixed(2) +
-          " honey per pollen"
-        );
-      },
-    },
-
-    invigoratingNectar: {
-      u: (128 * 5) / 2048,
-      v: 128 / 2048,
-      hideAmount: true,
-      svg: document.getElementById("invigoratingNectar"),
-      cooldown: document.getElementById("invigoratingNectar_cooldown"),
-      amount: document.getElementById("invigoratingNectar_amount"),
-      maxCooldown: 60 * 60 * 6,
-      tokenLife: 4,
-      amountFromCooldown: true,
-
-      update: (amount, player) => {
-        player.convertRate *= (amount * 0.45 + 1.05).toFixed(2);
-        player.redPollen *= (amount * 0.45 + 1.05).toFixed(2);
-        player.convertRateAtHive *= (amount * 0.09 + 1.01).toFixed(2);
-        player.honeyPerPollen *= (amount * 0.04 + 1.01).toFixed(2);
-      },
-
-      getMessage: (amount) => {
-        return (
-          "Invigorating Nectar\nx" +
-          (amount * 0.45 + 1.05).toFixed(2) +
-          " convert rate\nx" +
-          (amount * 0.45 + 1.05).toFixed(2) +
-          " red pollen\nx" +
-          (amount * 0.09 + 1.01).toFixed(2) +
-          " bee attack\nx" +
-          (amount * 0.04 + 1.01).toFixed(2) +
-          " honey per pollen"
-        );
-      },
-    },
-
-    motivatingNectar: {
-      u: (128 * 5) / 2048,
-      v: 128 / 2048,
-      hideAmount: true,
-      svg: document.getElementById("motivatingNectar"),
-      cooldown: document.getElementById("motivatingNectar_cooldown"),
-      amount: document.getElementById("motivatingNectar_amount"),
-      maxCooldown: 60 * 60 * 6,
-      tokenLife: 4,
-      amountFromCooldown: true,
-
-      update: (amount, player) => {
-        player.convertRate *= (amount * 0.45 + 1.05).toFixed(2);
-        player.bluePollen *= (amount * 0.45 + 1.05).toFixed(2);
-        player.redBeeAbilityRate *= (amount * 0.04 + 1.01).toFixed(2);
-        player.whiteBeeAbilityRate *= (amount * 0.04 + 1.01).toFixed(2);
-        player.blueBeeAbilityRate *= (amount * 0.04 + 1.01).toFixed(2);
-        player.honeyPerPollen *= (amount * 0.04 + 1.01).toFixed(2);
-      },
-
-      getMessage: (amount) => {
-        return (
-          "Motivating Nectar\nx" +
-          (amount * 0.45 + 1.05).toFixed(2) +
-          " convert rate\nx" +
-          (amount * 0.45 + 1.05).toFixed(2) +
-          " blue pollen\nx" +
-          (amount * 0.04 + 1.01).toFixed(2) +
-          " bee ability rate\nx" +
-          (amount * 0.04 + 1.01).toFixed(2) +
-          " honey per pollen"
-        );
-      },
-    },
-
-    refreshingNectar: {
-      u: (128 * 5) / 2048,
-      v: 128 / 2048,
-      hideAmount: true,
-      svg: document.getElementById("refreshingNectar"),
-      cooldown: document.getElementById("refreshingNectar_cooldown"),
-      amount: document.getElementById("refreshingNectar_amount"),
-      maxCooldown: 60 * 60 * 6,
-      tokenLife: 4,
-      amountFromCooldown: true,
-
-      update: (amount, player) => {
-        player.blueConvertRate *= (amount * 0.9 + 1.1).toFixed(2);
-        player.redPollen *= (amount * 0.45 + 1.05).toFixed(2);
-        player.beeEnergy *= (amount * 0.45 + 1.05).toFixed(2);
-        player.honeyPerPollen *= (amount * 0.04 + 1.01).toFixed(2);
-      },
-
-      getMessage: (amount) => {
-        return (
-          "Refreshing Nectar\nx" +
-          (amount * 0.9 + 1.1).toFixed(2) +
-          " blue bee convert rate\nx" +
-          (amount * 0.45 + 1.05).toFixed(2) +
-          " red pollen\nx" +
-          (amount * 0.45 + 1.05).toFixed(2) +
-          " bee energy\nx" +
-          (amount * 0.04 + 1.01).toFixed(2) +
-          " honey per pollen"
-        );
-      },
-    },
-
-    satisfyingNectar: {
-      u: (128 * 5) / 2048,
-      v: 128 / 2048,
-      hideAmount: true,
-      svg: document.getElementById("satisfyingNectar"),
-      cooldown: document.getElementById("satisfyingNectar_cooldown"),
-      amount: document.getElementById("satisfyingNectar_amount"),
-      maxCooldown: 60 * 60 * 6,
-      tokenLife: 4,
-      amountFromCooldown: true,
-
-      update: (amount, player) => {
-        player.redConvertRate *= (amount * 0.9 + 1.1).toFixed(2);
-        player.whitePollen *= (amount * 0.9 + 1.1).toFixed(2);
-        player.honeyAtHive *= (amount * 0.45 + 1.05).toFixed(2);
-        player.honeyPerPollen *= (amount * 0.04 + 1.01).toFixed(2);
-      },
-
-      getMessage: (amount) => {
-        return (
-          "Satisfying Nectar\nx" +
-          (amount * 0.9 + 1.1).toFixed(2) +
-          " red bee convert rate\nx" +
-          (amount * 0.9 + 1.1).toFixed(2) +
-          " white pollen\nx" +
-          (amount * 0.45 + 1.05).toFixed(2) +
-          " honey at hive\nx" +
-          (amount * 0.04 + 1.01).toFixed(2) +
-          " honey per pollen"
-        );
-      },
-    },
-
-    corruption: {
-      u: 0,
-      v: 0,
-      svg: document.getElementById("corruption"),
-      cooldown: document.getElementById("corruption_cooldown"),
-      amount: document.getElementById("corruption_amount"),
-      maxCooldown: 0,
-      tokenLife: 4,
-      maxAmount: 100,
-
-      update: (amount, player) => {
-        player.abilityDuplicationChance += amount * 0.001 + 0.05;
-      },
-
-      getMessage: (amount) => {
-        return (
-          "Corruption\n+" +
-          ((amount * 0.1 + 5) | 0) +
-          "% ability duplication chance"
-        );
-      },
-    },
-
-    glitch: {
-      desc: "Corrupts a random field 15x(+0.5x per bee lvl)(+ up to 15x depending on the bee's drives). Corruption stacks up to 100x, and standing in corrupted fields grant 5% to 15% ability dupication chance.<br><br>Ability dupication chance allows ability tokens to be duped, being reposition somewhere else on the field, lasting for x2(+0.1x per bee lvl) the original token's lifespan.<br><br>Standing under duped tokens for 1s will activate them. There is a 10%(+0.1% per glitched drive) that the duped token will become a ☺ token. ☺ tokens activate all duped tokens, add 3x corruption to the field, and collect x3 the bee's gather amount of pollen, instantly converting 50%. The pollen is multiplied by 25% for each duped token collected.",
-      trialCooldown: 120,
-      trialRate: 0.35,
-      u: (128 * 7) / 2048,
-      v: (128 * 9) / 2048,
-      tokenLife: 8,
-
-      func: function (params) {
-        fieldInfo[params.field].corruption = Math.min(
-          fieldInfo[params.field].corruption +
-            15 +
-            params.bee.level * 0.5 +
-            (((fieldInfo[params.field].generalColorComp.r *
-              player.extraInfo.drives.red) /
-              50 +
-              (fieldInfo[params.field].generalColorComp.w *
-                player.extraInfo.drives.white) /
-                50 +
-              (fieldInfo[params.field].generalColorComp.b *
-                player.extraInfo.drives.blue) /
-                50 +
-              player.extraInfo.drives.glitched / 50) *
-              15) /
-              4,
-          100
-        );
-
-        objects.mobs.push(new GlitchEffect(params.field, 5));
-      },
-    },
-
-    mindHack: {
-      desc: "Stuns 3(+1 every 4 bee lvls) random nearby enemies for 3s(+0.1s per bee lvl). Stunned enemies take x1.25 damage.",
-      trialCooldown: 25,
-      trialRate: 0.4,
-      u: (128 * 0) / 2048,
-      v: (128 * 10) / 2048,
-      tokenLife: 16,
-
-      func: function (params) {
-        let m = [];
-
-        for (let i in player.attacked) {
-          m.push(player.attacked[i]);
-        }
-
-        for (let i = 0; i < 3 + params.bee.level * 0.25 && m.length; i++) {
-          let r = (Math.random() * m.length) | 0;
-
-          m[r].mindHacked = 3 + params.bee.level * 0.1;
-          m.splice(r, 1);
-        }
-      },
-    },
-
-    mapCorruption: {
-      desc: "Corrupts a random field you're not in by 30x(+2x per bee lvl)(+ up to 15x depending on the bee's drives and the field's color).",
-      trialCooldown: 100,
-      trialRate: 0.25,
-      u: (128 * 1) / 2048,
-      v: (128 * 10) / 2048,
-      tokenLife: 8,
-
-      func: function (params) {
-        let f = [];
-
-        for (let i in fieldInfo) {
-          f.push(i);
-        }
-
-        f.splice(f.indexOf(params.field), 1);
-
-        f = f[(Math.random() * f.length) | 0];
-
-        fieldInfo[f].corruption = Math.min(
-          fieldInfo[f].corruption +
-            30 +
-            params.bee.level * 2 +
-            (((fieldInfo[f].generalColorComp.r * player.extraInfo.drives.red) /
-              50 +
-              (fieldInfo[f].generalColorComp.w *
-                player.extraInfo.drives.white) /
-                50 +
-              (fieldInfo[f].generalColorComp.b * player.extraInfo.drives.blue) /
-                50 +
-              player.extraInfo.drives.glitched / 50) *
-              15) /
-              4,
-          100
-        );
-
-        objects.mobs.push(new GlitchEffect(f, 5));
-
-        player.addMessage(
-          "Your Digital Bee corrupted the" + MATH.doGrammar(f) + "!",
-          [255 * 0.5, 0, 200 * 0.5]
-        );
-      },
-    },
-
-    smiley: {
-      trialCooldown: 0,
-      trialRate: 0,
-      u: (128 * 2) / 2048,
-      v: (128 * 10) / 2048,
-      tokenLife: 12,
-
-      func: function (params) {
-        let tokensCollected = 0;
-
-        for (let i in objects.tokens) {
-          if (objects.tokens[i] instanceof DupedToken) {
-            objects.tokens[i].collect();
-            tokensCollected++;
-          }
-        }
-
-        if (params.field) {
-          fieldInfo[params.field].corruption = Math.min(
-            fieldInfo[params.field].corruption + 3,
-            100
-          );
-
-          collectPollen({
-            x: params.x,
-            z: params.z,
-            pattern: [
-              [-4, 0],
-              [-4, 1],
-              [-4, 2],
-              [-3, 3],
-              [-2, 4],
-              [-1, 4],
-              [0, 4],
-              [1, 4],
-              [2, 4],
-              [3, 3],
-              [4, 2],
-              [4, 1],
-              [4, 0],
-              [4, -1],
-              [4, -2],
-              [3, -3],
-              [2, -4],
-              [1, -4],
-              [0, -4],
-              [-1, -4],
-              [-2, -4],
-              [-3, -3],
-              [-4, -2],
-              [-4, -1],
-              [-1, -1],
-              [1, -1],
-              [2, 1],
-              [1, 2],
-              [0, 2],
-              [-1, 2],
-              [-2, 1],
-            ],
-            amount: params.bee.gatherAmount * 3,
-            stackOffset: 0.4 + Math.random() * 0.5,
-            multiplier: tokensCollected * 0.25 + 1,
-            instantConversion: 0.5,
-            field: params.field,
-          });
-
-          objects.mobs.push(new GlitchEffect(params.field, 2));
-        }
-      },
-    },
-
-    redJellyBean: {
-      u: (128 * 4) / 2048,
-      v: (128 * 11) / 2048,
-      svg: document.getElementById("redJellyBean"),
-      cooldown: document.getElementById("redJellyBean_cooldown"),
-      amount: document.getElementById("redJellyBean_amount"),
-      maxCooldown: 60,
-      maxAmount: 3,
-      tokenLife: 16,
-
-      update: (amount, player) => {
-        player.redPollen *= 0.075 * amount + 1.1;
-      },
-
-      getMessage: (amount) => {
-        return (
-          "Red Jelly Bean\nx" +
-          (0.075 * amount + 1.1).toFixed(2) +
-          " red pollen"
-        );
-      },
-    },
-
-    whiteJellyBean: {
-      u: (128 * 5) / 2048,
-      v: (128 * 11) / 2048,
-      svg: document.getElementById("whiteJellyBean"),
-      cooldown: document.getElementById("whiteJellyBean_cooldown"),
-      amount: document.getElementById("whiteJellyBean_amount"),
-      maxCooldown: 60,
-      maxAmount: 3,
-      tokenLife: 16,
-
-      update: (amount, player) => {
-        player.whitePollen *= 0.075 * amount + 1.1;
-      },
-
-      getMessage: (amount) => {
-        return (
-          "White Jelly Bean\nx" +
-          (0.075 * amount + 1.1).toFixed(2) +
-          " white pollen"
-        );
-      },
-    },
-
-    blueJellyBean: {
-      u: (128 * 6) / 2048,
-      v: (128 * 11) / 2048,
-      svg: document.getElementById("blueJellyBean"),
-      cooldown: document.getElementById("blueJellyBean_cooldown"),
-      amount: document.getElementById("blueJellyBean_amount"),
-      maxCooldown: 60,
-      maxAmount: 3,
-      tokenLife: 16,
-
-      update: (amount, player) => {
-        player.bluePollen *= 0.075 * amount + 1.1;
-      },
-
-      getMessage: (amount) => {
-        return (
-          "Blue Jelly Bean\nx" +
-          (0.075 * amount + 1.1).toFixed(2) +
-          " blue pollen"
-        );
-      },
-    },
-
-    pinkJellyBean: {
-      u: (128 * 7) / 2048,
-      v: (128 * 11) / 2048,
-      svg: document.getElementById("pinkJellyBean"),
-      cooldown: document.getElementById("pinkJellyBean_cooldown"),
-      amount: document.getElementById("pinkJellyBean_amount"),
-      maxCooldown: 60,
-      maxAmount: 3,
-      tokenLife: 16,
-
-      update: (amount, player) => {
-        player.pollenFromBees *= 0.075 * amount + 1.1;
-      },
-
-      getMessage: (amount) => {
-        return (
-          "Pink Jelly Bean\nx" +
-          (0.075 * amount + 1.1).toFixed(2) +
-          " pollen from bees"
-        );
-      },
-    },
-
-    brownJellyBean: {
-      u: (128 * 0) / 2048,
-      v: (128 * 12) / 2048,
-      svg: document.getElementById("brownJellyBean"),
-      cooldown: document.getElementById("brownJellyBean_cooldown"),
-      amount: document.getElementById("brownJellyBean_amount"),
-      maxCooldown: 60,
-      maxAmount: 3,
-      tokenLife: 16,
-
-      update: (amount, player) => {
-        player.pollenFromTools *= 0.075 * amount + 1.1;
-      },
-
-      getMessage: (amount) => {
-        return (
-          "Brown Jelly Bean\nx" +
-          (0.075 * amount + 1.1).toFixed(2) +
-          " pollen from tools"
-        );
-      },
-    },
-
-    greenJellyBean: {
-      u: (128 * 1) / 2048,
-      v: (128 * 12) / 2048,
-      svg: document.getElementById("greenJellyBean"),
-      cooldown: document.getElementById("greenJellyBean_cooldown"),
-      amount: document.getElementById("greenJellyBean_amount"),
-      maxCooldown: 60,
-      maxAmount: 3,
-      tokenLife: 16,
-
-      update: (amount, player) => {
-        player.criticalChance += 0.01 * amount + 0.03;
-      },
-
-      getMessage: (amount) => {
-        return "Green Jelly Bean\n+" + (amount + 3) + "% critical chance";
-      },
-    },
-
-    blackJellyBean: {
-      u: (128 * 2) / 2048,
-      v: (128 * 12) / 2048,
-      svg: document.getElementById("blackJellyBean"),
-      cooldown: document.getElementById("blackJellyBean_cooldown"),
-      amount: document.getElementById("blackJellyBean_amount"),
-      maxCooldown: 60,
-      maxAmount: 3,
-      tokenLife: 16,
-
-      update: (amount, player) => {
-        player.whiteBombPollen *= 0.075 * amount + 1.1;
-        player.redBombPollen *= 0.075 * amount + 1.1;
-        player.blueBombPollen *= 0.075 * amount + 1.1;
-      },
-
-      getMessage: (amount) => {
-        return (
-          "Black Jelly Bean\nx" +
-          (0.075 * amount + 1.1).toFixed(2) +
-          " bomb pollen"
-        );
-      },
-    },
-
-    yellowJellyBean: {
-      u: (128 * 3) / 2048,
-      v: (128 * 12) / 2048,
-      svg: document.getElementById("yellowJellyBean"),
-      cooldown: document.getElementById("yellowJellyBean_cooldown"),
-      amount: document.getElementById("yellowJellyBean_amount"),
-      maxCooldown: 60,
-      maxAmount: 3,
-      tokenLife: 16,
-
-      update: (amount, player) => {
-        player.instantWhiteConversion = MATH.applyPercentage(
-          player.instantWhiteConversion,
-          0.05 * amount + 0.1
-        );
-        player.instantRedConversion = MATH.applyPercentage(
-          player.instantRedConversion,
-          0.05 * amount + 0.1
-        );
-        player.instantBlueConversion = MATH.applyPercentage(
-          player.instantBlueConversion,
-          0.05 * amount + 0.1
-        );
-      },
-
-      getMessage: (amount) => {
-        return (
-          "Yellow Jelly Bean\n+" + (5 * amount + 10) + "% instant conversion"
-        );
-      },
-    },
-
-    roboChallengeBuff: {
-      u: 0,
-      v: 0,
-      svg: document.getElementById("roboChallengeBuff"),
-      cooldown: document.getElementById("roboChallengeBuff_cooldown"),
-      amount: document.getElementById("roboChallengeBuff_amount"),
-      maxCooldown: 1.5 * 60,
-      tokenLife: 4,
-      maxAmount: 1,
-
-      update: "",
-      getMessage: "",
-    },
-
-    redDriveBuff: {
-      u: 0,
-      v: 0,
-      svg: document.getElementById("redDriveBuff"),
-      cooldown: document.getElementById("redDriveBuff_cooldown"),
-      amount: document.getElementById("redDriveBuff_amount"),
-      maxCooldown: 1.5 * 60,
-      tokenLife: 4,
-      maxAmount: 1,
-
-      update: (amount, player) => {
-        player.redPollen *= 1.25;
-        player.redFieldCapacity *= 1.25;
-        player.redBeeAttack++;
-      },
-
-      getMessage: (amount) => {
-        return "Red Drive\nx1.25 red pollen\nx1.25 red field capacity\n+1 red bee attack";
-      },
-    },
-
-    blueDriveBuff: {
-      u: 0,
-      v: 0,
-      svg: document.getElementById("blueDriveBuff"),
-      cooldown: document.getElementById("blueDriveBuff_cooldown"),
-      amount: document.getElementById("blueDriveBuff_amount"),
-      maxCooldown: 1.5 * 60,
-      tokenLife: 4,
-      maxAmount: 1,
-
-      update: (amount, player) => {
-        player.bluePollen *= 1.25;
-        player.blueFieldCapacity *= 1.25;
-        player.blueBeeAttack++;
-      },
-
-      getMessage: (amount) => {
-        return "Blue Drive\nx1.25 blue pollen\nx1.25 blue field capacity\n+1 blue bee attack";
-      },
-    },
-
-    whiteDriveBuff: {
-      u: 0,
-      v: 0,
-      svg: document.getElementById("whiteDriveBuff"),
-      cooldown: document.getElementById("whiteDriveBuff_cooldown"),
-      amount: document.getElementById("whiteDriveBuff_amount"),
-      maxCooldown: 1.5 * 60,
-      tokenLife: 4,
-      maxAmount: 1,
-
-      update: (amount, player) => {
-        player.whitePollen *= 1.25;
-        player.whiteFieldCapacity *= 1.25;
-        player.whiteBeeAttack++;
-      },
-
-      getMessage: (amount) => {
-        return "White Drive\nx1.25 white pollen\nx1.25 white field capacity\n+1 white bee attack";
-      },
-    },
-
-    glitchedDriveBuff: {
-      u: 0,
-      v: 0,
-      svg: document.getElementById("glitchedDriveBuff"),
-      cooldown: document.getElementById("glitchedDriveBuff_cooldown"),
-      amount: document.getElementById("glitchedDriveBuff_amount"),
-      maxCooldown: 1.5 * 60,
-      tokenLife: 4,
-      maxAmount: 1,
-
-      update: (amount, player) => {
-        player.redPollen *= 1.25;
-        player.bluePollen *= 1.25;
-        player.whitePollen *= 1.25;
-        player.capacity *= 1.25;
-        player.whiteBeeAttack++;
-        player.blueBeeAttack++;
-        player.redBeeAttack++;
-      },
-
-      getMessage: (amount) => {
-        return "Glitched Drive\nx1.25 pollen\nx1.25 capacity\n+1 bee attack";
-      },
-    },
-
-    antChallenge: {
-      u: 0,
-      v: 0,
-      svg: document.getElementById("antChallenge"),
-      cooldown: document.getElementById("antChallenge_cooldown"),
-      amount: document.getElementById("antChallenge_amount"),
-      maxCooldown: 5 * 60,
-      tokenLife: 4,
-      maxAmount: 1,
-
-      update: (amount, player) => {
-        player.instantRedConversion = 1;
-        player.instantWhiteConversion = 1;
-        player.instantBlueConversion = 1;
-      },
-
-      getMessage: (amount) => {
-        return "Ant Challenge\n+100% instant conversion";
-      },
-    },
-
-    bearMorph: {
-      u: 0,
-      v: 0,
-      svg: document.getElementById("bearMorph"),
-      cooldown: document.getElementById("bearMorph_cooldown"),
-      amount: document.getElementById("bearMorph_amount"),
-      maxCooldown: 30,
-      maxAmount: 1,
-
-      update: (amount, player) => {
-        player.redPollen *= 1.25;
-        player.bluePollen *= 1.25;
-        player.whitePollen *= 1.25;
-        player.walkSpeed *= 1.1;
-        player.jumpPower *= 1.2;
-      },
-
-      getMessage: (amount) => {
-        return "Bear Morph\nx1.25 pollen\nx1.1 walkspeed\nx1.2 jump power";
-      },
-    },
-
-    bearMorph_: {
-      u: 0,
-      v: 0,
-      svg: document.getElementById("bearMorph_"),
-      cooldown: document.getElementById("bearMorph__cooldown"),
-      amount: document.getElementById("bearMorph__amount"),
-      maxCooldown: 30,
-      maxAmount: 1,
-
-      update: (amount, player) => {
-        player.redPollen *= 1.25;
-        player.bluePollen *= 1.25;
-        player.whitePollen *= 1.25;
-        player.pollenFromBees *= 1.25;
-        player.pollenFromTools *= 1.25;
-        player.convertRate *= 1.5;
-        player.walkSpeed *= 1.1;
-        player.jumpPower *= 1.2;
-      },
-
-      getMessage: (amount) => {
-        return "Bear Morph+\nx1.25 pollen\nx1.5 convert rate\nx1.25 pollen from bees\nx1.25 pollen from tools\nx1.1 walkspeed\nx1.2 jump power";
-      },
-    },
-
-    bearMorphToken: {
-      desc: "Grants x1.25 pollen, x1.1 walkspeed, and x1.2 jump power for 10s. If the bee is gifted, this has a 20%(+1% per lvl) to grant an additional x1.5 convert rate, x1.25 pollen from bees, and x1.25 pollen from tools.",
-      trialCooldown: 120,
-      trialRate: 0.25,
-      u: (128 * 3) / 2048,
-      v: (128 * 13) / 2048,
-      tokenLife: 16,
-
-      func: function (params) {
-        if (Math.random() < 0.2 + params.bee.level * 0.01) {
-          player.addEffect("bearMorph_");
-        } else {
-          player.addEffect("bearMorph");
-        }
-      },
-    },
-
-    fetch: {
-      desc: "Summons a ball and starts a game of fetch. When you kick the ball, puppy bee will kick it back. The ball collects 5(+0.5 per lvl) pollen from 1 flower, picks up tokens, and more while it rolls. Every 4th hit will reward treats, with the amount of treats doubling every time. Treat rewards are stopped at 128.",
-      trialCooldown: 70,
-      trialRate: 0.15,
-      u: (128 * 4) / 2048,
-      v: (128 * 13) / 2048,
-      tokenLife: 8,
-
-      func: function (params) {
-        let f = fieldInfo[params.field],
-          ball = new FetchBall(
-            [f.x + params.x, f.y + 1, f.z + params.z],
-            params.bee
-          );
-        objects.mobs.push(ball);
-
-        params.bee.fetchBall = ball;
-      },
-    },
-
-    puppyLove: {
-      desc: "Grants all bees in the hive 75(+20 per lvl) bond.",
-      trialCooldown: 30,
-      trialRate: 0.2,
-      u: (128 * 5) / 2048,
-      v: (128 * 13) / 2048,
-      tokenLife: 8,
-
-      func: function (params) {
-        objects.explosions.push(
-          new Explosion({
-            col: [1, 1, 1],
-            pos: [
-              fieldInfo[params.field].x + params.x,
-              fieldInfo[params.field].y + 0.5,
-              fieldInfo[params.field].z + params.z,
-            ],
-            life: 0.5,
-            size: 6,
-            speed: 0.25,
-            aftershock: 0.05,
-          })
-        );
-
-        for (let y in player.hive) {
-          for (let x in player.hive[y]) {
-            if (player.hive[y][x].type) {
-              let bond = 75 + params.bee.level * 20,
-                beePee = player.hive[y][x].bee.pos.slice();
-
-              player.hive[y][x].bond += bond;
-
-              textRenderer.add(
-                bond + "",
-                [beePee[0], beePee[1] + 1, beePee[2]],
-                COLORS.bondArr,
-                0,
-                "+",
-                1.5
-              );
-            }
-          }
-        }
-      },
-    },
-
-    festiveCheer: {
-      u: (128 * 6) / 2048,
-      v: (128 * 13) / 2048,
-      svg: document.getElementById("festiveCheer"),
-      cooldown: document.getElementById("festiveCheer_cooldown"),
-      amount: document.getElementById("festiveCheer_amount"),
-      maxCooldown: 10,
-      maxAmount: 1,
-
-      update: (amount, player) => {
-        player.convertRate *= 2;
-        player.instantRedConversion = MATH.applyPercentage(
-          player.instantRedConversion,
-          1
-        );
-        player.instantWhiteConversion = MATH.applyPercentage(
-          player.instantWhiteConversion,
-          1
-        );
-        player.instantBlueConversion = MATH.applyPercentage(
-          player.instantBlueConversion,
-          1
-        );
-      },
-
-      getMessage: (amount) => {
-        return "Festive Cheer\n+100% instant conversion\nx2 convert rate";
-      },
-    },
-
-    festiveGifts: {
-      desc: "Creates a ring of 7(+1 per 4 lvls) gifts and grants Festive Cheer. Festive Cheer applies +100% instant conversion and x2 convert rate for 10s. Gifts given can include<br><br>• Common Gifts: honey, red boost tokens, treats, fruits, royal jelly, gumdrops.<br><br>• Rare Gifts: tickets, extracts, micro-converters, and magic beans.<br><br>• If the bee is gifted, these additional gifts maybe rewarded: glitter, oil, enzymes, and field dice.",
-      trialCooldown: 100,
-      trialRate: 0.05,
-      u: (128 * 6) / 2048,
-      v: (128 * 13) / 2048,
-      tokenLife: 8,
-
-      func: function (params) {
-        player.addEffect("festiveCheer");
-        player.addMessage(
-          "🎁 Festive Bee created festive gifts! 🎁",
-          COLORS.redArr
-        );
-
-        let amountOfTokens = (7 + params.bee.level * 0.25) | 0,
-          radius = amountOfTokens * 0.2 + 1.75;
-
-        let dropTable = [
-          "redBoost",
-          "redBoost",
-          "redBoost",
-          "treat",
-          "treat",
-          "strawberry",
-          "blueberry",
-          "sunflowerSeed",
-          "pineapple",
-          "honey",
-          "honey",
-          "gumdrops",
-          "royalJelly",
-        ];
-
-        dropTable = [
-          ...dropTable,
-          ...dropTable,
-          ...dropTable,
-          "ticket",
-          "redExtract",
-          "blueExtract",
-          "microConverter",
-          "magicBean",
-        ];
-
-        if (params.bee.gifted) {
-          dropTable = [
-            ...dropTable,
-            ...dropTable,
-            ...dropTable,
-            "glitter",
-            "oil",
-            "enzymes",
-            "fieldDice",
-            "starJelly",
-          ];
-        }
-
-        let x = fieldInfo[params.field].x + params.x,
-          y = fieldInfo[params.field].y + 1,
-          z = fieldInfo[params.field].z + params.z;
-
-        for (
-          let i = 0, inc = MATH.TWO_PI / amountOfTokens;
-          i < MATH.TWO_PI;
-          i += inc
-        ) {
-          let ty = dropTable[(Math.random() * dropTable.length) | 0];
-
-          if (ty === "redBoost") {
-            objects.tokens.push(
-              new Token(
-                30,
-                [x + Math.cos(i) * radius, y, z + Math.sin(i) * radius],
-                "redBoost",
-                {},
-                true
-              )
-            );
-          } else {
-            objects.tokens.push(
-              new LootToken(
-                30,
-                [x + Math.cos(i) * radius, y, z + Math.sin(i) * radius],
-                ty,
-                ty === "honey"
-                  ? (Math.random() * params.bee.level + params.bee.level) *
-                      params.bee.level *
-                      50 +
-                    2500
-                  : 1,
-                true,
-                MATH.doGrammar(this.type)
-              )
-            );
-          }
-        }
-      },
-    },
-  };
+  // FIXME: here goes effects
 
   let LIST_OF_STATS_FOR_PLAYER = [];
 
@@ -9884,3527 +3500,6 @@ function BeeSwarmSimulator(DATA) {
 
   // CHQ: The list of all of the items in the game. Includes the things that a player can feed bees with, weapons, tools and powerups that the player can use, new bees,
 
-  let items = {
-    translator: {
-      amount: 0,
-      u: (128 * 0) / 2048,
-      v: (128 * 0) / 2048,
-      value: Infinity,
-      use: function () {},
-    },
-
-    spiritPetal: {
-      amount: 0,
-      u: (128 * 0) / 2048,
-      v: (128 * 0) / 2048,
-      value: Infinity,
-      use: function () {},
-    },
-
-    cog: {
-      amount: 0,
-      u: (128 * 0) / 2048,
-      v: (128 * 0) / 2048,
-      value: Infinity,
-      use: function () {},
-    },
-
-    jellyBeans: {
-      amount: 0,
-      u: (128 * 3) / 2048,
-      v: (128 * 11) / 2048,
-      value: 20,
-      cooldown: 25,
-      autoUse: true,
-      use: function () {
-        if (!player.fieldIn) {
-          player.addMessage(
-            "You must be in a field to use Jelly Beans!",
-            COLORS.redArr
-          );
-          return;
-        }
-
-        items.jellyBeans.amount--;
-
-        for (let i = 0; i < 15; i++) {
-          window.setTimeout(function () {
-            if (player.fieldIn) {
-              let vel = player.bodyDir.slice();
-              vel[1] = MATH.random(5, 9);
-              vec3.rotateY(vel, vel, MATH.ORIGIN, MATH.random(-0.7, 0.7));
-              vel[0] *= MATH.random(3, 9);
-              vel[2] *= MATH.random(3, 9);
-
-              let arr = [];
-
-              arr.push("redJellyBean", "blueJellyBean", "whiteJellyBean");
-              arr.push("redJellyBean", "blueJellyBean", "whiteJellyBean");
-              arr.push("redJellyBean", "blueJellyBean", "whiteJellyBean");
-              arr.push(
-                "pinkJellyBean",
-                "brownJellyBean",
-                "blackJellyBean",
-                "yellowJellyBean",
-                "greenJellyBean"
-              );
-
-              objects.mobs.push(
-                new JellyBean(
-                  player.fieldIn,
-                  vel,
-                  arr[(Math.random() * arr.length) | 0]
-                )
-              );
-            }
-          }, 250 * i);
-        }
-      },
-    },
-
-    ticket: {
-      amount: 0,
-      u: (128 * 3) / 2048,
-      v: (128 * 10) / 2048,
-      value: 15,
-      use: function () {},
-    },
-
-    antPass: {
-      amount: 0,
-      u: (128 * 4) / 2048,
-      v: (128 * 10) / 2048,
-      value: Infinity,
-      use: function () {},
-    },
-
-    cloudVial: {
-      amount: 0,
-      u: (128 * 5) / 2048,
-      v: (128 * 12) / 2048,
-      value: 25,
-      use: function () {
-        if (!player.fieldIn) {
-          player.addMessage(
-            "You must be in a field to use Cloud Vials!",
-            COLORS.redArr
-          );
-          return;
-        }
-
-        if (player.fieldIn === "AntField") {
-          player.addMessage(
-            "You can' use this item in the Ant Field!",
-            COLORS.redArr
-          );
-          return;
-        }
-
-        let count = 0;
-
-        for (let i in objects.mobs) {
-          if (
-            objects.mobs[i] instanceof Cloud &&
-            objects.mobs[i].field === player.fieldIn
-          ) {
-            count++;
-          }
-        }
-
-        if (count > 6) {
-          player.addMessage(
-            "There are too many clouds in this field!",
-            COLORS.redArr
-          );
-          return;
-        }
-
-        items.cloudVial.amount--;
-
-        objects.mobs.push(
-          new Cloud(
-            player.fieldIn,
-            player.flowerIn.x,
-            player.flowerIn.z,
-            3 * 60
-          )
-        );
-      },
-    },
-
-    magicBean: {
-      amount: 0,
-      u: (128 * 4) / 2048,
-      v: (128 * 12) / 2048,
-      value: 25,
-      use: function () {
-        if (!player.fieldIn) {
-          player.addMessage(
-            "You must be in a field to use Magic Beans!",
-            COLORS.redArr
-          );
-          return;
-        }
-
-        if (player.fieldIn === "AntField") {
-          player.addMessage(
-            "You can' use this item in the Ant Field!",
-            COLORS.redArr
-          );
-          return;
-        }
-
-        for (let i in objects.mobs) {
-          if (
-            objects.mobs[i] instanceof Sprout &&
-            objects.mobs[i].field === player.fieldIn
-          ) {
-            player.addMessage(
-              "There is already a sprout in this field!",
-              COLORS.redArr
-            );
-            return;
-          }
-        }
-
-        items.magicBean.amount--;
-
-        let type = ["basic", "rare", "epic", "gummy", "legendary", "supreme"];
-
-        type =
-          type[
-            (Math.pow(Math.random(), 1.65) *
-              Math.pow(Math.random(), 1.65) *
-              type.length) |
-              0
-          ];
-
-        if (Math.random() < 0.65 && player.isNight < 0.9) type = "moon";
-
-        player.addMessage(
-          "You planted a " + MATH.doGrammar(type) + " Sprout!",
-          {
-            rare: [130, 130, 130],
-            epic: [210, 170, 0],
-            legendary: [0, 190, 220],
-            supreme: [30, 220, 90],
-            gummy: [230, 70, 230],
-            moon: [140, 200, 230],
-          }[type]
-        );
-
-        objects.mobs.push(new Sprout(player.fieldIn, type));
-      },
-    },
-
-    comfortingVial: {
-      amount: 0,
-      u: (128 * 0) / 2048,
-      v: (128 * 0) / 2048,
-      value: 35,
-      use: function () {
-        items.comfortingVial.amount--;
-        player.addEffect("comfortingNectar", (60 * 60) / (60 * 60 * 6));
-      },
-    },
-
-    invigoratingVial: {
-      amount: 0,
-      u: (128 * 0) / 2048,
-      v: (128 * 0) / 2048,
-      value: 35,
-      use: function () {
-        items.invigoratingVial.amount--;
-        player.addEffect("invigoratingNectar", (60 * 60) / (60 * 60 * 6));
-      },
-    },
-
-    motivatingVial: {
-      amount: 0,
-      u: (128 * 0) / 2048,
-      v: (128 * 0) / 2048,
-      value: 35,
-      use: function () {
-        items.motivatingVial.amount--;
-        player.addEffect("motivatingNectar", (60 * 60) / (60 * 60 * 6));
-      },
-    },
-
-    refreshingVial: {
-      amount: 0,
-      u: (128 * 0) / 2048,
-      v: (128 * 0) / 2048,
-      value: 35,
-      use: function () {
-        items.refreshingVial.amount--;
-        player.addEffect("refreshingNectar", (60 * 60) / (60 * 60 * 6));
-      },
-    },
-
-    satisfyingVial: {
-      amount: 0,
-      u: (128 * 0) / 2048,
-      v: (128 * 0) / 2048,
-      value: 35,
-      use: function () {
-        items.satisfyingVial.amount--;
-        player.addEffect("satisfyingNectar", (60 * 60) / (60 * 60 * 6));
-      },
-    },
-
-    redDrive: {
-      amount: 0,
-      u: (128 * 0) / 2048,
-      v: (128 * 0) / 2048,
-      value: 35,
-      use: function () {
-        if (!player.roboChallenge) {
-          player.addMessage(
-            "Drives can only be used in the Robo Challenge!",
-            COLORS.redArr
-          );
-          return;
-        }
-
-        items.redDrive.amount--;
-        player.addEffect("redDriveBuff");
-        player.extraInfo.drives.red = Math.min(
-          player.extraInfo.drives.red + 1,
-          50
-        );
-      },
-    },
-
-    blueDrive: {
-      amount: 0,
-      u: (128 * 0) / 2048,
-      v: (128 * 0) / 2048,
-      value: 35,
-      use: function () {
-        if (!player.roboChallenge) {
-          player.addMessage(
-            "Drives can only be used in the Robo Challenge!",
-            COLORS.redArr
-          );
-          return;
-        }
-
-        items.blueDrive.amount--;
-        player.addEffect("blueDriveBuff");
-        player.extraInfo.drives.blue = Math.min(
-          player.extraInfo.drives.blue + 1,
-          50
-        );
-      },
-    },
-
-    whiteDrive: {
-      amount: 0,
-      u: (128 * 0) / 2048,
-      v: (128 * 0) / 2048,
-      value: 35,
-      use: function () {
-        if (!player.roboChallenge) {
-          player.addMessage(
-            "Drives can only be used in the Robo Challenge!",
-            COLORS.redArr
-          );
-          return;
-        }
-
-        items.whiteDrive.amount--;
-        player.addEffect("whiteDriveBuff");
-        player.extraInfo.drives.white = Math.min(
-          player.extraInfo.drives.white + 1,
-          50
-        );
-      },
-    },
-
-    glitchedDrive: {
-      amount: 0,
-      u: (128 * 0) / 2048,
-      v: (128 * 0) / 2048,
-      value: 35,
-      use: function () {
-        if (!player.roboChallenge) {
-          player.addMessage(
-            "Drives can only be used in the Robo Challenge!",
-            COLORS.redArr
-          );
-          return;
-        }
-
-        items.glitchedDrive.amount--;
-        player.addEffect("glitchedDriveBuff");
-        player.extraInfo.drives.glitched = Math.min(
-          player.extraInfo.drives.glitched + 1,
-          50
-        );
-      },
-    },
-
-    roboPass: {
-      amount: 0,
-      u: (128 * 6) / 2048,
-      v: (128 * 12) / 2048,
-      value: 50,
-      use: function () {},
-    },
-
-    fieldDice: {
-      amount: 0,
-      u: (128 * 5) / 2048,
-      v: (128 * 10) / 2048,
-      value: 12,
-      use: function () {
-        items.fieldDice.amount--;
-
-        let f = [];
-
-        for (let i in fieldInfo) {
-          if (i !== "AntField") {
-            f.push(i);
-          }
-        }
-
-        for (let i = 0; i < 1; i++) {
-          let r = (Math.random() * f.length) | 0;
-
-          player.addEffect(
-            f[r][0].toLowerCase() + f[r].substring(1, f[r].length) + "Boost",
-            false,
-            false,
-            undefined,
-            1
-          );
-
-          player.addMessage(
-            'Activated "' +
-              MATH.doGrammar(
-                f[r][0].toLowerCase() + f[r].substring(1, f[r].length)
-              ) +
-              ' Boost"'
-          );
-        }
-      },
-    },
-
-    smoothDice: {
-      amount: 0,
-      u: (128 * 6) / 2048,
-      v: (128 * 10) / 2048,
-      value: 30,
-      use: function () {
-        items.smoothDice.amount--;
-
-        let f = [];
-
-        for (let i in fieldInfo) {
-          if (i !== "AntField") {
-            f.push(i);
-          }
-        }
-
-        for (let i = 0; i < 2; i++) {
-          let r = (Math.random() * f.length) | 0;
-
-          player.addEffect(
-            f[r][0].toLowerCase() + f[r].substring(1, f[r].length) + "Boost",
-            false,
-            false,
-            undefined,
-            2
-          );
-
-          player.addMessage(
-            'Activated x2 "' +
-              MATH.doGrammar(
-                f[r][0].toLowerCase() + f[r].substring(1, f[r].length)
-              ) +
-              ' Boost"'
-          );
-
-          f.splice(r, 1);
-        }
-      },
-    },
-
-    loadedDice: {
-      amount: 0,
-      u: (128 * 7) / 2048,
-      v: (128 * 10) / 2048,
-      value: 50,
-      use: function () {
-        items.loadedDice.amount--;
-
-        let f = [];
-
-        for (let i in fieldInfo) {
-          if (i !== "AntField") {
-            f.push(i);
-
-            if (i === player.fieldIn) {
-              f.push(i);
-              f.push(i);
-              f.push(i);
-              f.push(i);
-              f.push(i);
-              f.push(i);
-            }
-          }
-        }
-
-        for (let i = 0; i < 3; i++) {
-          let r = (Math.random() * f.length) | 0;
-
-          player.addEffect(
-            f[r][0].toLowerCase() + f[r].substring(1, f[r].length) + "Boost",
-            false,
-            false,
-            undefined,
-            3
-          );
-
-          player.addMessage(
-            'Activated x3 "' +
-              MATH.doGrammar(
-                f[r][0].toLowerCase() + f[r].substring(1, f[r].length)
-              ) +
-              ' Boost"'
-          );
-
-          for (let j in f) {
-            if (f[j] === f[r]) {
-              f.splice(j, 1);
-            }
-          }
-        }
-      },
-    },
-
-    microConverter: {
-      amount: 0,
-      u: (128 * 0) / 2048,
-      v: (128 * 11) / 2048,
-      value: 16,
-      cooldown: 2,
-      use: function () {
-        if (player.pollen < 1) {
-          player.addMessage(
-            "You must have pollen to use a micro-converter!",
-            COLORS.redArr
-          );
-          return;
-        }
-
-        items.microConverter.amount--;
-
-        textRenderer.add(
-          (player.pollen * player.honeyPerPollen) | 0,
-          [
-            player.body.position.x,
-            player.body.position.y + 2,
-            player.body.position.z,
-          ],
-          COLORS.honey,
-          1,
-          "⇆"
-        );
-        player.honey += (player.pollen * player.honeyPerPollen) | 0;
-        player.pollen = 0;
-      },
-    },
-
-    honeysuckle: {
-      amount: 0,
-      u: (128 * 1) / 2048,
-      v: (128 * 11) / 2048,
-      value: 13,
-      cooldown: 30,
-      autoUse: true,
-      use: function () {
-        if (player.pollen < player.capacity * 0.9) {
-          player.addMessage("Your container needs to be full!", COLORS.redArr);
-          return;
-        }
-
-        let am = Math.min(player.convertTotal * 0.25, player.pollen);
-
-        textRenderer.add(
-          (am * player.honeyPerPollen) | 0,
-          [
-            player.body.position.x,
-            player.body.position.y + 2,
-            player.body.position.z,
-          ],
-          COLORS.honey,
-          1,
-          "⇆"
-        );
-        player.honey += (am * player.honeyPerPollen) | 0;
-        player.pollen -= am;
-
-        items.honeysuckle.amount--;
-      },
-    },
-
-    whirligig: {
-      amount: 0,
-      u: (128 * 2) / 2048,
-      v: (128 * 11) / 2048,
-      value: 30,
-      cooldown: 60,
-      use: function () {
-        if (player.antChallenge) {
-          out.endAntChallenge();
-          return;
-        }
-
-        items.whirligig.amount--;
-
-        player.hivePos[0] += 1.5;
-        player.hivePos[2] += 2;
-
-        player.body.velocity.x = 0;
-        player.body.velocity.y = 0;
-        player.body.velocity.z = 0;
-
-        player.body.position.x = player.hivePos[0];
-        player.body.position.y = player.hivePos[1];
-        player.body.position.z = player.hivePos[2];
-
-        for (let i in objects.bees) {
-          objects.bees[i].pos = player.hivePos.slice();
-          objects.bees[i].state = "moveToPlayer";
-        }
-
-        player.hivePos[0] -= 1.5;
-        player.hivePos[2] -= 2;
-      },
-    },
-
-    softWax: {
-      canUseOnSlot: (slot) => {
-        return slot.beequip && slot.beequip.waxes.length < 5;
-      },
-      amount: 0,
-      u: (128 * 2) / 2048,
-      v: (128 * 9) / 2048,
-      value: 3,
-      use: function () {
-        player.addMessage("The wax improved the beequip!");
-
-        items.softWax.amount--;
-
-        player.hive[player.hiveIndex[1]][
-          player.hiveIndex[0]
-        ].beequip.waxes.push("1softWax");
-
-        let beeStats =
-            player.hive[player.hiveIndex[1]][
-              player.hiveIndex[0]
-            ].beequip.stats.bee.split(","),
-          numStatsToAdd =
-            player.hive[player.hiveIndex[1]][player.hiveIndex[0]].beequip
-              .potential >= 3
-              ? 2
-              : 1,
-          statsToAdd = [],
-          permBeeStats =
-            player.hive[player.hiveIndex[1]][
-              player.hiveIndex[0]
-            ].beequip.stats.bee.split(",");
-
-        for (let i = 0; i < numStatsToAdd; i++) {
-          let j = (Math.random() * beeStats.length) | 0;
-          statsToAdd.push(beeStats[j]);
-          beeStats.splice(j, 1);
-        }
-
-        for (let i in statsToAdd) {
-          for (let j in permBeeStats) {
-            if (statsToAdd[i] === permBeeStats[j]) {
-              let np =
-                player.hive[player.hiveIndex[1]][player.hiveIndex[0]].beequip
-                  .potential / 5;
-
-              let improvement = Number(
-                permBeeStats[j][0] === "*"
-                  ? (MATH.random(0.05, 0.1) * (np * 0.15 + 1)).toFixed(2)
-                  : (MATH.random(1, 5) * (np * 0.5 + 1)) | 0
-              );
-
-              permBeeStats[j] =
-                permBeeStats[j].substring(0, permBeeStats[j].indexOf("(") + 2) +
-                (
-                  Number(
-                    permBeeStats[j].substring(
-                      permBeeStats[j].indexOf("(") + 2,
-                      permBeeStats[j].indexOf(")")
-                    )
-                  ) + improvement
-                )
-                  .toFixed(2)
-                  .replaceAll(".00", "") +
-                ")";
-            }
-          }
-        }
-
-        player.hive[player.hiveIndex[1]][
-          player.hiveIndex[0]
-        ].beequip.stats.bee = permBeeStats.join(",");
-
-        player.updateBeequipPage();
-        player.updateHive();
-      },
-    },
-
-    hardWax: {
-      canUseOnSlot: (slot) => {
-        return slot.beequip && slot.beequip.waxes.length < 5;
-      },
-      amount: 0,
-      u: (128 * 3) / 2048,
-      v: (128 * 9) / 2048,
-      value: 26,
-      use: function () {
-        items.hardWax.amount--;
-
-        if (Math.random() > 0.6) {
-          player.addMessage(
-            "The wax failed to improve the beequip!",
-            COLORS.redArr
-          );
-          player.hive[player.hiveIndex[1]][
-            player.hiveIndex[0]
-          ].beequip.waxes.push("0hardWax");
-          player.updateBeequipPage();
-          player.updateHive();
-          return;
-        }
-
-        player.addMessage("The wax improved the beequip!");
-
-        player.hive[player.hiveIndex[1]][
-          player.hiveIndex[0]
-        ].beequip.waxes.push("1hardWax");
-
-        let beeStats =
-            player.hive[player.hiveIndex[1]][
-              player.hiveIndex[0]
-            ].beequip.stats.bee.split(","),
-          numStatsToAdd =
-            player.hive[player.hiveIndex[1]][player.hiveIndex[0]].beequip
-              .potential >= 3 && Math.random() < 0.5
-              ? 3
-              : 2,
-          statsToAdd = [],
-          permBeeStats =
-            player.hive[player.hiveIndex[1]][
-              player.hiveIndex[0]
-            ].beequip.stats.bee.split(",");
-
-        for (let i = 0; i < numStatsToAdd; i++) {
-          let j = (Math.random() * beeStats.length) | 0;
-          statsToAdd.push(beeStats[j]);
-          beeStats.splice(j, 1);
-        }
-
-        for (let i in statsToAdd) {
-          for (let j in permBeeStats) {
-            if (statsToAdd[i] === permBeeStats[j]) {
-              let np =
-                player.hive[player.hiveIndex[1]][player.hiveIndex[0]].beequip
-                  .potential / 5;
-
-              let improvement = Number(
-                permBeeStats[j][0] === "*"
-                  ? (MATH.random(0.075, 0.125) * (np * 0.15 + 1)).toFixed(2)
-                  : (MATH.random(2, 6) * (np * 0.5 + 1)) | 0
-              );
-
-              permBeeStats[j] =
-                permBeeStats[j].substring(0, permBeeStats[j].indexOf("(") + 2) +
-                (
-                  Number(
-                    permBeeStats[j].substring(
-                      permBeeStats[j].indexOf("(") + 2,
-                      permBeeStats[j].indexOf(")")
-                    )
-                  ) + improvement
-                )
-                  .toFixed(2)
-                  .replaceAll(".00", "") +
-                ")";
-            }
-          }
-        }
-
-        player.hive[player.hiveIndex[1]][
-          player.hiveIndex[0]
-        ].beequip.stats.bee = permBeeStats.join(",");
-
-        player.updateBeequipPage();
-        player.updateHive();
-      },
-    },
-
-    causticWax: {
-      canUseOnSlot: (slot) => {
-        return slot.beequip && slot.beequip.waxes.length < 5;
-      },
-      amount: 0,
-      u: (128 * 4) / 2048,
-      v: (128 * 9) / 2048,
-      value: 55,
-      use: function () {
-        items.causticWax.amount--;
-
-        if (Math.random() < 0.75) {
-          player.addMessage("The wax destroyed the beequip!", COLORS.redArr);
-
-          for (let i in player.currentGear.beequips)
-            if (
-              player.currentGear.beequips[i].id ===
-              player.hive[player.hiveIndex[1]][player.hiveIndex[0]].beequip.id
-            )
-              player.beequipLookingAt = Number(i);
-
-          window.deleteBeequip();
-          return;
-        }
-
-        player.addMessage("The wax improved the beequip!");
-
-        player.hive[player.hiveIndex[1]][
-          player.hiveIndex[0]
-        ].beequip.waxes.push("1causticWax");
-
-        let beeStats =
-            player.hive[player.hiveIndex[1]][
-              player.hiveIndex[0]
-            ].beequip.stats.bee.split(","),
-          numStatsToAdd =
-            player.hive[player.hiveIndex[1]][player.hiveIndex[0]].beequip
-              .potential >= 4 && Math.random() < 0.75
-              ? 4
-              : 3,
-          statsToAdd = [],
-          permBeeStats =
-            player.hive[player.hiveIndex[1]][
-              player.hiveIndex[0]
-            ].beequip.stats.bee.split(",");
-
-        for (let i = 0; i < numStatsToAdd; i++) {
-          let j = (Math.random() * beeStats.length) | 0;
-          statsToAdd.push(beeStats[j]);
-          beeStats.splice(j, 1);
-        }
-
-        for (let i in statsToAdd) {
-          for (let j in permBeeStats) {
-            if (statsToAdd[i] === permBeeStats[j]) {
-              let np =
-                player.hive[player.hiveIndex[1]][player.hiveIndex[0]].beequip
-                  .potential / 5;
-
-              let improvement = Number(
-                permBeeStats[j][0] === "*"
-                  ? (MATH.random(0.1, 0.175) * (np * 0.15 + 1)).toFixed(2)
-                  : (MATH.random(4, 9) * (np * 0.5 + 1)) | 0
-              );
-
-              permBeeStats[j] =
-                permBeeStats[j].substring(0, permBeeStats[j].indexOf("(") + 2) +
-                (
-                  Number(
-                    permBeeStats[j].substring(
-                      permBeeStats[j].indexOf("(") + 2,
-                      permBeeStats[j].indexOf(")")
-                    )
-                  ) + improvement
-                )
-                  .toFixed(2)
-                  .replaceAll(".00", "") +
-                ")";
-            }
-          }
-        }
-
-        player.hive[player.hiveIndex[1]][
-          player.hiveIndex[0]
-        ].beequip.stats.bee = permBeeStats.join(",");
-
-        player.updateBeequipPage();
-        player.updateHive();
-      },
-    },
-
-    swirledWax: {
-      canUseOnSlot: (slot) => {
-        return slot.beequip && slot.beequip.waxes.length < 5;
-      },
-      amount: 0,
-      u: (128 * 5) / 2048,
-      v: (128 * 9) / 2048,
-      value: 42,
-      use: function () {
-        items.swirledWax.amount--;
-
-        player.addMessage("The wax rerolled the beequip stats!");
-
-        player.hive[player.hiveIndex[1]][
-          player.hiveIndex[0]
-        ].beequip.waxes.push("1swirledWax");
-
-        let stats =
-          player.hive[player.hiveIndex[1]][
-            player.hiveIndex[0]
-          ].beequip.stats.bee.split(",");
-
-        for (let i in stats) {
-          let newNum =
-            Number(stats[i].substring(1, stats[i].indexOf(" "))) *
-            (stats[i][0] === "*"
-              ? MATH.random(0.8, 1.25)
-              : MATH.random(0.5, 2));
-
-          stats[i] =
-            stats[i][0] +
-            (stats[i][0] === "+"
-              ? Math.round(newNum)
-              : newNum.toFixed(2).replace(".00", "")) +
-            stats[i].substring(stats[i].indexOf(" "), stats[i].length);
-        }
-
-        player.hive[player.hiveIndex[1]][
-          player.hiveIndex[0]
-        ].beequip.stats.bee = stats.join(",");
-
-        player.updateBeequipPage();
-        player.updateHive();
-      },
-    },
-
-    turpentine: {
-      canUseOnSlot: (slot) => {
-        return slot.beequip && slot.beequip.waxes.length > 0;
-      },
-      amount: 0,
-      u: (128 * 0) / 2048,
-      v: (128 * 13) / 2048,
-      value: 60,
-      use: function () {
-        items.turpentine.amount--;
-
-        player.addMessage("The turpentine removed all waxes on the beequip!");
-
-        player.hive[player.hiveIndex[1]][player.hiveIndex[0]].beequip.waxes =
-          [];
-
-        let stats =
-          player.hive[player.hiveIndex[1]][
-            player.hiveIndex[0]
-          ].beequip.stats.bee.split(",");
-
-        for (let i in stats) {
-          stats[i] = stats[i].substr(0, stats[i].indexOf("(")) + "(+0)";
-        }
-
-        player.hive[player.hiveIndex[1]][
-          player.hiveIndex[0]
-        ].beequip.stats.bee = stats.join(",");
-
-        player.updateBeequipPage();
-        player.updateHive();
-      },
-    },
-
-    paperPlanter: {
-      amount: 0,
-      u: 0,
-      v: 0,
-      value: Infinity,
-      use: function () {
-        if (objects.planters.length >= 3) {
-          player.addMessage(
-            "You can only have 3 planters at once!",
-            COLORS.redArr
-          );
-          return;
-        }
-
-        if (player.fieldIn) {
-          for (let i in objects.planters) {
-            if (player.fieldIn === objects.planters[i].field) {
-              player.addMessage(
-                "You can only have 1 planter in a field!",
-                COLORS.redArr
-              );
-              return;
-            }
-
-            if (objects.planters[i].type === "paper") {
-              player.addMessage(
-                "You can only have 1 paper planter active!",
-                COLORS.redArr
-              );
-              return;
-            }
-          }
-
-          items.paperPlanter.amount--;
-          objects.planters.push(new Planter("paper"));
-        } else {
-          player.addMessage(
-            "You must be in a field to place a planter!",
-            COLORS.redArr
-          );
-        }
-      },
-    },
-
-    plasticPlanter: {
-      amount: 0,
-      u: 0,
-      v: 0,
-      value: Infinity,
-      use: function () {
-        if (objects.planters.length >= 3) {
-          player.addMessage(
-            "You can only have 3 planters at once!",
-            COLORS.redArr
-          );
-          return;
-        }
-
-        if (player.fieldIn) {
-          items.plasticPlanter.amount--;
-          objects.planters.push(new Planter("plastic"));
-        } else {
-          player.addMessage(
-            "You must be in a field to place a planter!",
-            COLORS.redArr
-          );
-        }
-      },
-    },
-
-    candyPlanter: {
-      amount: 0,
-      u: 0,
-      v: 0,
-      value: Infinity,
-      use: function () {
-        if (objects.planters.length >= 3) {
-          player.addMessage(
-            "You can only have 3 planters at once!",
-            COLORS.redArr
-          );
-          return;
-        }
-
-        if (player.fieldIn) {
-          items.candyPlanter.amount--;
-          objects.planters.push(new Planter("candy"));
-        } else {
-          player.addMessage(
-            "You must be in a field to place a planter!",
-            COLORS.redArr
-          );
-        }
-      },
-    },
-
-    redClayPlanter: {
-      amount: 0,
-      u: 0,
-      v: 0,
-      value: Infinity,
-      use: function () {
-        if (objects.planters.length >= 3) {
-          player.addMessage(
-            "You can only have 3 planters at once!",
-            COLORS.redArr
-          );
-          return;
-        }
-
-        if (player.fieldIn) {
-          items.redClayPlanter.amount--;
-          objects.planters.push(new Planter("redClay"));
-        } else {
-          player.addMessage(
-            "You must be in a field to place a planter!",
-            COLORS.redArr
-          );
-        }
-      },
-    },
-
-    blueClayPlanter: {
-      amount: 0,
-      u: 0,
-      v: 0,
-      value: Infinity,
-      use: function () {
-        if (objects.planters.length >= 3) {
-          player.addMessage(
-            "You can only have 3 planters at once!",
-            COLORS.redArr
-          );
-          return;
-        }
-
-        if (player.fieldIn) {
-          items.blueClayPlanter.amount--;
-          objects.planters.push(new Planter("blueClay"));
-        } else {
-          player.addMessage(
-            "You must be in a field to place a planter!",
-            COLORS.redArr
-          );
-        }
-      },
-    },
-
-    tackyPlanter: {
-      amount: 0,
-      u: 0,
-      v: 0,
-      value: Infinity,
-      use: function () {
-        if (objects.planters.length >= 3) {
-          player.addMessage(
-            "You can only have 3 planters at once!",
-            COLORS.redArr
-          );
-          return;
-        }
-
-        if (player.fieldIn) {
-          items.tackyPlanter.amount--;
-          objects.planters.push(new Planter("tacky"));
-        } else {
-          player.addMessage(
-            "You must be in a field to place a planter!",
-            COLORS.redArr
-          );
-        }
-      },
-    },
-
-    pesticidePlanter: {
-      amount: 0,
-      u: 0,
-      v: 0,
-      value: Infinity,
-      use: function () {
-        if (objects.planters.length >= 3) {
-          player.addMessage(
-            "You can only have 3 planters at once!",
-            COLORS.redArr
-          );
-          return;
-        }
-
-        if (player.fieldIn) {
-          items.pesticidePlanter.amount--;
-          objects.planters.push(new Planter("pesticide"));
-        } else {
-          player.addMessage(
-            "You must be in a field to place a planter!",
-            COLORS.redArr
-          );
-        }
-      },
-    },
-
-    petalPlanter: {
-      amount: 0,
-      u: 0,
-      v: 0,
-      value: Infinity,
-      use: function () {
-        if (objects.planters.length >= 3) {
-          player.addMessage(
-            "You can only have 3 planters at once!",
-            COLORS.redArr
-          );
-          return;
-        }
-
-        if (player.fieldIn) {
-          items.petalPlanter.amount--;
-          objects.planters.push(new Planter("petal"));
-        } else {
-          player.addMessage(
-            "You must be in a field to place a planter!",
-            COLORS.redArr
-          );
-        }
-      },
-    },
-
-    plentyPlanter: {
-      amount: 0,
-      u: 0,
-      v: 0,
-      value: Infinity,
-      use: function () {
-        if (objects.planters.length >= 3) {
-          player.addMessage(
-            "You can only have 3 planters at once!",
-            COLORS.redArr
-          );
-          return;
-        }
-
-        if (player.fieldIn) {
-          items.plentyPlanter.amount--;
-          objects.planters.push(new Planter("plenty"));
-        } else {
-          player.addMessage(
-            "You must be in a field to place a planter!",
-            COLORS.redArr
-          );
-        }
-      },
-    },
-
-    gumdrops: {
-      amount: 0,
-      u: 128 / 2048,
-      v: (128 * 7) / 2048,
-      cooldown: 4,
-      autoUse: true,
-      value: 5,
-      use: function () {
-        if (player.fieldIn) {
-          player.stats.gummyMorph++;
-          player.stats.gummyStar++;
-
-          if (Math.random() < 0.09) player.stats.gummyStar += 20;
-
-          items.gumdrops.amount--;
-
-          for (let i = 0, l = MATH.random(2, 5) | 0; i < l; i++) {
-            let r = MATH.random(2, 5) | 0,
-              f = function (f) {
-                f.goo = 1;
-                f.height = 1;
-              },
-              ox = (Math.random() * fieldInfo[player.fieldIn].width) | 0,
-              oz = (Math.random() * fieldInfo[player.fieldIn].length) | 0;
-
-            for (let x = -r; x <= r; x++) {
-              let _x = x + ox;
-
-              for (let z = -r; z <= r; z++) {
-                let _z = z + oz;
-
-                if (
-                  Math.abs(_x - ox) + Math.abs(_z - oz) <= r &&
-                  _x >= 0 &&
-                  _x < fieldInfo[player.fieldIn].width &&
-                  _z >= 0 &&
-                  _z < fieldInfo[player.fieldIn].length
-                ) {
-                  updateFlower(player.fieldIn, _x, _z, f, true, true, false);
-                }
-              }
-            }
-
-            objects.explosions.push(
-              new Explosion({
-                col: [1, 0.2, 1],
-                pos: [
-                  fieldInfo[player.fieldIn].x + ox,
-                  fieldInfo[player.fieldIn].y + 0.5,
-                  fieldInfo[player.fieldIn].z + oz,
-                ],
-                life: 0.75,
-                size: r * 1.5,
-                speed: 0.5,
-                aftershock: 0.005,
-                height: 0.3,
-              })
-            );
-          }
-        } else {
-          if (triggers.gummyBee_tame.colliding) {
-            items.gumdrops.amount--;
-            player.body.position.set(0, 1002, 1013);
-            player.body.velocity.set(0, 0, 0);
-            return;
-          }
-
-          player.addMessage(
-            "You must be standing in a field to use gumdrops!",
-            COLORS.redArr
-          );
-        }
-      },
-    },
-
-    coconut: {
-      amount: 0,
-      u: (128 * 2) / 2048,
-      v: (128 * 7) / 2048,
-      cooldown: 10,
-      autoUse: true,
-      value: 4,
-      use: function () {
-        if (player.fieldIn) {
-          items.coconut.amount--;
-
-          objects.mobs.push(
-            new Coconut(
-              (Math.random() * fieldInfo[player.fieldIn].width) | 0,
-              (Math.random() * fieldInfo[player.fieldIn].length) | 0,
-              0
-            )
-          );
-        } else {
-          player.addMessage(
-            "You must be standing in a field to use coconuts!",
-            COLORS.redArr
-          );
-        }
-      },
-    },
-
-    stinger: {
-      amount: 0,
-      u: (128 * 3) / 2048,
-      v: (128 * 7) / 2048,
-      value: 10,
-      use: function () {
-        items.stinger.amount--;
-        player.addEffect("stingerBuff");
-        player.stats.stingerUsed++;
-      },
-    },
-
-    glue: {
-      amount: 0,
-      u: 0,
-      v: (128 * 3) / 2048,
-      value: 19,
-      use: function () {
-        for (let i in player.effects) {
-          // if(player.effects[i].type==='purplePotionBuff'){
-
-          //     player.addMessage('Cannot use while Purple Potion is active!',COLORS.redArr)
-          //     return
-          // }
-
-          if (player.effects[i].type === "superSmoothieBuff") {
-            player.addMessage(
-              "Cannot use while Super Smoothie is active!",
-              COLORS.redArr
-            );
-            return;
-          }
-        }
-
-        items.glue.amount--;
-        player.addEffect("glueBuff");
-      },
-    },
-
-    oil: {
-      amount: 0,
-      u: 128 / 2048,
-      v: (128 * 3) / 2048,
-      value: 17,
-      use: function () {
-        for (let i in player.effects) {
-          if (player.effects[i].type === "superSmoothieBuff") {
-            player.addMessage(
-              "Cannot use while Super Smoothie is active!",
-              COLORS.redArr
-            );
-            return;
-          }
-        }
-
-        items.oil.amount--;
-        player.addEffect("oilBuff");
-      },
-    },
-
-    enzymes: {
-      amount: 0,
-      u: (128 * 2) / 2048,
-      v: (128 * 3) / 2048,
-      value: 17,
-      use: function () {
-        for (let i in player.effects) {
-          if (player.effects[i].type === "superSmoothieBuff") {
-            player.addMessage(
-              "Cannot use while Super Smoothie is active!",
-              COLORS.redArr
-            );
-            return;
-          }
-        }
-
-        items.enzymes.amount--;
-        player.addEffect("enzymesBuff");
-      },
-    },
-
-    redExtract: {
-      amount: 0,
-      u: (128 * 3) / 2048,
-      v: (128 * 3) / 2048,
-      value: 17,
-      use: function () {
-        for (let i in player.effects) {
-          // if(player.effects[i].type==='purplePotionBuff'){
-
-          //     player.addMessage('Cannot use while Purple Potion is active!',COLORS.redArr)
-          //     return
-          // }
-
-          if (player.effects[i].type === "superSmoothieBuff") {
-            player.addMessage(
-              "Cannot use while Super Smoothie is active!",
-              COLORS.redArr
-            );
-            return;
-          }
-        }
-
-        items.redExtract.amount--;
-        player.addEffect("redExtractBuff");
-      },
-    },
-
-    blueExtract: {
-      amount: 0,
-      u: (128 * 4) / 2048,
-      v: (128 * 3) / 2048,
-      value: 17,
-      use: function () {
-        for (let i in player.effects) {
-          // if(player.effects[i].type==='purplePotionBuff'){
-
-          //     player.addMessage('Cannot use while Purple Potion is active!',COLORS.redArr)
-          //     return
-          // }
-
-          if (player.effects[i].type === "superSmoothieBuff") {
-            player.addMessage(
-              "Cannot use while Super Smoothie is active!",
-              COLORS.redArr
-            );
-            return;
-          }
-        }
-
-        items.blueExtract.amount--;
-        player.addEffect("blueExtractBuff");
-      },
-    },
-
-    tropicalDrink: {
-      amount: 0,
-      u: (128 * 5) / 2048,
-      v: (128 * 3) / 2048,
-      value: 22,
-      use: function () {
-        for (let i in player.effects) {
-          if (player.effects[i].type === "superSmoothieBuff") {
-            player.addMessage(
-              "Cannot use while Super Smoothie is active!",
-              COLORS.redArr
-            );
-            return;
-          }
-        }
-
-        items.tropicalDrink.amount--;
-        player.addEffect("tropicalDrinkBuff");
-      },
-    },
-
-    purplePotion: {
-      amount: 0,
-      u: (128 * 6) / 2048,
-      v: (128 * 3) / 2048,
-      value: 95,
-      use: function () {
-        for (let i in player.effects) {
-          if (player.effects[i].type === "redExtractBuff") {
-            player.addMessage(
-              "Cannot use while Red Extract is active!",
-              COLORS.redArr
-            );
-            return;
-          }
-
-          if (player.effects[i].type === "blueExtractBuff") {
-            player.addMessage(
-              "Cannot use while Blue Extract is active!",
-              COLORS.redArr
-            );
-            return;
-          }
-
-          if (player.effects[i].type === "glueBuff") {
-            player.addMessage(
-              "Cannot use while Glue is active!",
-              COLORS.redArr
-            );
-            return;
-          }
-
-          if (player.effects[i].type === "superSmoothieBuff") {
-            player.addMessage(
-              "Cannot use while Super Smoothie is active!",
-              COLORS.redArr
-            );
-            return;
-          }
-        }
-
-        items.purplePotion.amount--;
-        player.addEffect("purplePotionBuff");
-      },
-    },
-
-    superSmoothie: {
-      amount: 0,
-      u: (128 * 7) / 2048,
-      v: (128 * 3) / 2048,
-      value: 120,
-      use: function () {
-        for (let i in player.effects) {
-          if (player.effects[i].type === "redExtractBuff") {
-            player.addMessage(
-              "Cannot use while Red Extract is active!",
-              COLORS.redArr
-            );
-            return;
-          }
-
-          if (player.effects[i].type === "blueExtractBuff") {
-            player.addMessage(
-              "Cannot use while Blue Extract is active!",
-              COLORS.redArr
-            );
-            return;
-          }
-
-          if (player.effects[i].type === "glueExtractBuff") {
-            player.addMessage(
-              "Cannot use while Glue is active!",
-              COLORS.redArr
-            );
-            return;
-          }
-
-          if (player.effects[i].type === "enzymesBuff") {
-            player.addMessage(
-              "Cannot use while Enzymes are active!",
-              COLORS.redArr
-            );
-            return;
-          }
-
-          if (player.effects[i].type === "oilBuff") {
-            player.addMessage("Cannot use while Oil is active!", COLORS.redArr);
-            return;
-          }
-
-          if (player.effects[i].type === "tropicalDrinkBuff") {
-            player.addMessage(
-              "Cannot use while Tropical Drink is active!",
-              COLORS.redArr
-            );
-            return;
-          }
-
-          if (player.effects[i].type === "purplePotionBuff") {
-            player.addMessage(
-              "Cannot use while Purple Potion is active!",
-              COLORS.redArr
-            );
-            return;
-          }
-        }
-
-        items.superSmoothie.amount--;
-        player.addEffect("superSmoothieBuff");
-      },
-    },
-
-    bitterberry: {
-      canUseOnSlot: (slot) => {
-        return slot.type !== null;
-      },
-      amount: 0,
-      u: (128 * 6) / 2048,
-      v: (128 * 7) / 2048,
-      value: 10,
-      use: function () {
-        howManyToFeed.style.display = "block";
-        feedAmount.value = 1;
-        howManyMessage.innerHTML =
-          "How many bitterberries will you feed to " +
-          MATH.doGrammar(
-            player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.type
-          ) +
-          " Bee?";
-        document.getElementById("feedUntilGifted").style.display = "none";
-
-        // CHQ: Limit the amount of treats fed to what the player actually have in inventory.
-        //      How: using constrain method of Math to set the feed amount to the lower of the
-        //           amount the player specified and the amount that the user actually has
-        howManyToFeed.onmousemove = feedAmount.oninput = function () {
-          let a = feedAmount.value;
-          feedAmount.value = MATH.constrain(a, 1, items.bitterberry.amount);
-        };
-
-        document.getElementById("cancelFeeding").onclick = function () {
-          howManyToFeed.style.display = "none";
-        };
-
-        document.getElementById("feedThisAmount").onclick = function () {
-          howManyToFeed.style.display = "none";
-
-          let amount = feedAmount.value;
-          items.bitterberry.amount -= amount;
-          player.stats.bitterberry += Number(amount);
-          player.updateInventory();
-
-          // CHQ: randomly gives powerup to bees
-          if (
-            Math.random() <
-            1 -
-              Math.pow(
-                1 -
-                  1 /
-                    (player.hive[player.hiveIndex[1]][player.hiveIndex[0]]
-                      .radioactive > 0
-                      ? 30
-                      : 100),
-                amount
-              )
-          ) {
-            player.addMessage(
-              "☢️ " +
-                MATH.doGrammar(
-                  player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.type
-                ) +
-                " bee gained a mutation! ☢️",
-              [50, 225, 90]
-            );
-
-            let stat = [
-                "abilityRate",
-                "gatherAmount",
-                "convertAmount",
-                "maxEnergy",
-                "attack",
-                "gatherAmount",
-                "convertAmount",
-                "maxEnergy",
-                "attack",
-                "gatherAmount",
-                "convertAmount",
-                "maxEnergy",
-                "attack",
-                "gatherAmount",
-                "convertAmount",
-                "maxEnergy",
-                "attack",
-                "gatherAmount",
-                "convertAmount",
-                "maxEnergy",
-                "attack",
-                "gatherAmount",
-                "convertAmount",
-                "maxEnergy",
-                "attack",
-                "gatherAmount",
-                "convertAmount",
-                "maxEnergy",
-                "attack",
-                "gatherAmount",
-                "convertAmount",
-                "maxEnergy",
-                "attack",
-              ],
-              oper,
-              num,
-              level =
-                player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee
-                  .level - 1;
-
-            stat = stat[(Math.random() * stat.length) | 0];
-
-            oper =
-              stat === "attack" ||
-              stat === "convertAmount" ||
-              stat === "gatherAmount"
-                ? Math.random() < 0.5
-                  ? "+"
-                  : "*"
-                : "*";
-
-            switch (stat) {
-              case "attack":
-                num =
-                  oper === "+"
-                    ? MATH.random(1 + level * (2 / 20), 3 + level * (4 / 20)) |
-                      0
-                    : MATH.random(1.05, 1.35 + level * 0.02);
-                break;
-              case "gatherAmount":
-                num =
-                  oper === "+"
-                    ? MATH.random(
-                        4 + level * (8 / 20),
-                        10 + level * (16 / 20)
-                      ) | 0
-                    : MATH.random(1.1, 1.3 + level * 0.04);
-                break;
-              case "convertAmount":
-                num =
-                  oper === "+"
-                    ? MATH.random(
-                        7 + level * (10 / 20),
-                        15 + level * (20 / 20)
-                      ) | 0
-                    : MATH.random(1.15, 1.4 + level * 0.04);
-                break;
-              case "maxEnergy":
-                num = MATH.random(1.2, 1.5 + level * 0.04);
-                break;
-              case "abilityRate":
-                num = MATH.random(1.05, 1.15 + level * 0.0175);
-                break;
-            }
-
-            num = Number(num.toFixed(2));
-
-            player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.mutation =
-              player.hive[player.hiveIndex[1]][player.hiveIndex[0]].mutation = {
-                stat: stat,
-                num: num,
-                oper: oper,
-              };
-
-            player.addMessage(
-              "☢️ " +
-                MATH.doGrammar(
-                  player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.type
-                ) +
-                " got " +
-                oper.replace("*", "x") +
-                num +
-                " " +
-                MATH.doGrammar(stat.replace("max", "")).toLowerCase() +
-                "! ☢️",
-              [50, 225, 90]
-            );
-          }
-
-          let addedBond = (amount * 100 * player.bondFromTreats) | 0;
-
-          player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bond +=
-            addedBond;
-
-          textRenderer.add(
-            addedBond + "",
-            [
-              player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.pos[0],
-              player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.pos[1] +
-                1,
-              player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.pos[2],
-            ],
-            COLORS.bondArr,
-            0,
-            "+",
-            1.5
-          );
-
-          player.addMessage(
-            MATH.doGrammar(
-              player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.type
-            ) + " Bee's bond improved",
-            COLORS.bondArr
-          );
-          player.addMessage(
-            "by " + MATH.addCommas(addedBond + "") + "!",
-            COLORS.bondArr
-          );
-
-          player.updateHive();
-        };
-      },
-    },
-
-    neonberry: {
-      canUseOnSlot: (slot) => {
-        return slot.type !== null;
-      },
-      amount: 0,
-      u: (128 * 7) / 2048,
-      v: (128 * 7) / 2048,
-      value: 16,
-      use: function () {
-        howManyToFeed.style.display = "block";
-        feedAmount.value = 1;
-        howManyMessage.innerHTML =
-          "How many neonberries will you feed to " +
-          MATH.doGrammar(
-            player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.type
-          ) +
-          " Bee?";
-        document.getElementById("feedUntilGifted").style.display = "none";
-
-        // CHQ: Limit the amount of treats fed to what the player actually have in inventory.
-        //      How: using constrain method of Math to set the feed amount to the lower of the
-        //           amount the player specified and the amount that the user actually has
-        howManyToFeed.onmousemove = feedAmount.oninput = function () {
-          let a = feedAmount.value;
-          feedAmount.value = MATH.constrain(a, 1, items.neonberry.amount);
-        };
-
-        document.getElementById("cancelFeeding").onclick = function () {
-          howManyToFeed.style.display = "none";
-        };
-
-        document.getElementById("feedThisAmount").onclick = function () {
-          howManyToFeed.style.display = "none";
-
-          let amount = feedAmount.value;
-          items.neonberry.amount -= amount;
-          player.stats.neonberry += Number(amount);
-          player.updateInventory();
-
-          player.hive[player.hiveIndex[1]][player.hiveIndex[0]].radioactive =
-            3 * 60 + (amount - 1) * 3;
-
-          player.addMessage(
-            "☢️ " +
-              MATH.doGrammar(
-                player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.type
-              ) +
-              " bee became radioactive for " +
-              MATH.doTime(
-                player.hive[player.hiveIndex[1]][player.hiveIndex[0]]
-                  .radioactive
-              ) +
-              " ☢️",
-            [50, 225, 90]
-          );
-
-          let addedBond = (amount * 500 * player.bondFromTreats) | 0;
-
-          player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bond +=
-            addedBond;
-
-          textRenderer.add(
-            addedBond + "",
-            [
-              player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.pos[0],
-              player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.pos[1] +
-                1,
-              player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.pos[2],
-            ],
-            COLORS.bondArr,
-            0,
-            "+",
-            1.5
-          );
-
-          player.addMessage(
-            MATH.doGrammar(
-              player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.type
-            ) + " Bee's bond improved",
-            COLORS.bondArr
-          );
-          player.addMessage(
-            "by " + MATH.addCommas(addedBond + "") + "!",
-            COLORS.bondArr
-          );
-
-          player.updateHive();
-        };
-      },
-    },
-
-    moonCharm: {
-      canUseOnSlot: (slot) => {
-        return slot.type !== null;
-      },
-      amount: 0,
-      u: (128 * 7) / 2048,
-      v: (128 * 12) / 2048,
-      value: 10,
-      use: function () {
-        howManyToFeed.style.display = "block";
-        feedAmount.value = 1;
-        howManyMessage.innerHTML =
-          "How many moon charms will you feed to " +
-          MATH.doGrammar(
-            player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.type
-          ) +
-          " Bee?";
-        document.getElementById("feedUntilGifted").style.display = "none";
-
-        // CHQ: Limit the amount of treats fed to what the player actually have in inventory.
-        //      How: using constrain method of Math to set the feed amount to the lower of the
-        //           amount the player specified and the amount that the user actually has
-        howManyToFeed.onmousemove = feedAmount.oninput = function () {
-          let a = feedAmount.value;
-          feedAmount.value = MATH.constrain(a, 1, items.moonCharm.amount);
-        };
-
-        document.getElementById("cancelFeeding").onclick = function () {
-          howManyToFeed.style.display = "none";
-        };
-
-        document.getElementById("feedThisAmount").onclick = function () {
-          howManyToFeed.style.display = "none";
-
-          let amount = feedAmount.value;
-          items.moonCharm.amount -= amount;
-          player.stats.moonCharm += Number(amount);
-          player.updateInventory();
-
-          let addedBond = (amount * 250 * player.bondFromTreats) | 0;
-
-          player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bond +=
-            addedBond;
-
-          textRenderer.add(
-            addedBond + "",
-            [
-              player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.pos[0],
-              player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.pos[1] +
-                1,
-              player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.pos[2],
-            ],
-            COLORS.bondArr,
-            0,
-            "+",
-            1.5
-          );
-
-          player.addMessage(
-            MATH.doGrammar(
-              player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.type
-            ) + " Bee's bond improved",
-            COLORS.bondArr
-          );
-          player.addMessage(
-            "by " + MATH.addCommas(addedBond + "") + "!",
-            COLORS.bondArr
-          );
-
-          player.updateHive();
-        };
-      },
-    },
-
-    treat: {
-      canUseOnSlot: (slot) => {
-        return slot.type !== null;
-      },
-      amount: 0,
-      u: 0,
-      v: (128 * 4) / 2048,
-      value: 1,
-      use: function () {
-        howManyToFeed.style.display = "block";
-        feedAmount.value = 1;
-        howManyMessage.innerHTML =
-          "How many treats will you feed to " +
-          MATH.doGrammar(
-            player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.type
-          ) +
-          " Bee?";
-        document.getElementById("feedUntilGifted").style.display = "none";
-
-        // CHQ: Limit the amount of treats fed to what the player actually have in inventory.
-        //      How: using constrain method of Math to set the feed amount to the lower of the
-        //           amount the player specified and the amount that the user actually has
-        howManyToFeed.onmousemove = feedAmount.oninput = function () {
-          let a = feedAmount.value;
-          feedAmount.value = MATH.constrain(a, 1, items.treat.amount);
-        };
-
-        document.getElementById("cancelFeeding").onclick = function () {
-          howManyToFeed.style.display = "none";
-        };
-
-        document.getElementById("feedThisAmount").onclick = function () {
-          howManyToFeed.style.display = "none";
-
-          let amount = feedAmount.value;
-          items.treat.amount -= amount;
-          player.stats.treat += Number(amount);
-
-          player.updateInventory();
-
-          let addedBond = (amount * 10 * player.bondFromTreats) | 0;
-
-          player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bond +=
-            addedBond;
-
-          textRenderer.add(
-            addedBond + "",
-            [
-              player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.pos[0],
-              player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.pos[1] +
-                1,
-              player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.pos[2],
-            ],
-            COLORS.bondArr,
-            0,
-            "+",
-            1.5
-          );
-
-          player.addMessage(
-            MATH.doGrammar(
-              player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.type
-            ) + " Bee's bond improved",
-            COLORS.bondArr
-          );
-          player.addMessage(
-            "by " + MATH.addCommas(addedBond + "") + "!",
-            COLORS.bondArr
-          );
-
-          player.updateHive();
-        };
-      },
-    },
-
-    starTreat: {
-      canUseOnSlot: (slot) => {
-        return slot.type !== null;
-      },
-      amount: 0,
-      u: (128 * 1) / 2048,
-      v: (128 * 13) / 2048,
-      value: 500,
-      use: function () {
-        howManyToFeed.style.display = "block";
-        feedAmount.value = 1;
-        howManyMessage.innerHTML =
-          "How many star treats will you feed to " +
-          MATH.doGrammar(
-            player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.type
-          ) +
-          " Bee?";
-        document.getElementById("feedUntilGifted").style.display = "none";
-
-        // CHQ: Limit the amount of treats fed to what the player actually have in inventory.
-        //      How: using constrain method of Math to set the feed amount to the lower of the
-        //           amount the player specified and the amount that the user actually has
-        howManyToFeed.onmousemove = feedAmount.oninput = function () {
-          let a = feedAmount.value;
-          feedAmount.value = MATH.constrain(a, 1, items.starTreat.amount);
-        };
-
-        document.getElementById("cancelFeeding").onclick = function () {
-          howManyToFeed.style.display = "none";
-        };
-
-        document.getElementById("feedThisAmount").onclick = function () {
-          howManyToFeed.style.display = "none";
-
-          let amount = feedAmount.value;
-          items.starTreat.amount -= amount;
-          player.stats.starTreat += Number(amount);
-          player.updateInventory();
-
-          let addedBond = (amount * 1000 * player.bondFromTreats) | 0;
-
-          player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bond +=
-            addedBond;
-
-          player.hive[player.hiveIndex[1]][player.hiveIndex[0]].gifted = true;
-          player.addMessage(
-            "⭐ The treat made the bee gifted! ⭐",
-            COLORS.honey
-          );
-
-          textRenderer.add(
-            addedBond + "",
-            [
-              player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.pos[0],
-              player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.pos[1] +
-                1,
-              player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.pos[2],
-            ],
-            COLORS.bondArr,
-            0,
-            "+",
-            1.5
-          );
-
-          player.addMessage(
-            MATH.doGrammar(
-              player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.type
-            ) + " Bee's bond improved",
-            COLORS.bondArr
-          );
-          player.addMessage(
-            "by " + MATH.addCommas(addedBond + "") + "!",
-            COLORS.bondArr
-          );
-
-          player.updateHive();
-        };
-      },
-    },
-
-    atomicTreat: {
-      canUseOnSlot: (slot) => {
-        return slot.type !== null;
-      },
-      amount: 0,
-      u: (128 * 2) / 2048,
-      v: (128 * 13) / 2048,
-      value: 40,
-      use: function () {
-        howManyToFeed.style.display = "block";
-        feedAmount.value = 1;
-        howManyMessage.innerHTML =
-          "How many atomic treats will you feed to " +
-          MATH.doGrammar(
-            player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.type
-          ) +
-          " Bee?";
-        document.getElementById("feedUntilGifted").style.display = "none";
-
-        // CHQ: Limit the amount of treats fed to what the player actually have in inventory.
-        //      How: using constrain method of Math to set the feed amount to the lower of the
-        //           amount the player specified and the amount that the user actually has
-        howManyToFeed.onmousemove = feedAmount.oninput = function () {
-          let a = feedAmount.value;
-          feedAmount.value = MATH.constrain(a, 1, items.atomicTreat.amount);
-        };
-
-        document.getElementById("cancelFeeding").onclick = function () {
-          howManyToFeed.style.display = "none";
-        };
-
-        document.getElementById("feedThisAmount").onclick = function () {
-          howManyToFeed.style.display = "none";
-
-          let amount = feedAmount.value;
-          items.atomicTreat.amount -= amount;
-          player.stats.atomicTreat += Number(amount);
-          player.updateInventory();
-
-          let addedBond = (amount * 1000 * player.bondFromTreats) | 0;
-
-          player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bond +=
-            addedBond;
-
-          player.addMessage(
-            "☢️ " +
-              MATH.doGrammar(
-                player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.type
-              ) +
-              " bee gained a mutation! ☢️",
-            [50, 225, 90]
-          );
-
-          let stat = [
-              "abilityRate",
-              "gatherAmount",
-              "convertAmount",
-              "maxEnergy",
-              "attack",
-              "gatherAmount",
-              "convertAmount",
-              "maxEnergy",
-              "attack",
-              "gatherAmount",
-              "convertAmount",
-              "maxEnergy",
-              "attack",
-              "gatherAmount",
-              "convertAmount",
-              "maxEnergy",
-              "attack",
-              "gatherAmount",
-              "convertAmount",
-              "maxEnergy",
-              "attack",
-              "gatherAmount",
-              "convertAmount",
-              "maxEnergy",
-              "attack",
-              "gatherAmount",
-              "convertAmount",
-              "maxEnergy",
-              "attack",
-              "gatherAmount",
-              "convertAmount",
-              "maxEnergy",
-              "attack",
-            ],
-            oper,
-            num,
-            level =
-              player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.level -
-              1;
-
-          stat = stat[(Math.random() * stat.length) | 0];
-
-          oper =
-            stat === "attack" ||
-            stat === "convertAmount" ||
-            stat === "gatherAmount"
-              ? Math.random() < 0.5
-                ? "+"
-                : "*"
-              : "*";
-
-          switch (stat) {
-            case "attack":
-              num =
-                oper === "+"
-                  ? MATH.random(1 + level * (2 / 20), 3 + level * (4 / 20)) | 0
-                  : MATH.random(1.05, 1.35 + level * 0.02);
-              break;
-            case "gatherAmount":
-              num =
-                oper === "+"
-                  ? MATH.random(4 + level * (8 / 20), 10 + level * (16 / 20)) |
-                    0
-                  : MATH.random(1.1, 1.3 + level * 0.04);
-              break;
-            case "convertAmount":
-              num =
-                oper === "+"
-                  ? MATH.random(7 + level * (10 / 20), 15 + level * (20 / 20)) |
-                    0
-                  : MATH.random(1.15, 1.4 + level * 0.04);
-              break;
-            case "maxEnergy":
-              num = MATH.random(1.2, 1.5 + level * 0.04);
-              break;
-            case "abilityRate":
-              num = MATH.random(1.05, 1.15 + level * 0.0175);
-              break;
-          }
-
-          num = Number(num.toFixed(2));
-
-          player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.mutation =
-            player.hive[player.hiveIndex[1]][player.hiveIndex[0]].mutation = {
-              stat: stat,
-              num: num,
-              oper: oper,
-            };
-
-          player.addMessage(
-            "☢️ " +
-              MATH.doGrammar(
-                player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.type
-              ) +
-              " got " +
-              oper.replace("*", "x") +
-              num +
-              " " +
-              MATH.doGrammar(stat.replace("max", "")).toLowerCase() +
-              "! ☢️",
-            [50, 225, 90]
-          );
-
-          textRenderer.add(
-            addedBond + "",
-            [
-              player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.pos[0],
-              player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.pos[1] +
-                1,
-              player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.pos[2],
-            ],
-            COLORS.bondArr,
-            0,
-            "+",
-            1.5
-          );
-
-          player.addMessage(
-            MATH.doGrammar(
-              player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.type
-            ) + " Bee's bond improved",
-            COLORS.bondArr
-          );
-          player.addMessage(
-            "by " + MATH.addCommas(addedBond + "") + "!",
-            COLORS.bondArr
-          );
-
-          player.updateHive();
-        };
-      },
-    },
-
-    blueberry: {
-      canUseOnSlot: (slot) => {
-        return slot.type !== null;
-      },
-      amount: 0,
-      u: 128 / 2048,
-      v: (128 * 4) / 2048,
-      value: 2,
-      use: function () {
-        howManyToFeed.style.display = "block";
-        feedAmount.value = 1;
-        howManyMessage.innerHTML =
-          "How many blueberries will you feed to " +
-          MATH.doGrammar(
-            player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.type
-          ) +
-          " Bee?";
-
-        document.getElementById("feedUntilGifted").style.display =
-          beeInfo[
-            player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.type
-          ].favoriteTreat === "blueberry" &&
-          !player.hive[player.hiveIndex[1]][player.hiveIndex[0]].gifted
-            ? "block"
-            : "none";
-
-        // CHQ: Limit the amount of treats fed to what the player actually have in inventory.
-        //      How: using constrain method of Math to set the feed amount to the lower of the
-        //           amount the player specified and the amount that the user actually has
-        howManyToFeed.onmousemove = feedAmount.oninput = function () {
-          let a = feedAmount.value;
-          feedAmount.value = MATH.constrain(a, 1, items.blueberry.amount);
-        };
-
-        document.getElementById("cancelFeeding").onclick = function () {
-          howManyToFeed.style.display = "none";
-        };
-
-        let feed = function (amount) {
-          howManyToFeed.style.display = "none";
-
-          items.blueberry.amount -= amount;
-          player.stats.blueberry += Number(amount);
-          player.updateInventory();
-
-          let isFavorite =
-              beeInfo[
-                player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.type
-              ].favoriteTreat === "blueberry",
-            bondToAdd =
-              (amount *
-                25 *
-                (isFavorite
-                  ? player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee
-                      .type === "buoyant"
-                    ? 3
-                    : 2
-                  : 1) *
-                player.bondFromTreats) |
-              0;
-
-          player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bond +=
-            bondToAdd;
-
-          if (isFavorite)
-            player.addMessage(
-              MATH.doGrammar(
-                player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.type
-              ) + " Bee loves blueberries! ╰(*°▽°*)╯",
-              COLORS.bondArr
-            );
-
-          textRenderer.add(
-            bondToAdd + "",
-            [
-              player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.pos[0],
-              player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.pos[1] +
-                1,
-              player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.pos[2],
-            ],
-            COLORS.bondArr,
-            0,
-            "+",
-            1.5
-          );
-
-          player.addMessage(
-            MATH.doGrammar(
-              player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.type
-            ) + " Bee's bond improved",
-            COLORS.bondArr
-          );
-          player.addMessage(
-            "by " + MATH.addCommas(bondToAdd + "") + "!",
-            COLORS.bondArr
-          );
-
-          player.updateHive();
-        };
-
-        document.getElementById("feedThisAmount").onclick = function () {
-          feed(feedAmount.value);
-        };
-
-        document.getElementById("feedUntilGifted").onclick = function () {
-          let am = MATH.simulateProbabilityTries(
-            1 /
-              (player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee
-                .type === "buoyant"
-                ? 15000 / 1.15
-                : 15000)
-          );
-
-          if (am < items.blueberry.amount) {
-            player.hive[player.hiveIndex[1]][player.hiveIndex[0]].gifted = true;
-            player.addMessage(
-              "After " + MATH.abvNumber(am + "") + " treats.....",
-              COLORS.honey
-            );
-            player.addMessage(
-              "⭐ The treat made the bee gifted! ⭐",
-              COLORS.honey
-            );
-            feed(am);
-          } else {
-            player.addMessage(
-              "The treat failed to make the bee gifted :(",
-              COLORS.redArr
-            );
-            feed(items.blueberry.amount);
-          }
-        };
-      },
-    },
-
-    strawberry: {
-      canUseOnSlot: (slot) => {
-        return slot.type !== null;
-      },
-      amount: 0,
-      u: (128 * 2) / 2048,
-      v: (128 * 4) / 2048,
-      value: 2,
-      use: function () {
-        howManyToFeed.style.display = "block";
-        feedAmount.value = 1;
-        howManyMessage.innerHTML =
-          "How many strawberries will you feed to " +
-          MATH.doGrammar(
-            player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.type
-          ) +
-          " Bee?";
-
-        document.getElementById("feedUntilGifted").style.display =
-          beeInfo[
-            player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.type
-          ].favoriteTreat === "strawberry" &&
-          !player.hive[player.hiveIndex[1]][player.hiveIndex[0]].gifted
-            ? "block"
-            : "none";
-
-        // CHQ: Limit the amount of treats fed to what the player actually have in inventory.
-        //      How: using constrain method of Math to set the feed amount to the lower of the
-        //           amount the player specified and the amount that the user actually has
-        howManyToFeed.onmousemove = feedAmount.oninput = function () {
-          let a = feedAmount.value;
-          feedAmount.value = MATH.constrain(a, 1, items.strawberry.amount);
-        };
-
-        document.getElementById("cancelFeeding").onclick = function () {
-          howManyToFeed.style.display = "none";
-        };
-
-        let feed = function (amount) {
-          howManyToFeed.style.display = "none";
-
-          items.strawberry.amount -= amount;
-          player.stats.strawberry += Number(amount);
-          player.updateInventory();
-
-          let isFavorite =
-              beeInfo[
-                player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.type
-              ].favoriteTreat === "strawberry",
-            bondToAdd =
-              (amount * 25 * (isFavorite ? 2 : 1) * player.bondFromTreats) | 0;
-
-          player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bond +=
-            bondToAdd;
-
-          if (isFavorite)
-            player.addMessage(
-              MATH.doGrammar(
-                player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.type
-              ) + " Bee loves strawberries! ╰(*°▽°*)╯",
-              COLORS.bondArr
-            );
-
-          textRenderer.add(
-            bondToAdd + "",
-            [
-              player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.pos[0],
-              player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.pos[1] +
-                1,
-              player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.pos[2],
-            ],
-            COLORS.bondArr,
-            0,
-            "+",
-            1.5
-          );
-
-          player.addMessage(
-            MATH.doGrammar(
-              player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.type
-            ) + " Bee's bond improved",
-            COLORS.bondArr
-          );
-          player.addMessage(
-            "by " + MATH.addCommas(bondToAdd + "") + "!",
-            COLORS.bondArr
-          );
-
-          player.updateHive();
-        };
-
-        document.getElementById("feedThisAmount").onclick = function () {
-          feed(feedAmount.value);
-        };
-
-        document.getElementById("feedUntilGifted").onclick = function () {
-          let am = MATH.simulateProbabilityTries(1 / 15000);
-
-          if (am < items.strawberry.amount) {
-            player.hive[player.hiveIndex[1]][player.hiveIndex[0]].gifted = true;
-            player.addMessage(
-              "After " + MATH.abvNumber(am + "") + " treats.....",
-              COLORS.honey
-            );
-            player.addMessage(
-              "⭐ The treat made the bee gifted! ⭐",
-              COLORS.honey
-            );
-            feed(am);
-          } else {
-            player.addMessage(
-              "The treat failed to make the bee gifted :(",
-              COLORS.redArr
-            );
-            feed(items.strawberry.amount);
-          }
-        };
-      },
-    },
-
-    pineapple: {
-      canUseOnSlot: (slot) => {
-        return slot.type !== null;
-      },
-      amount: 0,
-      u: (128 * 2) / 2048,
-      v: (128 * 5) / 2048,
-      value: 2,
-      use: function () {
-        howManyToFeed.style.display = "block";
-        feedAmount.value = 1;
-        howManyMessage.innerHTML =
-          "How many pineapples will you feed to " +
-          MATH.doGrammar(
-            player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.type
-          ) +
-          " Bee?";
-
-        document.getElementById("feedUntilGifted").style.display =
-          beeInfo[
-            player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.type
-          ].favoriteTreat === "pineapple" &&
-          !player.hive[player.hiveIndex[1]][player.hiveIndex[0]].gifted
-            ? "block"
-            : "none";
-
-        // CHQ: Limit the amount of treats fed to what the player actually have in inventory.
-        //      How: using constrain method of Math to set the feed amount to the lower of the
-        //           amount the player specified and the amount that the user actually has
-        howManyToFeed.onmousemove = feedAmount.oninput = function () {
-          let a = feedAmount.value;
-          feedAmount.value = MATH.constrain(a, 1, items.pineapple.amount);
-        };
-
-        document.getElementById("cancelFeeding").onclick = function () {
-          howManyToFeed.style.display = "none";
-        };
-
-        let feed = function (amount) {
-          howManyToFeed.style.display = "none";
-
-          items.pineapple.amount -= amount;
-          player.stats.pineapple += Number(amount);
-          player.updateInventory();
-
-          let isFavorite =
-              beeInfo[
-                player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.type
-              ].favoriteTreat === "pineapple",
-            bondToAdd =
-              (amount * 25 * (isFavorite ? 2 : 1) * player.bondFromTreats) | 0;
-
-          player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bond +=
-            bondToAdd;
-
-          if (isFavorite)
-            player.addMessage(
-              MATH.doGrammar(
-                player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.type
-              ) + " Bee loves pineapples! ╰(*°▽°*)╯",
-              COLORS.bondArr
-            );
-
-          textRenderer.add(
-            bondToAdd + "",
-            [
-              player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.pos[0],
-              player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.pos[1] +
-                1,
-              player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.pos[2],
-            ],
-            COLORS.bondArr,
-            0,
-            "+",
-            1.5
-          );
-
-          player.addMessage(
-            MATH.doGrammar(
-              player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.type
-            ) + " Bee's bond improved",
-            COLORS.bondArr
-          );
-          player.addMessage(
-            "by " + MATH.addCommas(bondToAdd + "") + "!",
-            COLORS.bondArr
-          );
-
-          player.updateHive();
-        };
-
-        document.getElementById("feedThisAmount").onclick = function () {
-          feed(feedAmount.value);
-        };
-
-        document.getElementById("feedUntilGifted").onclick = function () {
-          let am = MATH.simulateProbabilityTries(1 / 15000);
-
-          if (am < items.pineapple.amount) {
-            player.hive[player.hiveIndex[1]][player.hiveIndex[0]].gifted = true;
-            player.addMessage(
-              "After " + MATH.abvNumber(am + "") + " treats.....",
-              COLORS.honey
-            );
-            player.addMessage(
-              "⭐ The treat made the bee gifted! ⭐",
-              COLORS.honey
-            );
-            feed(am);
-          } else {
-            player.addMessage(
-              "The treat failed to make the bee gifted :(",
-              COLORS.redArr
-            );
-            feed(items.pineapple.amount);
-          }
-        };
-      },
-    },
-
-    sunflowerSeed: {
-      canUseOnSlot: (slot) => {
-        return slot.type !== null;
-      },
-      amount: 0,
-      u: (128 * 3) / 2048,
-      v: (128 * 5) / 2048,
-      value: 2,
-      use: function () {
-        howManyToFeed.style.display = "block";
-        feedAmount.value = 1;
-        howManyMessage.innerHTML =
-          "How many sunflower seeds will you feed to " +
-          MATH.doGrammar(
-            player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.type
-          ) +
-          " Bee?";
-
-        document.getElementById("feedUntilGifted").style.display =
-          beeInfo[
-            player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.type
-          ].favoriteTreat === "sunflowerSeed" &&
-          !player.hive[player.hiveIndex[1]][player.hiveIndex[0]].gifted
-            ? "block"
-            : "none";
-
-        // CHQ: Limit the amount of treats fed to what the player actually have in inventory.
-        //      How: using constrain method of Math to set the feed amount to the lower of the
-        //           amount the player specified and the amount that the user actually has
-        howManyToFeed.onmousemove = feedAmount.oninput = function () {
-          let a = feedAmount.value;
-          feedAmount.value = MATH.constrain(a, 1, items.sunflowerSeed.amount);
-        };
-
-        document.getElementById("cancelFeeding").onclick = function () {
-          howManyToFeed.style.display = "none";
-        };
-
-        let feed = function (amount) {
-          howManyToFeed.style.display = "none";
-
-          items.sunflowerSeed.amount -= amount;
-          player.stats.sunflowerSeed += Number(amount);
-          player.updateInventory();
-
-          let isFavorite =
-              beeInfo[
-                player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.type
-              ].favoriteTreat === "sunflowerSeed",
-            bondToAdd =
-              (amount * 25 * (isFavorite ? 2 : 1) * player.bondFromTreats) | 0;
-
-          player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bond +=
-            bondToAdd;
-
-          if (isFavorite)
-            player.addMessage(
-              MATH.doGrammar(
-                player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.type
-              ) + " Bee loves sunflower seeds! ╰(*°▽°*)╯",
-              COLORS.bondArr
-            );
-
-          textRenderer.add(
-            bondToAdd + "",
-            [
-              player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.pos[0],
-              player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.pos[1] +
-                1,
-              player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.pos[2],
-            ],
-            COLORS.bondArr,
-            0,
-            "+",
-            1.5
-          );
-
-          player.addMessage(
-            MATH.doGrammar(
-              player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.type
-            ) + " Bee's bond improved",
-            COLORS.bondArr
-          );
-          player.addMessage(
-            "by " + MATH.addCommas(bondToAdd + "") + "!",
-            COLORS.bondArr
-          );
-
-          player.updateHive();
-        };
-
-        document.getElementById("feedThisAmount").onclick = function () {
-          feed(feedAmount.value);
-        };
-
-        document.getElementById("feedUntilGifted").onclick = function () {
-          let am = MATH.simulateProbabilityTries(1 / 15000);
-
-          if (am < items.sunflowerSeed.amount) {
-            player.hive[player.hiveIndex[1]][player.hiveIndex[0]].gifted = true;
-            player.addMessage(
-              "After " + MATH.abvNumber(am + "") + " treats.....",
-              COLORS.honey
-            );
-            player.addMessage(
-              "⭐ The treat made the bee gifted! ⭐",
-              COLORS.honey
-            );
-            feed(am);
-          } else {
-            player.addMessage(
-              "The treat failed to make the bee gifted :(",
-              COLORS.redArr
-            );
-            feed(items.sunflowerSeed.amount);
-          }
-        };
-      },
-    },
-
-    basicEgg: {
-      canUseOnSlot: (slot) => {
-        return slot.type !== "basic";
-      },
-      amount: 0,
-      u: (128 * 4) / 2048,
-      v: (128 * 5) / 2048,
-      value: 60,
-      use: function () {
-        items.basicEgg.amount--;
-        player.hive[player.hiveIndex[1]][player.hiveIndex[0]].type = "basic";
-        player.hive[player.hiveIndex[1]][player.hiveIndex[0]].gifted =
-          Math.random() < 1 / 100;
-
-        for (let i in player.currentGear.beequips)
-          if (
-            player.hive[player.hiveIndex[1]][player.hiveIndex[0]].beequip &&
-            player.hive[player.hiveIndex[1]][player.hiveIndex[0]].beequip.id ===
-              player.currentGear.beequips[i].id
-          )
-            player.currentGear.beequips[i].bee = undefined;
-        player.hive[player.hiveIndex[1]][player.hiveIndex[0]].beequip =
-          undefined;
-
-        player.beePopup = {
-          type: player.hive[player.hiveIndex[1]][player.hiveIndex[0]].type,
-          message: "You hatched a...",
-          time: TIME,
-          gifted: player.hive[player.hiveIndex[1]][player.hiveIndex[0]].gifted,
-        };
-
-        player.updateHive();
-      },
-    },
-
-    silverEgg: {
-      canUseOnSlot: (slot) => {
-        return true;
-      },
-      amount: 0,
-      u: (128 * 5) / 2048,
-      v: (128 * 5) / 2048,
-      value: 90,
-      use: function () {
-        let types = {
-            mythic: 1 / 4000,
-            legendary: 0.075 - 1 / 4000,
-            epic: 0.325,
-            rare: 0.6,
-          },
-          r = Math.random(),
-          type,
-          c = 0;
-
-        for (let i in types) {
-          if (r <= types[i] + c) {
-            type = i;
-            break;
-          }
-
-          c += types[i];
-        }
-
-        types = [];
-
-        for (let i in beeInfo) {
-          if (beeInfo[i].rarity === type) {
-            types.push(i);
-          }
-        }
-
-        type = types[(Math.random() * types.length) | 0];
-
-        items.silverEgg.amount--;
-        player.hive[player.hiveIndex[1]][player.hiveIndex[0]].type = type;
-        player.hive[player.hiveIndex[1]][player.hiveIndex[0]].gifted =
-          Math.random() < 1 / 100;
-
-        for (let i in player.currentGear.beequips)
-          if (
-            player.hive[player.hiveIndex[1]][player.hiveIndex[0]].beequip &&
-            player.hive[player.hiveIndex[1]][player.hiveIndex[0]].beequip.id ===
-              player.currentGear.beequips[i].id
-          )
-            player.currentGear.beequips[i].bee = undefined;
-        player.hive[player.hiveIndex[1]][player.hiveIndex[0]].beequip =
-          undefined;
-
-        player.beePopup = {
-          type: player.hive[player.hiveIndex[1]][player.hiveIndex[0]].type,
-          message: "You hatched a...",
-          time: TIME,
-          gifted: player.hive[player.hiveIndex[1]][player.hiveIndex[0]].gifted,
-        };
-
-        player.updateHive();
-      },
-    },
-
-    goldEgg: {
-      canUseOnSlot: (slot) => {
-        return true;
-      },
-      amount: 0,
-      u: (128 * 6) / 2048,
-      v: (128 * 5) / 2048,
-      value: 125,
-      use: function () {
-        let types = { mythic: 1 / 500, legendary: 0.3 - 1 / 500, epic: 0.7 },
-          r = Math.random(),
-          type,
-          c = 0;
-
-        for (let i in types) {
-          if (r <= types[i] + c) {
-            type = i;
-            break;
-          }
-
-          c += types[i];
-        }
-
-        types = [];
-
-        for (let i in beeInfo) {
-          if (beeInfo[i].rarity === type) {
-            types.push(i);
-          }
-        }
-
-        type = types[(Math.random() * types.length) | 0];
-
-        items.goldEgg.amount--;
-        player.hive[player.hiveIndex[1]][player.hiveIndex[0]].type = type;
-        player.hive[player.hiveIndex[1]][player.hiveIndex[0]].gifted =
-          Math.random() < 1 / 100;
-
-        for (let i in player.currentGear.beequips)
-          if (
-            player.hive[player.hiveIndex[1]][player.hiveIndex[0]].beequip &&
-            player.hive[player.hiveIndex[1]][player.hiveIndex[0]].beequip.id ===
-              player.currentGear.beequips[i].id
-          )
-            player.currentGear.beequips[i].bee = undefined;
-        player.hive[player.hiveIndex[1]][player.hiveIndex[0]].beequip =
-          undefined;
-
-        player.beePopup = {
-          type: player.hive[player.hiveIndex[1]][player.hiveIndex[0]].type,
-          message: "You hatched a...",
-          time: TIME,
-          gifted: player.hive[player.hiveIndex[1]][player.hiveIndex[0]].gifted,
-        };
-
-        player.updateHive();
-      },
-    },
-
-    diamondEgg: {
-      canUseOnSlot: (slot) => {
-        return true;
-      },
-      amount: 0,
-      u: (128 * 7) / 2048,
-      v: (128 * 5) / 2048,
-      value: 200,
-      use: function () {
-        let types = { mythic: 0.05, legendary: 0.95 },
-          r = Math.random(),
-          type,
-          c = 0;
-
-        for (let i in types) {
-          if (r <= types[i] + c) {
-            type = i;
-            break;
-          }
-
-          c += types[i];
-        }
-
-        types = [];
-
-        for (let i in beeInfo) {
-          if (beeInfo[i].rarity === type) {
-            types.push(i);
-          }
-        }
-
-        type = types[(Math.random() * types.length) | 0];
-
-        items.diamondEgg.amount--;
-        player.hive[player.hiveIndex[1]][player.hiveIndex[0]].type = type;
-        player.hive[player.hiveIndex[1]][player.hiveIndex[0]].gifted =
-          Math.random() < 1 / 100;
-
-        for (let i in player.currentGear.beequips)
-          if (
-            player.hive[player.hiveIndex[1]][player.hiveIndex[0]].beequip &&
-            player.hive[player.hiveIndex[1]][player.hiveIndex[0]].beequip.id ===
-              player.currentGear.beequips[i].id
-          )
-            player.currentGear.beequips[i].bee = undefined;
-        player.hive[player.hiveIndex[1]][player.hiveIndex[0]].beequip =
-          undefined;
-
-        player.beePopup = {
-          type: player.hive[player.hiveIndex[1]][player.hiveIndex[0]].type,
-          message: "You hatched a...",
-          time: TIME,
-          gifted: player.hive[player.hiveIndex[1]][player.hiveIndex[0]].gifted,
-        };
-
-        player.updateHive();
-      },
-    },
-
-    mythicEgg: {
-      canUseOnSlot: (slot) => {
-        return true;
-      },
-      amount: 0,
-      u: (128 * 0) / 2048,
-      v: (128 * 6) / 2048,
-      value: 250,
-      use: function () {
-        let types = [];
-
-        for (let i in beeInfo) {
-          if (beeInfo[i].rarity === "mythic") {
-            types.push(i);
-          }
-        }
-
-        type = types[(Math.random() * types.length) | 0];
-
-        items.mythicEgg.amount--;
-        player.hive[player.hiveIndex[1]][player.hiveIndex[0]].type = type;
-        player.hive[player.hiveIndex[1]][player.hiveIndex[0]].gifted =
-          Math.random() < 1 / 100;
-
-        for (let i in player.currentGear.beequips)
-          if (
-            player.hive[player.hiveIndex[1]][player.hiveIndex[0]].beequip &&
-            player.hive[player.hiveIndex[1]][player.hiveIndex[0]].beequip.id ===
-              player.currentGear.beequips[i].id
-          )
-            player.currentGear.beequips[i].bee = undefined;
-        player.hive[player.hiveIndex[1]][player.hiveIndex[0]].beequip =
-          undefined;
-
-        player.beePopup = {
-          type: player.hive[player.hiveIndex[1]][player.hiveIndex[0]].type,
-          message: "You hatched a...",
-          time: TIME,
-          gifted: player.hive[player.hiveIndex[1]][player.hiveIndex[0]].gifted,
-        };
-
-        player.updateHive();
-      },
-    },
-
-    giftedSilverEgg: {
-      canUseOnSlot: (slot) => {
-        return true;
-      },
-      amount: 0,
-      u: (128 * 5) / 2048,
-      v: (128 * 8) / 2048,
-      value: 150,
-      use: function () {
-        let types = {
-            mythic: 1 / 4000,
-            legendary: 0.075 - 1 / 4000,
-            epic: 0.325,
-            rare: 0.6,
-          },
-          r = Math.random(),
-          type,
-          c = 0;
-
-        for (let i in types) {
-          if (r <= types[i] + c) {
-            type = i;
-            break;
-          }
-
-          c += types[i];
-        }
-
-        types = [];
-
-        for (let i in beeInfo) {
-          if (beeInfo[i].rarity === type) {
-            types.push(i);
-          }
-        }
-
-        type = types[(Math.random() * types.length) | 0];
-
-        items.giftedSilverEgg.amount--;
-        player.hive[player.hiveIndex[1]][player.hiveIndex[0]].type = type;
-        player.hive[player.hiveIndex[1]][player.hiveIndex[0]].gifted = true;
-
-        for (let i in player.currentGear.beequips)
-          if (
-            player.hive[player.hiveIndex[1]][player.hiveIndex[0]].beequip &&
-            player.hive[player.hiveIndex[1]][player.hiveIndex[0]].beequip.id ===
-              player.currentGear.beequips[i].id
-          )
-            player.currentGear.beequips[i].bee = undefined;
-        player.hive[player.hiveIndex[1]][player.hiveIndex[0]].beequip =
-          undefined;
-
-        player.beePopup = {
-          type: player.hive[player.hiveIndex[1]][player.hiveIndex[0]].type,
-          message: "You hatched a...",
-          time: TIME,
-          gifted: player.hive[player.hiveIndex[1]][player.hiveIndex[0]].gifted,
-        };
-
-        player.updateHive();
-      },
-    },
-
-    giftedGoldEgg: {
-      canUseOnSlot: (slot) => {
-        return true;
-      },
-      amount: 0,
-      u: (128 * 6) / 2048,
-      v: (128 * 8) / 2048,
-      value: 225,
-      use: function () {
-        let types = { mythic: 1 / 500, legendary: 0.3 - 1 / 500, epic: 0.7 },
-          r = Math.random(),
-          type,
-          c = 0;
-
-        for (let i in types) {
-          if (r <= types[i] + c) {
-            type = i;
-            break;
-          }
-
-          c += types[i];
-        }
-
-        types = [];
-
-        for (let i in beeInfo) {
-          if (beeInfo[i].rarity === type) {
-            types.push(i);
-          }
-        }
-
-        type = types[(Math.random() * types.length) | 0];
-
-        items.giftedGoldEgg.amount--;
-        player.hive[player.hiveIndex[1]][player.hiveIndex[0]].type = type;
-        player.hive[player.hiveIndex[1]][player.hiveIndex[0]].gifted = true;
-
-        for (let i in player.currentGear.beequips)
-          if (
-            player.hive[player.hiveIndex[1]][player.hiveIndex[0]].beequip &&
-            player.hive[player.hiveIndex[1]][player.hiveIndex[0]].beequip.id ===
-              player.currentGear.beequips[i].id
-          )
-            player.currentGear.beequips[i].bee = undefined;
-        player.hive[player.hiveIndex[1]][player.hiveIndex[0]].beequip =
-          undefined;
-
-        player.beePopup = {
-          type: player.hive[player.hiveIndex[1]][player.hiveIndex[0]].type,
-          message: "You hatched a...",
-          time: TIME,
-          gifted: player.hive[player.hiveIndex[1]][player.hiveIndex[0]].gifted,
-        };
-
-        player.updateHive();
-      },
-    },
-
-    giftedDiamondEgg: {
-      canUseOnSlot: (slot) => {
-        return true;
-      },
-      amount: 0,
-      u: (128 * 7) / 2048,
-      v: (128 * 8) / 2048,
-      value: 300,
-      use: function () {
-        let types = { mythic: 0.05, legendary: 0.95 },
-          r = Math.random(),
-          type,
-          c = 0;
-
-        for (let i in types) {
-          if (r <= types[i] + c) {
-            type = i;
-            break;
-          }
-
-          c += types[i];
-        }
-
-        types = [];
-
-        for (let i in beeInfo) {
-          if (beeInfo[i].rarity === type) {
-            types.push(i);
-          }
-        }
-
-        type = types[(Math.random() * types.length) | 0];
-
-        items.giftedDiamondEgg.amount--;
-        player.hive[player.hiveIndex[1]][player.hiveIndex[0]].type = type;
-        player.hive[player.hiveIndex[1]][player.hiveIndex[0]].gifted = true;
-
-        for (let i in player.currentGear.beequips)
-          if (
-            player.hive[player.hiveIndex[1]][player.hiveIndex[0]].beequip &&
-            player.hive[player.hiveIndex[1]][player.hiveIndex[0]].beequip.id ===
-              player.currentGear.beequips[i].id
-          )
-            player.currentGear.beequips[i].bee = undefined;
-        player.hive[player.hiveIndex[1]][player.hiveIndex[0]].beequip =
-          undefined;
-
-        player.beePopup = {
-          type: player.hive[player.hiveIndex[1]][player.hiveIndex[0]].type,
-          message: "You hatched a...",
-          time: TIME,
-          gifted: player.hive[player.hiveIndex[1]][player.hiveIndex[0]].gifted,
-        };
-
-        player.updateHive();
-      },
-    },
-
-    giftedMythicEgg: {
-      canUseOnSlot: (slot) => {
-        return true;
-      },
-      amount: 0,
-      u: (128 * 0) / 2048,
-      v: (128 * 9) / 2048,
-      value: 375,
-      use: function () {
-        let types = [];
-
-        for (let i in beeInfo) {
-          if (beeInfo[i].rarity === "mythic") {
-            types.push(i);
-          }
-        }
-
-        type = types[(Math.random() * types.length) | 0];
-
-        items.giftedMythicEgg.amount--;
-        player.hive[player.hiveIndex[1]][player.hiveIndex[0]].type = type;
-        player.hive[player.hiveIndex[1]][player.hiveIndex[0]].gifted = true;
-
-        for (let i in player.currentGear.beequips)
-          if (
-            player.hive[player.hiveIndex[1]][player.hiveIndex[0]].beequip &&
-            player.hive[player.hiveIndex[1]][player.hiveIndex[0]].beequip.id ===
-              player.currentGear.beequips[i].id
-          )
-            player.currentGear.beequips[i].bee = undefined;
-        player.hive[player.hiveIndex[1]][player.hiveIndex[0]].beequip =
-          undefined;
-
-        player.beePopup = {
-          type: player.hive[player.hiveIndex[1]][player.hiveIndex[0]].type,
-          message: "You hatched a...",
-          time: TIME,
-          gifted: player.hive[player.hiveIndex[1]][player.hiveIndex[0]].gifted,
-        };
-
-        player.updateHive();
-      },
-    },
-
-    starEgg: {
-      canUseOnSlot: (slot) => {
-        return true;
-      },
-      amount: 0,
-      u: (128 * 1) / 2048,
-      v: (128 * 9) / 2048,
-      value: 350,
-      use: function () {
-        let types = [],
-          alreadyGot = [];
-
-        for (let i in objects.bees) {
-          if (objects.bees[i].gifted) {
-            alreadyGot.push(objects.bees[i].type);
-          }
-        }
-
-        for (let i in beeInfo) {
-          if (alreadyGot.indexOf(i) < 0) {
-            types.push(i);
-          }
-        }
-
-        type = types[(Math.random() * types.length) | 0];
-
-        items.starEgg.amount--;
-        player.hive[player.hiveIndex[1]][player.hiveIndex[0]].type = type;
-        player.hive[player.hiveIndex[1]][player.hiveIndex[0]].gifted = true;
-
-        for (let i in player.currentGear.beequips)
-          if (
-            player.hive[player.hiveIndex[1]][player.hiveIndex[0]].beequip &&
-            player.hive[player.hiveIndex[1]][player.hiveIndex[0]].beequip &&
-            player.hive[player.hiveIndex[1]][player.hiveIndex[0]].beequip.id ===
-              player.currentGear.beequips[i].id
-          )
-            player.currentGear.beequips[i].bee = undefined;
-        player.hive[player.hiveIndex[1]][player.hiveIndex[0]].beequip =
-          undefined;
-
-        player.beePopup = {
-          type: player.hive[player.hiveIndex[1]][player.hiveIndex[0]].type,
-          message: "You hatched a...",
-          time: TIME,
-          gifted: player.hive[player.hiveIndex[1]][player.hiveIndex[0]].gifted,
-        };
-
-        player.updateHive();
-      },
-    },
-
-    royalJelly: {
-      canUseOnSlot: (slot) => {
-        return slot.type;
-      },
-      amount: 0,
-      u: (128 * 3) / 2048,
-      v: (128 * 8) / 2048,
-      value: 10,
-      use: function () {
-        for (let i in player.currentGear.beequips)
-          if (
-            player.hive[player.hiveIndex[1]][player.hiveIndex[0]].beequip &&
-            player.hive[player.hiveIndex[1]][player.hiveIndex[0]].beequip.id ===
-              player.currentGear.beequips[i].id
-          )
-            player.currentGear.beequips[i].bee = undefined;
-        player.hive[player.hiveIndex[1]][player.hiveIndex[0]].beequip =
-          undefined;
-
-        let max = 250000;
-
-        while (max-- >= 0 && items.royalJelly.amount-- > 0) {
-          let types = {
-              mythic: 1 / 4000,
-              legendary: 0.075 - 1 / 4000,
-              epic: 0.325,
-              rare: 0.6,
-            },
-            r = Math.random(),
-            type,
-            c = 0;
-
-          for (let i in types) {
-            if (r <= types[i] + c) {
-              type = i;
-              break;
-            }
-
-            c += types[i];
-          }
-
-          types = [];
-
-          for (let i in beeInfo) {
-            if (beeInfo[i].rarity === type) {
-              types.push(i);
-            }
-          }
-
-          type = types[(Math.random() * types.length) | 0];
-
-          player.hive[player.hiveIndex[1]][player.hiveIndex[0]].type = type;
-          player.hive[player.hiveIndex[1]][player.hiveIndex[0]].gifted =
-            Math.random() < 1 / 100;
-
-          if (
-            ["rare", "epic", "legendary", "mythic"].indexOf(
-              beeInfo[type].rarity
-            ) >=
-            ["rare", "epic", "legendary", "mythic"].indexOf(
-              player.autoRJSettings.until
-            )
-          ) {
-            if (
-              (player.hive[player.hiveIndex[1]][player.hiveIndex[0]].gifted &&
-                player.autoRJSettings.gifted) ||
-              !player.autoRJSettings.gifted
-            ) {
-              break;
-            }
-          }
-        }
-
-        if (250000 - max > 1)
-          player.addMessage(
-            "After using " + MATH.addCommas(250000 - max + "") + " jellies..."
-          );
-
-        player.stats.royalJelly += 250000 - max;
-        player.beePopup = {
-          type: player.hive[player.hiveIndex[1]][player.hiveIndex[0]].type,
-          message: "You got a...",
-          time: TIME,
-          gifted: player.hive[player.hiveIndex[1]][player.hiveIndex[0]].gifted,
-        };
-
-        player.updateInventory();
-        player.updateHive();
-      },
-    },
-
-    starJelly: {
-      canUseOnSlot: (slot) => {
-        return slot.type;
-      },
-      amount: 0,
-      u: (128 * 4) / 2048,
-      v: (128 * 8) / 2048,
-      value: 90,
-      use: function () {
-        for (let i in player.currentGear.beequips)
-          if (
-            player.hive[player.hiveIndex[1]][player.hiveIndex[0]].beequip &&
-            player.hive[player.hiveIndex[1]][player.hiveIndex[0]].beequip.id ===
-              player.currentGear.beequips[i].id
-          )
-            player.currentGear.beequips[i].bee = undefined;
-        player.hive[player.hiveIndex[1]][player.hiveIndex[0]].beequip =
-          undefined;
-
-        let max = 250000;
-
-        while (max-- >= 0 && items.starJelly.amount-- >= 0) {
-          let types = {
-              mythic: 1 / 4000,
-              legendary: 0.075 - 1 / 4000,
-              epic: 0.325,
-              rare: 0.6,
-            },
-            r = Math.random(),
-            type,
-            c = 0;
-
-          for (let i in types) {
-            if (r <= types[i] + c) {
-              type = i;
-              break;
-            }
-
-            c += types[i];
-          }
-
-          types = [];
-
-          for (let i in beeInfo) {
-            if (beeInfo[i].rarity === type) {
-              types.push(i);
-            }
-          }
-
-          type = types[(Math.random() * types.length) | 0];
-
-          player.hive[player.hiveIndex[1]][player.hiveIndex[0]].type = type;
-          player.hive[player.hiveIndex[1]][player.hiveIndex[0]].gifted = true;
-
-          if (
-            ["rare", "epic", "legendary", "mythic"].indexOf(
-              beeInfo[type].rarity
-            ) >=
-            ["rare", "epic", "legendary", "mythic"].indexOf(
-              player.autoRJSettings.until
-            )
-          ) {
-            break;
-          }
-        }
-
-        if (250000 - max > 1)
-          player.addMessage(
-            "After using " + MATH.addCommas(250000 - max + "") + " jellies..."
-          );
-
-        player.stats.starJelly += 250000 - max;
-        player.beePopup = {
-          type: player.hive[player.hiveIndex[1]][player.hiveIndex[0]].type,
-          message: "You got a...",
-          time: TIME,
-          gifted: player.hive[player.hiveIndex[1]][player.hiveIndex[0]].gifted,
-        };
-
-        player.updateInventory();
-        player.updateHive();
-      },
-    },
-
-    glitter: {
-      amount: 0,
-      u: 0,
-      v: (128 * 7) / 2048,
-      value: 25,
-      cooldown: 15.1 * 60,
-      use: function () {
-        if (player.fieldIn) {
-          if (player.fieldIn === "AntField") {
-            player.addMessage(
-              "You can' use this item in the Ant Field!",
-              COLORS.redArr
-            );
-            return;
-          }
-
-          let f = player.fieldIn;
-          f = f[0].toLowerCase() + f.substring(1, f.length);
-          player.addEffect(f + "Boost");
-          player.addMessage('Activated "' + MATH.doGrammar(f) + ' Boost"');
-          items.glitter.amount--;
-
-          for (let i in objects.planters) {
-            if (
-              objects.planters[i].field === player.fieldIn &&
-              !objects.planters[i].glistering
-            ) {
-              objects.planters[i].growthRate *= 1.25;
-              objects.planters[i].glistering = true;
-            }
-          }
-        } else {
-          player.addMessage(
-            "You must be standing in a field to use glitter!",
-            COLORS.redArr
-          );
-        }
-      },
-    },
-  };
-
   for (let i in beeInfo) {
     if (beeInfo[i].rarity === "event") {
       let id = i + "BeeEgg";
@@ -13434,7 +3529,7 @@ function BeeSwarmSimulator(DATA) {
             if (objects.bees[j].type === i) {
               player.addMessage(
                 "You can only have 1 " + MATH.doGrammar(i) + " Bee!",
-                COLORS.redArr
+                COLORS.redArr,
               );
               return;
             }
@@ -13847,7 +3942,7 @@ function BeeSwarmSimulator(DATA) {
 
       for (let i in beeInfo[this.type].trails) {
         this.trails.push(
-          new TrailRenderer.ConstantTrail(beeInfo[this.type].trails[i])
+          new TrailRenderer.ConstantTrail(beeInfo[this.type].trails[i]),
         );
         this.beeOffsets.push(beeInfo[this.type].trails[i].beeOffset || 0);
       }
@@ -13942,13 +4037,13 @@ function BeeSwarmSimulator(DATA) {
             this[str.substring(str.indexOf(" ") + 1, str.indexOf("("))] *=
               Number(str.substr(1, str.indexOf(" ") - 1)) +
               Number(
-                str.substr(str.indexOf("(") + 2, str.length).replace(")", "")
+                str.substr(str.indexOf("(") + 2, str.length).replace(")", ""),
               );
           } else {
             this[str.substring(str.indexOf(" ") + 1, str.indexOf("("))] +=
               Number(str.substr(1, str.indexOf(" ") - 1)) +
               Number(
-                str.substr(str.indexOf("(") + 2, str.length).replace(")", "")
+                str.substr(str.indexOf("(") + 2, str.length).replace(")", ""),
               );
           }
         }
@@ -14056,7 +4151,7 @@ function BeeSwarmSimulator(DATA) {
             dt *
               this.speed *
               player.beeSpeed *
-              (this.type === "spicy" ? player.flameHeatStackApplied : 1)
+              (this.type === "spicy" ? player.flameHeatStackApplied : 1),
           );
           if (vec3.sqrDist(this.moveTo, this.pos) < 0.8) {
             this.state = "attack";
@@ -14080,7 +4175,7 @@ function BeeSwarmSimulator(DATA) {
             BEE_FLY,
             beeInfo[this.type].u,
             this.GIFTED_BEE_TEXTURE_OFFSET,
-            beeInfo[this.type].meshPartId
+            beeInfo[this.type].meshPartId,
           );
 
           break;
@@ -14121,7 +4216,7 @@ function BeeSwarmSimulator(DATA) {
                 0,
                 "",
                 1.75,
-                false
+                false,
               );
             } else {
               if (
@@ -14132,9 +4227,9 @@ function BeeSwarmSimulator(DATA) {
                         2,
                         (this.gifted ? 2 : 1) +
                           this.level -
-                          this.attackMob.level
+                          this.attackMob.level,
                       ),
-                      0.05
+                      0.05,
                     )
                   : Math.pow(2, this.level - this.attackMob.level))
               ) {
@@ -14156,7 +4251,7 @@ function BeeSwarmSimulator(DATA) {
                       size: 1.75,
                       speed: 0.3,
                       aftershock: 0,
-                    })
+                    }),
                   );
                 }
               } else {
@@ -14173,7 +4268,7 @@ function BeeSwarmSimulator(DATA) {
                   0,
                   "",
                   1.75,
-                  false
+                  false,
                 );
               }
             }
@@ -14217,8 +4312,8 @@ function BeeSwarmSimulator(DATA) {
                     z: this.flowerCollecting[1],
                     bee: this,
                   },
-                  true
-                )
+                  true,
+                ),
               );
             }
           }
@@ -14234,7 +4329,7 @@ function BeeSwarmSimulator(DATA) {
             TIME * 5,
             beeInfo[this.type].u,
             this.GIFTED_BEE_TEXTURE_OFFSET,
-            beeInfo[this.type].meshPartId
+            beeInfo[this.type].meshPartId,
           );
 
           break;
@@ -14302,7 +4397,7 @@ function BeeSwarmSimulator(DATA) {
             dt *
               this.speed *
               player.beeSpeed *
-              (this.type === "spicy" ? player.flameHeatStackApplied : 1)
+              (this.type === "spicy" ? player.flameHeatStackApplied : 1),
           );
 
           if (vec3.sqrDist(this.moveTo, this.pos) < 0.8)
@@ -14319,7 +4414,7 @@ function BeeSwarmSimulator(DATA) {
             BEE_FLY,
             beeInfo[this.type].u,
             this.GIFTED_BEE_TEXTURE_OFFSET,
-            beeInfo[this.type].meshPartId
+            beeInfo[this.type].meshPartId,
           );
 
           if (player.converting && player.pollen) {
@@ -14359,7 +4454,7 @@ function BeeSwarmSimulator(DATA) {
             dt *
               this.speed *
               player.beeSpeed *
-              (this.type === "spicy" ? player.flameHeatStackApplied : 1)
+              (this.type === "spicy" ? player.flameHeatStackApplied : 1),
           );
 
           if (vec3.sqrDist(this.moveTo, this.pos) < 0.075) {
@@ -14382,7 +4477,7 @@ function BeeSwarmSimulator(DATA) {
             BEE_FLY,
             beeInfo[this.type].u,
             this.GIFTED_BEE_TEXTURE_OFFSET,
-            beeInfo[this.type].meshPartId
+            beeInfo[this.type].meshPartId,
           );
 
           break;
@@ -14442,8 +4537,8 @@ function BeeSwarmSimulator(DATA) {
                     x: fieldInfo[player.fieldIn].x | 0,
                     z: fieldInfo[player.fieldIn].z | 0,
                     bee: this,
-                  }
-                )
+                  },
+                ),
               );
             }
 
@@ -14461,7 +4556,7 @@ function BeeSwarmSimulator(DATA) {
             BEE_COLLECT,
             beeInfo[this.type].u,
             this.GIFTED_BEE_TEXTURE_OFFSET,
-            beeInfo[this.type].meshPartId
+            beeInfo[this.type].meshPartId,
           );
 
           break;
@@ -14510,7 +4605,7 @@ function BeeSwarmSimulator(DATA) {
             dt *
               this.speed *
               player.beeSpeed *
-              (this.type === "spicy" ? player.flameHeatStackApplied : 1)
+              (this.type === "spicy" ? player.flameHeatStackApplied : 1),
           );
 
           if (vec3.sqrDist(this.moveTo, this.pos) < 0.075) {
@@ -14532,7 +4627,7 @@ function BeeSwarmSimulator(DATA) {
             BEE_FLY,
             beeInfo[this.type].u,
             this.GIFTED_BEE_TEXTURE_OFFSET,
-            beeInfo[this.type].meshPartId
+            beeInfo[this.type].meshPartId,
           );
 
           break;
@@ -14616,8 +4711,8 @@ function BeeSwarmSimulator(DATA) {
                     x: this.flowerCollecting[0],
                     z: this.flowerCollecting[1],
                     bee: this,
-                  }
-                )
+                  },
+                ),
               );
             }
 
@@ -14636,7 +4731,7 @@ function BeeSwarmSimulator(DATA) {
             BEE_COLLECT,
             beeInfo[this.type].u,
             this.GIFTED_BEE_TEXTURE_OFFSET,
-            beeInfo[this.type].meshPartId
+            beeInfo[this.type].meshPartId,
           );
 
           break;
@@ -14657,7 +4752,7 @@ function BeeSwarmSimulator(DATA) {
             dt *
               this.speed *
               player.beeSpeed *
-              (this.type === "spicy" ? player.flameHeatStackApplied : 1)
+              (this.type === "spicy" ? player.flameHeatStackApplied : 1),
           );
           if (vec3.sqrDist(this.moveTo, this.pos) < 0.8) {
             this.pos = this.hivePos.slice();
@@ -14670,9 +4765,9 @@ function BeeSwarmSimulator(DATA) {
                   player.convertRate *
                   player[beeInfo[this.type].color + "ConvertRate"] *
                   player.convertRateAtHive *
-                  (this.type === "tabby" ? player.tabbyLoveStacks : 1)
+                  (this.type === "tabby" ? player.tabbyLoveStacks : 1),
               ),
-              player.pollen
+              player.pollen,
             );
 
             if (amountToTake === player.pollen) {
@@ -14694,7 +4789,7 @@ function BeeSwarmSimulator(DATA) {
             BEE_FLY,
             beeInfo[this.type].u,
             this.GIFTED_BEE_TEXTURE_OFFSET,
-            beeInfo[this.type].meshPartId
+            beeInfo[this.type].meshPartId,
           );
 
           break;
@@ -14720,7 +4815,7 @@ function BeeSwarmSimulator(DATA) {
             TIME * 5,
             beeInfo[this.type].u,
             this.GIFTED_BEE_TEXTURE_OFFSET,
-            beeInfo[this.type].meshPartId
+            beeInfo[this.type].meshPartId,
           );
           if (this.convertTimer <= 0) {
             this.state = "moveToHiveToConvert";
@@ -14730,7 +4825,7 @@ function BeeSwarmSimulator(DATA) {
                 player.honeyPerPollen *
                 (this.type === "diamond"
                   ? (1.4 + this.level * 0.03) * (this.gifted ? 2 : 1)
-                  : 1)
+                  : 1),
             );
 
             textRenderer.add(
@@ -14740,7 +4835,7 @@ function BeeSwarmSimulator(DATA) {
                   player.honeyPerPollen *
                   (this.type === "diamond"
                     ? (1.4 + this.level * 0.03) * (this.gifted ? 2 : 1)
-                    : 1)
+                    : 1),
               ),
               [
                 player.body.position.x,
@@ -14749,7 +4844,7 @@ function BeeSwarmSimulator(DATA) {
               ],
               COLORS.honey,
               0,
-              "+"
+              "+",
             );
 
             this.pollen = 0;
@@ -14799,7 +4894,7 @@ function BeeSwarmSimulator(DATA) {
             dt *
               this.speed *
               player.beeSpeed *
-              (this.type === "spicy" ? player.flameHeatStackApplied : 1)
+              (this.type === "spicy" ? player.flameHeatStackApplied : 1),
           );
           if (vec3.sqrDist(this.moveTo, this.pos) < 0.8) {
             this.pos = this.hivePos.slice();
@@ -14813,9 +4908,9 @@ function BeeSwarmSimulator(DATA) {
                   (this.type === "buoyant" ? (this.gifted ? 4 : 3) : 1) *
                   player[beeInfo[this.type].color + "ConvertRate"] *
                   player.convertRateAtHive *
-                  (this.type === "tabby" ? player.tabbyLoveStacks : 1)
+                  (this.type === "tabby" ? player.tabbyLoveStacks : 1),
               ),
-              player.hiveBalloon.pollen
+              player.hiveBalloon.pollen,
             );
 
             if (amountToTake === player.hiveBalloon.pollen) {
@@ -14837,7 +4932,7 @@ function BeeSwarmSimulator(DATA) {
             BEE_FLY,
             beeInfo[this.type].u,
             this.GIFTED_BEE_TEXTURE_OFFSET,
-            beeInfo[this.type].meshPartId
+            beeInfo[this.type].meshPartId,
           );
 
           break;
@@ -14863,7 +4958,7 @@ function BeeSwarmSimulator(DATA) {
             TIME * 5,
             beeInfo[this.type].u,
             this.GIFTED_BEE_TEXTURE_OFFSET,
-            beeInfo[this.type].meshPartId
+            beeInfo[this.type].meshPartId,
           );
           if (this.convertTimer <= 0) {
             this.state = "moveToHiveToConvertBalloon";
@@ -14873,7 +4968,7 @@ function BeeSwarmSimulator(DATA) {
                 player.honeyPerPollen *
                 (this.type === "diamond"
                   ? (1.4 + this.level * 0.03) * (this.gifted ? 2 : 1)
-                  : 1)
+                  : 1),
             );
 
             textRenderer.add(
@@ -14883,7 +4978,7 @@ function BeeSwarmSimulator(DATA) {
                   player.honeyPerPollen *
                   (this.type === "diamond"
                     ? (1.4 + this.level * 0.03) * (this.gifted ? 2 : 1)
-                    : 1)
+                    : 1),
               ),
               [
                 player.body.position.x,
@@ -14892,7 +4987,7 @@ function BeeSwarmSimulator(DATA) {
               ],
               COLORS.honey,
               0,
-              "+"
+              "+",
             );
 
             this.pollen = 0;
@@ -14937,7 +5032,7 @@ function BeeSwarmSimulator(DATA) {
             dt *
               this.speed *
               player.beeSpeed *
-              (this.type === "spicy" ? player.flameHeatStackApplied : 1)
+              (this.type === "spicy" ? player.flameHeatStackApplied : 1),
           );
           if (vec3.sqrDist(this.moveTo, this.pos) < 1) {
             this.pos = this.hivePos.slice();
@@ -14958,7 +5053,7 @@ function BeeSwarmSimulator(DATA) {
             BEE_FLY,
             beeInfo[this.type].u,
             this.GIFTED_BEE_TEXTURE_OFFSET,
-            beeInfo[this.type].meshPartId
+            beeInfo[this.type].meshPartId,
           );
 
           break;
@@ -14984,7 +5079,7 @@ function BeeSwarmSimulator(DATA) {
               [255, 255, 255],
               0,
               "",
-              1.25
+              1.25,
             );
           }
 
@@ -14999,7 +5094,7 @@ function BeeSwarmSimulator(DATA) {
             this.sleepRotate,
             beeInfo[this.type].u,
             this.GIFTED_BEE_TEXTURE_OFFSET,
-            beeInfo[this.type].meshPartId
+            beeInfo[this.type].meshPartId,
           );
 
           break;
@@ -15016,7 +5111,7 @@ function BeeSwarmSimulator(DATA) {
             this.pos,
             this.pos,
             this.moveDir,
-            dt * this.speed * player.beeSpeed * 1.5
+            dt * this.speed * player.beeSpeed * 1.5,
           );
           if (vec3.sqrDist(this.moveTo, this.pos) < 0.7) {
             this.pos = this.moveTo.slice();
@@ -15051,7 +5146,7 @@ function BeeSwarmSimulator(DATA) {
                   0;
 
               this.targets.push(
-                new Target(player.fieldIn, _x, _z, i + 1, this)
+                new Target(player.fieldIn, _x, _z, i + 1, this),
               );
               objects.targets.push(this.targets[this.targets.length - 1]);
             }
@@ -15068,7 +5163,7 @@ function BeeSwarmSimulator(DATA) {
             BEE_FLY,
             beeInfo[this.type].u,
             this.GIFTED_BEE_TEXTURE_OFFSET,
-            beeInfo[this.type].meshPartId
+            beeInfo[this.type].meshPartId,
           );
 
           break;
@@ -15147,8 +5242,8 @@ function BeeSwarmSimulator(DATA) {
                     x: this.targets[2].x,
                     z: this.targets[2].z,
                     bee: this,
-                  }
-                )
+                  },
+                ),
               );
               objects.tokens.push(
                 new Token(
@@ -15164,8 +5259,8 @@ function BeeSwarmSimulator(DATA) {
                     x: this.targets[2].x + 1,
                     z: this.targets[2].z,
                     bee: this,
-                  }
-                )
+                  },
+                ),
               );
               objects.tokens.push(
                 new Token(
@@ -15181,8 +5276,8 @@ function BeeSwarmSimulator(DATA) {
                     x: this.targets[2].x - 1,
                     z: this.targets[2].z,
                     bee: this,
-                  }
-                )
+                  },
+                ),
               );
             }
 
@@ -15194,8 +5289,8 @@ function BeeSwarmSimulator(DATA) {
                     this.targets[2].x,
                     this.targets[2].z,
                     "preciseMark",
-                    this.level
-                  )
+                    this.level,
+                  ),
                 );
               }
             }
@@ -15210,8 +5305,8 @@ function BeeSwarmSimulator(DATA) {
                       effects.focus.tokenLife,
                       [_t.pos[0], _t.pos[1] + 0.5, _t.pos[2]],
                       "focus",
-                      { field: _t.field, x: _t.x, z: _t.z, bee: this }
-                    )
+                      { field: _t.field, x: _t.x, z: _t.z, bee: this },
+                    ),
                   );
 
                 collectPollen({
@@ -15286,8 +5381,8 @@ function BeeSwarmSimulator(DATA) {
                     effects.redBoost.tokenLife,
                     [_t.pos[0], _t.pos[1] + 0.5, _t.pos[2]],
                     "redBoost",
-                    { field: _t.field, x: _t.x, z: _t.z, bee: this }
-                  )
+                    { field: _t.field, x: _t.x, z: _t.z, bee: this },
+                  ),
                 );
               }
             }
@@ -15310,7 +5405,7 @@ function BeeSwarmSimulator(DATA) {
                 size: 1.75,
                 speed: 0.3,
                 aftershock: 0,
-              })
+              }),
             );
           }
 
@@ -15325,7 +5420,7 @@ function BeeSwarmSimulator(DATA) {
             BEE_FLY,
             beeInfo[this.type].u,
             this.GIFTED_BEE_TEXTURE_OFFSET,
-            beeInfo[this.type].meshPartId
+            beeInfo[this.type].meshPartId,
           );
 
           break;
@@ -15354,7 +5449,7 @@ function BeeSwarmSimulator(DATA) {
             this.pos,
             this.pos,
             this.moveDir,
-            dt * this.speed * player.beeSpeed
+            dt * this.speed * player.beeSpeed,
           );
 
           if (this.triangulateTimer <= 0) {
@@ -15372,7 +5467,7 @@ function BeeSwarmSimulator(DATA) {
             BEE_FLY,
             beeInfo[this.type].u,
             this.GIFTED_BEE_TEXTURE_OFFSET,
-            beeInfo[this.type].meshPartId
+            beeInfo[this.type].meshPartId,
           );
 
           break;
@@ -15404,7 +5499,7 @@ function BeeSwarmSimulator(DATA) {
 
             this.fetchBall.kick(
               dir[0] + MATH.random(-0.2, 0.2),
-              dir[1] + MATH.random(-0.2, 0.2)
+              dir[1] + MATH.random(-0.2, 0.2),
             );
           }
 
@@ -15413,7 +5508,7 @@ function BeeSwarmSimulator(DATA) {
             this.pos,
             this.pos,
             this.moveDir,
-            dt * this.speed * player.beeSpeed
+            dt * this.speed * player.beeSpeed,
           );
 
           meshes.bees.instanceData.push(
@@ -15427,7 +5522,7 @@ function BeeSwarmSimulator(DATA) {
             BEE_FLY,
             beeInfo[this.type].u,
             this.GIFTED_BEE_TEXTURE_OFFSET,
-            beeInfo[this.type].meshPartId
+            beeInfo[this.type].meshPartId,
           );
 
           break;
@@ -15449,7 +5544,7 @@ function BeeSwarmSimulator(DATA) {
           0,
           2.5,
           2.5,
-          0
+          0,
         );
       }
 
@@ -15465,7 +5560,7 @@ function BeeSwarmSimulator(DATA) {
             0.2,
             1.35,
             1.35,
-            0
+            0,
           );
         textRenderer.addDecalRaw(
           ...this.pos,
@@ -15478,7 +5573,7 @@ function BeeSwarmSimulator(DATA) {
           2.25,
           2.25,
           (TIME * 1.25 + this.hiveX + this.hiveY * 5) *
-            (this.hiveY % 2 ? 1 : -1)
+            (this.hiveY % 2 ? 1 : -1),
         );
       }
     }
@@ -15554,7 +5649,7 @@ function BeeSwarmSimulator(DATA) {
 
       for (let i in beeInfo[this.type].trails) {
         this.trails.push(
-          new TrailRenderer.ConstantTrail(beeInfo[this.type].trails[i])
+          new TrailRenderer.ConstantTrail(beeInfo[this.type].trails[i]),
         );
         this.beeOffsets.push(beeInfo[this.type].trails[i].beeOffset || 0);
       }
@@ -15655,7 +5750,7 @@ function BeeSwarmSimulator(DATA) {
             dt *
               this.speed *
               player.beeSpeed *
-              (this.type === "spicy" ? player.flameHeatStackApplied : 1)
+              (this.type === "spicy" ? player.flameHeatStackApplied : 1),
           );
           if (vec3.sqrDist(this.moveTo, this.pos) < 0.8) {
             this.state = "attack";
@@ -15678,7 +5773,7 @@ function BeeSwarmSimulator(DATA) {
             BEE_FLY,
             beeInfo[this.type].u,
             this.GIFTED_BEE_TEXTURE_OFFSET,
-            beeInfo[this.type].meshPartId
+            beeInfo[this.type].meshPartId,
           );
 
           break;
@@ -15711,9 +5806,9 @@ function BeeSwarmSimulator(DATA) {
                 ? Math.max(
                     Math.pow(
                       2,
-                      (this.gifted ? 2 : 1) + this.level - this.attackMob.level
+                      (this.gifted ? 2 : 1) + this.level - this.attackMob.level,
                     ),
-                    0.05
+                    0.05,
                   )
                 : Math.pow(2, this.level - this.attackMob.level))
             ) {
@@ -15734,7 +5829,7 @@ function BeeSwarmSimulator(DATA) {
                     size: 1.75,
                     speed: 0.3,
                     aftershock: 0,
-                  })
+                  }),
                 );
               }
             } else {
@@ -15749,7 +5844,7 @@ function BeeSwarmSimulator(DATA) {
                 0,
                 "",
                 1.25,
-                false
+                false,
               );
             }
 
@@ -15790,8 +5885,8 @@ function BeeSwarmSimulator(DATA) {
                     z: this.flowerCollecting[1],
                     bee: this,
                   },
-                  true
-                )
+                  true,
+                ),
               );
             }
           }
@@ -15807,7 +5902,7 @@ function BeeSwarmSimulator(DATA) {
             TIME * 5,
             beeInfo[this.type].u,
             this.GIFTED_BEE_TEXTURE_OFFSET,
-            beeInfo[this.type].meshPartId
+            beeInfo[this.type].meshPartId,
           );
 
           break;
@@ -15832,7 +5927,7 @@ function BeeSwarmSimulator(DATA) {
             dt *
               this.speed *
               player.beeSpeed *
-              (this.type === "spicy" ? player.flameHeatStackApplied : 1)
+              (this.type === "spicy" ? player.flameHeatStackApplied : 1),
           );
 
           if (vec3.sqrDist(this.moveTo, this.pos) < 0.8)
@@ -15849,7 +5944,7 @@ function BeeSwarmSimulator(DATA) {
             BEE_FLY,
             beeInfo[this.type].u,
             this.GIFTED_BEE_TEXTURE_OFFSET,
-            beeInfo[this.type].meshPartId
+            beeInfo[this.type].meshPartId,
           );
 
           if (player.converting && player.pollen) {
@@ -15907,7 +6002,7 @@ function BeeSwarmSimulator(DATA) {
             dt *
               this.speed *
               player.beeSpeed *
-              (this.type === "spicy" ? player.flameHeatStackApplied : 1)
+              (this.type === "spicy" ? player.flameHeatStackApplied : 1),
           );
 
           if (vec3.sqrDist(this.moveTo, this.pos) < 0.075) {
@@ -15929,7 +6024,7 @@ function BeeSwarmSimulator(DATA) {
             BEE_FLY,
             beeInfo[this.type].u,
             this.GIFTED_BEE_TEXTURE_OFFSET,
-            beeInfo[this.type].meshPartId
+            beeInfo[this.type].meshPartId,
           );
 
           break;
@@ -15993,8 +6088,8 @@ function BeeSwarmSimulator(DATA) {
                     x: this.flowerCollecting[0],
                     z: this.flowerCollecting[1],
                     bee: this,
-                  }
-                )
+                  },
+                ),
               );
             }
 
@@ -16013,7 +6108,7 @@ function BeeSwarmSimulator(DATA) {
             BEE_COLLECT,
             beeInfo[this.type].u,
             this.GIFTED_BEE_TEXTURE_OFFSET,
-            beeInfo[this.type].meshPartId
+            beeInfo[this.type].meshPartId,
           );
 
           break;
@@ -16030,7 +6125,7 @@ function BeeSwarmSimulator(DATA) {
             this.pos,
             this.pos,
             this.moveDir,
-            dt * this.speed * player.beeSpeed * 1.5
+            dt * this.speed * player.beeSpeed * 1.5,
           );
           if (vec3.sqrDist(this.moveTo, this.pos) < 0.7) {
             this.pos = this.moveTo.slice();
@@ -16065,7 +6160,7 @@ function BeeSwarmSimulator(DATA) {
                   0;
 
               this.targets.push(
-                new Target(player.fieldIn, _x, _z, i + 1, this)
+                new Target(player.fieldIn, _x, _z, i + 1, this),
               );
               objects.targets.push(this.targets[this.targets.length - 1]);
             }
@@ -16082,7 +6177,7 @@ function BeeSwarmSimulator(DATA) {
             BEE_FLY,
             beeInfo[this.type].u,
             this.GIFTED_BEE_TEXTURE_OFFSET,
-            beeInfo[this.type].meshPartId
+            beeInfo[this.type].meshPartId,
           );
 
           break;
@@ -16153,8 +6248,8 @@ function BeeSwarmSimulator(DATA) {
                     x: this.targets[2].x,
                     z: this.targets[2].z,
                     bee: this,
-                  }
-                )
+                  },
+                ),
               );
               objects.tokens.push(
                 new Token(
@@ -16170,8 +6265,8 @@ function BeeSwarmSimulator(DATA) {
                     x: this.targets[2].x + 1,
                     z: this.targets[2].z,
                     bee: this,
-                  }
-                )
+                  },
+                ),
               );
               objects.tokens.push(
                 new Token(
@@ -16187,8 +6282,8 @@ function BeeSwarmSimulator(DATA) {
                     x: this.targets[2].x - 1,
                     z: this.targets[2].z,
                     bee: this,
-                  }
-                )
+                  },
+                ),
               );
             }
 
@@ -16200,8 +6295,8 @@ function BeeSwarmSimulator(DATA) {
                     this.targets[2].x,
                     this.targets[2].z,
                     "preciseMark",
-                    this.level
-                  )
+                    this.level,
+                  ),
                 );
               }
             }
@@ -16216,8 +6311,8 @@ function BeeSwarmSimulator(DATA) {
                       effects.focus.tokenLife,
                       [_t.pos[0], _t.pos[1] + 0.5, _t.pos[2]],
                       "focus",
-                      { field: _t.field, x: _t.x, z: _t.z, bee: this }
-                    )
+                      { field: _t.field, x: _t.x, z: _t.z, bee: this },
+                    ),
                   );
 
                 collectPollen({
@@ -16291,8 +6386,8 @@ function BeeSwarmSimulator(DATA) {
                     effects.redBoost.tokenLife,
                     [_t.pos[0], _t.pos[1] + 0.5, _t.pos[2]],
                     "redBoost",
-                    { field: _t.field, x: _t.x, z: _t.z, bee: this }
-                  )
+                    { field: _t.field, x: _t.x, z: _t.z, bee: this },
+                  ),
                 );
               }
             }
@@ -16315,7 +6410,7 @@ function BeeSwarmSimulator(DATA) {
                 size: 1.75,
                 speed: 0.3,
                 aftershock: 0,
-              })
+              }),
             );
           }
 
@@ -16330,7 +6425,7 @@ function BeeSwarmSimulator(DATA) {
             BEE_FLY,
             beeInfo[this.type].u,
             this.GIFTED_BEE_TEXTURE_OFFSET,
-            beeInfo[this.type].meshPartId
+            beeInfo[this.type].meshPartId,
           );
 
           break;
@@ -16359,7 +6454,7 @@ function BeeSwarmSimulator(DATA) {
             this.pos,
             this.pos,
             this.moveDir,
-            dt * this.speed * player.beeSpeed
+            dt * this.speed * player.beeSpeed,
           );
 
           if (this.triangulateTimer <= 0) {
@@ -16377,7 +6472,7 @@ function BeeSwarmSimulator(DATA) {
             BEE_FLY,
             beeInfo[this.type].u,
             this.GIFTED_BEE_TEXTURE_OFFSET,
-            beeInfo[this.type].meshPartId
+            beeInfo[this.type].meshPartId,
           );
 
           break;
@@ -16445,7 +6540,7 @@ function BeeSwarmSimulator(DATA) {
       this.params.life -= dt;
       this.size += Math.max(
         (this.params.size - this.size) * this.params.speed,
-        this.params.aftershock
+        this.params.aftershock,
       );
 
       meshes[this.primitive].instanceData.push(
@@ -16457,48 +6552,14 @@ function BeeSwarmSimulator(DATA) {
         this.params.col[2],
         Math.min(this.params.life * this.lifespan, this.maxAlpha),
         this.backface ? -this.size : this.size,
-        this.params.height
+        this.params.height,
       );
 
       return this.params.life <= 0;
     }
   }
 
-  class ReverseExplosion {
-    constructor(params) {
-      this.transformHeight = params.transformHeight;
-      this.primitive = params.primitive || "cylinder_explosions";
-      this.lifespan = 1 / params.life;
-      this.params = params;
-      this.size = params.size;
-      this.params.height = this.params.height || 1;
-      this.backface = params.backface === undefined ? false : params.backface;
-    }
-
-    die(index) {
-      objects.explosions.splice(index, 1);
-    }
-
-    update() {
-      this.params.life -= dt;
-      let s = this.params.life * this.lifespan * this.size;
-
-      meshes[this.primitive].instanceData.push(
-        this.params.pos[0],
-        this.params.pos[1],
-        this.params.pos[2],
-        this.params.col[0],
-        this.params.col[1],
-        this.params.col[2],
-        this.params.life * this.lifespan * this.params.alpha,
-        this.backface ? -s : s,
-        this.transformHeight ? this.params.height : this.params.height / s
-      );
-
-      return this.params.life <= 0;
-    }
-  }
-
+  // FIXME: ReverseExplosion goes here
   class Flame {
     constructor(field, x, z, isStatic) {
       player.stats.flames++;
@@ -16539,17 +6600,17 @@ function BeeSwarmSimulator(DATA) {
 
         player.pollen -= Math.min(
           Math.ceil(player.convertTotal * 0.02),
-          player.pollen
+          player.pollen,
         );
         player.honey += Math.ceil(
           Math.min(Math.ceil(player.convertTotal * 0.02), player.pollen) *
-            player.honeyPerPollen
+            player.honeyPerPollen,
         );
         if (player.extraInfo.enablePollenText)
           textRenderer.add(
             Math.ceil(
               Math.min(Math.ceil(player.convertTotal * 0.02), player.pollen) *
-                player.honeyPerPollen
+                player.honeyPerPollen,
             ),
             [
               player.body.position.x,
@@ -16558,7 +6619,7 @@ function BeeSwarmSimulator(DATA) {
             ],
             COLORS.honey,
             0,
-            "+"
+            "+",
           );
       }
     }
@@ -16579,7 +6640,7 @@ function BeeSwarmSimulator(DATA) {
             size: 2,
             alpha: 1,
             height: 3,
-          })
+          }),
         );
 
         this.dark = true;
@@ -16588,17 +6649,17 @@ function BeeSwarmSimulator(DATA) {
           this.life *= 1.5;
           player.pollen -= Math.min(
             Math.ceil(player.convertTotal * 0.02),
-            player.pollen
+            player.pollen,
           );
           player.honey += Math.ceil(
             Math.min(Math.ceil(player.convertTotal * 0.02), player.pollen) *
-              player.honeyPerPollen
+              player.honeyPerPollen,
           );
           if (player.extraInfo.enablePollenText)
             textRenderer.add(
               Math.ceil(
                 Math.min(Math.ceil(player.convertTotal * 0.02), player.pollen) *
-                  player.honeyPerPollen
+                  player.honeyPerPollen,
               ),
               [
                 player.body.position.x,
@@ -16607,7 +6668,7 @@ function BeeSwarmSimulator(DATA) {
               ],
               COLORS.honey,
               0,
-              "+"
+              "+",
             );
           this.getRidOfOilTrailTimer = 2;
           this.oilT = 0;
@@ -16819,7 +6880,7 @@ function BeeSwarmSimulator(DATA) {
           size: 4,
           speed: 0.5,
           aftershock: 0.05,
-        })
+        }),
       );
       let g = this.golden ? 1.5 * player.bubblePollen : player.bubblePollen;
 
@@ -16876,8 +6937,8 @@ function BeeSwarmSimulator(DATA) {
             "honey",
             Math.ceil(p * 0.5),
             true,
-            "Gold Bubble"
-          )
+            "Gold Bubble",
+          ),
         );
       }
 
@@ -16906,7 +6967,7 @@ function BeeSwarmSimulator(DATA) {
         this.col[2] * player.isNight,
         Math.min(this.life * 0.35, this.golden ? 0.8 : 0.7),
         Math.min((TIME - this.birth) * 15, 3),
-        1
+        1,
       );
 
       return this.life <= 0;
@@ -16971,7 +7032,7 @@ function BeeSwarmSimulator(DATA) {
             this.func,
             true,
             false,
-            false
+            false,
           );
         }
 
@@ -16988,7 +7049,7 @@ function BeeSwarmSimulator(DATA) {
             speed: 0.15,
             aftershock: 0.01,
             height: 0.075,
-          })
+          }),
         );
       }
     }
@@ -17067,7 +7128,7 @@ function BeeSwarmSimulator(DATA) {
           0,
           1,
           0.45,
-          1
+          1,
         );
 
         if (this.type === "honeyMark") {
@@ -17078,9 +7139,9 @@ function BeeSwarmSimulator(DATA) {
 
             let a = Math.min(
               Math.round(
-                (player.convertTotal * 3) / (objects.bees.length || 1)
+                (player.convertTotal * 3) / (objects.bees.length || 1),
               ),
-              player.pollen
+              player.pollen,
             );
             player.pollen -= a;
             player.honey += Math.ceil(a * player.honeyPerPollen);
@@ -17095,7 +7156,7 @@ function BeeSwarmSimulator(DATA) {
                 ],
                 COLORS.honey,
                 0,
-                "+"
+                "+",
               );
           }
         }
@@ -17109,7 +7170,7 @@ function BeeSwarmSimulator(DATA) {
           0,
           0.85,
           0.45,
-          1
+          1,
         );
       }
 
@@ -17122,7 +7183,7 @@ function BeeSwarmSimulator(DATA) {
         player.isNight,
         0.05,
         this.diameter - 0.1,
-        0.01
+        0.01,
       );
 
       meshes.cylinder_explosions.instanceData.push(
@@ -17134,7 +7195,7 @@ function BeeSwarmSimulator(DATA) {
         0.4 * player.isNight,
         1,
         0.125,
-        27
+        27,
       );
       meshes.cylinder_explosions.instanceData.push(
         this.pos[0],
@@ -17145,7 +7206,7 @@ function BeeSwarmSimulator(DATA) {
         0.4,
         1,
         0.4,
-        0.5
+        0.5,
       );
       meshes.tokens.instanceData.push(
         this.pos[0],
@@ -17155,7 +7216,7 @@ function BeeSwarmSimulator(DATA) {
         effects[this.type + "Token"].u,
         effects[this.type + "Token"].v,
         1,
-        1.35
+        1.35,
       );
 
       this.surgeAfter -= dt;
@@ -17174,7 +7235,7 @@ function BeeSwarmSimulator(DATA) {
             life: 0.3,
             size: this.diameter * 0.8,
             alpha: 0.75,
-          })
+          }),
         );
 
         if (f.type === "honeyMark") {
@@ -17286,7 +7347,7 @@ function BeeSwarmSimulator(DATA) {
           size: 4,
           speed: 0.5,
           aftershock: 0.05,
-        })
+        }),
       );
 
       objects.mobs.splice(index, 1);
@@ -17341,8 +7402,8 @@ function BeeSwarmSimulator(DATA) {
               new Bubble(
                 this.field,
                 (this.pos[0] - fieldInfo[this.field].x) | 0,
-                (this.pos[2] - fieldInfo[this.field].z) | 0
-              )
+                (this.pos[2] - fieldInfo[this.field].z) | 0,
+              ),
             );
 
           for (let i in objects.tokens) {
@@ -17362,7 +7423,7 @@ function BeeSwarmSimulator(DATA) {
                   size: 1.8,
                   speed: 0.2,
                   aftershock: 0.005,
-                })
+                }),
               );
               let bx = (b.pos[0] - fieldInfo[this.field].x) | 0,
                 bz = (b.pos[2] - fieldInfo[this.field].z) | 0;
@@ -17395,7 +7456,7 @@ function BeeSwarmSimulator(DATA) {
         gl.FLOAT,
         gl.FLASE,
         24,
-        12
+        12,
       );
       gl.uniform4fv(glCache.mob_instanceInfo1, this.pos);
       gl.uniform2f(glCache.mob_instanceInfo2, 0.9, 1);
@@ -17403,7 +7464,7 @@ function BeeSwarmSimulator(DATA) {
         gl.TRIANGLES,
         meshes[this.mesh].indexAmount,
         gl.UNSIGNED_SHORT,
-        0
+        0,
       );
 
       return this.life <= 0;
@@ -17442,7 +7503,7 @@ function BeeSwarmSimulator(DATA) {
         player.capacity *
           0.35 *
           (this.golden ? 1.35 : 1) *
-          (beeLevel * 0.0375 + 1)
+          (beeLevel * 0.0375 + 1),
       );
       this.invCap = 1 / this.cap;
       this.displaySize = 0;
@@ -17453,8 +7514,8 @@ function BeeSwarmSimulator(DATA) {
         (fieldInfo[this.field].generalColorComp.b >= 0.5
           ? 4
           : fieldInfo[this.field].generalColorComp.w >= 0.5
-          ? 2
-          : 0);
+            ? 2
+            : 0);
 
       this.prevFlowers = [];
       this.flowers = [];
@@ -17553,7 +7614,7 @@ function BeeSwarmSimulator(DATA) {
           player.isNight,
           0.5,
           0.03,
-          67
+          67,
         );
         meshes.explosions.instanceData.push(
           this.pos[0],
@@ -17564,7 +7625,7 @@ function BeeSwarmSimulator(DATA) {
           this.col[2] * player.isNight,
           this.col[3],
           this.displaySize,
-          1.03
+          1.03,
         );
 
         meshes.explosions.instanceData.push(
@@ -17576,7 +7637,7 @@ function BeeSwarmSimulator(DATA) {
           0,
           0.35,
           7,
-          0.01
+          0.01,
         );
 
         if (this.golden) {
@@ -17590,7 +7651,7 @@ function BeeSwarmSimulator(DATA) {
             0.85,
             2,
             2,
-            TIME
+            TIME,
           );
         }
 
@@ -17601,7 +7662,7 @@ function BeeSwarmSimulator(DATA) {
           -0.465,
           true,
           true,
-          0.175
+          0.175,
         );
 
         textRenderer.addDecalRaw(
@@ -17614,7 +7675,7 @@ function BeeSwarmSimulator(DATA) {
           0,
           1,
           0.25,
-          0
+          0,
         );
 
         textRenderer.addDecalRaw(
@@ -17628,7 +7689,7 @@ function BeeSwarmSimulator(DATA) {
           0.1,
           this.pollen * this.invCap,
           0.25,
-          0
+          0,
         );
         textRenderer.addDecalRaw(
           ...this.pos,
@@ -17640,7 +7701,7 @@ function BeeSwarmSimulator(DATA) {
           1,
           -0.44,
           -0.44,
-          0
+          0,
         );
 
         if (
@@ -17696,7 +7757,7 @@ function BeeSwarmSimulator(DATA) {
           this.moveDir = vec3.sub(
             [],
             [player.hivePos[0] + 1.5, player.hivePos[1], player.hivePos[2]],
-            this.pos
+            this.pos,
           );
           vec3.normalize(this.moveDir, this.moveDir);
 
@@ -17738,7 +7799,7 @@ function BeeSwarmSimulator(DATA) {
           player.isNight,
           0.5,
           0.03,
-          67
+          67,
         );
 
         meshes.explosions.instanceData.push(
@@ -17750,7 +7811,7 @@ function BeeSwarmSimulator(DATA) {
           this.col[2] * player.isNight,
           this.col[3],
           this.displaySize,
-          1.05
+          1.05,
         );
 
         if (this.golden) {
@@ -17764,7 +7825,7 @@ function BeeSwarmSimulator(DATA) {
             0.85,
             2,
             2,
-            TIME
+            TIME,
           );
         }
 
@@ -17775,7 +7836,7 @@ function BeeSwarmSimulator(DATA) {
           -0.465,
           true,
           true,
-          0.175
+          0.175,
         );
 
         textRenderer.addDecalRaw(
@@ -17788,7 +7849,7 @@ function BeeSwarmSimulator(DATA) {
           1,
           -0.44,
           -0.44,
-          0
+          0,
         );
 
         if (vec3.sqrDist(this.pos, player.hivePos) < 9) {
@@ -17830,7 +7891,7 @@ function BeeSwarmSimulator(DATA) {
           size: 3,
           alpha: 1,
           height: 3,
-        })
+        }),
       );
 
       if (
@@ -17847,7 +7908,7 @@ function BeeSwarmSimulator(DATA) {
               player.convertRate *
               player[beeInfo[this.bee.type].color + "ConvertRate"] *
               (player.flameHeatStack * 10),
-          player.pollen
+          player.pollen,
         );
 
         player.pollen -= amountToConvert;
@@ -17862,7 +7923,7 @@ function BeeSwarmSimulator(DATA) {
             ],
             COLORS.honey,
             0,
-            "+"
+            "+",
           );
 
         let hpt = amountToConvert / 5;
@@ -17879,8 +7940,8 @@ function BeeSwarmSimulator(DATA) {
               "honey",
               Math.ceil(hpt),
               true,
-              "Target Practice"
-            )
+              "Target Practice",
+            ),
           );
         }
 
@@ -17915,206 +7976,14 @@ function BeeSwarmSimulator(DATA) {
         this.col[2],
         0.5,
         1.75,
-        0.75
+        0.75,
       );
 
       return this.splice;
     }
   }
 
-  class Triangulate {
-    constructor(bee, tokenPos) {
-      this.life = MATH.random(2.9, 3.1);
-      this.field = player.fieldIn;
-      this.tokenPos = tokenPos;
-      this.bee = bee;
-      this.mesh = new Mesh(true);
-      this.offset = (Math.random() - 0.5) * 0.075;
-    }
-
-    die(index) {
-      let px = Math.round(player.body.position.x - fieldInfo[this.field].x),
-        pz = Math.round(player.body.position.z - fieldInfo[this.field].z),
-        tx = Math.round(this.tokenPos[0] - fieldInfo[this.field].x),
-        tz = Math.round(this.tokenPos[2] - fieldInfo[this.field].z),
-        bx = Math.round(this.bee.pos[0] - fieldInfo[this.field].x),
-        bz = Math.round(this.bee.pos[2] - fieldInfo[this.field].z),
-        minX = Math.min(Math.min(bx, px), tx),
-        maxX = Math.max(Math.max(bx, px), tx),
-        minZ = Math.min(Math.min(bz, pz), tz),
-        maxZ = Math.max(Math.max(bz, pz), tz);
-
-      minX = MATH.constrain(minX, 0, fieldInfo[this.field].width);
-      maxX = MATH.constrain(maxX, 0, fieldInfo[this.field].width);
-      minZ = MATH.constrain(minZ, 0, fieldInfo[this.field].length);
-      maxZ = MATH.constrain(maxZ, 0, fieldInfo[this.field].length);
-
-      let f = [];
-
-      for (let x = minX; x < maxX; x++) {
-        for (let z = minZ; z < maxZ; z++) {
-          if (MATH.pointInTriangle(x, z, px, pz, tx, tz, bx, bz)) {
-            f.push([x, z]);
-          }
-        }
-      }
-
-      for (let i in objects.tokens) {
-        if (
-          MATH.pointInTriangle(
-            Math.round(objects.tokens[i].pos[0] - fieldInfo[this.field].x),
-            Math.round(objects.tokens[i].pos[2] - fieldInfo[this.field].z),
-            px,
-            pz,
-            tx,
-            tz,
-            bx,
-            bz
-          ) &&
-          !(objects.tokens[i] instanceof DupedToken)
-        ) {
-          objects.tokens[i].collect();
-        }
-      }
-
-      let containsPollenMark = 1,
-        containsHoneyMark,
-        containsPreciseMark,
-        extraPollenFromMarks = 1;
-
-      for (let i in objects.marks) {
-        if (
-          MATH.pointInTriangle(
-            objects.marks[i].x,
-            objects.marks[i].z,
-            px,
-            pz,
-            tx,
-            tz,
-            bx,
-            bz
-          )
-        ) {
-          extraPollenFromMarks = 1.5;
-
-          if (objects.marks[i].type === "pollenMark") {
-            containsPollenMark = 2;
-          } else if (objects.marks[i].type === "honeyMark") {
-            containsHoneyMark = true;
-          } else {
-            containsPreciseMark = true;
-          }
-        }
-      }
-
-      collectPollen({
-        x: 0,
-        z: 0,
-        pattern: f,
-        amount: 10 + this.bee.level * 2,
-        yOffset: 2.5,
-        stackHeight: 0.8,
-        field: this.field,
-        otherPos: [
-          (minX + maxX) * 0.5 + fieldInfo[this.field].x,
-          player.body.position.y + 0.5,
-          (minZ + maxZ) * 0.5 + fieldInfo[this.field].z,
-        ],
-        multiplier: {
-          r: extraPollenFromMarks,
-          b: extraPollenFromMarks,
-          w: containsPollenMark * extraPollenFromMarks,
-        },
-        alwaysCrit: containsPreciseMark,
-        instantConversion: containsHoneyMark ? 0.5 : 0,
-      });
-
-      objects.explosions.push(
-        new ReverseExplosion({
-          col: [1, 1, 1],
-          pos: this.bee.pos.slice(),
-          life: 0.25,
-          size: 2,
-          alpha: 1,
-          height: 1,
-        })
-      );
-      objects.explosions.push(
-        new ReverseExplosion({
-          col: [1, 1, 1],
-          pos: this.tokenPos,
-          life: 0.25,
-          size: 2,
-          alpha: 1,
-          height: 1,
-        })
-      );
-      objects.explosions.push(
-        new ReverseExplosion({
-          col: [1, 1, 1],
-          pos: [
-            player.body.position.x,
-            player.body.position.y,
-            player.body.position.z,
-          ],
-          life: 0.25,
-          size: 2,
-          alpha: 1,
-          height: 1,
-        })
-      );
-
-      objects.triangulates.splice(index, 1);
-    }
-
-    update() {
-      this.life -= dt;
-
-      let c = Math.max(1 - this.life * 0.25, 0.2);
-
-      this.mesh.setMesh(
-        [
-          this.tokenPos[0],
-          this.tokenPos[1] + this.offset,
-          this.tokenPos[2],
-          c,
-          c,
-          c,
-          1,
-          0,
-          0,
-          0,
-          this.bee.pos[0],
-          this.tokenPos[1] + this.offset,
-          this.bee.pos[2],
-          c,
-          c,
-          c,
-          1,
-          0,
-          0,
-          0,
-          player.body.position.x,
-          this.tokenPos[1] + this.offset,
-          player.body.position.z,
-          c,
-          c,
-          c,
-          1,
-          0,
-          0,
-          0,
-        ],
-        [0, 1, 2, 2, 1, 0]
-      );
-
-      this.mesh.setBuffers();
-      this.mesh.render();
-
-      return this.life <= 0;
-    }
-  }
-
+  // FIXME: entities goes here
   class FuzzBomb {
     constructor(field, beeLevel) {
       this.beeLevel = beeLevel;
@@ -18145,7 +8014,7 @@ function BeeSwarmSimulator(DATA) {
           size: 4,
           speed: 0.5,
           aftershock: 0.05,
-        })
+        }),
       );
     }
 
@@ -18165,7 +8034,7 @@ function BeeSwarmSimulator(DATA) {
             size: 4,
             speed: 0.5,
             aftershock: 0.05,
-          })
+          }),
         );
         let p = [
           [0, 0],
@@ -18219,7 +8088,7 @@ function BeeSwarmSimulator(DATA) {
               },
               true,
               false,
-              true
+              true,
             );
           }
         }
@@ -18307,7 +8176,7 @@ function BeeSwarmSimulator(DATA) {
         0,
         Math.min(this.life, 0.85),
         1.25,
-        1
+        1,
       );
 
       return this.life <= 0;
@@ -18354,7 +8223,7 @@ function BeeSwarmSimulator(DATA) {
               size: 1.2,
               speed: 0.35,
               aftershock: 0.005,
-            })
+            }),
           );
 
           this.hitBees.push(i);
@@ -18365,8 +8234,8 @@ function BeeSwarmSimulator(DATA) {
               10000 +
                 b.convertAmount *
                   7.5 *
-                  player[beeInfo[b.type].color + "ConvertRate"]
-            )
+                  player[beeInfo[b.type].color + "ConvertRate"],
+            ),
           );
 
           player.pollen -= amountToConvert;
@@ -18378,7 +8247,7 @@ function BeeSwarmSimulator(DATA) {
               [b.pos[0], b.pos[1] + 0.75, b.pos[2]],
               COLORS.honey,
               1,
-              "⇆"
+              "⇆",
             );
         }
       }
@@ -18419,7 +8288,7 @@ function BeeSwarmSimulator(DATA) {
         gl.FLOAT,
         gl.FLASE,
         24,
-        12
+        12,
       );
       gl.uniform4fv(glCache.mob_instanceInfo1, this.pos);
       gl.uniform2f(glCache.mob_instanceInfo2, 1, this.life * 1.75);
@@ -18427,7 +8296,7 @@ function BeeSwarmSimulator(DATA) {
         gl.TRIANGLES,
         meshes.petalShuriken.indexAmount,
         gl.UNSIGNED_SHORT,
-        0
+        0,
       );
 
       return this.life <= 0;
@@ -18492,7 +8361,7 @@ function BeeSwarmSimulator(DATA) {
         [255, 0, 0],
         crit ? (superCrit ? 2 : 1) : 0,
         "",
-        1.25
+        1.25,
       );
     }
 
@@ -18870,13 +8739,13 @@ function BeeSwarmSimulator(DATA) {
                     amulet.push(
                       "+1 redBeeAttack",
                       "+1 blueBeeAttack",
-                      "+1 whiteBeeAttack"
+                      "+1 whiteBeeAttack",
                     );
                   } else {
                     amulet.push(
                       Math.random() < 0.5
                         ? "+1 redBeeAttack"
-                        : "+1 blueBeeAttack"
+                        : "+1 blueBeeAttack",
                     );
                   }
 
@@ -18890,8 +8759,8 @@ function BeeSwarmSimulator(DATA) {
                           MATH.random(1.05, 1.15).toFixed(2) +
                           " whitePollen",
                       ],
-                      2
-                    )
+                      2,
+                    ),
                   );
 
                   player.showGeneratedAmulet("kingBeetleAmulet", amulet);
@@ -19006,9 +8875,9 @@ function BeeSwarmSimulator(DATA) {
                     (this.type === "tunnelBear"
                       ? 0.3
                       : this.type === "kingBeetle"
-                      ? 0.25
-                      : 0.2),
-                  player.lootLuck * 1.5
+                        ? 0.25
+                        : 0.2),
+                  player.lootLuck * 1.5,
                 );
 
               if (this.type === "tunnelBear") {
@@ -19028,8 +8897,8 @@ function BeeSwarmSimulator(DATA) {
                       ty,
                       am,
                       true,
-                      MATH.doGrammar(this.type)
-                    )
+                      MATH.doGrammar(this.type),
+                    ),
                   );
                 } else {
                   objects.tokens.push(
@@ -19039,8 +8908,8 @@ function BeeSwarmSimulator(DATA) {
                       "honey",
                       12500,
                       true,
-                      MATH.doGrammar(this.type)
-                    )
+                      MATH.doGrammar(this.type),
+                    ),
                   );
                 }
               } else {
@@ -19062,8 +8931,8 @@ function BeeSwarmSimulator(DATA) {
                       ty,
                       am,
                       true,
-                      MATH.doGrammar(this.type)
-                    )
+                      MATH.doGrammar(this.type),
+                    ),
                   );
                 } else {
                   objects.tokens.push(
@@ -19085,8 +8954,8 @@ function BeeSwarmSimulator(DATA) {
                         kingBeetle: 2500,
                       }[this.type],
                       true,
-                      MATH.doGrammar(this.type)
-                    )
+                      MATH.doGrammar(this.type),
+                    ),
                   );
                 }
               }
@@ -19155,7 +9024,7 @@ function BeeSwarmSimulator(DATA) {
                   mantis: 30,
                   kingBeetle: 75,
                   tunnelBear: 10000,
-                }[this.type]
+                }[this.type],
               );
               this.damageTimer = 1.5;
             }
@@ -19223,7 +9092,7 @@ function BeeSwarmSimulator(DATA) {
                           mantis: 30,
                           kingBeetle: 75,
                           tunnelBear: 10000,
-                        }[this.type]
+                        }[this.type],
                       );
                     }
                   }
@@ -19267,7 +9136,7 @@ function BeeSwarmSimulator(DATA) {
               0,
               -2,
               -2,
-              0
+              0,
             );
           }
 
@@ -19281,7 +9150,7 @@ function BeeSwarmSimulator(DATA) {
             gl.FLOAT,
             gl.FLASE,
             24,
-            0
+            0,
           );
           gl.vertexAttribPointer(
             glCache.mob_vertColor,
@@ -19289,13 +9158,13 @@ function BeeSwarmSimulator(DATA) {
             gl.FLOAT,
             gl.FLASE,
             24,
-            12
+            12,
           );
           gl.drawElements(
             gl.TRIANGLES,
             meshes[this.type].indexAmount,
             gl.UNSIGNED_SHORT,
-            0
+            0,
           );
 
           this.pos[1] +=
@@ -19308,7 +9177,7 @@ function BeeSwarmSimulator(DATA) {
             MATH.doGrammar(this.type) + " (Level " + this.level + ")",
             [this.pos[0], this.pos[1] + 0.4, this.pos[2]],
             COLORS.whiteArr,
-            100
+            100,
           );
 
           textRenderer.addDecalRaw(
@@ -19323,7 +9192,7 @@ function BeeSwarmSimulator(DATA) {
             0,
             2.5,
             0.4,
-            0
+            0,
           );
           textRenderer.addDecalRaw(
             this.pos[0],
@@ -19338,7 +9207,7 @@ function BeeSwarmSimulator(DATA) {
             0.2,
             (this.health * 2.5) / this.maxHealth,
             0.4,
-            0
+            0,
           );
 
           textRenderer.addSingle(
@@ -19347,7 +9216,7 @@ function BeeSwarmSimulator(DATA) {
             COLORS.whiteArr,
             -1,
             false,
-            false
+            false,
           );
           this.pos[1] -=
             this.type === "werewolf" ||
@@ -19405,7 +9274,7 @@ function BeeSwarmSimulator(DATA) {
             gl.FLOAT,
             gl.FLASE,
             24,
-            0
+            0,
           );
           gl.vertexAttribPointer(
             glCache.mob_vertColor,
@@ -19413,13 +9282,13 @@ function BeeSwarmSimulator(DATA) {
             gl.FLOAT,
             gl.FLASE,
             24,
-            12
+            12,
           );
           gl.drawElements(
             gl.TRIANGLES,
             meshes[this.type].indexAmount,
             gl.UNSIGNED_SHORT,
-            0
+            0,
           );
 
           this.pos[1] +=
@@ -19428,7 +9297,7 @@ function BeeSwarmSimulator(DATA) {
             "Rhino Beetle (Level " + this.level + ")",
             [this.pos[0], this.pos[1] + 0.4, this.pos[2]],
             COLORS.whiteArr,
-            100
+            100,
           );
 
           textRenderer.addDecalRaw(
@@ -19443,7 +9312,7 @@ function BeeSwarmSimulator(DATA) {
             0,
             2.5,
             0.4,
-            0
+            0,
           );
           textRenderer.addDecalRaw(
             this.pos[0],
@@ -19458,7 +9327,7 @@ function BeeSwarmSimulator(DATA) {
             0.2,
             (this.health * 2.5) / this.maxHealth,
             0.4,
-            0
+            0,
           );
 
           textRenderer.addSingle(
@@ -19467,7 +9336,7 @@ function BeeSwarmSimulator(DATA) {
             COLORS.whiteArr,
             -1,
             false,
-            false
+            false,
           );
           this.pos[1] -=
             this.type === "werewolf" || this.type === "mantis" ? 3 : 1;
@@ -19493,7 +9362,7 @@ function BeeSwarmSimulator(DATA) {
               false,
               false,
               0,
-              0.2
+              0.2,
             );
             textRenderer.addSingle(
               MATH.doTime(this.respawnTimer),
@@ -19503,7 +9372,7 @@ function BeeSwarmSimulator(DATA) {
               false,
               false,
               0,
-              -0.2
+              -0.2,
             );
           }
 
@@ -19564,7 +9433,7 @@ function BeeSwarmSimulator(DATA) {
         [255, 0, 0],
         crit ? (superCrit ? 2 : 1) : 0,
         "",
-        [0, 1.25, 1.275, 1.3, 1.65, 1.75][(Math.min(d.toString().length), 5)]
+        [0, 1.25, 1.275, 1.3, 1.65, 1.75][(Math.min(d.toString().length), 5)],
       );
     }
 
@@ -19588,14 +9457,14 @@ function BeeSwarmSimulator(DATA) {
             loots += "honey,".repeat((MATH.random(100, 225) * 0.5 * decay) | 0);
             loots += "treat,".repeat((MATH.random(50, 125) * 0.5 * decay) | 0);
             loots += "bitterberry,".repeat(
-              (MATH.random(8, 15) * 0.5 * decay) | 0
+              (MATH.random(8, 15) * 0.5 * decay) | 0,
             );
             loots += "neonberry,".repeat(
-              (MATH.random(4, 10) * 0.5 * decay) | 0
+              (MATH.random(4, 10) * 0.5 * decay) | 0,
             );
             loots += "fieldDice,".repeat((MATH.random(1, 7) * 0.5 * decay) | 0);
             loots += "microConverter,".repeat(
-              (MATH.random(1, 5) * 0.5 * decay) | 0
+              (MATH.random(1, 5) * 0.5 * decay) | 0,
             );
             loots += "magicBean,".repeat((MATH.random(1, 4) * 0.5 * decay) | 0);
 
@@ -19623,8 +9492,8 @@ function BeeSwarmSimulator(DATA) {
                       ? MATH.random(500, 1500) | 0
                       : MATH.random(1, 4) | 0,
                     true,
-                    "Mondo Chick"
-                  )
+                    "Mondo Chick",
+                  ),
                 );
 
                 loots.splice(i, 1);
@@ -19717,7 +9586,7 @@ function BeeSwarmSimulator(DATA) {
               0,
               -2,
               -2,
-              0
+              0,
             );
           }
 
@@ -19726,7 +9595,7 @@ function BeeSwarmSimulator(DATA) {
             "Mondo Chick (Level " + this.level + ")",
             [this.pos[0], this.pos[1] + 0.9, this.pos[2]],
             COLORS.whiteArr,
-            100
+            100,
           );
           textRenderer.addDecalRaw(
             this.pos[0],
@@ -19740,7 +9609,7 @@ function BeeSwarmSimulator(DATA) {
             0.27 * 0.5,
             2.5,
             0.4,
-            0
+            0,
           );
           textRenderer.addDecalRaw(
             this.pos[0],
@@ -19755,7 +9624,7 @@ function BeeSwarmSimulator(DATA) {
             0.27,
             (this.timeLimit * 2.5) / this.maxTimeLimit,
             0.4,
-            0
+            0,
           );
 
           textRenderer.addDecalRaw(
@@ -19770,7 +9639,7 @@ function BeeSwarmSimulator(DATA) {
             0,
             2.5,
             0.4,
-            0
+            0,
           );
           textRenderer.addDecalRaw(
             this.pos[0],
@@ -19785,7 +9654,7 @@ function BeeSwarmSimulator(DATA) {
             0.2,
             (this.health * 2.5) / this.maxHealth,
             0.4,
-            0
+            0,
           );
 
           textRenderer.addSingle(
@@ -19794,7 +9663,7 @@ function BeeSwarmSimulator(DATA) {
             COLORS.whiteArr,
             -1,
             false,
-            false
+            false,
           );
           textRenderer.addSingle(
             "Time: " + MATH.doTime((this.timeLimit | 0) + ""),
@@ -19804,7 +9673,7 @@ function BeeSwarmSimulator(DATA) {
             false,
             false,
             0,
-            0.6
+            0.6,
           );
 
           this.pos[1] -= 2.4;
@@ -19819,7 +9688,7 @@ function BeeSwarmSimulator(DATA) {
             0.9 * player.isNight,
             this.fallenEggShellEffect * 0.5 + 1,
             4,
-            1.15
+            1.15,
           );
 
           if (!this.running) {
@@ -19841,7 +9710,7 @@ function BeeSwarmSimulator(DATA) {
             gl.FLOAT,
             gl.FLASE,
             24,
-            0
+            0,
           );
           gl.vertexAttribPointer(
             glCache.mob_vertColor,
@@ -19849,13 +9718,13 @@ function BeeSwarmSimulator(DATA) {
             gl.FLOAT,
             gl.FLASE,
             24,
-            12
+            12,
           );
           gl.drawElements(
             gl.TRIANGLES,
             meshes.mondoChick.indexAmount,
             gl.UNSIGNED_SHORT,
-            0
+            0,
           );
 
           break;
@@ -19918,7 +9787,7 @@ function BeeSwarmSimulator(DATA) {
         [255, 0, 0],
         crit ? (superCrit ? 2 : 1) : 0,
         "",
-        [0, 1.25, 1.275, 1.3, 1.65, 1.75][(Math.min(d.toString().length), 5)]
+        [0, 1.25, 1.275, 1.3, 1.65, 1.75][(Math.min(d.toString().length), 5)],
       );
     }
 
@@ -19944,12 +9813,12 @@ function BeeSwarmSimulator(DATA) {
                 size: 5,
                 speed: 0.25,
                 aftershock: 0.005,
-              })
+              }),
             );
 
             player.addMessage(
               "⚠️You've found a Rogue Vicious Bee!⚠️",
-              [0, 0, 0]
+              [0, 0, 0],
             );
             this.state = "attack";
             player.damage(20);
@@ -19963,7 +9832,7 @@ function BeeSwarmSimulator(DATA) {
             gl.FLOAT,
             gl.FLASE,
             24,
-            0
+            0,
           );
           gl.vertexAttribPointer(
             glCache.mob_vertColor,
@@ -19971,7 +9840,7 @@ function BeeSwarmSimulator(DATA) {
             gl.FLOAT,
             gl.FLASE,
             24,
-            12
+            12,
           );
           gl.uniform2f(glCache.mob_instanceInfo2, 0.55, 1);
           gl.uniform4fv(glCache.mob_instanceInfo1, [
@@ -19984,7 +9853,7 @@ function BeeSwarmSimulator(DATA) {
             gl.TRIANGLES,
             meshes.spike.indexAmount,
             gl.UNSIGNED_SHORT,
-            0
+            0,
           );
 
           break;
@@ -19997,7 +9866,7 @@ function BeeSwarmSimulator(DATA) {
             this.state = "dead";
 
             let am = Math.floor(
-                this.level * this.level * this.level * 1000 + 2500
+                this.level * this.level * this.level * 1000 + 2500,
               ),
               sm = ((this.level * 0.5) | 0) + 3;
 
@@ -20013,15 +9882,15 @@ function BeeSwarmSimulator(DATA) {
               ],
               COLORS.honey,
               0,
-              "+"
+              "+",
             );
             player.addMessage(
-              "+" + MATH.addCommas(am + "") + " Honey (from Rogue Vicious Bee)"
+              "+" + MATH.addCommas(am + "") + " Honey (from Rogue Vicious Bee)",
             );
             player.addMessage(
               "+" +
                 MATH.addCommas(sm + "") +
-                " Stingers (from Rogue Vicious Bee)"
+                " Stingers (from Rogue Vicious Bee)",
             );
 
             player.updateInventory();
@@ -20081,7 +9950,7 @@ function BeeSwarmSimulator(DATA) {
                 BEE_FLY,
                 beeInfo.vicious.u,
                 beeInfo.vicious.v,
-                beeInfo.vicious.meshPartId
+                beeInfo.vicious.meshPartId,
               );
             }
 
@@ -20111,7 +9980,7 @@ function BeeSwarmSimulator(DATA) {
                 BEE_FLY,
                 beeInfo.vicious.u,
                 beeInfo.vicious.v,
-                beeInfo.vicious.meshPartId
+                beeInfo.vicious.meshPartId,
               );
 
               if (this.addSpikeAttackTimer <= 0) {
@@ -20146,7 +10015,7 @@ function BeeSwarmSimulator(DATA) {
                 BEE_FLY,
                 beeInfo.vicious.u,
                 beeInfo.vicious.v,
-                beeInfo.vicious.meshPartId
+                beeInfo.vicious.meshPartId,
               );
 
               if (this.addSpikeAttackTimer <= 0) {
@@ -20174,7 +10043,7 @@ function BeeSwarmSimulator(DATA) {
               gl.FLOAT,
               gl.FLASE,
               24,
-              0
+              0,
             );
             gl.vertexAttribPointer(
               glCache.mob_vertColor,
@@ -20182,7 +10051,7 @@ function BeeSwarmSimulator(DATA) {
               gl.FLOAT,
               gl.FLASE,
               24,
-              12
+              12,
             );
             gl.uniform2f(glCache.mob_instanceInfo2, 0.5, 1);
 
@@ -20204,7 +10073,7 @@ function BeeSwarmSimulator(DATA) {
                   0,
                   s.glow,
                   1.5,
-                  0.001
+                  0.001,
                 );
               } else if (s.life < 0.5) {
                 s.pos[1] += (s.y - 10 - s.pos[1]) * dt * 10;
@@ -20218,7 +10087,7 @@ function BeeSwarmSimulator(DATA) {
                   0,
                   s.glow,
                   1.5,
-                  0.001
+                  0.001,
                 );
               }
 
@@ -20238,7 +10107,7 @@ function BeeSwarmSimulator(DATA) {
                 gl.TRIANGLES,
                 meshes.spike.indexAmount,
                 gl.UNSIGNED_SHORT,
-                0
+                0,
               );
 
               if (s.life <= 0) {
@@ -20257,7 +10126,7 @@ function BeeSwarmSimulator(DATA) {
               BEE_FLY,
               beeInfo.vicious.u,
               beeInfo.vicious.v,
-              beeInfo.vicious.meshPartId
+              beeInfo.vicious.meshPartId,
             );
 
             textRenderer.addDecalRaw(
@@ -20272,7 +10141,7 @@ function BeeSwarmSimulator(DATA) {
               0,
               -2,
               -2,
-              0
+              0,
             );
           }
 
@@ -20281,7 +10150,7 @@ function BeeSwarmSimulator(DATA) {
             "Rogue Vicious Bee (Level " + this.level + ")",
             [this.pos[0], this.pos[1] + 0.9, this.pos[2]],
             COLORS.whiteArr,
-            100
+            100,
           );
           textRenderer.addDecalRaw(
             this.pos[0],
@@ -20295,7 +10164,7 @@ function BeeSwarmSimulator(DATA) {
             0.27 * 0.5,
             2.5,
             0.4,
-            0
+            0,
           );
           textRenderer.addDecalRaw(
             this.pos[0],
@@ -20310,7 +10179,7 @@ function BeeSwarmSimulator(DATA) {
             0.27,
             (this.timeLimit * 2.5) / this.maxTimeLimit,
             0.4,
-            0
+            0,
           );
 
           textRenderer.addDecalRaw(
@@ -20325,7 +10194,7 @@ function BeeSwarmSimulator(DATA) {
             0,
             2.5,
             0.4,
-            0
+            0,
           );
           textRenderer.addDecalRaw(
             this.pos[0],
@@ -20340,7 +10209,7 @@ function BeeSwarmSimulator(DATA) {
             0.2,
             (this.health * 2.5) / this.maxHealth,
             0.4,
-            0
+            0,
           );
 
           textRenderer.addSingle(
@@ -20349,7 +10218,7 @@ function BeeSwarmSimulator(DATA) {
             COLORS.whiteArr,
             -1,
             false,
-            false
+            false,
           );
           textRenderer.addSingle(
             "Time: " + MATH.doTime((this.timeLimit | 0) + ""),
@@ -20359,7 +10228,7 @@ function BeeSwarmSimulator(DATA) {
             false,
             false,
             0,
-            0.6
+            0.6,
           );
           this.pos[1] -= 1.25;
 
@@ -20470,7 +10339,7 @@ function BeeSwarmSimulator(DATA) {
         [255, 0, 0],
         crit ? (superCrit ? 2 : 1) : 0,
         "",
-        [0, 1.25, 1.275, 1.3, 1.65, 1.75][(Math.min(d.toString().length), 5)]
+        [0, 1.25, 1.275, 1.3, 1.65, 1.75][(Math.min(d.toString().length), 5)],
       );
     }
 
@@ -20498,7 +10367,7 @@ function BeeSwarmSimulator(DATA) {
             BEE_FLY,
             beeInfo.windy.u,
             beeInfo.windy.v,
-            beeInfo.windy.meshPartId
+            beeInfo.windy.meshPartId,
           );
 
           if (this.pos[1] > 55) {
@@ -20524,7 +10393,7 @@ function BeeSwarmSimulator(DATA) {
             BEE_FLY,
             beeInfo.windy.u,
             beeInfo.windy.v,
-            beeInfo.windy.meshPartId
+            beeInfo.windy.meshPartId,
           );
 
           if (TIME > this.timeAtArrival) {
@@ -20563,8 +10432,8 @@ function BeeSwarmSimulator(DATA) {
                 this.field,
                 (fieldInfo[this.field].width * 0.5) | 0,
                 (fieldInfo[this.field].length * 0.5) | 0,
-                3 * 60
-              )
+                3 * 60,
+              ),
             );
 
             this.tornados = [];
@@ -20631,8 +10500,8 @@ function BeeSwarmSimulator(DATA) {
                     1,
                     true,
                     "Wild Windy Bee",
-                    ["tokensFromWildWindyBee"]
-                  )
+                    ["tokensFromWildWindyBee"],
+                  ),
                 );
               } else {
                 objects.tokens.push(
@@ -20647,8 +10516,8 @@ function BeeSwarmSimulator(DATA) {
                     (this.level - 2) * 10000 + 1000,
                     true,
                     "Wild Windy Bee",
-                    ["tokensFromWildWindyBee"]
-                  )
+                    ["tokensFromWildWindyBee"],
+                  ),
                 );
               }
             }
@@ -20684,7 +10553,7 @@ function BeeSwarmSimulator(DATA) {
 
             player.addMessage(
               "☁️Wild Windy Bee is fleeing...☁️",
-              [160, 160, 160]
+              [160, 160, 160],
             );
 
             return;
@@ -20751,10 +10620,10 @@ function BeeSwarmSimulator(DATA) {
                   this.whipWarning.addPos(vec3.add([], this.whipA, c));
                   this.whipWarning.addPos(vec3.sub([], this.whipA, c));
                   this.whipWarning.addPos(
-                    vec3.add([], vec3.sub([], this.whipB, c), dir)
+                    vec3.add([], vec3.sub([], this.whipB, c), dir),
                   );
                   this.whipWarning.addPos(
-                    vec3.add([], vec3.add([], this.whipB, c), dir)
+                    vec3.add([], vec3.add([], this.whipB, c), dir),
                   );
                   this.whipWarning.addPos(vec3.add([], this.whipA, c));
 
@@ -20771,7 +10640,7 @@ function BeeSwarmSimulator(DATA) {
                     t.target = vec3.add(
                       [],
                       vec3.add([], this.whipB, [c[0] * s, y, c[2] * s]),
-                      [dir[0] * l, 0, dir[2] * l]
+                      [dir[0] * l, 0, dir[2] * l],
                     );
                   }
                 }
@@ -20793,7 +10662,7 @@ function BeeSwarmSimulator(DATA) {
                 BEE_FLY,
                 beeInfo.windy.u,
                 beeInfo.windy.v,
-                beeInfo.windy.meshPartId
+                beeInfo.windy.meshPartId,
               );
             }
 
@@ -20831,7 +10700,7 @@ function BeeSwarmSimulator(DATA) {
                 BEE_FLY,
                 beeInfo.windy.u,
                 beeInfo.windy.v,
-                beeInfo.windy.meshPartId
+                beeInfo.windy.meshPartId,
               );
             } else if (this.attackState === 1) {
               this.nextAttackTimer -= dt;
@@ -20847,7 +10716,7 @@ function BeeSwarmSimulator(DATA) {
                 BEE_FLY,
                 beeInfo.windy.u,
                 beeInfo.windy.v,
-                beeInfo.windy.meshPartId
+                beeInfo.windy.meshPartId,
               );
             }
 
@@ -20922,7 +10791,7 @@ function BeeSwarmSimulator(DATA) {
               gl.FLOAT,
               gl.FLASE,
               24,
-              0
+              0,
             );
             gl.vertexAttribPointer(
               glCache.mob_vertColor,
@@ -20930,7 +10799,7 @@ function BeeSwarmSimulator(DATA) {
               gl.FLOAT,
               gl.FLASE,
               24,
-              12
+              12,
             );
             gl.uniform2f(glCache.mob_instanceInfo2, 0.6, 0.7);
 
@@ -21052,7 +10921,7 @@ function BeeSwarmSimulator(DATA) {
                 gl.TRIANGLES,
                 meshes[m].indexAmount,
                 gl.UNSIGNED_SHORT,
-                0
+                0,
               );
             }
           } else {
@@ -21067,7 +10936,7 @@ function BeeSwarmSimulator(DATA) {
               BEE_FLY,
               beeInfo.windy.u,
               beeInfo.windy.v,
-              beeInfo.windy.meshPartId
+              beeInfo.windy.meshPartId,
             );
 
             textRenderer.addDecalRaw(
@@ -21082,7 +10951,7 @@ function BeeSwarmSimulator(DATA) {
               0,
               -2,
               -2,
-              0
+              0,
             );
           }
 
@@ -21091,7 +10960,7 @@ function BeeSwarmSimulator(DATA) {
             "Wild Windy Bee (Level " + this.level + ")",
             [this.pos[0], this.pos[1] + 0.9, this.pos[2]],
             COLORS.whiteArr,
-            100
+            100,
           );
           textRenderer.addDecalRaw(
             this.pos[0],
@@ -21105,7 +10974,7 @@ function BeeSwarmSimulator(DATA) {
             0.27 * 0.5,
             2.5,
             0.4,
-            0
+            0,
           );
           textRenderer.addDecalRaw(
             this.pos[0],
@@ -21120,7 +10989,7 @@ function BeeSwarmSimulator(DATA) {
             0.27,
             (this.timeLimit * 2.5) / this.maxTimeLimit,
             0.4,
-            0
+            0,
           );
 
           textRenderer.addDecalRaw(
@@ -21135,7 +11004,7 @@ function BeeSwarmSimulator(DATA) {
             0,
             2.5,
             0.4,
-            0
+            0,
           );
           textRenderer.addDecalRaw(
             this.pos[0],
@@ -21150,7 +11019,7 @@ function BeeSwarmSimulator(DATA) {
             0.2,
             (this.health * 2.5) / this.maxHealth,
             0.4,
-            0
+            0,
           );
 
           textRenderer.addSingle(
@@ -21159,7 +11028,7 @@ function BeeSwarmSimulator(DATA) {
             COLORS.whiteArr,
             -1,
             false,
-            false
+            false,
           );
           textRenderer.addSingle(
             "Time: " + MATH.doTime((this.timeLimit | 0) + ""),
@@ -21169,7 +11038,7 @@ function BeeSwarmSimulator(DATA) {
             false,
             false,
             0,
-            0.6
+            0.6,
           );
           this.pos[1] -= 1.25;
 
@@ -21229,7 +11098,7 @@ function BeeSwarmSimulator(DATA) {
         [255, 0, 0],
         crit ? (superCrit ? 2 : 1) : 0,
         "",
-        [0, 1.25, 1.275, 1.3, 1.65, 1.75][(Math.min(d.toString().length), 5)]
+        [0, 1.25, 1.275, 1.3, 1.65, 1.75][(Math.min(d.toString().length), 5)],
       );
     }
 
@@ -21246,7 +11115,7 @@ function BeeSwarmSimulator(DATA) {
           false,
           false,
           0,
-          0.2
+          0.2,
         );
         textRenderer.addSingle(
           MATH.doTime(this.isDead),
@@ -21256,7 +11125,7 @@ function BeeSwarmSimulator(DATA) {
           false,
           false,
           0,
-          -0.2
+          -0.2,
         );
 
         return this.isDead <= 0;
@@ -21273,7 +11142,7 @@ function BeeSwarmSimulator(DATA) {
           decay = MATH.constrain(
             Math.pow(2, -0.001 * this.timeToDefeat),
             0.1,
-            1
+            1,
           );
 
         loots += "coconut,".repeat((MATH.random(60, 110) * 0.5 * decay) | 0);
@@ -21307,8 +11176,8 @@ function BeeSwarmSimulator(DATA) {
                 loots[it],
                 loots[it] === "coconut" ? MATH.random(1, 4) | 0 : 1,
                 true,
-                "Coconut Crab"
-              )
+                "Coconut Crab",
+              ),
             );
             loots.splice(i, 1);
           }, i * 300);
@@ -21470,11 +11339,11 @@ function BeeSwarmSimulator(DATA) {
                     Math.sign(
                       fieldInfo[this.field].x +
                         fieldInfo[this.field].width * 0.5 -
-                        this.pos[0]
+                        this.pos[0],
                     ) *
                     6.5,
                 fieldInfo[this.field].x,
-                fieldInfo[this.field].x + fieldInfo[this.field].width
+                fieldInfo[this.field].x + fieldInfo[this.field].width,
               );
 
               this.clawA = [
@@ -21494,7 +11363,7 @@ function BeeSwarmSimulator(DATA) {
                 Math.abs(
                   fieldInfo[this.field].x +
                     fieldInfo[this.field].width * 0.5 -
-                    this.pos[0]
+                    this.pos[0],
                 ) < 0.5 &&
                 player.fieldIn === this.field
               ) {
@@ -21504,47 +11373,53 @@ function BeeSwarmSimulator(DATA) {
 
                 let DIS = this;
 
-                window.setTimeout(function () {
-                  DIS.state = "alignClaws";
-                }, 1000 * 7 + 2000);
+                window.setTimeout(
+                  function () {
+                    DIS.state = "alignClaws";
+                  },
+                  1000 * 7 + 2000,
+                );
 
                 for (let i = 0; i < 7; i++) {
-                  window.setTimeout(function () {
-                    DIS._cm = 14;
+                  window.setTimeout(
+                    function () {
+                      DIS._cm = 14;
 
-                    objects.mobs.push(
-                      new Coconut(
-                        i
-                          ? (MATH.random(0.1, 0.9) *
-                              fieldInfo[DIS.field].width) |
-                            0
-                          : player.flowerIn.x,
-                        i
-                          ? (MATH.random(0.5, 0.9) *
-                              fieldInfo[DIS.field].length) |
-                            0
-                          : player.flowerIn.z,
-                        0,
-                        true
-                      )
-                    );
-
-                    window.setTimeout(function () {
-                      objects.explosions.push(
-                        new Explosion({
-                          col: [0.8, 0.8, 0.8],
-                          pos: DIS.pos.slice(),
-                          life: 0.5,
-                          size: 11,
-                          speed: 0.2,
-                          aftershock: 0.03,
-                          maxAlpha: 0.15,
-                          primitive: "cylinder_explosions",
-                          height: 0.1,
-                        })
+                      objects.mobs.push(
+                        new Coconut(
+                          i
+                            ? (MATH.random(0.1, 0.9) *
+                                fieldInfo[DIS.field].width) |
+                                0
+                            : player.flowerIn.x,
+                          i
+                            ? (MATH.random(0.5, 0.9) *
+                                fieldInfo[DIS.field].length) |
+                                0
+                            : player.flowerIn.z,
+                          0,
+                          true,
+                        ),
                       );
-                    }, 500);
-                  }, 1000 * i + 1000);
+
+                      window.setTimeout(function () {
+                        objects.explosions.push(
+                          new Explosion({
+                            col: [0.8, 0.8, 0.8],
+                            pos: DIS.pos.slice(),
+                            life: 0.5,
+                            size: 11,
+                            speed: 0.2,
+                            aftershock: 0.03,
+                            maxAlpha: 0.15,
+                            primitive: "cylinder_explosions",
+                            height: 0.1,
+                          }),
+                        );
+                      }, 500);
+                    },
+                    1000 * i + 1000,
+                  );
                 }
               }
 
@@ -21590,7 +11465,7 @@ function BeeSwarmSimulator(DATA) {
           0,
           -2,
           -2,
-          0
+          0,
         );
       }
 
@@ -21600,7 +11475,7 @@ function BeeSwarmSimulator(DATA) {
         "Coconut Crab (Level " + this.level + ")",
         [this.pos[0], this.pos[1] + 0.4, this.pos[2]],
         COLORS.whiteArr,
-        100
+        100,
       );
 
       textRenderer.addDecalRaw(
@@ -21615,7 +11490,7 @@ function BeeSwarmSimulator(DATA) {
         0,
         2.5,
         0.4,
-        0
+        0,
       );
       textRenderer.addDecalRaw(
         this.pos[0],
@@ -21630,7 +11505,7 @@ function BeeSwarmSimulator(DATA) {
         0.2,
         (this.health * 2.5) / this.maxHealth,
         0.4,
-        0
+        0,
       );
 
       textRenderer.addSingle(
@@ -21639,7 +11514,7 @@ function BeeSwarmSimulator(DATA) {
         COLORS.whiteArr,
         -1,
         false,
-        false
+        false,
       );
 
       this.pos[1] -= 4.3;
@@ -21655,13 +11530,13 @@ function BeeSwarmSimulator(DATA) {
         gl.FLOAT,
         gl.FLASE,
         24,
-        12
+        12,
       );
       gl.drawElements(
         gl.TRIANGLES,
         meshes.coconutCrab.indexAmount,
         gl.UNSIGNED_SHORT,
-        0
+        0,
       );
 
       gl.uniform4fv(glCache.mob_instanceInfo1, this.clawA);
@@ -21675,13 +11550,13 @@ function BeeSwarmSimulator(DATA) {
         gl.FLOAT,
         gl.FLASE,
         24,
-        12
+        12,
       );
       gl.drawElements(
         gl.TRIANGLES,
         meshes.crabClaw.indexAmount,
         gl.UNSIGNED_SHORT,
-        0
+        0,
       );
 
       gl.uniform4fv(glCache.mob_instanceInfo1, this.clawB);
@@ -21695,13 +11570,13 @@ function BeeSwarmSimulator(DATA) {
         gl.FLOAT,
         gl.FLASE,
         24,
-        12
+        12,
       );
       gl.drawElements(
         gl.TRIANGLES,
         meshes.crabClaw.indexAmount,
         gl.UNSIGNED_SHORT,
-        0
+        0,
       );
     }
   }
@@ -21760,7 +11635,7 @@ function BeeSwarmSimulator(DATA) {
         [255, 0, 0],
         crit ? (superCrit ? 2 : 1) : 0,
         "",
-        [0, 1.25, 1.275, 1.3, 1.65, 1.75][(Math.min(d.toString().length), 5)]
+        [0, 1.25, 1.275, 1.3, 1.65, 1.75][(Math.min(d.toString().length), 5)],
       );
     }
 
@@ -21777,7 +11652,7 @@ function BeeSwarmSimulator(DATA) {
           false,
           false,
           0,
-          0.2
+          0.2,
         );
         textRenderer.addSingle(
           MATH.doTime(this.isDead),
@@ -21787,7 +11662,7 @@ function BeeSwarmSimulator(DATA) {
           false,
           false,
           0,
-          -0.2
+          -0.2,
         );
 
         return this.isDead <= 0;
@@ -21827,13 +11702,13 @@ function BeeSwarmSimulator(DATA) {
                 MATH.random(1.01 + g * 0.01, 1.05 + g * 0.015).toFixed(2) +
                 " honeyFromTokens",
             ],
-            (g * 0.5 + 2) | 0
-          )
+            (g * 0.5 + 2) | 0,
+          ),
         );
 
         player.showGeneratedAmulet(
           ["bronze", "silver", "gold", "diamond", "supreme"][g] + "SnailAmulet",
-          amulet
+          amulet,
         );
 
         let loots = "",
@@ -21895,8 +11770,8 @@ function BeeSwarmSimulator(DATA) {
                 loots[it],
                 MATH.random(1, 4) | 0,
                 true,
-                "Stump Snail"
-              )
+                "Stump Snail",
+              ),
             );
             loots.splice(i, 1);
           }, i * 300);
@@ -22003,7 +11878,7 @@ function BeeSwarmSimulator(DATA) {
           0,
           -2,
           -2,
-          0
+          0,
         );
       }
 
@@ -22013,7 +11888,7 @@ function BeeSwarmSimulator(DATA) {
         "Stump Snail (Level " + this.level + ")",
         [this.pos[0], this.pos[1] + 0.4, this.pos[2]],
         COLORS.whiteArr,
-        100
+        100,
       );
 
       textRenderer.addDecalRaw(
@@ -22028,7 +11903,7 @@ function BeeSwarmSimulator(DATA) {
         0,
         2.5,
         0.4,
-        0
+        0,
       );
       textRenderer.addDecalRaw(
         this.pos[0],
@@ -22043,7 +11918,7 @@ function BeeSwarmSimulator(DATA) {
         0.2,
         (this.health * 2.5) / this.maxHealth,
         0.4,
-        0
+        0,
       );
 
       textRenderer.addSingle(
@@ -22052,7 +11927,7 @@ function BeeSwarmSimulator(DATA) {
         COLORS.whiteArr,
         -1,
         false,
-        false
+        false,
       );
 
       this.pos[1] -= 2.5;
@@ -22068,23 +11943,26 @@ function BeeSwarmSimulator(DATA) {
         gl.FLOAT,
         gl.FLASE,
         24,
-        12
+        12,
       );
       gl.drawElements(
         gl.TRIANGLES,
         meshes.stumpSnail.indexAmount,
         gl.UNSIGNED_SHORT,
-        0
+        0,
       );
     }
   }
 
   class FireflyPatch {
     constructor() {
-      window.setTimeout(() => {
-        this.flyBack = true;
-        window.setTimeout(() => (this.splice = true), 20 * 1000);
-      }, 1.75 * 60 * 1000);
+      window.setTimeout(
+        () => {
+          this.flyBack = true;
+          window.setTimeout(() => (this.splice = true), 20 * 1000);
+        },
+        1.75 * 60 * 1000,
+      );
 
       this.fireflies = [];
       this.cycle = 3;
@@ -22158,7 +12036,7 @@ function BeeSwarmSimulator(DATA) {
                     fieldInfo[this.field].y + 0.75,
                     fieldInfo[this.field].z + this.z,
                   ],
-                  f.pos
+                  f.pos,
                 );
               }
 
@@ -22200,8 +12078,8 @@ function BeeSwarmSimulator(DATA) {
                     tt,
                     1,
                     false,
-                    "Fireflies"
-                  )
+                    "Fireflies",
+                  ),
                 );
               }
 
@@ -22228,7 +12106,7 @@ function BeeSwarmSimulator(DATA) {
                     fieldInfo[this.field].y + 0.75,
                     fieldInfo[this.field].z + this.z,
                   ],
-                  f.pos
+                  f.pos,
                 );
               }
 
@@ -22252,7 +12130,7 @@ function BeeSwarmSimulator(DATA) {
           BEE_FLY,
           0.875,
           0.625,
-          0
+          0,
         );
         textRenderer.addDecalRaw(
           ...f.pos,
@@ -22264,7 +12142,7 @@ function BeeSwarmSimulator(DATA) {
           0.2,
           2.5,
           2.5,
-          0
+          0,
         );
         textRenderer.addDecalRaw(
           ...f.pos,
@@ -22276,7 +12154,7 @@ function BeeSwarmSimulator(DATA) {
           0.2,
           3,
           3,
-          TIME + i * 0.5
+          TIME + i * 0.5,
         );
         meshes.explosions.instanceData.push(...f.pos, 1, 1, 0.2, 0.2, 0.95, 1);
       }
@@ -22299,8 +12177,8 @@ function BeeSwarmSimulator(DATA) {
             tt,
             1,
             false,
-            "Fireflies"
-          )
+            "Fireflies",
+          ),
         );
 
         objects.explosions.push(
@@ -22315,7 +12193,7 @@ function BeeSwarmSimulator(DATA) {
             size: 6,
             speed: 0.2,
             aftershock: 0.05,
-          })
+          }),
         );
 
         this.cycle--;
@@ -22425,7 +12303,7 @@ function BeeSwarmSimulator(DATA) {
         [255, 0, 0],
         crit ? (superCrit ? 2 : 1) : 0,
         "",
-        [0, 1.25, 1.275, 1.3, 1.65, 1.75][(Math.min(d.toString().length), 5)]
+        [0, 1.25, 1.275, 1.3, 1.65, 1.75][(Math.min(d.toString().length), 5)],
       );
     }
 
@@ -22595,7 +12473,7 @@ function BeeSwarmSimulator(DATA) {
                 this.bullets[i].pos,
                 this.bullets[i].pos,
                 this.bullets[i].vel,
-                dt
+                dt,
               );
 
               if (
@@ -22625,7 +12503,7 @@ function BeeSwarmSimulator(DATA) {
               0,
               -2,
               -2,
-              0
+              0,
             );
           }
 
@@ -22634,7 +12512,7 @@ function BeeSwarmSimulator(DATA) {
             MATH.doGrammar(this.mega) + " (Level " + this.level + ")",
             [this.pos[0], this.pos[1] + 0.4, this.pos[2]],
             COLORS.whiteArr,
-            100
+            100,
           );
 
           textRenderer.addDecalRaw(
@@ -22649,7 +12527,7 @@ function BeeSwarmSimulator(DATA) {
             0,
             2.5,
             0.4,
-            0
+            0,
           );
           textRenderer.addDecalRaw(
             this.pos[0],
@@ -22664,7 +12542,7 @@ function BeeSwarmSimulator(DATA) {
             0.2,
             (this.health * 2.5) / this.maxHealth,
             0.4,
-            0
+            0,
           );
 
           textRenderer.addSingle(
@@ -22673,7 +12551,7 @@ function BeeSwarmSimulator(DATA) {
             COLORS.whiteArr,
             -1,
             false,
-            false
+            false,
           );
 
           this.pos[1] -= 1;
@@ -22688,7 +12566,7 @@ function BeeSwarmSimulator(DATA) {
             gl.FLOAT,
             gl.FLASE,
             24,
-            0
+            0,
           );
           gl.vertexAttribPointer(
             glCache.mob_vertColor,
@@ -22696,13 +12574,13 @@ function BeeSwarmSimulator(DATA) {
             gl.FLOAT,
             gl.FLASE,
             24,
-            12
+            12,
           );
           gl.drawElements(
             gl.TRIANGLES,
             meshes[this.mega].indexAmount,
             gl.UNSIGNED_SHORT,
-            0
+            0,
           );
 
           break;
@@ -22774,7 +12652,7 @@ function BeeSwarmSimulator(DATA) {
         [255, 0, 0],
         crit ? (superCrit ? 2 : 1) : 0,
         "",
-        [0, 1.25, 1.275, 1.3, 1.65, 1.75][(Math.min(d.toString().length), 5)]
+        [0, 1.25, 1.275, 1.3, 1.65, 1.75][(Math.min(d.toString().length), 5)],
       );
     }
 
@@ -22882,7 +12760,7 @@ function BeeSwarmSimulator(DATA) {
               0,
               -2,
               -2,
-              0
+              0,
             );
           }
 
@@ -22891,7 +12769,7 @@ function BeeSwarmSimulator(DATA) {
             MATH.doGrammar(this.gold) + " (Level " + this.level + ")",
             [this.pos[0], this.pos[1] + 0.4, this.pos[2]],
             COLORS.whiteArr,
-            100
+            100,
           );
 
           textRenderer.addDecalRaw(
@@ -22906,7 +12784,7 @@ function BeeSwarmSimulator(DATA) {
             0,
             2.5,
             0.4,
-            0
+            0,
           );
           textRenderer.addDecalRaw(
             this.pos[0],
@@ -22921,7 +12799,7 @@ function BeeSwarmSimulator(DATA) {
             0.2,
             (this.health * 2.5) / this.maxHealth,
             0.4,
-            0
+            0,
           );
 
           textRenderer.addSingle(
@@ -22930,7 +12808,7 @@ function BeeSwarmSimulator(DATA) {
             COLORS.whiteArr,
             -1,
             false,
-            false
+            false,
           );
 
           this.pos[1] -= 1;
@@ -22945,7 +12823,7 @@ function BeeSwarmSimulator(DATA) {
             gl.FLOAT,
             gl.FLASE,
             24,
-            0
+            0,
           );
           gl.vertexAttribPointer(
             glCache.mob_vertColor,
@@ -22953,13 +12831,13 @@ function BeeSwarmSimulator(DATA) {
             gl.FLOAT,
             gl.FLASE,
             24,
-            12
+            12,
           );
           gl.drawElements(
             gl.TRIANGLES,
             meshes[this.gold].indexAmount,
             gl.UNSIGNED_SHORT,
-            0
+            0,
           );
 
           break;
@@ -23078,7 +12956,7 @@ function BeeSwarmSimulator(DATA) {
         [255, 0, 0],
         crit ? (superCrit ? 2 : 1) : 0,
         "",
-        [0, 1.25, 1.275, 1.3, 1.65, 1.75][(Math.min(d.toString().length), 5)]
+        [0, 1.25, 1.275, 1.3, 1.65, 1.75][(Math.min(d.toString().length), 5)],
       );
     }
 
@@ -23124,7 +13002,7 @@ function BeeSwarmSimulator(DATA) {
                 v[2 - this.constraintAxis] =
                   Math.sign(
                     player.body.position[this.constraintAxis ? "x" : "z"] -
-                      this.pos[2 - this.constraintAxis]
+                      this.pos[2 - this.constraintAxis],
                   ) * 8;
 
                 this.cogs.push({
@@ -23140,7 +13018,7 @@ function BeeSwarmSimulator(DATA) {
               this.desiredPos = MATH.constrain(
                 player.body.position[this.constraintAxis ? "z" : "x"],
                 this.constraintRange[0],
-                this.constraintRange[1]
+                this.constraintRange[1],
               );
 
               this.pos[this.constraintAxis] +=
@@ -23172,7 +13050,7 @@ function BeeSwarmSimulator(DATA) {
               0,
               -2,
               -2,
-              0
+              0,
             );
           }
 
@@ -23181,7 +13059,7 @@ function BeeSwarmSimulator(DATA) {
             "Cogturret (Level " + this.level + ")",
             [this.pos[0], this.pos[1] + 0.4, this.pos[2]],
             COLORS.whiteArr,
-            100
+            100,
           );
 
           textRenderer.addDecalRaw(
@@ -23196,7 +13074,7 @@ function BeeSwarmSimulator(DATA) {
             0,
             2.5,
             0.4,
-            0
+            0,
           );
           textRenderer.addDecalRaw(
             this.pos[0],
@@ -23211,7 +13089,7 @@ function BeeSwarmSimulator(DATA) {
             0.2,
             (this.health * 2.5) / this.maxHealth,
             0.4,
-            0
+            0,
           );
 
           textRenderer.addSingle(
@@ -23220,7 +13098,7 @@ function BeeSwarmSimulator(DATA) {
             COLORS.whiteArr,
             -1,
             false,
-            false
+            false,
           );
 
           this.pos[1] -= 1;
@@ -23235,7 +13113,7 @@ function BeeSwarmSimulator(DATA) {
             gl.FLOAT,
             gl.FLASE,
             24,
-            0
+            0,
           );
           gl.vertexAttribPointer(
             glCache.mob_vertColor,
@@ -23243,13 +13121,13 @@ function BeeSwarmSimulator(DATA) {
             gl.FLOAT,
             gl.FLASE,
             24,
-            12
+            12,
           );
           gl.drawElements(
             gl.TRIANGLES,
             meshes.cogTurret.indexAmount,
             gl.UNSIGNED_SHORT,
-            0
+            0,
           );
 
           gl.bindBuffer(gl.ARRAY_BUFFER, meshes.cog.vertBuffer);
@@ -23260,7 +13138,7 @@ function BeeSwarmSimulator(DATA) {
             gl.FLOAT,
             gl.FLASE,
             24,
-            0
+            0,
           );
           gl.vertexAttribPointer(
             glCache.mob_vertColor,
@@ -23268,7 +13146,7 @@ function BeeSwarmSimulator(DATA) {
             gl.FLOAT,
             gl.FLASE,
             24,
-            12
+            12,
           );
           gl.uniform2f(glCache.mob_instanceInfo2, 0.6, 1);
 
@@ -23323,7 +13201,7 @@ function BeeSwarmSimulator(DATA) {
               gl.TRIANGLES,
               meshes.cog.indexAmount,
               gl.UNSIGNED_SHORT,
-              0
+              0,
             );
 
             if (s.pos[1] < s.deathY) {
@@ -23437,7 +13315,7 @@ function BeeSwarmSimulator(DATA) {
         [255, 0, 0],
         crit ? (superCrit ? 2 : 1) : 0,
         "",
-        [0, 1.25, 1.275, 1.3, 1.65, 1.75][(Math.min(d.toString().length), 5)]
+        [0, 1.25, 1.275, 1.3, 1.65, 1.75][(Math.min(d.toString().length), 5)],
       );
     }
 
@@ -23460,7 +13338,7 @@ function BeeSwarmSimulator(DATA) {
             gl.FLOAT,
             gl.FLASE,
             24,
-            0
+            0,
           );
           gl.vertexAttribPointer(
             glCache.mob_vertColor,
@@ -23468,7 +13346,7 @@ function BeeSwarmSimulator(DATA) {
             gl.FLOAT,
             gl.FLASE,
             24,
-            12
+            12,
           );
           gl.uniform2f(glCache.mob_instanceInfo2, this.meshScale, 1);
           gl.uniform4fv(glCache.mob_instanceInfo1, [
@@ -23481,7 +13359,7 @@ function BeeSwarmSimulator(DATA) {
             gl.TRIANGLES,
             meshes[this.mesh].indexAmount,
             gl.UNSIGNED_SHORT,
-            0
+            0,
           );
 
           break;
@@ -23588,7 +13466,7 @@ function BeeSwarmSimulator(DATA) {
               0,
               -2,
               -2,
-              0
+              0,
             );
           }
 
@@ -23597,7 +13475,7 @@ function BeeSwarmSimulator(DATA) {
             this.displayName + " (Level " + this.level + ")",
             [this.pos[0], this.pos[1] + 0.5, this.pos[2]],
             COLORS.whiteArr,
-            100
+            100,
           );
 
           textRenderer.addDecalRaw(
@@ -23612,7 +13490,7 @@ function BeeSwarmSimulator(DATA) {
             0,
             2.5,
             0.4,
-            0
+            0,
           );
           textRenderer.addDecalRaw(
             this.pos[0],
@@ -23627,7 +13505,7 @@ function BeeSwarmSimulator(DATA) {
             0.2,
             (this.health * 2.5) / this.maxHealth,
             0.4,
-            0
+            0,
           );
 
           textRenderer.addSingle(
@@ -23636,7 +13514,7 @@ function BeeSwarmSimulator(DATA) {
             COLORS.whiteArr,
             -1,
             false,
-            false
+            false,
           );
 
           this.pos[1] -= 1.25;
@@ -23649,7 +13527,7 @@ function BeeSwarmSimulator(DATA) {
             gl.FLOAT,
             gl.FLASE,
             24,
-            0
+            0,
           );
           gl.vertexAttribPointer(
             glCache.mob_vertColor,
@@ -23657,7 +13535,7 @@ function BeeSwarmSimulator(DATA) {
             gl.FLOAT,
             gl.FLASE,
             24,
-            12
+            12,
           );
           gl.uniform4fv(glCache.mob_instanceInfo1, this.pos);
           gl.uniform2f(glCache.mob_instanceInfo2, this.meshScale, 1);
@@ -23665,7 +13543,7 @@ function BeeSwarmSimulator(DATA) {
             gl.TRIANGLES,
             meshes[this.mesh].indexAmount,
             gl.UNSIGNED_SHORT,
-            0
+            0,
           );
 
           break;
@@ -23752,7 +13630,7 @@ function BeeSwarmSimulator(DATA) {
           gl.bindBuffer(gl.ARRAY_BUFFER, meshes.lawnMowerWarning.vertBuffer);
           gl.bindBuffer(
             gl.ELEMENT_ARRAY_BUFFER,
-            meshes.lawnMowerWarning.indexBuffer
+            meshes.lawnMowerWarning.indexBuffer,
           );
           gl.vertexAttribPointer(
             glCache.mob_vertPos,
@@ -23760,7 +13638,7 @@ function BeeSwarmSimulator(DATA) {
             gl.FLOAT,
             gl.FLASE,
             24,
-            0
+            0,
           );
           gl.vertexAttribPointer(
             glCache.mob_vertColor,
@@ -23768,7 +13646,7 @@ function BeeSwarmSimulator(DATA) {
             gl.FLOAT,
             gl.FLASE,
             24,
-            12
+            12,
           );
           gl.uniform2f(glCache.mob_instanceInfo2, 1, 1);
           gl.uniform4fv(glCache.mob_instanceInfo1, [
@@ -23781,7 +13659,7 @@ function BeeSwarmSimulator(DATA) {
             gl.TRIANGLES,
             meshes.lawnMowerWarning.indexAmount,
             gl.UNSIGNED_SHORT,
-            0
+            0,
           );
         }
       } else {
@@ -23805,7 +13683,7 @@ function BeeSwarmSimulator(DATA) {
           gl.FLOAT,
           gl.FLASE,
           24,
-          0
+          0,
         );
         gl.vertexAttribPointer(
           glCache.mob_vertColor,
@@ -23813,7 +13691,7 @@ function BeeSwarmSimulator(DATA) {
           gl.FLOAT,
           gl.FLASE,
           24,
-          12
+          12,
         );
         gl.uniform2f(glCache.mob_instanceInfo2, 1, 1);
         gl.uniform4fv(glCache.mob_instanceInfo1, this.pos);
@@ -23821,7 +13699,7 @@ function BeeSwarmSimulator(DATA) {
           gl.TRIANGLES,
           meshes.lawnMower.indexAmount,
           gl.UNSIGNED_SHORT,
-          0
+          0,
         );
       }
 
@@ -23873,7 +13751,7 @@ function BeeSwarmSimulator(DATA) {
           speed: 0.25,
           aftershock: 0.05,
           maxAlpha: 0.5,
-        })
+        }),
       );
 
       objects.explosions.push(
@@ -23885,7 +13763,7 @@ function BeeSwarmSimulator(DATA) {
           speed: 0.7,
           aftershock: 0.1,
           maxAlpha: 0.3,
-        })
+        }),
       );
 
       if (player.fieldIn) {
@@ -23894,8 +13772,8 @@ function BeeSwarmSimulator(DATA) {
             new Bubble(
               player.fieldIn,
               (Math.random() * fieldInfo[player.fieldIn].width) | 0,
-              (Math.random() * fieldInfo[player.fieldIn].length) | 0
-            )
+              (Math.random() * fieldInfo[player.fieldIn].length) | 0,
+            ),
           );
         }
       }
@@ -23918,7 +13796,7 @@ function BeeSwarmSimulator(DATA) {
         gl.FLOAT,
         gl.FLASE,
         24,
-        12
+        12,
       );
 
       let dir = player.bodyDir.slice(),
@@ -23953,7 +13831,7 @@ function BeeSwarmSimulator(DATA) {
           1,
           1,
           0.5,
-          1
+          1,
         );
 
         if (
@@ -23972,7 +13850,7 @@ function BeeSwarmSimulator(DATA) {
         gl.TRIANGLES,
         meshes.popStar.indexAmount,
         gl.UNSIGNED_SHORT,
-        0
+        0,
       );
 
       p[0] += player.cameraDir[0];
@@ -23983,7 +13861,7 @@ function BeeSwarmSimulator(DATA) {
         this.value.toString(),
         p.slice(),
         COLORS.whiteArr,
-        -2
+        -2,
       );
       p[1] -= 0.3;
       textRenderer.addSingle(MATH.doTime(this.life), p, COLORS.whiteArr, -1);
@@ -24031,7 +13909,7 @@ function BeeSwarmSimulator(DATA) {
           speed: 0.25,
           aftershock: 0.05,
           maxAlpha: 0.5,
-        })
+        }),
       );
 
       objects.explosions.push(
@@ -24043,7 +13921,7 @@ function BeeSwarmSimulator(DATA) {
           speed: 0.7,
           aftershock: 0.1,
           maxAlpha: 0.3,
-        })
+        }),
       );
 
       objects.mobs.splice(index, 1);
@@ -24064,7 +13942,7 @@ function BeeSwarmSimulator(DATA) {
         gl.FLOAT,
         gl.FLASE,
         24,
-        12
+        12,
       );
 
       let dir = player.bodyDir.slice(),
@@ -24112,7 +13990,7 @@ function BeeSwarmSimulator(DATA) {
         gl.TRIANGLES,
         meshes.scorchingStar.indexAmount,
         gl.UNSIGNED_SHORT,
-        0
+        0,
       );
 
       p[0] += player.cameraDir[0];
@@ -24123,7 +14001,7 @@ function BeeSwarmSimulator(DATA) {
         (this.value | 0).toString(),
         p.slice(),
         COLORS.whiteArr,
-        -2
+        -2,
       );
       p[1] -= 0.3;
       textRenderer.addSingle(MATH.doTime(this.life), p, COLORS.whiteArr, -1);
@@ -24170,7 +14048,7 @@ function BeeSwarmSimulator(DATA) {
           speed: 0.25,
           aftershock: 0.05,
           maxAlpha: 0.5,
-        })
+        }),
       );
 
       objects.explosions.push(
@@ -24182,7 +14060,7 @@ function BeeSwarmSimulator(DATA) {
           speed: 0.7,
           aftershock: 0.1,
           maxAlpha: 0.3,
-        })
+        }),
       );
 
       if (player.fieldIn) {
@@ -24202,8 +14080,8 @@ function BeeSwarmSimulator(DATA) {
               "honey",
               amountPerToken,
               false,
-              "Gummy Star"
-            )
+              "Gummy Star",
+            ),
           );
         }
       }
@@ -24226,7 +14104,7 @@ function BeeSwarmSimulator(DATA) {
         gl.FLOAT,
         gl.FLASE,
         24,
-        12
+        12,
       );
 
       let dir = player.bodyDir.slice(),
@@ -24253,7 +14131,7 @@ function BeeSwarmSimulator(DATA) {
         gl.TRIANGLES,
         meshes.gummyStar.indexAmount,
         gl.UNSIGNED_SHORT,
-        0
+        0,
       );
 
       p[0] += player.cameraDir[0];
@@ -24264,7 +14142,7 @@ function BeeSwarmSimulator(DATA) {
         this.value.toString(),
         p.slice(),
         COLORS.whiteArr,
-        -2
+        -2,
       );
       p[1] -= 0.3;
       textRenderer.addSingle(MATH.doTime(this.life), p, COLORS.whiteArr, -1);
@@ -24301,7 +14179,7 @@ function BeeSwarmSimulator(DATA) {
           aftershock: 0.05,
           maxAlpha: 0.5,
           height: 0.25,
-        })
+        }),
       );
 
       objects.mobs.splice(index, 1);
@@ -24319,7 +14197,7 @@ function BeeSwarmSimulator(DATA) {
         gl.FLOAT,
         gl.FLASE,
         24,
-        12
+        12,
       );
 
       let theta = TIME * 3.5,
@@ -24339,7 +14217,7 @@ function BeeSwarmSimulator(DATA) {
         gl.TRIANGLES,
         meshes.starSaw.indexAmount,
         gl.UNSIGNED_SHORT,
-        0
+        0,
       );
 
       for (let i in objects.bubbles) {
@@ -24405,7 +14283,7 @@ function BeeSwarmSimulator(DATA) {
               stackHeight: 0.5,
               instantConversion: 1,
             }),
-            player.pollen
+            player.pollen,
           );
 
         if (a) {
@@ -24451,7 +14329,7 @@ function BeeSwarmSimulator(DATA) {
         gl.FLOAT,
         gl.FLASE,
         24,
-        12
+        12,
       );
 
       let theta = TIME * 0.75,
@@ -24471,7 +14349,7 @@ function BeeSwarmSimulator(DATA) {
         gl.TRIANGLES,
         meshes.guidingStar.indexAmount,
         gl.UNSIGNED_SHORT,
-        0
+        0,
       );
 
       this.particleTimer -= dt;
@@ -24566,7 +14444,7 @@ function BeeSwarmSimulator(DATA) {
       gl.bindBuffer(gl.ARRAY_BUFFER, meshes.levitatingStarShower.vertBuffer);
       gl.bindBuffer(
         gl.ELEMENT_ARRAY_BUFFER,
-        meshes.levitatingStarShower.indexBuffer
+        meshes.levitatingStarShower.indexBuffer,
       );
       gl.vertexAttribPointer(glCache.mob_vertPos, 3, gl.FLOAT, gl.FLASE, 24, 0);
       gl.vertexAttribPointer(
@@ -24575,20 +14453,20 @@ function BeeSwarmSimulator(DATA) {
         gl.FLOAT,
         gl.FLASE,
         24,
-        12
+        12,
       );
 
       gl.uniform4fv(glCache.mob_instanceInfo1, this.pos);
       gl.uniform2f(
         glCache.mob_instanceInfo2,
         Math.min(this.life * 3, 1) * 1.5,
-        Math.min((3 - this.life) * 0.5, 1)
+        Math.min((3 - this.life) * 0.5, 1),
       );
       gl.drawElements(
         gl.TRIANGLES,
         meshes.levitatingStarShower.indexAmount,
         gl.UNSIGNED_SHORT,
-        0
+        0,
       );
 
       return this.life <= 0;
@@ -24641,7 +14519,7 @@ function BeeSwarmSimulator(DATA) {
       ) {
         let amountToConvert = Math.min(
           player.convertTotal * 0.1,
-          player.pollen
+          player.pollen,
         );
 
         player.pollen -= amountToConvert;
@@ -24656,7 +14534,7 @@ function BeeSwarmSimulator(DATA) {
             ],
             COLORS.honey,
             0,
-            "+"
+            "+",
           );
 
         player.addEffect("inspire");
@@ -24687,7 +14565,7 @@ function BeeSwarmSimulator(DATA) {
         0,
         (2.25 - this.life) * 3,
         1.5,
-        0.001
+        0.001,
       );
 
       gl.bindBuffer(gl.ARRAY_BUFFER, meshes.fallingStar.vertBuffer);
@@ -24699,7 +14577,7 @@ function BeeSwarmSimulator(DATA) {
         gl.FLOAT,
         gl.FLASE,
         24,
-        12
+        12,
       );
 
       gl.uniform4fv(glCache.mob_instanceInfo1, this.pos);
@@ -24708,7 +14586,7 @@ function BeeSwarmSimulator(DATA) {
         gl.TRIANGLES,
         meshes.fallingStar.indexAmount,
         gl.UNSIGNED_SHORT,
-        0
+        0,
       );
 
       return this.life <= 0;
@@ -24763,7 +14641,7 @@ function BeeSwarmSimulator(DATA) {
               size: 1.2,
               speed: 0.35,
               aftershock: 0.005,
-            })
+            }),
           );
 
           this.hitBees.push(i);
@@ -24774,8 +14652,8 @@ function BeeSwarmSimulator(DATA) {
               10000 +
                 b.convertAmount *
                   10 *
-                  player[beeInfo[b.type].color + "ConvertRate"]
-            )
+                  player[beeInfo[b.type].color + "ConvertRate"],
+            ),
           );
 
           player.pollen -= amountToConvert;
@@ -24787,7 +14665,7 @@ function BeeSwarmSimulator(DATA) {
               [b.pos[0], b.pos[1] + 0.75, b.pos[2]],
               COLORS.honey,
               1,
-              "⇆"
+              "⇆",
             );
         }
       }
@@ -24841,7 +14719,7 @@ function BeeSwarmSimulator(DATA) {
                 size: b.displaySize * 1.5,
                 speed: 0.4,
                 aftershock: 0.01,
-              })
+              }),
             );
 
             let am = Math.round(Math.min(b.pollen, b.cap * 0.01));
@@ -24863,15 +14741,15 @@ function BeeSwarmSimulator(DATA) {
                     "honey",
                     hpt,
                     true,
-                    "Balloon"
-                  )
+                    "Balloon",
+                  ),
                 );
               }
             }
 
             player.addEffect(
               "tideBlessing",
-              ((b.golden ? 45 : 30) / (4 * 60 * 60)) * 2
+              ((b.golden ? 45 : 30) / (4 * 60 * 60)) * 2,
             );
 
             if (b.pollen <= 0) {
@@ -24890,7 +14768,7 @@ function BeeSwarmSimulator(DATA) {
         gl.FLOAT,
         gl.FLASE,
         24,
-        12
+        12,
       );
       gl.uniform4fv(glCache.mob_instanceInfo1, this.pos);
       gl.uniform2f(glCache.mob_instanceInfo2, this.size, 0.6);
@@ -24898,7 +14776,7 @@ function BeeSwarmSimulator(DATA) {
         gl.TRIANGLES,
         meshes.wave.indexAmount,
         gl.UNSIGNED_SHORT,
-        0
+        0,
       );
 
       this.collectTimer -= dt;
@@ -25117,7 +14995,7 @@ function BeeSwarmSimulator(DATA) {
           this.bee.gifted ? 1 : 0,
           1,
           0.1,
-          10000
+          10000,
         );
 
         return this.life <= 0;
@@ -25224,7 +15102,7 @@ function BeeSwarmSimulator(DATA) {
             false,
             false,
             undefined,
-            b.type === "honey" ? 3 : 1
+            b.type === "honey" ? 3 : 1,
           );
           this.amount += b.type === "honey" ? 3 : 1;
         }
@@ -25251,7 +15129,7 @@ function BeeSwarmSimulator(DATA) {
             false,
             false,
             undefined,
-            b.type === "precise" ? 30 : 8
+            b.type === "precise" ? 30 : 8,
           );
           this.amount += b.type === "precise" ? 30 : 8;
         }
@@ -25268,7 +15146,7 @@ function BeeSwarmSimulator(DATA) {
         gl.FLOAT,
         gl.FLASE,
         24,
-        12
+        12,
       );
       gl.uniform4fv(glCache.mob_instanceInfo1, this.pos);
       gl.uniform2f(glCache.mob_instanceInfo2, this.rad * 2, this.life * 0.5);
@@ -25276,7 +15154,7 @@ function BeeSwarmSimulator(DATA) {
         gl.TRIANGLES,
         meshes.gummyBall.indexAmount,
         gl.UNSIGNED_SHORT,
-        0
+        0,
       );
 
       textRenderer.addSingle(
@@ -25285,7 +15163,7 @@ function BeeSwarmSimulator(DATA) {
         COLORS.whiteArr,
         -3,
         true,
-        false
+        false,
       );
 
       this.collectTimer -= dt;
@@ -25317,7 +15195,7 @@ function BeeSwarmSimulator(DATA) {
       x = player.flowerIn.x,
       z = player.flowerIn.z,
       delay = 0,
-      isBigFatBully
+      isBigFatBully,
     ) {
       this.isBigFatBully = isBigFatBully;
       this.delay = delay;
@@ -25392,7 +15270,7 @@ function BeeSwarmSimulator(DATA) {
 
           if (hpt) {
             player.pollen -= Math.ceil(
-              Math.min(player.convertTotal, player.pollen)
+              Math.min(player.convertTotal, player.pollen),
             );
 
             for (let i = 0; i < MATH.TWO_PI; i += MATH.TWO_PI / 5) {
@@ -25407,8 +15285,8 @@ function BeeSwarmSimulator(DATA) {
                   "honey",
                   Math.ceil(hpt),
                   true,
-                  "Coconut"
-                )
+                  "Coconut",
+                ),
               );
             }
           }
@@ -25448,7 +15326,7 @@ function BeeSwarmSimulator(DATA) {
           0,
           this.glow * 0.75,
           this.displaySize,
-          0.001
+          0.001,
         );
         meshes.explosions.instanceData.push(
           this.pos[0],
@@ -25459,7 +15337,7 @@ function BeeSwarmSimulator(DATA) {
           1,
           0.15,
           -this.displaySize - 1,
-          1
+          1,
         );
         meshes.explosions.instanceData.push(
           this.pos[0],
@@ -25470,7 +15348,7 @@ function BeeSwarmSimulator(DATA) {
           0,
           1,
           this.displaySize,
-          1
+          1,
         );
 
         return this.y + this.displaySize < this.pos[1];
@@ -25500,7 +15378,7 @@ function BeeSwarmSimulator(DATA) {
       player.addMessage(
         "+" +
           MATH.addCommas(Math.ceil(am * 2 * player.honeyPerPollen) + "") +
-          " Honey (from Diamond Drain)"
+          " Honey (from Diamond Drain)",
       );
 
       objects.mobs.splice(index, 1);
@@ -25520,7 +15398,7 @@ function BeeSwarmSimulator(DATA) {
         gl.bindBuffer(gl.ARRAY_BUFFER, meshes.drainingDiamond.vertBuffer);
         gl.bindBuffer(
           gl.ELEMENT_ARRAY_BUFFER,
-          meshes.drainingDiamond.indexBuffer
+          meshes.drainingDiamond.indexBuffer,
         );
         gl.vertexAttribPointer(
           glCache.mob_vertPos,
@@ -25528,7 +15406,7 @@ function BeeSwarmSimulator(DATA) {
           gl.FLOAT,
           gl.FLASE,
           24,
-          0
+          0,
         );
         gl.vertexAttribPointer(
           glCache.mob_vertColor,
@@ -25536,7 +15414,7 @@ function BeeSwarmSimulator(DATA) {
           gl.FLOAT,
           gl.FLASE,
           24,
-          12
+          12,
         );
         gl.uniform4fv(glCache.mob_instanceInfo1, this.pos);
         gl.uniform2f(glCache.mob_instanceInfo2, 1.6, 0.75);
@@ -25544,13 +15422,13 @@ function BeeSwarmSimulator(DATA) {
           gl.TRIANGLES,
           meshes.drainingDiamond.indexAmount,
           gl.UNSIGNED_SHORT,
-          0
+          0,
         );
       } else {
         gl.bindBuffer(gl.ARRAY_BUFFER, meshes.shiningDiamond.vertBuffer);
         gl.bindBuffer(
           gl.ELEMENT_ARRAY_BUFFER,
-          meshes.shiningDiamond.indexBuffer
+          meshes.shiningDiamond.indexBuffer,
         );
         gl.vertexAttribPointer(
           glCache.mob_vertPos,
@@ -25558,7 +15436,7 @@ function BeeSwarmSimulator(DATA) {
           gl.FLOAT,
           gl.FLASE,
           24,
-          0
+          0,
         );
         gl.vertexAttribPointer(
           glCache.mob_vertColor,
@@ -25566,7 +15444,7 @@ function BeeSwarmSimulator(DATA) {
           gl.FLOAT,
           gl.FLASE,
           24,
-          12
+          12,
         );
         gl.uniform4fv(glCache.mob_instanceInfo1, this.pos);
         gl.uniform2f(glCache.mob_instanceInfo2, 1.6, 1);
@@ -25574,7 +15452,7 @@ function BeeSwarmSimulator(DATA) {
           gl.TRIANGLES,
           meshes.shiningDiamond.indexAmount,
           gl.UNSIGNED_SHORT,
-          0
+          0,
         );
       }
 
@@ -25699,7 +15577,7 @@ function BeeSwarmSimulator(DATA) {
                 },
                 true,
                 false,
-                false
+                false,
               );
             }
           }
@@ -25734,7 +15612,7 @@ function BeeSwarmSimulator(DATA) {
         c,
         0.8,
         2.1,
-        0.9
+        0.9,
       );
       meshes.explosions.instanceData.push(
         this.pos[0] + 0.45,
@@ -25745,7 +15623,7 @@ function BeeSwarmSimulator(DATA) {
         c,
         0.8,
         1.8,
-        0.9
+        0.9,
       );
       meshes.explosions.instanceData.push(
         this.pos[0] - 0.5,
@@ -25756,7 +15634,7 @@ function BeeSwarmSimulator(DATA) {
         c,
         0.8,
         1.9,
-        0.9
+        0.9,
       );
       meshes.explosions.instanceData.push(
         this.pos[0] + 0.75,
@@ -25767,7 +15645,7 @@ function BeeSwarmSimulator(DATA) {
         c,
         0.8,
         2.2,
-        0.9
+        0.9,
       );
 
       if (
@@ -25809,7 +15687,7 @@ function BeeSwarmSimulator(DATA) {
           BEE_FLY,
           beeInfo.windy.u,
           beeInfo.windy.v,
-          beeInfo.windy.meshPartId
+          beeInfo.windy.meshPartId,
         );
 
         if (!(frameCount % 12)) {
@@ -25963,7 +15841,7 @@ function BeeSwarmSimulator(DATA) {
         gl.FLOAT,
         gl.FLASE,
         24,
-        12
+        12,
       );
       this.pos[3] = TIME * (this.speed + 5);
       gl.uniform4fv(glCache.mob_instanceInfo1, this.pos);
@@ -25972,7 +15850,7 @@ function BeeSwarmSimulator(DATA) {
         gl.TRIANGLES,
         meshes.tornado.indexAmount,
         gl.UNSIGNED_SHORT,
-        0
+        0,
       );
 
       return this.life <= 0;
@@ -25986,7 +15864,7 @@ function BeeSwarmSimulator(DATA) {
       x = player.flowerIn.x,
       z = player.flowerIn.z,
       growth = 0,
-      glis
+      glis,
     ) {
       this.growth = growth;
       this.maxGrowth = {
@@ -26149,7 +16027,7 @@ function BeeSwarmSimulator(DATA) {
         (bee.planterSipTime *
           player.nectarMultiplier *
           (bee.type === "shy" ? (bee.gifted ? 2.5 : 2) : 1)) /
-          (6 * 60 * 60)
+          (6 * 60 * 60),
       );
     }
 
@@ -26157,7 +16035,7 @@ function BeeSwarmSimulator(DATA) {
       fieldInfo[this.field].degration = Math.min(
         fieldInfo[this.field].degration +
           (this.maxGrowth / this.growthRate + 10 * 60) * 0.00027777777 * 2,
-        1
+        1,
       );
       fieldInfo[this.field].planter = undefined;
 
@@ -26194,10 +16072,10 @@ function BeeSwarmSimulator(DATA) {
                 perc +
                 Math.round(MATH.random(-1, 1))) |
                 0,
-              1
+              1,
             ),
-            "puffshroom"
-          )
+            "puffshroom",
+          ),
         );
       }
 
@@ -26312,7 +16190,7 @@ function BeeSwarmSimulator(DATA) {
 
       player.addEffect(
         fieldInfo[this.field].nectarType,
-        seconds / (6 * 60 * 60)
+        seconds / (6 * 60 * 60),
       );
 
       player.stats.hoursOfNectar += seconds / (60 * 60);
@@ -26340,7 +16218,7 @@ function BeeSwarmSimulator(DATA) {
           }[this.type] *
             perc *
             perc *
-            (1 - fieldInfo[this.field].degration * 0.666)
+            (1 - fieldInfo[this.field].degration * 0.666),
         ),
         dropTable = [],
         dropRates = {};
@@ -26600,12 +16478,12 @@ function BeeSwarmSimulator(DATA) {
                 }[DIS.type] *
                   (perc * 0.5 + 0.5)) /
                   items[it].value +
-                  1
+                  1,
               ) | 0,
               true,
               "Planter",
-              ["tokensFromPlanters"]
-            )
+              ["tokensFromPlanters"],
+            ),
           );
         }, 225 * i);
       }
@@ -26653,7 +16531,7 @@ function BeeSwarmSimulator(DATA) {
         ],
         COLORS.whiteArr,
         -0.6,
-        false
+        false,
       );
 
       textRenderer.addDecalRaw(
@@ -26668,7 +16546,7 @@ function BeeSwarmSimulator(DATA) {
         0,
         2.25,
         0.35,
-        0
+        0,
       );
 
       textRenderer.addDecalRaw(
@@ -26684,7 +16562,7 @@ function BeeSwarmSimulator(DATA) {
         0.1,
         this.growth * this.invGrowth * 2.25,
         0.35,
-        0
+        0,
       );
 
       this.displaySize =
@@ -26712,13 +16590,13 @@ function BeeSwarmSimulator(DATA) {
         0,
         1,
         this.displaySize,
-        1.03
+        1.03,
       );
 
       gl.bindBuffer(gl.ARRAY_BUFFER, meshes[this.type + "Planter"].vertBuffer);
       gl.bindBuffer(
         gl.ELEMENT_ARRAY_BUFFER,
-        meshes[this.type + "Planter"].indexBuffer
+        meshes[this.type + "Planter"].indexBuffer,
       );
       gl.vertexAttribPointer(glCache.mob_vertPos, 3, gl.FLOAT, gl.FLASE, 24, 0);
       gl.vertexAttribPointer(
@@ -26727,7 +16605,7 @@ function BeeSwarmSimulator(DATA) {
         gl.FLOAT,
         gl.FLASE,
         24,
-        12
+        12,
       );
       gl.uniform4fv(glCache.mob_instanceInfo1, this.pos);
       gl.uniform2f(glCache.mob_instanceInfo2, 1, 1);
@@ -26735,7 +16613,7 @@ function BeeSwarmSimulator(DATA) {
         gl.TRIANGLES,
         meshes[this.type + "Planter"].indexAmount,
         gl.UNSIGNED_SHORT,
-        0
+        0,
       );
 
       if (this.glistering) {
@@ -26871,7 +16749,7 @@ function BeeSwarmSimulator(DATA) {
         gl.FLOAT,
         gl.FLASE,
         24,
-        12
+        12,
       );
 
       gl.uniform4fv(glCache.mob_instanceInfo1, this.pos);
@@ -26880,7 +16758,7 @@ function BeeSwarmSimulator(DATA) {
         gl.TRIANGLES,
         meshes[this.mesh].indexAmount,
         gl.UNSIGNED_SHORT,
-        0
+        0,
       );
 
       return this.life <= 0;
@@ -26937,7 +16815,7 @@ function BeeSwarmSimulator(DATA) {
         this.control1,
         this.control2,
         this.startPos,
-        MATH.constrain(this.life * (1 / this.lifespan), 0, 1)
+        MATH.constrain(this.life * (1 / this.lifespan), 0, 1),
       );
 
       vec3.add(p, p, this.bodyPos);
@@ -27029,7 +16907,7 @@ function BeeSwarmSimulator(DATA) {
         gl.FLOAT,
         gl.FLASE,
         24,
-        12
+        12,
       );
       gl.uniform4fv(glCache.mob_instanceInfo1, this.pos);
       gl.uniform2f(glCache.mob_instanceInfo2, 1, 1);
@@ -27037,7 +16915,7 @@ function BeeSwarmSimulator(DATA) {
         gl.TRIANGLES,
         meshes.spike.indexAmount,
         gl.UNSIGNED_SHORT,
-        0
+        0,
       );
 
       return this.life <= 0;
@@ -27099,7 +16977,7 @@ function BeeSwarmSimulator(DATA) {
           ...b.col,
           b.alpha,
           b.rad,
-          b.hei
+          b.hei,
         );
       }
 
@@ -27157,8 +17035,8 @@ function BeeSwarmSimulator(DATA) {
           new Token(
             effects[this.type].tokenLife,
             [this.pos[0], this.pos[1] + 1.1, this.pos[2]],
-            this.type
-          )
+            this.type,
+          ),
         );
       }
 
@@ -27422,8 +17300,8 @@ function BeeSwarmSimulator(DATA) {
               1,
               false,
               "Sprout",
-              ["tokensFromSprouts"]
-            )
+              ["tokensFromSprouts"],
+            ),
           );
         }, 200 * i);
       }
@@ -27439,7 +17317,7 @@ function BeeSwarmSimulator(DATA) {
           maxAlpha: 1,
           primitive: "cylinder_explosions",
           height: 500,
-        })
+        }),
       );
 
       objects.mobs.splice(index, 1);
@@ -27448,7 +17326,7 @@ function BeeSwarmSimulator(DATA) {
     update() {
       let pollen = Math.max(
         this.pollenBefore - player.stats["pollenFrom" + this.field],
-        0
+        0,
       );
 
       this.growth += (pollen * this.invAmount - this.growth) * dt * 15;
@@ -27458,7 +17336,7 @@ function BeeSwarmSimulator(DATA) {
         [this.pos[0], this.pos[1] + 4, this.pos[2]],
         COLORS.whiteArr,
         -3.5,
-        false
+        false,
       );
 
       meshes.cylinder_explosions.instanceData.push(
@@ -27470,13 +17348,13 @@ function BeeSwarmSimulator(DATA) {
         0.6,
         0.15,
         5,
-        500
+        500,
       );
 
       gl.bindBuffer(gl.ARRAY_BUFFER, meshes[this.type + "Sprout"].vertBuffer);
       gl.bindBuffer(
         gl.ELEMENT_ARRAY_BUFFER,
-        meshes[this.type + "Sprout"].indexBuffer
+        meshes[this.type + "Sprout"].indexBuffer,
       );
       gl.vertexAttribPointer(glCache.mob_vertPos, 3, gl.FLOAT, gl.FLASE, 24, 0);
       gl.vertexAttribPointer(
@@ -27485,7 +17363,7 @@ function BeeSwarmSimulator(DATA) {
         gl.FLOAT,
         gl.FLASE,
         24,
-        12
+        12,
       );
       gl.uniform4fv(glCache.mob_instanceInfo1, this.pos);
       gl.uniform2f(glCache.mob_instanceInfo2, 0.6 + (1 - this.growth) * 1.6, 1);
@@ -27493,7 +17371,7 @@ function BeeSwarmSimulator(DATA) {
         gl.TRIANGLES,
         meshes[this.type + "Sprout"].indexAmount,
         gl.UNSIGNED_SHORT,
-        0
+        0,
       );
 
       return pollen <= 0;
@@ -27631,7 +17509,7 @@ function BeeSwarmSimulator(DATA) {
           size: this.displayScale * 2,
           speed: 0.2,
           aftershock: 0.05,
-        })
+        }),
       );
 
       if (this.life <= 0) {
@@ -27703,8 +17581,8 @@ function BeeSwarmSimulator(DATA) {
             "turpentine",
             1,
             true,
-            "Puffshroom"
-          )
+            "Puffshroom",
+          ),
         );
       }
 
@@ -27775,8 +17653,8 @@ function BeeSwarmSimulator(DATA) {
               it,
               am,
               true,
-              "Puffshroom"
-            )
+              "Puffshroom",
+            ),
           );
         }, 150 * i);
       }
@@ -27821,7 +17699,7 @@ function BeeSwarmSimulator(DATA) {
                 j,
                 vec2.sqrDist(
                   [this.pos[0], this.pos[2]],
-                  [fieldInfo[j].x + x, fieldInfo[j].z + z]
+                  [fieldInfo[j].x + x, fieldInfo[j].z + z],
                 ),
                 x,
                 z,
@@ -27878,8 +17756,8 @@ function BeeSwarmSimulator(DATA) {
               lvl,
               this.life,
               this.prevFields,
-              type
-            )
+              type,
+            ),
           );
         }
       }
@@ -27902,7 +17780,7 @@ function BeeSwarmSimulator(DATA) {
         false,
         false,
         0,
-        0.7
+        0.7,
       );
 
       textRenderer.addSingle(
@@ -27913,7 +17791,7 @@ function BeeSwarmSimulator(DATA) {
         false,
         false,
         0,
-        0.6
+        0.6,
       );
       textRenderer.addDecalRaw(
         this.pos[0],
@@ -27927,7 +17805,7 @@ function BeeSwarmSimulator(DATA) {
         0.27 * 0.5,
         3,
         0.6,
-        0
+        0,
       );
       textRenderer.addDecalRaw(
         this.pos[0],
@@ -27941,7 +17819,7 @@ function BeeSwarmSimulator(DATA) {
         0.27,
         this.life * 0.0033333333 * 3,
         0.6,
-        0
+        0,
       );
 
       textRenderer.addSingle(
@@ -27951,7 +17829,7 @@ function BeeSwarmSimulator(DATA) {
         -1.25,
         true,
         true,
-        0.175
+        0.175,
       );
       textRenderer.addDecalRaw(
         this.pos[0],
@@ -27965,7 +17843,7 @@ function BeeSwarmSimulator(DATA) {
         0,
         3,
         0.6,
-        0
+        0,
       );
       textRenderer.addDecalRaw(
         this.pos[0],
@@ -27979,7 +17857,7 @@ function BeeSwarmSimulator(DATA) {
         0.1,
         Math.min(this.pollen * this.invCap, 1) * 3,
         0.6,
-        0
+        0,
       );
       textRenderer.addDecalRaw(
         this.pos[0],
@@ -27993,7 +17871,7 @@ function BeeSwarmSimulator(DATA) {
         1,
         -1.25,
         -1.25,
-        0
+        0,
       );
 
       this.pos[1] -= this.displayScale * 1.75 + 0.25;
@@ -28007,7 +17885,7 @@ function BeeSwarmSimulator(DATA) {
         gl.FLOAT,
         gl.FLASE,
         24,
-        12
+        12,
       );
 
       gl.uniform4fv(glCache.mob_instanceInfo1, this.pos);
@@ -28016,7 +17894,7 @@ function BeeSwarmSimulator(DATA) {
         gl.TRIANGLES,
         meshes[this.type].indexAmount,
         gl.UNSIGNED_SHORT,
-        0
+        0,
       );
 
       return this.pollen >= this.cap || this.life <= 0;
@@ -28057,8 +17935,8 @@ function BeeSwarmSimulator(DATA) {
           this.z,
           this.plife,
           this.level,
-          this.type
-        )
+          this.type,
+        ),
       );
 
       objects.explosions.push(
@@ -28074,7 +17952,7 @@ function BeeSwarmSimulator(DATA) {
           size: this.displayScale * 2,
           speed: 0.2,
           aftershock: 0.05,
-        })
+        }),
       );
 
       objects.mobs.splice(index, 1);
@@ -28087,7 +17965,7 @@ function BeeSwarmSimulator(DATA) {
         this.pos,
         vec3.lerp([], this.startPos, this.controlPos, this.t),
         vec3.lerp([], this.controlPos, this.endPos, this.t),
-        this.t
+        this.t,
       );
 
       meshes.explosions.instanceData.push(
@@ -28099,7 +17977,7 @@ function BeeSwarmSimulator(DATA) {
         0.1,
         0.85,
         this.displayScale,
-        1
+        1,
       );
 
       return this.t >= 1;
@@ -28151,8 +18029,8 @@ function BeeSwarmSimulator(DATA) {
             30,
             [this.body.position.x, this.body.position.y, this.body.position.z],
             "treat",
-            this.treat.amount
-          )
+            this.treat.amount,
+          ),
         );
 
         this.treat.amount = this.treat.amount * 2;
@@ -28188,7 +18066,7 @@ function BeeSwarmSimulator(DATA) {
         0.1,
         this.life,
         1,
-        1
+        1,
       );
 
       let arr = [
@@ -28391,22 +18269,22 @@ function BeeSwarmSimulator(DATA) {
           lerp(
             fx,
             grad3d(perm[p01], x, y - 1, z),
-            grad3d(perm[p11], x - 1, y - 1, z)
-          )
+            grad3d(perm[p11], x - 1, y - 1, z),
+          ),
         ),
         lerp(
           fy,
           lerp(
             fx,
             grad3d(perm[p00 + 1], x, y, z - 1),
-            grad3d(perm[p10 + 1], x - 1, y, z - 1)
+            grad3d(perm[p10 + 1], x - 1, y, z - 1),
           ),
           lerp(
             fx,
             grad3d(perm[p01 + 1], x, y - 1, z - 1),
-            grad3d(perm[p11 + 1], x - 1, y - 1, z - 1)
-          )
-        )
+            grad3d(perm[p11 + 1], x - 1, y - 1, z - 1),
+          ),
+        ),
       );
     };
 
@@ -28425,8 +18303,8 @@ function BeeSwarmSimulator(DATA) {
         lerp(
           fx,
           grad2d(perm[p0 + 1], x, y - 1),
-          grad2d(perm[p1 + 1], x - 1, y - 1)
-        )
+          grad2d(perm[p1 + 1], x - 1, y - 1),
+        ),
       );
     };
 
@@ -28481,13 +18359,13 @@ function BeeSwarmSimulator(DATA) {
       .replaceAll("ASPECT", aspect + 0.000001)
       .replaceAll(
         "SCREEN_CHANGE",
-        (((width + height) * 0.5) / 600) * 1.5 + 0.00001
+        (((width + height) * 0.5) / 600) * 1.5 + 0.00001,
       );
     let fshText = window["glsl_" + fsh]
       .trim()
       .replaceAll(
         "LIGHT_DIR",
-        "vec3(" + lightDir[0] + "," + lightDir[1] + "," + lightDir[2] + ")"
+        "vec3(" + lightDir[0] + "," + lightDir[1] + "," + lightDir[2] + ")",
       )
       .replaceAll("INV_AVG_HALF_WIDTH_HEIGHT", 2 / ((width + height) * 0.5))
       .replaceAll("INV_HALF_WIDTH", 1 / (width * 0.5))
@@ -28500,7 +18378,7 @@ function BeeSwarmSimulator(DATA) {
       .replaceAll("ASPECT", aspect + 0.00001)
       .replaceAll(
         "SCREEN_CHANGE",
-        (((width + height) * 0.5) / 600) * 1.5 + 0.00001
+        (((width + height) * 0.5) / 600) * 1.5 + 0.00001,
       );
 
     vsh = gl.createShader(gl.VERTEX_SHADER);
@@ -28520,145 +18398,145 @@ function BeeSwarmSimulator(DATA) {
 
   let staticGeometryProgram = createProgram(
       "static_geometry_vsh",
-      "static_geometry_fsh"
+      "static_geometry_fsh",
     ),
     dynamicGeometryProgram = createProgram(
       "dynamic_geometry_vsh",
-      "dynamic_geometry_fsh"
+      "dynamic_geometry_fsh",
     ),
     tokenGeometryProgram = createProgram(
       "token_geometry_vsh",
-      "token_geometry_fsh"
+      "token_geometry_fsh",
     ),
     flowerGeometryProgram = createProgram(
       "flower_geometry_vsh",
-      "flower_geometry_fsh"
+      "flower_geometry_fsh",
     ),
     beeGeometryProgram = createProgram("bee_geometry_vsh", "bee_geometry_fsh"),
     particleRendererProgram = createProgram(
       "particle_renderer_vsh",
-      "particle_renderer_fsh"
+      "particle_renderer_fsh",
     ),
     explosionRendererProgram = createProgram(
       "explosion_renderer_vsh",
-      "explosion_renderer_fsh"
+      "explosion_renderer_fsh",
     ),
     textRendererProgram = createProgram(
       "text_renderer_vsh",
-      "text_renderer_fsh"
+      "text_renderer_fsh",
     ),
     mobRendererProgram = createProgram("mob_renderer_vsh", "mob_renderer_fsh"),
     trailRendererProgram = createProgram(
       "trail_renderer_vsh",
-      "trail_renderer_fsh"
+      "trail_renderer_fsh",
     );
 
   let initGlCache = function (glCache) {
     glCache.static_viewMatrix = gl.getUniformLocation(
       staticGeometryProgram,
-      "viewMatrix"
+      "viewMatrix",
     );
     glCache.static_isNight = gl.getUniformLocation(
       staticGeometryProgram,
-      "isNight"
+      "isNight",
     );
     glCache.static_vertPos = gl.getAttribLocation(
       staticGeometryProgram,
-      "vertPos"
+      "vertPos",
     );
     gl.enableVertexAttribArray(glCache.static_vertPos);
     glCache.static_vertColor = gl.getAttribLocation(
       staticGeometryProgram,
-      "vertColor"
+      "vertColor",
     );
     gl.enableVertexAttribArray(glCache.static_vertColor);
     glCache.static_vertUV = gl.getAttribLocation(
       staticGeometryProgram,
-      "vertUV"
+      "vertUV",
     );
     gl.enableVertexAttribArray(glCache.static_vertUV);
 
     glCache.dynamic_viewMatrix = gl.getUniformLocation(
       dynamicGeometryProgram,
-      "viewMatrix"
+      "viewMatrix",
     );
     glCache.dynamic_modelMatrix = gl.getUniformLocation(
       dynamicGeometryProgram,
-      "modelMatrix"
+      "modelMatrix",
     );
     glCache.dynamic_isNight = gl.getUniformLocation(
       dynamicGeometryProgram,
-      "isNight"
+      "isNight",
     );
     glCache.dynamic_vertPos = gl.getAttribLocation(
       dynamicGeometryProgram,
-      "vertPos"
+      "vertPos",
     );
     gl.enableVertexAttribArray(glCache.dynamic_vertPos);
     glCache.dynamic_vertColor = gl.getAttribLocation(
       dynamicGeometryProgram,
-      "vertColor"
+      "vertColor",
     );
     gl.enableVertexAttribArray(glCache.dynamic_vertColor);
     glCache.dynamic_vertNormal = gl.getAttribLocation(
       dynamicGeometryProgram,
-      "vertNormal"
+      "vertNormal",
     );
     gl.enableVertexAttribArray(glCache.dynamic_vertNormal);
 
     glCache.token_viewMatrix = gl.getUniformLocation(
       tokenGeometryProgram,
-      "viewMatrix"
+      "viewMatrix",
     );
     glCache.token_isNight = gl.getUniformLocation(
       tokenGeometryProgram,
-      "isNight"
+      "isNight",
     );
     glCache.token_vertPos = gl.getAttribLocation(
       tokenGeometryProgram,
-      "vertPos"
+      "vertPos",
     );
     gl.enableVertexAttribArray(glCache.token_vertPos);
     glCache.token_vertUV = gl.getAttribLocation(tokenGeometryProgram, "vertUV");
     gl.enableVertexAttribArray(glCache.token_vertUV);
     glCache.token_instancePos = gl.getAttribLocation(
       tokenGeometryProgram,
-      "instance_pos"
+      "instance_pos",
     );
     gl.enableVertexAttribArray(glCache.token_instancePos);
     glCache.token_instanceUV = gl.getAttribLocation(
       tokenGeometryProgram,
-      "instance_uv"
+      "instance_uv",
     );
     gl.enableVertexAttribArray(glCache.token_instanceUV);
 
     glCache.flower_viewMatrix = gl.getUniformLocation(
       flowerGeometryProgram,
-      "viewMatrix"
+      "viewMatrix",
     );
     glCache.flower_isNight = gl.getUniformLocation(
       flowerGeometryProgram,
-      "isNight"
+      "isNight",
     );
     glCache.flower_vertPos = gl.getAttribLocation(
       flowerGeometryProgram,
-      "vertPos"
+      "vertPos",
     );
     gl.enableVertexAttribArray(glCache.flower_vertPos);
     glCache.flower_vertUV = gl.getAttribLocation(
       flowerGeometryProgram,
-      "vertUV"
+      "vertUV",
     );
     gl.enableVertexAttribArray(glCache.flower_vertUV);
     glCache.flower_vertGoo = gl.getAttribLocation(
       flowerGeometryProgram,
-      "vertGoo"
+      "vertGoo",
     );
     gl.enableVertexAttribArray(glCache.flower_vertGoo);
 
     glCache.bee_viewMatrix = gl.getUniformLocation(
       beeGeometryProgram,
-      "viewMatrix"
+      "viewMatrix",
     );
     glCache.bee_isNight = gl.getUniformLocation(beeGeometryProgram, "isNight");
     glCache.bee_vertPos = gl.getAttribLocation(beeGeometryProgram, "vertPos");
@@ -28667,68 +18545,68 @@ function BeeSwarmSimulator(DATA) {
     gl.enableVertexAttribArray(glCache.bee_vertUV);
     glCache.bee_instancePos = gl.getAttribLocation(
       beeGeometryProgram,
-      "instance_pos"
+      "instance_pos",
     );
     gl.enableVertexAttribArray(glCache.bee_instancePos);
     glCache.bee_instanceRotation = gl.getAttribLocation(
       beeGeometryProgram,
-      "instance_rotation"
+      "instance_rotation",
     );
     gl.enableVertexAttribArray(glCache.bee_instanceRotation);
     glCache.bee_instanceUV = gl.getAttribLocation(
       beeGeometryProgram,
-      "instance_uv"
+      "instance_uv",
     );
     gl.enableVertexAttribArray(glCache.bee_instanceUV);
 
     glCache.particle_vertPos = gl.getAttribLocation(
       particleRendererProgram,
-      "vertPos"
+      "vertPos",
     );
     gl.enableVertexAttribArray(glCache.particle_vertPos);
     glCache.particle_vertColor = gl.getAttribLocation(
       particleRendererProgram,
-      "vertColor"
+      "vertColor",
     );
     gl.enableVertexAttribArray(glCache.particle_vertColor);
     glCache.particle_vertSize = gl.getAttribLocation(
       particleRendererProgram,
-      "vertSize"
+      "vertSize",
     );
     gl.enableVertexAttribArray(glCache.particle_vertSize);
     glCache.particle_vertRot = gl.getAttribLocation(
       particleRendererProgram,
-      "vertRot"
+      "vertRot",
     );
     gl.enableVertexAttribArray(glCache.particle_vertRot);
     glCache.particle_viewMatrix = gl.getUniformLocation(
       particleRendererProgram,
-      "viewMatrix"
+      "viewMatrix",
     );
 
     glCache.explosion_vertPos = gl.getAttribLocation(
       explosionRendererProgram,
-      "vertPos"
+      "vertPos",
     );
     gl.enableVertexAttribArray(glCache.explosion_vertPos);
     glCache.explosion_instancePos = gl.getAttribLocation(
       explosionRendererProgram,
-      "instance_pos"
+      "instance_pos",
     );
     gl.enableVertexAttribArray(glCache.explosion_instancePos);
     glCache.explosion_instanceColor = gl.getAttribLocation(
       explosionRendererProgram,
-      "instance_color"
+      "instance_color",
     );
     gl.enableVertexAttribArray(glCache.explosion_instanceColor);
     glCache.explosion_instanceScale = gl.getAttribLocation(
       explosionRendererProgram,
-      "instance_scale"
+      "instance_scale",
     );
     gl.enableVertexAttribArray(glCache.explosion_instanceScale);
     glCache.explosion_viewMatrix = gl.getUniformLocation(
       explosionRendererProgram,
-      "viewMatrix"
+      "viewMatrix",
     );
 
     glCache.text_vertPos = gl.getAttribLocation(textRendererProgram, "vertPos");
@@ -28737,72 +18615,72 @@ function BeeSwarmSimulator(DATA) {
     gl.enableVertexAttribArray(glCache.text_vertUV);
     glCache.text_instanceOrigin = gl.getAttribLocation(
       textRendererProgram,
-      "instance_origin"
+      "instance_origin",
     );
     gl.enableVertexAttribArray(glCache.text_instanceOrigin);
     glCache.text_instanceOffset = gl.getAttribLocation(
       textRendererProgram,
-      "instance_offset"
+      "instance_offset",
     );
     gl.enableVertexAttribArray(glCache.text_instanceOffset);
     glCache.text_instanceUV = gl.getAttribLocation(
       textRendererProgram,
-      "instance_uv"
+      "instance_uv",
     );
     gl.enableVertexAttribArray(glCache.text_instanceUV);
     glCache.text_instanceColor = gl.getAttribLocation(
       textRendererProgram,
-      "instance_color"
+      "instance_color",
     );
     gl.enableVertexAttribArray(glCache.text_instanceColor);
     glCache.text_instanceInfo = gl.getAttribLocation(
       textRendererProgram,
-      "instance_info"
+      "instance_info",
     );
     gl.enableVertexAttribArray(glCache.text_instanceInfo);
     glCache.text_viewMatrix = gl.getUniformLocation(
       textRendererProgram,
-      "viewMatrix"
+      "viewMatrix",
     );
 
     glCache.mob_viewMatrix = gl.getUniformLocation(
       mobRendererProgram,
-      "viewMatrix"
+      "viewMatrix",
     );
     glCache.mob_isNight = gl.getUniformLocation(mobRendererProgram, "isNight");
     glCache.mob_vertPos = gl.getAttribLocation(mobRendererProgram, "vertPos");
     gl.enableVertexAttribArray(glCache.mob_vertPos);
     glCache.mob_vertColor = gl.getAttribLocation(
       mobRendererProgram,
-      "vertColor"
+      "vertColor",
     );
     gl.enableVertexAttribArray(glCache.mob_vertColor);
     glCache.mob_instanceInfo1 = gl.getUniformLocation(
       mobRendererProgram,
-      "instance_info1"
+      "instance_info1",
     );
     glCache.mob_instanceInfo2 = gl.getUniformLocation(
       mobRendererProgram,
-      "instance_info2"
+      "instance_info2",
     );
 
     glCache.trail_viewMatrix = gl.getUniformLocation(
       trailRendererProgram,
-      "viewMatrix"
+      "viewMatrix",
     );
     glCache.trail_vertPos = gl.getAttribLocation(
       trailRendererProgram,
-      "vertPos"
+      "vertPos",
     );
     gl.enableVertexAttribArray(glCache.trail_vertPos);
     glCache.trail_vertColor = gl.getAttribLocation(
       trailRendererProgram,
-      "vertCol"
+      "vertCol",
     );
     gl.enableVertexAttribArray(glCache.trail_vertColor);
     glCache.trail_isNight = gl.getUniformLocation(
       trailRendererProgram,
-      "isNight"
+      "isNight",
     );
 
     return glCache;
@@ -28811,2469 +18689,7 @@ function BeeSwarmSimulator(DATA) {
   let glCache = initGlCache({}),
     globalMeshID = 0;
 
-  class Mesh {
-    constructor(isStatic = true, verts, index) {
-      this.isStatic = isStatic;
-      this.setMesh(verts || [], index || []);
-      this.meshGlobalID = globalMeshID++;
-      this.matrix = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1];
-      this.ogMatrix = this.matrix.slice();
-    }
-
-    setMesh(verts, index) {
-      this.mesh = {
-        data: {
-          verts: new Float32Array(verts),
-          index: new Uint16Array(index),
-        },
-        buffers: {
-          verts: gl.createBuffer(),
-          index: gl.createBuffer(),
-        },
-
-        indexAmount: index.length,
-      };
-    }
-
-    setMeshFromFunction(func) {
-      let verts = [],
-        index = [],
-        addBox,
-        addHiveSlot,
-        addCylinder,
-        addSphere,
-        applyFinalRotation,
-        addGiftedRing,
-        addStar,
-        addLimbBox,
-        addLimbCylinder,
-        DIS = this;
-
-      if (this.isStatic) {
-        for (let i = world.bodies.length; i--; ) {
-          if (
-            world.bodies[i].collisionFilterGroup === STATIC_PHYSICS_GROUP &&
-            world.bodies[i].parentMeshGlobalID === this.meshGlobalID
-          ) {
-            world.removeBody(world.bodies[i]);
-          }
-        }
-
-        addBox = function (
-          x,
-          y,
-          z,
-          w,
-          h,
-          l,
-          rot,
-          _col,
-          physics = true,
-          textures = true,
-          mesh = true
-        ) {
-          let col = (
-            _col === true
-              ? [0, 0.8, 0, 0.6]
-              : typeof _col === "string"
-              ? [1, 0, 0, 0.6]
-              : _col
-          ).slice();
-
-          rot = rot || [0, 0, 0];
-
-          let rotation = quat.fromEuler([], rot[0], rot[1], rot[2]);
-          let model = mat4.fromRotationTranslation([], rotation, [x, y, z, 1]),
-            a = col[3] || 1;
-
-          col[0] *= 1.2;
-          col[1] *= 1.2;
-          col[2] *= 1.2;
-
-          if (physics) {
-            let B = new CANNON.Body({
-              shape: new CANNON.Box(new CANNON.Vec3(w * 0.5, h * 0.5, l * 0.5)),
-              mass: 0,
-              position: new CANNON.Vec3(x, y, z),
-              quaternion: new CANNON.Quaternion(...rotation),
-              collisionFilterGroup: STATIC_PHYSICS_GROUP,
-              collisionFilterMask: PLAYER_PHYSICS_GROUP | DYNAMIC_PHYSICS_GROUP,
-            });
-
-            if (typeof _col === "string") B.isBannedGate = _col;
-
-            B.parentMeshGlobalID = DIS.meshGlobalID;
-            world.addBody(B);
-          }
-
-          let v = [
-            [-0.5 * w, 0.5 * h, -0.5 * l],
-            [-0.5 * w, 0.5 * h, 0.5 * l],
-            [0.5 * w, 0.5 * h, 0.5 * l],
-            [0.5 * w, 0.5 * h, -0.5 * l],
-            [-0.5 * w, -0.5 * h, -0.5 * l],
-            [-0.5 * w, -0.5 * h, 0.5 * l],
-            [0.5 * w, -0.5 * h, 0.5 * l],
-            [0.5 * w, -0.5 * h, -0.5 * l],
-          ];
-
-          let shade = [];
-
-          let normals = [
-            [0, 1, 0],
-            [0, 0, 1],
-            [0, 0, -1],
-            [1, 0, 0],
-            [-1, 0, 0],
-            [0, -1, 0],
-          ];
-
-          for (let i = 0, _l = v.length; i < _l; i++) {
-            vec3.transformMat4(v[i], v[i], model);
-
-            if (i < 6) {
-              vec3.transformQuat(normals[i], normals[i], rotation);
-              let n = normals[i];
-              let d =
-                n[0] * lightDir[0] + n[1] * lightDir[1] + n[2] * lightDir[2];
-              shade[i] = d * 0.8 + 0.65;
-            }
-          }
-
-          let vl = verts.length / 10;
-
-          if (!textures) {
-            w = 0;
-            h = 0;
-            l = 0;
-          }
-
-          if (!mesh) {
-            return;
-          }
-
-          verts.push(
-            v[0][0],
-            v[0][1],
-            v[0][2],
-            col[0] * shade[0],
-            col[1] * shade[0],
-            col[2] * shade[0],
-            a,
-            w,
-            l,
-            0,
-            v[1][0],
-            v[1][1],
-            v[1][2],
-            col[0] * shade[0],
-            col[1] * shade[0],
-            col[2] * shade[0],
-            a,
-            w,
-            0,
-            0,
-            v[2][0],
-            v[2][1],
-            v[2][2],
-            col[0] * shade[0],
-            col[1] * shade[0],
-            col[2] * shade[0],
-            a,
-            0,
-            0,
-            0,
-            v[3][0],
-            v[3][1],
-            v[3][2],
-            col[0] * shade[0],
-            col[1] * shade[0],
-            col[2] * shade[0],
-            a,
-            0,
-            l,
-            0,
-
-            v[1][0],
-            v[1][1],
-            v[1][2],
-            col[0] * shade[1],
-            col[1] * shade[1],
-            col[2] * shade[1],
-            a,
-            0,
-            0,
-            0,
-            v[2][0],
-            v[2][1],
-            v[2][2],
-            col[0] * shade[1],
-            col[1] * shade[1],
-            col[2] * shade[1],
-            a,
-            w,
-            0,
-            0,
-            v[5][0],
-            v[5][1],
-            v[5][2],
-            col[0] * shade[1],
-            col[1] * shade[1],
-            col[2] * shade[1],
-            a,
-            0,
-            h,
-            0,
-            v[6][0],
-            v[6][1],
-            v[6][2],
-            col[0] * shade[1],
-            col[1] * shade[1],
-            col[2] * shade[1],
-            a,
-            w,
-            h,
-            0,
-
-            v[0][0],
-            v[0][1],
-            v[0][2],
-            col[0] * shade[2],
-            col[1] * shade[2],
-            col[2] * shade[2],
-            a,
-            w,
-            h,
-            0,
-            v[3][0],
-            v[3][1],
-            v[3][2],
-            col[0] * shade[2],
-            col[1] * shade[2],
-            col[2] * shade[2],
-            a,
-            0,
-            h,
-            0,
-            v[4][0],
-            v[4][1],
-            v[4][2],
-            col[0] * shade[2],
-            col[1] * shade[2],
-            col[2] * shade[2],
-            a,
-            w,
-            0,
-            0,
-            v[7][0],
-            v[7][1],
-            v[7][2],
-            col[0] * shade[2],
-            col[1] * shade[2],
-            col[2] * shade[2],
-            a,
-            0,
-            0,
-            0,
-
-            v[2][0],
-            v[2][1],
-            v[2][2],
-            col[0] * shade[3],
-            col[1] * shade[3],
-            col[2] * shade[3],
-            a,
-            0,
-            0,
-            0,
-            v[3][0],
-            v[3][1],
-            v[3][2],
-            col[0] * shade[3],
-            col[1] * shade[3],
-            col[2] * shade[3],
-            a,
-            l,
-            0,
-            0,
-            v[6][0],
-            v[6][1],
-            v[6][2],
-            col[0] * shade[3],
-            col[1] * shade[3],
-            col[2] * shade[3],
-            a,
-            0,
-            h,
-            0,
-            v[7][0],
-            v[7][1],
-            v[7][2],
-            col[0] * shade[3],
-            col[1] * shade[3],
-            col[2] * shade[3],
-            a,
-            l,
-            h,
-            0,
-
-            v[0][0],
-            v[0][1],
-            v[0][2],
-            col[0] * shade[4],
-            col[1] * shade[4],
-            col[2] * shade[4],
-            a,
-            0,
-            0,
-            0,
-            v[1][0],
-            v[1][1],
-            v[1][2],
-            col[0] * shade[4],
-            col[1] * shade[4],
-            col[2] * shade[4],
-            a,
-            l,
-            0,
-            0,
-            v[4][0],
-            v[4][1],
-            v[4][2],
-            col[0] * shade[4],
-            col[1] * shade[4],
-            col[2] * shade[4],
-            a,
-            0,
-            h,
-            0,
-            v[5][0],
-            v[5][1],
-            v[5][2],
-            col[0] * shade[4],
-            col[1] * shade[4],
-            col[2] * shade[4],
-            a,
-            l,
-            h,
-            0,
-
-            v[4][0],
-            v[4][1],
-            v[4][2],
-            col[0] * shade[5],
-            col[1] * shade[5],
-            col[2] * shade[5],
-            a,
-            0,
-            l,
-            0,
-            v[5][0],
-            v[5][1],
-            v[5][2],
-            col[0] * shade[5],
-            col[1] * shade[5],
-            col[2] * shade[5],
-            a,
-            0,
-            0,
-            0,
-            v[6][0],
-            v[6][1],
-            v[6][2],
-            col[0] * shade[5],
-            col[1] * shade[5],
-            col[2] * shade[5],
-            a,
-            w,
-            0,
-            0,
-            v[7][0],
-            v[7][1],
-            v[7][2],
-            col[0] * shade[5],
-            col[1] * shade[5],
-            col[2] * shade[5],
-            a,
-            w,
-            l,
-            0
-          );
-
-          index.push(
-            0 + vl,
-            1 + vl,
-            2 + vl,
-            0 + vl,
-            2 + vl,
-            3 + vl,
-            5 + vl,
-            6 + vl,
-            7 + vl,
-            6 + vl,
-            5 + vl,
-            4 + vl,
-            8 + vl,
-            9 + vl,
-            10 + vl,
-            11 + vl,
-            10 + vl,
-            9 + vl,
-            14 + vl,
-            13 + vl,
-            12 + vl,
-            13 + vl,
-            14 + vl,
-            15 + vl,
-            18 + vl,
-            17 + vl,
-            16 + vl,
-            17 + vl,
-            18 + vl,
-            19 + vl,
-            22 + vl,
-            21 + vl,
-            20 + vl,
-            23 + vl,
-            22 + vl,
-            20 + vl
-          );
-        };
-
-        addHiveSlot = function (x, y, z, w, h, type, gifted) {
-          let t = 128 / 2048,
-            _x = beeInfo[type || "basic"].u,
-            _y = beeInfo[type || "basic"].v + (gifted ? 768 / 2048 : 0),
-            isNull = type === null ? 1 : 0,
-            [r, g, b] = COLORS.honey_normalized;
-
-          r *= 0.5;
-          g *= 0.5;
-          b *= 0.5;
-
-          let vl = verts.length / 10;
-
-          verts.push(
-            x - w,
-            y - h,
-            z,
-            r,
-            g,
-            b,
-            1,
-            _x,
-            t + _y,
-            isNull,
-            x + w,
-            y - h,
-            z,
-            r,
-            g,
-            b,
-            1,
-            t + _x,
-            t + _y,
-            isNull,
-            x + w,
-            y + h,
-            z,
-            r,
-            g,
-            b,
-            1,
-            t + _x,
-            _y,
-            isNull,
-            x - w,
-            y + h,
-            z,
-            r,
-            g,
-            b,
-            1,
-            _x,
-            _y,
-            isNull
-          );
-
-          index.push(vl, vl + 1, vl + 2, vl + 2, vl + 3, vl);
-        };
-
-        addGiftedRing = function (x, y, z, w, h) {
-          addBox(
-            x,
-            y,
-            z,
-            w * 2,
-            h * 2,
-            0.25,
-            false,
-            [100, 100, 0],
-            false,
-            false
-          );
-        };
-
-        addStar = function (
-          x,
-          y,
-          z,
-          innerRad,
-          outerRad,
-          thickness,
-          depth,
-          r,
-          g,
-          b,
-          la = 0.75,
-          lb = 0.25,
-          rx = 0,
-          ry = 0,
-          rz = 0
-        ) {
-          let rotQuat = quat.fromEuler([], rx, ry, rz);
-
-          innerRad *= 0.8;
-          let _verts = [],
-            _index = [],
-            pos = [],
-            vs = [],
-            ix = [],
-            j = 0,
-            vl = verts.length / 10;
-
-          for (let i = 0; i < MATH.TWO_PI; i += MATH.TWO_PI / 10) {
-            let r = j++ % 2 === 0 ? outerRad : innerRad;
-
-            pos.push([Math.sin(i) * r, Math.cos(i) * r, -thickness]);
-          }
-
-          j = 0;
-
-          for (let i = 0; i < MATH.TWO_PI; i += MATH.TWO_PI / 10) {
-            let r = j++ % 2 === 0 ? outerRad : innerRad;
-
-            pos.push([Math.sin(i) * r, Math.cos(i) * r, thickness]);
-          }
-
-          pos.push([0, 0, -depth], [0, 0, depth]);
-
-          vs.push(
-            0,
-            1,
-            20,
-            1,
-            2,
-            20,
-            2,
-            3,
-            20,
-            3,
-            4,
-            20,
-            4,
-            5,
-            20,
-            5,
-            6,
-            20,
-            6,
-            7,
-            20,
-            7,
-            8,
-            20,
-            8,
-            9,
-            20,
-            9,
-            0,
-            20,
-            11,
-            10,
-            21,
-            12,
-            11,
-            21,
-            13,
-            12,
-            21,
-            14,
-            13,
-            21,
-            15,
-            14,
-            21,
-            16,
-            15,
-            21,
-            17,
-            16,
-            21,
-            18,
-            17,
-            21,
-            19,
-            18,
-            21,
-            10,
-            19,
-            21,
-            9,
-            10,
-            0
-          );
-
-          ix.push(
-            2,
-            1,
-            0,
-            5,
-            4,
-            3,
-            6,
-            7,
-            8,
-            9,
-            10,
-            11,
-            12,
-            13,
-            14,
-            15,
-            16,
-            17,
-            18,
-            19,
-            20,
-            21,
-            22,
-            23,
-            24,
-            25,
-            26,
-            27,
-            28,
-            29,
-            30,
-            31,
-            32,
-            33,
-            34,
-            35,
-            36,
-            37,
-            38,
-            39,
-            40,
-            41,
-            42,
-            43,
-            44,
-            45,
-            46,
-            47,
-            48,
-            49,
-            50,
-            51,
-            52,
-            53,
-            54,
-            55,
-            56,
-            57,
-            58,
-            59,
-            60,
-            61,
-            62
-          );
-
-          for (let i = 0; i < 10; i++) {
-            vs.push(0 + i, 10 + i, 1 + i, 11 + i, 1 + i, 10 + i);
-            ix.push(
-              i * 6,
-              i * 6 + 1,
-              i * 6 + 2,
-              i * 6 + 3,
-              i * 6 + 4,
-              i * 6 + 5
-            );
-          }
-
-          for (let i = 63; i < ix.length; i++) {
-            ix[i] += 63;
-          }
-
-          for (let i = 0; i < pos.length; i++) {
-            vec3.transformQuat(pos[i], pos[i], rotQuat);
-            vec3.add(pos[i], pos[i], [x, y, z]);
-          }
-
-          for (let i in vs) {
-            vs[i] = pos[vs[i]];
-          }
-
-          _index = ix;
-
-          let findNorm = (a, b, c) => {
-            a = vs[a];
-            b = vs[b];
-            c = vs[c];
-
-            let n = vec3.cross(
-              [],
-              [a[0] - b[0], a[1] - b[1], a[2] - b[2]],
-              [a[0] - c[0], a[1] - c[1], a[2] - c[2]]
-            );
-
-            return vec3.normalize(n, n);
-          };
-
-          for (let i = 0; i < _index.length; i += 3) {
-            let i1 = _index[i],
-              i2 = _index[i + 1],
-              i3 = _index[i + 2],
-              shade =
-                vec3.dot([0.035, 0.175, 0.053], findNorm(i1, i2, i3)) * la + lb;
-
-            verts.push(
-              ...vs[i1],
-              r * shade,
-              g * shade,
-              b * shade,
-              1,
-              0,
-              0,
-              0,
-              ...vs[i2],
-              r * shade,
-              g * shade,
-              b * shade,
-              1,
-              0,
-              0,
-              0,
-              ...vs[i3],
-              r * shade,
-              g * shade,
-              b * shade,
-              1,
-              0,
-              0,
-              0
-            );
-          }
-
-          for (let i in _index) {
-            _index[i] += vl;
-          }
-
-          index.push(..._index);
-        };
-
-        addCylinder = function (
-          x,
-          y,
-          z,
-          rad,
-          hei,
-          sides,
-          r,
-          g,
-          b,
-          a,
-          rx,
-          ry,
-          rz,
-          r2,
-          shading = true
-        ) {
-          let rad2 = r2 ?? rad,
-            vl = verts.length / 10,
-            _verts = [],
-            _index = [];
-
-          for (
-            let t = 0, inc = MATH.TWO_PI / sides;
-            t <= MATH.TWO_PI;
-            t += inc
-          ) {
-            let t1 = t - inc * 0.5,
-              t2 = t + inc * 0.5,
-              s = shading ? Math.sin(t1) * 0.1 + 0.9 : 1;
-            _verts.push(
-              Math.cos(t1) * rad,
-              Math.sin(t1) * rad,
-              hei * 0.5,
-              r * s,
-              g * s,
-              b * s,
-              a,
-              0,
-              0,
-              0,
-              Math.cos(t1) * rad2,
-              Math.sin(t1) * rad2,
-              -hei * 0.5,
-              r * s,
-              g * s,
-              b * s,
-              a,
-              0,
-              0,
-              0,
-              Math.cos(t2) * rad,
-              Math.sin(t2) * rad,
-              hei * 0.5,
-              r * s,
-              g * s,
-              b * s,
-              a,
-              0,
-              0,
-              0,
-              Math.cos(t2) * rad2,
-              Math.sin(t2) * rad2,
-              -hei * 0.5,
-              r * s,
-              g * s,
-              b * s,
-              a,
-              0,
-              0,
-              0
-            );
-
-            let _vl = _verts.length / 10;
-            _index.push(_vl, _vl + 1, _vl + 2, _vl + 3, _vl + 2, _vl + 1);
-          }
-
-          let _v = _verts.length / 10;
-
-          for (
-            let t = 0, inc = MATH.TWO_PI / sides;
-            t <= MATH.TWO_PI;
-            t += inc
-          ) {
-            let t1 = t - inc * 0.5,
-              t2 = t + inc * 0.5;
-            _verts.push(
-              Math.cos(t1) * rad,
-              Math.sin(t1) * rad,
-              hei * 0.5,
-              r * 0.9,
-              g * 0.9,
-              b * 0.9,
-              a,
-              0,
-              0,
-              0,
-              Math.cos(t2) * rad,
-              Math.sin(t2) * rad,
-              hei * 0.5,
-              r * 0.9,
-              g * 0.9,
-              b * 0.9,
-              a,
-              0,
-              0,
-              0
-            );
-          }
-          for (let l = _verts.length / 10, i = _v; i < l; i++) {
-            _index.push(_v, i, i + 2);
-          }
-          _v = _verts.length / 10;
-          for (
-            let t = 0, inc = MATH.TWO_PI / sides;
-            t <= MATH.TWO_PI;
-            t += inc
-          ) {
-            let t1 = t - inc * 0.5,
-              t2 = t + inc * 0.5;
-            _verts.push(
-              Math.cos(t1) * rad2,
-              Math.sin(t1) * rad2,
-              -hei * 0.5,
-              r * 0.7,
-              g * 0.7,
-              b * 0.7,
-              a,
-              0,
-              0,
-              0,
-              Math.cos(t2) * rad2,
-              Math.sin(t2) * rad2,
-              -hei * 0.5,
-              r * 0.7,
-              g * 0.7,
-              b * 0.7,
-              a,
-              0,
-              0,
-              0
-            );
-          }
-          for (let l = _verts.length / 10, i = _v; i < l; i++) {
-            _index.push(i, i - 1, _v);
-          }
-
-          for (let i in _index) {
-            _index[i] += vl;
-          }
-
-          index.push(..._index);
-
-          let rotQuat = quat.fromEuler([], rx, ry, rz);
-
-          for (let i = 0; i < _verts.length; i += 10) {
-            if (rx) {
-              let rotated = vec3.transformQuat(
-                [],
-                [_verts[i], _verts[i + 1], _verts[i + 2]],
-                rotQuat
-              );
-              _verts[i] = rotated[0] + x;
-              _verts[i + 1] = rotated[1] + y;
-              _verts[i + 2] = rotated[2] + z;
-
-              rotated = vec3.transformQuat(
-                rotated,
-                [_verts[i + 7], _verts[i + 8], _verts[i + 9]],
-                rotQuat
-              );
-
-              _verts[i + 7] = rotated[0];
-              _verts[i + 8] = rotated[1];
-              _verts[i + 9] = rotated[2];
-            } else {
-              _verts[i] += x;
-              _verts[i + 1] += y;
-              _verts[i + 2] += z;
-            }
-          }
-
-          verts.push(..._verts);
-        };
-
-        addSphere = function (x, y, z, rad, detail, r, g, b, a, ys = 1) {
-          let _m = MATH.icosphere(detail),
-            _verts = [],
-            _index = [];
-
-          for (let i = 0, l = _m.verts.length; i < l; i += 3) {
-            _verts.push(
-              _m.verts[i] * rad + x,
-              _m.verts[i + 1] * rad * ys + y,
-              _m.verts[i + 2] * rad + z,
-              r,
-              g,
-              b,
-              a,
-              0,
-              0,
-              0
-            );
-          }
-
-          for (let i in _m.index) {
-            _index.push(_m.index[i] + verts.length / 10);
-          }
-
-          verts.push(..._verts);
-          index.push(..._index);
-        };
-
-        addLimbBox = function (
-          AArot,
-          x,
-          y,
-          z,
-          w,
-          h,
-          l,
-          rot,
-          u,
-          _v,
-          useTex = false
-        ) {
-          rot = rot || [0, 0, 0];
-
-          let rotation = quat.fromEuler([], rot[0], rot[1], rot[2]);
-          let model = mat4.fromRotationTranslation([], rotation, [x, y, z, 1]),
-            a = 1;
-
-          let v = [
-            [-0.5 * w, 0.5 * h, -0.5 * l],
-            [-0.5 * w, 0.5 * h, 0.5 * l],
-            [0.5 * w, 0.5 * h, 0.5 * l],
-            [0.5 * w, 0.5 * h, -0.5 * l],
-            [-0.5 * w, -0.5 * h, -0.5 * l],
-            [-0.5 * w, -0.5 * h, 0.5 * l],
-            [0.5 * w, -0.5 * h, 0.5 * l],
-            [0.5 * w, -0.5 * h, -0.5 * l],
-          ];
-
-          let shade = [];
-
-          let normals = [
-            [0, 1, 0],
-            [0, 0, 1],
-            [0, 0, -1],
-            [1, 0, 0],
-            [-1, 0, 0],
-            [0, -1, 0],
-          ];
-
-          for (let i = 0, _l = v.length; i < _l; i++) {
-            vec3.transformMat4(v[i], v[i], model);
-
-            if (i < 6) {
-              vec3.transformQuat(normals[i], normals[i], rotation);
-              let n = normals[i];
-              let d =
-                n[0] * lightDir[0] + n[1] * lightDir[1] + n[2] * lightDir[2];
-              shade[i] = d * 0.8 + 0.65;
-            }
-
-            switch (AArot) {
-              case 1:
-                let _temp = v[i][0];
-                v[i][0] = -v[i][2];
-                v[i][2] = _temp;
-
-                break;
-
-              case 2:
-                v[i][0] = -v[i][0];
-                v[i][2] = -v[i][2];
-
-                break;
-
-              case 3:
-                let __temp = v[i][0];
-                v[i][0] = v[i][2];
-                v[i][2] = -__temp;
-
-                break;
-            }
-          }
-
-          let vl = verts.length / 10,
-            tv = 126 / 1024,
-            col = [1, 1, 1];
-
-          if (!useTex) {
-            tv = 0;
-          }
-
-          u += 1 / 1024;
-          _v += 1 / 1024;
-
-          verts.push(
-            v[0][0],
-            v[0][1],
-            v[0][2],
-            col[0] * shade[0],
-            col[1] * shade[0],
-            col[2] * shade[0],
-            a,
-            u,
-            _v,
-            0,
-            v[1][0],
-            v[1][1],
-            v[1][2],
-            col[0] * shade[0],
-            col[1] * shade[0],
-            col[2] * shade[0],
-            a,
-            u,
-            _v,
-            0,
-            v[2][0],
-            v[2][1],
-            v[2][2],
-            col[0] * shade[0],
-            col[1] * shade[0],
-            col[2] * shade[0],
-            a,
-            u,
-            _v,
-            0,
-            v[3][0],
-            v[3][1],
-            v[3][2],
-            col[0] * shade[0],
-            col[1] * shade[0],
-            col[2] * shade[0],
-            a,
-            u,
-            _v,
-            0,
-
-            v[1][0],
-            v[1][1],
-            v[1][2],
-            col[0] * shade[1],
-            col[1] * shade[1],
-            col[2] * shade[1],
-            a,
-            u,
-            _v,
-            0,
-            v[2][0],
-            v[2][1],
-            v[2][2],
-            col[0] * shade[1],
-            col[1] * shade[1],
-            col[2] * shade[1],
-            a,
-            u + tv,
-            _v,
-            0,
-            v[5][0],
-            v[5][1],
-            v[5][2],
-            col[0] * shade[1],
-            col[1] * shade[1],
-            col[2] * shade[1],
-            a,
-            u,
-            _v + tv,
-            0,
-            v[6][0],
-            v[6][1],
-            v[6][2],
-            col[0] * shade[1],
-            col[1] * shade[1],
-            col[2] * shade[1],
-            a,
-            u + tv,
-            _v + tv,
-            0,
-
-            v[0][0],
-            v[0][1],
-            v[0][2],
-            col[0] * shade[2],
-            col[1] * shade[2],
-            col[2] * shade[2],
-            a,
-            u,
-            _v,
-            0,
-            v[3][0],
-            v[3][1],
-            v[3][2],
-            col[0] * shade[2],
-            col[1] * shade[2],
-            col[2] * shade[2],
-            a,
-            u,
-            _v,
-            0,
-            v[4][0],
-            v[4][1],
-            v[4][2],
-            col[0] * shade[2],
-            col[1] * shade[2],
-            col[2] * shade[2],
-            a,
-            u,
-            _v,
-            0,
-            v[7][0],
-            v[7][1],
-            v[7][2],
-            col[0] * shade[2],
-            col[1] * shade[2],
-            col[2] * shade[2],
-            a,
-            u,
-            _v,
-            0,
-
-            v[2][0],
-            v[2][1],
-            v[2][2],
-            col[0] * shade[3],
-            col[1] * shade[3],
-            col[2] * shade[3],
-            a,
-            u,
-            _v,
-            0,
-            v[3][0],
-            v[3][1],
-            v[3][2],
-            col[0] * shade[3],
-            col[1] * shade[3],
-            col[2] * shade[3],
-            a,
-            u,
-            _v,
-            0,
-            v[6][0],
-            v[6][1],
-            v[6][2],
-            col[0] * shade[3],
-            col[1] * shade[3],
-            col[2] * shade[3],
-            a,
-            u,
-            _v,
-            0,
-            v[7][0],
-            v[7][1],
-            v[7][2],
-            col[0] * shade[3],
-            col[1] * shade[3],
-            col[2] * shade[3],
-            a,
-            u,
-            _v,
-            0,
-
-            v[0][0],
-            v[0][1],
-            v[0][2],
-            col[0] * shade[4],
-            col[1] * shade[4],
-            col[2] * shade[4],
-            a,
-            u,
-            _v,
-            0,
-            v[1][0],
-            v[1][1],
-            v[1][2],
-            col[0] * shade[4],
-            col[1] * shade[4],
-            col[2] * shade[4],
-            a,
-            u,
-            _v,
-            0,
-            v[4][0],
-            v[4][1],
-            v[4][2],
-            col[0] * shade[4],
-            col[1] * shade[4],
-            col[2] * shade[4],
-            a,
-            u,
-            _v,
-            0,
-            v[5][0],
-            v[5][1],
-            v[5][2],
-            col[0] * shade[4],
-            col[1] * shade[4],
-            col[2] * shade[4],
-            a,
-            u,
-            _v,
-            0,
-
-            v[4][0],
-            v[4][1],
-            v[4][2],
-            col[0] * shade[5],
-            col[1] * shade[5],
-            col[2] * shade[5],
-            a,
-            u,
-            _v,
-            0,
-            v[5][0],
-            v[5][1],
-            v[5][2],
-            col[0] * shade[5],
-            col[1] * shade[5],
-            col[2] * shade[5],
-            a,
-            u,
-            _v,
-            0,
-            v[6][0],
-            v[6][1],
-            v[6][2],
-            col[0] * shade[5],
-            col[1] * shade[5],
-            col[2] * shade[5],
-            a,
-            u,
-            _v,
-            0,
-            v[7][0],
-            v[7][1],
-            v[7][2],
-            col[0] * shade[5],
-            col[1] * shade[5],
-            col[2] * shade[5],
-            a,
-            u,
-            _v,
-            0
-          );
-
-          index.push(
-            0 + vl,
-            1 + vl,
-            2 + vl,
-            0 + vl,
-            2 + vl,
-            3 + vl,
-            5 + vl,
-            6 + vl,
-            7 + vl,
-            6 + vl,
-            5 + vl,
-            4 + vl,
-            8 + vl,
-            9 + vl,
-            10 + vl,
-            11 + vl,
-            10 + vl,
-            9 + vl,
-            14 + vl,
-            13 + vl,
-            12 + vl,
-            13 + vl,
-            14 + vl,
-            15 + vl,
-            18 + vl,
-            17 + vl,
-            16 + vl,
-            17 + vl,
-            18 + vl,
-            19 + vl,
-            22 + vl,
-            21 + vl,
-            20 + vl,
-            23 + vl,
-            22 + vl,
-            20 + vl
-          );
-        };
-
-        addLimbCylinder = function (
-          AArot,
-          x,
-          y,
-          z,
-          rad,
-          hei,
-          sides,
-          r,
-          g,
-          b,
-          a,
-          rx,
-          ry,
-          rz,
-          u,
-          __v
-        ) {
-          u += 1 / 1024;
-          __v += 1 / 1024;
-
-          let rad2 = rad,
-            vl = verts.length / 10,
-            _verts = [],
-            _index = [];
-
-          for (
-            let t = 0, inc = MATH.TWO_PI / sides;
-            t <= MATH.TWO_PI;
-            t += inc
-          ) {
-            let t1 = t - inc * 0.5,
-              t2 = t + inc * 0.5,
-              s = Math.sin(t1) * 0.1 + 0.9;
-            _verts.push(
-              Math.cos(t1) * rad,
-              Math.sin(t1) * rad,
-              hei * 0.5,
-              r * s,
-              g * s,
-              b * s,
-              a,
-              u,
-              __v,
-              0,
-              Math.cos(t1) * rad2,
-              Math.sin(t1) * rad2,
-              -hei * 0.5,
-              r * s,
-              g * s,
-              b * s,
-              a,
-              u,
-              __v,
-              0,
-              Math.cos(t2) * rad,
-              Math.sin(t2) * rad,
-              hei * 0.5,
-              r * s,
-              g * s,
-              b * s,
-              a,
-              u,
-              __v,
-              0,
-              Math.cos(t2) * rad2,
-              Math.sin(t2) * rad2,
-              -hei * 0.5,
-              r * s,
-              g * s,
-              b * s,
-              a,
-              u,
-              __v,
-              0
-            );
-
-            let _vl = _verts.length / 10;
-            _index.push(_vl, _vl + 1, _vl + 2, _vl + 3, _vl + 2, _vl + 1);
-          }
-
-          let _v = _verts.length / 10;
-
-          for (
-            let t = 0, inc = MATH.TWO_PI / sides;
-            t <= MATH.TWO_PI;
-            t += inc
-          ) {
-            let t1 = t - inc * 0.5,
-              t2 = t + inc * 0.5;
-            _verts.push(
-              Math.cos(t1) * rad,
-              Math.sin(t1) * rad,
-              hei * 0.5,
-              r * 0.9,
-              g * 0.9,
-              b * 0.9,
-              a,
-              u,
-              __v,
-              0,
-              Math.cos(t2) * rad,
-              Math.sin(t2) * rad,
-              hei * 0.5,
-              r * 0.9,
-              g * 0.9,
-              b * 0.9,
-              a,
-              u,
-              __v,
-              0
-            );
-          }
-          for (let l = _verts.length / 10, i = _v; i < l; i++) {
-            _index.push(_v, i, i + 2);
-          }
-          _v = _verts.length / 10;
-          for (
-            let t = 0, inc = MATH.TWO_PI / sides;
-            t <= MATH.TWO_PI;
-            t += inc
-          ) {
-            let t1 = t - inc * 0.5,
-              t2 = t + inc * 0.5;
-            _verts.push(
-              Math.cos(t1) * rad2,
-              Math.sin(t1) * rad2,
-              -hei * 0.5,
-              r * 0.7,
-              g * 0.7,
-              b * 0.7,
-              a,
-              u,
-              __v,
-              0,
-              Math.cos(t2) * rad2,
-              Math.sin(t2) * rad2,
-              -hei * 0.5,
-              r * 0.7,
-              g * 0.7,
-              b * 0.7,
-              a,
-              u,
-              __v,
-              0
-            );
-          }
-          for (let l = _verts.length / 10, i = _v; i < l; i++) {
-            _index.push(i, i - 1, _v);
-          }
-
-          for (let i in _index) {
-            _index[i] += vl;
-          }
-
-          index.push(..._index);
-
-          let rotQuat = quat.fromEuler([], rx, ry, rz);
-
-          for (let i = 0; i < _verts.length; i += 10) {
-            if (rx) {
-              let rotated = vec3.transformQuat(
-                [],
-                [_verts[i], _verts[i + 1], _verts[i + 2]],
-                rotQuat
-              );
-              _verts[i] = rotated[0] + x;
-              _verts[i + 1] = rotated[1] + y;
-              _verts[i + 2] = rotated[2] + z;
-
-              rotated = vec3.transformQuat(
-                rotated,
-                [_verts[i + 7], _verts[i + 8], _verts[i + 9]],
-                rotQuat
-              );
-
-              _verts[i + 7] = rotated[0];
-              _verts[i + 8] = rotated[1];
-              _verts[i + 9] = rotated[2];
-            } else {
-              _verts[i] += x;
-              _verts[i + 1] += y;
-              _verts[i + 2] += z;
-            }
-
-            switch (AArot) {
-              case 1:
-                let _temp = _verts[i];
-                _verts[i] = -_verts[i + 2];
-                _verts[i + 2] = _temp;
-
-                break;
-
-              case 2:
-                _verts[i] = -_verts[i];
-                _verts[i + 2] = -_verts[i + 2];
-
-                break;
-
-              case 3:
-                let __temp = _verts[i];
-                _verts[i] = _verts[i + 2];
-                _verts[i + 2] = -__temp;
-
-                break;
-            }
-          }
-
-          verts.push(..._verts);
-        };
-      } else {
-        addBox = function (x, y, z, w, h, l, rot, col, rot2 = [0, 0, 0]) {
-          rot = rot || [0, 0, 0];
-
-          let rotation = quat.fromEuler([], rot[0], rot[1], rot[2]),
-            rotation2 = quat.fromEuler([], rot2[0], rot2[1], rot2[2]);
-          let model = mat4.fromRotationTranslation([], rotation, [x, y, z, 1]);
-
-          let v = [
-            [-0.5 * w, 0.5 * h, -0.5 * l],
-            [-0.5 * w, 0.5 * h, 0.5 * l],
-            [0.5 * w, 0.5 * h, 0.5 * l],
-            [0.5 * w, 0.5 * h, -0.5 * l],
-            [-0.5 * w, -0.5 * h, -0.5 * l],
-            [-0.5 * w, -0.5 * h, 0.5 * l],
-            [0.5 * w, -0.5 * h, 0.5 * l],
-            [0.5 * w, -0.5 * h, -0.5 * l],
-          ];
-
-          let normals = [
-            [0, 1, 0],
-            [0, 0, 1],
-            [0, 0, -1],
-            [1, 0, 0],
-            [-1, 0, 0],
-            [0, -1, 0],
-          ];
-
-          for (let i = 0, _l = v.length; i < _l; i++) {
-            vec3.transformMat4(v[i], v[i], model);
-            vec3.transformQuat(v[i], v[i], rotation2);
-
-            if (i < 6) {
-              vec3.transformQuat(normals[i], normals[i], rotation);
-            }
-
-            vec3.transformMat4(v[i], v[i], DIS.matrix);
-          }
-
-          let vl = verts.length / 9,
-            n = normals;
-
-          verts.push(
-            v[0][0],
-            v[0][1],
-            v[0][2],
-            col[0],
-            col[1],
-            col[2],
-            n[0][0],
-            n[0][1],
-            n[0][2],
-            v[1][0],
-            v[1][1],
-            v[1][2],
-            col[0],
-            col[1],
-            col[2],
-            n[0][0],
-            n[0][1],
-            n[0][2],
-            v[2][0],
-            v[2][1],
-            v[2][2],
-            col[0],
-            col[1],
-            col[2],
-            n[0][0],
-            n[0][1],
-            n[0][2],
-            v[3][0],
-            v[3][1],
-            v[3][2],
-            col[0],
-            col[1],
-            col[2],
-            n[0][0],
-            n[0][1],
-            n[0][2],
-
-            v[1][0],
-            v[1][1],
-            v[1][2],
-            col[0],
-            col[1],
-            col[2],
-            n[1][0],
-            n[1][1],
-            n[1][2],
-            v[2][0],
-            v[2][1],
-            v[2][2],
-            col[0],
-            col[1],
-            col[2],
-            n[1][0],
-            n[1][1],
-            n[1][2],
-            v[5][0],
-            v[5][1],
-            v[5][2],
-            col[0],
-            col[1],
-            col[2],
-            n[1][0],
-            n[1][1],
-            n[1][2],
-            v[6][0],
-            v[6][1],
-            v[6][2],
-            col[0],
-            col[1],
-            col[2],
-            n[1][0],
-            n[1][1],
-            n[1][2],
-
-            v[0][0],
-            v[0][1],
-            v[0][2],
-            col[0],
-            col[1],
-            col[2],
-            n[2][0],
-            n[2][1],
-            n[2][2],
-            v[3][0],
-            v[3][1],
-            v[3][2],
-            col[0],
-            col[1],
-            col[2],
-            n[2][0],
-            n[2][1],
-            n[2][2],
-            v[4][0],
-            v[4][1],
-            v[4][2],
-            col[0],
-            col[1],
-            col[2],
-            n[2][0],
-            n[2][1],
-            n[2][2],
-            v[7][0],
-            v[7][1],
-            v[7][2],
-            col[0],
-            col[1],
-            col[2],
-            n[2][0],
-            n[2][1],
-            n[2][2],
-
-            v[2][0],
-            v[2][1],
-            v[2][2],
-            col[0],
-            col[1],
-            col[2],
-            n[3][0],
-            n[3][1],
-            n[3][2],
-            v[3][0],
-            v[3][1],
-            v[3][2],
-            col[0],
-            col[1],
-            col[2],
-            n[3][0],
-            n[3][1],
-            n[3][2],
-            v[6][0],
-            v[6][1],
-            v[6][2],
-            col[0],
-            col[1],
-            col[2],
-            n[3][0],
-            n[3][1],
-            n[3][2],
-            v[7][0],
-            v[7][1],
-            v[7][2],
-            col[0],
-            col[1],
-            col[2],
-            n[3][0],
-            n[3][1],
-            n[3][2],
-
-            v[0][0],
-            v[0][1],
-            v[0][2],
-            col[0],
-            col[1],
-            col[2],
-            n[4][0],
-            n[4][1],
-            n[4][2],
-            v[1][0],
-            v[1][1],
-            v[1][2],
-            col[0],
-            col[1],
-            col[2],
-            n[4][0],
-            n[4][1],
-            n[4][2],
-            v[4][0],
-            v[4][1],
-            v[4][2],
-            col[0],
-            col[1],
-            col[2],
-            n[4][0],
-            n[4][1],
-            n[4][2],
-            v[5][0],
-            v[5][1],
-            v[5][2],
-            col[0],
-            col[1],
-            col[2],
-            n[4][0],
-            n[4][1],
-            n[4][2],
-
-            v[4][0],
-            v[4][1],
-            v[4][2],
-            col[0],
-            col[1],
-            col[2],
-            n[5][0],
-            n[5][1],
-            n[5][2],
-            v[5][0],
-            v[5][1],
-            v[5][2],
-            col[0],
-            col[1],
-            col[2],
-            n[5][0],
-            n[5][1],
-            n[5][2],
-            v[6][0],
-            v[6][1],
-            v[6][2],
-            col[0],
-            col[1],
-            col[2],
-            n[5][0],
-            n[5][1],
-            n[5][2],
-            v[7][0],
-            v[7][1],
-            v[7][2],
-            col[0],
-            col[1],
-            col[2],
-            n[5][0],
-            n[5][1],
-            n[5][2]
-          );
-
-          index.push(
-            0 + vl,
-            1 + vl,
-            2 + vl,
-            0 + vl,
-            2 + vl,
-            3 + vl,
-            5 + vl,
-            6 + vl,
-            7 + vl,
-            6 + vl,
-            5 + vl,
-            4 + vl,
-            8 + vl,
-            9 + vl,
-            10 + vl,
-            11 + vl,
-            10 + vl,
-            9 + vl,
-            14 + vl,
-            13 + vl,
-            12 + vl,
-            13 + vl,
-            14 + vl,
-            15 + vl,
-            18 + vl,
-            17 + vl,
-            16 + vl,
-            17 + vl,
-            18 + vl,
-            19 + vl,
-            22 + vl,
-            21 + vl,
-            20 + vl,
-            23 + vl,
-            22 + vl,
-            20 + vl
-          );
-        };
-
-        addCylinder = function (
-          x,
-          y,
-          z,
-          rad,
-          hei,
-          sides,
-          r,
-          g,
-          b,
-          rx,
-          ry,
-          rz,
-          r2
-        ) {
-          let rad2 = r2 ?? rad,
-            vl = verts.length / 9,
-            _verts = [],
-            _index = [];
-
-          for (
-            let t = 0, inc = MATH.TWO_PI / sides;
-            t <= MATH.TWO_PI;
-            t += inc
-          ) {
-            let t1 = t - inc * 0.5,
-              t2 = t + inc * 0.5;
-            _verts.push(
-              Math.cos(t1) * rad,
-              Math.sin(t1) * rad,
-              hei * 0.5,
-              r,
-              g,
-              b,
-              Math.cos(t1),
-              Math.sin(t1),
-              0,
-              Math.cos(t1) * rad2,
-              Math.sin(t1) * rad2,
-              -hei * 0.5,
-              r,
-              g,
-              b,
-              Math.cos(t1),
-              Math.sin(t1),
-              0,
-              Math.cos(t2) * rad,
-              Math.sin(t2) * rad,
-              hei * 0.5,
-              r,
-              g,
-              b,
-              Math.cos(t2),
-              Math.sin(t2),
-              0,
-              Math.cos(t2) * rad2,
-              Math.sin(t2) * rad2,
-              -hei * 0.5,
-              r,
-              g,
-              b,
-              Math.cos(t2),
-              Math.sin(t2),
-              0
-            );
-
-            let _vl = _verts.length / 9;
-            _index.push(_vl, _vl + 1, _vl + 2, _vl + 3, _vl + 2, _vl + 1);
-          }
-
-          let _v = _verts.length / 9;
-
-          for (
-            let t = 0, inc = MATH.TWO_PI / sides;
-            t <= MATH.TWO_PI;
-            t += inc
-          ) {
-            let t1 = t - inc * 0.5,
-              t2 = t + inc * 0.5;
-            _verts.push(
-              Math.cos(t1) * rad,
-              Math.sin(t1) * rad,
-              hei * 0.5,
-              r,
-              g,
-              b,
-              0,
-              0,
-              1,
-              Math.cos(t2) * rad,
-              Math.sin(t2) * rad,
-              hei * 0.5,
-              r,
-              g,
-              b,
-              0,
-              0,
-              1
-            );
-          }
-          for (let l = _verts.length / 9, i = _v; i < l - 1; i++) {
-            _index.push(_v, i, i + 2);
-          }
-          _v = _verts.length / 9;
-          for (
-            let t = 0, inc = MATH.TWO_PI / sides;
-            t <= MATH.TWO_PI;
-            t += inc
-          ) {
-            let t1 = t - inc * 0.5,
-              t2 = t + inc * 0.5;
-            _verts.push(
-              Math.cos(t1) * rad2,
-              Math.sin(t1) * rad2,
-              -hei * 0.5,
-              r,
-              g,
-              b,
-              0,
-              0,
-              -1,
-              Math.cos(t2) * rad2,
-              Math.sin(t2) * rad2,
-              -hei * 0.5,
-              r,
-              g,
-              b,
-              0,
-              0,
-              -1
-            );
-          }
-          for (let l = _verts.length / 9, i = _v; i < l; i++) {
-            _index.push(i, i - 1, _v);
-          }
-
-          for (let i in _index) {
-            _index[i] += vl;
-          }
-
-          index.push(..._index);
-
-          let rotQuat = quat.fromEuler([], rx, ry, rz);
-
-          for (let i = 0; i < _verts.length; i += 9) {
-            if (rx) {
-              let rotated = vec3.transformQuat(
-                [],
-                [_verts[i], _verts[i + 1], _verts[i + 2]],
-                rotQuat
-              );
-              _verts[i] = rotated[0] + x;
-              _verts[i + 1] = rotated[1] + y;
-              _verts[i + 2] = rotated[2] + z;
-
-              rotated = vec3.transformQuat(
-                rotated,
-                [_verts[i + 6], _verts[i + 7], _verts[i + 8]],
-                rotQuat
-              );
-
-              _verts[i + 6] = rotated[0];
-              _verts[i + 7] = rotated[1];
-              _verts[i + 8] = rotated[2];
-            } else {
-              _verts[i] += x;
-              _verts[i + 1] += y;
-              _verts[i + 2] += z;
-            }
-
-            [_verts[i], _verts[i + 1], _verts[i + 2]] = vec3.transformMat4(
-              [],
-              [_verts[i], _verts[i + 1], _verts[i + 2]],
-              DIS.matrix
-            );
-          }
-
-          verts.push(..._verts);
-        };
-
-        addSphere = function (x, y, z, rad, detail, r, g, b, vl) {
-          let _m = MATH.icosphere(detail),
-            _verts = [],
-            _index = [];
-
-          for (let i = 0, l = _m.verts.length; i < l; i += 3) {
-            _verts.push(
-              _m.verts[i] * rad + x,
-              _m.verts[i + 1] * rad + y,
-              _m.verts[i + 2] * rad + z,
-              r,
-              g,
-              b,
-              _m.verts[i],
-              _m.verts[i + 1],
-              _m.verts[i + 2]
-            );
-          }
-
-          for (let i in _m.index) {
-            _index.push(_m.index[i] + verts.length / 9);
-          }
-
-          for (let i = 0; i < _verts.length; i += 9) {
-            [_verts[i], _verts[i + 1], _verts[i + 2]] = vec3.transformMat4(
-              [],
-              [_verts[i], _verts[i + 1], _verts[i + 2]],
-              DIS.matrix
-            );
-          }
-
-          verts.push(..._verts);
-          index.push(..._index);
-        };
-
-        addStar = function (
-          x,
-          y,
-          z,
-          innerRad,
-          outerRad,
-          thickness,
-          depth,
-          r,
-          g,
-          b,
-          la = 0.75,
-          lb = 0.25,
-          rx = 0,
-          ry = 0,
-          rz = 0
-        ) {
-          let rotQuat = quat.fromEuler([], rx, ry, rz);
-
-          innerRad *= 0.8;
-          let _verts = [],
-            _index = [],
-            pos = [],
-            vs = [],
-            ix = [],
-            j = 0,
-            vl = verts.length / 9;
-
-          for (let i = 0; i < MATH.TWO_PI; i += MATH.TWO_PI / 10) {
-            let r = j++ % 2 === 0 ? outerRad : innerRad;
-
-            pos.push([Math.sin(i) * r, Math.cos(i) * r, -thickness]);
-          }
-
-          j = 0;
-
-          for (let i = 0; i < MATH.TWO_PI; i += MATH.TWO_PI / 10) {
-            let r = j++ % 2 === 0 ? outerRad : innerRad;
-
-            pos.push([Math.sin(i) * r, Math.cos(i) * r, thickness]);
-          }
-
-          pos.push([0, 0, -depth], [0, 0, depth]);
-
-          vs.push(
-            0,
-            1,
-            20,
-            1,
-            2,
-            20,
-            2,
-            3,
-            20,
-            3,
-            4,
-            20,
-            4,
-            5,
-            20,
-            5,
-            6,
-            20,
-            6,
-            7,
-            20,
-            7,
-            8,
-            20,
-            8,
-            9,
-            20,
-            9,
-            0,
-            20,
-            11,
-            10,
-            21,
-            12,
-            11,
-            21,
-            13,
-            12,
-            21,
-            14,
-            13,
-            21,
-            15,
-            14,
-            21,
-            16,
-            15,
-            21,
-            17,
-            16,
-            21,
-            18,
-            17,
-            21,
-            19,
-            18,
-            21,
-            10,
-            19,
-            21,
-            9,
-            10,
-            0
-          );
-
-          ix.push(
-            2,
-            1,
-            0,
-            5,
-            4,
-            3,
-            6,
-            7,
-            8,
-            9,
-            10,
-            11,
-            12,
-            13,
-            14,
-            15,
-            16,
-            17,
-            18,
-            19,
-            20,
-            21,
-            22,
-            23,
-            24,
-            25,
-            26,
-            27,
-            28,
-            29,
-            30,
-            31,
-            32,
-            33,
-            34,
-            35,
-            36,
-            37,
-            38,
-            39,
-            40,
-            41,
-            42,
-            43,
-            44,
-            45,
-            46,
-            47,
-            48,
-            49,
-            50,
-            51,
-            52,
-            53,
-            54,
-            55,
-            56,
-            57,
-            58,
-            59,
-            60,
-            61,
-            62
-          );
-
-          for (let i = 0; i < 10; i++) {
-            vs.push(0 + i, 10 + i, 1 + i, 11 + i, 1 + i, 10 + i);
-            ix.push(
-              i * 6,
-              i * 6 + 1,
-              i * 6 + 2,
-              i * 6 + 3,
-              i * 6 + 4,
-              i * 6 + 5
-            );
-          }
-
-          for (let i = 63; i < ix.length; i++) {
-            ix[i] += 63;
-          }
-
-          for (let i = 0; i < pos.length; i++) {
-            vec3.transformQuat(pos[i], pos[i], rotQuat);
-            vec3.add(pos[i], pos[i], [x, y, z]);
-            vec3.transformMat4(pos[i], pos[i], DIS.matrix);
-          }
-
-          for (let i in vs) {
-            vs[i] = pos[vs[i]];
-          }
-
-          _index = ix;
-
-          let findNorm = (a, b, c) => {
-            a = vs[a];
-            b = vs[b];
-            c = vs[c];
-
-            let n = vec3.cross(
-              [],
-              [a[0] - b[0], a[1] - b[1], a[2] - b[2]],
-              [a[0] - c[0], a[1] - c[1], a[2] - c[2]]
-            );
-
-            return vec3.normalize(n, n);
-          };
-
-          for (let i = 0; i < _index.length; i += 3) {
-            let i1 = _index[i],
-              i2 = _index[i + 1],
-              i3 = _index[i + 2],
-              shade =
-                vec3.dot([0.035, 0.175, 0.053], findNorm(i1, i2, i3)) * la + lb;
-
-            verts.push(
-              ...vs[i1],
-              r * shade,
-              g * shade,
-              b * shade,
-              0,
-              1,
-              0,
-              ...vs[i2],
-              r * shade,
-              g * shade,
-              b * shade,
-              0,
-              1,
-              0,
-              ...vs[i3],
-              r * shade,
-              g * shade,
-              b * shade,
-              0,
-              1,
-              0
-            );
-          }
-
-          for (let i in _index) {
-            _index[i] += vl;
-          }
-
-          index.push(..._index);
-        };
-
-        applyFinalRotation = function (x, y, z) {
-          if (!mat4.exactEquals(DIS.matrix, DIS.ogMatrix)) return;
-
-          let q = quat.fromEuler([], x, y, z);
-
-          for (let i = 0; i < verts.length; i += 9) {
-            let v = vec3.transformQuat(
-              [],
-              [verts[i], verts[i + 1], verts[i + 2]],
-              q
-            );
-
-            verts[i] = v[0];
-            verts[i + 1] = v[1];
-            verts[i + 2] = v[2];
-          }
-        };
-      }
-
-      func(
-        addBox,
-        addHiveSlot,
-        addCylinder,
-        addSphere,
-        applyFinalRotation,
-        addGiftedRing,
-        addStar,
-        addLimbBox,
-        addLimbCylinder
-      );
-      this.setMesh(verts, index);
-    }
-
-    setBuffers() {
-      if (this.isStatic) {
-        gl.bindBuffer(gl.ARRAY_BUFFER, this.mesh.buffers.verts);
-        gl.bufferData(gl.ARRAY_BUFFER, this.mesh.data.verts, gl.STATIC_DRAW);
-
-        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.mesh.buffers.index);
-        gl.bufferData(
-          gl.ELEMENT_ARRAY_BUFFER,
-          this.mesh.data.index,
-          gl.STATIC_DRAW
-        );
-      } else {
-        gl.bindBuffer(gl.ARRAY_BUFFER, this.mesh.buffers.verts);
-        gl.bufferData(gl.ARRAY_BUFFER, this.mesh.data.verts, gl.STATIC_DRAW);
-
-        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.mesh.buffers.index);
-        gl.bufferData(
-          gl.ELEMENT_ARRAY_BUFFER,
-          this.mesh.data.index,
-          gl.STATIC_DRAW
-        );
-      }
-    }
-
-    render() {
-      if (this.isStatic) {
-        gl.bindBuffer(gl.ARRAY_BUFFER, this.mesh.buffers.verts);
-
-        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.mesh.buffers.index);
-
-        gl.vertexAttribPointer(
-          glCache.static_vertPos,
-          3,
-          gl.FLOAT,
-          gl.FALSE,
-          40,
-          0
-        );
-        gl.vertexAttribPointer(
-          glCache.static_vertColor,
-          4,
-          gl.FLOAT,
-          gl.FALSE,
-          40,
-          12
-        );
-        gl.vertexAttribPointer(
-          glCache.static_vertUV,
-          3,
-          gl.FLOAT,
-          gl.FALSE,
-          40,
-          28
-        );
-      } else {
-        gl.bindBuffer(gl.ARRAY_BUFFER, this.mesh.buffers.verts);
-
-        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.mesh.buffers.index);
-
-        gl.vertexAttribPointer(
-          glCache.dynamic_vertPos,
-          3,
-          gl.FLOAT,
-          gl.FALSE,
-          36,
-          0
-        );
-        gl.vertexAttribPointer(
-          glCache.dynamic_vertColor,
-          3,
-          gl.FLOAT,
-          gl.FALSE,
-          36,
-          12
-        );
-        gl.vertexAttribPointer(
-          glCache.dynamic_vertNormal,
-          3,
-          gl.FLOAT,
-          gl.FALSE,
-          36,
-          24
-        );
-      }
-
-      gl.drawElements(
-        gl.TRIANGLES,
-        this.mesh.indexAmount,
-        gl.UNSIGNED_SHORT,
-        0
-      );
-    }
-  }
+  //  FIXME: Mesh goes here
 
   let textures = (function (out) {
     tex_ctx.clearRect(0, 0, 2048, 2048);
@@ -31284,7 +18700,7 @@ function BeeSwarmSimulator(DATA) {
         MATH.random(12, 500),
         MATH.random(12, 500),
         MATH.random(25, 45),
-        MATH.random(25, 45)
+        MATH.random(25, 45),
       );
 
       tex_ctx.fillStyle = "rgba(0,0,0,0.015)";
@@ -31314,7 +18730,7 @@ function BeeSwarmSimulator(DATA) {
       0,
       gl.RGBA,
       gl.UNSIGNED_BYTE,
-      tex_ctx.getImageData(0, 0, 512, 512)
+      tex_ctx.getImageData(0, 0, 512, 512),
     );
 
     gl.generateMipmap(gl.TEXTURE_2D);
@@ -31331,7 +18747,7 @@ function BeeSwarmSimulator(DATA) {
       0,
       gl.RGBA,
       gl.UNSIGNED_BYTE,
-      tex_ctx.getImageData(0, 0, 2048, 2048)
+      tex_ctx.getImageData(0, 0, 2048, 2048),
     );
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
@@ -31349,7 +18765,7 @@ function BeeSwarmSimulator(DATA) {
       0,
       gl.RGBA,
       gl.UNSIGNED_BYTE,
-      tex_ctx.getImageData(0, 0, 1024, 1024)
+      tex_ctx.getImageData(0, 0, 1024, 1024),
     );
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
@@ -31428,7 +18844,7 @@ function BeeSwarmSimulator(DATA) {
       0,
       gl.RGBA,
       gl.UNSIGNED_BYTE,
-      tex_ctx.getImageData(0, 0, 512, 600)
+      tex_ctx.getImageData(0, 0, 512, 600),
     );
     gl.generateMipmap(gl.TEXTURE_2D);
 
@@ -31445,7 +18861,7 @@ function BeeSwarmSimulator(DATA) {
       0,
       gl.RGBA,
       gl.UNSIGNED_BYTE,
-      data
+      data,
     );
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
@@ -31468,7 +18884,7 @@ function BeeSwarmSimulator(DATA) {
       0,
       gl.RGBA,
       gl.UNSIGNED_BYTE,
-      tex_ctx.getImageData(0, 0, 1024, 1024)
+      tex_ctx.getImageData(0, 0, 1024, 1024),
     );
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
@@ -31486,7 +18902,7 @@ function BeeSwarmSimulator(DATA) {
       0,
       gl.RGBA,
       gl.UNSIGNED_BYTE,
-      tex_ctx.getImageData(0, 0, 1024, 1024)
+      tex_ctx.getImageData(0, 0, 1024, 1024),
     );
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
@@ -31548,7 +18964,7 @@ function BeeSwarmSimulator(DATA) {
           0.1,
           0.5,
           [0, 20, 0],
-          [0.4, 0.4, 0.4]
+          [0.4, 0.4, 0.4],
         );
         box(
           -0.3 + 0.2,
@@ -31558,7 +18974,7 @@ function BeeSwarmSimulator(DATA) {
           0.1,
           0.5,
           [0, 40, 0],
-          [0.4, 0.4, 0.4]
+          [0.4, 0.4, 0.4],
         );
         box(
           -0.3 - 0.1,
@@ -31568,7 +18984,7 @@ function BeeSwarmSimulator(DATA) {
           0.1,
           0.5,
           [0, -20, 0],
-          [0.4, 0.4, 0.4]
+          [0.4, 0.4, 0.4],
         );
         box(
           -0.3 - 0.2,
@@ -31578,7 +18994,7 @@ function BeeSwarmSimulator(DATA) {
           0.1,
           0.5,
           [0, -40, 0],
-          [0.4, 0.4, 0.4]
+          [0.4, 0.4, 0.4],
         );
         box(-0.3, 0, 0.6 + 0.65, 0.1, 0.1, 0.4, false, [0.4, 0.4, 0.4]);
       },
@@ -31599,7 +19015,7 @@ function BeeSwarmSimulator(DATA) {
           0.25,
           0.1,
           [0, 0, -30],
-          [1.3, 1.3, 0]
+          [1.3, 1.3, 0],
         );
         box(
           -0.2 + 0.15,
@@ -31609,7 +19025,7 @@ function BeeSwarmSimulator(DATA) {
           0.25,
           0.1,
           [0, 0, 30],
-          [1.3, 1.3, 0]
+          [1.3, 1.3, 0],
         );
         box(
           -0.2 + 0.15 - Math.sin(30 * MATH.TO_RAD) * 0.41,
@@ -31619,7 +19035,7 @@ function BeeSwarmSimulator(DATA) {
           0.6,
           0.1,
           [0, 0, 30],
-          [1.3, 1.3, 1.3]
+          [1.3, 1.3, 1.3],
         );
         box(
           -0.2 - 0.15 + Math.sin(30 * MATH.TO_RAD) * 0.41,
@@ -31629,7 +19045,7 @@ function BeeSwarmSimulator(DATA) {
           0.6,
           0.1,
           [0, 0, -30],
-          [1.3, 1.3, 1.3]
+          [1.3, 1.3, 1.3],
         );
       },
       desc: "A little pair of yellow clippers.<br><br>Collects 9 pollen from 1 flowers every 0.6s.",
@@ -31764,7 +19180,7 @@ function BeeSwarmSimulator(DATA) {
           0,
           0,
           0,
-          0.25
+          0.25,
         );
         cylinder(
           -0.3,
@@ -31779,7 +19195,7 @@ function BeeSwarmSimulator(DATA) {
           0.001,
           90,
           0,
-          0.25
+          0.25,
         );
         cylinder(
           -0.3,
@@ -31794,7 +19210,7 @@ function BeeSwarmSimulator(DATA) {
           90,
           0,
           0,
-          0.25
+          0.25,
         );
       },
       particles: function () {
@@ -31880,7 +19296,7 @@ function BeeSwarmSimulator(DATA) {
           0.6,
           0.1,
           [0, 0, 30],
-          [1.3, 1.3, 1.3]
+          [1.3, 1.3, 1.3],
         );
         box(
           -0.2 - 0.15 + Math.sin(30 * MATH.TO_RAD) * 0.41,
@@ -31890,7 +19306,7 @@ function BeeSwarmSimulator(DATA) {
           0.6,
           0.1,
           [0, 0, -30],
-          [1.3, 1.3, 1.3]
+          [1.3, 1.3, 1.3],
         );
       },
       desc: "A pair of school scissors.<br><br>Collects 50 pollen from 1 flowers every 0.5s.",
@@ -31966,7 +19382,7 @@ function BeeSwarmSimulator(DATA) {
           0.4 * 1.4,
           90,
           0,
-          0
+          0,
         );
         cylinder(
           -0.3,
@@ -31980,7 +19396,7 @@ function BeeSwarmSimulator(DATA) {
           0.4 * 1.4,
           90,
           0,
-          0
+          0,
         );
         cylinder(
           -0.3,
@@ -31994,7 +19410,7 @@ function BeeSwarmSimulator(DATA) {
           0.4 * 1.4,
           90,
           0,
-          0
+          0,
         );
         cylinder(
           -0.3,
@@ -32008,7 +19424,7 @@ function BeeSwarmSimulator(DATA) {
           0.2,
           90,
           0,
-          0
+          0,
         );
       },
       desc: "A giant honey dipper.<br><br>Collects 2 pollen from 49 flowers every 0.8s.",
@@ -32051,7 +19467,7 @@ function BeeSwarmSimulator(DATA) {
           1.5,
           0,
           0,
-          0
+          0,
         );
         cylinder(
           -0.3,
@@ -32065,7 +19481,7 @@ function BeeSwarmSimulator(DATA) {
           1.2,
           0,
           0,
-          0
+          0,
         );
       },
       particles: function () {
@@ -32112,8 +19528,8 @@ function BeeSwarmSimulator(DATA) {
             new Bubble(
               player.fieldIn,
               (Math.random() * fieldInfo[player.fieldIn].width) | 0,
-              (Math.random() * fieldInfo[player.fieldIn].length) | 0
-            )
+              (Math.random() * fieldInfo[player.fieldIn].length) | 0,
+            ),
           );
         }
       },
@@ -32184,7 +19600,7 @@ function BeeSwarmSimulator(DATA) {
         if (player.toolUses % 10 === 0) {
           if (player.fieldIn) {
             objects.flames.push(
-              new Flame(player.fieldIn, player.flowerIn.x, player.flowerIn.z)
+              new Flame(player.fieldIn, player.flowerIn.x, player.flowerIn.z),
             );
           } else {
             objects.flames.push(
@@ -32192,8 +19608,8 @@ function BeeSwarmSimulator(DATA) {
                 player.body.position.x,
                 player.body.position.y,
                 player.body.position.z,
-                true
-              )
+                true,
+              ),
             );
           }
         }
@@ -32233,7 +19649,7 @@ function BeeSwarmSimulator(DATA) {
           0.1,
           0.5,
           [0, 20, 0],
-          [1.3, 1.3, 0.4]
+          [1.3, 1.3, 0.4],
         );
         box(
           -0.3 + 0.2,
@@ -32243,7 +19659,7 @@ function BeeSwarmSimulator(DATA) {
           0.1,
           0.5,
           [0, 40, 0],
-          [1.3, 1.3, 0.4]
+          [1.3, 1.3, 0.4],
         );
         box(
           -0.3 - 0.1,
@@ -32253,7 +19669,7 @@ function BeeSwarmSimulator(DATA) {
           0.1,
           0.5,
           [0, -20, 0],
-          [1.3, 1.3, 0.4]
+          [1.3, 1.3, 0.4],
         );
         box(
           -0.3 - 0.2,
@@ -32263,14 +19679,14 @@ function BeeSwarmSimulator(DATA) {
           0.1,
           0.5,
           [0, -40, 0],
-          [1.3, 1.3, 0.4]
+          [1.3, 1.3, 0.4],
         );
         box(-0.3, 0, 0.6 + 0.65, 0.1, 0.1, 0.4, false, [1.3, 1.3, 0.4]);
       },
       ability: function () {
         if (player.toolUses % 5 === 0 && player.fieldIn) {
           objects.mobs.push(
-            new Scratch(null, player.flowerIn.x, player.flowerIn.z, true)
+            new Scratch(null, player.flowerIn.x, player.flowerIn.z, true),
           );
         }
       },
@@ -32296,7 +19712,7 @@ function BeeSwarmSimulator(DATA) {
           0.1,
           0.1,
           false,
-          [1.2, 1.2, 0]
+          [1.2, 1.2, 0],
         );
         box(
           -0.3 + 0.3 * 0.4,
@@ -32306,7 +19722,7 @@ function BeeSwarmSimulator(DATA) {
           0.1,
           0.1,
           false,
-          [1.2, 1.2, 0]
+          [1.2, 1.2, 0],
         );
         box(
           -0.3,
@@ -32316,7 +19732,7 @@ function BeeSwarmSimulator(DATA) {
           0.1,
           0.1,
           false,
-          [1.2, 1.2, 0]
+          [1.2, 1.2, 0],
         );
         box(-0.3, 0.4 + 1.25 * 0.5, 0.4, 0.1, 0.1, 0.1, false, [1.2, 1.2, 0]);
       },
@@ -32499,7 +19915,7 @@ function BeeSwarmSimulator(DATA) {
           1.5,
           90,
           0,
-          0
+          0,
         );
         cylinder(
           -0.3,
@@ -32513,7 +19929,7 @@ function BeeSwarmSimulator(DATA) {
           1.5,
           90,
           0,
-          0
+          0,
         );
         cylinder(
           -0.3,
@@ -32527,7 +19943,7 @@ function BeeSwarmSimulator(DATA) {
           1.5,
           90,
           0,
-          0
+          0,
         );
         cylinder(
           -0.3,
@@ -32541,7 +19957,7 @@ function BeeSwarmSimulator(DATA) {
           1.4,
           90,
           0,
-          0
+          0,
         );
         box(-0.5, 1, 0.4, 0.175, 0.5, 0.12, [0, 0, 70], [0, 0, 1.4]);
         box(-0.5, 0.825, 0.4, 0.175, 0.4, 0.12, [0, 0, -70], [0, 0, 1.4]);
@@ -32596,7 +20012,7 @@ function BeeSwarmSimulator(DATA) {
               size: 5,
               alpha: 2,
               height: 500,
-            })
+            }),
           );
 
           if (player.fieldIn) {
@@ -32728,7 +20144,7 @@ function BeeSwarmSimulator(DATA) {
           0.3,
           0.3,
           [45, 0, 45],
-          [1.5, 1.2, 0]
+          [1.5, 1.2, 0],
         );
         for (let i = 0; i < MATH.TWO_PI; i += MATH.TWO_PI / 3) {
           box(
@@ -32739,7 +20155,7 @@ function BeeSwarmSimulator(DATA) {
             0.1,
             0.7,
             [Math.sin(i) * -30, 0, Math.cos(i) * -30],
-            [1.2, 1.2, 1.2]
+            [1.2, 1.2, 1.2],
           );
         }
 
@@ -32756,7 +20172,7 @@ function BeeSwarmSimulator(DATA) {
             0.1,
             0.7,
             [Math.sin(i) * 30, 0, Math.cos(i) * 30],
-            [1.2, 1.2, 1.2]
+            [1.2, 1.2, 1.2],
           );
         }
 
@@ -32769,7 +20185,7 @@ function BeeSwarmSimulator(DATA) {
             0.1,
             0.7,
             [60, i * MATH.TO_DEG, 0],
-            [1.2, 1.2, 1.2]
+            [1.2, 1.2, 1.2],
           );
           box(
             -0.3 - 0.1 + Math.sin(i) * 0.25,
@@ -32779,7 +20195,7 @@ function BeeSwarmSimulator(DATA) {
             0.1,
             0.7,
             [-60, i * MATH.TO_DEG, 0],
-            [1.2, 1.2, 1.2]
+            [1.2, 1.2, 1.2],
           );
         }
       },
@@ -32792,8 +20208,8 @@ function BeeSwarmSimulator(DATA) {
                 player.body.position.y + 0.25,
                 player.body.position.z,
               ],
-              player.bodyDir.slice()
-            )
+              player.bodyDir.slice(),
+            ),
           );
         }
       },
@@ -32876,7 +20292,7 @@ function BeeSwarmSimulator(DATA) {
           0.15,
           [0, 0, 0],
           [0.1, 0, 0],
-          [0, 0, 30]
+          [0, 0, 30],
         );
         box(
           -0.55,
@@ -32887,7 +20303,7 @@ function BeeSwarmSimulator(DATA) {
           1.2,
           [0, 0, 0],
           [0.1, 0, 0],
-          [0, 0, 30]
+          [0, 0, 30],
         );
         box(-0.55, 1.5, 2, 0.15, 0.5, 1, [20, 0, 0], [0.1, 0, 0], [0, 0, 30]);
         box(
@@ -32899,7 +20315,7 @@ function BeeSwarmSimulator(DATA) {
           1,
           [40, 0, 0],
           [0.1, 0, 0],
-          [0, 0, 30]
+          [0, 0, 30],
         );
 
         box(
@@ -32911,7 +20327,7 @@ function BeeSwarmSimulator(DATA) {
           1.2,
           [0, 0, 0],
           [1.2, 0, 0.4],
-          [0, 0, 30]
+          [0, 0, 30],
         );
         box(
           -0.55,
@@ -32922,7 +20338,7 @@ function BeeSwarmSimulator(DATA) {
           1,
           [20, 0, 0],
           [1.2, 0, 0.4],
-          [0, 0, 30]
+          [0, 0, 30],
         );
         box(
           -0.55,
@@ -32933,7 +20349,7 @@ function BeeSwarmSimulator(DATA) {
           0.5,
           [40, 0, 0],
           [1.2, 0, 0.4],
-          [0, 0, 30]
+          [0, 0, 30],
         );
 
         box(
@@ -32945,7 +20361,7 @@ function BeeSwarmSimulator(DATA) {
           1.3,
           [20, 0, 0],
           [0.1, 0, 0],
-          [0, 0, 30]
+          [0, 0, 30],
         );
         box(
           -0.55,
@@ -32956,7 +20372,7 @@ function BeeSwarmSimulator(DATA) {
           0.9,
           [-20, 0, 0],
           [0.1, 0, 0],
-          [0, 0, 30]
+          [0, 0, 30],
         );
       },
       ability: function (arr) {
@@ -32964,10 +20380,10 @@ function BeeSwarmSimulator(DATA) {
 
         if (player.fieldIn && !player.attacked.length) {
           let x = Math.round(
-              player.body.position.x - fieldInfo[player.fieldIn].x
+              player.body.position.x - fieldInfo[player.fieldIn].x,
             ),
             z = Math.round(
-              player.body.position.z - fieldInfo[player.fieldIn].z
+              player.body.position.z - fieldInfo[player.fieldIn].z,
             ),
             a = [];
 
@@ -33105,8 +20521,8 @@ function BeeSwarmSimulator(DATA) {
                 player.body.position.y + 0.25,
                 player.body.position.z,
               ],
-              player.bodyDir.slice()
-            )
+              player.bodyDir.slice(),
+            ),
           );
         }
       },
@@ -33202,7 +20618,7 @@ function BeeSwarmSimulator(DATA) {
           90,
           0,
           0,
-          0.15
+          0.15,
         );
         cylinder(-0.4, 0.8, 0.4, 0.1, 1.75, 15, 1.5, 0.15, 1.5, 90, 0, 0, 0.1);
         sphere(-0.4, 1.6, 0.4, 0.5, 1, 0.26, 2.7, 1.1);
@@ -33219,7 +20635,7 @@ function BeeSwarmSimulator(DATA) {
           90,
           0,
           0,
-          0.6
+          0.6,
         );
         sphere(-0.4 - 0.3, 1.85, 0.4, 0.25, 1, 0.26, 2.7, 1.1);
         sphere(-0.4 + 0.3, 1.85, 0.4, 0.25, 1, 0.26, 2.7, 1.1);
@@ -33231,7 +20647,7 @@ function BeeSwarmSimulator(DATA) {
           1,
           1.5 * 1.75,
           0.65 * 1.75,
-          1.5 * 1.75
+          1.5 * 1.75,
         );
         sphere(
           -0.4,
@@ -33241,7 +20657,7 @@ function BeeSwarmSimulator(DATA) {
           1,
           1.5 * 1.75,
           0.65 * 1.75,
-          1.5 * 1.75
+          1.5 * 1.75,
         );
       },
       particles: function () {
@@ -33264,7 +20680,7 @@ function BeeSwarmSimulator(DATA) {
           0.9 * player.isNight,
           1,
           player.gummyBallSize * 0.5,
-          1
+          1,
         );
 
         toolParticle -= dt;
@@ -33398,7 +20814,7 @@ function BeeSwarmSimulator(DATA) {
         "The Robo Challenge is over! Your score is " +
           out.roboChallenge.round +
           "!",
-        [0, 150, 0]
+        [0, 150, 0],
       );
 
       let arr = [
@@ -33437,8 +20853,8 @@ function BeeSwarmSimulator(DATA) {
             ["microConverter", MATH.random(1, 4) | 0],
             ["jellyBeans", MATH.random(1, 6) | 0],
           ],
-          Math.min(out.roboChallenge.round / 6, 3) | 0
-        )
+          Math.min(out.roboChallenge.round / 6, 3) | 0,
+        ),
       );
 
       if (out.roboChallenge.round > 11 && Math.random() < 0.25)
@@ -33460,7 +20876,7 @@ function BeeSwarmSimulator(DATA) {
             " " +
             MATH.doGrammar(arr[i][0]) +
             " (from Robo Challenge)",
-          [35, 75, 255]
+          [35, 75, 255],
         );
       }
 
@@ -33483,10 +20899,10 @@ function BeeSwarmSimulator(DATA) {
         switch (t) {
           case "bronze":
             amulet.push(
-              "*" + MATH.random(1.1, 1.2).toFixed(2) + " capacityMultiplier"
+              "*" + MATH.random(1.1, 1.2).toFixed(2) + " capacityMultiplier",
             );
             amulet.push(
-              "*" + MATH.random(1.03, 1.05).toFixed(2) + " beeAttack"
+              "*" + MATH.random(1.03, 1.05).toFixed(2) + " beeAttack",
             );
 
             if (Math.random() < 0.25) {
@@ -33497,7 +20913,7 @@ function BeeSwarmSimulator(DATA) {
                   MATH.random(1.05, 1.1).toFixed(2) +
                   " " +
                   ["red", "blue", "white"][(Math.random() * 3) | 0] +
-                  "Pollen"
+                  "Pollen",
               );
             }
 
@@ -33505,19 +20921,19 @@ function BeeSwarmSimulator(DATA) {
               amulet.push(
                 "+" +
                   MATH.random(0.01, 0.03).toFixed(2) +
-                  " instantRedConversion"
+                  " instantRedConversion",
               );
             } else if (Math.random() < 0.5) {
               amulet.push(
                 "+" +
                   MATH.random(0.01, 0.03).toFixed(2) +
-                  " instantWhiteConversion"
+                  " instantWhiteConversion",
               );
             } else {
               amulet.push(
                 "+" +
                   MATH.random(0.01, 0.03).toFixed(2) +
-                  " instantBlueConversion"
+                  " instantBlueConversion",
               );
             }
 
@@ -33525,10 +20941,10 @@ function BeeSwarmSimulator(DATA) {
 
           case "silver":
             amulet.push(
-              "*" + MATH.random(1.2, 1.3).toFixed(2) + " capacityMultiplier"
+              "*" + MATH.random(1.2, 1.3).toFixed(2) + " capacityMultiplier",
             );
             amulet.push(
-              "*" + MATH.random(1.05, 1.08).toFixed(2) + " beeAttack"
+              "*" + MATH.random(1.05, 1.08).toFixed(2) + " beeAttack",
             );
 
             if (Math.random() < 0.25) {
@@ -33539,7 +20955,7 @@ function BeeSwarmSimulator(DATA) {
                   MATH.random(1.07, 1.15).toFixed(2) +
                   " " +
                   ["red", "blue", "white"][(Math.random() * 3) | 0] +
-                  "Pollen"
+                  "Pollen",
               );
             }
 
@@ -33547,33 +20963,33 @@ function BeeSwarmSimulator(DATA) {
               amulet.push(
                 "+" +
                   MATH.random(0.02, 0.03).toFixed(2) +
-                  " instantRedConversion"
+                  " instantRedConversion",
               );
             } else if (Math.random() < 0.5) {
               amulet.push(
                 "+" +
                   MATH.random(0.02, 0.03).toFixed(2) +
-                  " instantWhiteConversion"
+                  " instantWhiteConversion",
               );
             } else {
               amulet.push(
                 "+" +
                   MATH.random(0.02, 0.03).toFixed(2) +
-                  " instantBlueConversion"
+                  " instantBlueConversion",
               );
             }
 
             if (Math.random() < 0.333) {
               amulet.push(
-                "*" + MATH.random(1.02, 1.06).toFixed(2) + " flamePollen"
+                "*" + MATH.random(1.02, 1.06).toFixed(2) + " flamePollen",
               );
             } else if (Math.random() < 0.5) {
               amulet.push(
-                "*" + MATH.random(1.02, 1.06).toFixed(2) + " bubblePollen"
+                "*" + MATH.random(1.02, 1.06).toFixed(2) + " bubblePollen",
               );
             } else {
               amulet.push(
-                "*" + MATH.random(1.02, 1.06).toFixed(2) + " markDuration"
+                "*" + MATH.random(1.02, 1.06).toFixed(2) + " markDuration",
               );
             }
 
@@ -33581,7 +20997,7 @@ function BeeSwarmSimulator(DATA) {
 
           case "gold":
             amulet.push(
-              "*" + MATH.random(1.3, 1.4).toFixed(2) + " capacityMultiplier"
+              "*" + MATH.random(1.3, 1.4).toFixed(2) + " capacityMultiplier",
             );
             amulet.push("*" + MATH.random(1.06, 1.1).toFixed(2) + " beeAttack");
 
@@ -33593,7 +21009,7 @@ function BeeSwarmSimulator(DATA) {
                   MATH.random(1.15, 1.2).toFixed(2) +
                   " " +
                   ["red", "blue", "white"][(Math.random() * 3) | 0] +
-                  "Pollen"
+                  "Pollen",
               );
             }
 
@@ -33601,33 +21017,33 @@ function BeeSwarmSimulator(DATA) {
               amulet.push(
                 "+" +
                   MATH.random(0.02, 0.05).toFixed(2) +
-                  " instantRedConversion"
+                  " instantRedConversion",
               );
             } else if (Math.random() < 0.5) {
               amulet.push(
                 "+" +
                   MATH.random(0.02, 0.05).toFixed(2) +
-                  " instantWhiteConversion"
+                  " instantWhiteConversion",
               );
             } else {
               amulet.push(
                 "+" +
                   MATH.random(0.02, 0.05).toFixed(2) +
-                  " instantBlueConversion"
+                  " instantBlueConversion",
               );
             }
 
             if (Math.random() < 0.333) {
               amulet.push(
-                "*" + MATH.random(1.04, 1.08).toFixed(2) + " flamePollen"
+                "*" + MATH.random(1.04, 1.08).toFixed(2) + " flamePollen",
               );
             } else if (Math.random() < 0.5) {
               amulet.push(
-                "*" + MATH.random(1.04, 1.08).toFixed(2) + " bubblePollen"
+                "*" + MATH.random(1.04, 1.08).toFixed(2) + " bubblePollen",
               );
             } else {
               amulet.push(
-                "*" + MATH.random(1.04, 1.08).toFixed(2) + " markDuration"
+                "*" + MATH.random(1.04, 1.08).toFixed(2) + " markDuration",
               );
             }
 
@@ -33635,10 +21051,10 @@ function BeeSwarmSimulator(DATA) {
 
           case "diamond":
             amulet.push(
-              "*" + MATH.random(1.4, 1.5).toFixed(2) + " capacityMultiplier"
+              "*" + MATH.random(1.4, 1.5).toFixed(2) + " capacityMultiplier",
             );
             amulet.push(
-              "*" + MATH.random(1.07, 1.12).toFixed(2) + " beeAttack"
+              "*" + MATH.random(1.07, 1.12).toFixed(2) + " beeAttack",
             );
 
             if (Math.random() < 0.25) {
@@ -33649,7 +21065,7 @@ function BeeSwarmSimulator(DATA) {
                   MATH.random(1.2, 1.25).toFixed(2) +
                   " " +
                   ["red", "blue", "white"][(Math.random() * 3) | 0] +
-                  "Pollen"
+                  "Pollen",
               );
             }
 
@@ -33657,33 +21073,33 @@ function BeeSwarmSimulator(DATA) {
               amulet.push(
                 "+" +
                   MATH.random(0.04, 0.09).toFixed(2) +
-                  " instantRedConversion"
+                  " instantRedConversion",
               );
             } else if (Math.random() < 0.5) {
               amulet.push(
                 "+" +
                   MATH.random(0.04, 0.09).toFixed(2) +
-                  " instantWhiteConversion"
+                  " instantWhiteConversion",
               );
             } else {
               amulet.push(
                 "+" +
                   MATH.random(0.04, 0.09).toFixed(2) +
-                  " instantBlueConversion"
+                  " instantBlueConversion",
               );
             }
 
             if (Math.random() < 0.333) {
               amulet.push(
-                "*" + MATH.random(1.05, 1.12).toFixed(2) + " flamePollen"
+                "*" + MATH.random(1.05, 1.12).toFixed(2) + " flamePollen",
               );
             } else if (Math.random() < 0.5) {
               amulet.push(
-                "*" + MATH.random(1.05, 1.12).toFixed(2) + " bubblePollen"
+                "*" + MATH.random(1.05, 1.12).toFixed(2) + " bubblePollen",
               );
             } else {
               amulet.push(
-                "*" + MATH.random(1.04, 1.08).toFixed(2) + " markDuration"
+                "*" + MATH.random(1.04, 1.08).toFixed(2) + " markDuration",
               );
             }
 
@@ -33692,17 +21108,17 @@ function BeeSwarmSimulator(DATA) {
                 amulet.push("*1.05 nectarMultiplier");
               } else {
                 amulet.push(
-                  "*" + MATH.random(1.15, 1.35).toFixed(2) + " honeyFromTokens"
+                  "*" + MATH.random(1.15, 1.35).toFixed(2) + " honeyFromTokens",
                 );
               }
             } else {
               if (Math.random() < 0.5) {
                 amulet.push(
-                  "*" + MATH.random(1.05, 1.11).toFixed(2) + " superCritPower"
+                  "*" + MATH.random(1.05, 1.11).toFixed(2) + " superCritPower",
                 );
               } else {
                 amulet.push(
-                  "*" + MATH.random(1.1, 1.2).toFixed(2) + " tokenLifespan"
+                  "*" + MATH.random(1.1, 1.2).toFixed(2) + " tokenLifespan",
                 );
               }
             }
@@ -33711,7 +21127,7 @@ function BeeSwarmSimulator(DATA) {
 
           case "supreme":
             amulet.push(
-              "*" + MATH.random(1.5, 1.6).toFixed(2) + " capacityMultiplier"
+              "*" + MATH.random(1.5, 1.6).toFixed(2) + " capacityMultiplier",
             );
             amulet.push("*" + MATH.random(1.1, 1.15).toFixed(2) + " beeAttack");
 
@@ -33723,7 +21139,7 @@ function BeeSwarmSimulator(DATA) {
                   MATH.random(1.2, 1.3).toFixed(2) +
                   " " +
                   ["red", "blue", "white"][(Math.random() * 3) | 0] +
-                  "Pollen"
+                  "Pollen",
               );
             }
 
@@ -33731,33 +21147,33 @@ function BeeSwarmSimulator(DATA) {
               amulet.push(
                 "+" +
                   MATH.random(0.07, 0.13).toFixed(2) +
-                  " instantRedConversion"
+                  " instantRedConversion",
               );
             } else if (Math.random() < 0.5) {
               amulet.push(
                 "+" +
                   MATH.random(0.07, 0.13).toFixed(2) +
-                  " instantWhiteConversion"
+                  " instantWhiteConversion",
               );
             } else {
               amulet.push(
                 "+" +
                   MATH.random(0.07, 0.13).toFixed(2) +
-                  " instantBlueConversion"
+                  " instantBlueConversion",
               );
             }
 
             if (Math.random() < 0.333) {
               amulet.push(
-                "*" + MATH.random(1.07, 1.15).toFixed(2) + " flamePollen"
+                "*" + MATH.random(1.07, 1.15).toFixed(2) + " flamePollen",
               );
             } else if (Math.random() < 0.5) {
               amulet.push(
-                "*" + MATH.random(1.07, 1.15).toFixed(2) + " bubblePollen"
+                "*" + MATH.random(1.07, 1.15).toFixed(2) + " bubblePollen",
               );
             } else {
               amulet.push(
-                "*" + MATH.random(1.04, 1.08).toFixed(2) + " markDuration"
+                "*" + MATH.random(1.04, 1.08).toFixed(2) + " markDuration",
               );
             }
 
@@ -33766,17 +21182,17 @@ function BeeSwarmSimulator(DATA) {
                 amulet.push("*1.05 nectarMultiplier");
               } else {
                 amulet.push(
-                  "*" + MATH.random(1.35, 1.6).toFixed(2) + " honeyFromTokens"
+                  "*" + MATH.random(1.35, 1.6).toFixed(2) + " honeyFromTokens",
                 );
               }
             } else {
               if (Math.random() < 0.5) {
                 amulet.push(
-                  "*" + MATH.random(1.08, 1.15).toFixed(2) + " superCritPower"
+                  "*" + MATH.random(1.08, 1.15).toFixed(2) + " superCritPower",
                 );
               } else {
                 amulet.push(
-                  "*" + MATH.random(1.2, 1.3).toFixed(2) + " tokenLifespan"
+                  "*" + MATH.random(1.2, 1.3).toFixed(2) + " tokenLifespan",
                 );
               }
             }
@@ -33825,385 +21241,13 @@ function BeeSwarmSimulator(DATA) {
       }
     };
 
-    let upgrades = {
-        Botnet: {
-          stats: "*1.25 pollenFromBees",
-          rarity: "common",
-          maxStacks: 1,
-        },
-        Iterate: {
-          stats: "*1.05 redPollen,*1.05 bluePollen,*1.05 whitePollen",
-          rarity: "common",
-          maxStacks: 15,
-        },
-        Sharpen: {
-          stats: "*1.25 beeAttack,*0.9 capacity",
-          rarity: "common",
-          maxStacks: 5,
-        },
-        Defragment: {
-          stats: "*1.5 capacity,-20% criticalPower",
-          rarity: "common",
-          maxStacks: 5,
-        },
-        XSS: {
-          stats: "*1.1 bluePollen,*0.91 whitePollen",
-          rarity: "common",
-          maxStacks: 1,
-        },
-        "Overfit: Red": {
-          stats: "*1.1 redPollen,*0.95 capacity",
-          rarity: "common",
-          maxStacks: 10,
-        },
-        "Overfit: Blue": {
-          stats: "*1.1 bluePollen,*0.95 beeSpeed,*0.95 walkSpeed",
-          rarity: "common",
-          maxStacks: 10,
-        },
-        "Overfit: White": {
-          stats: "*1.1 whitePollen,*0.9 convertRate",
-          rarity: "common",
-          maxStacks: 10,
-        },
-        Apply: {
-          stats: "*1.2 pollenFromCoconuts",
-          rarity: "common",
-          maxStacks: 3,
-        },
-        Clockwork: {
-          stats: "+3 cogsPerRound,*0.9 markDuration",
-          rarity: "common",
-          maxStacks: 3,
-        },
-        Outsource: {
-          stats: "*1.1 pollenFromTools,*0.95 pollenFromBees",
-          rarity: "common",
-          maxStacks: 5,
-        },
-        Equalize: {
-          stats: "+1 beeAttack,*0.975 beeAttack",
-          rarity: "common",
-          maxStacks: 3,
-        },
-        "Flash Drive": {
-          stats: "*1.01 beeSpeed,*1.01 walkSpeed,-1% criticalChance",
-          rarity: "common",
-          maxStacks: 10,
-        },
-        Memory: {
-          stats:
-            "*1.03 redBeeAbilityRate,*1.03 blueBeeAbilityRate,*1.03 whiteBeeAbilityRate",
-          rarity: "common",
-          maxStacks: 3,
-        },
-        Binary: {
-          stats: "*0.5 honeyAtHive,*2 convertRateAtHive",
-          rarity: "common",
-          maxStacks: 3,
-        },
-        Codec: {
-          stats:
-            "+5% instantRedConversion,+5% instantBlueConversion,+5% instantWhiteConversion,*0.96 beeAttack",
-          rarity: "common",
-          maxStacks: 3,
-        },
-        Overclock: {
-          stats: "*1.04 beeSpeed,*1.04 walkSpeed,*0.9 capacity",
-          rarity: "common",
-          maxStacks: 3,
-        },
-        Inverse: {
-          stats: "*1.5 beeAttack,*0.5 capacity",
-          rarity: "common",
-          maxStacks: 1,
-        },
-        Transpose: {
-          stats: "*1.1 convertRate,*0.9 convertRateAtHive",
-          rarity: "common",
-          maxStacks: 3,
-        },
-        "Cross Product": {
-          stats: "+2 movementCollection,*1.04 walkSpeed",
-          rarity: "common",
-          maxStacks: 3,
-        },
-        "Dot Product": {
-          stats: "+2% criticalChance,*1.04 walkSpeed",
-          rarity: "common",
-          maxStacks: 5,
-        },
-        Projection: {
-          stats: "*1.03 redPollen,*1.03 bluePollen",
-          rarity: "common",
-          maxStacks: 5,
-        },
-        Offset: {
-          stats: "*1.15 tokenLifespan,*0.96 walkSpeed",
-          rarity: "common",
-          maxStacks: 3,
-        },
-        Sine: { stats: "*1.05 bluePollen", rarity: "common", maxStacks: 4 },
-        Cosine: { stats: "*1.05 redPollen", rarity: "common", maxStacks: 4 },
-        Tangent: { stats: "*1.05 whitePollen", rarity: "common", maxStacks: 4 },
-        Reduce: {
-          stats:
-            "*1.03 beeAttack,*0.98 redPollen,*0.98 bluePollen,*0.98 whitePollen",
-          rarity: "common",
-          maxStacks: 10,
-        },
-        Refractor: {
-          stats: "*1.06 convertRate",
-          rarity: "common",
-          maxStacks: 10,
-        },
-        NRG: {
-          stats: "*1.07 beeEnergy,*1.02 walkSpeed,-1 cogsPerRound",
-          rarity: "common",
-          maxStacks: 10,
-        },
-
-        VPN: {
-          stats: "+2% defense,*0.98 walkSpeed",
-          rarity: "rare",
-          maxStacks: 10,
-        },
-        Hyperbolic: {
-          stats: "*1.06 beeAttack,*0.98 goo",
-          rarity: "rare",
-          maxStacks: 5,
-        },
-        Inject: {
-          stats:
-            "+1 redBeeAttack,+1 whiteBeeAttack,+1 blueBeeAttack,-1 cogsPerRound",
-          rarity: "rare",
-          maxStacks: 3,
-        },
-        Fragment: {
-          stats: "+4% instantBombConversion",
-          rarity: "rare",
-          maxStacks: 4,
-        },
-        Translation: { stats: "*1.03 beeSpeed", rarity: "rare", maxStacks: 3 },
-        "Blue Screen": {
-          stats: "*1.08 blueBeeAbilityRate,+2 blueBeeAttack,-1 cogsPerRound",
-          rarity: "rare",
-          maxStacks: 3,
-        },
-        Commit: {
-          stats: "+5% superCritChance,-3% criticalChance",
-          rarity: "rare",
-          maxStacks: 2,
-        },
-        GPU: { stats: "*1.05 walkSpeed", rarity: "rare", maxStacks: 2 },
-        CPU: {
-          stats: "+20% criticalPower,*0.9 walkSpeed",
-          rarity: "rare",
-          maxStacks: 1,
-        },
-        Saturate: {
-          stats: "+2 redBeeAttack,+2 blueBeeAttack,-2 whiteBeeAttack",
-          rarity: "rare",
-          maxStacks: 3,
-        },
-        RAM: {
-          stats: "+50000 capacity,+1 cogsPerRound,-2% defense",
-          rarity: "rare",
-          maxStacks: 10,
-        },
-        "SSD: Blue": {
-          stats:
-            "*1.5 blueFieldCapacity,*1.25 blueConvertRate,-3% criticalChance",
-          rarity: "rare",
-          maxStacks: 3,
-        },
-        "SSD: Red": {
-          stats:
-            "*1.5 redFieldCapacity,*1.25 redConvertRate,*0.7 whiteBombPollen",
-          rarity: "rare",
-          maxStacks: 3,
-        },
-        "SSD: White": {
-          stats:
-            "*1.5 whiteFieldCapacity,*1.25 whiteConvertRate,*0.9 beeAttack",
-          rarity: "rare",
-          maxStacks: 3,
-        },
-        Bluetooth: {
-          stats: "*1.1 bluePollen,+1 blueBeeAttack",
-          rarity: "rare",
-          maxStacks: 3,
-        },
-        Bruteforce: {
-          stats: "*1.1 redPollen,+3% superCritChance",
-          rarity: "rare",
-          maxStacks: 3,
-        },
-        "Fluid Simulation": {
-          stats: "*1.1 whitePollen,*1.08 goo",
-          rarity: "rare",
-          maxStacks: 3,
-        },
-        Method: {
-          stats: "*1.2 beeEnergy,*0.9 honeyFromTokens",
-          rarity: "rare",
-          maxStacks: 3,
-        },
-
-        Bandwidth: {
-          stats: "x1.25 convertRateAtHive,*1.05 markDuration",
-          rarity: "epic",
-          maxStacks: 3,
-        },
-        beeBay: { stats: "+1 beesPerRound", rarity: "epic", maxStacks: 1 },
-        Instancing: {
-          stats:
-            "+3% instantRedConversion,+3% instantBlueConversion,+3% instantWhiteConversion",
-          rarity: "epic",
-          maxStacks: 5,
-        },
-        "Pop-up": {
-          stats: "*1.25 bubblePollen,-1 blueBeeAttack",
-          rarity: "epic",
-          maxStacks: 3,
-        },
-        Overheat: {
-          stats: "*1.25 flamePollen,*0.95 redPollen",
-          rarity: "epic",
-          maxStacks: 3,
-        },
-        "White Noise": {
-          stats: "*1.1 whitePollen,*1.25 whiteBombPollen,-1 cogsPerRound",
-          rarity: "epic",
-          maxStacks: 1,
-        },
-        Battery: {
-          stats: "*1.1 markDuration,*1.1 flameLife,*0.95 walkSpeed",
-          rarity: "epic",
-          maxStacks: 1,
-        },
-        Asynchronize: {
-          stats: "+4 movementCollection,*0.96 tokenLifespan",
-          rarity: "epic",
-          maxStacks: 3,
-        },
-        "Bit Shift": {
-          stats: "*1.05 convertRate,+3% instantBombConversion",
-          rarity: "epic",
-          maxStacks: 10,
-        },
-        Base64: {
-          stats: "*1.64 convertRate,*0.64 pollenFromCoconuts",
-          rarity: "epic",
-          maxStacks: 1,
-        },
-        Trojan: {
-          stats: "*1.25 beeAttack,*0.9 beeSpeed",
-          rarity: "epic",
-          maxStacks: 1,
-        },
-        Uniform: {
-          stats:
-            "*1.15 redPollen,*1.15 bluePollen,*1.15 whitePollen,*0.92 beeAttack",
-          rarity: "epic",
-          maxStacks: 2,
-        },
-        Duplicate: {
-          stats:
-            "+2% abilityDuplicationChance,*0.94 redBeeAbilityRate,*0.94 blueBeeAbilityRate,*0.94 whiteBeeAbilityRate",
-          rarity: "epic",
-          maxStacks: 4,
-        },
-        Furnace: {
-          stats:
-            "*1.07 flamePollen,+5% instantFlameConversion,*1.07 flameLife,-2 cogsPerRound",
-          rarity: "epic",
-          maxStacks: 3,
-        },
-
-        "Cloud 9": {
-          stats: "*1.35 capacity,-1 cogsPerRound",
-          rarity: "legendary",
-          maxStacks: 5,
-        },
-        "180°": {
-          stats: "*1.8 beeAttack,-18% criticalChance",
-          rarity: "legendary",
-          maxStacks: 1,
-        },
-        "Vice Versa": {
-          stats: "*1.5 redBombPollen,*1.5 blueBombPollen,*0.9 whiteBombPollen",
-          rarity: "legendary",
-          maxStacks: 1,
-        },
-        "Schematic Error": {
-          stats: "*1.25 redBombPollen,+3% abilityDuplicationChance",
-          rarity: "legendary",
-          maxStacks: 1,
-        },
-        "d^=b[,7'": {
-          stats: "*2 goo,*0.85 whitePollen",
-          rarity: "legendary",
-          maxStacks: 1,
-        },
-        Unlisted: {
-          stats: "+3% criticalChance,*1.2 superCritPower",
-          rarity: "legendary",
-          maxStacks: 1,
-        },
-        23.5: {
-          stats:
-            "+2% instantBlueConversion,+3% instantWhiteConversion,+5% instantRedConversion",
-          rarity: "legendary",
-          maxStacks: 5,
-        },
-        Knock: {
-          stats: "*1.25 beeAttack,-10% defense",
-          rarity: "legendary",
-          maxStacks: 1,
-        },
-        "12%": {
-          stats: "*0.12 goo,*1.55 whitePollen",
-          rarity: "legendary",
-          maxStacks: 1,
-        },
-        "Plus Minus": {
-          stats: "+6% criticalChance,-2% superCritChance",
-          rarity: "legendary",
-          maxStacks: 2,
-        },
-        8.2: {
-          stats: "*1.8 pollenFromCoconuts,*1.2 capacity",
-          rarity: "legendary",
-          maxStacks: 1,
-        },
-        "Friend Credits": {
-          stats: "+4 cogsPerRound,*1.1 honeyFromTokens",
-          rarity: "legendary",
-          maxStacks: 3,
-        },
-        Technoblade: {
-          stats: "+25% defense",
-          rarity: "legendary",
-          maxStacks: 1,
-        },
-        "A-List": {
-          stats: "*1.25 beeSpeed,+4 movementCollection,-2 cogsPerRound",
-          rarity: "legendary",
-          maxStacks: 2,
-        },
-        '<u style="user-select:text">ยังน่ารัก</u>': {
-          stats: "*1.5 buoyantBeeAttack,-1 cogsPerRound",
-          rarity: "legendary",
-          maxStacks: 1,
-        },
-      },
-      rarityColor = {
-        common: "rgb(180,130,30)",
-        rare: "rgb(210,210,210)",
-        epic: "rgb(250,230,10)",
-        legendary: "rgb(20,240,255)",
-      };
+    // FIXME: upgades here
+    rarityColor = {
+      common: "rgb(180,130,30)",
+      rare: "rgb(210,210,210)",
+      epic: "rgb(250,230,10)",
+      legendary: "rgb(20,240,255)",
+    };
 
     out.startRoboChallenge = function () {
       out.roboChallenge.cogsPerRound = 12;
@@ -34240,8 +21284,8 @@ function BeeSwarmSimulator(DATA) {
             n = Number(
               _u.substring(
                 1,
-                _u.indexOf("%") > -1 ? _u.indexOf("%") : _u.indexOf(" ")
-              )
+                _u.indexOf("%") > -1 ? _u.indexOf("%") : _u.indexOf(" "),
+              ),
             );
 
           if (
@@ -34279,7 +21323,7 @@ function BeeSwarmSimulator(DATA) {
       effects.roboChallengeBuff.update = Object.constructor(
         "amount",
         "player",
-        ef
+        ef,
       );
 
       effects.roboChallengeBuff.getMessage = function () {
@@ -34375,9 +21419,9 @@ function BeeSwarmSimulator(DATA) {
                 m === CogTurret
                   ? MATH.random(0, 4) | 0
                   : out.roboChallenge.round > 5
-                  ? Math.random() < 0.8
-                  : 0
-              )
+                    ? Math.random() < 0.8
+                    : 0,
+              ),
             );
           }
         } else {
@@ -34414,8 +21458,8 @@ function BeeSwarmSimulator(DATA) {
               new m(
                 f[(Math.random() * f.length) | 0],
                 (out.roboChallenge.round * MATH.random(0.5, 0.6) + 1) | 0,
-                m === CogTurret ? MATH.random(0, 4) | 0 : Math.random() < 0.8
-              )
+                m === CogTurret ? MATH.random(0, 4) | 0 : Math.random() < 0.8,
+              ),
             );
           }
         }
@@ -34460,8 +21504,8 @@ function BeeSwarmSimulator(DATA) {
           new m(
             f,
             (out.roboChallenge.round * MATH.random(0.5, 0.6) + 1) | 0,
-            m === CogTurret ? MATH.random(0, 4) | 0 : Math.random() < 0.8
-          )
+            m === CogTurret ? MATH.random(0, 4) | 0 : Math.random() < 0.8,
+          ),
         );
       }, 20000);
     };
@@ -34529,7 +21573,7 @@ function BeeSwarmSimulator(DATA) {
               ((MATH.random(3, 7) +
                 { common: 0, rare: 2, epic: 5, legendary: 9 }[_u.rarity]) /
                 ((_u.maxStacks - 1) * 0.1 + 1.25)) |
-                0
+                0,
             );
 
             u.splice(r, 1);
@@ -34570,19 +21614,19 @@ function BeeSwarmSimulator(DATA) {
                   MATH.addCommas(
                     n.substring(
                       1,
-                      n.indexOf("%") > -1 ? n.indexOf("%") : n.indexOf(" ")
-                    )
+                      n.indexOf("%") > -1 ? n.indexOf("%") : n.indexOf(" "),
+                    ),
                   ) +
                   n.substring(
                     n.indexOf("%") > -1 ? n.indexOf("%") : n.indexOf(" "),
-                    n.length
+                    n.length,
                   );
 
               s += n + "<br></div>";
             }
 
             document.getElementById(
-              "roboUpgradeChoice" + i
+              "roboUpgradeChoice" + i,
             ).style.backgroundColor = rarityColor[upgrades[c[i - 1]].rarity];
 
             document.getElementById("roboUpgradeChoice" + i).innerHTML =
@@ -34649,12 +21693,12 @@ function BeeSwarmSimulator(DATA) {
                   MATH.addCommas(
                     n.substring(
                       1,
-                      n.indexOf("%") > -1 ? n.indexOf("%") : n.indexOf(" ")
-                    )
+                      n.indexOf("%") > -1 ? n.indexOf("%") : n.indexOf(" "),
+                    ),
                   ) +
                   n.substring(
                     n.indexOf("%") > -1 ? n.indexOf("%") : n.indexOf(" "),
-                    n.length
+                    n.length,
                   );
 
               s += n + "<br></div>";
@@ -34894,7 +21938,7 @@ function BeeSwarmSimulator(DATA) {
               0,
               0,
               35,
-              35
+              35,
             );
 
             document.getElementById("roboActiveBees").appendChild(img);
@@ -34921,13 +21965,13 @@ function BeeSwarmSimulator(DATA) {
             document.getElementById("roboBeeChoice" + (i + 1)).style.display =
               "block";
             document.getElementById(
-              "roboBeeChoice" + (i + 1)
+              "roboBeeChoice" + (i + 1),
             ).style.backgroundColor =
               beeInfo[bee.type].color === "red"
                 ? "rgb(255,50,50,0.6)"
                 : beeInfo[bee.type].color === "blue"
-                ? "rgb(50,50,255,0.6)"
-                : "rgb(255,255,255,0.6)";
+                  ? "rgb(50,50,255,0.6)"
+                  : "rgb(255,255,255,0.6)";
 
             let img = document.createElement("canvas");
 
@@ -34949,7 +21993,7 @@ function BeeSwarmSimulator(DATA) {
               0,
               0,
               80,
-              80
+              80,
             );
 
             let descStr =
@@ -35020,7 +22064,7 @@ function BeeSwarmSimulator(DATA) {
         "The Ant Challenge is over! Your score is " +
           out.antChallenge.score +
           "!",
-        [35, 75, 255]
+        [35, 75, 255],
       );
 
       let arr = [
@@ -35050,8 +22094,8 @@ function BeeSwarmSimulator(DATA) {
               (Math.sqrt(out.antChallenge.score * 1.25) * 0.2 + 1) | 0,
             ],
           ],
-          1
-        )
+          1,
+        ),
       );
 
       for (let i in arr) {
@@ -35067,7 +22111,7 @@ function BeeSwarmSimulator(DATA) {
             " " +
             MATH.doGrammar(arr[i][0]) +
             " (from Robo Challenge)",
-          [35, 75, 255]
+          [35, 75, 255],
         );
       }
 
@@ -35085,7 +22129,7 @@ function BeeSwarmSimulator(DATA) {
         "*1." + (g + 1) + " capacityMultiplier",
         "*" +
           MATH.random(1.05 + g * 0.15, 1.15 + g * 0.15).toFixed(2) +
-          " convertRate"
+          " convertRate",
       );
 
       amulet.push(
@@ -35114,8 +22158,8 @@ function BeeSwarmSimulator(DATA) {
               MATH.random(1.03 + g * 0.05, 1.1 + g * 0.05).toFixed(2) +
               " pollenFromBees",
           ],
-          g + 1
-        )
+          g + 1,
+        ),
       );
 
       player.showGeneratedAmulet(t + "AntAmulet", amulet);
@@ -35150,7 +22194,7 @@ function BeeSwarmSimulator(DATA) {
         objects.mobs.push(new LawnMower(out.antChallenge.round));
         out.antChallenge.lawnMowerTimer = Math.max(
           -0.33333 * out.antChallenge.round + 15,
-          2
+          2,
         );
       }
 
@@ -35230,8 +22274,8 @@ function BeeSwarmSimulator(DATA) {
             new Ant(
               out.antChallenge.round,
               ...p[i],
-              t[(Math.random() * t.length) | 0]
-            )
+              t[(Math.random() * t.length) | 0],
+            ),
           );
         }
 
@@ -35244,8 +22288,8 @@ function BeeSwarmSimulator(DATA) {
                 new Ant(
                   out.antChallenge.round,
                   ...p[i],
-                  t[(Math.random() * t.length) | 0]
-                )
+                  t[(Math.random() * t.length) | 0],
+                ),
               );
             }
           }, 750);
@@ -35258,13 +22302,13 @@ function BeeSwarmSimulator(DATA) {
             out.antChallenge.pollenReq -
               (out.stats.pollenFromAntField -
                 out.antChallenge.pollenBeforeReq) +
-              ""
+              "",
           ),
           [-21, 8, -61],
           COLORS.whiteArr,
           -3,
           false,
-          false
+          false,
         );
       } else {
         out.antChallenge.pollenBeforeReq = out.stats.pollenFromAntField;
@@ -35274,7 +22318,7 @@ function BeeSwarmSimulator(DATA) {
           COLORS.whiteArr,
           -3,
           false,
-          false
+          false,
         );
       }
 
@@ -35286,7 +22330,7 @@ function BeeSwarmSimulator(DATA) {
         false,
         false,
         0,
-        0.5
+        0.5,
       );
       textRenderer.addSingle(
         "Round: " + out.antChallenge.round,
@@ -35296,7 +22340,7 @@ function BeeSwarmSimulator(DATA) {
         false,
         false,
         0,
-        0
+        0,
       );
       textRenderer.addSingle(
         "Score: " + out.antChallenge.score,
@@ -35306,7 +22350,7 @@ function BeeSwarmSimulator(DATA) {
         false,
         false,
         0,
-        -0.5
+        -0.5,
       );
     };
 
@@ -35336,7 +22380,7 @@ function BeeSwarmSimulator(DATA) {
           final.push(
             amulet[i].replace("POLLEN", "redPollen"),
             amulet[i].replace("POLLEN", "bluePollen"),
-            amulet[i].replace("POLLEN", "whitePollen")
+            amulet[i].replace("POLLEN", "whitePollen"),
           );
           continue;
         }
@@ -35344,7 +22388,7 @@ function BeeSwarmSimulator(DATA) {
           final.push(
             amulet[i].replace("INSTANT_CONVERSION", "instantRedConversion"),
             amulet[i].replace("INSTANT_CONVERSION", "instantBlueConversion"),
-            amulet[i].replace("INSTANT_CONVERSION", "instantWhiteConversion")
+            amulet[i].replace("INSTANT_CONVERSION", "instantWhiteConversion"),
           );
           continue;
         }
@@ -35429,7 +22473,7 @@ function BeeSwarmSimulator(DATA) {
               .replaceAll("Blue", "")
               .replaceAll("red", "")
               .replaceAll("blue", "")
-              .replaceAll("white", "")
+              .replaceAll("white", ""),
           );
         } else {
           cleaned.push(a);
@@ -35456,7 +22500,7 @@ function BeeSwarmSimulator(DATA) {
                   ((Number(x.substr(1, x.indexOf(" "))) * 100) | 0) +
                   "%" +
                   x.substr(x.indexOf(" "), x.length)
-                : x
+                : x,
             )
             .join("<br>")
             .replaceAll("*", "x")
@@ -35474,8 +22518,8 @@ function BeeSwarmSimulator(DATA) {
               x
                 .split(" ")[1]
                 .replace("INSTANT_CONVERSION", "instantConversion")
-                .replace("POLLEN", "pollen")
-            )
+                .replace("POLLEN", "pollen"),
+            ),
         )
         .map((x) =>
           x[0] === "+"
@@ -35483,7 +22527,7 @@ function BeeSwarmSimulator(DATA) {
               ((Number(x.substr(1, x.indexOf(" "))) * 100) | 0) +
               "%" +
               x.substr(x.indexOf(" "), x.length)
-            : x
+            : x,
         )
         .join("<br>")
         .replaceAll("*", "x")
@@ -35547,7 +22591,7 @@ function BeeSwarmSimulator(DATA) {
         [255, 0, 0],
         0,
         "",
-        2
+        2,
       );
     };
 
@@ -35712,7 +22756,7 @@ function BeeSwarmSimulator(DATA) {
         req[i].push(
           req[i][0] === "beeTypes" || req[i][0].indexOf("beesToLevel") > -1
             ? 0
-            : out.stats[req[i][0]]
+            : out.stats[req[i][0]],
         );
       }
 
@@ -35808,7 +22852,7 @@ function BeeSwarmSimulator(DATA) {
                     player.roboChallenge.round++;
                     items.cog.amount += player.roboChallenge.cogsPerRound;
                     player.addMessage(
-                      "+" + player.roboChallenge.cogsPerRound + " Cogs"
+                      "+" + player.roboChallenge.cogsPerRound + " Cogs",
                     );
                     player.updateInventory();
                     player.updateRoboUI();
@@ -35820,7 +22864,7 @@ function BeeSwarmSimulator(DATA) {
           } else {
             player.addMessage(
               MATH.doGrammar(i) + " has nothing to say anymore!",
-              COLORS.redArr
+              COLORS.redArr,
             );
             return;
           }
@@ -35857,7 +22901,7 @@ function BeeSwarmSimulator(DATA) {
       out.viewMatrixCopy = out.viewMatrix.slice();
       out.easeAmount = 0;
       itemName.innerHTML = MATH.doGrammar(
-        shops[out.currentShop].items[shops[out.currentShop].currentIndex].name
+        shops[out.currentShop].items[shops[out.currentShop].currentIndex].name,
       );
 
       itemCostSVG.innerHTML = "";
@@ -35903,7 +22947,7 @@ function BeeSwarmSimulator(DATA) {
         if (typeof cost[i] === "function") {
           cost[i] = cost[i](
             shops[out.currentShop].items[shops[out.currentShop].currentIndex]
-              .amountPurchased
+              .amountPurchased,
           );
         }
 
@@ -35923,7 +22967,7 @@ function BeeSwarmSimulator(DATA) {
           "px'>" +
           itemSVGCode[c[1]].replace(
             "SCALE",
-            "scale(0.7,0.7);margin-top:-10px;margin-bottom:0px;margin-left:-10px"
+            "scale(0.7,0.7);margin-top:-10px;margin-bottom:0px;margin-left:-10px",
           ) +
           "<div style='position:absolute;top:15px;left:50px;font-size:16px;'><svg style='position:absolute;'><text x='3' y='20' stroke='black' stroke-width='3' style='font-size:15px'>" +
           text +
@@ -35962,7 +23006,7 @@ function BeeSwarmSimulator(DATA) {
         itemName.innerHTML =
           MATH.doGrammar(
             shops[out.currentShop].items[shops[out.currentShop].currentIndex]
-              .name
+              .name,
           ) + (incre > 1 ? " x" + MATH.abvNumber(incre + "") : "");
 
         itemCostSVG.innerHTML = "";
@@ -36009,7 +23053,7 @@ function BeeSwarmSimulator(DATA) {
             cost[i] = cost[i](
               shops[out.currentShop].items[shops[out.currentShop].currentIndex]
                 .amountPurchased,
-              incre
+              incre,
             );
           }
 
@@ -36029,7 +23073,7 @@ function BeeSwarmSimulator(DATA) {
             "px'>" +
             itemSVGCode[c[1]].replace(
               "SCALE",
-              "scale(0.7,0.7);margin-top:-10px;margin-bottom:0px;margin-left:-10px"
+              "scale(0.7,0.7);margin-top:-10px;margin-bottom:0px;margin-left:-10px",
             ) +
             "<div style='position:absolute;top:15px;left:50px;font-size:16px;'><svg style='position:absolute;'><text x='3' y='20' stroke='black' stroke-width='3' style='font-size:15px'>" +
             text +
@@ -36064,7 +23108,7 @@ function BeeSwarmSimulator(DATA) {
         itemName.innerHTML =
           MATH.doGrammar(
             shops[out.currentShop].items[shops[out.currentShop].currentIndex]
-              .name
+              .name,
           ) + (incre > 1 ? " x" + MATH.abvNumber(incre + "") : "");
 
         itemCostSVG.innerHTML = "";
@@ -36111,7 +23155,7 @@ function BeeSwarmSimulator(DATA) {
             cost[i] = cost[i](
               shops[out.currentShop].items[shops[out.currentShop].currentIndex]
                 .amountPurchased,
-              incre
+              incre,
             );
           }
 
@@ -36131,7 +23175,7 @@ function BeeSwarmSimulator(DATA) {
             "px'>" +
             itemSVGCode[c[1]].replace(
               "SCALE",
-              "scale(0.7,0.7);margin-top:-10px;margin-bottom:0px;margin-left:-10px"
+              "scale(0.7,0.7);margin-top:-10px;margin-bottom:0px;margin-left:-10px",
             ) +
             "<div style='position:absolute;top:15px;left:50px;font-size:16px;'><svg style='position:absolute;'><text x='3' y='20' stroke='black' stroke-width='3' style='font-size:15px'>" +
             text +
@@ -36211,7 +23255,7 @@ function BeeSwarmSimulator(DATA) {
             cost[i] = cost[i](
               shops[out.currentShop].items[shops[out.currentShop].currentIndex]
                 .amountPurchased,
-              incre
+              incre,
             );
           }
 
@@ -36248,7 +23292,7 @@ function BeeSwarmSimulator(DATA) {
             ].cost[i](
               shops[out.currentShop].items[shops[out.currentShop].currentIndex]
                 .amountPurchased + incre,
-              incre
+              incre,
             ).split(" ");
           }
 
@@ -36267,7 +23311,7 @@ function BeeSwarmSimulator(DATA) {
             "px'>" +
             itemSVGCode[c[1]].replace(
               "SCALE",
-              "scale(0.7,0.7);margin-top:-10px;margin-bottom:0px;margin-left:-10px"
+              "scale(0.7,0.7);margin-top:-10px;margin-bottom:0px;margin-left:-10px",
             ) +
             "<div style='position:absolute;top:15px;left:50px;font-size:16px;'><svg style='position:absolute;'><text x='3' y='20' stroke='black' stroke-width='3' style='font-size:15px'>" +
             text +
@@ -36309,12 +23353,12 @@ function BeeSwarmSimulator(DATA) {
                   ? MATH.doPlural(
                       shops[out.currentShop].items[
                         shops[out.currentShop].currentIndex
-                      ].name
+                      ].name,
                     )
                   : shops[out.currentShop].items[
                       shops[out.currentShop].currentIndex
-                    ].name
-              )
+                    ].name,
+              ),
           );
 
           if (
@@ -36334,7 +23378,7 @@ function BeeSwarmSimulator(DATA) {
           if (out.currentGear.beequips.length >= 6) {
             player.addMessage(
               "You can't hold more than 6 beequips!",
-              COLORS.redArr
+              COLORS.redArr,
             );
 
             for (let i in cost) {
@@ -36349,15 +23393,15 @@ function BeeSwarmSimulator(DATA) {
           } else {
             out.generateBeequip(
               shops[out.currentShop].items[shops[out.currentShop].currentIndex]
-                .name
+                .name,
             );
             out.addMessage(
               "Recieived " +
                 MATH.doGrammar(
                   shops[out.currentShop].items[
                     shops[out.currentShop].currentIndex
-                  ].name
-                )
+                  ].name,
+                ),
             );
           }
         } else {
@@ -36378,8 +23422,8 @@ function BeeSwarmSimulator(DATA) {
               MATH.doGrammar(
                 shops[out.currentShop].items[
                   shops[out.currentShop].currentIndex
-                ].name
-              )
+                ].name,
+              ),
           );
         }
 
@@ -36434,7 +23478,7 @@ function BeeSwarmSimulator(DATA) {
             hotbarSlots[j].innerHTML =
               itemSVGCode[i].replace(
                 "SCALE",
-                "scale(0.512,0.512);margin-left:-18px;margin-top:-19px"
+                "scale(0.512,0.512);margin-left:-18px;margin-top:-19px",
               ) +
               "<div style='font-size:9px;text-align:right;margin-top:-30px'>x" +
               items[i].amount +
@@ -36480,12 +23524,12 @@ function BeeSwarmSimulator(DATA) {
                   "The hive balloon granted x" +
                     out.hiveBalloon.blessing +
                     " balloon blessing!",
-                  [205, 205, 0]
+                  [205, 205, 0],
                 );
               } else {
                 out.addMessage(
                   "The hive balloon refreshed your balloon blessing!",
-                  [205, 205, 0]
+                  [205, 205, 0],
                 );
               }
             }
@@ -36527,7 +23571,7 @@ function BeeSwarmSimulator(DATA) {
         0.6 * player.isNight,
         0.75,
         out.hiveBalloon.displaySize,
-        1.05
+        1.05,
       );
 
       meshes.cylinder_explosions.instanceData.push(
@@ -36539,7 +23583,7 @@ function BeeSwarmSimulator(DATA) {
         player.isNight,
         1,
         0.05,
-        40
+        40,
       );
 
       textRenderer.addSingle(
@@ -36550,14 +23594,14 @@ function BeeSwarmSimulator(DATA) {
           out.hivePos[2] + 3,
         ],
         COLORS.whiteArr,
-        -1
+        -1,
       );
 
       p = Math.round(out.hiveBalloon.maxPollen).toString();
 
       out.hiveBalloon.blessing = Math.max(
         Math.ceil(Math.pow(out.hiveBalloon.maxPollen, 1 / 7) * 2 - 4),
-        1
+        1,
       );
 
       textRenderer.addSingle(
@@ -36570,7 +23614,7 @@ function BeeSwarmSimulator(DATA) {
         [0, 100, 255],
         -1,
         true,
-        false
+        false,
       );
     };
 
@@ -36600,7 +23644,7 @@ function BeeSwarmSimulator(DATA) {
       bond = 0,
       mutation,
       radioactive,
-      beequip
+      beequip,
     ) {
       if (out.hive[out.hive.length - 1].length < 5) {
         out.hive[out.hive.length - 1].push({
@@ -36644,7 +23688,7 @@ function BeeSwarmSimulator(DATA) {
             effects[type].maxCooldown,
             effects[type].maxCooldown * amplify +
               out.effects[found].cooldown +
-              dt
+              dt,
           );
 
           return;
@@ -36669,12 +23713,12 @@ function BeeSwarmSimulator(DATA) {
           if (refresh) {
             out.effects[found].amount = Math.min(
               Math.max(out.effects[found].amount, refresh),
-              effects[type].maxAmount
+              effects[type].maxAmount,
             );
           } else {
             out.effects[found].amount = Math.min(
               setAmount ?? out.effects[found].amount + (addAmount || 1),
-              effects[type].maxAmount
+              effects[type].maxAmount,
             );
           }
 
@@ -36686,7 +23730,7 @@ function BeeSwarmSimulator(DATA) {
         out.effects.push({
           cooldown: effects[type].maxCooldown,
           type: type,
-          amount: refresh ? refresh : setAmount ?? (addAmount || 1),
+          amount: refresh ? refresh : (setAmount ?? (addAmount || 1)),
         });
       }
 
@@ -36808,7 +23852,7 @@ function BeeSwarmSimulator(DATA) {
               ] *=
                 Number(str.substr(1, str.indexOf(" ") - 1)) +
                 Number(
-                  str.substr(str.indexOf("(") + 2, str.length).replace(")", "")
+                  str.substr(str.indexOf("(") + 2, str.length).replace(")", ""),
                 );
             } else {
               player.defaultStats[
@@ -36816,7 +23860,7 @@ function BeeSwarmSimulator(DATA) {
               ] +=
                 Number(str.substr(1, str.indexOf(" ") - 1)) +
                 Number(
-                  str.substr(str.indexOf("(") + 2, str.length).replace(")", "")
+                  str.substr(str.indexOf("(") + 2, str.length).replace(")", ""),
                 );
             }
           }
@@ -36833,7 +23877,7 @@ function BeeSwarmSimulator(DATA) {
             if (s[j].indexOf("Conversion") > -1) {
               out.defaultStats[s[j]] = MATH.applyPercentage(
                 out.defaultStats[s[j]],
-                b.num
+                b.num,
               );
             } else {
               out.defaultStats[s[j]] += b.num;
@@ -36985,7 +24029,7 @@ function BeeSwarmSimulator(DATA) {
             toAdd =
               toAdd.substr(0, toAdd.indexOf(" ") + 1) +
               MATH.doGrammar(
-                toAdd.substring(toAdd.indexOf(" ") + 1, toAdd.indexOf("("))
+                toAdd.substring(toAdd.indexOf(" ") + 1, toAdd.indexOf("(")),
               ) +
               '<l style="color:rgb(20,160,20)">' +
               toAdd.substring(toAdd.indexOf("("), toAdd.length) +
@@ -37004,7 +24048,7 @@ function BeeSwarmSimulator(DATA) {
 
         s =
           out.currentGear.beequips[out.beequipLookingAt].stats.player.split(
-            ","
+            ",",
           );
 
         if (
@@ -37021,7 +24065,7 @@ function BeeSwarmSimulator(DATA) {
             toAdd =
               toAdd.substr(0, toAdd.indexOf(" ") + 1) +
               MATH.doGrammar(
-                toAdd.substring(toAdd.indexOf(" ") + 1, toAdd.indexOf("("))
+                toAdd.substring(toAdd.indexOf(" ") + 1, toAdd.indexOf("(")),
               ) +
               toAdd.substring(toAdd.indexOf("("), toAdd.length);
 
@@ -37041,12 +24085,12 @@ function BeeSwarmSimulator(DATA) {
             w
               ? itemSVGCode[w.substring(1)].replace(
                   "SCALE",
-                  "translate(-24px,-22px) scale(0.5,0.5)"
+                  "translate(-24px,-22px) scale(0.5,0.5)",
                 ) +
                   "<div style='font-size:14px;margin-top:-55px;margin-left:10px'>" +
                   (Number(w[0]) ? "✔️" : "❌") +
                   "</div>"
-              : ""
+              : "",
           );
         }
 
@@ -37064,14 +24108,14 @@ function BeeSwarmSimulator(DATA) {
           MATH.doGrammar(
             out.currentGear.beequips[out.beequipLookingAt].type.replaceAll(
               "candycane",
-              "candyCane"
-            )
+              "candyCane",
+            ),
           ) +
           "</div><div style='position:fixed;background-color:rgb(240,240,240);margin-left:80px;margin-top:29px;border-radius:10px;font-size:13px;padding-top:0px;font-family:trebuchet ms;width:113px;padding-left:7px;padding-top:3px;padding-bottom:3px;'>Level: " +
           beequips[out.currentGear.beequips[out.beequipLookingAt].type].level +
           "</div><div style='position:fixed;background-color:rgb(240,240,240);margin-left:80px;margin-top:55px;border-radius:10px;padding-left:7px;padding-top:3px;padding-bottom:3px;font-size:13px;font-family:trebuchet ms;width:113px;'>Color: " +
           MATH.doGrammar(
-            beequips[out.currentGear.beequips[out.beequipLookingAt].type].color
+            beequips[out.currentGear.beequips[out.beequipLookingAt].type].color,
           ) +
           "</div><div style='position:fixed;background-color:rgb(240,240,240);margin-left:80px;margin-top:81px;border-radius:10px;padding-left:7px;padding-top:3px;padding-bottom:3px;font-size:13px;font-family:trebuchet ms;width:113px;'>Potential: " +
           out.currentGear.beequips[out.beequipLookingAt].potential +
@@ -37095,7 +24139,7 @@ function BeeSwarmSimulator(DATA) {
               MATH.doGrammar(
                 beequips[
                   out.currentGear.beequips[out.beequipLookingAt].type
-                ].extraAbility.split("_")[1]
+                ].extraAbility.split("_")[1],
               ) +
               "</p>"
             : "") +
@@ -37138,7 +24182,7 @@ function BeeSwarmSimulator(DATA) {
           0,
           0,
           76,
-          76
+          76,
         );
 
         let count = 0,
@@ -37180,7 +24224,7 @@ function BeeSwarmSimulator(DATA) {
                   beeInfo.basic[c + "Amount"] / beeInfo.basic[c + "Speed"]) *
                   0.05,
                 -1,
-                1
+                1,
               ),
               _v = value;
 
@@ -37196,7 +24240,7 @@ function BeeSwarmSimulator(DATA) {
                 (beeInfo[out.beesPageBee][c] - beeInfo.basic[c]) *
                   { attack: 0.4, energy: 0.15, speed: 0.3 }[c],
                 -1,
-                1
+                1,
               ),
               _v = value;
 
@@ -37407,11 +24451,11 @@ function BeeSwarmSimulator(DATA) {
         unsorted.sort(
           (a, b) =>
             ["common", "rare", "epic", "legendary", "mythic", "event"].indexOf(
-              beeInfo[a].rarity
+              beeInfo[a].rarity,
             ) -
             ["common", "rare", "epic", "legendary", "mythic", "event"].indexOf(
-              beeInfo[b].rarity
-            )
+              beeInfo[b].rarity,
+            ),
         );
 
         for (let i in unsorted)
@@ -37431,8 +24475,8 @@ function BeeSwarmSimulator(DATA) {
             beeInfo[i].color === "red"
               ? "rgb(255,0,0,0.5)"
               : beeInfo[i].color === "blue"
-              ? "rgb(0,0,255,0.5)"
-              : "rgb(255,255,255,0.5)";
+                ? "rgb(0,0,255,0.5)"
+                : "rgb(255,255,255,0.5)";
 
           img.width = 70;
           img.height = 70;
@@ -37450,7 +24494,7 @@ function BeeSwarmSimulator(DATA) {
             0,
             0,
             70,
-            70
+            70,
           );
 
           text.innerHTML =
@@ -37492,182 +24536,165 @@ function BeeSwarmSimulator(DATA) {
 
       out.computeStats(merelyAGliderStateChange);
 
-      out.toolMesh.setMeshFromFunction(function (
-        box,
-        a,
-        cylinder,
-        sphere,
-        applyFinalRotation,
-        c,
-        star
-      ) {
-        gear.tool[out.currentGear.tool].mesh(
-          box,
-          cylinder,
-          sphere,
-          star,
-          applyFinalRotation
-        );
-      });
+      out.toolMesh.setMeshFromFunction(
+        function (box, a, cylinder, sphere, applyFinalRotation, c, star) {
+          gear.tool[out.currentGear.tool].mesh(
+            box,
+            cylinder,
+            sphere,
+            star,
+            applyFinalRotation,
+          );
+        },
+      );
 
       out.toolMesh.setBuffers();
 
-      playerMesh.setMeshFromFunction(function (
-        box,
-        a,
-        cylinder,
-        sphere,
-        applyFinalRotation,
-        c,
-        star
-      ) {
-        box(0, 0, 0, 0.5, 1, 0.5, false, [1.45, 1.45, 1]);
+      playerMesh.setMeshFromFunction(
+        function (box, a, cylinder, sphere, applyFinalRotation, c, star) {
+          box(0, 0, 0, 0.5, 1, 0.5, false, [1.45, 1.45, 1]);
 
-        let totalAmulets = 0,
-          currentAmulet = 0;
+          let totalAmulets = 0,
+            currentAmulet = 0;
 
-        for (let i in out.currentGear)
-          if (i.indexOf("Amulet") > -1) totalAmulets++;
+          for (let i in out.currentGear)
+            if (i.indexOf("Amulet") > -1) totalAmulets++;
 
-        for (let i in out.currentGear) {
-          if (i === "tool" || i === "sprinkler") continue;
+          for (let i in out.currentGear) {
+            if (i === "tool" || i === "sprinkler") continue;
 
-          if (i.indexOf("Amulet") < 0 && i !== "beequips") {
-            if (i === "glider" || i === "parachute") {
-              if (player.isGliding)
+            if (i.indexOf("Amulet") < 0 && i !== "beequips") {
+              if (i === "glider" || i === "parachute") {
+                if (player.isGliding)
+                  gear[i][out.currentGear[i]].mesh(
+                    box,
+                    cylinder,
+                    sphere,
+                    star,
+                    applyFinalRotation,
+                  );
+              } else {
                 gear[i][out.currentGear[i]].mesh(
                   box,
                   cylinder,
                   sphere,
                   star,
-                  applyFinalRotation
+                  applyFinalRotation,
                 );
-            } else {
-              gear[i][out.currentGear[i]].mesh(
-                box,
-                cylinder,
-                sphere,
-                star,
-                applyFinalRotation
-              );
+              }
+            } else if (i !== "beequips") {
+              let theta =
+                ((currentAmulet++ + 1) / (totalAmulets + 1) - 0.5) *
+                (totalAmulets * 0.25 + 1);
+
+              let x = Math.sin(theta) * 1.5,
+                y = Math.cos(theta) * 1.5;
+
+              window.amuletOffset = [x, y - 1.5];
+
+              gear[i].mesh(box, cylinder, sphere, star);
             }
-          } else if (i !== "beequips") {
-            let theta =
-              ((currentAmulet++ + 1) / (totalAmulets + 1) - 0.5) *
-              (totalAmulets * 0.25 + 1);
-
-            let x = Math.sin(theta) * 1.5,
-              y = Math.cos(theta) * 1.5;
-
-            window.amuletOffset = [x, y - 1.5];
-
-            gear[i].mesh(box, cylinder, sphere, star);
           }
-        }
-      });
+        },
+      );
 
       playerMesh.setBuffers();
     };
 
     out.updateHive = function () {
-      out.hiveMesh.setMeshFromFunction(function (
-        box,
-        hiveSlot,
-        useless1,
-        useless2,
-        useless3,
-        giftedRing
-      ) {
-        for (let i in objects.bees) {
-          for (let j in objects.bees[i].trails) {
-            objects.bees[i].trails[j].splice = true;
-          }
-        }
-
-        objects.bees = [];
-
-        for (let i in raycastWorld.bodies) {
-          raycastWorld.removeBody(raycastWorld.bodies[i]);
-        }
-
-        for (let y = 0; y < out.hive.length; y++) {
-          for (let x = 0; x < out.hive[y].length; x++) {
-            let bond = out.hive[y][x].bond;
-
-            let l,
-              r = [
-                0, 10, 50, 250, 750, 1500, 3000, 6000, 125000, 25000, 50000,
-                100000, 200000, 400000, 800000, 1600000, 3200000, 6400000,
-                12800000, 25600000,
-              ];
-
-            for (let i in r) {
-              if (bond >= r[i]) l = i;
+      out.hiveMesh.setMeshFromFunction(
+        function (box, hiveSlot, useless1, useless2, useless3, giftedRing) {
+          for (let i in objects.bees) {
+            for (let j in objects.bees[i].trails) {
+              objects.bees[i].trails[j].splice = true;
             }
+          }
 
-            if (l < 20) l++;
+          objects.bees = [];
 
-            if (!l || l > 20) l = 20;
+          for (let i in raycastWorld.bodies) {
+            raycastWorld.removeBody(raycastWorld.bodies[i]);
+          }
 
-            out.hive[y][x].level = l;
+          for (let y = 0; y < out.hive.length; y++) {
+            for (let x = 0; x < out.hive[y].length; x++) {
+              let bond = out.hive[y][x].bond;
 
-            hiveSlot(
-              out.hivePos[0] + x * 0.8,
-              out.hivePos[1] + y * 0.8 - 2.25,
-              out.hivePos[2],
-              0.35,
-              0.35,
-              out.hive[y][x].type,
-              out.hive[y][x].gifted
-            );
+              let l,
+                r = [
+                  0, 10, 50, 250, 750, 1500, 3000, 6000, 125000, 25000, 50000,
+                  100000, 200000, 400000, 800000, 1600000, 3200000, 6400000,
+                  12800000, 25600000,
+                ];
 
-            if (out.hive[y][x].type !== null) {
-              if (out.hive[y][x].gifted)
-                giftedRing(
-                  out.hivePos[0] + x * 0.8,
-                  out.hivePos[1] + y * 0.8 - 2.25,
-                  out.hivePos[2] - 0.2,
-                  0.45,
-                  0.45,
-                  out.hive[y][x].type
-                );
+              for (let i in r) {
+                if (bond >= r[i]) l = i;
+              }
 
-              let _b = new Bee(
-                [
-                  out.hivePos[0] + x * 0.8,
-                  out.hivePos[1] + y * 0.8 - 2.25,
-                  out.hivePos[2],
-                ],
+              if (l < 20) l++;
+
+              if (!l || l > 20) l = 20;
+
+              out.hive[y][x].level = l;
+
+              hiveSlot(
+                out.hivePos[0] + x * 0.8,
+                out.hivePos[1] + y * 0.8 - 2.25,
+                out.hivePos[2],
+                0.35,
+                0.35,
                 out.hive[y][x].type,
-                out.hive[y][x].level,
                 out.hive[y][x].gifted,
-                x,
-                y,
-                out.hive[y][x].mutation
               );
 
-              out.hive[y][x].bee = _b;
-              objects.bees.push(_b);
+              if (out.hive[y][x].type !== null) {
+                if (out.hive[y][x].gifted)
+                  giftedRing(
+                    out.hivePos[0] + x * 0.8,
+                    out.hivePos[1] + y * 0.8 - 2.25,
+                    out.hivePos[2] - 0.2,
+                    0.45,
+                    0.45,
+                    out.hive[y][x].type,
+                  );
+
+                let _b = new Bee(
+                  [
+                    out.hivePos[0] + x * 0.8,
+                    out.hivePos[1] + y * 0.8 - 2.25,
+                    out.hivePos[2],
+                  ],
+                  out.hive[y][x].type,
+                  out.hive[y][x].level,
+                  out.hive[y][x].gifted,
+                  x,
+                  y,
+                  out.hive[y][x].mutation,
+                );
+
+                out.hive[y][x].bee = _b;
+                objects.bees.push(_b);
+              }
+
+              let b = new CANNON.Body({
+                position: new CANNON.Vec3(
+                  player.hivePos[0] + x * 0.8,
+                  player.hivePos[1] + y * 0.8 - 2.25,
+                  player.hivePos[2] - 0.2,
+                ),
+                shape: new CANNON.Box(new CANNON.Vec3(0.4, 0.4, 0.1)),
+                mass: 0,
+              });
+
+              b.hiveIndex = [x, y];
+
+              raycastWorld.addBody(b);
             }
-
-            let b = new CANNON.Body({
-              position: new CANNON.Vec3(
-                player.hivePos[0] + x * 0.8,
-                player.hivePos[1] + y * 0.8 - 2.25,
-                player.hivePos[2] - 0.2
-              ),
-              shape: new CANNON.Box(new CANNON.Vec3(0.4, 0.4, 0.1)),
-              mass: 0,
-            });
-
-            b.hiveIndex = [x, y];
-
-            raycastWorld.addBody(b);
           }
-        }
 
-        out.computeStats();
-      });
+          out.computeStats();
+        },
+      );
 
       out.hiveMesh.setBuffers();
     };
@@ -37758,12 +24785,12 @@ function BeeSwarmSimulator(DATA) {
       out.capacity = Math.round(out.capacity);
       out.honey = Math.round(out.honey);
 
+      // Using abbreviation logic instead of just adding commas
       pollenAmount2.textContent = pollenAmount.textContent =
-        MATH.addCommas(out.pollen.toString()) +
-        "/" +
-        MATH.addCommas(player.capacity.toString());
-      honeyAmount2.textContent = honeyAmount.textContent = MATH.addCommas(
-        out.honey.toString()
+        MATH.abvNumber(out.pollen) + " / " + MATH.abvNumber(player.capacity);
+
+      honeyAmount2.textContent = honeyAmount.textContent = MATH.abvNumber(
+        out.honey,
       );
 
       let p = Math.min(out.pollen / out.capacity, 1);
@@ -37803,7 +24830,7 @@ function BeeSwarmSimulator(DATA) {
         out.sprinklers[out.currentSprinkler].set(
           player.fieldIn,
           player.flowerIn.x,
-          player.flowerIn.z
+          player.flowerIn.z,
         );
         out.currentSprinkler =
           (out.currentSprinkler + 1) % out.sprinklers.length;
@@ -37822,7 +24849,7 @@ function BeeSwarmSimulator(DATA) {
                 y,
                 z,
                 box,
-                cylinder
+                cylinder,
               );
             }
           }
@@ -37840,12 +24867,12 @@ function BeeSwarmSimulator(DATA) {
         ctx.strokeText(
           MATH.doGrammar(out.itemDragging || out.beequipDragging.type),
           user.mouseX,
-          user.mouseY
+          user.mouseY,
         );
         ctx.fillText(
           MATH.doGrammar(out.itemDragging || out.beequipDragging.type),
           user.mouseX,
-          user.mouseY
+          user.mouseY,
         );
         ctx.textAlign = "center";
       }
@@ -37882,7 +24909,7 @@ function BeeSwarmSimulator(DATA) {
 
                 let taskAction = MATH.doStatGrammar(out.quests[i].req[j][0]);
                 let taskAmount = MATH.addCommas(
-                  out.quests[i].req[j][1].toString()
+                  out.quests[i].req[j][1].toString(),
                 );
                 let taskFocus =
                   out.quests[i].req[j][1] > 1 &&
@@ -37903,7 +24930,7 @@ function BeeSwarmSimulator(DATA) {
                         out.quests[i].req[j][2]) /
                         out.quests[i].req[j][1],
                       0,
-                      1
+                      1,
                     ) * 100
                   ).toFixed(0);
 
@@ -37915,7 +24942,7 @@ function BeeSwarmSimulator(DATA) {
                         out.quests[i].req[j][2]) /
                         out.quests[i].req[j][1]) *
                         190,
-                      190
+                      190,
                     )) +
                   "px;bottom:0px;background-color:rgb(0,250,0);'></div><div style='position:absolute;left:0px;top:0px;border-radius:2px;right:0px;bottom:0px'>" +
                   c +
@@ -38019,7 +25046,7 @@ function BeeSwarmSimulator(DATA) {
           "%<br>Ability Duplication Chance: " +
           Math.round(
             player.abilityDuplicationChance * 100 +
-              (player.hasDigitalBee && player.extraInfo.drives.maxed ? 1 : 0)
+              (player.hasDigitalBee && player.extraInfo.drives.maxed ? 1 : 0),
           ) +
           "%<br>Bond From Treats: " +
           Math.round(player.bondFromTreats * 100) +
@@ -38144,7 +25171,7 @@ function BeeSwarmSimulator(DATA) {
                   ? shops[out.currentShop].increments[
                       shops[out.currentShop].currentIncrement
                     ]
-                  : 1
+                  : 1,
               );
             }
 
@@ -38169,16 +25196,16 @@ function BeeSwarmSimulator(DATA) {
             ].owned
               ? "Sold Out"
               : canBuy
-              ? "Purchase"
-              : "Not Enough";
+                ? "Purchase"
+                : "Not Enough";
 
             purchaseButton.style.backgroundColor = shops[out.currentShop].items[
               shops[out.currentShop].currentIndex
             ].owned
               ? "rgb(255,50,50)"
               : canBuy
-              ? "rgb(0,200,0)"
-              : "rgb(225,0,0)";
+                ? "rgb(0,200,0)"
+                : "rgb(225,0,0)";
           } else {
             purchaseButton.innerHTML = shops[out.currentShop].items[
               shops[out.currentShop].currentIndex
@@ -38194,8 +25221,8 @@ function BeeSwarmSimulator(DATA) {
                 ? "Equipped"
                 : "Equip"
               : canBuy
-              ? "Purchase"
-              : "Not Enough";
+                ? "Purchase"
+                : "Not Enough";
 
             purchaseButton.style.backgroundColor = shops[out.currentShop].items[
               shops[out.currentShop].currentIndex
@@ -38211,8 +25238,8 @@ function BeeSwarmSimulator(DATA) {
                 ? "rgb(100,200,100)"
                 : "rgb(0,200,0)"
               : canBuy
-              ? "rgb(0,200,0)"
-              : "rgb(225,0,0)";
+                ? "rgb(0,200,0)"
+                : "rgb(225,0,0)";
           }
 
           if (user.clickedKeys.e) {
@@ -38257,7 +25284,7 @@ function BeeSwarmSimulator(DATA) {
         ctx.translate(half_width + 40, half_height + 20);
         ctx.scale(
           Math.min(1, (TIME - player.beePopup.time) * 10),
-          Math.min(1, (TIME - player.beePopup.time) * 10)
+          Math.min(1, (TIME - player.beePopup.time) * 10),
         );
         ctx.fillStyle = player.beePopup.gifted
           ? "rgb(" +
@@ -38322,10 +25349,10 @@ function BeeSwarmSimulator(DATA) {
                 legendary: 3,
                 mythic: 4,
                 event: 5,
-              }[beeInfo[bee].rarity]
+              }[beeInfo[bee].rarity],
             ),
           0,
-          -120
+          -120,
         );
         ctx.strokeText(
           (player.beePopup.gifted ? "Gifted " : "") +
@@ -38338,10 +25365,10 @@ function BeeSwarmSimulator(DATA) {
                 legendary: 3,
                 mythic: 4,
                 event: 5,
-              }[beeInfo[bee].rarity]
+              }[beeInfo[bee].rarity],
             ),
           0,
-          -120
+          -120,
         );
 
         ctx.font = "bold 13px arial";
@@ -38381,7 +25408,7 @@ function BeeSwarmSimulator(DATA) {
             " " +
             MATH.doGrammar(beeInfo[bee].rarity),
           0,
-          23
+          23,
         );
 
         ctx.rotate(Math.cos(TIME * 5) * 0.1);
@@ -38394,7 +25421,7 @@ function BeeSwarmSimulator(DATA) {
           -45,
           -95 + Math.sin(TIME * 2) * 7,
           90,
-          90
+          90,
         );
 
         ctx.setTransform(1, 0, 0, 1, 0, 0);
@@ -38441,9 +25468,9 @@ function BeeSwarmSimulator(DATA) {
                     Ro: [5, 8],
                     Mo: [6, 9],
                     Pe: [9, 12],
-                  }[f.substring(0, 2)]
-                ) | 0
-              )
+                  }[f.substring(0, 2)],
+                ) | 0,
+              ),
             );
           }
         }
@@ -38457,13 +25484,13 @@ function BeeSwarmSimulator(DATA) {
           out.isNight +
             dt * 0.0666667 * Math.sign(out.targetLight - out.isNight),
           NIGHT_DARKNESS,
-          1
+          1,
         );
 
         vec3.scale(
           out.skyColor,
           [0.4, 0.6, 1],
-          MATH.map(out.isNight, NIGHT_DARKNESS, 1, 0, 1)
+          MATH.map(out.isNight, NIGHT_DARKNESS, 1, 0, 1),
         );
 
         gl.useProgram(staticGeometryProgram);
@@ -38489,7 +25516,7 @@ function BeeSwarmSimulator(DATA) {
         let p = MATH.constrain(
             (player.isCrafting.time - TIME) / player.isCrafting.waitTime,
             0,
-            1
+            1,
           ),
           a = (player.isCrafting.amount * (1 - p)) | 0,
           n = Math.ceil(p * player.isCrafting.amount * 0.25);
@@ -38542,7 +25569,7 @@ function BeeSwarmSimulator(DATA) {
                 (a > 1
                   ? MATH.doPlural(MATH.doGrammar(player.isCrafting.item))
                   : MATH.doGrammar(player.isCrafting.item)) +
-                " (from Blender)"
+                " (from Blender)",
             );
 
           for (let i in blenderRecipes) {
@@ -38562,7 +25589,7 @@ function BeeSwarmSimulator(DATA) {
                       (f > 1
                         ? MATH.doPlural(MATH.doGrammar(b.req[j][0]))
                         : MATH.doGrammar(b.req[j][0])) +
-                      " (from Blender Refund)"
+                      " (from Blender Refund)",
                   );
               }
 
@@ -38580,7 +25607,7 @@ function BeeSwarmSimulator(DATA) {
 
           items.ticket.amount -= n;
           player.addMessage(
-            "-" + MATH.addCommas(n + "") + (n === 1 ? " Ticket" : " Tickets")
+            "-" + MATH.addCommas(n + "") + (n === 1 ? " Ticket" : " Tickets"),
           );
           items[player.isCrafting.item].amount += player.isCrafting.amount;
           player.addMessage(
@@ -38590,7 +25617,7 @@ function BeeSwarmSimulator(DATA) {
               (player.isCrafting.amount > 1
                 ? MATH.doPlural(MATH.doGrammar(player.isCrafting.item))
                 : MATH.doGrammar(player.isCrafting.item)) +
-              " (from Blender)"
+              " (from Blender)",
           );
           player.stats.itemsUsingTheBlender += player.isCrafting.amount;
           player.isCrafting = false;
@@ -38656,11 +25683,11 @@ function BeeSwarmSimulator(DATA) {
         document.getElementById("shrineX").onclick();
         out.addMessage(
           "You're supposed to donate, not get donations here lol",
-          COLORS.redArr
+          COLORS.redArr,
         );
         out.addMessage(
           "Stop being poor(haha) and get an item that you can donate",
-          COLORS.redArr
+          COLORS.redArr,
         );
         return;
       }
@@ -38671,7 +25698,7 @@ function BeeSwarmSimulator(DATA) {
 
       document.getElementById("shrineMenu").style.display = "block";
       document.getElementById("shrineItemName").innerHTML = MATH.doGrammar(
-        windShrineDonations[out.shrineIndex].item
+        windShrineDonations[out.shrineIndex].item,
       );
       document.getElementById("shrineItem").innerHTML = itemSVGCode[
         windShrineDonations[out.shrineIndex].item
@@ -38703,13 +25730,13 @@ function BeeSwarmSimulator(DATA) {
 
       document.getElementById("shrineAmount").value = Math.min(
         document.getElementById("shrineAmount").value,
-        items[windShrineDonations[out.shrineIndex].item].amount
+        items[windShrineDonations[out.shrineIndex].item].amount,
       );
 
       document.getElementById("shrineAmount").oninput = function () {
         document.getElementById("shrineAmount").value = Math.min(
           document.getElementById("shrineAmount").value,
-          items[windShrineDonations[out.shrineIndex].item].amount
+          items[windShrineDonations[out.shrineIndex].item].amount,
         );
       };
 
@@ -38768,41 +25795,47 @@ function BeeSwarmSimulator(DATA) {
         ];
 
         for (let i in mess) {
-          window.setTimeout(function () {
-            out.addMessage(mess[i][(Math.random() * mess[i].length) | 0], [
-              160 * 0.6,
-              235 * 0.6,
-              255 * 0.6,
-            ]);
-          }, i * 3250 + 750);
+          window.setTimeout(
+            function () {
+              out.addMessage(mess[i][(Math.random() * mess[i].length) | 0], [
+                160 * 0.6,
+                235 * 0.6,
+                255 * 0.6,
+              ]);
+            },
+            i * 3250 + 750,
+          );
         }
 
         if (windShrineDonations[out.shrineIndex].item === "spiritPetal") {
-          window.setTimeout(function () {
-            if (items.windyBeeEgg.amount > 0) {
-              player.addMessage(
-                "Hey! Stop being greedy! You have a Windy Bee already! >:(",
-                COLORS.redArr
-              );
-              return;
-            }
+          window.setTimeout(
+            function () {
+              if (items.windyBeeEgg.amount > 0) {
+                player.addMessage(
+                  "Hey! Stop being greedy! You have a Windy Bee already! >:(",
+                  COLORS.redArr,
+                );
+                return;
+              }
 
-            out.addMessage("🎉 You've tamed a Windy Bee! 🎉", [
-              160 * 0.75,
-              235 * 0.75,
-              255 * 0.75,
-            ]);
-            out.addMessage("+1 Windy Bee Egg");
-            items[windShrineDonations[out.shrineIndex].item].amount--;
-            out.updateInventory();
+              out.addMessage("🎉 You've tamed a Windy Bee! 🎉", [
+                160 * 0.75,
+                235 * 0.75,
+                255 * 0.75,
+              ]);
+              out.addMessage("+1 Windy Bee Egg");
+              items[windShrineDonations[out.shrineIndex].item].amount--;
+              out.updateInventory();
 
-            if (document.getElementById("shrineAmount").value > 1) {
-              out.addMessage(
-                "Hey! No soft-locking! You donated 1+ petals! >:(",
-                COLORS.redArr
-              );
-            }
-          }, 3 * 3250 + 750);
+              if (document.getElementById("shrineAmount").value > 1) {
+                out.addMessage(
+                  "Hey! No soft-locking! You donated 1+ petals! >:(",
+                  COLORS.redArr,
+                );
+              }
+            },
+            3 * 3250 + 750,
+          );
         } else {
           items[windShrineDonations[out.shrineIndex].item].amount -=
             document.getElementById("shrineAmount").value;
@@ -38814,150 +25847,153 @@ function BeeSwarmSimulator(DATA) {
 
         out.updateInventory();
 
-        window.setTimeout(function () {
-          if (
-            windShrineDonations[out.shrineIndex].item === "spiritPetal" &&
-            items.windyBeeEgg.amount > 0
-          )
-            return;
+        window.setTimeout(
+          function () {
+            if (
+              windShrineDonations[out.shrineIndex].item === "spiritPetal" &&
+              items.windyBeeEgg.amount > 0
+            )
+              return;
 
-          let info = windShrineDonations[out.shrineIndex],
-            amountOfTokens,
-            amountDonated =
-              windShrineDonations[out.shrineIndex].item === "spiritPetal"
-                ? 1000
-                : document.getElementById("shrineAmount").value;
+            let info = windShrineDonations[out.shrineIndex],
+              amountOfTokens,
+              amountDonated =
+                windShrineDonations[out.shrineIndex].item === "spiritPetal"
+                  ? 1000
+                  : document.getElementById("shrineAmount").value;
 
-          switch (info.rewardType) {
-            case "honey":
-              amountOfTokens = (3 + info.rewardAmount * 0.5) | 0;
+            switch (info.rewardType) {
+              case "honey":
+                amountOfTokens = (3 + info.rewardAmount * 0.5) | 0;
 
-              for (let i = 0; i < amountOfTokens; i++) {
-                let theta = (i - (amountOfTokens - 1) * 0.5) * 0.5,
-                  x = -Math.cos(theta) * 4.5,
-                  z = Math.sin(theta) * 4.5;
+                for (let i = 0; i < amountOfTokens; i++) {
+                  let theta = (i - (amountOfTokens - 1) * 0.5) * 0.5,
+                    x = -Math.cos(theta) * 4.5,
+                    z = Math.sin(theta) * 4.5;
 
-                window.setTimeout(function () {
-                  objects.tokens.push(
-                    new LootToken(
-                      60,
-                      [68 + x, 23.75, -21.5 + z],
-                      "honey",
-                      ((info.rewardAmount *
-                        info.rewardAmount *
-                        info.rewardAmount *
-                        40 *
-                        (amountDonated * 0.025 + 1) -
-                        20) *
-                        MATH.random(0.8, 1 / 0.8)) |
-                        0,
-                      false,
-                      "Wind Shrine"
-                    )
-                  );
-                }, i * 150);
-              }
-
-              let _fields = [];
-
-              for (let i in fieldInfo) if (i !== "AntField") _fields.push(i);
-
-              _fields = _fields[(Math.random() * _fields.length) | 0];
-
-              objects.mobs.push(
-                new Cloud(
-                  _fields,
-                  (Math.random() * fieldInfo[_fields].width) | 0,
-                  (Math.random() * fieldInfo[_fields].length) | 0,
-                  5 * 60,
-                  true
-                )
-              );
-
-              window.setTimeout(
-                () =>
-                  player.addMessage(
-                    "☁️A Wild Windy Bee has appeared!☁️",
-                    [160, 160, 160]
-                  ),
-                750
-              );
-
-              break;
-
-            case "winds":
-              amountOfTokens = (3 + info.rewardAmount * 0.6) | 0;
-
-              let fields = [];
-
-              for (let i in fieldInfo) if (i !== "AntField") fields.push(i);
-
-              for (let i = 0; i < amountOfTokens; i++) {
-                let theta = (i - (amountOfTokens - 1) * 0.5) * 0.5,
-                  x = -Math.cos(theta) * 4.5,
-                  z = Math.sin(theta) * 4.5;
-
-                if (Math.random() < 0.2) {
                   window.setTimeout(function () {
                     objects.tokens.push(
                       new LootToken(
                         60,
                         [68 + x, 23.75, -21.5 + z],
                         "honey",
-                        (info.rewardAmount *
+                        ((info.rewardAmount *
                           info.rewardAmount *
-                          2500 *
-                          (amountDonated * 0.02 + 1) *
+                          info.rewardAmount *
+                          40 *
+                          (amountDonated * 0.025 + 1) -
+                          20) *
                           MATH.random(0.8, 1 / 0.8)) |
                           0,
                         false,
-                        "Wind Shrine"
-                      )
-                    );
-                  }, i * 150);
-                } else {
-                  let field = (Math.random() * fields.length) | 0,
-                    eff = fields[field];
-
-                  fields.splice(field, 1);
-
-                  for (let j = 0, _j = Math.random() * 2.5; j < _j; j++)
-                    objects.mobs.push(
-                      new Cloud(
-                        eff,
-                        (Math.random() * fieldInfo[eff].width) | 0,
-                        (Math.random() * fieldInfo[eff].length) | 0,
-                        5 * 60
-                      )
-                    );
-
-                  eff += "Winds";
-                  eff = eff[0].toLowerCase() + eff.substring(1);
-
-                  window.setTimeout(function () {
-                    objects.tokens.push(
-                      new Token(
-                        60,
-                        [68 + x, 23.75, -21.5 + z],
-                        eff,
-                        {},
-                        false,
-                        Math.max(
-                          Math.ceil(
-                            info.rewardAmount +
-                              Math.round(MATH.random(-1.25, 1.25))
-                          ),
-                          1
-                        )
-                      )
+                        "Wind Shrine",
+                      ),
                     );
                   }, i * 150);
                 }
-              }
 
-              break;
-          }
-        }, 2 * 3250 + 1750);
+                let _fields = [];
+
+                for (let i in fieldInfo) if (i !== "AntField") _fields.push(i);
+
+                _fields = _fields[(Math.random() * _fields.length) | 0];
+
+                objects.mobs.push(
+                  new Cloud(
+                    _fields,
+                    (Math.random() * fieldInfo[_fields].width) | 0,
+                    (Math.random() * fieldInfo[_fields].length) | 0,
+                    5 * 60,
+                    true,
+                  ),
+                );
+
+                window.setTimeout(
+                  () =>
+                    player.addMessage(
+                      "☁️A Wild Windy Bee has appeared!☁️",
+                      [160, 160, 160],
+                    ),
+                  750,
+                );
+
+                break;
+
+              case "winds":
+                amountOfTokens = (3 + info.rewardAmount * 0.6) | 0;
+
+                let fields = [];
+
+                for (let i in fieldInfo) if (i !== "AntField") fields.push(i);
+
+                for (let i = 0; i < amountOfTokens; i++) {
+                  let theta = (i - (amountOfTokens - 1) * 0.5) * 0.5,
+                    x = -Math.cos(theta) * 4.5,
+                    z = Math.sin(theta) * 4.5;
+
+                  if (Math.random() < 0.2) {
+                    window.setTimeout(function () {
+                      objects.tokens.push(
+                        new LootToken(
+                          60,
+                          [68 + x, 23.75, -21.5 + z],
+                          "honey",
+                          (info.rewardAmount *
+                            info.rewardAmount *
+                            2500 *
+                            (amountDonated * 0.02 + 1) *
+                            MATH.random(0.8, 1 / 0.8)) |
+                            0,
+                          false,
+                          "Wind Shrine",
+                        ),
+                      );
+                    }, i * 150);
+                  } else {
+                    let field = (Math.random() * fields.length) | 0,
+                      eff = fields[field];
+
+                    fields.splice(field, 1);
+
+                    for (let j = 0, _j = Math.random() * 2.5; j < _j; j++)
+                      objects.mobs.push(
+                        new Cloud(
+                          eff,
+                          (Math.random() * fieldInfo[eff].width) | 0,
+                          (Math.random() * fieldInfo[eff].length) | 0,
+                          5 * 60,
+                        ),
+                      );
+
+                    eff += "Winds";
+                    eff = eff[0].toLowerCase() + eff.substring(1);
+
+                    window.setTimeout(function () {
+                      objects.tokens.push(
+                        new Token(
+                          60,
+                          [68 + x, 23.75, -21.5 + z],
+                          eff,
+                          {},
+                          false,
+                          Math.max(
+                            Math.ceil(
+                              info.rewardAmount +
+                                Math.round(MATH.random(-1.25, 1.25)),
+                            ),
+                            1,
+                          ),
+                        ),
+                      );
+                    }, i * 150);
+                  }
+                }
+
+                break;
+            }
+          },
+          2 * 3250 + 1750,
+        );
       };
     };
 
@@ -39034,14 +26070,14 @@ function BeeSwarmSimulator(DATA) {
           let r = blenderRecipes[player.blenderIndex].req[i];
           maximumCanCraft = Math.min(
             maximumCanCraft,
-            (items[r[0]].amount / r[1]) | 0
+            (items[r[0]].amount / r[1]) | 0,
           );
         }
 
         document.getElementById("blenderCraftAmount").value = MATH.constrain(
           document.getElementById("blenderCraftAmount").value,
           maximumCanCraft ? 1 : 0,
-          maximumCanCraft
+          maximumCanCraft,
         );
 
         if (!Number(document.getElementById("blenderCraftAmount").value)) {
@@ -39053,7 +26089,7 @@ function BeeSwarmSimulator(DATA) {
             "rgb(0,170,0)";
           document.getElementById("blenderCraft").onclick = function () {
             let am = Number(
-                document.getElementById("blenderCraftAmount").value
+                document.getElementById("blenderCraftAmount").value,
               ),
               waitTime = am + 45;
 
@@ -39077,7 +26113,7 @@ function BeeSwarmSimulator(DATA) {
                       " " +
                       (am > 1
                         ? MATH.doPlural(MATH.doGrammar(b.req[j][0]))
-                        : MATH.doGrammar(b.req[j][0]))
+                        : MATH.doGrammar(b.req[j][0])),
                   );
                 }
 
@@ -39098,7 +26134,7 @@ function BeeSwarmSimulator(DATA) {
           let r = blenderRecipes[player.blenderIndex].req[i],
             h = itemSVGCode[r[0]].replace(
               "SCALE",
-              "translate(-20px,-10px) scale(0.5,0.5)"
+              "translate(-20px,-10px) scale(0.5,0.5)",
             );
 
           document.getElementById("blenderReq").innerHTML +=
@@ -39198,7 +26234,7 @@ function BeeSwarmSimulator(DATA) {
         MATH.xRotate(
           MATH.yRotate(out.viewMatrix, out.cosYaw, out.sinYaw),
           out.cosPitch,
-          out.sinPitch
+          out.sinPitch,
         );
 
         out.cameraDir[0] = out.viewMatrix[2];
@@ -39208,14 +26244,14 @@ function BeeSwarmSimulator(DATA) {
         out.cameraRaycastPoint.set(
           player.body.position.x + out.cameraDir[0] * out.zoom,
           player.body.position.y + 0.5 + out.cameraDir[1] * out.zoom,
-          player.body.position.z + out.cameraDir[2] * out.zoom
+          player.body.position.z + out.cameraDir[2] * out.zoom,
         );
 
         world.raycastClosest(
           out.body.position,
           out.cameraRaycastPoint,
           out.cameraRaycastFilter,
-          out.cameraRaycastResult
+          out.cameraRaycastResult,
         );
 
         let d =
@@ -39231,7 +26267,7 @@ function BeeSwarmSimulator(DATA) {
           out.viewMatrix,
           -player.body.position.x - out.cameraDir[0] * d + normalizedCamDir[1],
           -player.body.position.y - 0.5 - out.cameraDir[1] * d,
-          -player.body.position.z - out.cameraDir[2] * d - normalizedCamDir[0]
+          -player.body.position.z - out.cameraDir[2] * d - normalizedCamDir[0],
         );
 
         MATH.mult(out.viewMatrix, out.projectionMatrix, out.viewMatrix);
@@ -39251,7 +26287,7 @@ function BeeSwarmSimulator(DATA) {
         MATH.xRotate(
           MATH.yRotate(out.viewMatrix, out.cosYaw, out.sinYaw),
           out.cosPitch,
-          out.sinPitch
+          out.sinPitch,
         );
 
         out.cameraDir[0] = out.viewMatrix[2];
@@ -39261,14 +26297,14 @@ function BeeSwarmSimulator(DATA) {
         out.cameraRaycastPoint.set(
           player.body.position.x + out.cameraDir[0] * out.zoom,
           player.body.position.y + 0.5 + out.cameraDir[1] * out.zoom,
-          player.body.position.z + out.cameraDir[2] * out.zoom
+          player.body.position.z + out.cameraDir[2] * out.zoom,
         );
 
         world.raycastClosest(
           out.body.position,
           out.cameraRaycastPoint,
           out.cameraRaycastFilter,
-          out.cameraRaycastResult
+          out.cameraRaycastResult,
         );
 
         let d =
@@ -39280,7 +26316,7 @@ function BeeSwarmSimulator(DATA) {
           out.viewMatrix,
           -player.body.position.x - out.cameraDir[0] * d,
           -player.body.position.y - 0.5 - out.cameraDir[1] * d,
-          -player.body.position.z - out.cameraDir[2] * d
+          -player.body.position.z - out.cameraDir[2] * d,
         );
         MATH.mult(out.viewMatrix, out.projectionMatrix, out.viewMatrix);
 
@@ -39310,7 +26346,7 @@ function BeeSwarmSimulator(DATA) {
       mat4.rotateX(
         out.toolMatrix,
         out.toolMatrix,
-        Math.max(0, (-Math.abs(out.toolRot - 2) + 2) * MATH.QUATER_PI)
+        Math.max(0, (-Math.abs(out.toolRot - 2) + 2) * MATH.QUATER_PI),
       );
 
       if (out.viewMatrixToChange) {
@@ -39318,7 +26354,7 @@ function BeeSwarmSimulator(DATA) {
         MATH.lerpMatrix(
           out.viewMatrixCopy,
           out.viewMatrixToChange,
-          out.easeAmount
+          out.easeAmount,
         );
         out.viewMatrix = out.viewMatrixCopy.slice();
       }
@@ -39478,7 +26514,7 @@ function BeeSwarmSimulator(DATA) {
                   player.hivePos[2] + 0.1,
                 ],
                 c,
-                -1.5
+                -1.5,
               );
             }
 
@@ -39490,7 +26526,7 @@ function BeeSwarmSimulator(DATA) {
                   player.hivePos[2] + 0.2,
                 ],
                 player.hive[y][x].beequip.type,
-                [-1, -1]
+                [-1, -1],
               );
             }
 
@@ -39504,7 +26540,7 @@ function BeeSwarmSimulator(DATA) {
                   player.hivePos[2] + 0.1,
                 ],
                 "radioactive",
-                [1.3, 1.3]
+                [1.3, 1.3],
               );
 
               if (player.radioactiveParticleTimer <= 0) {
@@ -39537,12 +26573,12 @@ function BeeSwarmSimulator(DATA) {
       for (let i in fieldInfo) {
         fieldInfo[i].degration = Math.max(
           fieldInfo[i].degration - dt * 0.00027777777,
-          0
+          0,
         );
         fieldInfo[i].corruption = MATH.constrain(
           fieldInfo[i].corruption - dt * 0.6,
           0,
-          100
+          100,
         );
 
         updateFlower(
@@ -39596,7 +26632,7 @@ function BeeSwarmSimulator(DATA) {
           },
           true,
           true,
-          true
+          true,
         );
 
         if (!player.fieldIn) {
@@ -39619,7 +26655,7 @@ function BeeSwarmSimulator(DATA) {
                 "corruption",
                 false,
                 false,
-                fieldInfo[i].corruption | 0
+                fieldInfo[i].corruption | 0,
               );
           }
         }
@@ -39680,8 +26716,8 @@ function BeeSwarmSimulator(DATA) {
               tt,
               1,
               false,
-              "Leaves"
-            )
+              "Leaves",
+            ),
           );
         }
       }
@@ -39797,7 +26833,7 @@ function BeeSwarmSimulator(DATA) {
             "Cogs can be used to buy more quest rerolls and items like drives. There are 4 colors of drives, which can be used to buff your pollen and bee attack depending on which color the drives are.",
             "The challenge ends when you run out of time. You can get many rewards based on how many rounds you completed. You can also get Cog Amulets, which give many permanent buffs to your hive.",
             " Amulet stats are increased based on how many rounds you do. With enough drives, you can also buy a Digital Bee, which is an event bee that can be hatched and used in your hive!",
-            "That's it! Have fun!"
+            "That's it! Have fun!",
           );
           NPCs.roboBear.dialogueIndex++;
         },
@@ -39812,16 +26848,16 @@ function BeeSwarmSimulator(DATA) {
                 (function (s) {
                   return (
                     (s >= 3600 ? ((0.00027777777 * s) | 0) + "h " : "") +
-                    (s >= 60 ? ((0.0166666667 * s) % 60 | 0) + "m " : "") +
+                    (s >= 60 ? (((0.0166666667 * s) % 60) | 0) + "m " : "") +
                     ((s | 0) % 60) +
                     "s"
                   );
                 })(
                   60 * 60 -
                     (Date.now() - player.extraInfo.freeRoboPass) * 0.001 +
-                    ""
+                    "",
                 ) +
-                "!"
+                "!",
             );
           } else {
             NPCs.roboBear.dialogue.push("", "Ok!", function () {
@@ -39854,7 +26890,7 @@ function BeeSwarmSimulator(DATA) {
           } else {
             NPCs.roboBear.dialogue.push(
               "",
-              "You need a Robo Pass to start the challenge!"
+              "You need a Robo Pass to start the challenge!",
             );
           }
           NPCs.roboBear.dialogueIndex++;
@@ -41088,7 +28124,7 @@ function BeeSwarmSimulator(DATA) {
             (n, i = 1) =>
               Math.min(
                 Math.floor(5000 * Math.pow(1.003, n) * i),
-                1000000000000
+                1000000000000,
               ) + " honey",
           ],
           desc: "Can be used to purchase special items and activate machines!",
@@ -41329,64 +28365,58 @@ function BeeSwarmSimulator(DATA) {
     },
   };
 
-  shopGearMesh.setMeshFromFunction(function (
-    box,
-    a,
-    cylinder,
-    sphere,
-    applyFinalRotation,
-    c,
-    star
-  ) {
-    let num = 0;
+  shopGearMesh.setMeshFromFunction(
+    function (box, a, cylinder, sphere, applyFinalRotation, c, star) {
+      let num = 0;
 
-    for (let i in shops) {
-      let s = shops[i].items;
+      for (let i in shops) {
+        let s = shops[i].items;
 
-      for (let j in s) {
-        let si = s[j];
+        for (let j in s) {
+          let si = s[j];
 
-        if (si.slot !== "item" && si.slot !== "beequip") {
-          mat4.fromRotationTranslationScale(
-            shopGearMesh.matrix,
-            quat.fromEuler([], ...(si.displayRot || [0, 0, 0])),
-            si.displayPos,
-            si.displayScale || [1, 1, 1]
-          );
-
-          if (si.slot === "sprinkler") {
-            gear[si.slot][si.name].shopMesh(
-              0,
-              0,
-              0,
-              box,
-              cylinder,
-              sphere,
-              star,
-              applyFinalRotation,
-              false
+          if (si.slot !== "item" && si.slot !== "beequip") {
+            mat4.fromRotationTranslationScale(
+              shopGearMesh.matrix,
+              quat.fromEuler([], ...(si.displayRot || [0, 0, 0])),
+              si.displayPos,
+              si.displayScale || [1, 1, 1],
             );
-          } else {
-            gear[si.slot][si.name].mesh(
-              box,
-              cylinder,
-              sphere,
-              star,
-              applyFinalRotation,
-              false
-            );
+
+            if (si.slot === "sprinkler") {
+              gear[si.slot][si.name].shopMesh(
+                0,
+                0,
+                0,
+                box,
+                cylinder,
+                sphere,
+                star,
+                applyFinalRotation,
+                false,
+              );
+            } else {
+              gear[si.slot][si.name].mesh(
+                box,
+                cylinder,
+                sphere,
+                star,
+                applyFinalRotation,
+                false,
+              );
+            }
           }
         }
       }
-    }
-  });
+    },
+  );
 
   shopGearMesh.setBuffers();
 
   for (let i in shops) {
     for (let j in shops[i].items) {
       shops[i].items[j].viewMatrix = computeSceneViewMatrix(
-        ...shops[i].items[j].viewMatrix
+        ...shops[i].items[j].viewMatrix,
       );
     }
   }
@@ -41512,10 +28542,10 @@ function BeeSwarmSimulator(DATA) {
                 "Item is on a cooldown of " +
                   MATH.doTime(
                     items[player.itemDragging].maxCooldown -
-                      (TIME - items[player.itemDragging].cooldown)
+                      (TIME - items[player.itemDragging].cooldown),
                   ) +
                   "!",
-                COLORS.redArr
+                COLORS.redArr,
               );
             }
 
@@ -41607,10 +28637,10 @@ function BeeSwarmSimulator(DATA) {
               "Item is on a cooldown of " +
                 MATH.doTime(
                   items[hotbarSlots[n].itemType].maxCooldown -
-                    (TIME - items[hotbarSlots[n].itemType].cooldown)
+                    (TIME - items[hotbarSlots[n].itemType].cooldown),
                 ) +
                 "!",
-              COLORS.redArr
+              COLORS.redArr,
             );
           }
         }
@@ -41809,7 +28839,7 @@ function BeeSwarmSimulator(DATA) {
       critType,
       prefix = "+",
       scale = 1,
-      addCommas = true
+      addCommas = true,
     ) {
       let m, s;
 
@@ -41853,7 +28883,7 @@ function BeeSwarmSimulator(DATA) {
       splitCommas = true,
       addCommas = true,
       offx = 0,
-      offy = 0
+      offy = 0,
     ) {
       let m = message;
 
@@ -41861,7 +28891,7 @@ function BeeSwarmSimulator(DATA) {
         m = message.split("/");
 
         if (m.length > 1) {
-          (m = MATH.abvNumber(m[0]) + "/" + MATH.abvNumber(m[1])), s;
+          ((m = MATH.abvNumber(m[0]) + "/" + MATH.abvNumber(m[1])), s);
         } else {
           m = addCommas ? MATH.addCommas(m[0]) : m[0];
         }
@@ -41887,7 +28917,7 @@ function BeeSwarmSimulator(DATA) {
           color[2] * MATH.INV_255,
           s,
           s,
-          0
+          0,
         );
       }
     };
@@ -41913,7 +28943,7 @@ function BeeSwarmSimulator(DATA) {
         1,
         1,
         ...size,
-        rot
+        rot,
       );
     };
 
@@ -41935,14 +28965,14 @@ function BeeSwarmSimulator(DATA) {
         gl.FLOAT,
         gl.FALSE,
         16,
-        0
+        0,
       );
       gl.vertexAttribPointer(glCache.text_vertUV, 2, gl.FLOAT, gl.FALSE, 16, 8);
       gl.bindBuffer(gl.ARRAY_BUFFER, out.instanceBuffer);
       gl.bufferData(
         gl.ARRAY_BUFFER,
         Float32Array.from(out.decal_instanceData),
-        gl.DYNAMIC_DRAW
+        gl.DYNAMIC_DRAW,
       );
       gl.vertexAttribPointer(
         glCache.text_instanceOrigin,
@@ -41950,7 +28980,7 @@ function BeeSwarmSimulator(DATA) {
         gl.FLOAT,
         gl.FALSE,
         52,
-        0
+        0,
       );
       gl.vertexAttribDivisor(glCache.text_instanceOrigin, 1);
       gl.vertexAttribPointer(
@@ -41959,7 +28989,7 @@ function BeeSwarmSimulator(DATA) {
         gl.FLOAT,
         gl.FALSE,
         52,
-        12
+        12,
       );
       gl.vertexAttribDivisor(glCache.text_instanceOffset, 1);
       gl.vertexAttribPointer(
@@ -41968,7 +28998,7 @@ function BeeSwarmSimulator(DATA) {
         gl.FLOAT,
         gl.FALSE,
         52,
-        20
+        20,
       );
       gl.vertexAttribDivisor(glCache.text_instanceUV, 1);
       gl.vertexAttribPointer(
@@ -41977,7 +29007,7 @@ function BeeSwarmSimulator(DATA) {
         gl.FLOAT,
         gl.FALSE,
         52,
-        28
+        28,
       );
       gl.vertexAttribDivisor(glCache.text_instanceColor, 1);
       gl.vertexAttribPointer(
@@ -41986,7 +29016,7 @@ function BeeSwarmSimulator(DATA) {
         gl.FLOAT,
         gl.FALSE,
         52,
-        40
+        40,
       );
       gl.vertexAttribDivisor(glCache.text_instanceInfo, 1);
       gl.drawElementsInstanced(
@@ -41994,7 +29024,7 @@ function BeeSwarmSimulator(DATA) {
         out.decal_indexAmount,
         gl.UNSIGNED_SHORT,
         0,
-        out.decal_instanceData.length * MATH.INV_13
+        out.decal_instanceData.length * MATH.INV_13,
       );
 
       let n = player.isNight * 0.85,
@@ -42474,7 +29504,7 @@ function BeeSwarmSimulator(DATA) {
             d.col[2] * t,
             s,
             s,
-            SIN_TIME * 0.4
+            SIN_TIME * 0.4,
           );
         } else if (d.critType === 2) {
           out.instanceData.push(
@@ -42490,7 +29520,7 @@ function BeeSwarmSimulator(DATA) {
             MATH.lerp(0.7, d.col[2], _t),
             s,
             s,
-            SIN_TIME * 0.4
+            SIN_TIME * 0.4,
           );
         } else {
           out.instanceData.push(
@@ -42506,7 +29536,7 @@ function BeeSwarmSimulator(DATA) {
             d.col[2],
             s,
             s,
-            0
+            0,
           );
         }
 
@@ -42524,14 +29554,14 @@ function BeeSwarmSimulator(DATA) {
         gl.FLOAT,
         gl.FALSE,
         16,
-        0
+        0,
       );
       gl.vertexAttribPointer(glCache.text_vertUV, 2, gl.FLOAT, gl.FALSE, 16, 8);
       gl.bindBuffer(gl.ARRAY_BUFFER, out.instanceBuffer);
       gl.bufferData(
         gl.ARRAY_BUFFER,
         Float32Array.from(out.instanceData),
-        gl.DYNAMIC_DRAW
+        gl.DYNAMIC_DRAW,
       );
       gl.vertexAttribPointer(
         glCache.text_instanceOrigin,
@@ -42539,7 +29569,7 @@ function BeeSwarmSimulator(DATA) {
         gl.FLOAT,
         gl.FALSE,
         52,
-        0
+        0,
       );
       gl.vertexAttribPointer(
         glCache.text_instanceOffset,
@@ -42547,7 +29577,7 @@ function BeeSwarmSimulator(DATA) {
         gl.FLOAT,
         gl.FALSE,
         52,
-        12
+        12,
       );
       gl.vertexAttribPointer(
         glCache.text_instanceUV,
@@ -42555,7 +29585,7 @@ function BeeSwarmSimulator(DATA) {
         gl.FLOAT,
         gl.FALSE,
         52,
-        20
+        20,
       );
       gl.vertexAttribPointer(
         glCache.text_instanceColor,
@@ -42563,7 +29593,7 @@ function BeeSwarmSimulator(DATA) {
         gl.FLOAT,
         gl.FALSE,
         52,
-        28
+        28,
       );
       gl.vertexAttribPointer(
         glCache.text_instanceInfo,
@@ -42571,14 +29601,14 @@ function BeeSwarmSimulator(DATA) {
         gl.FLOAT,
         gl.FALSE,
         52,
-        40
+        40,
       );
       gl.drawElementsInstanced(
         gl.TRIANGLES,
         out.indexAmount,
         gl.UNSIGNED_SHORT,
         0,
-        out.instanceData.length * MATH.INV_13
+        out.instanceData.length * MATH.INV_13,
       );
 
       gl.vertexAttribDivisor(glCache.text_instanceOrigin, 0);
@@ -42613,12 +29643,12 @@ function BeeSwarmSimulator(DATA) {
           ctx.strokeText(
             t.message,
             p[0] * half_width + half_width,
-            height - (p[1] * half_height + half_height)
+            height - (p[1] * half_height + half_height),
           );
           ctx.fillText(
             t.message,
             p[0] * half_width + half_width,
-            height - (p[1] * half_height + half_height)
+            height - (p[1] * half_height + half_height),
           );
         }
       }
@@ -42665,7 +29695,7 @@ function BeeSwarmSimulator(DATA) {
           d.col[2],
           d.col[3],
           d.size,
-          d.rot
+          d.rot,
         );
 
         if (d.life <= 0) {
@@ -42677,14 +29707,14 @@ function BeeSwarmSimulator(DATA) {
       gl.uniformMatrix4fv(
         glCache.particle_viewMatrix,
         gl.FALSE,
-        player.viewMatrix
+        player.viewMatrix,
       );
 
       gl.bindBuffer(gl.ARRAY_BUFFER, out.vertBuffer);
       gl.bufferData(
         gl.ARRAY_BUFFER,
         Float32Array.from(out.verts),
-        gl.DYNAMIC_DRAW
+        gl.DYNAMIC_DRAW,
       );
       gl.vertexAttribPointer(
         glCache.particle_vertPos,
@@ -42692,7 +29722,7 @@ function BeeSwarmSimulator(DATA) {
         gl.FLOAT,
         gl.FALSE,
         36,
-        0
+        0,
       );
       gl.vertexAttribPointer(
         glCache.particle_vertColor,
@@ -42700,7 +29730,7 @@ function BeeSwarmSimulator(DATA) {
         gl.FLOAT,
         gl.FALSE,
         36,
-        12
+        12,
       );
       gl.vertexAttribPointer(
         glCache.particle_vertSize,
@@ -42708,7 +29738,7 @@ function BeeSwarmSimulator(DATA) {
         gl.FLOAT,
         gl.FALSE,
         36,
-        28
+        28,
       );
       gl.vertexAttribPointer(
         glCache.particle_vertRot,
@@ -42716,7 +29746,7 @@ function BeeSwarmSimulator(DATA) {
         gl.FLOAT,
         gl.FALSE,
         36,
-        32
+        32,
       );
       gl.drawArrays(gl.POINTS, 0, out.verts.length / 9);
     };
@@ -42754,7 +29784,7 @@ function BeeSwarmSimulator(DATA) {
       gl.bufferData(
         gl.ELEMENT_ARRAY_BUFFER,
         out.constantTrailIndex,
-        gl.STATIC_DRAW
+        gl.STATIC_DRAW,
       );
     };
 
@@ -42977,7 +30007,7 @@ function BeeSwarmSimulator(DATA) {
           gl.FLOAT,
           gl.FALSE,
           28,
-          0
+          0,
         );
         gl.vertexAttribPointer(
           glCache.trail_vertColor,
@@ -42985,7 +30015,7 @@ function BeeSwarmSimulator(DATA) {
           gl.FLOAT,
           gl.FALSE,
           28,
-          12
+          12,
         );
         gl.drawElements(gl.TRIANGLES, this.index.length, gl.UNSIGNED_SHORT, 0);
       };
@@ -43266,7 +30296,7 @@ function BeeSwarmSimulator(DATA) {
       gl.uniformMatrix4fv(
         glCache.trail_viewMatrix,
         gl.FALSE,
-        player.viewMatrix
+        player.viewMatrix,
       );
 
       for (let i in out.trails) {
@@ -43295,7 +30325,7 @@ function BeeSwarmSimulator(DATA) {
         gl.FLOAT,
         gl.FALSE,
         28,
-        0
+        0,
       );
       gl.vertexAttribPointer(
         glCache.trail_vertColor,
@@ -43303,13 +30333,13 @@ function BeeSwarmSimulator(DATA) {
         gl.FLOAT,
         gl.FALSE,
         28,
-        12
+        12,
       );
       gl.drawElements(
         gl.TRIANGLES,
         out.constantTrailIndex.length,
         gl.UNSIGNED_SHORT,
-        0
+        0,
       );
     };
 
@@ -43355,8 +30385,8 @@ function BeeSwarmSimulator(DATA) {
             life * ((funcParams.bee.level - 1) * 0.1 + 2),
             p,
             type,
-            fp
-          )
+            fp,
+          ),
         );
 
         objects.mobs.push(new GlitchEffect(player.fieldIn, 1));
@@ -43392,7 +30422,7 @@ function BeeSwarmSimulator(DATA) {
         } else {
           if (this.type.indexOf("Winds") > -1) {
             player.addMessage(
-              "x" + this.amplify + ' "' + MATH.doGrammar(this.type) + '"'
+              "x" + this.amplify + ' "' + MATH.doGrammar(this.type) + '"',
             );
             player.addEffect(this.type, false, false, this.amplify);
           } else {
@@ -43417,7 +30447,7 @@ function BeeSwarmSimulator(DATA) {
           effects[this.type].u,
           effects[this.type].v,
           this.life * 5,
-          1
+          1,
         );
       } else {
         this.rotation += dt * 2.6;
@@ -43430,7 +30460,7 @@ function BeeSwarmSimulator(DATA) {
           effects[this.type].u,
           effects[this.type].v,
           this.life * 0.3,
-          1
+          1,
         );
 
         if (
@@ -43455,7 +30485,7 @@ function BeeSwarmSimulator(DATA) {
       amount,
       canBeLinked = false,
       source,
-      statsToAdd
+      statsToAdd,
     ) {
       this.statsToAdd = statsToAdd || [];
       this.life = life;
@@ -43501,13 +30531,13 @@ function BeeSwarmSimulator(DATA) {
               ],
               COLORS.honey,
               0,
-              "+"
+              "+",
             );
           player.addMessage(
             "+" +
               MATH.addCommas(this.amount + "") +
               " Honey" +
-              (this.from ? " (from " + this.from + ")" : "")
+              (this.from ? " (from " + this.from + ")" : ""),
           );
           player.stats.honeyTokens++;
         } else {
@@ -43519,7 +30549,7 @@ function BeeSwarmSimulator(DATA) {
               (this.amount > 1
                 ? MATH.doPlural(MATH.doGrammar(this.type))
                 : MATH.doGrammar(this.type) +
-                  (this.from ? " (from " + this.from + ")" : ""))
+                  (this.from ? " (from " + this.from + ")" : "")),
           );
         }
       }
@@ -43540,7 +30570,7 @@ function BeeSwarmSimulator(DATA) {
           this.u,
           this.v,
           this.life * 5,
-          1
+          1,
         );
       } else {
         this.rotation += dt * 2.6;
@@ -43553,7 +30583,7 @@ function BeeSwarmSimulator(DATA) {
           this.u,
           this.v,
           this.life * 0.3,
-          1
+          1,
         );
 
         if (
@@ -43633,7 +30663,7 @@ function BeeSwarmSimulator(DATA) {
           0.85,
           -3,
           -3,
-          0
+          0,
         );
       } else {
         textRenderer.addDecalRaw(
@@ -43648,7 +30678,7 @@ function BeeSwarmSimulator(DATA) {
           0.1,
           3,
           3,
-          0
+          0,
         );
 
         textRenderer.addDecalRaw(
@@ -43663,7 +30693,7 @@ function BeeSwarmSimulator(DATA) {
           1,
           -3,
           -3,
-          MATH.dupedTokenLoadingArcRotation(this.activationTimer)
+          MATH.dupedTokenLoadingArcRotation(this.activationTimer),
         );
 
         this.rotation += dt * 2.6;
@@ -43676,7 +30706,7 @@ function BeeSwarmSimulator(DATA) {
           effects[this.type].u,
           effects[this.type].v,
           this.life * 0.15,
-          1.5
+          1.5,
         );
 
         if (
@@ -43722,7 +30752,7 @@ function BeeSwarmSimulator(DATA) {
       c * r,
       -0.05,
       (s * 0.495 + 0.5) * texSize,
-      (-c * 0.495 + 0.5) * texSize
+      (-c * 0.495 + 0.5) * texSize,
     );
   }
 
@@ -43735,7 +30765,7 @@ function BeeSwarmSimulator(DATA) {
       i % vl,
       (i + 1) % vl,
       (i + 2) % vl,
-      (i + 3) % vl
+      (i + 3) % vl,
     );
   }
 
@@ -43750,7 +30780,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.token.indexAmount = index.length;
@@ -43942,7 +30972,7 @@ function BeeSwarmSimulator(DATA) {
       v[7][2],
       r * s6,
       g * s6,
-      b * s6
+      b * s6,
     );
 
     index.push(
@@ -43994,7 +31024,7 @@ function BeeSwarmSimulator(DATA) {
       27 + vl,
       27 + vl,
       26 + vl,
-      24 + vl
+      24 + vl,
     );
   }
 
@@ -44010,7 +31040,7 @@ function BeeSwarmSimulator(DATA) {
     lb = 0.25,
     x = 0,
     y = 0,
-    z = 0
+    z = 0,
   ) {
     innerRad *= 0.8;
     let _verts = [],
@@ -44099,7 +31129,7 @@ function BeeSwarmSimulator(DATA) {
       21,
       9,
       10,
-      0
+      0,
     );
 
     ix.push(
@@ -44165,7 +31195,7 @@ function BeeSwarmSimulator(DATA) {
       59,
       60,
       61,
-      62
+      62,
     );
 
     for (let i = 0; i < 10; i++) {
@@ -44191,7 +31221,7 @@ function BeeSwarmSimulator(DATA) {
       let n = vec3.cross(
         [],
         [a[0] - b[0], a[1] - b[1], a[2] - b[2]],
-        [a[0] - c[0], a[1] - c[1], a[2] - c[2]]
+        [a[0] - c[0], a[1] - c[1], a[2] - c[2]],
       );
 
       return vec3.normalize(n, n);
@@ -44215,7 +31245,7 @@ function BeeSwarmSimulator(DATA) {
         ...vs[i3],
         r * shade,
         g * shade,
-        b * shade
+        b * shade,
       );
     }
 
@@ -44238,7 +31268,7 @@ function BeeSwarmSimulator(DATA) {
     r2,
     bottom = true,
     top = true,
-    shading = true
+    shading = true,
   ) {
     let rad2 = r2 ?? rad,
       vl = verts.length / 6,
@@ -44273,7 +31303,7 @@ function BeeSwarmSimulator(DATA) {
           -hei * 0.5,
           r * (Math.cos(t2) * 0.1 + 0.9),
           g * (Math.cos(t2) * 0.1 + 0.9),
-          b * (Math.cos(t2) * 0.1 + 0.9)
+          b * (Math.cos(t2) * 0.1 + 0.9),
         );
 
         let _vl = _verts.length / 6;
@@ -44307,7 +31337,7 @@ function BeeSwarmSimulator(DATA) {
           -hei * 0.5,
           r,
           g,
-          b
+          b,
         );
 
         let _vl = _verts.length / 6;
@@ -44332,7 +31362,7 @@ function BeeSwarmSimulator(DATA) {
         hei * 0.5,
         r,
         g,
-        b
+        b,
       );
     }
 
@@ -44356,7 +31386,7 @@ function BeeSwarmSimulator(DATA) {
         -hei * 0.5,
         r,
         g,
-        b
+        b,
       );
     }
     for (let l = _verts.length / 6, i = _v; i < l && bottom; i++) {
@@ -44376,7 +31406,7 @@ function BeeSwarmSimulator(DATA) {
         let rotated = vec3.transformQuat(
           [],
           [_verts[i], _verts[i + 1], _verts[i + 2]],
-          rotQuat
+          rotQuat,
         );
         _verts[i] = rotated[0] + x;
         _verts[i + 1] = rotated[1] + y;
@@ -44404,7 +31434,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.explosion.indexAmount = index.length;
@@ -44432,7 +31462,7 @@ function BeeSwarmSimulator(DATA) {
       i % vl,
       (i + 1) % vl,
       (i + 2) % vl,
-      (i + 3) % vl
+      (i + 3) % vl,
     );
   }
 
@@ -44449,7 +31479,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.cylinder_explosion.indexAmount = index.length;
@@ -44475,7 +31505,7 @@ function BeeSwarmSimulator(DATA) {
     [0.5 * w, -0.5 * h, -0.5 * l],
   ];
 
-  (w = 128 / 2048), (e = 1 / 2048);
+  ((w = 128 / 2048), (e = 1 / 2048));
   h = w;
   l = w;
 
@@ -44681,7 +31711,7 @@ function BeeSwarmSimulator(DATA) {
     0,
     0,
     0,
-    0
+    0,
   );
 
   index.push(
@@ -44733,7 +31763,7 @@ function BeeSwarmSimulator(DATA) {
     27,
     27,
     26,
-    24
+    24,
   );
 
   _b(-0.085, 0.05, 0, 0.05, 0.5, 0.5, 0.01, 0.01, 1, 0, 0, 20);
@@ -44758,7 +31788,7 @@ function BeeSwarmSimulator(DATA) {
     0,
     0,
     0,
-    0.2
+    0.2,
   );
   let ico = MATH.icosphere(1);
   for (let i in ico.index) index.push(ico.index[i] + verts.length / 7);
@@ -44770,7 +31800,7 @@ function BeeSwarmSimulator(DATA) {
       0.04,
       0.09,
       100,
-      3
+      3,
     );
 
   _c(0.075, 0.185, -0.35, 0.075, 0.2, 8, -0.04, 0.01, 4, -10, 0, 0);
@@ -44854,7 +31884,7 @@ function BeeSwarmSimulator(DATA) {
     0,
     0,
     0.1,
-    0.85
+    0.85,
   );
   _c(
     -0.2,
@@ -44870,7 +31900,7 @@ function BeeSwarmSimulator(DATA) {
     0,
     0,
     0.1,
-    0.85
+    0.85,
   );
 
   _c(0.275, 0.04, 0.15, 0.2, 0.02, 10, 0.01, 0.09, 17, 0, 0, -60, 0.2, 0.9);
@@ -44885,7 +31915,7 @@ function BeeSwarmSimulator(DATA) {
     0.4 * 0.5 + 0.05,
     0.03,
     0.09,
-    18
+    18,
   );
   _b(
     0,
@@ -44896,7 +31926,7 @@ function BeeSwarmSimulator(DATA) {
     0.4 * 0.5 + 0.05,
     0.03,
     0.09,
-    18
+    18,
   );
   _b(0, 0.175, 0, 0.375 + 0.1, 0.2, 0.4 * 0.5, 0.01, 0.01, 18);
   _c(0, 0.2 + 0.1 + 0.02, 0, 0.13, 0.04, 4, 0.001, 0.001, 18, 0, 45, 0, 0.05);
@@ -44918,7 +31948,7 @@ function BeeSwarmSimulator(DATA) {
     0,
     0,
     0,
-    1.25
+    1.25,
   );
   _c(0, 0.2 + 0.05, 0.2, 0.075, 0.02, 10, 0.01, 0.12, 19, 0, 0, 0);
   _c(0, 0.2 + 0.1, 0.2, 0.02, 0.1, 10, 0.01, 0.12, 19, 0, 0, 0);
@@ -44961,7 +31991,7 @@ function BeeSwarmSimulator(DATA) {
       0.01,
       0.01,
       shade,
-      7
+      7,
     );
 
     index.push(vl, vl + 1, vl + 2, vl + 2, vl + 1, vl);
@@ -44980,7 +32010,7 @@ function BeeSwarmSimulator(DATA) {
     rx = 0,
     ry = 0,
     rz = 0,
-    shade
+    shade,
   ) {
     shade = shade ?? 1;
 
@@ -45177,7 +32207,7 @@ function BeeSwarmSimulator(DATA) {
       uvcolx,
       uvcoly,
       0.95 * shade,
-      id
+      id,
     );
 
     let ind = [
@@ -45206,7 +32236,7 @@ function BeeSwarmSimulator(DATA) {
     ry = 0,
     rz = 0,
     r2,
-    shade
+    shade,
   ) {
     let si = verts.length,
       vl = si / 7;
@@ -45230,7 +32260,7 @@ function BeeSwarmSimulator(DATA) {
         uvcolx,
         uvcoly,
         shade ? shade : c * 0.25 + 0.75,
-        id
+        id,
       );
     }
 
@@ -45273,7 +32303,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.bee.indexAmount = index.length;
@@ -45303,7 +32333,7 @@ function BeeSwarmSimulator(DATA) {
     0,
     0.25,
     true,
-    true
+    true,
   );
   c(
     0.5,
@@ -45320,7 +32350,7 @@ function BeeSwarmSimulator(DATA) {
     0,
     0.25,
     true,
-    true
+    true,
   );
   c(0.5, 0.77, -0.42, 0.2, 0.4, 9, 1, 1, 1, 30, -20, 0, 0.2, true, false);
   c(-0.5, 0.77, -0.42, 0.2, 0.4, 9, 1, 1, 1, 30, 20, 0, 0.2, true, false);
@@ -45333,7 +32363,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.frog.indexAmount = index.length;
@@ -45351,7 +32381,7 @@ function BeeSwarmSimulator(DATA) {
       [],
       [verts[i], verts[i + 1], verts[i + 2]],
       [0, 1, 0],
-      MATH.TO_RAD * -60
+      MATH.TO_RAD * -60,
     );
 
     verts[i] = a[0];
@@ -45372,7 +32402,7 @@ function BeeSwarmSimulator(DATA) {
     0.8 * 1.35,
     30,
     0,
-    0
+    0,
   );
   b(0.5, -0.5, -0.2, 0.75, 0.4, 1.3, 0.3, 0.4, 0.8, 0.00001, -20, 0);
   b(-0.5, -0.5, -0.2, 0.75, 0.4, 1.3, 0.3, 0.4, 0.8, 0.00001, 20, 0);
@@ -45391,7 +32421,7 @@ function BeeSwarmSimulator(DATA) {
     0,
     0.25,
     true,
-    true
+    true,
   );
   c(
     0.5,
@@ -45408,7 +32438,7 @@ function BeeSwarmSimulator(DATA) {
     0,
     0.25,
     true,
-    true
+    true,
   );
   c(0.5, 0.77, -0.42, 0.2, 0.4, 9, 1, 1, 1, 30, -20, 0, 0.2, true, false);
   c(-0.5, 0.77, -0.42, 0.2, 0.4, 9, 1, 1, 1, 30, 20, 0, 0.2, true, false);
@@ -45421,7 +32451,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.giftedFrog.indexAmount = index.length;
@@ -45446,7 +32476,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.rhinoBeetle.indexAmount = index.length;
@@ -45471,7 +32501,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.ladybug.indexAmount = index.length;
@@ -45508,7 +32538,7 @@ function BeeSwarmSimulator(DATA) {
     0.05,
     0.0001,
     0,
-    -35
+    -35,
   );
   b(
     1.6 + 0.3,
@@ -45522,7 +32552,7 @@ function BeeSwarmSimulator(DATA) {
     0.05,
     0.0001,
     0,
-    45
+    45,
   );
   b(
     -0.75 - 0.3,
@@ -45536,7 +32566,7 @@ function BeeSwarmSimulator(DATA) {
     0.05,
     0.0001,
     0,
-    35
+    35,
   );
   b(
     -1.6 - 0.3,
@@ -45550,7 +32580,7 @@ function BeeSwarmSimulator(DATA) {
     0.05,
     0.0001,
     0,
-    -45
+    -45,
   );
 
   b(
@@ -45565,7 +32595,7 @@ function BeeSwarmSimulator(DATA) {
     0.05,
     0.0001,
     0,
-    -35
+    -35,
   );
   b(
     1.6 + 0.3,
@@ -45579,7 +32609,7 @@ function BeeSwarmSimulator(DATA) {
     0.05,
     0.0001,
     0,
-    45
+    45,
   );
   b(
     -0.75 - 0.3,
@@ -45593,7 +32623,7 @@ function BeeSwarmSimulator(DATA) {
     0.05,
     0.0001,
     0,
-    35
+    35,
   );
   b(
     -1.6 - 0.3,
@@ -45607,7 +32637,7 @@ function BeeSwarmSimulator(DATA) {
     0.05,
     0.0001,
     0,
-    -45
+    -45,
   );
 
   b(0.25, 0.2, -0.9 * 1.3, 0.1, 0.1, 0.15, 0.7, 0, 0);
@@ -45619,7 +32649,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.spider.indexAmount = index.length;
@@ -45657,7 +32687,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.werewolf.indexAmount = index.length;
@@ -45681,7 +32711,7 @@ function BeeSwarmSimulator(DATA) {
     0.2 * 0.75,
     215,
     0,
-    0
+    0,
   );
   b(
     0.275,
@@ -45695,7 +32725,7 @@ function BeeSwarmSimulator(DATA) {
     0.2 * 0.75,
     155,
     0,
-    0
+    0,
   );
   b(
     0.275,
@@ -45709,7 +32739,7 @@ function BeeSwarmSimulator(DATA) {
     0.2 * 0.75,
     235,
     0,
-    0
+    0,
   );
   b(
     -0.275,
@@ -45723,7 +32753,7 @@ function BeeSwarmSimulator(DATA) {
     0.2 * 0.75,
     215,
     0,
-    0
+    0,
   );
   b(
     -0.275,
@@ -45737,7 +32767,7 @@ function BeeSwarmSimulator(DATA) {
     0.2 * 0.75,
     155,
     0,
-    0
+    0,
   );
   b(
     -0.275,
@@ -45751,7 +32781,7 @@ function BeeSwarmSimulator(DATA) {
     0.2 * 0.75,
     235,
     0,
-    0
+    0,
   );
 
   b(
@@ -45766,7 +32796,7 @@ function BeeSwarmSimulator(DATA) {
     0.2 * 0.75,
     0.001,
     0,
-    -40
+    -40,
   );
   b(
     0.5,
@@ -45780,7 +32810,7 @@ function BeeSwarmSimulator(DATA) {
     0.2 * 0.75,
     0.001,
     0,
-    40
+    40,
   );
 
   b(-0.3, 2.15, -0.7, 0.2, 0.2, 0.2, 0.2, 0.5, 0.5);
@@ -45792,7 +32822,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.mantis.indexAmount = index.length;
@@ -45821,7 +32851,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.scorpion.indexAmount = index.length;
@@ -45846,7 +32876,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.kingBeetle.indexAmount = index.length;
@@ -45872,7 +32902,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.tunnelBear.indexAmount = index.length;
@@ -45947,7 +32977,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.mechsquito.indexAmount = index.length;
@@ -45983,7 +33013,7 @@ function BeeSwarmSimulator(DATA) {
       _s.verts[i + 2] + 0.75,
       0.1,
       0.1,
-      0.1
+      0.1,
     );
   }
 
@@ -46000,7 +33030,7 @@ function BeeSwarmSimulator(DATA) {
       _s.verts[i + 2] + 0.75 * 2,
       0.1,
       0.1,
-      0.1
+      0.1,
     );
   }
 
@@ -46062,7 +33092,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.megaMechsquito.indexAmount = index.length;
@@ -46101,7 +33131,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.cogmower.indexAmount = index.length;
@@ -46140,7 +33170,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.goldenCogmower.indexAmount = index.length;
@@ -46174,7 +33204,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.cogTurret.indexAmount = index.length;
@@ -46196,7 +33226,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.cog.indexAmount = index.length;
@@ -46221,7 +33251,7 @@ function BeeSwarmSimulator(DATA) {
     -90 + 6,
     0,
     0,
-    0.3
+    0.3,
   );
   c(
     0,
@@ -46236,7 +33266,7 @@ function BeeSwarmSimulator(DATA) {
     -90 + 14,
     0,
     0,
-    0.27
+    0.27,
   );
 
   c(
@@ -46252,7 +33282,7 @@ function BeeSwarmSimulator(DATA) {
     -90 + 10,
     0,
     0,
-    0.75
+    0.75,
   );
   c(
     0,
@@ -46267,7 +33297,7 @@ function BeeSwarmSimulator(DATA) {
     -90 + 10,
     0,
     0,
-    0.65
+    0.65,
   );
   c(
     0,
@@ -46282,7 +33312,7 @@ function BeeSwarmSimulator(DATA) {
     -90 + 10,
     0,
     0,
-    0.4
+    0.4,
   );
 
   gl.bindBuffer(gl.ARRAY_BUFFER, meshes.puffshroom.vertBuffer);
@@ -46291,7 +33321,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.puffshroom.indexAmount = index.length;
@@ -46316,7 +33346,7 @@ function BeeSwarmSimulator(DATA) {
     -90 + 6,
     0,
     0,
-    0.3
+    0.3,
   );
   c(
     0,
@@ -46331,7 +33361,7 @@ function BeeSwarmSimulator(DATA) {
     -90 + 14,
     0,
     0,
-    0.27
+    0.27,
   );
 
   c(
@@ -46347,7 +33377,7 @@ function BeeSwarmSimulator(DATA) {
     -90 + 10,
     0,
     0,
-    0.75
+    0.75,
   );
   c(
     0,
@@ -46362,7 +33392,7 @@ function BeeSwarmSimulator(DATA) {
     -90 + 10,
     0,
     0,
-    0.65
+    0.65,
   );
   c(
     0,
@@ -46377,7 +33407,7 @@ function BeeSwarmSimulator(DATA) {
     -90 + 10,
     0,
     0,
-    0.4
+    0.4,
   );
 
   gl.bindBuffer(gl.ARRAY_BUFFER, meshes.rarePuffshroom.vertBuffer);
@@ -46386,7 +33416,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.rarePuffshroom.indexAmount = index.length;
@@ -46412,7 +33442,7 @@ function BeeSwarmSimulator(DATA) {
     -90 + 14,
     0,
     0,
-    0.27
+    0.27,
   );
 
   c(
@@ -46428,7 +33458,7 @@ function BeeSwarmSimulator(DATA) {
     -90 + 10,
     0,
     0,
-    0.75
+    0.75,
   );
   c(
     0,
@@ -46443,7 +33473,7 @@ function BeeSwarmSimulator(DATA) {
     -90 + 10,
     0,
     0,
-    0.65
+    0.65,
   );
   c(
     0,
@@ -46458,7 +33488,7 @@ function BeeSwarmSimulator(DATA) {
     -90 + 10,
     0,
     0,
-    0.4
+    0.4,
   );
 
   gl.bindBuffer(gl.ARRAY_BUFFER, meshes.epicPuffshroom.vertBuffer);
@@ -46467,7 +33497,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.epicPuffshroom.indexAmount = index.length;
@@ -46493,7 +33523,7 @@ function BeeSwarmSimulator(DATA) {
     -90 + 14,
     0,
     0,
-    0.27
+    0.27,
   );
 
   c(
@@ -46509,7 +33539,7 @@ function BeeSwarmSimulator(DATA) {
     -90 + 10,
     0,
     0,
-    0.75
+    0.75,
   );
   c(
     0,
@@ -46524,7 +33554,7 @@ function BeeSwarmSimulator(DATA) {
     -90 + 10,
     0,
     0,
-    0.65
+    0.65,
   );
   c(
     0,
@@ -46539,19 +33569,19 @@ function BeeSwarmSimulator(DATA) {
     -90 + 10,
     0,
     0,
-    0.4
+    0.4,
   );
 
   gl.bindBuffer(gl.ARRAY_BUFFER, meshes.legendaryPuffshroom.vertBuffer);
   gl.bufferData(gl.ARRAY_BUFFER, Float32Array.from(verts), gl.STATIC_DRAW);
   gl.bindBuffer(
     gl.ELEMENT_ARRAY_BUFFER,
-    meshes.legendaryPuffshroom.indexBuffer
+    meshes.legendaryPuffshroom.indexBuffer,
   );
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.legendaryPuffshroom.indexAmount = index.length;
@@ -46577,7 +33607,7 @@ function BeeSwarmSimulator(DATA) {
     -90 + 14,
     0,
     0,
-    0.27
+    0.27,
   );
 
   c(
@@ -46593,7 +33623,7 @@ function BeeSwarmSimulator(DATA) {
     -90 + 10,
     0,
     0,
-    0.75
+    0.75,
   );
   c(
     0,
@@ -46608,7 +33638,7 @@ function BeeSwarmSimulator(DATA) {
     -90 + 10,
     0,
     0,
-    0.65
+    0.65,
   );
   c(
     0,
@@ -46623,7 +33653,7 @@ function BeeSwarmSimulator(DATA) {
     -90 + 10,
     0,
     0,
-    0.4
+    0.4,
   );
 
   gl.bindBuffer(gl.ARRAY_BUFFER, meshes.mythicPuffshroom.vertBuffer);
@@ -46632,7 +33662,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.mythicPuffshroom.indexAmount = index.length;
@@ -46660,7 +33690,7 @@ function BeeSwarmSimulator(DATA) {
     1.2,
     true,
     true,
-    true
+    true,
   );
   c(
     0,
@@ -46678,7 +33708,7 @@ function BeeSwarmSimulator(DATA) {
     0.7,
     true,
     true,
-    true
+    true,
   );
 
   for (let i = 0; i < verts.length; i += 6) {
@@ -46686,7 +33716,7 @@ function BeeSwarmSimulator(DATA) {
       [],
       [verts[i], verts[i + 1], verts[i + 2]],
       MATH.ORIGIN,
-      0.3
+      0.3,
     );
 
     verts[i] = _t[0];
@@ -46711,7 +33741,7 @@ function BeeSwarmSimulator(DATA) {
     0.7,
     true,
     true,
-    true
+    true,
   );
   c(
     0,
@@ -46729,7 +33759,7 @@ function BeeSwarmSimulator(DATA) {
     0.2,
     true,
     true,
-    true
+    true,
   );
 
   for (let i = 0; i < verts.length; i += 6) {
@@ -46787,7 +33817,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.mondoChick.indexAmount = index.length;
@@ -46842,7 +33872,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.coconutCrab.indexAmount = index.length;
@@ -46863,7 +33893,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.crabClaw.indexAmount = index.length;
@@ -46888,7 +33918,7 @@ function BeeSwarmSimulator(DATA) {
       _s.verts[i + 2] - 2.5,
       0.3,
       0.7,
-      0.4
+      0.4,
     );
   }
 
@@ -46913,7 +33943,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.stumpSnail.indexAmount = index.length;
@@ -46938,7 +33968,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.ant.indexAmount = index.length;
@@ -46964,7 +33994,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.armyAnt.indexAmount = index.length;
@@ -46992,7 +34022,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.flyingAnt.indexAmount = index.length;
@@ -47017,7 +34047,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.fireAnt.indexAmount = index.length;
@@ -47041,7 +34071,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.petalShuriken.indexAmount = index.length;
@@ -47068,7 +34098,7 @@ function BeeSwarmSimulator(DATA) {
     0.6,
     0.00001,
     0,
-    -50
+    -50,
   );
 
   gl.bindBuffer(gl.ARRAY_BUFFER, meshes.lawnMower.vertBuffer);
@@ -47077,7 +34107,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.lawnMower.indexAmount = index.length;
@@ -47096,7 +34126,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.lawnMowerWarning.indexAmount = index.length;
@@ -47115,7 +34145,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.popStar.indexAmount = index.length;
@@ -47134,7 +34164,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.scorchingStar.indexAmount = index.length;
@@ -47164,7 +34194,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.gummyStar.indexAmount = index.length;
@@ -47182,7 +34212,7 @@ function BeeSwarmSimulator(DATA) {
       [],
       [verts[i], verts[i + 1], verts[i + 2]],
       MATH.ORIGIN,
-      MATH.HALF_PI
+      MATH.HALF_PI,
     );
 
     verts[i] = a[0];
@@ -47196,7 +34226,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.starSaw.indexAmount = index.length;
@@ -47214,7 +34244,7 @@ function BeeSwarmSimulator(DATA) {
       [],
       [verts[i], verts[i + 1], verts[i + 2]],
       MATH.ORIGIN,
-      MATH.HALF_PI * 0.75
+      MATH.HALF_PI * 0.75,
     );
 
     verts[i] = a[0];
@@ -47228,7 +34258,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.guidingStar.indexAmount = index.length;
@@ -47246,7 +34276,7 @@ function BeeSwarmSimulator(DATA) {
       [],
       [verts[i], verts[i + 1], verts[i + 2]],
       MATH.ORIGIN,
-      -MATH.HALF_PI
+      -MATH.HALF_PI,
     );
 
     verts[i] = a[0];
@@ -47258,12 +34288,12 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(gl.ARRAY_BUFFER, Float32Array.from(verts), gl.STATIC_DRAW);
   gl.bindBuffer(
     gl.ELEMENT_ARRAY_BUFFER,
-    meshes.levitatingStarShower.indexBuffer
+    meshes.levitatingStarShower.indexBuffer,
   );
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.levitatingStarShower.indexAmount = index.length;
@@ -47282,7 +34312,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.fallingStar.indexAmount = index.length;
@@ -47304,7 +34334,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.wave.indexAmount = index.length;
@@ -47331,7 +34361,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.gummyBall.indexAmount = index.length;
@@ -47351,7 +34381,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.drainingDiamond.indexAmount = index.length;
@@ -47371,7 +34401,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.shiningDiamond.indexAmount = index.length;
@@ -47398,7 +34428,7 @@ function BeeSwarmSimulator(DATA) {
       0,
       i * 0.5 + 1,
       true,
-      true
+      true,
     );
   }
 
@@ -47408,7 +34438,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.tornado.indexAmount = index.length;
@@ -47435,7 +34465,7 @@ function BeeSwarmSimulator(DATA) {
       0,
       i * 0.5 + 1,
       true,
-      true
+      true,
     );
   }
 
@@ -47445,7 +34475,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.tornado_red.indexAmount = index.length;
@@ -47469,7 +34499,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.scratch.indexAmount = index.length;
@@ -47493,7 +34523,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.goldenRakeScratch.indexAmount = index.length;
@@ -47518,7 +34548,7 @@ function BeeSwarmSimulator(DATA) {
     0.3 * 0.6,
     0.001,
     0,
-    45
+    45,
   );
   b(
     -0.275,
@@ -47532,7 +34562,7 @@ function BeeSwarmSimulator(DATA) {
     0.3 * 0.6,
     0.001,
     0,
-    -45
+    -45,
   );
 
   gl.bindBuffer(gl.ARRAY_BUFFER, meshes.paperPlanter.vertBuffer);
@@ -47541,7 +34571,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.paperPlanter.indexAmount = index.length;
@@ -47569,7 +34599,7 @@ function BeeSwarmSimulator(DATA) {
     0.75,
     true,
     true,
-    true
+    true,
   );
   c(
     0,
@@ -47587,7 +34617,7 @@ function BeeSwarmSimulator(DATA) {
     0.89,
     true,
     true,
-    true
+    true,
   );
   c(
     0,
@@ -47605,7 +34635,7 @@ function BeeSwarmSimulator(DATA) {
     0.65,
     true,
     true,
-    true
+    true,
   );
 
   c(0, 0.2, 0, 0.7, 0.1, 10, 1, 1, 1, -90, 0, 0, 0.7, true, true, true);
@@ -47632,7 +34662,7 @@ function BeeSwarmSimulator(DATA) {
       0.1,
       true,
       true,
-      true
+      true,
     );
   }
 
@@ -47642,7 +34672,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.candyPlanter.indexAmount = index.length;
@@ -47670,7 +34700,7 @@ function BeeSwarmSimulator(DATA) {
     0.75,
     true,
     true,
-    true
+    true,
   );
   c(
     0,
@@ -47688,7 +34718,7 @@ function BeeSwarmSimulator(DATA) {
     0.89,
     true,
     true,
-    true
+    true,
   );
   c(
     0,
@@ -47706,7 +34736,7 @@ function BeeSwarmSimulator(DATA) {
     0.65,
     true,
     true,
-    true
+    true,
   );
 
   gl.bindBuffer(gl.ARRAY_BUFFER, meshes.plasticPlanter.vertBuffer);
@@ -47715,7 +34745,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.plasticPlanter.indexAmount = index.length;
@@ -47745,7 +34775,7 @@ function BeeSwarmSimulator(DATA) {
     0.3,
     true,
     true,
-    true
+    true,
   );
   c(
     0,
@@ -47763,7 +34793,7 @@ function BeeSwarmSimulator(DATA) {
     0.7,
     true,
     true,
-    true
+    true,
   );
 
   c(
@@ -47782,7 +34812,7 @@ function BeeSwarmSimulator(DATA) {
     0.25,
     true,
     true,
-    true
+    true,
   );
   c(
     0,
@@ -47800,7 +34830,7 @@ function BeeSwarmSimulator(DATA) {
     0.25,
     true,
     true,
-    true
+    true,
   );
 
   c(
@@ -47819,7 +34849,7 @@ function BeeSwarmSimulator(DATA) {
     0.075,
     true,
     true,
-    true
+    true,
   );
   c(
     0,
@@ -47837,7 +34867,7 @@ function BeeSwarmSimulator(DATA) {
     0.075,
     true,
     true,
-    true
+    true,
   );
 
   c(
@@ -47856,7 +34886,7 @@ function BeeSwarmSimulator(DATA) {
     0.05,
     true,
     true,
-    true
+    true,
   );
   c(
     0,
@@ -47874,7 +34904,7 @@ function BeeSwarmSimulator(DATA) {
     0.05,
     true,
     true,
-    true
+    true,
   );
 
   c(
@@ -47893,7 +34923,7 @@ function BeeSwarmSimulator(DATA) {
     0.05,
     true,
     true,
-    true
+    true,
   );
   c(
     0,
@@ -47911,7 +34941,7 @@ function BeeSwarmSimulator(DATA) {
     0.05,
     true,
     true,
-    true
+    true,
   );
   c(
     -0.15,
@@ -47929,7 +34959,7 @@ function BeeSwarmSimulator(DATA) {
     0.05,
     true,
     true,
-    true
+    true,
   );
   c(
     0,
@@ -47947,7 +34977,7 @@ function BeeSwarmSimulator(DATA) {
     0.05,
     true,
     true,
-    true
+    true,
   );
 
   c(
@@ -47966,7 +34996,7 @@ function BeeSwarmSimulator(DATA) {
     0.27,
     true,
     true,
-    true
+    true,
   );
 
   gl.bindBuffer(gl.ARRAY_BUFFER, meshes.pesticidePlanter.vertBuffer);
@@ -47975,7 +35005,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.pesticidePlanter.indexAmount = index.length;
@@ -48003,7 +35033,7 @@ function BeeSwarmSimulator(DATA) {
     0.75,
     true,
     true,
-    true
+    true,
   );
   c(
     0,
@@ -48021,7 +35051,7 @@ function BeeSwarmSimulator(DATA) {
     0.89,
     true,
     true,
-    true
+    true,
   );
   c(
     0,
@@ -48039,7 +35069,7 @@ function BeeSwarmSimulator(DATA) {
     0.65,
     true,
     true,
-    true
+    true,
   );
 
   for (let i = 0; i < MATH.TWO_PI; i += MATH.TWO_PI * 0.1) {
@@ -48059,7 +35089,7 @@ function BeeSwarmSimulator(DATA) {
       0.1,
       true,
       true,
-      true
+      true,
     );
   }
 
@@ -48069,7 +35099,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.redClayPlanter.indexAmount = index.length;
@@ -48097,7 +35127,7 @@ function BeeSwarmSimulator(DATA) {
     0.75,
     true,
     true,
-    true
+    true,
   );
   c(
     0,
@@ -48115,7 +35145,7 @@ function BeeSwarmSimulator(DATA) {
     0.89,
     true,
     true,
-    true
+    true,
   );
   c(
     0,
@@ -48133,7 +35163,7 @@ function BeeSwarmSimulator(DATA) {
     0.65,
     true,
     true,
-    true
+    true,
   );
 
   for (let i = 0; i < MATH.TWO_PI; i += MATH.TWO_PI * 0.1) {
@@ -48153,7 +35183,7 @@ function BeeSwarmSimulator(DATA) {
       0.1,
       true,
       true,
-      true
+      true,
     );
   }
 
@@ -48163,7 +35193,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.blueClayPlanter.indexAmount = index.length;
@@ -48183,7 +35213,7 @@ function BeeSwarmSimulator(DATA) {
       _ico.verts[i + 2] * 1.75,
       0.4 * (_ico.verts[i + 1] * 0.2 + 0.8),
       1.1 * (_ico.verts[i + 1] * 0.2 + 0.8),
-      0.4 * (_ico.verts[i + 1] * 0.2 + 0.8)
+      0.4 * (_ico.verts[i + 1] * 0.2 + 0.8),
     );
   }
 
@@ -48205,7 +35235,7 @@ function BeeSwarmSimulator(DATA) {
     0.825,
     true,
     true,
-    true
+    true,
   );
   c(
     0,
@@ -48223,7 +35253,7 @@ function BeeSwarmSimulator(DATA) {
     0.65,
     true,
     true,
-    true
+    true,
   );
 
   c(0, 0.25, 0, 0.92, 0.1, 10, 0.1, 0.1, 0.8, 45, 0, 0, 0.92, true, true, true);
@@ -48243,7 +35273,7 @@ function BeeSwarmSimulator(DATA) {
     0.92,
     true,
     true,
-    true
+    true,
   );
 
   c(
@@ -48262,7 +35292,7 @@ function BeeSwarmSimulator(DATA) {
     0.92,
     true,
     true,
-    true
+    true,
   );
   c(
     0,
@@ -48280,7 +35310,7 @@ function BeeSwarmSimulator(DATA) {
     0.92,
     true,
     true,
-    true
+    true,
   );
 
   for (let i = 0; i < MATH.TWO_PI; i += MATH.TWO_PI * 0.2) {
@@ -48300,7 +35330,7 @@ function BeeSwarmSimulator(DATA) {
       0.1,
       true,
       true,
-      true
+      true,
     );
   }
 
@@ -48317,7 +35347,7 @@ function BeeSwarmSimulator(DATA) {
       0,
       0.01,
       i * MATH.TO_DEG,
-      0
+      0,
     );
   }
 
@@ -48327,7 +35357,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.tackyPlanter.indexAmount = index.length;
@@ -48345,7 +35375,7 @@ function BeeSwarmSimulator(DATA) {
       _ico.verts[i + 2] * 1.75,
       1 * (_ico.verts[i + 1] * 0.2 + 0.8),
       1 * (_ico.verts[i + 1] * 0.2 + 0.8),
-      0.5 * (_ico.verts[i + 1] * 0.2 + 0.8)
+      0.5 * (_ico.verts[i + 1] * 0.2 + 0.8),
     );
   }
 
@@ -48362,7 +35392,7 @@ function BeeSwarmSimulator(DATA) {
       0.85,
       45,
       i * MATH.TO_DEG,
-      0
+      0,
     );
   }
 
@@ -48384,7 +35414,7 @@ function BeeSwarmSimulator(DATA) {
     0.825,
     true,
     true,
-    true
+    true,
   );
   c(
     0,
@@ -48402,7 +35432,7 @@ function BeeSwarmSimulator(DATA) {
     0.65,
     true,
     true,
-    true
+    true,
   );
 
   for (let i = 0, co = 0; i < MATH.TWO_PI; i += MATH.TWO_PI * 0.25, co++) {
@@ -48423,7 +35453,7 @@ function BeeSwarmSimulator(DATA) {
       0.25,
       true,
       true,
-      true
+      true,
     );
   }
 
@@ -48433,7 +35463,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.petalPlanter.indexAmount = index.length;
@@ -48451,7 +35481,7 @@ function BeeSwarmSimulator(DATA) {
       _ico.verts[i + 2] * 1.75,
       1 * (_ico.verts[i + 1] * 0.2 + 0.8),
       0.75 * (_ico.verts[i + 1] * 0.2 + 0.8),
-      0.1 * (_ico.verts[i + 1] * 0.2 + 0.8)
+      0.1 * (_ico.verts[i + 1] * 0.2 + 0.8),
     );
   }
 
@@ -48476,7 +35506,7 @@ function BeeSwarmSimulator(DATA) {
     0.8,
     true,
     true,
-    true
+    true,
   );
   c(
     0,
@@ -48494,7 +35524,7 @@ function BeeSwarmSimulator(DATA) {
     0.65,
     true,
     true,
-    true
+    true,
   );
 
   b(0, 1.5 - 0.25, 0, 2.25, 0.15, 0.15, 1, 0.75, 0.1);
@@ -48518,7 +35548,7 @@ function BeeSwarmSimulator(DATA) {
     1.9 * 0.5,
     true,
     true,
-    true
+    true,
   );
   c(
     0,
@@ -48536,7 +35566,7 @@ function BeeSwarmSimulator(DATA) {
     1.9 * 0.5,
     true,
     true,
-    true
+    true,
   );
 
   gl.bindBuffer(gl.ARRAY_BUFFER, meshes.plentyPlanter.vertBuffer);
@@ -48545,7 +35575,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.plentyPlanter.indexAmount = index.length;
@@ -48572,7 +35602,7 @@ function BeeSwarmSimulator(DATA) {
     0.35 * 2,
     true,
     true,
-    true
+    true,
   );
 
   gl.bindBuffer(gl.ARRAY_BUFFER, meshes.spike.vertBuffer);
@@ -48581,7 +35611,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.spike.indexAmount = index.length;
@@ -48603,7 +35633,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.basicSprout.indexAmount = index.length;
@@ -48625,7 +35655,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.rareSprout.indexAmount = index.length;
@@ -48647,7 +35677,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.epicSprout.indexAmount = index.length;
@@ -48669,7 +35699,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.legendarySprout.indexAmount = index.length;
@@ -48691,7 +35721,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.supremeSprout.indexAmount = index.length;
@@ -48713,7 +35743,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.gummySprout.indexAmount = index.length;
@@ -48735,7 +35765,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.moonSprout.indexAmount = index.length;
@@ -48758,7 +35788,7 @@ function BeeSwarmSimulator(DATA) {
         "e",
         "star",
         "INFO",
-        player.createdMesh
+        player.createdMesh,
       );
 
       f(box, a, cylinder, sphere, d, e, star, player.restrictionInfo);
@@ -48778,580 +35808,10 @@ function BeeSwarmSimulator(DATA) {
 
   let id = 0;
 
-  function addFlower(field, x, z) {
-    if (!flowers[field][z]) flowers[field][z] = [];
+  //  FIXME: addFlower goes here
+  // FIXME: updateFlower goes here
 
-    let y = fieldInfo[field].y,
-      c = fieldInfo[field].getColor(),
-      l = fieldInfo[field].getLevel();
-
-    flowers[field][z][x] = {
-      x: x,
-      z: z,
-      color: c,
-      level: l,
-      ogLevel: l,
-      height: 1,
-      id: id++,
-      y: y,
-      goo: 0,
-      gooColor:
-        noise(
-          x * 0.2 + fieldInfo[field].x * 10,
-          z * 0.2 + fieldInfo[field].z * 10
-        ) < 0.49
-          ? -1
-          : 1,
-      pollinationTimer: 1,
-      puffshrooms: [],
-    };
-
-    let vl = verts.length / 8;
-
-    let h = flowers[field][z][x].height * 0.5,
-      tx,
-      ty,
-      lvl = flowers[field][z][x].level,
-      g = flowers[field][z][x].goo * flowers[field][z][x].gooColor;
-
-    switch (flowers[field][z][x].color) {
-      case "red":
-        if (lvl === 1) {
-          tx = 0;
-          ty = 0;
-        } else if (lvl === 2) {
-          tx = (256 * 3) / 1024;
-          ty = 0;
-        } else if (lvl === 3) {
-          tx = (256 * 2) / 1024;
-          ty = 256 / 1024;
-        } else if (lvl === 4) {
-          tx = 256 / 1024;
-          ty = (256 * 2) / 1024;
-        } else if (lvl >= 5) {
-          tx = 0;
-          ty = (256 * 3) / 1024;
-        }
-        break;
-
-      case "blue":
-        if (lvl === 1) {
-          tx = 256 / 1024;
-          ty = 0;
-        } else if (lvl === 2) {
-          tx = 0;
-          ty = 256 / 1024;
-        } else if (lvl === 3) {
-          tx = (256 * 3) / 1024;
-          ty = 256 / 1024;
-        } else if (lvl === 4) {
-          tx = (256 * 2) / 1024;
-          ty = (256 * 2) / 1024;
-        } else if (lvl >= 5) {
-          tx = 256 / 1024;
-          ty = (256 * 3) / 1024;
-        }
-        break;
-
-      case "white":
-        if (lvl === 1) {
-          tx = (256 * 2) / 1024;
-          ty = 0;
-        } else if (lvl === 2) {
-          tx = 256 / 1024;
-          ty = 256 / 1024;
-        } else if (lvl === 3) {
-          tx = 0;
-          ty = (256 * 2) / 1024;
-        } else if (lvl === 4) {
-          tx = (256 * 3) / 1024;
-          ty = (256 * 2) / 1024;
-        } else if (lvl >= 5) {
-          tx = (256 * 2) / 1024;
-          ty = (256 * 3) / 1024;
-        }
-        break;
-    }
-
-    x += fieldInfo[field].x;
-    z += fieldInfo[field].z;
-
-    verts.push(
-      x - 0.5,
-      y + h,
-      z - 0.5,
-      texOffset + tx,
-      texOffset + ty,
-      1,
-      1,
-      g,
-      x + 0.5,
-      y + h,
-      z - 0.5,
-      texSize + tx,
-      texOffset + ty,
-      1,
-      1,
-      g,
-      x + 0.5,
-      y + h,
-      z + 0.5,
-      texSize + tx,
-      texSize + ty,
-      1,
-      1,
-      g,
-      x - 0.5,
-      y + h,
-      z + 0.5,
-      texOffset + tx,
-      texSize + ty,
-      1,
-      1,
-      g,
-
-      x - 0.5,
-      y,
-      z - 0.5,
-      0,
-      0,
-      1,
-      -10000,
-      0,
-      x + 0.5,
-      y,
-      z - 0.5,
-      0,
-      0,
-      1,
-      -10000,
-      0,
-      x + 0.5,
-      y,
-      z + 0.5,
-      0,
-      0,
-      1,
-      -10000,
-      0,
-      x - 0.5,
-      y,
-      z + 0.5,
-      0,
-      0,
-      1,
-      -10000,
-      0
-    );
-
-    index.push(
-      vl + 2,
-      vl + 1,
-      vl,
-      vl + 3,
-      vl + 2,
-      vl,
-      vl + 6,
-      vl + 5,
-      vl + 2,
-      vl + 7,
-      vl + 6,
-      vl + 2,
-      vl + 1,
-      vl + 5,
-      vl + 4,
-      vl,
-      vl + 1,
-      vl + 4,
-      vl + 3,
-      vl + 7,
-      vl + 2,
-      vl + 4,
-      vl + 3,
-      vl,
-      vl + 3,
-      vl + 4,
-      vl + 7,
-      vl + 1,
-      vl + 2,
-      vl + 5
-    );
-  }
-
-  function updateFlower(
-    field,
-    x,
-    z,
-    func,
-    updateHeight,
-    updateGoo,
-    updatePollination
-  ) {
-    func(flowers[field][z][x]);
-
-    flowers[field][z][x].height = MATH.constrain(
-      flowers[field][z][x].height,
-      0,
-      1
-    );
-
-    let i = flowers[field][z][x].id * 64;
-
-    UPDATE_FLOWER_MESH = true;
-
-    if (updateHeight) {
-      let newHeight =
-        flowers[field][z][x].y +
-        Math.max(flowers[field][z][x].height * 0.5, 0.05);
-
-      flowers.mesh.verts[i + 1] = newHeight;
-      flowers.mesh.verts[i + 9] = newHeight;
-      flowers.mesh.verts[i + 17] = newHeight;
-      flowers.mesh.verts[i + 25] = newHeight;
-
-      newHeight = Math.max(flowers[field][z][x].height, 0);
-
-      flowers.mesh.verts[i + 5] = newHeight;
-      flowers.mesh.verts[i + 13] = newHeight;
-      flowers.mesh.verts[i + 21] = newHeight;
-      flowers.mesh.verts[i + 29] = newHeight;
-    }
-
-    if (updateGoo) {
-      let g = flowers[field][z][x].goo * flowers[field][z][x].gooColor * 0.7;
-
-      flowers.mesh.verts[i + 7] = g;
-      flowers.mesh.verts[i + 15] = g;
-      flowers.mesh.verts[i + 23] = g;
-      flowers.mesh.verts[i + 31] = g;
-    }
-
-    if (updatePollination) {
-      let tx,
-        ty,
-        lvl = flowers[field][z][x].level;
-
-      switch (flowers[field][z][x].color) {
-        case "red":
-          if (lvl === 1) {
-            tx = 0;
-            ty = 0;
-          } else if (lvl === 2) {
-            tx = (256 * 3) / 1024;
-            ty = 0;
-          } else if (lvl === 3) {
-            tx = (256 * 2) / 1024;
-            ty = 256 / 1024;
-          } else if (lvl === 4) {
-            tx = 256 / 1024;
-            ty = (256 * 2) / 1024;
-          } else if (lvl >= 5) {
-            tx = 0;
-            ty = (256 * 3) / 1024;
-          }
-          break;
-
-        case "blue":
-          if (lvl === 1) {
-            tx = 256 / 1024;
-            ty = 0;
-          } else if (lvl === 2) {
-            tx = 0;
-            ty = 256 / 1024;
-          } else if (lvl === 3) {
-            tx = (256 * 3) / 1024;
-            ty = 256 / 1024;
-          } else if (lvl === 4) {
-            tx = (256 * 2) / 1024;
-            ty = (256 * 2) / 1024;
-          } else if (lvl >= 5) {
-            tx = 256 / 1024;
-            ty = (256 * 3) / 1024;
-          }
-          break;
-
-        case "white":
-          if (lvl === 1) {
-            tx = (256 * 2) / 1024;
-            ty = 0;
-          } else if (lvl === 2) {
-            tx = 256 / 1024;
-            ty = 256 / 1024;
-          } else if (lvl === 3) {
-            tx = 0;
-            ty = (256 * 2) / 1024;
-          } else if (lvl === 4) {
-            tx = (256 * 3) / 1024;
-            ty = (256 * 2) / 1024;
-          } else if (lvl >= 5) {
-            tx = (256 * 2) / 1024;
-            ty = (256 * 3) / 1024;
-          }
-          break;
-      }
-
-      flowers.mesh.verts[i + 3] = texOffset + tx;
-      flowers.mesh.verts[i + 4] = texOffset + ty;
-      flowers.mesh.verts[i + 11] = texSize + tx;
-      flowers.mesh.verts[i + 12] = texOffset + ty;
-      flowers.mesh.verts[i + 19] = texSize + tx;
-      flowers.mesh.verts[i + 20] = texSize + ty;
-      flowers.mesh.verts[i + 27] = texOffset + tx;
-      flowers.mesh.verts[i + 28] = texSize + ty;
-    }
-  }
-
-  function collectPollen(params) {
-    if (player.pollen >= player.capacity || params.pattern.length < 1) {
-      return 0;
-    }
-
-    let f = fieldInfo[params.field || player.fieldIn],
-      x = params.x,
-      z = params.z,
-      total = { r: 0, b: 0, w: 0 },
-      stackHeight = params.stackHeight || 0.425,
-      crit = {
-        r:
-          params.alwaysCrit || Math.random() < player.criticalChance
-            ? Math.random() < player.superCritChance
-              ? 2
-              : 1
-            : 0,
-        b:
-          params.alwaysCrit || Math.random() < player.criticalChance
-            ? Math.random() < player.superCritChance
-              ? 2
-              : 1
-            : 0,
-        w:
-          params.alwaysCrit || Math.random() < player.criticalChance
-            ? Math.random() < player.superCritChance
-              ? 2
-              : 1
-            : 0,
-      },
-      amount =
-        typeof params.amount === "number"
-          ? { r: params.amount, b: params.amount, w: params.amount }
-          : params.amount,
-      pattern = params.pattern,
-      otherAccum = { r: 0, b: 0, w: 0 },
-      multiplier = params.multiplier
-        ? typeof params.multiplier === "number"
-          ? { r: params.multiplier, b: params.multiplier, w: params.multiplier }
-          : params.multiplier
-        : { r: 1, b: 1, w: 1 },
-      totalHoney = 0,
-      totalGoo = 0,
-      yOffset = params.yOffset || 2;
-
-    multiplier.r *=
-      player.redPollen *
-      (crit.r === 0
-        ? 1
-        : crit.r === 1
-        ? player.criticalPower
-        : player.criticalPower * player.superCritPower);
-    multiplier.b *=
-      player.bluePollen *
-      (crit.b === 0
-        ? 1
-        : crit.b === 1
-        ? player.criticalPower
-        : player.criticalPower * player.superCritPower);
-    multiplier.w *=
-      player.whitePollen *
-      (crit.w === 0
-        ? 1
-        : crit.w === 1
-        ? player.criticalPower
-        : player.criticalPower * player.superCritPower);
-
-    let instantConversion = {
-      r: params.instantConversion
-        ? (player.instantRedConversion - 1) * params.instantConversion + 1
-        : player.instantRedConversion,
-      b: params.instantConversion
-        ? (player.instantBlueConversion - 1) * params.instantConversion + 1
-        : player.instantBlueConversion,
-      w: params.instantConversion
-        ? (player.instantWhiteConversion - 1) * params.instantConversion + 1
-        : player.instantWhiteConversion,
-    };
-
-    instantConversion.r = crit.r === 2 ? 1 : instantConversion.r;
-    instantConversion.w = crit.w === 2 ? 1 : instantConversion.w;
-    instantConversion.b = crit.b === 2 ? 1 : instantConversion.b;
-
-    function collectFunction(f) {
-      let amountToCollect = Math.min(amount[f.color[0]], f.height * 100),
-        amp = amountToCollect * 0.01;
-
-      f.height -= Math.min(
-        params.depleteAll ? f.height : amp / ((f.level - 1) * 0.2 + 1),
-        f.height
-      );
-
-      amountToCollect *= multiplier[f.color[0]];
-      amountToCollect *= f.level;
-
-      if (f.goo) {
-        amountToCollect *= player.goo;
-        totalGoo += amountToCollect;
-
-        if (params.isGummyBaller) {
-          player.addEffect("gummyBall", (f.goo * 0.45) / 180);
-          f.goo *= 0.5;
-        }
-      }
-
-      if (params.replenish) f.height += params.replenish;
-      if (params.gooTrail) f.goo = 1;
-
-      if (f.balloon) {
-        amountToCollect *= f.color === "blue" ? 1.2 : 1.1;
-        amountToCollect *= f.balloon.golden ? 1.05 : 1;
-
-        f.balloon.pollen += amountToCollect;
-        otherAccum[f.color[0]] +=
-          amountToCollect * (1 - instantConversion[f.color[0]]);
-      }
-      if (f.puffshrooms.length) {
-        for (let j in f.puffshrooms) {
-          f.puffshrooms[j].pollen += amountToCollect;
-        }
-
-        otherAccum[f.color[0]] +=
-          amountToCollect * (1 - instantConversion[f.color[0]]);
-      } else {
-        total[f.color[0]] += amountToCollect;
-      }
-    }
-
-    for (let i in pattern) {
-      let p = pattern[i];
-
-      let _x = x + p[0],
-        _z = z + p[1];
-
-      if (_x >= 0 && _x < f.width && _z >= 0 && _z < f.length) {
-        updateFlower(
-          params.field || player.fieldIn,
-          _x,
-          _z,
-          collectFunction,
-          true,
-          params.gooTrail || params.isGummyBaller,
-          false
-        );
-      }
-    }
-
-    total.r = Math.round(total.r);
-    total.b = Math.round(total.b);
-    total.w = Math.round(total.w);
-    otherAccum.r = Math.round(otherAccum.r);
-    otherAccum.b = Math.round(otherAccum.b);
-    otherAccum.w = Math.round(otherAccum.w);
-    totalGoo = Math.round(totalGoo);
-
-    if (player.extraInfo.enablePollenText) {
-      let stack = [];
-
-      if (total.w || otherAccum.w)
-        stack.push({ c: "white", v: total.w + otherAccum.w });
-      if (total.r || otherAccum.r)
-        stack.push({ c: "red", v: total.r + otherAccum.r });
-      if (total.b || otherAccum.b)
-        stack.push({ c: "blue", v: total.b + otherAccum.b });
-
-      if (stack[1] && stack[0].v > stack[1].v) {
-        let n = stack[0];
-        stack[0] = stack[1];
-        stack[1] = n;
-      }
-
-      if (stack[2] && stack[0].v > stack[2].v) {
-        let n = stack[0];
-        stack[0] = stack[2];
-        stack[2] = n;
-      }
-
-      if (stack[1] && stack[2] && stack[1].v > stack[2].v) {
-        let n = stack[1];
-        stack[1] = stack[2];
-        stack[2] = n;
-      }
-
-      for (let i in stack) {
-        textRenderer.add(
-          stack[i].v,
-          params.otherPos
-            ? [
-                params.otherPos[0],
-                params.otherPos[1] + yOffset + stackHeight * i,
-                params.otherPos[2],
-              ]
-            : [
-                f.x + x,
-                f.y +
-                  yOffset +
-                  stackHeight * i +
-                  (stack[i].v + "").length * 0.3,
-                f.z + z,
-              ],
-          COLORS[stack[i].c + "Arr"],
-          crit[stack[i].c[0]]
-        );
-      }
-    }
-
-    totalHoney =
-      total.r * instantConversion.r +
-      total.b * instantConversion.b +
-      total.w * instantConversion.w;
-
-    player.pollen = Math.min(
-      player.pollen + Math.ceil(total.w + total.r + total.b - totalHoney),
-      player.capacity
-    );
-
-    totalHoney = Math.ceil(
-      (totalHoney + totalGoo * 0.1) * player.honeyPerPollen
-    );
-
-    player.honey += totalHoney;
-
-    if (totalHoney && player.extraInfo.enablePollenText) {
-      textRenderer.add(
-        totalHoney,
-        [
-          player.body.position.x,
-          player.body.position.y + yOffset * 0.8 + 0.4 + Math.random() * 0.75,
-          player.body.position.z,
-        ],
-        COLORS.honey,
-        0,
-        "+",
-        0.85
-      );
-    }
-
-    player.stats.redPollen += total.r + otherAccum.r;
-    player.stats.bluePollen += total.b + otherAccum.b;
-    player.stats.whitePollen += total.w + otherAccum.w;
-    player.stats.goo += totalGoo;
-
-    let totalCollected =
-      total.r + total.b + total.w + otherAccum.r + otherAccum.b + otherAccum.w;
-
-    player.stats["pollenFrom" + (params.field || player.fieldIn)] +=
-      totalCollected;
-    player.stats.pollen += totalCollected;
-
-    return totalCollected;
-  }
+  // FIXME: collectPollen goes here
 
   function createField(
     name,
@@ -49363,7 +35823,7 @@ function BeeSwarmSimulator(DATA) {
     c,
     _l,
     generalColorComp,
-    nectarType
+    nectarType,
   ) {
     player.stats["pollenFrom" + name] = 0;
 
@@ -49391,383 +35851,6 @@ function BeeSwarmSimulator(DATA) {
     }
   }
 
-  createField(
-    "CoconutField",
-    25,
-    12.5,
-    -39.5,
-    17,
-    14,
-    function () {
-      let c = Math.random();
-
-      return Math.random() < 0.1
-        ? Math.random() < 0.4
-          ? "blue"
-          : "red"
-        : "white";
-    },
-    function () {
-      return 3;
-    },
-    { w: 0.9, b: 0.04, r: 0.06 },
-    "refreshing"
-  );
-
-  createField(
-    "PepperPatch",
-    61,
-    20.5,
-    -44,
-    15,
-    15,
-    function () {
-      let c = Math.random();
-
-      return Math.random() < 0.1 ? "white" : "red";
-    },
-    function () {
-      return 3;
-    },
-    { b: 0, r: 0.9, w: 0.1 },
-    "invigorating"
-  );
-
-  createField(
-    "RoseField",
-    31,
-    2,
-    31.5,
-    18,
-    13,
-    function () {
-      let c = Math.random();
-
-      return Math.random() < 0.12 ? "white" : "red";
-    },
-    function () {
-      return Math.random() < 0.5 ? 3 : Math.random() < 0.12 ? 1 : 2;
-    },
-    { r: 0.88, w: 0.12, b: 0 },
-    "motivating"
-  );
-
-  createField(
-    "PineTreeForest",
-    31,
-    12.5,
-    74,
-    14,
-    19,
-    function () {
-      let c = Math.random();
-
-      return Math.random() < 0.1 ? "white" : "blue";
-    },
-    function () {
-      return Math.random() < 0.46 ? 3 : Math.random() < 0.6 ? 1 : 2;
-    },
-    { w: 0.1, b: 0.9, r: 0 },
-    "comforting"
-  );
-
-  createField(
-    "PumpkinPatch",
-    4,
-    12.5,
-    76.5,
-    18,
-    12,
-    function () {
-      let c = Math.random();
-
-      return Math.random() < 0.57
-        ? "white"
-        : Math.random() < 0.52
-        ? "red"
-        : "blue";
-    },
-    function () {
-      return Math.random() < 0.76 ? 3 : 2;
-    },
-    { w: 0.57, r: (1 - 0.57) * 0.52, b: (1 - 0.57) * 0.48 },
-    "satisfying"
-  );
-
-  createField(
-    "CactusField",
-    4,
-    12.5,
-    63.5,
-    18,
-    11,
-    function () {
-      let c = Math.random();
-
-      return Math.random() < 0.06
-        ? "white"
-        : Math.random() < 0.58
-        ? "blue"
-        : "red";
-    },
-    function () {
-      return Math.random() < 0.56 ? 3 : 2;
-    },
-    { w: 0.06, b: (1 - 0.06) * 0.58, r: (1 - 0.06) * 0.42 },
-    "invigorating"
-  );
-
-  createField(
-    "MountainTopField",
-    -35,
-    33,
-    73,
-    15,
-    15,
-    function () {
-      let c = Math.random();
-
-      return Math.random() < 0.5 ? "red" : "blue";
-    },
-    function () {
-      return 3;
-    },
-    { r: 0.5, b: 0.5, w: 0 },
-    "invigorating"
-  );
-
-  createField(
-    "SunflowerField",
-    15.5,
-    -1.5,
-    16,
-    11,
-    18,
-    function () {
-      let c = Math.random();
-
-      return Math.random() > 0.7
-        ? Math.random() < 0.4
-          ? "blue"
-          : "red"
-        : "white";
-    },
-    function () {
-      return Math.random() < 0.1 ? 2 : 1;
-    },
-    { w: 0.7, b: 0.15, r: 0.15 },
-    "satisfying"
-  );
-
-  createField(
-    "MushroomField",
-    -6,
-    -1.5,
-    29,
-    19,
-    13,
-    function () {
-      let c = Math.random();
-
-      return Math.random() < 0.69 ? "red" : "white";
-    },
-    function () {
-      return Math.random() < 0.9 ? 1 : 2;
-    },
-    { w: 0.31, b: 0, r: 0.69 },
-    "motivating"
-  );
-
-  createField(
-    "StrawberryField",
-    6,
-    2,
-    47.5,
-    15,
-    15,
-    function () {
-      let c = Math.random();
-
-      return Math.random() < 0.69 ? "red" : "white";
-    },
-    function () {
-      return Math.random() < 0.04 ? 3 : Math.random() < 0.8 ? 2 : 1;
-    },
-    { w: 0.31, b: 0, r: 0.69 },
-    "refreshing"
-  );
-
-  createField(
-    "SpiderField",
-    -18.5,
-    2,
-    48.5,
-    17,
-    13,
-    function () {
-      let c = Math.random();
-
-      return "white";
-    },
-    function () {
-      return Math.random() < 0.8 ? 2 : Math.random() < 0.5 ? 3 : 1;
-    },
-    { w: 1, b: 0, r: 0 },
-    "motivating"
-  );
-
-  createField(
-    "BambooField",
-    -52,
-    2,
-    50.375,
-    21,
-    12,
-    function () {
-      let c = Math.random();
-
-      return Math.random() < 0.25 ? "white" : "blue";
-    },
-    function () {
-      return Math.random() < 0.75 ? 2 : Math.random() < 0.25 ? 3 : 1;
-    },
-    { w: 0.25, b: 0.75, r: 0 },
-    "comforting"
-  );
-
-  createField(
-    "PineapplePatch",
-    -71.5,
-    12.5,
-    79,
-    19,
-    14,
-    function () {
-      let c = Math.random();
-
-      return Math.random() < 0.89
-        ? "white"
-        : Math.random() > 0.56
-        ? "blue"
-        : "red";
-    },
-    function () {
-      return Math.random() < 0.5 ? 2 : Math.random() < 0.38 ? 1 : 3;
-    },
-    { w: 0.89, b: 0.05, r: 0.06 },
-    "satisfying"
-  );
-
-  createField(
-    "StumpField",
-    -102.5,
-    16,
-    74.5,
-    16,
-    16,
-    function () {
-      let c = Math.random();
-
-      return Math.random() < 0.8
-        ? "blue"
-        : Math.random() > 0.2
-        ? "white"
-        : "red";
-    },
-    function () {
-      return 3;
-    },
-    { w: 0.15, b: 0.8, r: 0.05 },
-    "motivating"
-  );
-
-  createField(
-    "BlueFlowerField",
-    -55,
-    -1.5,
-    29,
-    24,
-    13,
-    function () {
-      let c = Math.random();
-
-      return Math.random() < 0.69 ? "blue" : "white";
-    },
-    function () {
-      return Math.random() < 0.89 ? 1 : 2;
-    },
-    { w: 0.31, r: 0, b: 0.69 },
-    "refreshing"
-  );
-
-  createField(
-    "CloverField",
-    -50,
-    4,
-    8.5,
-    18,
-    18,
-    function () {
-      let c = Math.random();
-
-      return Math.random() < 0.32
-        ? "white"
-        : Math.random() < 0.5
-        ? "blue"
-        : "red";
-    },
-    function () {
-      return Math.random() < 0.51 ? 1 : 2;
-    },
-    { w: 0.32, r: 0.34, b: 0.34 },
-    "invigorating"
-  );
-
-  createField(
-    "DandelionField",
-    -15,
-    -1.5,
-    7,
-    19,
-    13,
-    function () {
-      let c = Math.random();
-
-      return Math.random() < 0.85
-        ? "white"
-        : Math.random() < 0.366
-        ? "blue"
-        : "red";
-    },
-    function () {
-      return Math.random() < 0.871 ? 1 : 2;
-    },
-    { w: 0.85, r: 0.05, b: 0.1 },
-    "comforting"
-  );
-
-  createField(
-    "AntField",
-    -29.5,
-    5.5,
-    -59,
-    18,
-    12,
-    function () {
-      let c = Math.random();
-
-      return Math.random() < 0.333333
-        ? "white"
-        : Math.random() < 0.5
-        ? "blue"
-        : "red";
-    },
-    function () {
-      return 1;
-    },
-    { w: 0.33333, r: 0.33333, b: 0.33333 }
-  );
-
   flowers.mesh = {};
   flowers.mesh.vertBuffer = gl.createBuffer();
   flowers.mesh.indexBuffer = gl.createBuffer();
@@ -49779,13 +35862,13 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ARRAY_BUFFER,
     Float32Array.from(flowers.mesh.verts),
-    gl.DYNAMIC_DRAW
+    gl.DYNAMIC_DRAW,
   );
   gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, flowers.mesh.indexBuffer);
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(flowers.mesh.index),
-    gl.DYNAMIC_DRAW
+    gl.DYNAMIC_DRAW,
   );
 
   for (let i = 0; i < 25; i++) player.addSlot(null);
@@ -49799,14 +35882,19 @@ function BeeSwarmSimulator(DATA) {
       if (i.indexOf("Planter") > -1) continue;
 
       objects.tokens.push(
-        new LootToken(10000, [(ct % 9) - 2, -1, -7 + ((ct / 9) | 0)], i, 100000)
+        new LootToken(
+          10000,
+          [(ct % 9) - 2, -1, -7 + ((ct / 9) | 0)],
+          i,
+          100000,
+        ),
       );
 
       ct++;
     }
 
     objects.tokens.push(
-      new LootToken(10000, [0, 1, 0], "honey", 100000000000000)
+      new LootToken(10000, [0, 1, 0], "honey", 100000000000000),
     );
   }
 
@@ -50063,7 +36151,7 @@ function BeeSwarmSimulator(DATA) {
       save = JSON.parse(string);
     } catch (e) {
       alert(
-        "\nSave code is invalid! The save code may contain other errors not detected by this program.\n\nAn empty new game will now be loaded."
+        "\nSave code is invalid! The save code may contain other errors not detected by this program.\n\nAn empty new game will now be loaded.",
       );
 
       return;
@@ -50117,7 +36205,7 @@ function BeeSwarmSimulator(DATA) {
           h.bond,
           h.mutation,
           h.radioactive,
-          h.beequip
+          h.beequip,
         );
       }
     }
@@ -50171,8 +36259,8 @@ function BeeSwarmSimulator(DATA) {
           save.planters[i].x,
           save.planters[i].z,
           save.planters[i].growth,
-          save.planters[i].glistering
-        )
+          save.planters[i].glistering,
+        ),
       );
     }
   }
@@ -50545,8 +36633,8 @@ function BeeSwarmSimulator(DATA) {
       2,
       15,
       "rhinoBeetle",
-      "mob_bamb1"
-    )
+      "mob_bamb1",
+    ),
   );
   objects.mobs.push(
     new BugMob(
@@ -50555,8 +36643,8 @@ function BeeSwarmSimulator(DATA) {
       3,
       18,
       "rhinoBeetle",
-      "mob_bamb2"
-    )
+      "mob_bamb2",
+    ),
   );
 
   //bluf
@@ -50567,8 +36655,8 @@ function BeeSwarmSimulator(DATA) {
       1,
       8,
       "rhinoBeetle",
-      "mob_bluf1"
-    )
+      "mob_bluf1",
+    ),
   );
 
   //clov
@@ -50586,8 +36674,8 @@ function BeeSwarmSimulator(DATA) {
       2,
       12,
       "rhinoBeetle",
-      "mob_clov1"
-    )
+      "mob_clov1",
+    ),
   );
   objects.mobs.push(
     new BugMob(
@@ -50603,8 +36691,8 @@ function BeeSwarmSimulator(DATA) {
       2,
       10,
       "ladybug",
-      "mob_clov2"
-    )
+      "mob_clov2",
+    ),
   );
 
   //pineap
@@ -50622,8 +36710,8 @@ function BeeSwarmSimulator(DATA) {
       5,
       20,
       "rhinoBeetle",
-      "mob_pinea1"
-    )
+      "mob_pinea1",
+    ),
   );
   objects.mobs.push(
     new BugMob(
@@ -50639,8 +36727,8 @@ function BeeSwarmSimulator(DATA) {
       4,
       25,
       "mantis",
-      "mob_pinea2"
-    )
+      "mob_pinea2",
+    ),
   );
 
   //straw
@@ -50651,8 +36739,8 @@ function BeeSwarmSimulator(DATA) {
       2,
       10,
       "ladybug",
-      "mob_straw1"
-    )
+      "mob_straw1",
+    ),
   );
   objects.mobs.push(
     new BugMob(
@@ -50661,8 +36749,8 @@ function BeeSwarmSimulator(DATA) {
       3,
       12,
       "ladybug",
-      "mob_straw2"
-    )
+      "mob_straw2",
+    ),
   );
 
   //mush
@@ -50673,8 +36761,8 @@ function BeeSwarmSimulator(DATA) {
       1,
       6,
       "ladybug",
-      "mob_mush1"
-    )
+      "mob_mush1",
+    ),
   );
 
   //spi
@@ -50692,8 +36780,8 @@ function BeeSwarmSimulator(DATA) {
       4,
       25,
       "spider",
-      "mob_spi1"
-    )
+      "mob_spi1",
+    ),
   );
 
   objects.mobs.push(
@@ -50710,8 +36798,8 @@ function BeeSwarmSimulator(DATA) {
       6,
       75,
       "werewolf",
-      "mob_were1"
-    )
+      "mob_were1",
+    ),
   );
 
   //pine
@@ -50722,8 +36810,8 @@ function BeeSwarmSimulator(DATA) {
       5,
       35,
       "mantis",
-      "mob_pine1"
-    )
+      "mob_pine1",
+    ),
   );
   objects.mobs.push(
     new BugMob(
@@ -50732,8 +36820,8 @@ function BeeSwarmSimulator(DATA) {
       6,
       45,
       "mantis",
-      "mob_pine2"
-    )
+      "mob_pine2",
+    ),
   );
 
   //rose
@@ -50751,8 +36839,8 @@ function BeeSwarmSimulator(DATA) {
       5,
       35,
       "scorpion",
-      "mob_rose1"
-    )
+      "mob_rose1",
+    ),
   );
   objects.mobs.push(
     new BugMob(
@@ -50768,8 +36856,8 @@ function BeeSwarmSimulator(DATA) {
       5,
       35,
       "scorpion",
-      "mob_rose2"
-    )
+      "mob_rose2",
+    ),
   );
 
   objects.mobs.push(
@@ -50786,8 +36874,8 @@ function BeeSwarmSimulator(DATA) {
       7,
       2500,
       "kingBeetle",
-      "mob_king1"
-    )
+      "mob_king1",
+    ),
   );
 
   objects.mobs.push(
@@ -50797,8 +36885,8 @@ function BeeSwarmSimulator(DATA) {
       9,
       10000,
       "tunnelBear",
-      "mob_tun1"
-    )
+      "mob_tun1",
+    ),
   );
 
   objects.mobs.push(new CoconutCrab());
@@ -50809,7 +36897,7 @@ function BeeSwarmSimulator(DATA) {
     function (e) {
       player.pointerLocked = document.pointerLockElement === uiCanvas;
     },
-    false
+    false,
   );
 
   // CHQ: stop the pointer lock, which intereferes with menu selection
@@ -50819,40 +36907,46 @@ function BeeSwarmSimulator(DATA) {
     SAVE_GAME(1);
     player.addMessage("Game Autosaved!");
     console.error(
-      "\n\n\n\n\nGame automatically saved on " + Date.now() + "\n\n\n\n\n"
+      "\n\n\n\n\nGame automatically saved on " + Date.now() + "\n\n\n\n\n",
     );
   }, 30000);
 
   function setGlobalPuffshroomSpawn() {
-    window.setTimeout(() => {
-      let field = [];
+    window.setTimeout(
+      () => {
+        let field = [];
 
-      for (let i in fieldInfo) if (i !== "AntField") field.push(i);
+        for (let i in fieldInfo) if (i !== "AntField") field.push(i);
 
-      field = field[(Math.random() * field.length) | 0];
+        field = field[(Math.random() * field.length) | 0];
 
-      objects.mobs.push(
-        new Puffshroom(
-          field,
-          (MATH.random(0.25, 0.75) * fieldInfo[field].width) | 0,
-          (z = (MATH.random(0.25, 0.75) * fieldInfo[field].length) | 0),
-          5 * 60,
-          1,
-          "puffshroom"
-        )
-      );
+        objects.mobs.push(
+          new Puffshroom(
+            field,
+            (MATH.random(0.25, 0.75) * fieldInfo[field].width) | 0,
+            (z = (MATH.random(0.25, 0.75) * fieldInfo[field].length) | 0),
+            5 * 60,
+            1,
+            "puffshroom",
+          ),
+        );
 
-      setGlobalPuffshroomSpawn();
-    }, (60 * 30 - ((Date.now() * 0.001) % (60 * 30))) * 1000);
+        setGlobalPuffshroomSpawn();
+      },
+      (60 * 30 - ((Date.now() * 0.001) % (60 * 30))) * 1000,
+    );
   }
   setGlobalPuffshroomSpawn();
 
   function setGlobalMondoChickSpawn() {
-    window.setTimeout(() => {
-      objects.mobs.push(new MondoChick());
+    window.setTimeout(
+      () => {
+        objects.mobs.push(new MondoChick());
 
-      setGlobalMondoChickSpawn();
-    }, (60 * 60 - ((Date.now() * 0.001) % (60 * 60))) * 1000);
+        setGlobalMondoChickSpawn();
+      },
+      (60 * 60 - ((Date.now() * 0.001) % (60 * 60))) * 1000,
+    );
   }
   setGlobalMondoChickSpawn();
 
@@ -50936,12 +37030,12 @@ function BeeSwarmSimulator(DATA) {
             "height",
             30 -
               (player.effects[i].cooldown * 30) /
-                effects[player.effects[i].type].maxCooldown || 30
+                effects[player.effects[i].type].maxCooldown || 30,
           );
 
           effects[player.effects[i].type].update(
             player.effects[i].amount,
-            player
+            player,
           );
 
           if (player.effects[i].cooldown <= 0) {
@@ -51042,13 +37136,13 @@ function BeeSwarmSimulator(DATA) {
     gl.uniformMatrix4fv(
       glCache.dynamic_viewMatrix,
       gl.FALSE,
-      player.viewMatrix
+      player.viewMatrix,
     );
 
     gl.uniformMatrix4fv(
       glCache.dynamic_modelMatrix,
       gl.FALSE,
-      MATH.IDENTITY_MATRIX
+      MATH.IDENTITY_MATRIX,
     );
     shopGearMesh.render();
 
@@ -51056,7 +37150,7 @@ function BeeSwarmSimulator(DATA) {
       gl.uniformMatrix4fv(
         glCache.dynamic_modelMatrix,
         gl.FALSE,
-        player.modelMatrix
+        player.modelMatrix,
       );
       playerMesh.render();
     }
@@ -51064,7 +37158,7 @@ function BeeSwarmSimulator(DATA) {
     gl.uniformMatrix4fv(
       glCache.dynamic_modelMatrix,
       gl.FALSE,
-      player.toolMatrix
+      player.toolMatrix,
     );
     player.toolMesh.render();
 
@@ -51079,7 +37173,7 @@ function BeeSwarmSimulator(DATA) {
       gl.bufferData(
         gl.ARRAY_BUFFER,
         Float32Array.from(flowers.mesh.verts),
-        gl.DYNAMIC_DRAW
+        gl.DYNAMIC_DRAW,
       );
 
     UPDATE_FLOWER_MESH = false;
@@ -51090,7 +37184,7 @@ function BeeSwarmSimulator(DATA) {
       gl.FLOAT,
       gl.FALSE,
       32,
-      0
+      0,
     );
     gl.vertexAttribPointer(
       glCache.flower_vertUV,
@@ -51098,7 +37192,7 @@ function BeeSwarmSimulator(DATA) {
       gl.FLOAT,
       gl.FALSE,
       32,
-      12
+      12,
     );
     gl.vertexAttribPointer(
       glCache.flower_vertGoo,
@@ -51106,14 +37200,14 @@ function BeeSwarmSimulator(DATA) {
       gl.FLOAT,
       gl.FALSE,
       32,
-      28
+      28,
     );
 
     gl.drawElements(
       gl.TRIANGLES,
       flowers.mesh.indexAmount,
       gl.UNSIGNED_SHORT,
-      0
+      0,
     );
 
     gl.bindTexture(gl.TEXTURE_2D, textures.default);
@@ -51150,10 +37244,10 @@ function BeeSwarmSimulator(DATA) {
         new CANNON.Vec3(
           d[0] + dir[0] * 10000,
           d[1] + dir[1] * 10000,
-          d[2] + dir[2] * 10000
+          d[2] + dir[2] * 10000,
         ),
         {},
-        result
+        result,
       );
       x = result.hitPointWorld.x;
       y = result.hitPointWorld.y;
@@ -51172,11 +37266,11 @@ function BeeSwarmSimulator(DATA) {
           if (
             (player.itemDragging &&
               items[player.itemDragging].canUseOnSlot(
-                player.hive[player.hiveIndex[1]][player.hiveIndex[0]]
+                player.hive[player.hiveIndex[1]][player.hiveIndex[0]],
               )) ||
             (player.beequipDragging &&
               beequips[player.beequipDragging.type].canUseOnSlot(
-                player.hive[player.hiveIndex[1]][player.hiveIndex[0]]
+                player.hive[player.hiveIndex[1]][player.hiveIndex[0]],
               ))
           ) {
             box(
@@ -51189,7 +37283,7 @@ function BeeSwarmSimulator(DATA) {
               false,
               [0, 100, 0],
               false,
-              false
+              false,
             );
           } else {
             player.canUseItem = false;
@@ -51203,7 +37297,7 @@ function BeeSwarmSimulator(DATA) {
               false,
               [100, 0, 0],
               false,
-              false
+              false,
             );
           }
         });
@@ -51269,7 +37363,7 @@ function BeeSwarmSimulator(DATA) {
           1,
           5,
           4,
-          Math.PI
+          Math.PI,
         );
       }
 
@@ -51278,225 +37372,227 @@ function BeeSwarmSimulator(DATA) {
         !NPCs[minNPC].doesntHaveMesh &&
         !player.fieldIn
       ) {
-        NPCs[minNPC].mesh.setMeshFromFunction(function (
-          box,
-          a,
-          cylinder,
-          sphere,
-          d,
-          e,
-          star,
-          limbBox,
-          limbCylinder
-        ) {
-          NPCs[minNPC].animation += dt + dt + dt;
+        NPCs[minNPC].mesh.setMeshFromFunction(
+          function (
+            box,
+            a,
+            cylinder,
+            sphere,
+            d,
+            e,
+            star,
+            limbBox,
+            limbCylinder,
+          ) {
+            NPCs[minNPC].animation += dt + dt + dt;
 
-          let x = NPCs[minNPC].meshParams.x,
-            y = NPCs[minNPC].meshParams.y,
-            z = NPCs[minNPC].meshParams.z,
-            r = NPCs[minNPC].meshParams.r,
-            s = NPCs[minNPC].meshParams.s,
-            t = NPCs[minNPC].animation,
-            t1 = Math.sin(t * 2.1) * 5 - 0.5;
+            let x = NPCs[minNPC].meshParams.x,
+              y = NPCs[minNPC].meshParams.y,
+              z = NPCs[minNPC].meshParams.z,
+              r = NPCs[minNPC].meshParams.r,
+              s = NPCs[minNPC].meshParams.s,
+              t = NPCs[minNPC].animation,
+              t1 = Math.sin(t * 2.1) * 5 - 0.5;
 
-          limbBox(
-            r,
-            x,
-            y + Math.cos(t1 * MATH.TO_RAD * 2) * s * 0.6,
-            z + Math.sin(t1 * MATH.TO_RAD * 2) * s * 0.6,
-            1.1 * s,
-            0.9 * s,
-            0.6 * s,
-            [t1 * 2, 0, 0],
-            (NPCs[minNPC].meshParams.texture.torso.u * 128) / 1024,
-            (NPCs[minNPC].meshParams.texture.torso.v * 128) / 1024,
-            NPCs[minNPC].meshParams.texture.torso.texture
-          );
-          limbBox(
-            r,
-            x,
-            y + Math.cos(t1 * MATH.TO_RAD * 2.75) * s * 1.65,
-            z + Math.sin(t1 * MATH.TO_RAD * 2.75) * s * 1.65,
-            1.2 * s,
-            1.15 * s,
-            0.6 * s,
-            [t1 * 4, 0, 0],
-            (NPCs[minNPC].meshParams.texture.face.u * 128) / 1024,
-            (NPCs[minNPC].meshParams.texture.face.v * 128) / 1024,
-            true
-          );
-          limbBox(
-            r,
-            x,
-            y,
-            z,
-            1.1 * s,
-            0.25 * s,
-            0.6 * s,
-            [t1, 0, 0],
-            (NPCs[minNPC].meshParams.texture.torso.u * 128) / 1024,
-            (NPCs[minNPC].meshParams.texture.torso.v * 128) / 1024
-          );
-          limbBox(
-            r,
-            x + s / 1.25,
-            y - Math.cos(t1 * MATH.TO_RAD * 3.5 * 2) * s * 0.65 + s * 1.15,
-            z - Math.sin(t1 * MATH.TO_RAD * 3.5 * 2) * s * 0.2,
-            0.5 * s,
-            1.15 * s,
-            0.5 * s,
-            [t1 * 3.5 * 2, 0, 9],
-            ((NPCs[minNPC].meshParams.texture.face.u +
-              NPCs[minNPC].meshParams.texture.extremities.u) *
-              128) /
-              1024,
-            ((NPCs[minNPC].meshParams.texture.face.v +
-              NPCs[minNPC].meshParams.texture.extremities.v) *
-              128) /
-              1024
-          );
-          s /= 1.25;
-          limbBox(
-            r,
-            x - 0.35 * s,
-            y - 0.55 * s,
-            z + 0.1 * s,
-            0.55 * s * 1.25,
-            0.6 * s * 1.25,
-            0.55 * s * 1.25,
-            [t1 * 1.25 - 10, 0, -5],
-            ((NPCs[minNPC].meshParams.texture.face.u +
-              NPCs[minNPC].meshParams.texture.extremities.u) *
-              128) /
-              1024,
-            ((NPCs[minNPC].meshParams.texture.face.v +
-              NPCs[minNPC].meshParams.texture.extremities.v) *
-              128) /
-              1024
-          );
-          limbBox(
-            r,
-            x - 0.42 * s,
-            y - 1.15 * s,
-            z + 0.1 * s,
-            0.55 * s * 1.25,
-            0.6 * s * 1.25,
-            0.55 * s * 1.25,
-            [10 - t1 * 0.5, 0, -5],
-            ((NPCs[minNPC].meshParams.texture.face.u +
-              NPCs[minNPC].meshParams.texture.extremities.u) *
-              128) /
-              1024,
-            ((NPCs[minNPC].meshParams.texture.face.v +
-              NPCs[minNPC].meshParams.texture.extremities.v) *
-              128) /
-              1024
-          );
-          limbBox(
-            r,
-            x + 0.35 * s,
-            y - 0.55 * s,
-            z + 0.1 * s,
-            0.55 * s * 1.25,
-            0.6 * s * 1.25,
-            0.55 * s * 1.25,
-            [t1 * 1.25 - 10, 0, 5],
-            ((NPCs[minNPC].meshParams.texture.face.u +
-              NPCs[minNPC].meshParams.texture.extremities.u) *
-              128) /
-              1024,
-            ((NPCs[minNPC].meshParams.texture.face.v +
-              NPCs[minNPC].meshParams.texture.extremities.v) *
-              128) /
-              1024
-          );
-          limbBox(
-            r,
-            x + 0.42 * s,
-            y - 1.15 * s,
-            z + 0.1 * s,
-            0.55 * s * 1.25,
-            0.6 * s * 1.25,
-            0.55 * s * 1.25,
-            [10 - t1 * 0.5, 0, 5],
-            ((NPCs[minNPC].meshParams.texture.face.u +
-              NPCs[minNPC].meshParams.texture.extremities.u) *
-              128) /
-              1024,
-            ((NPCs[minNPC].meshParams.texture.face.v +
-              NPCs[minNPC].meshParams.texture.extremities.v) *
-              128) /
-              1024
-          );
-          s *= 1.25;
-          limbCylinder(
-            r,
-            x - 0.6 * s,
-            y + Math.cos(t1 * MATH.TO_RAD * 3) * s * 2.2,
-            z + Math.sin(t1 * MATH.TO_RAD * 3) * s * 2.2,
-            0.3 * s,
-            0.65 * s,
-            10,
-            0.9,
-            0.9,
-            0.9,
-            1,
-            t1 * 4,
-            0,
-            0,
-            ((NPCs[minNPC].meshParams.texture.face.u +
-              NPCs[minNPC].meshParams.texture.ears.u) *
-              128) /
-              1024,
-            ((NPCs[minNPC].meshParams.texture.face.v +
-              NPCs[minNPC].meshParams.texture.ears.v) *
-              128) /
-              1024
-          );
-          limbCylinder(
-            r,
-            x + 0.6 * s,
-            y + Math.cos(t1 * MATH.TO_RAD * 3) * s * 2.2,
-            z + Math.sin(t1 * MATH.TO_RAD * 3) * s * 2.2,
-            0.3 * s,
-            0.65 * s,
-            10,
-            0.9,
-            0.9,
-            0.9,
-            1,
-            t1 * 4,
-            0,
-            0,
-            ((NPCs[minNPC].meshParams.texture.face.u +
-              NPCs[minNPC].meshParams.texture.ears.u) *
-              128) /
-              1024,
-            ((NPCs[minNPC].meshParams.texture.face.v +
-              NPCs[minNPC].meshParams.texture.ears.v) *
-              128) /
-              1024
-          );
-          t1 = Math.sin(t * 2.1 + 0.5) * 5 - 0.5;
-          limbBox(
-            r,
-            x - (1 * s) / 1.25,
-            y - Math.cos(t1 * MATH.TO_RAD * 3.5 * 2) * s * 0.65 + s * 1.15,
-            z - Math.sin(t1 * MATH.TO_RAD * 3.5 * 2) * s * 0.2,
-            0.5 * s,
-            1.15 * s,
-            0.5 * s,
-            [t1 * 3.5 * 2, 0, -9],
-            ((NPCs[minNPC].meshParams.texture.face.u +
-              NPCs[minNPC].meshParams.texture.extremities.u) *
-              128) /
-              1024,
-            ((NPCs[minNPC].meshParams.texture.face.v +
-              NPCs[minNPC].meshParams.texture.extremities.v) *
-              128) /
-              1024
-          );
-        });
+            limbBox(
+              r,
+              x,
+              y + Math.cos(t1 * MATH.TO_RAD * 2) * s * 0.6,
+              z + Math.sin(t1 * MATH.TO_RAD * 2) * s * 0.6,
+              1.1 * s,
+              0.9 * s,
+              0.6 * s,
+              [t1 * 2, 0, 0],
+              (NPCs[minNPC].meshParams.texture.torso.u * 128) / 1024,
+              (NPCs[minNPC].meshParams.texture.torso.v * 128) / 1024,
+              NPCs[minNPC].meshParams.texture.torso.texture,
+            );
+            limbBox(
+              r,
+              x,
+              y + Math.cos(t1 * MATH.TO_RAD * 2.75) * s * 1.65,
+              z + Math.sin(t1 * MATH.TO_RAD * 2.75) * s * 1.65,
+              1.2 * s,
+              1.15 * s,
+              0.6 * s,
+              [t1 * 4, 0, 0],
+              (NPCs[minNPC].meshParams.texture.face.u * 128) / 1024,
+              (NPCs[minNPC].meshParams.texture.face.v * 128) / 1024,
+              true,
+            );
+            limbBox(
+              r,
+              x,
+              y,
+              z,
+              1.1 * s,
+              0.25 * s,
+              0.6 * s,
+              [t1, 0, 0],
+              (NPCs[minNPC].meshParams.texture.torso.u * 128) / 1024,
+              (NPCs[minNPC].meshParams.texture.torso.v * 128) / 1024,
+            );
+            limbBox(
+              r,
+              x + s / 1.25,
+              y - Math.cos(t1 * MATH.TO_RAD * 3.5 * 2) * s * 0.65 + s * 1.15,
+              z - Math.sin(t1 * MATH.TO_RAD * 3.5 * 2) * s * 0.2,
+              0.5 * s,
+              1.15 * s,
+              0.5 * s,
+              [t1 * 3.5 * 2, 0, 9],
+              ((NPCs[minNPC].meshParams.texture.face.u +
+                NPCs[minNPC].meshParams.texture.extremities.u) *
+                128) /
+                1024,
+              ((NPCs[minNPC].meshParams.texture.face.v +
+                NPCs[minNPC].meshParams.texture.extremities.v) *
+                128) /
+                1024,
+            );
+            s /= 1.25;
+            limbBox(
+              r,
+              x - 0.35 * s,
+              y - 0.55 * s,
+              z + 0.1 * s,
+              0.55 * s * 1.25,
+              0.6 * s * 1.25,
+              0.55 * s * 1.25,
+              [t1 * 1.25 - 10, 0, -5],
+              ((NPCs[minNPC].meshParams.texture.face.u +
+                NPCs[minNPC].meshParams.texture.extremities.u) *
+                128) /
+                1024,
+              ((NPCs[minNPC].meshParams.texture.face.v +
+                NPCs[minNPC].meshParams.texture.extremities.v) *
+                128) /
+                1024,
+            );
+            limbBox(
+              r,
+              x - 0.42 * s,
+              y - 1.15 * s,
+              z + 0.1 * s,
+              0.55 * s * 1.25,
+              0.6 * s * 1.25,
+              0.55 * s * 1.25,
+              [10 - t1 * 0.5, 0, -5],
+              ((NPCs[minNPC].meshParams.texture.face.u +
+                NPCs[minNPC].meshParams.texture.extremities.u) *
+                128) /
+                1024,
+              ((NPCs[minNPC].meshParams.texture.face.v +
+                NPCs[minNPC].meshParams.texture.extremities.v) *
+                128) /
+                1024,
+            );
+            limbBox(
+              r,
+              x + 0.35 * s,
+              y - 0.55 * s,
+              z + 0.1 * s,
+              0.55 * s * 1.25,
+              0.6 * s * 1.25,
+              0.55 * s * 1.25,
+              [t1 * 1.25 - 10, 0, 5],
+              ((NPCs[minNPC].meshParams.texture.face.u +
+                NPCs[minNPC].meshParams.texture.extremities.u) *
+                128) /
+                1024,
+              ((NPCs[minNPC].meshParams.texture.face.v +
+                NPCs[minNPC].meshParams.texture.extremities.v) *
+                128) /
+                1024,
+            );
+            limbBox(
+              r,
+              x + 0.42 * s,
+              y - 1.15 * s,
+              z + 0.1 * s,
+              0.55 * s * 1.25,
+              0.6 * s * 1.25,
+              0.55 * s * 1.25,
+              [10 - t1 * 0.5, 0, 5],
+              ((NPCs[minNPC].meshParams.texture.face.u +
+                NPCs[minNPC].meshParams.texture.extremities.u) *
+                128) /
+                1024,
+              ((NPCs[minNPC].meshParams.texture.face.v +
+                NPCs[minNPC].meshParams.texture.extremities.v) *
+                128) /
+                1024,
+            );
+            s *= 1.25;
+            limbCylinder(
+              r,
+              x - 0.6 * s,
+              y + Math.cos(t1 * MATH.TO_RAD * 3) * s * 2.2,
+              z + Math.sin(t1 * MATH.TO_RAD * 3) * s * 2.2,
+              0.3 * s,
+              0.65 * s,
+              10,
+              0.9,
+              0.9,
+              0.9,
+              1,
+              t1 * 4,
+              0,
+              0,
+              ((NPCs[minNPC].meshParams.texture.face.u +
+                NPCs[minNPC].meshParams.texture.ears.u) *
+                128) /
+                1024,
+              ((NPCs[minNPC].meshParams.texture.face.v +
+                NPCs[minNPC].meshParams.texture.ears.v) *
+                128) /
+                1024,
+            );
+            limbCylinder(
+              r,
+              x + 0.6 * s,
+              y + Math.cos(t1 * MATH.TO_RAD * 3) * s * 2.2,
+              z + Math.sin(t1 * MATH.TO_RAD * 3) * s * 2.2,
+              0.3 * s,
+              0.65 * s,
+              10,
+              0.9,
+              0.9,
+              0.9,
+              1,
+              t1 * 4,
+              0,
+              0,
+              ((NPCs[minNPC].meshParams.texture.face.u +
+                NPCs[minNPC].meshParams.texture.ears.u) *
+                128) /
+                1024,
+              ((NPCs[minNPC].meshParams.texture.face.v +
+                NPCs[minNPC].meshParams.texture.ears.v) *
+                128) /
+                1024,
+            );
+            t1 = Math.sin(t * 2.1 + 0.5) * 5 - 0.5;
+            limbBox(
+              r,
+              x - (1 * s) / 1.25,
+              y - Math.cos(t1 * MATH.TO_RAD * 3.5 * 2) * s * 0.65 + s * 1.15,
+              z - Math.sin(t1 * MATH.TO_RAD * 3.5 * 2) * s * 0.2,
+              0.5 * s,
+              1.15 * s,
+              0.5 * s,
+              [t1 * 3.5 * 2, 0, -9],
+              ((NPCs[minNPC].meshParams.texture.face.u +
+                NPCs[minNPC].meshParams.texture.extremities.u) *
+                128) /
+                1024,
+              ((NPCs[minNPC].meshParams.texture.face.v +
+                NPCs[minNPC].meshParams.texture.extremities.v) *
+                128) /
+                1024,
+            );
+          },
+        );
 
         NPCs[minNPC].mesh.setBuffers();
       }
@@ -51536,7 +37632,7 @@ function BeeSwarmSimulator(DATA) {
     gl.bufferData(
       gl.ARRAY_BUFFER,
       Float32Array.from(meshes.bees.instanceData),
-      gl.DYNAMIC_DRAW
+      gl.DYNAMIC_DRAW,
     );
 
     gl.vertexAttribPointer(
@@ -51545,7 +37641,7 @@ function BeeSwarmSimulator(DATA) {
       gl.FLOAT,
       gl.FLASE,
       44,
-      0
+      0,
     );
     gl.vertexAttribDivisor(glCache.bee_instancePos, 1);
     gl.vertexAttribPointer(
@@ -51554,7 +37650,7 @@ function BeeSwarmSimulator(DATA) {
       gl.FLOAT,
       gl.FLASE,
       44,
-      16
+      16,
     );
     gl.vertexAttribDivisor(glCache.bee_instanceRotation, 1);
     gl.vertexAttribPointer(
@@ -51563,7 +37659,7 @@ function BeeSwarmSimulator(DATA) {
       gl.FLOAT,
       gl.FLASE,
       44,
-      32
+      32,
     );
     gl.vertexAttribDivisor(glCache.bee_instanceUV, 1);
 
@@ -51572,7 +37668,7 @@ function BeeSwarmSimulator(DATA) {
       meshes.bee.indexAmount,
       gl.UNSIGNED_SHORT,
       0,
-      meshes.bees.instanceData.length * MATH.INV_11
+      meshes.bees.instanceData.length * MATH.INV_11,
     );
 
     gl.vertexAttribDivisor(glCache.bee_instancePos, 0);
@@ -51847,7 +37943,7 @@ function BeeSwarmSimulator(DATA) {
     gl.bufferData(
       gl.ARRAY_BUFFER,
       Float32Array.from(meshes.tokens.instanceData),
-      gl.DYNAMIC_DRAW
+      gl.DYNAMIC_DRAW,
     );
 
     gl.vertexAttribPointer(
@@ -51856,7 +37952,7 @@ function BeeSwarmSimulator(DATA) {
       gl.FLOAT,
       gl.FALSE,
       32,
-      0
+      0,
     );
     gl.vertexAttribDivisor(glCache.token_instancePos, 1);
     gl.vertexAttribPointer(
@@ -51865,7 +37961,7 @@ function BeeSwarmSimulator(DATA) {
       gl.FLOAT,
       gl.FALSE,
       32,
-      16
+      16,
     );
     gl.vertexAttribDivisor(glCache.token_instanceUV, 1);
 
@@ -51874,7 +37970,7 @@ function BeeSwarmSimulator(DATA) {
       meshes.token.indexAmount,
       gl.UNSIGNED_SHORT,
       0,
-      meshes.tokens.instanceData.length * 0.125
+      meshes.tokens.instanceData.length * 0.125,
     );
 
     gl.vertexAttribDivisor(glCache.token_instancePos, 0);
@@ -51907,7 +38003,7 @@ function BeeSwarmSimulator(DATA) {
     gl.uniformMatrix4fv(
       glCache.explosion_viewMatrix,
       gl.FALSE,
-      player.viewMatrix
+      player.viewMatrix,
     );
 
     for (let i = objects.bubbles.length; i--; ) {
@@ -51949,7 +38045,7 @@ function BeeSwarmSimulator(DATA) {
     gl.bindBuffer(gl.ARRAY_BUFFER, meshes.cylinder_explosion.vertBuffer);
     gl.bindBuffer(
       gl.ELEMENT_ARRAY_BUFFER,
-      meshes.cylinder_explosion.indexBuffer
+      meshes.cylinder_explosion.indexBuffer,
     );
     gl.vertexAttribPointer(
       glCache.explosion_vertPos,
@@ -51957,14 +38053,14 @@ function BeeSwarmSimulator(DATA) {
       gl.FLOAT,
       gl.FLASE,
       12,
-      0
+      0,
     );
 
     gl.bindBuffer(gl.ARRAY_BUFFER, meshes.cylinder_explosions.instanceBuffer);
     gl.bufferData(
       gl.ARRAY_BUFFER,
       Float32Array.from(meshes.cylinder_explosions.instanceData),
-      gl.DYNAMIC_DRAW
+      gl.DYNAMIC_DRAW,
     );
     gl.vertexAttribPointer(
       glCache.explosion_instancePos,
@@ -51972,7 +38068,7 @@ function BeeSwarmSimulator(DATA) {
       gl.FLOAT,
       gl.FLASE,
       36,
-      0
+      0,
     );
     gl.vertexAttribDivisor(glCache.explosion_instancePos, 1);
     gl.vertexAttribPointer(
@@ -51981,7 +38077,7 @@ function BeeSwarmSimulator(DATA) {
       gl.FLOAT,
       gl.FLASE,
       36,
-      12
+      12,
     );
     gl.vertexAttribDivisor(glCache.explosion_instanceColor, 1);
     gl.vertexAttribPointer(
@@ -51990,7 +38086,7 @@ function BeeSwarmSimulator(DATA) {
       gl.FLOAT,
       gl.FLASE,
       36,
-      28
+      28,
     );
     gl.vertexAttribDivisor(glCache.explosion_instanceScale, 1);
     gl.drawElementsInstanced(
@@ -51998,7 +38094,7 @@ function BeeSwarmSimulator(DATA) {
       meshes.cylinder_explosion.indexAmount,
       gl.UNSIGNED_SHORT,
       0,
-      meshes.cylinder_explosions.instanceData.length * MATH.INV_9
+      meshes.cylinder_explosions.instanceData.length * MATH.INV_9,
     );
 
     gl.bindBuffer(gl.ARRAY_BUFFER, meshes.explosion.vertBuffer);
@@ -52009,13 +38105,13 @@ function BeeSwarmSimulator(DATA) {
       gl.FLOAT,
       gl.FLASE,
       12,
-      0
+      0,
     );
     gl.bindBuffer(gl.ARRAY_BUFFER, meshes.explosions.instanceBuffer);
     gl.bufferData(
       gl.ARRAY_BUFFER,
       Float32Array.from(meshes.explosions.instanceData),
-      gl.DYNAMIC_DRAW
+      gl.DYNAMIC_DRAW,
     );
     gl.vertexAttribPointer(
       glCache.explosion_instancePos,
@@ -52023,7 +38119,7 @@ function BeeSwarmSimulator(DATA) {
       gl.FLOAT,
       gl.FLASE,
       36,
-      0
+      0,
     );
     gl.vertexAttribPointer(
       glCache.explosion_instanceColor,
@@ -52031,7 +38127,7 @@ function BeeSwarmSimulator(DATA) {
       gl.FLOAT,
       gl.FLASE,
       36,
-      12
+      12,
     );
     gl.vertexAttribPointer(
       glCache.explosion_instanceScale,
@@ -52039,14 +38135,14 @@ function BeeSwarmSimulator(DATA) {
       gl.FLOAT,
       gl.FLASE,
       36,
-      28
+      28,
     );
     gl.drawElementsInstanced(
       gl.TRIANGLES,
       meshes.explosion.indexAmount,
       gl.UNSIGNED_SHORT,
       0,
-      meshes.explosions.instanceData.length * MATH.INV_9
+      meshes.explosions.instanceData.length * MATH.INV_9,
     );
 
     gl.depthMask(true);
