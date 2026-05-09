@@ -1,6 +1,8 @@
 // CheckpointTable.tsx
 
 import React, { useState, useEffect } from "react";
+
+import { GameCanvas } from "./GameCanvas";
 // import { idGenerator } from "../utils/idGenerator";
 import {
   Table,
@@ -264,6 +266,71 @@ const ConfirmationModal = (props: {
   );
 };
 
+// CHQ: Claude AI fixed types for parameters
+const PlayDeleteModules = (props: {
+  confirmationModal: ReturnType<typeof useConfirmationModal>;
+  loading: boolean;
+  successMessage: string | null;
+  errorMessage: string | null;
+}) => {
+  const { confirmationModal, loading, successMessage, errorMessage } = props;
+  return (
+    <ConfirmationModal
+      open={confirmationModal.isOpen}
+      onClose={confirmationModal.cancelAction}
+      onConfirm={confirmationModal.confirmAction}
+      message={confirmationModal.message}
+      loading={loading}
+      successMessage={successMessage}
+      errorMessage={errorMessage}
+      confirmLabel={
+        confirmationModal.confirmationType === "delete"
+          ? "Confirm Delete"
+          : "Confirm"
+      }
+      confirmColor={
+        confirmationModal.confirmationType === "delete" ? "error" : "primary"
+      }
+    />
+  );
+};
+
+const HeaderPortion = (props: {
+  setIsColumnModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsTableCollapsed: React.Dispatch<React.SetStateAction<boolean>>;
+  isTableCollapsed: boolean;
+}) => {
+  const { setIsColumnModalOpen, setIsTableCollapsed, isTableCollapsed } = props;
+  return (
+    <Box
+      sx={{
+        p: 2,
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        flexWrap: "wrap",
+        gap: 2,
+      }}
+    >
+      <Typography variant="h5" component="div">
+        Checkpoint Data
+      </Typography>
+      <Box sx={{ display: "flex", gap: 1 }}>
+        <Button variant="outlined" onClick={() => setIsColumnModalOpen(true)}>
+          Customize Columns
+        </Button>
+        <Button
+          variant="outlined"
+          onClick={() => setIsTableCollapsed(!isTableCollapsed)}
+        >
+          {isTableCollapsed ? <MyChevronRightIcon /> : <MyExpandMoreIcon />}{" "}
+          {isTableCollapsed ? "Expand" : "Collapse"} Table
+        </Button>
+      </Box>
+    </Box>
+  );
+};
+
 // Main CheckpointTable component
 const CheckpointTable = (props: {
   thePages: Checkpoint[];
@@ -274,6 +341,9 @@ const CheckpointTable = (props: {
 
   const [rawTableData, setRawTableData] = useState<Checkpoint[]>(thePages);
 
+  const [activeCheckpoint, setActiveCheckpoint] = useState<Checkpoint | null>(
+    null,
+  );
   // Sync local state with props whenever thePages changes
   useEffect(() => {
     setRawTableData(thePages);
@@ -397,41 +467,28 @@ const CheckpointTable = (props: {
   };
 
   // Handler to confirm entering game at checkpoint and make the API call
-  const confirmPlayCheckpoint = async (dataPayload: Checkpoint) => {};
+  const confirmPlayCheckpoint = async (dataPayload: Checkpoint) => {
+    setActiveCheckpoint(dataPayload);
+    confirmationModal.cancelAction(); // closes the modal
+  };
+
+  if (activeCheckpoint) {
+    return (
+      <GameCanvas
+        checkpoint={activeCheckpoint}
+        onExit={() => setActiveCheckpoint(null)}
+      />
+    );
+  }
 
   return (
     <Box sx={{ width: "100%", overflowX: "auto" }}>
       <Paper sx={{ width: "100%", mb: 2 }}>
-        <Box
-          sx={{
-            p: 2,
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            flexWrap: "wrap",
-            gap: 2,
-          }}
-        >
-          <Typography variant="h5" component="div">
-            Checkpoint Data
-          </Typography>
-          <Box sx={{ display: "flex", gap: 1 }}>
-            <Button
-              variant="outlined"
-              onClick={() => setIsColumnModalOpen(true)}
-            >
-              Customize Columns
-            </Button>
-            <Button
-              variant="outlined"
-              onClick={() => setIsTableCollapsed(!isTableCollapsed)}
-            >
-              {isTableCollapsed ? <MyChevronRightIcon /> : <MyExpandMoreIcon />}{" "}
-              {isTableCollapsed ? "Expand" : "Collapse"} Table
-            </Button>
-          </Box>
-        </Box>
-
+        <HeaderPortion
+          setIsColumnModalOpen={setIsColumnModalOpen}
+          setIsTableCollapsed={setIsTableCollapsed}
+          isTableCollapsed={isTableCollapsed}
+        />
         <ColumnVisibilityControlModal
           open={isColumnModalOpen}
           onClose={() => setIsColumnModalOpen(false)}
@@ -472,27 +529,14 @@ const CheckpointTable = (props: {
         onDelete={handleDeleteCheckpoint}
       />
 
-      {/* Play Confirmation Modal */}
+      {/* Play and Delete Confirmation Modal */}
       {(confirmationModal.confirmationType === "delete" ||
         confirmationModal.confirmationType === "play") && (
-        <ConfirmationModal
-          open={confirmationModal.isOpen}
-          onClose={confirmationModal.cancelAction}
-          onConfirm={confirmationModal.confirmAction}
-          message={confirmationModal.message}
+        <PlayDeleteModules
+          confirmationModal={confirmationModal}
           loading={loading}
           successMessage={successMessage}
           errorMessage={errorMessage}
-          confirmLabel={
-            confirmationModal.confirmationType === "delete"
-              ? "Confirm Delete"
-              : "Confirm"
-          }
-          confirmColor={
-            confirmationModal.confirmationType === "delete"
-              ? "error"
-              : "primary"
-          }
         />
       )}
     </Box>
