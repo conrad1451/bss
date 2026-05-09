@@ -7,12 +7,17 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+.vite/
+dist/
 bssReactTs/node_modules
 bssReactTs/.env
 
 bssReactTs/dist
 bssReactTs/dist-ssr
+bssReactTs/stash_analysis
 *.local
+
+dataFilesForRepo/
 
 # Editor directories and files
 .vscode/*
