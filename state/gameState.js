@@ -32,6 +32,11 @@ export const gameState = {
 
   // Player State
   player: {
+    inventory: {
+      translators: 0,
+      spiritPetals: 0,
+      cogs: 0, // Used for Robo Challenge
+    },
     honey: 0,
     pollen: 0,
     capacity: 0,
