@@ -90,7 +90,7 @@ const GameApp = (props: {
     return <div>Loading game data...</div>;
   }
 
-  console.log("session token is " + mySessionToken);
+  // console.log("session token is " + mySessionToken);
 
   return (
     <div className="flex flex-col items-center justify-center p-8 bg-gray-100 rounded-xl shadow-lg w-full max-w-lg mx-auto text-center">
