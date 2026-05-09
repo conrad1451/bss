@@ -416,6 +416,53 @@ const CheckpointTable = (props: {
     }
   };
 
+  // CHQ: Gemini AI added handler for saving checkpoint
+
+  // Inside CheckpointTable component
+  const handleSaveCheckpoint = async (saveCode: string) => {
+    // 1. Guard check for activeCheckpoint null state
+    if (!activeCheckpoint) {
+      console.error("No active checkpoint selected to save.");
+      return;
+    }
+
+    const payload = {
+      title: activeCheckpoint.title,
+      // Store the engine's saveCode string inside the 'data' JSON blob
+      data: JSON.stringify({ saveCode: saveCode }),
+    };
+
+    try {
+      // 2. Use 'theChoice' for the base URL or construct it manually
+      // 3. Ensure you are using the correct prop names (theToken instead of sessionToken)
+      const response = await fetch(`${apiURL}/${activeCheckpoint.id}`, {
+        method: "POST", // Backend: POST /api/players/{player_id}/checkpoints
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${theToken}`,
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (response.ok) {
+        console.log("Checkpoint persisted to Neon successfully.");
+
+        // Optional: Update local state to reflect the new saved data
+        setRawTableData((prev) =>
+          prev.map((cp) =>
+            cp.id === activeCheckpoint.id ? { ...cp, data: payload.data } : cp,
+          ),
+        );
+      } else {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Failed to save.");
+      }
+    } catch (error: any) {
+      console.error("Failed to save to Neon:", error);
+      setErrorMessage(error.message);
+    }
+  };
+
   // CHQ: Claude AI updated this
   // Handler to open the delete confirmation modal
   const handleDeleteCheckpoint = (checkpoint: Checkpoint) => {
@@ -471,11 +518,12 @@ const CheckpointTable = (props: {
     setActiveCheckpoint(dataPayload);
     confirmationModal.cancelAction(); // closes the modal
   };
-
   if (activeCheckpoint) {
     return (
       <GameCanvas
         checkpoint={activeCheckpoint}
+        // Pass the handler here so GameCanvas can call it via useGameEngine
+        onSave={handleSaveCheckpoint}
         onExit={() => setActiveCheckpoint(null)}
       />
     );

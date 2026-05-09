@@ -1,24 +1,22 @@
-// CHQ: Claude AI generated
-
 import { useEffect } from "react";
 import { initGame, destroyGame } from "../game/engine";
 import type { Checkpoint } from "../utils/dataTypes";
 
+// CHQ: Gemini AI refactored
 export function useGameEngine(
-  canvasRef: React.RefObject<HTMLCanvasElement>,
+  glRef: React.RefObject<HTMLCanvasElement | null>, // Allow null
+  uiRef: React.RefObject<HTMLCanvasElement | null>, // Allow null
+  texRef: React.RefObject<HTMLCanvasElement | null>, // Allow null
   checkpoint: Checkpoint,
-  onSave: (data: string) => void,
+  onSave: (data: string) => void, // Pass the save handler
 ) {
   useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
+    if (!glRef.current || !uiRef.current || !texRef.current) return;
 
-    // Parse checkpoint.data blob and pass it to the engine
-    const saveData = checkpoint.data ? JSON.parse(checkpoint.data) : null;
-    initGame(canvas, saveData, onSave);
+    initGame(checkpoint, onSave);
 
     return () => {
-      destroyGame(canvas);
+      destroyGame();
     };
-  }, [checkpoint.id]); // re-init only if checkpoint changes
+  }, [checkpoint.id, onSave]);
 }

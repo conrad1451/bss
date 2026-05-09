@@ -165,7 +165,7 @@ function main() {
     let w = window.open();
     w.document.open();
     w.document.write(
-      "<!doctype html><html>" + document.querySelector("html").innerHTML
+      "<!doctype html><html>" + document.querySelector("html").innerHTML,
     );
     w.document.close();
   };
@@ -189,7 +189,7 @@ function main() {
 
     document.getElementById("createImportedGame").onclick = function () {
       alert(
-        "\nTo import a game, you'll need a string containing the saved data of the game. Copy the string, and then use CTRL+V in this program to start the game.\n\nAn invalid code will create an error message. There is a chance errors in the save code are not detected and pass through. This may corrupt the game, resulting in crashes."
+        "\nTo import a game, you'll need a string containing the saved data of the game. Copy the string, and then use CTRL+V in this program to start the game.\n\nAn invalid code will create an error message. There is a chance errors in the save code are not detected and pass through. This may corrupt the game, resulting in crashes.",
       );
     };
 
@@ -242,7 +242,7 @@ function main() {
             confirm(
               '\nDo you really want to delete save "' +
                 res[index].data.name +
-                '"?'
+                '"?',
             )
           ) {
             deleteSaveConfirmation = false;
@@ -270,7 +270,7 @@ function main() {
               alert(
                 '\nThe save code for save "' +
                   res[index].data.name +
-                  '" has been copied to your clipboard.'
+                  '" has been copied to your clipboard.',
               );
             })
             .catch((e) => {
@@ -293,7 +293,7 @@ function main() {
               alert(
                 '\nThere was an error copying the save code for save "' +
                   res[index].data.name +
-                  '" to your clipboard. The code has been printed at the bottom of the page instead.'
+                  '" to your clipboard. The code has been printed at the bottom of the page instead.',
               );
             });
         };
@@ -385,7 +385,7 @@ function main() {
   };
 
   document.getElementById("info_mainBack").onclick = document.getElementById(
-    "select_mainBack"
+    "select_mainBack",
   ).onclick = function () {
     document.getElementById("mainInfoMenu").style.display = "none";
     document.getElementById("mainSelectMenu").style.display = "none";
@@ -397,7 +397,7 @@ function main() {
 
 var _M = Math;
 
-function BeeSwarmSimulator(DATA) {
+export function BeeSwarmSimulator(DATA) {
   document.onpaste = undefined;
 
   let Math = _M,
@@ -423,7 +423,7 @@ function BeeSwarmSimulator(DATA) {
 
   if (!gl) {
     alert(
-      "WebGL2 is not supported. Switch to a compatiable browser or computer to play."
+      "WebGL2 is not supported. Switch to a compatiable browser or computer to play.",
     );
     return;
   }
@@ -460,37 +460,37 @@ function BeeSwarmSimulator(DATA) {
 
     staticGeometryProgram = createProgram(
       "static_geometry_vsh",
-      "static_geometry_fsh"
+      "static_geometry_fsh",
     );
     dynamicGeometryProgram = createProgram(
       "dynamic_geometry_vsh",
-      "dynamic_geometry_fsh"
+      "dynamic_geometry_fsh",
     );
     tokenGeometryProgram = createProgram(
       "token_geometry_vsh",
-      "token_geometry_fsh"
+      "token_geometry_fsh",
     );
     flowerGeometryProgram = createProgram(
       "flower_geometry_vsh",
-      "flower_geometry_fsh"
+      "flower_geometry_fsh",
     );
     beeGeometryProgram = createProgram("bee_geometry_vsh", "bee_geometry_fsh");
     particleRendererProgram = createProgram(
       "particle_renderer_vsh",
-      "particle_renderer_fsh"
+      "particle_renderer_fsh",
     );
     explosionRendererProgram = createProgram(
       "explosion_renderer_vsh",
-      "explosion_renderer_fsh"
+      "explosion_renderer_fsh",
     );
     textRendererProgram = createProgram(
       "text_renderer_vsh",
-      "text_renderer_fsh"
+      "text_renderer_fsh",
     );
     mobRendererProgram = createProgram("mob_renderer_vsh", "mob_renderer_fsh");
     trailRendererProgram = createProgram(
       "trail_renderer_vsh",
-      "trail_renderer_fsh"
+      "trail_renderer_fsh",
     );
 
     glCache = initGlCache({});
@@ -536,7 +536,7 @@ function BeeSwarmSimulator(DATA) {
   gl.cullFace(gl.BACK);
 
   let passiveActivationPopup = document.getElementById(
-    "passiveActivationPopup"
+    "passiveActivationPopup",
   );
   let pollenAmount = document.getElementById("pollenAmount");
   let honeyAmount = document.getElementById("honeyAmount");
@@ -574,7 +574,7 @@ function BeeSwarmSimulator(DATA) {
         name + "_description"
       ][j].substring(
         itemSVGCode[name + "_description"][j].indexOf(">") + 1,
-        itemSVGCode[name + "_description"][j].indexOf("<")
+        itemSVGCode[name + "_description"][j].indexOf("<"),
       );
     }
 
@@ -588,7 +588,7 @@ function BeeSwarmSimulator(DATA) {
       '<svg style="width:70px;height:70px;transform:SCALE">' +
       itemSVGCode[name][itemSVGCode[name].length - 1].substr(
         0,
-        itemSVGCode[name][itemSVGCode[name].length - 1].indexOf("</svg>")
+        itemSVGCode[name][itemSVGCode[name].length - 1].indexOf("</svg>"),
       ) +
       "<title>" +
       MATH.doGrammar(name) +
@@ -601,7 +601,7 @@ function BeeSwarmSimulator(DATA) {
       if (player.itemDragging && items[player.itemDragging].canUseOnSlot) {
         player.addMessage(
           "This item cannot be put into the hotbar!",
-          COLORS.redArr
+          COLORS.redArr,
         );
         return;
       }
@@ -613,7 +613,7 @@ function BeeSwarmSimulator(DATA) {
         hotbarSlots[i].innerHTML =
           itemSVGCode[player.itemDragging].replace(
             "SCALE",
-            "scale(0.512,0.512);margin-left:-18px;margin-top:-19px"
+            "scale(0.512,0.512);margin-left:-18px;margin-top:-19px",
           ) +
           "<div style='font-size:9px;text-align:right;margin-top:-30px'>x" +
           items[player.itemDragging].amount +
@@ -709,10 +709,10 @@ function BeeSwarmSimulator(DATA) {
               "Item is on a cooldown of " +
                 MATH.doTime(
                   items[hotbarSlots[i].itemType].maxCooldown -
-                    (TIME - items[hotbarSlots[i].itemType].cooldown)
+                    (TIME - items[hotbarSlots[i].itemType].cooldown),
                 ) +
                 "!",
-              COLORS.redArr
+              COLORS.redArr,
             );
           }
         }
@@ -841,7 +841,7 @@ function BeeSwarmSimulator(DATA) {
         SAVE_GAME(1);
         player.addMessage("Game Saved!");
         console.error(
-          "\n\n\n\n\nGame manually saved on " + Date.now() + "\n\n\n\n\n"
+          "\n\n\n\n\nGame manually saved on " + Date.now() + "\n\n\n\n\n",
         );
       };
 
@@ -932,7 +932,7 @@ function BeeSwarmSimulator(DATA) {
             MATH.doTime(
               5 * 60 -
                 (Date.now() - player.extraInfo.windShrineDonate) * 0.001 +
-                ""
+                "",
             ) +
             ")"
           );
@@ -1006,7 +1006,7 @@ function BeeSwarmSimulator(DATA) {
           ],
           COLORS.honey,
           1,
-          "⇆"
+          "⇆",
         );
         player.honey += (player.pollen * player.honeyPerPollen) | 0;
         player.pollen = 0;
@@ -1557,7 +1557,7 @@ function BeeSwarmSimulator(DATA) {
           ],
           COLORS.honey,
           1,
-          "⇆"
+          "⇆",
         );
         player.honey += Math.ceil(player.pollen * player.honeyPerPollen);
         player.pollen = 0;
@@ -1591,7 +1591,7 @@ function BeeSwarmSimulator(DATA) {
           ],
           COLORS.honey,
           1,
-          "⇆"
+          "⇆",
         );
         player.honey += Math.ceil(player.pollen * player.honeyPerPollen);
         player.pollen = 0;
@@ -1625,7 +1625,7 @@ function BeeSwarmSimulator(DATA) {
           ],
           COLORS.honey,
           1,
-          "⇆"
+          "⇆",
         );
         player.honey += Math.ceil(player.pollen * player.honeyPerPollen);
         player.pollen = 0;
@@ -1669,7 +1669,7 @@ function BeeSwarmSimulator(DATA) {
           ).replace("0 ", " "),
           "*" +
             Math.min(1 + player.stats.moonAmulets * 0.03, 1.75).toFixed(2) +
-            " convertRate"
+            " convertRate",
         );
 
         let g = Math.min(player.stats.moonAmulets, 25);
@@ -1678,7 +1678,7 @@ function BeeSwarmSimulator(DATA) {
           amulet.push(
             "*" +
               MATH.random(1.01 + g * 0.001, 1.02 + g * 0.002).toFixed(2) +
-              " nectarMultiplier"
+              " nectarMultiplier",
           );
         }
 
@@ -1686,7 +1686,7 @@ function BeeSwarmSimulator(DATA) {
           amulet.push(
             "*" +
               MATH.random(1.02 + g * 0.01, 1.08 + g * 0.02).toFixed(2) +
-              " lootLuck"
+              " lootLuck",
           );
         }
 
@@ -1694,11 +1694,11 @@ function BeeSwarmSimulator(DATA) {
           amulet.push(
             "*" +
               MATH.random(1.05 + 25 * 0.007, 1.15 + g * 0.014).toFixed(2) +
-              " whitePollen"
+              " whitePollen",
           );
         } else {
           amulet.push(
-            "*" + MATH.random(1.03, 1.1).toFixed(2) + " bondFromTreats"
+            "*" + MATH.random(1.03, 1.1).toFixed(2) + " bondFromTreats",
           );
         }
 
@@ -1721,8 +1721,8 @@ function BeeSwarmSimulator(DATA) {
                 MATH.random(1.01 + g * 0.001, 1.02 + g * 0.001).toFixed(2) +
                 " honeyPerPollen",
             ],
-            g === 25 && Math.random() < 0.333 ? 2 : 1
-          )
+            g === 25 && Math.random() < 0.333 ? 2 : 1,
+          ),
         );
 
         player.showGeneratedAmulet("moonAmulet", amulet);
@@ -1780,8 +1780,8 @@ function BeeSwarmSimulator(DATA) {
               "+" + MATH.random(0.01, 0.05).toFixed(2) + " beeAbilityRate",
               "+" + MATH.random(0.01, 0.05).toFixed(2) + " criticalChance",
             ],
-            2
-          )
+            2,
+          ),
         );
 
         player.showGeneratedAmulet("bronzeStarAmulet", amulet);
@@ -1839,8 +1839,8 @@ function BeeSwarmSimulator(DATA) {
               "+" + MATH.random(0.01, 0.05).toFixed(2) + " beeAbilityRate",
               "+" + MATH.random(0.01, 0.05).toFixed(2) + " criticalChance",
             ],
-            3
-          )
+            3,
+          ),
         );
 
         player.showGeneratedAmulet("silverStarAmulet", amulet);
@@ -1898,8 +1898,8 @@ function BeeSwarmSimulator(DATA) {
               "+" + MATH.random(0.01, 0.05).toFixed(2) + " beeAbilityRate",
               "+" + MATH.random(0.01, 0.05).toFixed(2) + " criticalChance",
             ],
-            4
-          )
+            4,
+          ),
         );
 
         player.showGeneratedAmulet("goldStarAmulet", amulet);
@@ -1957,8 +1957,8 @@ function BeeSwarmSimulator(DATA) {
               "+" + MATH.random(0.01, 0.05).toFixed(2) + " beeAbilityRate",
               "+" + MATH.random(0.01, 0.05).toFixed(2) + " criticalChance",
             ],
-            5
-          )
+            5,
+          ),
         );
 
         if (Math.random() < 0.5) {
@@ -2021,8 +2021,8 @@ function BeeSwarmSimulator(DATA) {
               "+" + MATH.random(0.01, 0.08).toFixed(2) + " beeAbilityRate",
               "+" + MATH.random(0.01, 0.08).toFixed(2) + " criticalChance",
             ],
-            5
-          )
+            5,
+          ),
         );
 
         let gotten = [
@@ -2070,7 +2070,7 @@ function BeeSwarmSimulator(DATA) {
             MATH.doTime(
               60 * 60 -
                 (Date.now() - player.extraInfo.strawberryDispenser) * 0.001 +
-                ""
+                "",
             ) +
             ")"
           );
@@ -2099,7 +2099,7 @@ function BeeSwarmSimulator(DATA) {
         player.updateInventory();
         player.addMessage("+" + MATH.addCommas(1000 * numBees + "") + " Honey");
         player.addMessage(
-          "+" + MATH.addCommas(numBees + 3 + "") + " Strawberries"
+          "+" + MATH.addCommas(numBees + 3 + "") + " Strawberries",
         );
         player.addMessage('Activated x10 "Red Boost"');
         player.addMessage('Activated x5 "Haste"');
@@ -2117,7 +2117,7 @@ function BeeSwarmSimulator(DATA) {
             MATH.doTime(
               60 * 60 -
                 (Date.now() - player.extraInfo.blueberryDispenser) * 0.001 +
-                ""
+                "",
             ) +
             ")"
           );
@@ -2146,7 +2146,7 @@ function BeeSwarmSimulator(DATA) {
         player.updateInventory();
         player.addMessage("+" + MATH.addCommas(1000 * numBees + "") + " Honey");
         player.addMessage(
-          "+" + MATH.addCommas(numBees + 3 + "") + " Blueberries"
+          "+" + MATH.addCommas(numBees + 3 + "") + " Blueberries",
         );
         player.addMessage('Activated x10 "Blue Boost"');
         player.addMessage('Activated x5 "Haste"');
@@ -2165,7 +2165,7 @@ function BeeSwarmSimulator(DATA) {
             MATH.doTime(
               60 * 60 -
                 (Date.now() - player.extraInfo.treatDispenser) * 0.001 +
-                ""
+                "",
             ) +
             ")"
           );
@@ -2194,10 +2194,10 @@ function BeeSwarmSimulator(DATA) {
         player.updateInventory();
         player.addMessage("+" + MATH.addCommas(250 * numBees + "") + " Honey");
         player.addMessage(
-          "+" + MATH.addCommas(objects.bees.length * 4 + 10 + "") + " Treats"
+          "+" + MATH.addCommas(objects.bees.length * 4 + 10 + "") + " Treats",
         );
         player.addMessage(
-          "+" + MATH.addCommas(numBees + 3 + "") + " Pineapples"
+          "+" + MATH.addCommas(numBees + 3 + "") + " Pineapples",
         );
         player.addMessage('Activated x5 "Haste"');
       },
@@ -2214,7 +2214,7 @@ function BeeSwarmSimulator(DATA) {
             MATH.doTime(
               60 * 60 -
                 (Date.now() - player.extraInfo.honeyDispenser) * 0.001 +
-                ""
+                "",
             ) +
             ")"
           );
@@ -2238,9 +2238,9 @@ function BeeSwarmSimulator(DATA) {
             MATH.addCommas(
               objects.bees.length * objects.bees.length * objects.bees.length +
                 100 +
-                ""
+                "",
             ) +
-            " Honey"
+            " Honey",
         );
         player.addMessage('Activated x5 "Haste"');
       },
@@ -2281,7 +2281,7 @@ function BeeSwarmSimulator(DATA) {
             MATH.doTime(
               6 * 60 * 60 -
                 (Date.now() - player.extraInfo.glueDispenser) * 0.001 +
-                ""
+                "",
             ) +
             ")"
           );
@@ -2317,7 +2317,7 @@ function BeeSwarmSimulator(DATA) {
             MATH.doTime(
               20 * 60 -
                 (Date.now() - player.extraInfo.antPassDispenser) * 0.001 +
-                ""
+                "",
             ) +
             ")"
           );
@@ -2355,7 +2355,7 @@ function BeeSwarmSimulator(DATA) {
               2 * 60 * 60 -
                 (Date.now() - player.extraInfo.giftedRoyalJellyDispenser) *
                   0.001 +
-                ""
+                "",
             ) +
             ")"
           );
@@ -2468,7 +2468,7 @@ function BeeSwarmSimulator(DATA) {
             MATH.doTime(
               2 * 60 * 60 -
                 (Date.now() - player.extraInfo.sproutSummoner) * 0.001 +
-                ""
+                "",
             ) +
             ")"
           );
@@ -2511,7 +2511,7 @@ function BeeSwarmSimulator(DATA) {
             supreme: [30, 220, 90],
             gummy: [230, 70, 230],
             moon: [140, 200, 230],
-          }[type]
+          }[type],
         );
 
         objects.mobs.push(new Sprout(f, type));
@@ -2529,7 +2529,7 @@ function BeeSwarmSimulator(DATA) {
             MATH.doTime(
               30 * 60 -
                 (Date.now() - player.extraInfo.fieldBooster) * 0.001 +
-                ""
+                "",
             ) +
             ")"
           );
@@ -2564,14 +2564,14 @@ function BeeSwarmSimulator(DATA) {
           false,
           false,
           undefined,
-          am
+          am,
         );
         player.addMessage(
           "Activated x" +
             am +
             ' "' +
             MATH.doGrammar(f[0].toLowerCase() + f.substring(1, f.length)) +
-            ' Boost"'
+            ' Boost"',
         );
       },
     },
@@ -2588,7 +2588,7 @@ function BeeSwarmSimulator(DATA) {
             MATH.doTime(
               30 * 60 -
                 (Date.now() - player.extraInfo.redFieldBooster) * 0.001 +
-                ""
+                "",
             ) +
             ")"
           );
@@ -2615,14 +2615,14 @@ function BeeSwarmSimulator(DATA) {
           false,
           false,
           undefined,
-          am
+          am,
         );
         player.addMessage(
           "Activated x" +
             am +
             ' "' +
             MATH.doGrammar(f[0].toLowerCase() + f.substring(1, f.length)) +
-            ' Boost"'
+            ' Boost"',
         );
       },
     },
@@ -2639,7 +2639,7 @@ function BeeSwarmSimulator(DATA) {
             MATH.doTime(
               30 * 60 -
                 (Date.now() - player.extraInfo.blueFieldBooster) * 0.001 +
-                ""
+                "",
             ) +
             ")"
           );
@@ -2666,14 +2666,14 @@ function BeeSwarmSimulator(DATA) {
           false,
           false,
           undefined,
-          am
+          am,
         );
         player.addMessage(
           "Activated x" +
             am +
             ' "' +
             MATH.doGrammar(f[0].toLowerCase() + f.substring(1, f.length)) +
-            ' Boost"'
+            ' Boost"',
         );
       },
     },
@@ -3182,7 +3182,7 @@ function BeeSwarmSimulator(DATA) {
         let amulet = [];
 
         amulet.push(
-          "*" + MATH.random(1.5, 1.6).toFixed(2) + " capacityMultiplier"
+          "*" + MATH.random(1.5, 1.6).toFixed(2) + " capacityMultiplier",
         );
         amulet.push("*" + MATH.random(1.1, 1.15).toFixed(2) + " beeAttack");
 
@@ -3194,35 +3194,37 @@ function BeeSwarmSimulator(DATA) {
               MATH.random(1.2, 1.3).toFixed(2) +
               " " +
               ["red", "blue", "white"][(Math.random() * 3) | 0] +
-              "Pollen"
+              "Pollen",
           );
         }
 
         if (Math.random() < 0.333) {
           amulet.push(
-            "+" + MATH.random(0.07, 0.13).toFixed(2) + " instantRedConversion"
+            "+" + MATH.random(0.07, 0.13).toFixed(2) + " instantRedConversion",
           );
         } else if (Math.random() < 0.5) {
           amulet.push(
-            "+" + MATH.random(0.07, 0.13).toFixed(2) + " instantWhiteConversion"
+            "+" +
+              MATH.random(0.07, 0.13).toFixed(2) +
+              " instantWhiteConversion",
           );
         } else {
           amulet.push(
-            "+" + MATH.random(0.07, 0.13).toFixed(2) + " instantBlueConversion"
+            "+" + MATH.random(0.07, 0.13).toFixed(2) + " instantBlueConversion",
           );
         }
 
         if (Math.random() < 0.333) {
           amulet.push(
-            "*" + MATH.random(1.07, 1.15).toFixed(2) + " flamePollen"
+            "*" + MATH.random(1.07, 1.15).toFixed(2) + " flamePollen",
           );
         } else if (Math.random() < 0.5) {
           amulet.push(
-            "*" + MATH.random(1.07, 1.15).toFixed(2) + " bubblePollen"
+            "*" + MATH.random(1.07, 1.15).toFixed(2) + " bubblePollen",
           );
         } else {
           amulet.push(
-            "*" + MATH.random(1.04, 1.08).toFixed(2) + " markDuration"
+            "*" + MATH.random(1.04, 1.08).toFixed(2) + " markDuration",
           );
         }
 
@@ -3231,17 +3233,17 @@ function BeeSwarmSimulator(DATA) {
             amulet.push("*1.05 nectarMultiplier");
           } else {
             amulet.push(
-              "*" + MATH.random(1.35, 1.6).toFixed(2) + " honeyFromTokens"
+              "*" + MATH.random(1.35, 1.6).toFixed(2) + " honeyFromTokens",
             );
           }
         } else {
           if (Math.random() < 0.5) {
             amulet.push(
-              "*" + MATH.random(1.08, 1.15).toFixed(2) + " superCritPower"
+              "*" + MATH.random(1.08, 1.15).toFixed(2) + " superCritPower",
             );
           } else {
             amulet.push(
-              "*" + MATH.random(1.2, 1.3).toFixed(2) + " tokenLifespan"
+              "*" + MATH.random(1.2, 1.3).toFixed(2) + " tokenLifespan",
             );
           }
         }
@@ -3269,11 +3271,11 @@ function BeeSwarmSimulator(DATA) {
           amulet.push(
             "+1 redBeeAttack",
             "+1 blueBeeAttack",
-            "+1 whiteBeeAttack"
+            "+1 whiteBeeAttack",
           );
         } else {
           amulet.push(
-            Math.random() < 0.5 ? "+1 redBeeAttack" : "+1 blueBeeAttack"
+            Math.random() < 0.5 ? "+1 redBeeAttack" : "+1 blueBeeAttack",
           );
         }
 
@@ -3285,8 +3287,8 @@ function BeeSwarmSimulator(DATA) {
               "*" + MATH.random(1.05, 1.2).toFixed(2) + " redPollen",
               "*" + MATH.random(1.05, 1.15).toFixed(2) + " whitePollen",
             ],
-            2
-          )
+            2,
+          ),
         );
 
         player.showGeneratedAmulet("kingBeetleAmulet", amulet);
@@ -3312,7 +3314,7 @@ function BeeSwarmSimulator(DATA) {
           "*1." + (g + 1) + " capacityMultiplier",
           "*" +
             MATH.random(1.05 + g * 0.15, 1.15 + g * 0.15).toFixed(2) +
-            " convertRate"
+            " convertRate",
         );
 
         amulet.push(
@@ -3341,8 +3343,8 @@ function BeeSwarmSimulator(DATA) {
                 MATH.random(1.03 + g * 0.05, 1.1 + g * 0.05).toFixed(2) +
                 " pollenFromBees",
             ],
-            g + 1
-          )
+            g + 1,
+          ),
         );
 
         player.showGeneratedAmulet(t + "AntAmulet", amulet);
@@ -3389,13 +3391,13 @@ function BeeSwarmSimulator(DATA) {
                 MATH.random(1.01 + g * 0.01, 1.05 + g * 0.015).toFixed(2) +
                 " honeyFromTokens",
             ],
-            (g * 0.5 + 2) | 0
-          )
+            (g * 0.5 + 2) | 0,
+          ),
         );
 
         player.showGeneratedAmulet(
           ["bronze", "silver", "gold", "diamond", "supreme"][g] + "SnailAmulet",
-          amulet
+          amulet,
         );
       },
     };
@@ -3490,14 +3492,14 @@ function BeeSwarmSimulator(DATA) {
               speed: 0.5,
               aftershock: 0.01,
               height: 0.01,
-            })
+            }),
           );
           objects.flames.push(
             new Flame(
               player.fieldIn,
               bee.flowerCollecting[0],
-              bee.flowerCollecting[1]
-            )
+              bee.flowerCollecting[1],
+            ),
           );
         }
       },
@@ -3543,8 +3545,8 @@ function BeeSwarmSimulator(DATA) {
             new Bubble(
               player.fieldIn,
               bee.flowerCollecting[0],
-              bee.flowerCollecting[1]
-            )
+              bee.flowerCollecting[1],
+            ),
           );
         }
       },
@@ -3678,7 +3680,7 @@ function BeeSwarmSimulator(DATA) {
               },
               true,
               false,
-              true
+              true,
             );
 
             for (let j = 0; j < 6; j++) {
@@ -3830,8 +3832,8 @@ function BeeSwarmSimulator(DATA) {
             new Bubble(
               player.fieldIn,
               bee.flowerCollecting[0],
-              bee.flowerCollecting[1]
-            )
+              bee.flowerCollecting[1],
+            ),
           );
         }
       },
@@ -4370,14 +4372,14 @@ function BeeSwarmSimulator(DATA) {
               speed: 0.5,
               aftershock: 0.01,
               height: 0.01,
-            })
+            }),
           );
           objects.flames.push(
             new Flame(
               player.fieldIn,
               bee.flowerCollecting[0],
-              bee.flowerCollecting[1]
-            )
+              bee.flowerCollecting[1],
+            ),
           );
         }
       },
@@ -5220,15 +5222,15 @@ function BeeSwarmSimulator(DATA) {
           player.bluePollen *= (amount - 1) * 0.03 + 1.15;
           player.instantRedConversion = MATH.applyPercentage(
             player.instantRedConversion,
-            (amount - 1) * 0.05 + 0.1
+            (amount - 1) * 0.05 + 0.1,
           );
           player.instantBlueConversion = MATH.applyPercentage(
             player.instantBlueConversion,
-            (amount - 1) * 0.05 + 0.1
+            (amount - 1) * 0.05 + 0.1,
           );
           player.instantWhiteConversion = MATH.applyPercentage(
             player.instantWhiteConversion,
-            (amount - 1) * 0.05 + 0.1
+            (amount - 1) * 0.05 + 0.1,
           );
         }
       },
@@ -5262,15 +5264,15 @@ function BeeSwarmSimulator(DATA) {
           player.bluePollen *= (amount - 1) * 0.03 + 1.15;
           player.instantRedConversion = MATH.applyPercentage(
             player.instantRedConversion,
-            (amount - 1) * 0.05 + 0.1
+            (amount - 1) * 0.05 + 0.1,
           );
           player.instantBlueConversion = MATH.applyPercentage(
             player.instantBlueConversion,
-            (amount - 1) * 0.05 + 0.1
+            (amount - 1) * 0.05 + 0.1,
           );
           player.instantWhiteConversion = MATH.applyPercentage(
             player.instantWhiteConversion,
-            (amount - 1) * 0.05 + 0.1
+            (amount - 1) * 0.05 + 0.1,
           );
         }
       },
@@ -5304,15 +5306,15 @@ function BeeSwarmSimulator(DATA) {
           player.bluePollen *= (amount - 1) * 0.03 + 1.15;
           player.instantRedConversion = MATH.applyPercentage(
             player.instantRedConversion,
-            (amount - 1) * 0.05 + 0.1
+            (amount - 1) * 0.05 + 0.1,
           );
           player.instantBlueConversion = MATH.applyPercentage(
             player.instantBlueConversion,
-            (amount - 1) * 0.05 + 0.1
+            (amount - 1) * 0.05 + 0.1,
           );
           player.instantWhiteConversion = MATH.applyPercentage(
             player.instantWhiteConversion,
-            (amount - 1) * 0.05 + 0.1
+            (amount - 1) * 0.05 + 0.1,
           );
         }
       },
@@ -5346,15 +5348,15 @@ function BeeSwarmSimulator(DATA) {
           player.bluePollen *= (amount - 1) * 0.03 + 1.15;
           player.instantRedConversion = MATH.applyPercentage(
             player.instantRedConversion,
-            (amount - 1) * 0.05 + 0.1
+            (amount - 1) * 0.05 + 0.1,
           );
           player.instantBlueConversion = MATH.applyPercentage(
             player.instantBlueConversion,
-            (amount - 1) * 0.05 + 0.1
+            (amount - 1) * 0.05 + 0.1,
           );
           player.instantWhiteConversion = MATH.applyPercentage(
             player.instantWhiteConversion,
-            (amount - 1) * 0.05 + 0.1
+            (amount - 1) * 0.05 + 0.1,
           );
         }
       },
@@ -5388,15 +5390,15 @@ function BeeSwarmSimulator(DATA) {
           player.bluePollen *= (amount - 1) * 0.03 + 1.15;
           player.instantRedConversion = MATH.applyPercentage(
             player.instantRedConversion,
-            (amount - 1) * 0.05 + 0.1
+            (amount - 1) * 0.05 + 0.1,
           );
           player.instantBlueConversion = MATH.applyPercentage(
             player.instantBlueConversion,
-            (amount - 1) * 0.05 + 0.1
+            (amount - 1) * 0.05 + 0.1,
           );
           player.instantWhiteConversion = MATH.applyPercentage(
             player.instantWhiteConversion,
-            (amount - 1) * 0.05 + 0.1
+            (amount - 1) * 0.05 + 0.1,
           );
         }
       },
@@ -5430,15 +5432,15 @@ function BeeSwarmSimulator(DATA) {
           player.bluePollen *= (amount - 1) * 0.03 + 1.15;
           player.instantRedConversion = MATH.applyPercentage(
             player.instantRedConversion,
-            (amount - 1) * 0.05 + 0.1
+            (amount - 1) * 0.05 + 0.1,
           );
           player.instantBlueConversion = MATH.applyPercentage(
             player.instantBlueConversion,
-            (amount - 1) * 0.05 + 0.1
+            (amount - 1) * 0.05 + 0.1,
           );
           player.instantWhiteConversion = MATH.applyPercentage(
             player.instantWhiteConversion,
-            (amount - 1) * 0.05 + 0.1
+            (amount - 1) * 0.05 + 0.1,
           );
         }
       },
@@ -5472,15 +5474,15 @@ function BeeSwarmSimulator(DATA) {
           player.bluePollen *= (amount - 1) * 0.03 + 1.15;
           player.instantRedConversion = MATH.applyPercentage(
             player.instantRedConversion,
-            (amount - 1) * 0.05 + 0.1
+            (amount - 1) * 0.05 + 0.1,
           );
           player.instantBlueConversion = MATH.applyPercentage(
             player.instantBlueConversion,
-            (amount - 1) * 0.05 + 0.1
+            (amount - 1) * 0.05 + 0.1,
           );
           player.instantWhiteConversion = MATH.applyPercentage(
             player.instantWhiteConversion,
-            (amount - 1) * 0.05 + 0.1
+            (amount - 1) * 0.05 + 0.1,
           );
         }
       },
@@ -5514,15 +5516,15 @@ function BeeSwarmSimulator(DATA) {
           player.bluePollen *= (amount - 1) * 0.03 + 1.15;
           player.instantRedConversion = MATH.applyPercentage(
             player.instantRedConversion,
-            (amount - 1) * 0.05 + 0.1
+            (amount - 1) * 0.05 + 0.1,
           );
           player.instantBlueConversion = MATH.applyPercentage(
             player.instantBlueConversion,
-            (amount - 1) * 0.05 + 0.1
+            (amount - 1) * 0.05 + 0.1,
           );
           player.instantWhiteConversion = MATH.applyPercentage(
             player.instantWhiteConversion,
-            (amount - 1) * 0.05 + 0.1
+            (amount - 1) * 0.05 + 0.1,
           );
         }
       },
@@ -5556,15 +5558,15 @@ function BeeSwarmSimulator(DATA) {
           player.bluePollen *= (amount - 1) * 0.03 + 1.15;
           player.instantRedConversion = MATH.applyPercentage(
             player.instantRedConversion,
-            (amount - 1) * 0.05 + 0.1
+            (amount - 1) * 0.05 + 0.1,
           );
           player.instantBlueConversion = MATH.applyPercentage(
             player.instantBlueConversion,
-            (amount - 1) * 0.05 + 0.1
+            (amount - 1) * 0.05 + 0.1,
           );
           player.instantWhiteConversion = MATH.applyPercentage(
             player.instantWhiteConversion,
-            (amount - 1) * 0.05 + 0.1
+            (amount - 1) * 0.05 + 0.1,
           );
         }
       },
@@ -5598,15 +5600,15 @@ function BeeSwarmSimulator(DATA) {
           player.bluePollen *= (amount - 1) * 0.03 + 1.15;
           player.instantRedConversion = MATH.applyPercentage(
             player.instantRedConversion,
-            (amount - 1) * 0.05 + 0.1
+            (amount - 1) * 0.05 + 0.1,
           );
           player.instantBlueConversion = MATH.applyPercentage(
             player.instantBlueConversion,
-            (amount - 1) * 0.05 + 0.1
+            (amount - 1) * 0.05 + 0.1,
           );
           player.instantWhiteConversion = MATH.applyPercentage(
             player.instantWhiteConversion,
-            (amount - 1) * 0.05 + 0.1
+            (amount - 1) * 0.05 + 0.1,
           );
         }
       },
@@ -5640,15 +5642,15 @@ function BeeSwarmSimulator(DATA) {
           player.bluePollen *= (amount - 1) * 0.03 + 1.15;
           player.instantRedConversion = MATH.applyPercentage(
             player.instantRedConversion,
-            (amount - 1) * 0.05 + 0.1
+            (amount - 1) * 0.05 + 0.1,
           );
           player.instantBlueConversion = MATH.applyPercentage(
             player.instantBlueConversion,
-            (amount - 1) * 0.05 + 0.1
+            (amount - 1) * 0.05 + 0.1,
           );
           player.instantWhiteConversion = MATH.applyPercentage(
             player.instantWhiteConversion,
-            (amount - 1) * 0.05 + 0.1
+            (amount - 1) * 0.05 + 0.1,
           );
         }
       },
@@ -5682,15 +5684,15 @@ function BeeSwarmSimulator(DATA) {
           player.bluePollen *= (amount - 1) * 0.03 + 1.15;
           player.instantRedConversion = MATH.applyPercentage(
             player.instantRedConversion,
-            (amount - 1) * 0.05 + 0.1
+            (amount - 1) * 0.05 + 0.1,
           );
           player.instantBlueConversion = MATH.applyPercentage(
             player.instantBlueConversion,
-            (amount - 1) * 0.05 + 0.1
+            (amount - 1) * 0.05 + 0.1,
           );
           player.instantWhiteConversion = MATH.applyPercentage(
             player.instantWhiteConversion,
-            (amount - 1) * 0.05 + 0.1
+            (amount - 1) * 0.05 + 0.1,
           );
         }
       },
@@ -5724,15 +5726,15 @@ function BeeSwarmSimulator(DATA) {
           player.bluePollen *= (amount - 1) * 0.03 + 1.15;
           player.instantRedConversion = MATH.applyPercentage(
             player.instantRedConversion,
-            (amount - 1) * 0.05 + 0.1
+            (amount - 1) * 0.05 + 0.1,
           );
           player.instantBlueConversion = MATH.applyPercentage(
             player.instantBlueConversion,
-            (amount - 1) * 0.05 + 0.1
+            (amount - 1) * 0.05 + 0.1,
           );
           player.instantWhiteConversion = MATH.applyPercentage(
             player.instantWhiteConversion,
-            (amount - 1) * 0.05 + 0.1
+            (amount - 1) * 0.05 + 0.1,
           );
         }
       },
@@ -5766,15 +5768,15 @@ function BeeSwarmSimulator(DATA) {
           player.bluePollen *= (amount - 1) * 0.03 + 1.15;
           player.instantRedConversion = MATH.applyPercentage(
             player.instantRedConversion,
-            (amount - 1) * 0.05 + 0.1
+            (amount - 1) * 0.05 + 0.1,
           );
           player.instantBlueConversion = MATH.applyPercentage(
             player.instantBlueConversion,
-            (amount - 1) * 0.05 + 0.1
+            (amount - 1) * 0.05 + 0.1,
           );
           player.instantWhiteConversion = MATH.applyPercentage(
             player.instantWhiteConversion,
-            (amount - 1) * 0.05 + 0.1
+            (amount - 1) * 0.05 + 0.1,
           );
         }
       },
@@ -5808,15 +5810,15 @@ function BeeSwarmSimulator(DATA) {
           player.bluePollen *= (amount - 1) * 0.03 + 1.15;
           player.instantRedConversion = MATH.applyPercentage(
             player.instantRedConversion,
-            (amount - 1) * 0.05 + 0.1
+            (amount - 1) * 0.05 + 0.1,
           );
           player.instantBlueConversion = MATH.applyPercentage(
             player.instantBlueConversion,
-            (amount - 1) * 0.05 + 0.1
+            (amount - 1) * 0.05 + 0.1,
           );
           player.instantWhiteConversion = MATH.applyPercentage(
             player.instantWhiteConversion,
-            (amount - 1) * 0.05 + 0.1
+            (amount - 1) * 0.05 + 0.1,
           );
         }
       },
@@ -5850,15 +5852,15 @@ function BeeSwarmSimulator(DATA) {
           player.bluePollen *= (amount - 1) * 0.03 + 1.15;
           player.instantRedConversion = MATH.applyPercentage(
             player.instantRedConversion,
-            (amount - 1) * 0.05 + 0.1
+            (amount - 1) * 0.05 + 0.1,
           );
           player.instantBlueConversion = MATH.applyPercentage(
             player.instantBlueConversion,
-            (amount - 1) * 0.05 + 0.1
+            (amount - 1) * 0.05 + 0.1,
           );
           player.instantWhiteConversion = MATH.applyPercentage(
             player.instantWhiteConversion,
-            (amount - 1) * 0.05 + 0.1
+            (amount - 1) * 0.05 + 0.1,
           );
         }
       },
@@ -5892,15 +5894,15 @@ function BeeSwarmSimulator(DATA) {
           player.bluePollen *= (amount - 1) * 0.03 + 1.15;
           player.instantRedConversion = MATH.applyPercentage(
             player.instantRedConversion,
-            (amount - 1) * 0.05 + 0.1
+            (amount - 1) * 0.05 + 0.1,
           );
           player.instantBlueConversion = MATH.applyPercentage(
             player.instantBlueConversion,
-            (amount - 1) * 0.05 + 0.1
+            (amount - 1) * 0.05 + 0.1,
           );
           player.instantWhiteConversion = MATH.applyPercentage(
             player.instantWhiteConversion,
-            (amount - 1) * 0.05 + 0.1
+            (amount - 1) * 0.05 + 0.1,
           );
         }
       },
@@ -6115,7 +6117,7 @@ function BeeSwarmSimulator(DATA) {
               size: 4,
               speed: 0.35,
               aftershock: 0.05,
-            })
+            }),
           );
         }
 
@@ -6176,7 +6178,7 @@ function BeeSwarmSimulator(DATA) {
               size: 4,
               speed: 0.35,
               aftershock: 0.05,
-            })
+            }),
           );
         }
 
@@ -6237,7 +6239,7 @@ function BeeSwarmSimulator(DATA) {
               size: 4,
               speed: 0.35,
               aftershock: 0.05,
-            })
+            }),
           );
         }
 
@@ -6310,7 +6312,7 @@ function BeeSwarmSimulator(DATA) {
               size: 4,
               speed: 0.35,
               aftershock: 0.05,
-            })
+            }),
           );
         }
 
@@ -6387,7 +6389,7 @@ function BeeSwarmSimulator(DATA) {
               size: 4,
               speed: 0.35,
               aftershock: 0.05,
-            })
+            }),
           );
         }
 
@@ -6464,7 +6466,7 @@ function BeeSwarmSimulator(DATA) {
               speed: 0.35,
               aftershock: 0.05,
               instantConversion: player.instantBombConversion,
-            })
+            }),
           );
         }
 
@@ -6669,7 +6671,7 @@ function BeeSwarmSimulator(DATA) {
         player.superCritPower *= amount * 0.06 + 1;
         player.instantRedConversion = MATH.applyPercentage(
           player.instantRedConversion,
-          amount * 0.0025
+          amount * 0.0025,
         );
         player.beeAttack *= amount * 0.02 + 1;
       },
@@ -6704,8 +6706,8 @@ function BeeSwarmSimulator(DATA) {
               (MATH.random(0.2, 0.8) * fieldInfo[params.field].width) | 0,
               (MATH.random(0.2, 0.8) * fieldInfo[params.field].length) | 0,
               "pollenMark",
-              params.bee.level
-            )
+              params.bee.level,
+            ),
           );
         }
       },
@@ -6727,8 +6729,8 @@ function BeeSwarmSimulator(DATA) {
             (MATH.random(0.2, 0.8) * fieldInfo[params.field].width) | 0,
             (MATH.random(0.2, 0.8) * fieldInfo[params.field].length) | 0,
             "honeyMark",
-            params.bee.level
-          )
+            params.bee.level,
+          ),
         );
       },
     },
@@ -6833,7 +6835,7 @@ function BeeSwarmSimulator(DATA) {
             params.z - 1 < fieldInfo[params.field].length
           ) {
             objects.flames.push(
-              new Flame(params.field, params.x, params.z - 1)
+              new Flame(params.field, params.x, params.z - 1),
             );
           }
 
@@ -6844,7 +6846,7 @@ function BeeSwarmSimulator(DATA) {
             params.z + 1 < fieldInfo[params.field].length
           ) {
             objects.flames.push(
-              new Flame(params.field, params.x, params.z + 1)
+              new Flame(params.field, params.x, params.z + 1),
             );
           }
 
@@ -6855,7 +6857,7 @@ function BeeSwarmSimulator(DATA) {
             params.z < fieldInfo[params.field].length
           ) {
             objects.flames.push(
-              new Flame(params.field, params.x - 1, params.z)
+              new Flame(params.field, params.x - 1, params.z),
             );
           }
 
@@ -6866,7 +6868,7 @@ function BeeSwarmSimulator(DATA) {
             params.z < fieldInfo[params.field].length
           ) {
             objects.flames.push(
-              new Flame(params.field, params.x + 1, params.z)
+              new Flame(params.field, params.x + 1, params.z),
             );
           }
 
@@ -6880,8 +6882,8 @@ function BeeSwarmSimulator(DATA) {
               "fire",
               Math.max(params.bee.level - 2, 1),
               15 + params.bee.level,
-              params.bee.gifted
-            )
+              params.bee.gifted,
+            ),
           );
 
           objects.tempBees.push(
@@ -6894,8 +6896,8 @@ function BeeSwarmSimulator(DATA) {
               "fire",
               Math.max(params.bee.level - 2, 1),
               15 + params.bee.level,
-              params.bee.gifted
-            )
+              params.bee.gifted,
+            ),
           );
 
           objects.explosions.push(
@@ -6910,7 +6912,7 @@ function BeeSwarmSimulator(DATA) {
               size: 5,
               speed: 0.25,
               aftershock: 0.005,
-            })
+            }),
           );
         }
       },
@@ -6921,21 +6923,21 @@ function BeeSwarmSimulator(DATA) {
             "fire",
             Math.max(params.bee.level - 2, 1),
             15 + params.bee.level,
-            params.bee.gifted
-          )
+            params.bee.gifted,
+          ),
         );
 
         objects.flames.push(
-          new Flame(params.pos[0] - 1, params.pos[1], params.pos[2], true)
+          new Flame(params.pos[0] - 1, params.pos[1], params.pos[2], true),
         );
         objects.flames.push(
-          new Flame(params.pos[0] + 1, params.pos[1], params.pos[2], true)
+          new Flame(params.pos[0] + 1, params.pos[1], params.pos[2], true),
         );
         objects.flames.push(
-          new Flame(params.pos[0], params.pos[1], params.pos[2] + 1, true)
+          new Flame(params.pos[0], params.pos[1], params.pos[2] + 1, true),
         );
         objects.flames.push(
-          new Flame(params.pos[0], params.pos[1], params.pos[2] - 1, true)
+          new Flame(params.pos[0], params.pos[1], params.pos[2] - 1, true),
         );
       },
     },
@@ -6997,7 +6999,7 @@ function BeeSwarmSimulator(DATA) {
               fieldInfo[params.field].x + params.x,
               fieldInfo[params.field].y + 0.75,
               fieldInfo[params.field].z + params.z,
-            ])
+            ]),
           );
         }
 
@@ -7043,7 +7045,7 @@ function BeeSwarmSimulator(DATA) {
                     fieldInfo[params.field].length) *
                     0.5 *
                     1.5),
-              })
+              }),
             );
           }
 
@@ -7064,7 +7066,7 @@ function BeeSwarmSimulator(DATA) {
         if (player.fieldIn === params.field) {
           for (let i = 0; i < 2 + ((params.bee.level * 0.2) | 0); i++) {
             objects.fuzzBombs.push(
-              new FuzzBomb(params.field, params.bee.level)
+              new FuzzBomb(params.field, params.bee.level),
             );
           }
         }
@@ -7102,7 +7104,7 @@ function BeeSwarmSimulator(DATA) {
       func: function (params) {
         if (params.field === player.fieldIn) {
           objects.mobs.push(
-            new Frog(params.field, params.x, params.z, params.bee)
+            new Frog(params.field, params.x, params.z, params.bee),
           );
         }
       },
@@ -7136,7 +7138,7 @@ function BeeSwarmSimulator(DATA) {
                   height: 1,
                   primitive: "explosions",
                   transformHeight: true,
-                })
+                }),
               );
             }
           }
@@ -7148,8 +7150,8 @@ function BeeSwarmSimulator(DATA) {
               params.z,
               params.bee.gifted &&
                 Math.random() < 0.1 + params.bee.level * 0.01,
-              params.bee.level - 1
-            )
+              params.bee.level - 1,
+            ),
           );
         }
       },
@@ -7192,8 +7194,8 @@ function BeeSwarmSimulator(DATA) {
                   effects[type].tokenLife,
                   [b.pos[0], Math.round(params.bee.pos) + 0.5, b.pos[2]],
                   type,
-                  { field: b.field, x: b.x, z: b.z, bee: params.bee }
-                )
+                  { field: b.field, x: b.x, z: b.z, bee: params.bee },
+                ),
               );
               objects.explosions.push(
                 new ReverseExplosion({
@@ -7205,7 +7207,7 @@ function BeeSwarmSimulator(DATA) {
                   height: 1,
                   primitive: "explosions",
                   transformHeight: true,
-                })
+                }),
               );
             }
           }
@@ -7216,8 +7218,8 @@ function BeeSwarmSimulator(DATA) {
               params.x,
               params.z,
               true,
-              params.bee.level
-            )
+              params.bee.level,
+            ),
           );
         }
       },
@@ -7330,7 +7332,7 @@ function BeeSwarmSimulator(DATA) {
               speed: 0.5,
               aftershock: 0.005,
               height: 0.3,
-            })
+            }),
           );
         }
       },
@@ -7388,7 +7390,7 @@ function BeeSwarmSimulator(DATA) {
                 speed: 0.5,
                 aftershock: 0.005,
                 height: 0.3,
-              })
+              }),
             );
           }
         }
@@ -7477,15 +7479,15 @@ function BeeSwarmSimulator(DATA) {
         player.convertRate *= 1.5;
         player.instantRedConversion = MATH.applyPercentage(
           player.instantRedConversion,
-          0.12
+          0.12,
         );
         player.instantWhiteConversion = MATH.applyPercentage(
           player.instantWhiteConversion,
-          0.12
+          0.12,
         );
         player.instantBlueConversion = MATH.applyPercentage(
           player.instantBlueConversion,
-          0.12
+          0.12,
         );
       },
 
@@ -7596,15 +7598,15 @@ function BeeSwarmSimulator(DATA) {
         player.honeyAtHive *= 1.1;
         player.instantRedConversion = MATH.applyPercentage(
           player.instantRedConversion,
-          0.17
+          0.17,
         );
         player.instantWhiteConversion = MATH.applyPercentage(
           player.instantWhiteConversion,
-          0.17
+          0.17,
         );
         player.instantBlueConversion = MATH.applyPercentage(
           player.instantBlueConversion,
-          0.17
+          0.17,
         );
         player.walkSpeed *= 1.05;
         player.beeSpeed *= 1.1;
@@ -7647,7 +7649,7 @@ function BeeSwarmSimulator(DATA) {
         player.bluePollen *= Math.min(player.popStarSize * 0.0125 + 2, 5);
         player.instantBlueConversion = MATH.applyPercentage(
           player.instantBlueConversion,
-          0.05
+          0.05,
         );
         player.bubblePollen *= 1.25;
       },
@@ -7672,15 +7674,15 @@ function BeeSwarmSimulator(DATA) {
         player.redPollen *= Math.min(player.scorchingStarSize * 0.00035 + 2, 5);
         player.convertRate *= Math.min(
           player.scorchingStarSize * 0.00035 + 2,
-          5
+          5,
         );
         player.beeAttack *= Math.min(
           player.scorchingStarSize * 0.00015 + 1,
-          1.5
+          1.5,
         );
         player.instantRedConversion = MATH.applyPercentage(
           player.instantRedConversion,
-          0.2
+          0.2,
         );
       },
 
@@ -7708,11 +7710,11 @@ function BeeSwarmSimulator(DATA) {
         player.goo *= Math.min(player.gummyStarSize * 0.0000000003 + 1, 2);
         player.whitePollen *= Math.min(
           player.gummyStarSize * 0.0000000002 + 1,
-          2
+          2,
         );
         player.instantWhiteConversion = MATH.applyPercentage(
           player.instantWhiteConversion,
-          0.2
+          0.2,
         );
       },
 
@@ -7995,18 +7997,21 @@ function BeeSwarmSimulator(DATA) {
 
       activate() {
         for (let i = 0; i < 30; i++) {
-          window.setTimeout(function () {
-            objects.mobs.push(
-              new PetalShuriken(
-                [
-                  player.body.position.x,
-                  player.body.position.y + 0.25,
-                  player.body.position.z,
-                ],
-                [Math.cos(i * 0.75), 0, Math.sin(i * 0.75)]
-              )
-            );
-          }, 1000 * i * 0.15);
+          window.setTimeout(
+            function () {
+              objects.mobs.push(
+                new PetalShuriken(
+                  [
+                    player.body.position.x,
+                    player.body.position.y + 0.25,
+                    player.body.position.z,
+                  ],
+                  [Math.cos(i * 0.75), 0, Math.sin(i * 0.75)],
+                ),
+              );
+            },
+            1000 * i * 0.15,
+          );
         }
       },
 
@@ -8242,8 +8247,8 @@ function BeeSwarmSimulator(DATA) {
               new Coconut(
                 (Math.random() * fieldInfo[player.fieldIn].width) | 0,
                 (Math.random() * fieldInfo[player.fieldIn].length) | 0,
-                i * 0.4
-              )
+                i * 0.4,
+              ),
             );
           }
         }
@@ -8258,7 +8263,7 @@ function BeeSwarmSimulator(DATA) {
       isPassive: true,
       svg: document.getElementById("emergencyCoconutShieldPassive"),
       cooldown: document.getElementById(
-        "emergencyCoconutShieldPassive_cooldown"
+        "emergencyCoconutShieldPassive_cooldown",
       ),
       amount: document.getElementById("emergencyCoconutShieldPassive_amount"),
       maxCooldown: 60,
@@ -8275,8 +8280,8 @@ function BeeSwarmSimulator(DATA) {
               new Coconut(
                 (Math.random() * fieldInfo[player.fieldIn].width) | 0,
                 (Math.random() * fieldInfo[player.fieldIn].length) | 0,
-                i * 0.4
-              )
+                i * 0.4,
+              ),
             );
           }
         }
@@ -8333,7 +8338,7 @@ function BeeSwarmSimulator(DATA) {
 
         if (player.fieldIn && !player.attacked.length) {
           objects.flames.push(
-            new Flame(player.fieldIn, player.flowerIn.x, player.flowerIn.z)
+            new Flame(player.fieldIn, player.flowerIn.x, player.flowerIn.z),
           );
 
           for (let j in dirs) {
@@ -8356,8 +8361,8 @@ function BeeSwarmSimulator(DATA) {
               player.body.position.x,
               player.body.position.y,
               player.body.position.z,
-              true
-            )
+              true,
+            ),
           );
 
           for (let j in dirs) {
@@ -8370,8 +8375,8 @@ function BeeSwarmSimulator(DATA) {
                   player.body.position.x + x,
                   player.body.position.y,
                   player.body.position.z + z,
-                  true
-                )
+                  true,
+                ),
               );
             }
           }
@@ -8405,7 +8410,7 @@ function BeeSwarmSimulator(DATA) {
 
         if (player.fieldIn && !player.attacked.length) {
           objects.flames.push(
-            new Flame(player.fieldIn, player.flowerIn.x, player.flowerIn.z)
+            new Flame(player.fieldIn, player.flowerIn.x, player.flowerIn.z),
           );
 
           for (let j in dirs) {
@@ -8428,8 +8433,8 @@ function BeeSwarmSimulator(DATA) {
               player.body.position.x,
               player.body.position.y,
               player.body.position.z,
-              true
-            )
+              true,
+            ),
           );
 
           for (let j in dirs) {
@@ -8442,8 +8447,8 @@ function BeeSwarmSimulator(DATA) {
                   player.body.position.x + x,
                   player.body.position.y,
                   player.body.position.z + z,
-                  true
-                )
+                  true,
+                ),
               );
             }
           }
@@ -8474,8 +8479,8 @@ function BeeSwarmSimulator(DATA) {
               new Bubble(
                 player.fieldIn,
                 (Math.random() * fieldInfo[player.fieldIn].width) | 0,
-                (Math.random() * fieldInfo[player.fieldIn].length) | 0
-              )
+                (Math.random() * fieldInfo[player.fieldIn].length) | 0,
+              ),
             );
           }
         }
@@ -8524,8 +8529,8 @@ function BeeSwarmSimulator(DATA) {
                 "honey",
                 amountPerToken,
                 false,
-                "Coin Scatter"
-              )
+                "Coin Scatter",
+              ),
             );
           }
         }
@@ -8584,7 +8589,7 @@ function BeeSwarmSimulator(DATA) {
               },
               true,
               false,
-              true
+              true,
             );
           }
         }
@@ -8760,12 +8765,12 @@ function BeeSwarmSimulator(DATA) {
             f,
             (Math.random() * fieldInfo[f].width) | 0,
             (Math.random() * fieldInfo[f].length) | 0,
-            60 + params.bee.level * 5
-          )
+            60 + params.bee.level * 5,
+          ),
         );
 
         player.addMessage(
-          "☁️Your windy bee made a cloud in the " + MATH.doGrammar(f) + "!☁️"
+          "☁️Your windy bee made a cloud in the " + MATH.doGrammar(f) + "!☁️",
         );
       },
     },
@@ -9096,7 +9101,7 @@ function BeeSwarmSimulator(DATA) {
               player.extraInfo.drives.glitched / 50) *
               15) /
               4,
-          100
+          100,
         );
 
         objects.mobs.push(new GlitchEffect(params.field, 5));
@@ -9160,14 +9165,14 @@ function BeeSwarmSimulator(DATA) {
               player.extraInfo.drives.glitched / 50) *
               15) /
               4,
-          100
+          100,
         );
 
         objects.mobs.push(new GlitchEffect(f, 5));
 
         player.addMessage(
           "Your Digital Bee corrupted the" + MATH.doGrammar(f) + "!",
-          [255 * 0.5, 0, 200 * 0.5]
+          [255 * 0.5, 0, 200 * 0.5],
         );
       },
     },
@@ -9192,7 +9197,7 @@ function BeeSwarmSimulator(DATA) {
         if (params.field) {
           fieldInfo[params.field].corruption = Math.min(
             fieldInfo[params.field].corruption + 3,
-            100
+            100,
           );
 
           collectPollen({
@@ -9415,15 +9420,15 @@ function BeeSwarmSimulator(DATA) {
       update: (amount, player) => {
         player.instantWhiteConversion = MATH.applyPercentage(
           player.instantWhiteConversion,
-          0.05 * amount + 0.1
+          0.05 * amount + 0.1,
         );
         player.instantRedConversion = MATH.applyPercentage(
           player.instantRedConversion,
-          0.05 * amount + 0.1
+          0.05 * amount + 0.1,
         );
         player.instantBlueConversion = MATH.applyPercentage(
           player.instantBlueConversion,
-          0.05 * amount + 0.1
+          0.05 * amount + 0.1,
         );
       },
 
@@ -9633,7 +9638,7 @@ function BeeSwarmSimulator(DATA) {
         let f = fieldInfo[params.field],
           ball = new FetchBall(
             [f.x + params.x, f.y + 1, f.z + params.z],
-            params.bee
+            params.bee,
           );
         objects.mobs.push(ball);
 
@@ -9662,7 +9667,7 @@ function BeeSwarmSimulator(DATA) {
             size: 6,
             speed: 0.25,
             aftershock: 0.05,
-          })
+          }),
         );
 
         for (let y in player.hive) {
@@ -9679,7 +9684,7 @@ function BeeSwarmSimulator(DATA) {
                 COLORS.bondArr,
                 0,
                 "+",
-                1.5
+                1.5,
               );
             }
           }
@@ -9700,15 +9705,15 @@ function BeeSwarmSimulator(DATA) {
         player.convertRate *= 2;
         player.instantRedConversion = MATH.applyPercentage(
           player.instantRedConversion,
-          1
+          1,
         );
         player.instantWhiteConversion = MATH.applyPercentage(
           player.instantWhiteConversion,
-          1
+          1,
         );
         player.instantBlueConversion = MATH.applyPercentage(
           player.instantBlueConversion,
-          1
+          1,
         );
       },
 
@@ -9729,7 +9734,7 @@ function BeeSwarmSimulator(DATA) {
         player.addEffect("festiveCheer");
         player.addMessage(
           "🎁 Festive Bee created festive gifts! 🎁",
-          COLORS.redArr
+          COLORS.redArr,
         );
 
         let amountOfTokens = (7 + params.bee.level * 0.25) | 0,
@@ -9793,8 +9798,8 @@ function BeeSwarmSimulator(DATA) {
                 [x + Math.cos(i) * radius, y, z + Math.sin(i) * radius],
                 "redBoost",
                 {},
-                true
-              )
+                true,
+              ),
             );
           } else {
             objects.tokens.push(
@@ -9806,11 +9811,11 @@ function BeeSwarmSimulator(DATA) {
                   ? (Math.random() * params.bee.level + params.bee.level) *
                       params.bee.level *
                       50 +
-                    2500
+                      2500
                   : 1,
                 true,
-                MATH.doGrammar(this.type)
-              )
+                MATH.doGrammar(this.type),
+              ),
             );
           }
         }
@@ -9920,7 +9925,7 @@ function BeeSwarmSimulator(DATA) {
         if (!player.fieldIn) {
           player.addMessage(
             "You must be in a field to use Jelly Beans!",
-            COLORS.redArr
+            COLORS.redArr,
           );
           return;
         }
@@ -9946,15 +9951,15 @@ function BeeSwarmSimulator(DATA) {
                 "brownJellyBean",
                 "blackJellyBean",
                 "yellowJellyBean",
-                "greenJellyBean"
+                "greenJellyBean",
               );
 
               objects.mobs.push(
                 new JellyBean(
                   player.fieldIn,
                   vel,
-                  arr[(Math.random() * arr.length) | 0]
-                )
+                  arr[(Math.random() * arr.length) | 0],
+                ),
               );
             }
           }, 250 * i);
@@ -9987,7 +9992,7 @@ function BeeSwarmSimulator(DATA) {
         if (!player.fieldIn) {
           player.addMessage(
             "You must be in a field to use Cloud Vials!",
-            COLORS.redArr
+            COLORS.redArr,
           );
           return;
         }
@@ -9995,7 +10000,7 @@ function BeeSwarmSimulator(DATA) {
         if (player.fieldIn === "AntField") {
           player.addMessage(
             "You can' use this item in the Ant Field!",
-            COLORS.redArr
+            COLORS.redArr,
           );
           return;
         }
@@ -10014,7 +10019,7 @@ function BeeSwarmSimulator(DATA) {
         if (count > 6) {
           player.addMessage(
             "There are too many clouds in this field!",
-            COLORS.redArr
+            COLORS.redArr,
           );
           return;
         }
@@ -10026,8 +10031,8 @@ function BeeSwarmSimulator(DATA) {
             player.fieldIn,
             player.flowerIn.x,
             player.flowerIn.z,
-            3 * 60
-          )
+            3 * 60,
+          ),
         );
       },
     },
@@ -10041,7 +10046,7 @@ function BeeSwarmSimulator(DATA) {
         if (!player.fieldIn) {
           player.addMessage(
             "You must be in a field to use Magic Beans!",
-            COLORS.redArr
+            COLORS.redArr,
           );
           return;
         }
@@ -10049,7 +10054,7 @@ function BeeSwarmSimulator(DATA) {
         if (player.fieldIn === "AntField") {
           player.addMessage(
             "You can' use this item in the Ant Field!",
-            COLORS.redArr
+            COLORS.redArr,
           );
           return;
         }
@@ -10061,7 +10066,7 @@ function BeeSwarmSimulator(DATA) {
           ) {
             player.addMessage(
               "There is already a sprout in this field!",
-              COLORS.redArr
+              COLORS.redArr,
             );
             return;
           }
@@ -10090,7 +10095,7 @@ function BeeSwarmSimulator(DATA) {
             supreme: [30, 220, 90],
             gummy: [230, 70, 230],
             moon: [140, 200, 230],
-          }[type]
+          }[type],
         );
 
         objects.mobs.push(new Sprout(player.fieldIn, type));
@@ -10161,7 +10166,7 @@ function BeeSwarmSimulator(DATA) {
         if (!player.roboChallenge) {
           player.addMessage(
             "Drives can only be used in the Robo Challenge!",
-            COLORS.redArr
+            COLORS.redArr,
           );
           return;
         }
@@ -10170,7 +10175,7 @@ function BeeSwarmSimulator(DATA) {
         player.addEffect("redDriveBuff");
         player.extraInfo.drives.red = Math.min(
           player.extraInfo.drives.red + 1,
-          50
+          50,
         );
       },
     },
@@ -10184,7 +10189,7 @@ function BeeSwarmSimulator(DATA) {
         if (!player.roboChallenge) {
           player.addMessage(
             "Drives can only be used in the Robo Challenge!",
-            COLORS.redArr
+            COLORS.redArr,
           );
           return;
         }
@@ -10193,7 +10198,7 @@ function BeeSwarmSimulator(DATA) {
         player.addEffect("blueDriveBuff");
         player.extraInfo.drives.blue = Math.min(
           player.extraInfo.drives.blue + 1,
-          50
+          50,
         );
       },
     },
@@ -10207,7 +10212,7 @@ function BeeSwarmSimulator(DATA) {
         if (!player.roboChallenge) {
           player.addMessage(
             "Drives can only be used in the Robo Challenge!",
-            COLORS.redArr
+            COLORS.redArr,
           );
           return;
         }
@@ -10216,7 +10221,7 @@ function BeeSwarmSimulator(DATA) {
         player.addEffect("whiteDriveBuff");
         player.extraInfo.drives.white = Math.min(
           player.extraInfo.drives.white + 1,
-          50
+          50,
         );
       },
     },
@@ -10230,7 +10235,7 @@ function BeeSwarmSimulator(DATA) {
         if (!player.roboChallenge) {
           player.addMessage(
             "Drives can only be used in the Robo Challenge!",
-            COLORS.redArr
+            COLORS.redArr,
           );
           return;
         }
@@ -10239,7 +10244,7 @@ function BeeSwarmSimulator(DATA) {
         player.addEffect("glitchedDriveBuff");
         player.extraInfo.drives.glitched = Math.min(
           player.extraInfo.drives.glitched + 1,
-          50
+          50,
         );
       },
     },
@@ -10276,15 +10281,15 @@ function BeeSwarmSimulator(DATA) {
             false,
             false,
             undefined,
-            1
+            1,
           );
 
           player.addMessage(
             'Activated "' +
               MATH.doGrammar(
-                f[r][0].toLowerCase() + f[r].substring(1, f[r].length)
+                f[r][0].toLowerCase() + f[r].substring(1, f[r].length),
               ) +
-              ' Boost"'
+              ' Boost"',
           );
         }
       },
@@ -10314,15 +10319,15 @@ function BeeSwarmSimulator(DATA) {
             false,
             false,
             undefined,
-            2
+            2,
           );
 
           player.addMessage(
             'Activated x2 "' +
               MATH.doGrammar(
-                f[r][0].toLowerCase() + f[r].substring(1, f[r].length)
+                f[r][0].toLowerCase() + f[r].substring(1, f[r].length),
               ) +
-              ' Boost"'
+              ' Boost"',
           );
 
           f.splice(r, 1);
@@ -10363,15 +10368,15 @@ function BeeSwarmSimulator(DATA) {
             false,
             false,
             undefined,
-            3
+            3,
           );
 
           player.addMessage(
             'Activated x3 "' +
               MATH.doGrammar(
-                f[r][0].toLowerCase() + f[r].substring(1, f[r].length)
+                f[r][0].toLowerCase() + f[r].substring(1, f[r].length),
               ) +
-              ' Boost"'
+              ' Boost"',
           );
 
           for (let j in f) {
@@ -10393,7 +10398,7 @@ function BeeSwarmSimulator(DATA) {
         if (player.pollen < 1) {
           player.addMessage(
             "You must have pollen to use a micro-converter!",
-            COLORS.redArr
+            COLORS.redArr,
           );
           return;
         }
@@ -10409,7 +10414,7 @@ function BeeSwarmSimulator(DATA) {
           ],
           COLORS.honey,
           1,
-          "⇆"
+          "⇆",
         );
         player.honey += (player.pollen * player.honeyPerPollen) | 0;
         player.pollen = 0;
@@ -10440,7 +10445,7 @@ function BeeSwarmSimulator(DATA) {
           ],
           COLORS.honey,
           1,
-          "⇆"
+          "⇆",
         );
         player.honey += (am * player.honeyPerPollen) | 0;
         player.pollen -= am;
@@ -10532,7 +10537,7 @@ function BeeSwarmSimulator(DATA) {
               let improvement = Number(
                 permBeeStats[j][0] === "*"
                   ? (MATH.random(0.05, 0.1) * (np * 0.15 + 1)).toFixed(2)
-                  : (MATH.random(1, 5) * (np * 0.5 + 1)) | 0
+                  : (MATH.random(1, 5) * (np * 0.5 + 1)) | 0,
               );
 
               permBeeStats[j] =
@@ -10541,8 +10546,8 @@ function BeeSwarmSimulator(DATA) {
                   Number(
                     permBeeStats[j].substring(
                       permBeeStats[j].indexOf("(") + 2,
-                      permBeeStats[j].indexOf(")")
-                    )
+                      permBeeStats[j].indexOf(")"),
+                    ),
                   ) + improvement
                 )
                   .toFixed(2)
@@ -10575,7 +10580,7 @@ function BeeSwarmSimulator(DATA) {
         if (Math.random() > 0.6) {
           player.addMessage(
             "The wax failed to improve the beequip!",
-            COLORS.redArr
+            COLORS.redArr,
           );
           player.hive[player.hiveIndex[1]][
             player.hiveIndex[0]
@@ -10622,7 +10627,7 @@ function BeeSwarmSimulator(DATA) {
               let improvement = Number(
                 permBeeStats[j][0] === "*"
                   ? (MATH.random(0.075, 0.125) * (np * 0.15 + 1)).toFixed(2)
-                  : (MATH.random(2, 6) * (np * 0.5 + 1)) | 0
+                  : (MATH.random(2, 6) * (np * 0.5 + 1)) | 0,
               );
 
               permBeeStats[j] =
@@ -10631,8 +10636,8 @@ function BeeSwarmSimulator(DATA) {
                   Number(
                     permBeeStats[j].substring(
                       permBeeStats[j].indexOf("(") + 2,
-                      permBeeStats[j].indexOf(")")
-                    )
+                      permBeeStats[j].indexOf(")"),
+                    ),
                   ) + improvement
                 )
                   .toFixed(2)
@@ -10713,7 +10718,7 @@ function BeeSwarmSimulator(DATA) {
               let improvement = Number(
                 permBeeStats[j][0] === "*"
                   ? (MATH.random(0.1, 0.175) * (np * 0.15 + 1)).toFixed(2)
-                  : (MATH.random(4, 9) * (np * 0.5 + 1)) | 0
+                  : (MATH.random(4, 9) * (np * 0.5 + 1)) | 0,
               );
 
               permBeeStats[j] =
@@ -10722,8 +10727,8 @@ function BeeSwarmSimulator(DATA) {
                   Number(
                     permBeeStats[j].substring(
                       permBeeStats[j].indexOf("(") + 2,
-                      permBeeStats[j].indexOf(")")
-                    )
+                      permBeeStats[j].indexOf(")"),
+                    ),
                   ) + improvement
                 )
                   .toFixed(2)
@@ -10831,7 +10836,7 @@ function BeeSwarmSimulator(DATA) {
         if (objects.planters.length >= 3) {
           player.addMessage(
             "You can only have 3 planters at once!",
-            COLORS.redArr
+            COLORS.redArr,
           );
           return;
         }
@@ -10841,7 +10846,7 @@ function BeeSwarmSimulator(DATA) {
             if (player.fieldIn === objects.planters[i].field) {
               player.addMessage(
                 "You can only have 1 planter in a field!",
-                COLORS.redArr
+                COLORS.redArr,
               );
               return;
             }
@@ -10849,7 +10854,7 @@ function BeeSwarmSimulator(DATA) {
             if (objects.planters[i].type === "paper") {
               player.addMessage(
                 "You can only have 1 paper planter active!",
-                COLORS.redArr
+                COLORS.redArr,
               );
               return;
             }
@@ -10860,7 +10865,7 @@ function BeeSwarmSimulator(DATA) {
         } else {
           player.addMessage(
             "You must be in a field to place a planter!",
-            COLORS.redArr
+            COLORS.redArr,
           );
         }
       },
@@ -10875,7 +10880,7 @@ function BeeSwarmSimulator(DATA) {
         if (objects.planters.length >= 3) {
           player.addMessage(
             "You can only have 3 planters at once!",
-            COLORS.redArr
+            COLORS.redArr,
           );
           return;
         }
@@ -10886,7 +10891,7 @@ function BeeSwarmSimulator(DATA) {
         } else {
           player.addMessage(
             "You must be in a field to place a planter!",
-            COLORS.redArr
+            COLORS.redArr,
           );
         }
       },
@@ -10901,7 +10906,7 @@ function BeeSwarmSimulator(DATA) {
         if (objects.planters.length >= 3) {
           player.addMessage(
             "You can only have 3 planters at once!",
-            COLORS.redArr
+            COLORS.redArr,
           );
           return;
         }
@@ -10912,7 +10917,7 @@ function BeeSwarmSimulator(DATA) {
         } else {
           player.addMessage(
             "You must be in a field to place a planter!",
-            COLORS.redArr
+            COLORS.redArr,
           );
         }
       },
@@ -10927,7 +10932,7 @@ function BeeSwarmSimulator(DATA) {
         if (objects.planters.length >= 3) {
           player.addMessage(
             "You can only have 3 planters at once!",
-            COLORS.redArr
+            COLORS.redArr,
           );
           return;
         }
@@ -10938,7 +10943,7 @@ function BeeSwarmSimulator(DATA) {
         } else {
           player.addMessage(
             "You must be in a field to place a planter!",
-            COLORS.redArr
+            COLORS.redArr,
           );
         }
       },
@@ -10953,7 +10958,7 @@ function BeeSwarmSimulator(DATA) {
         if (objects.planters.length >= 3) {
           player.addMessage(
             "You can only have 3 planters at once!",
-            COLORS.redArr
+            COLORS.redArr,
           );
           return;
         }
@@ -10964,7 +10969,7 @@ function BeeSwarmSimulator(DATA) {
         } else {
           player.addMessage(
             "You must be in a field to place a planter!",
-            COLORS.redArr
+            COLORS.redArr,
           );
         }
       },
@@ -10979,7 +10984,7 @@ function BeeSwarmSimulator(DATA) {
         if (objects.planters.length >= 3) {
           player.addMessage(
             "You can only have 3 planters at once!",
-            COLORS.redArr
+            COLORS.redArr,
           );
           return;
         }
@@ -10990,7 +10995,7 @@ function BeeSwarmSimulator(DATA) {
         } else {
           player.addMessage(
             "You must be in a field to place a planter!",
-            COLORS.redArr
+            COLORS.redArr,
           );
         }
       },
@@ -11005,7 +11010,7 @@ function BeeSwarmSimulator(DATA) {
         if (objects.planters.length >= 3) {
           player.addMessage(
             "You can only have 3 planters at once!",
-            COLORS.redArr
+            COLORS.redArr,
           );
           return;
         }
@@ -11016,7 +11021,7 @@ function BeeSwarmSimulator(DATA) {
         } else {
           player.addMessage(
             "You must be in a field to place a planter!",
-            COLORS.redArr
+            COLORS.redArr,
           );
         }
       },
@@ -11031,7 +11036,7 @@ function BeeSwarmSimulator(DATA) {
         if (objects.planters.length >= 3) {
           player.addMessage(
             "You can only have 3 planters at once!",
-            COLORS.redArr
+            COLORS.redArr,
           );
           return;
         }
@@ -11042,7 +11047,7 @@ function BeeSwarmSimulator(DATA) {
         } else {
           player.addMessage(
             "You must be in a field to place a planter!",
-            COLORS.redArr
+            COLORS.redArr,
           );
         }
       },
@@ -11057,7 +11062,7 @@ function BeeSwarmSimulator(DATA) {
         if (objects.planters.length >= 3) {
           player.addMessage(
             "You can only have 3 planters at once!",
-            COLORS.redArr
+            COLORS.redArr,
           );
           return;
         }
@@ -11068,7 +11073,7 @@ function BeeSwarmSimulator(DATA) {
         } else {
           player.addMessage(
             "You must be in a field to place a planter!",
-            COLORS.redArr
+            COLORS.redArr,
           );
         }
       },
@@ -11130,7 +11135,7 @@ function BeeSwarmSimulator(DATA) {
                 speed: 0.5,
                 aftershock: 0.005,
                 height: 0.3,
-              })
+              }),
             );
           }
         } else {
@@ -11143,7 +11148,7 @@ function BeeSwarmSimulator(DATA) {
 
           player.addMessage(
             "You must be standing in a field to use gumdrops!",
-            COLORS.redArr
+            COLORS.redArr,
           );
         }
       },
@@ -11164,13 +11169,13 @@ function BeeSwarmSimulator(DATA) {
             new Coconut(
               (Math.random() * fieldInfo[player.fieldIn].width) | 0,
               (Math.random() * fieldInfo[player.fieldIn].length) | 0,
-              0
-            )
+              0,
+            ),
           );
         } else {
           player.addMessage(
             "You must be standing in a field to use coconuts!",
-            COLORS.redArr
+            COLORS.redArr,
           );
         }
       },
@@ -11204,7 +11209,7 @@ function BeeSwarmSimulator(DATA) {
           if (player.effects[i].type === "superSmoothieBuff") {
             player.addMessage(
               "Cannot use while Super Smoothie is active!",
-              COLORS.redArr
+              COLORS.redArr,
             );
             return;
           }
@@ -11225,7 +11230,7 @@ function BeeSwarmSimulator(DATA) {
           if (player.effects[i].type === "superSmoothieBuff") {
             player.addMessage(
               "Cannot use while Super Smoothie is active!",
-              COLORS.redArr
+              COLORS.redArr,
             );
             return;
           }
@@ -11246,7 +11251,7 @@ function BeeSwarmSimulator(DATA) {
           if (player.effects[i].type === "superSmoothieBuff") {
             player.addMessage(
               "Cannot use while Super Smoothie is active!",
-              COLORS.redArr
+              COLORS.redArr,
             );
             return;
           }
@@ -11273,7 +11278,7 @@ function BeeSwarmSimulator(DATA) {
           if (player.effects[i].type === "superSmoothieBuff") {
             player.addMessage(
               "Cannot use while Super Smoothie is active!",
-              COLORS.redArr
+              COLORS.redArr,
             );
             return;
           }
@@ -11300,7 +11305,7 @@ function BeeSwarmSimulator(DATA) {
           if (player.effects[i].type === "superSmoothieBuff") {
             player.addMessage(
               "Cannot use while Super Smoothie is active!",
-              COLORS.redArr
+              COLORS.redArr,
             );
             return;
           }
@@ -11321,7 +11326,7 @@ function BeeSwarmSimulator(DATA) {
           if (player.effects[i].type === "superSmoothieBuff") {
             player.addMessage(
               "Cannot use while Super Smoothie is active!",
-              COLORS.redArr
+              COLORS.redArr,
             );
             return;
           }
@@ -11342,7 +11347,7 @@ function BeeSwarmSimulator(DATA) {
           if (player.effects[i].type === "redExtractBuff") {
             player.addMessage(
               "Cannot use while Red Extract is active!",
-              COLORS.redArr
+              COLORS.redArr,
             );
             return;
           }
@@ -11350,7 +11355,7 @@ function BeeSwarmSimulator(DATA) {
           if (player.effects[i].type === "blueExtractBuff") {
             player.addMessage(
               "Cannot use while Blue Extract is active!",
-              COLORS.redArr
+              COLORS.redArr,
             );
             return;
           }
@@ -11358,7 +11363,7 @@ function BeeSwarmSimulator(DATA) {
           if (player.effects[i].type === "glueBuff") {
             player.addMessage(
               "Cannot use while Glue is active!",
-              COLORS.redArr
+              COLORS.redArr,
             );
             return;
           }
@@ -11366,7 +11371,7 @@ function BeeSwarmSimulator(DATA) {
           if (player.effects[i].type === "superSmoothieBuff") {
             player.addMessage(
               "Cannot use while Super Smoothie is active!",
-              COLORS.redArr
+              COLORS.redArr,
             );
             return;
           }
@@ -11387,7 +11392,7 @@ function BeeSwarmSimulator(DATA) {
           if (player.effects[i].type === "redExtractBuff") {
             player.addMessage(
               "Cannot use while Red Extract is active!",
-              COLORS.redArr
+              COLORS.redArr,
             );
             return;
           }
@@ -11395,7 +11400,7 @@ function BeeSwarmSimulator(DATA) {
           if (player.effects[i].type === "blueExtractBuff") {
             player.addMessage(
               "Cannot use while Blue Extract is active!",
-              COLORS.redArr
+              COLORS.redArr,
             );
             return;
           }
@@ -11403,7 +11408,7 @@ function BeeSwarmSimulator(DATA) {
           if (player.effects[i].type === "glueExtractBuff") {
             player.addMessage(
               "Cannot use while Glue is active!",
-              COLORS.redArr
+              COLORS.redArr,
             );
             return;
           }
@@ -11411,7 +11416,7 @@ function BeeSwarmSimulator(DATA) {
           if (player.effects[i].type === "enzymesBuff") {
             player.addMessage(
               "Cannot use while Enzymes are active!",
-              COLORS.redArr
+              COLORS.redArr,
             );
             return;
           }
@@ -11424,7 +11429,7 @@ function BeeSwarmSimulator(DATA) {
           if (player.effects[i].type === "tropicalDrinkBuff") {
             player.addMessage(
               "Cannot use while Tropical Drink is active!",
-              COLORS.redArr
+              COLORS.redArr,
             );
             return;
           }
@@ -11432,7 +11437,7 @@ function BeeSwarmSimulator(DATA) {
           if (player.effects[i].type === "purplePotionBuff") {
             player.addMessage(
               "Cannot use while Purple Potion is active!",
-              COLORS.redArr
+              COLORS.redArr,
             );
             return;
           }
@@ -11457,7 +11462,7 @@ function BeeSwarmSimulator(DATA) {
         howManyMessage.innerHTML =
           "How many bitterberries will you feed to " +
           MATH.doGrammar(
-            player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.type
+            player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.type,
           ) +
           " Bee?";
         document.getElementById("feedUntilGifted").style.display = "none";
@@ -11493,16 +11498,17 @@ function BeeSwarmSimulator(DATA) {
                       .radioactive > 0
                       ? 30
                       : 100),
-                amount
+                amount,
               )
           ) {
             player.addMessage(
               "☢️ " +
                 MATH.doGrammar(
-                  player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.type
+                  player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee
+                    .type,
                 ) +
                 " bee gained a mutation! ☢️",
-              [50, 225, 90]
+              [50, 225, 90],
             );
 
             let stat = [
@@ -11570,7 +11576,7 @@ function BeeSwarmSimulator(DATA) {
                   oper === "+"
                     ? MATH.random(
                         4 + level * (8 / 20),
-                        10 + level * (16 / 20)
+                        10 + level * (16 / 20),
                       ) | 0
                     : MATH.random(1.1, 1.3 + level * 0.04);
                 break;
@@ -11579,7 +11585,7 @@ function BeeSwarmSimulator(DATA) {
                   oper === "+"
                     ? MATH.random(
                         7 + level * (10 / 20),
-                        15 + level * (20 / 20)
+                        15 + level * (20 / 20),
                       ) | 0
                     : MATH.random(1.15, 1.4 + level * 0.04);
                 break;
@@ -11603,7 +11609,8 @@ function BeeSwarmSimulator(DATA) {
             player.addMessage(
               "☢️ " +
                 MATH.doGrammar(
-                  player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.type
+                  player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee
+                    .type,
                 ) +
                 " got " +
                 oper.replace("*", "x") +
@@ -11611,7 +11618,7 @@ function BeeSwarmSimulator(DATA) {
                 " " +
                 MATH.doGrammar(stat.replace("max", "")).toLowerCase() +
                 "! ☢️",
-              [50, 225, 90]
+              [50, 225, 90],
             );
           }
 
@@ -11631,18 +11638,18 @@ function BeeSwarmSimulator(DATA) {
             COLORS.bondArr,
             0,
             "+",
-            1.5
+            1.5,
           );
 
           player.addMessage(
             MATH.doGrammar(
-              player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.type
+              player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.type,
             ) + " Bee's bond improved",
-            COLORS.bondArr
+            COLORS.bondArr,
           );
           player.addMessage(
             "by " + MATH.addCommas(addedBond + "") + "!",
-            COLORS.bondArr
+            COLORS.bondArr,
           );
 
           player.updateHive();
@@ -11664,7 +11671,7 @@ function BeeSwarmSimulator(DATA) {
         howManyMessage.innerHTML =
           "How many neonberries will you feed to " +
           MATH.doGrammar(
-            player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.type
+            player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.type,
           ) +
           " Bee?";
         document.getElementById("feedUntilGifted").style.display = "none";
@@ -11695,15 +11702,15 @@ function BeeSwarmSimulator(DATA) {
           player.addMessage(
             "☢️ " +
               MATH.doGrammar(
-                player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.type
+                player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.type,
               ) +
               " bee became radioactive for " +
               MATH.doTime(
                 player.hive[player.hiveIndex[1]][player.hiveIndex[0]]
-                  .radioactive
+                  .radioactive,
               ) +
               " ☢️",
-            [50, 225, 90]
+            [50, 225, 90],
           );
 
           let addedBond = (amount * 500 * player.bondFromTreats) | 0;
@@ -11722,18 +11729,18 @@ function BeeSwarmSimulator(DATA) {
             COLORS.bondArr,
             0,
             "+",
-            1.5
+            1.5,
           );
 
           player.addMessage(
             MATH.doGrammar(
-              player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.type
+              player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.type,
             ) + " Bee's bond improved",
-            COLORS.bondArr
+            COLORS.bondArr,
           );
           player.addMessage(
             "by " + MATH.addCommas(addedBond + "") + "!",
-            COLORS.bondArr
+            COLORS.bondArr,
           );
 
           player.updateHive();
@@ -11755,7 +11762,7 @@ function BeeSwarmSimulator(DATA) {
         howManyMessage.innerHTML =
           "How many moon charms will you feed to " +
           MATH.doGrammar(
-            player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.type
+            player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.type,
           ) +
           " Bee?";
         document.getElementById("feedUntilGifted").style.display = "none";
@@ -11796,18 +11803,18 @@ function BeeSwarmSimulator(DATA) {
             COLORS.bondArr,
             0,
             "+",
-            1.5
+            1.5,
           );
 
           player.addMessage(
             MATH.doGrammar(
-              player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.type
+              player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.type,
             ) + " Bee's bond improved",
-            COLORS.bondArr
+            COLORS.bondArr,
           );
           player.addMessage(
             "by " + MATH.addCommas(addedBond + "") + "!",
-            COLORS.bondArr
+            COLORS.bondArr,
           );
 
           player.updateHive();
@@ -11829,7 +11836,7 @@ function BeeSwarmSimulator(DATA) {
         howManyMessage.innerHTML =
           "How many treats will you feed to " +
           MATH.doGrammar(
-            player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.type
+            player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.type,
           ) +
           " Bee?";
         document.getElementById("feedUntilGifted").style.display = "none";
@@ -11871,18 +11878,18 @@ function BeeSwarmSimulator(DATA) {
             COLORS.bondArr,
             0,
             "+",
-            1.5
+            1.5,
           );
 
           player.addMessage(
             MATH.doGrammar(
-              player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.type
+              player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.type,
             ) + " Bee's bond improved",
-            COLORS.bondArr
+            COLORS.bondArr,
           );
           player.addMessage(
             "by " + MATH.addCommas(addedBond + "") + "!",
-            COLORS.bondArr
+            COLORS.bondArr,
           );
 
           player.updateHive();
@@ -11904,7 +11911,7 @@ function BeeSwarmSimulator(DATA) {
         howManyMessage.innerHTML =
           "How many star treats will you feed to " +
           MATH.doGrammar(
-            player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.type
+            player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.type,
           ) +
           " Bee?";
         document.getElementById("feedUntilGifted").style.display = "none";
@@ -11937,7 +11944,7 @@ function BeeSwarmSimulator(DATA) {
           player.hive[player.hiveIndex[1]][player.hiveIndex[0]].gifted = true;
           player.addMessage(
             "⭐ The treat made the bee gifted! ⭐",
-            COLORS.honey
+            COLORS.honey,
           );
 
           textRenderer.add(
@@ -11951,18 +11958,18 @@ function BeeSwarmSimulator(DATA) {
             COLORS.bondArr,
             0,
             "+",
-            1.5
+            1.5,
           );
 
           player.addMessage(
             MATH.doGrammar(
-              player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.type
+              player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.type,
             ) + " Bee's bond improved",
-            COLORS.bondArr
+            COLORS.bondArr,
           );
           player.addMessage(
             "by " + MATH.addCommas(addedBond + "") + "!",
-            COLORS.bondArr
+            COLORS.bondArr,
           );
 
           player.updateHive();
@@ -11984,7 +11991,7 @@ function BeeSwarmSimulator(DATA) {
         howManyMessage.innerHTML =
           "How many atomic treats will you feed to " +
           MATH.doGrammar(
-            player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.type
+            player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.type,
           ) +
           " Bee?";
         document.getElementById("feedUntilGifted").style.display = "none";
@@ -12017,10 +12024,10 @@ function BeeSwarmSimulator(DATA) {
           player.addMessage(
             "☢️ " +
               MATH.doGrammar(
-                player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.type
+                player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.type,
               ) +
               " bee gained a mutation! ☢️",
-            [50, 225, 90]
+            [50, 225, 90],
           );
 
           let stat = [
@@ -12116,7 +12123,7 @@ function BeeSwarmSimulator(DATA) {
           player.addMessage(
             "☢️ " +
               MATH.doGrammar(
-                player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.type
+                player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.type,
               ) +
               " got " +
               oper.replace("*", "x") +
@@ -12124,7 +12131,7 @@ function BeeSwarmSimulator(DATA) {
               " " +
               MATH.doGrammar(stat.replace("max", "")).toLowerCase() +
               "! ☢️",
-            [50, 225, 90]
+            [50, 225, 90],
           );
 
           textRenderer.add(
@@ -12138,18 +12145,18 @@ function BeeSwarmSimulator(DATA) {
             COLORS.bondArr,
             0,
             "+",
-            1.5
+            1.5,
           );
 
           player.addMessage(
             MATH.doGrammar(
-              player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.type
+              player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.type,
             ) + " Bee's bond improved",
-            COLORS.bondArr
+            COLORS.bondArr,
           );
           player.addMessage(
             "by " + MATH.addCommas(addedBond + "") + "!",
-            COLORS.bondArr
+            COLORS.bondArr,
           );
 
           player.updateHive();
@@ -12171,7 +12178,7 @@ function BeeSwarmSimulator(DATA) {
         howManyMessage.innerHTML =
           "How many blueberries will you feed to " +
           MATH.doGrammar(
-            player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.type
+            player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.type,
           ) +
           " Bee?";
 
@@ -12224,9 +12231,9 @@ function BeeSwarmSimulator(DATA) {
           if (isFavorite)
             player.addMessage(
               MATH.doGrammar(
-                player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.type
+                player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.type,
               ) + " Bee loves blueberries! ╰(*°▽°*)╯",
-              COLORS.bondArr
+              COLORS.bondArr,
             );
 
           textRenderer.add(
@@ -12240,18 +12247,18 @@ function BeeSwarmSimulator(DATA) {
             COLORS.bondArr,
             0,
             "+",
-            1.5
+            1.5,
           );
 
           player.addMessage(
             MATH.doGrammar(
-              player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.type
+              player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.type,
             ) + " Bee's bond improved",
-            COLORS.bondArr
+            COLORS.bondArr,
           );
           player.addMessage(
             "by " + MATH.addCommas(bondToAdd + "") + "!",
-            COLORS.bondArr
+            COLORS.bondArr,
           );
 
           player.updateHive();
@@ -12267,24 +12274,24 @@ function BeeSwarmSimulator(DATA) {
               (player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee
                 .type === "buoyant"
                 ? 15000 / 1.15
-                : 15000)
+                : 15000),
           );
 
           if (am < items.blueberry.amount) {
             player.hive[player.hiveIndex[1]][player.hiveIndex[0]].gifted = true;
             player.addMessage(
               "After " + MATH.abvNumber(am + "") + " treats.....",
-              COLORS.honey
+              COLORS.honey,
             );
             player.addMessage(
               "⭐ The treat made the bee gifted! ⭐",
-              COLORS.honey
+              COLORS.honey,
             );
             feed(am);
           } else {
             player.addMessage(
               "The treat failed to make the bee gifted :(",
-              COLORS.redArr
+              COLORS.redArr,
             );
             feed(items.blueberry.amount);
           }
@@ -12306,7 +12313,7 @@ function BeeSwarmSimulator(DATA) {
         howManyMessage.innerHTML =
           "How many strawberries will you feed to " +
           MATH.doGrammar(
-            player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.type
+            player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.type,
           ) +
           " Bee?";
 
@@ -12350,9 +12357,9 @@ function BeeSwarmSimulator(DATA) {
           if (isFavorite)
             player.addMessage(
               MATH.doGrammar(
-                player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.type
+                player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.type,
               ) + " Bee loves strawberries! ╰(*°▽°*)╯",
-              COLORS.bondArr
+              COLORS.bondArr,
             );
 
           textRenderer.add(
@@ -12366,18 +12373,18 @@ function BeeSwarmSimulator(DATA) {
             COLORS.bondArr,
             0,
             "+",
-            1.5
+            1.5,
           );
 
           player.addMessage(
             MATH.doGrammar(
-              player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.type
+              player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.type,
             ) + " Bee's bond improved",
-            COLORS.bondArr
+            COLORS.bondArr,
           );
           player.addMessage(
             "by " + MATH.addCommas(bondToAdd + "") + "!",
-            COLORS.bondArr
+            COLORS.bondArr,
           );
 
           player.updateHive();
@@ -12394,17 +12401,17 @@ function BeeSwarmSimulator(DATA) {
             player.hive[player.hiveIndex[1]][player.hiveIndex[0]].gifted = true;
             player.addMessage(
               "After " + MATH.abvNumber(am + "") + " treats.....",
-              COLORS.honey
+              COLORS.honey,
             );
             player.addMessage(
               "⭐ The treat made the bee gifted! ⭐",
-              COLORS.honey
+              COLORS.honey,
             );
             feed(am);
           } else {
             player.addMessage(
               "The treat failed to make the bee gifted :(",
-              COLORS.redArr
+              COLORS.redArr,
             );
             feed(items.strawberry.amount);
           }
@@ -12426,7 +12433,7 @@ function BeeSwarmSimulator(DATA) {
         howManyMessage.innerHTML =
           "How many pineapples will you feed to " +
           MATH.doGrammar(
-            player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.type
+            player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.type,
           ) +
           " Bee?";
 
@@ -12470,9 +12477,9 @@ function BeeSwarmSimulator(DATA) {
           if (isFavorite)
             player.addMessage(
               MATH.doGrammar(
-                player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.type
+                player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.type,
               ) + " Bee loves pineapples! ╰(*°▽°*)╯",
-              COLORS.bondArr
+              COLORS.bondArr,
             );
 
           textRenderer.add(
@@ -12486,18 +12493,18 @@ function BeeSwarmSimulator(DATA) {
             COLORS.bondArr,
             0,
             "+",
-            1.5
+            1.5,
           );
 
           player.addMessage(
             MATH.doGrammar(
-              player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.type
+              player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.type,
             ) + " Bee's bond improved",
-            COLORS.bondArr
+            COLORS.bondArr,
           );
           player.addMessage(
             "by " + MATH.addCommas(bondToAdd + "") + "!",
-            COLORS.bondArr
+            COLORS.bondArr,
           );
 
           player.updateHive();
@@ -12514,17 +12521,17 @@ function BeeSwarmSimulator(DATA) {
             player.hive[player.hiveIndex[1]][player.hiveIndex[0]].gifted = true;
             player.addMessage(
               "After " + MATH.abvNumber(am + "") + " treats.....",
-              COLORS.honey
+              COLORS.honey,
             );
             player.addMessage(
               "⭐ The treat made the bee gifted! ⭐",
-              COLORS.honey
+              COLORS.honey,
             );
             feed(am);
           } else {
             player.addMessage(
               "The treat failed to make the bee gifted :(",
-              COLORS.redArr
+              COLORS.redArr,
             );
             feed(items.pineapple.amount);
           }
@@ -12546,7 +12553,7 @@ function BeeSwarmSimulator(DATA) {
         howManyMessage.innerHTML =
           "How many sunflower seeds will you feed to " +
           MATH.doGrammar(
-            player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.type
+            player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.type,
           ) +
           " Bee?";
 
@@ -12590,9 +12597,9 @@ function BeeSwarmSimulator(DATA) {
           if (isFavorite)
             player.addMessage(
               MATH.doGrammar(
-                player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.type
+                player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.type,
               ) + " Bee loves sunflower seeds! ╰(*°▽°*)╯",
-              COLORS.bondArr
+              COLORS.bondArr,
             );
 
           textRenderer.add(
@@ -12606,18 +12613,18 @@ function BeeSwarmSimulator(DATA) {
             COLORS.bondArr,
             0,
             "+",
-            1.5
+            1.5,
           );
 
           player.addMessage(
             MATH.doGrammar(
-              player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.type
+              player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.type,
             ) + " Bee's bond improved",
-            COLORS.bondArr
+            COLORS.bondArr,
           );
           player.addMessage(
             "by " + MATH.addCommas(bondToAdd + "") + "!",
-            COLORS.bondArr
+            COLORS.bondArr,
           );
 
           player.updateHive();
@@ -12634,17 +12641,17 @@ function BeeSwarmSimulator(DATA) {
             player.hive[player.hiveIndex[1]][player.hiveIndex[0]].gifted = true;
             player.addMessage(
               "After " + MATH.abvNumber(am + "") + " treats.....",
-              COLORS.honey
+              COLORS.honey,
             );
             player.addMessage(
               "⭐ The treat made the bee gifted! ⭐",
-              COLORS.honey
+              COLORS.honey,
             );
             feed(am);
           } else {
             player.addMessage(
               "The treat failed to make the bee gifted :(",
-              COLORS.redArr
+              COLORS.redArr,
             );
             feed(items.sunflowerSeed.amount);
           }
@@ -13246,10 +13253,10 @@ function BeeSwarmSimulator(DATA) {
 
           if (
             ["rare", "epic", "legendary", "mythic"].indexOf(
-              beeInfo[type].rarity
+              beeInfo[type].rarity,
             ) >=
             ["rare", "epic", "legendary", "mythic"].indexOf(
-              player.autoRJSettings.until
+              player.autoRJSettings.until,
             )
           ) {
             if (
@@ -13264,7 +13271,7 @@ function BeeSwarmSimulator(DATA) {
 
         if (250000 - max > 1)
           player.addMessage(
-            "After using " + MATH.addCommas(250000 - max + "") + " jellies..."
+            "After using " + MATH.addCommas(250000 - max + "") + " jellies...",
           );
 
         player.stats.royalJelly += 250000 - max;
@@ -13336,10 +13343,10 @@ function BeeSwarmSimulator(DATA) {
 
           if (
             ["rare", "epic", "legendary", "mythic"].indexOf(
-              beeInfo[type].rarity
+              beeInfo[type].rarity,
             ) >=
             ["rare", "epic", "legendary", "mythic"].indexOf(
-              player.autoRJSettings.until
+              player.autoRJSettings.until,
             )
           ) {
             break;
@@ -13348,7 +13355,7 @@ function BeeSwarmSimulator(DATA) {
 
         if (250000 - max > 1)
           player.addMessage(
-            "After using " + MATH.addCommas(250000 - max + "") + " jellies..."
+            "After using " + MATH.addCommas(250000 - max + "") + " jellies...",
           );
 
         player.stats.starJelly += 250000 - max;
@@ -13375,7 +13382,7 @@ function BeeSwarmSimulator(DATA) {
           if (player.fieldIn === "AntField") {
             player.addMessage(
               "You can' use this item in the Ant Field!",
-              COLORS.redArr
+              COLORS.redArr,
             );
             return;
           }
@@ -13398,7 +13405,7 @@ function BeeSwarmSimulator(DATA) {
         } else {
           player.addMessage(
             "You must be standing in a field to use glitter!",
-            COLORS.redArr
+            COLORS.redArr,
           );
         }
       },
@@ -13434,7 +13441,7 @@ function BeeSwarmSimulator(DATA) {
             if (objects.bees[j].type === i) {
               player.addMessage(
                 "You can only have 1 " + MATH.doGrammar(i) + " Bee!",
-                COLORS.redArr
+                COLORS.redArr,
               );
               return;
             }
@@ -13847,7 +13854,7 @@ function BeeSwarmSimulator(DATA) {
 
       for (let i in beeInfo[this.type].trails) {
         this.trails.push(
-          new TrailRenderer.ConstantTrail(beeInfo[this.type].trails[i])
+          new TrailRenderer.ConstantTrail(beeInfo[this.type].trails[i]),
         );
         this.beeOffsets.push(beeInfo[this.type].trails[i].beeOffset || 0);
       }
@@ -13942,13 +13949,13 @@ function BeeSwarmSimulator(DATA) {
             this[str.substring(str.indexOf(" ") + 1, str.indexOf("("))] *=
               Number(str.substr(1, str.indexOf(" ") - 1)) +
               Number(
-                str.substr(str.indexOf("(") + 2, str.length).replace(")", "")
+                str.substr(str.indexOf("(") + 2, str.length).replace(")", ""),
               );
           } else {
             this[str.substring(str.indexOf(" ") + 1, str.indexOf("("))] +=
               Number(str.substr(1, str.indexOf(" ") - 1)) +
               Number(
-                str.substr(str.indexOf("(") + 2, str.length).replace(")", "")
+                str.substr(str.indexOf("(") + 2, str.length).replace(")", ""),
               );
           }
         }
@@ -14056,7 +14063,7 @@ function BeeSwarmSimulator(DATA) {
             dt *
               this.speed *
               player.beeSpeed *
-              (this.type === "spicy" ? player.flameHeatStackApplied : 1)
+              (this.type === "spicy" ? player.flameHeatStackApplied : 1),
           );
           if (vec3.sqrDist(this.moveTo, this.pos) < 0.8) {
             this.state = "attack";
@@ -14080,7 +14087,7 @@ function BeeSwarmSimulator(DATA) {
             BEE_FLY,
             beeInfo[this.type].u,
             this.GIFTED_BEE_TEXTURE_OFFSET,
-            beeInfo[this.type].meshPartId
+            beeInfo[this.type].meshPartId,
           );
 
           break;
@@ -14121,7 +14128,7 @@ function BeeSwarmSimulator(DATA) {
                 0,
                 "",
                 1.75,
-                false
+                false,
               );
             } else {
               if (
@@ -14132,9 +14139,9 @@ function BeeSwarmSimulator(DATA) {
                         2,
                         (this.gifted ? 2 : 1) +
                           this.level -
-                          this.attackMob.level
+                          this.attackMob.level,
                       ),
-                      0.05
+                      0.05,
                     )
                   : Math.pow(2, this.level - this.attackMob.level))
               ) {
@@ -14156,7 +14163,7 @@ function BeeSwarmSimulator(DATA) {
                       size: 1.75,
                       speed: 0.3,
                       aftershock: 0,
-                    })
+                    }),
                   );
                 }
               } else {
@@ -14173,7 +14180,7 @@ function BeeSwarmSimulator(DATA) {
                   0,
                   "",
                   1.75,
-                  false
+                  false,
                 );
               }
             }
@@ -14217,8 +14224,8 @@ function BeeSwarmSimulator(DATA) {
                     z: this.flowerCollecting[1],
                     bee: this,
                   },
-                  true
-                )
+                  true,
+                ),
               );
             }
           }
@@ -14234,7 +14241,7 @@ function BeeSwarmSimulator(DATA) {
             TIME * 5,
             beeInfo[this.type].u,
             this.GIFTED_BEE_TEXTURE_OFFSET,
-            beeInfo[this.type].meshPartId
+            beeInfo[this.type].meshPartId,
           );
 
           break;
@@ -14302,7 +14309,7 @@ function BeeSwarmSimulator(DATA) {
             dt *
               this.speed *
               player.beeSpeed *
-              (this.type === "spicy" ? player.flameHeatStackApplied : 1)
+              (this.type === "spicy" ? player.flameHeatStackApplied : 1),
           );
 
           if (vec3.sqrDist(this.moveTo, this.pos) < 0.8)
@@ -14319,7 +14326,7 @@ function BeeSwarmSimulator(DATA) {
             BEE_FLY,
             beeInfo[this.type].u,
             this.GIFTED_BEE_TEXTURE_OFFSET,
-            beeInfo[this.type].meshPartId
+            beeInfo[this.type].meshPartId,
           );
 
           if (player.converting && player.pollen) {
@@ -14359,7 +14366,7 @@ function BeeSwarmSimulator(DATA) {
             dt *
               this.speed *
               player.beeSpeed *
-              (this.type === "spicy" ? player.flameHeatStackApplied : 1)
+              (this.type === "spicy" ? player.flameHeatStackApplied : 1),
           );
 
           if (vec3.sqrDist(this.moveTo, this.pos) < 0.075) {
@@ -14382,7 +14389,7 @@ function BeeSwarmSimulator(DATA) {
             BEE_FLY,
             beeInfo[this.type].u,
             this.GIFTED_BEE_TEXTURE_OFFSET,
-            beeInfo[this.type].meshPartId
+            beeInfo[this.type].meshPartId,
           );
 
           break;
@@ -14442,8 +14449,8 @@ function BeeSwarmSimulator(DATA) {
                     x: fieldInfo[player.fieldIn].x | 0,
                     z: fieldInfo[player.fieldIn].z | 0,
                     bee: this,
-                  }
-                )
+                  },
+                ),
               );
             }
 
@@ -14461,7 +14468,7 @@ function BeeSwarmSimulator(DATA) {
             BEE_COLLECT,
             beeInfo[this.type].u,
             this.GIFTED_BEE_TEXTURE_OFFSET,
-            beeInfo[this.type].meshPartId
+            beeInfo[this.type].meshPartId,
           );
 
           break;
@@ -14510,7 +14517,7 @@ function BeeSwarmSimulator(DATA) {
             dt *
               this.speed *
               player.beeSpeed *
-              (this.type === "spicy" ? player.flameHeatStackApplied : 1)
+              (this.type === "spicy" ? player.flameHeatStackApplied : 1),
           );
 
           if (vec3.sqrDist(this.moveTo, this.pos) < 0.075) {
@@ -14532,7 +14539,7 @@ function BeeSwarmSimulator(DATA) {
             BEE_FLY,
             beeInfo[this.type].u,
             this.GIFTED_BEE_TEXTURE_OFFSET,
-            beeInfo[this.type].meshPartId
+            beeInfo[this.type].meshPartId,
           );
 
           break;
@@ -14616,8 +14623,8 @@ function BeeSwarmSimulator(DATA) {
                     x: this.flowerCollecting[0],
                     z: this.flowerCollecting[1],
                     bee: this,
-                  }
-                )
+                  },
+                ),
               );
             }
 
@@ -14636,7 +14643,7 @@ function BeeSwarmSimulator(DATA) {
             BEE_COLLECT,
             beeInfo[this.type].u,
             this.GIFTED_BEE_TEXTURE_OFFSET,
-            beeInfo[this.type].meshPartId
+            beeInfo[this.type].meshPartId,
           );
 
           break;
@@ -14657,7 +14664,7 @@ function BeeSwarmSimulator(DATA) {
             dt *
               this.speed *
               player.beeSpeed *
-              (this.type === "spicy" ? player.flameHeatStackApplied : 1)
+              (this.type === "spicy" ? player.flameHeatStackApplied : 1),
           );
           if (vec3.sqrDist(this.moveTo, this.pos) < 0.8) {
             this.pos = this.hivePos.slice();
@@ -14670,9 +14677,9 @@ function BeeSwarmSimulator(DATA) {
                   player.convertRate *
                   player[beeInfo[this.type].color + "ConvertRate"] *
                   player.convertRateAtHive *
-                  (this.type === "tabby" ? player.tabbyLoveStacks : 1)
+                  (this.type === "tabby" ? player.tabbyLoveStacks : 1),
               ),
-              player.pollen
+              player.pollen,
             );
 
             if (amountToTake === player.pollen) {
@@ -14694,7 +14701,7 @@ function BeeSwarmSimulator(DATA) {
             BEE_FLY,
             beeInfo[this.type].u,
             this.GIFTED_BEE_TEXTURE_OFFSET,
-            beeInfo[this.type].meshPartId
+            beeInfo[this.type].meshPartId,
           );
 
           break;
@@ -14720,7 +14727,7 @@ function BeeSwarmSimulator(DATA) {
             TIME * 5,
             beeInfo[this.type].u,
             this.GIFTED_BEE_TEXTURE_OFFSET,
-            beeInfo[this.type].meshPartId
+            beeInfo[this.type].meshPartId,
           );
           if (this.convertTimer <= 0) {
             this.state = "moveToHiveToConvert";
@@ -14730,7 +14737,7 @@ function BeeSwarmSimulator(DATA) {
                 player.honeyPerPollen *
                 (this.type === "diamond"
                   ? (1.4 + this.level * 0.03) * (this.gifted ? 2 : 1)
-                  : 1)
+                  : 1),
             );
 
             textRenderer.add(
@@ -14740,7 +14747,7 @@ function BeeSwarmSimulator(DATA) {
                   player.honeyPerPollen *
                   (this.type === "diamond"
                     ? (1.4 + this.level * 0.03) * (this.gifted ? 2 : 1)
-                    : 1)
+                    : 1),
               ),
               [
                 player.body.position.x,
@@ -14749,7 +14756,7 @@ function BeeSwarmSimulator(DATA) {
               ],
               COLORS.honey,
               0,
-              "+"
+              "+",
             );
 
             this.pollen = 0;
@@ -14799,7 +14806,7 @@ function BeeSwarmSimulator(DATA) {
             dt *
               this.speed *
               player.beeSpeed *
-              (this.type === "spicy" ? player.flameHeatStackApplied : 1)
+              (this.type === "spicy" ? player.flameHeatStackApplied : 1),
           );
           if (vec3.sqrDist(this.moveTo, this.pos) < 0.8) {
             this.pos = this.hivePos.slice();
@@ -14813,9 +14820,9 @@ function BeeSwarmSimulator(DATA) {
                   (this.type === "buoyant" ? (this.gifted ? 4 : 3) : 1) *
                   player[beeInfo[this.type].color + "ConvertRate"] *
                   player.convertRateAtHive *
-                  (this.type === "tabby" ? player.tabbyLoveStacks : 1)
+                  (this.type === "tabby" ? player.tabbyLoveStacks : 1),
               ),
-              player.hiveBalloon.pollen
+              player.hiveBalloon.pollen,
             );
 
             if (amountToTake === player.hiveBalloon.pollen) {
@@ -14837,7 +14844,7 @@ function BeeSwarmSimulator(DATA) {
             BEE_FLY,
             beeInfo[this.type].u,
             this.GIFTED_BEE_TEXTURE_OFFSET,
-            beeInfo[this.type].meshPartId
+            beeInfo[this.type].meshPartId,
           );
 
           break;
@@ -14863,7 +14870,7 @@ function BeeSwarmSimulator(DATA) {
             TIME * 5,
             beeInfo[this.type].u,
             this.GIFTED_BEE_TEXTURE_OFFSET,
-            beeInfo[this.type].meshPartId
+            beeInfo[this.type].meshPartId,
           );
           if (this.convertTimer <= 0) {
             this.state = "moveToHiveToConvertBalloon";
@@ -14873,7 +14880,7 @@ function BeeSwarmSimulator(DATA) {
                 player.honeyPerPollen *
                 (this.type === "diamond"
                   ? (1.4 + this.level * 0.03) * (this.gifted ? 2 : 1)
-                  : 1)
+                  : 1),
             );
 
             textRenderer.add(
@@ -14883,7 +14890,7 @@ function BeeSwarmSimulator(DATA) {
                   player.honeyPerPollen *
                   (this.type === "diamond"
                     ? (1.4 + this.level * 0.03) * (this.gifted ? 2 : 1)
-                    : 1)
+                    : 1),
               ),
               [
                 player.body.position.x,
@@ -14892,7 +14899,7 @@ function BeeSwarmSimulator(DATA) {
               ],
               COLORS.honey,
               0,
-              "+"
+              "+",
             );
 
             this.pollen = 0;
@@ -14937,7 +14944,7 @@ function BeeSwarmSimulator(DATA) {
             dt *
               this.speed *
               player.beeSpeed *
-              (this.type === "spicy" ? player.flameHeatStackApplied : 1)
+              (this.type === "spicy" ? player.flameHeatStackApplied : 1),
           );
           if (vec3.sqrDist(this.moveTo, this.pos) < 1) {
             this.pos = this.hivePos.slice();
@@ -14958,7 +14965,7 @@ function BeeSwarmSimulator(DATA) {
             BEE_FLY,
             beeInfo[this.type].u,
             this.GIFTED_BEE_TEXTURE_OFFSET,
-            beeInfo[this.type].meshPartId
+            beeInfo[this.type].meshPartId,
           );
 
           break;
@@ -14984,7 +14991,7 @@ function BeeSwarmSimulator(DATA) {
               [255, 255, 255],
               0,
               "",
-              1.25
+              1.25,
             );
           }
 
@@ -14999,7 +15006,7 @@ function BeeSwarmSimulator(DATA) {
             this.sleepRotate,
             beeInfo[this.type].u,
             this.GIFTED_BEE_TEXTURE_OFFSET,
-            beeInfo[this.type].meshPartId
+            beeInfo[this.type].meshPartId,
           );
 
           break;
@@ -15016,7 +15023,7 @@ function BeeSwarmSimulator(DATA) {
             this.pos,
             this.pos,
             this.moveDir,
-            dt * this.speed * player.beeSpeed * 1.5
+            dt * this.speed * player.beeSpeed * 1.5,
           );
           if (vec3.sqrDist(this.moveTo, this.pos) < 0.7) {
             this.pos = this.moveTo.slice();
@@ -15051,7 +15058,7 @@ function BeeSwarmSimulator(DATA) {
                   0;
 
               this.targets.push(
-                new Target(player.fieldIn, _x, _z, i + 1, this)
+                new Target(player.fieldIn, _x, _z, i + 1, this),
               );
               objects.targets.push(this.targets[this.targets.length - 1]);
             }
@@ -15068,7 +15075,7 @@ function BeeSwarmSimulator(DATA) {
             BEE_FLY,
             beeInfo[this.type].u,
             this.GIFTED_BEE_TEXTURE_OFFSET,
-            beeInfo[this.type].meshPartId
+            beeInfo[this.type].meshPartId,
           );
 
           break;
@@ -15147,8 +15154,8 @@ function BeeSwarmSimulator(DATA) {
                     x: this.targets[2].x,
                     z: this.targets[2].z,
                     bee: this,
-                  }
-                )
+                  },
+                ),
               );
               objects.tokens.push(
                 new Token(
@@ -15164,8 +15171,8 @@ function BeeSwarmSimulator(DATA) {
                     x: this.targets[2].x + 1,
                     z: this.targets[2].z,
                     bee: this,
-                  }
-                )
+                  },
+                ),
               );
               objects.tokens.push(
                 new Token(
@@ -15181,8 +15188,8 @@ function BeeSwarmSimulator(DATA) {
                     x: this.targets[2].x - 1,
                     z: this.targets[2].z,
                     bee: this,
-                  }
-                )
+                  },
+                ),
               );
             }
 
@@ -15194,8 +15201,8 @@ function BeeSwarmSimulator(DATA) {
                     this.targets[2].x,
                     this.targets[2].z,
                     "preciseMark",
-                    this.level
-                  )
+                    this.level,
+                  ),
                 );
               }
             }
@@ -15210,8 +15217,8 @@ function BeeSwarmSimulator(DATA) {
                       effects.focus.tokenLife,
                       [_t.pos[0], _t.pos[1] + 0.5, _t.pos[2]],
                       "focus",
-                      { field: _t.field, x: _t.x, z: _t.z, bee: this }
-                    )
+                      { field: _t.field, x: _t.x, z: _t.z, bee: this },
+                    ),
                   );
 
                 collectPollen({
@@ -15286,8 +15293,8 @@ function BeeSwarmSimulator(DATA) {
                     effects.redBoost.tokenLife,
                     [_t.pos[0], _t.pos[1] + 0.5, _t.pos[2]],
                     "redBoost",
-                    { field: _t.field, x: _t.x, z: _t.z, bee: this }
-                  )
+                    { field: _t.field, x: _t.x, z: _t.z, bee: this },
+                  ),
                 );
               }
             }
@@ -15310,7 +15317,7 @@ function BeeSwarmSimulator(DATA) {
                 size: 1.75,
                 speed: 0.3,
                 aftershock: 0,
-              })
+              }),
             );
           }
 
@@ -15325,7 +15332,7 @@ function BeeSwarmSimulator(DATA) {
             BEE_FLY,
             beeInfo[this.type].u,
             this.GIFTED_BEE_TEXTURE_OFFSET,
-            beeInfo[this.type].meshPartId
+            beeInfo[this.type].meshPartId,
           );
 
           break;
@@ -15354,7 +15361,7 @@ function BeeSwarmSimulator(DATA) {
             this.pos,
             this.pos,
             this.moveDir,
-            dt * this.speed * player.beeSpeed
+            dt * this.speed * player.beeSpeed,
           );
 
           if (this.triangulateTimer <= 0) {
@@ -15372,7 +15379,7 @@ function BeeSwarmSimulator(DATA) {
             BEE_FLY,
             beeInfo[this.type].u,
             this.GIFTED_BEE_TEXTURE_OFFSET,
-            beeInfo[this.type].meshPartId
+            beeInfo[this.type].meshPartId,
           );
 
           break;
@@ -15404,7 +15411,7 @@ function BeeSwarmSimulator(DATA) {
 
             this.fetchBall.kick(
               dir[0] + MATH.random(-0.2, 0.2),
-              dir[1] + MATH.random(-0.2, 0.2)
+              dir[1] + MATH.random(-0.2, 0.2),
             );
           }
 
@@ -15413,7 +15420,7 @@ function BeeSwarmSimulator(DATA) {
             this.pos,
             this.pos,
             this.moveDir,
-            dt * this.speed * player.beeSpeed
+            dt * this.speed * player.beeSpeed,
           );
 
           meshes.bees.instanceData.push(
@@ -15427,7 +15434,7 @@ function BeeSwarmSimulator(DATA) {
             BEE_FLY,
             beeInfo[this.type].u,
             this.GIFTED_BEE_TEXTURE_OFFSET,
-            beeInfo[this.type].meshPartId
+            beeInfo[this.type].meshPartId,
           );
 
           break;
@@ -15449,7 +15456,7 @@ function BeeSwarmSimulator(DATA) {
           0,
           2.5,
           2.5,
-          0
+          0,
         );
       }
 
@@ -15465,7 +15472,7 @@ function BeeSwarmSimulator(DATA) {
             0.2,
             1.35,
             1.35,
-            0
+            0,
           );
         textRenderer.addDecalRaw(
           ...this.pos,
@@ -15478,7 +15485,7 @@ function BeeSwarmSimulator(DATA) {
           2.25,
           2.25,
           (TIME * 1.25 + this.hiveX + this.hiveY * 5) *
-            (this.hiveY % 2 ? 1 : -1)
+            (this.hiveY % 2 ? 1 : -1),
         );
       }
     }
@@ -15554,7 +15561,7 @@ function BeeSwarmSimulator(DATA) {
 
       for (let i in beeInfo[this.type].trails) {
         this.trails.push(
-          new TrailRenderer.ConstantTrail(beeInfo[this.type].trails[i])
+          new TrailRenderer.ConstantTrail(beeInfo[this.type].trails[i]),
         );
         this.beeOffsets.push(beeInfo[this.type].trails[i].beeOffset || 0);
       }
@@ -15655,7 +15662,7 @@ function BeeSwarmSimulator(DATA) {
             dt *
               this.speed *
               player.beeSpeed *
-              (this.type === "spicy" ? player.flameHeatStackApplied : 1)
+              (this.type === "spicy" ? player.flameHeatStackApplied : 1),
           );
           if (vec3.sqrDist(this.moveTo, this.pos) < 0.8) {
             this.state = "attack";
@@ -15678,7 +15685,7 @@ function BeeSwarmSimulator(DATA) {
             BEE_FLY,
             beeInfo[this.type].u,
             this.GIFTED_BEE_TEXTURE_OFFSET,
-            beeInfo[this.type].meshPartId
+            beeInfo[this.type].meshPartId,
           );
 
           break;
@@ -15711,9 +15718,9 @@ function BeeSwarmSimulator(DATA) {
                 ? Math.max(
                     Math.pow(
                       2,
-                      (this.gifted ? 2 : 1) + this.level - this.attackMob.level
+                      (this.gifted ? 2 : 1) + this.level - this.attackMob.level,
                     ),
-                    0.05
+                    0.05,
                   )
                 : Math.pow(2, this.level - this.attackMob.level))
             ) {
@@ -15734,7 +15741,7 @@ function BeeSwarmSimulator(DATA) {
                     size: 1.75,
                     speed: 0.3,
                     aftershock: 0,
-                  })
+                  }),
                 );
               }
             } else {
@@ -15749,7 +15756,7 @@ function BeeSwarmSimulator(DATA) {
                 0,
                 "",
                 1.25,
-                false
+                false,
               );
             }
 
@@ -15790,8 +15797,8 @@ function BeeSwarmSimulator(DATA) {
                     z: this.flowerCollecting[1],
                     bee: this,
                   },
-                  true
-                )
+                  true,
+                ),
               );
             }
           }
@@ -15807,7 +15814,7 @@ function BeeSwarmSimulator(DATA) {
             TIME * 5,
             beeInfo[this.type].u,
             this.GIFTED_BEE_TEXTURE_OFFSET,
-            beeInfo[this.type].meshPartId
+            beeInfo[this.type].meshPartId,
           );
 
           break;
@@ -15832,7 +15839,7 @@ function BeeSwarmSimulator(DATA) {
             dt *
               this.speed *
               player.beeSpeed *
-              (this.type === "spicy" ? player.flameHeatStackApplied : 1)
+              (this.type === "spicy" ? player.flameHeatStackApplied : 1),
           );
 
           if (vec3.sqrDist(this.moveTo, this.pos) < 0.8)
@@ -15849,7 +15856,7 @@ function BeeSwarmSimulator(DATA) {
             BEE_FLY,
             beeInfo[this.type].u,
             this.GIFTED_BEE_TEXTURE_OFFSET,
-            beeInfo[this.type].meshPartId
+            beeInfo[this.type].meshPartId,
           );
 
           if (player.converting && player.pollen) {
@@ -15907,7 +15914,7 @@ function BeeSwarmSimulator(DATA) {
             dt *
               this.speed *
               player.beeSpeed *
-              (this.type === "spicy" ? player.flameHeatStackApplied : 1)
+              (this.type === "spicy" ? player.flameHeatStackApplied : 1),
           );
 
           if (vec3.sqrDist(this.moveTo, this.pos) < 0.075) {
@@ -15929,7 +15936,7 @@ function BeeSwarmSimulator(DATA) {
             BEE_FLY,
             beeInfo[this.type].u,
             this.GIFTED_BEE_TEXTURE_OFFSET,
-            beeInfo[this.type].meshPartId
+            beeInfo[this.type].meshPartId,
           );
 
           break;
@@ -15993,8 +16000,8 @@ function BeeSwarmSimulator(DATA) {
                     x: this.flowerCollecting[0],
                     z: this.flowerCollecting[1],
                     bee: this,
-                  }
-                )
+                  },
+                ),
               );
             }
 
@@ -16013,7 +16020,7 @@ function BeeSwarmSimulator(DATA) {
             BEE_COLLECT,
             beeInfo[this.type].u,
             this.GIFTED_BEE_TEXTURE_OFFSET,
-            beeInfo[this.type].meshPartId
+            beeInfo[this.type].meshPartId,
           );
 
           break;
@@ -16030,7 +16037,7 @@ function BeeSwarmSimulator(DATA) {
             this.pos,
             this.pos,
             this.moveDir,
-            dt * this.speed * player.beeSpeed * 1.5
+            dt * this.speed * player.beeSpeed * 1.5,
           );
           if (vec3.sqrDist(this.moveTo, this.pos) < 0.7) {
             this.pos = this.moveTo.slice();
@@ -16065,7 +16072,7 @@ function BeeSwarmSimulator(DATA) {
                   0;
 
               this.targets.push(
-                new Target(player.fieldIn, _x, _z, i + 1, this)
+                new Target(player.fieldIn, _x, _z, i + 1, this),
               );
               objects.targets.push(this.targets[this.targets.length - 1]);
             }
@@ -16082,7 +16089,7 @@ function BeeSwarmSimulator(DATA) {
             BEE_FLY,
             beeInfo[this.type].u,
             this.GIFTED_BEE_TEXTURE_OFFSET,
-            beeInfo[this.type].meshPartId
+            beeInfo[this.type].meshPartId,
           );
 
           break;
@@ -16153,8 +16160,8 @@ function BeeSwarmSimulator(DATA) {
                     x: this.targets[2].x,
                     z: this.targets[2].z,
                     bee: this,
-                  }
-                )
+                  },
+                ),
               );
               objects.tokens.push(
                 new Token(
@@ -16170,8 +16177,8 @@ function BeeSwarmSimulator(DATA) {
                     x: this.targets[2].x + 1,
                     z: this.targets[2].z,
                     bee: this,
-                  }
-                )
+                  },
+                ),
               );
               objects.tokens.push(
                 new Token(
@@ -16187,8 +16194,8 @@ function BeeSwarmSimulator(DATA) {
                     x: this.targets[2].x - 1,
                     z: this.targets[2].z,
                     bee: this,
-                  }
-                )
+                  },
+                ),
               );
             }
 
@@ -16200,8 +16207,8 @@ function BeeSwarmSimulator(DATA) {
                     this.targets[2].x,
                     this.targets[2].z,
                     "preciseMark",
-                    this.level
-                  )
+                    this.level,
+                  ),
                 );
               }
             }
@@ -16216,8 +16223,8 @@ function BeeSwarmSimulator(DATA) {
                       effects.focus.tokenLife,
                       [_t.pos[0], _t.pos[1] + 0.5, _t.pos[2]],
                       "focus",
-                      { field: _t.field, x: _t.x, z: _t.z, bee: this }
-                    )
+                      { field: _t.field, x: _t.x, z: _t.z, bee: this },
+                    ),
                   );
 
                 collectPollen({
@@ -16291,8 +16298,8 @@ function BeeSwarmSimulator(DATA) {
                     effects.redBoost.tokenLife,
                     [_t.pos[0], _t.pos[1] + 0.5, _t.pos[2]],
                     "redBoost",
-                    { field: _t.field, x: _t.x, z: _t.z, bee: this }
-                  )
+                    { field: _t.field, x: _t.x, z: _t.z, bee: this },
+                  ),
                 );
               }
             }
@@ -16315,7 +16322,7 @@ function BeeSwarmSimulator(DATA) {
                 size: 1.75,
                 speed: 0.3,
                 aftershock: 0,
-              })
+              }),
             );
           }
 
@@ -16330,7 +16337,7 @@ function BeeSwarmSimulator(DATA) {
             BEE_FLY,
             beeInfo[this.type].u,
             this.GIFTED_BEE_TEXTURE_OFFSET,
-            beeInfo[this.type].meshPartId
+            beeInfo[this.type].meshPartId,
           );
 
           break;
@@ -16359,7 +16366,7 @@ function BeeSwarmSimulator(DATA) {
             this.pos,
             this.pos,
             this.moveDir,
-            dt * this.speed * player.beeSpeed
+            dt * this.speed * player.beeSpeed,
           );
 
           if (this.triangulateTimer <= 0) {
@@ -16377,7 +16384,7 @@ function BeeSwarmSimulator(DATA) {
             BEE_FLY,
             beeInfo[this.type].u,
             this.GIFTED_BEE_TEXTURE_OFFSET,
-            beeInfo[this.type].meshPartId
+            beeInfo[this.type].meshPartId,
           );
 
           break;
@@ -16445,7 +16452,7 @@ function BeeSwarmSimulator(DATA) {
       this.params.life -= dt;
       this.size += Math.max(
         (this.params.size - this.size) * this.params.speed,
-        this.params.aftershock
+        this.params.aftershock,
       );
 
       meshes[this.primitive].instanceData.push(
@@ -16457,7 +16464,7 @@ function BeeSwarmSimulator(DATA) {
         this.params.col[2],
         Math.min(this.params.life * this.lifespan, this.maxAlpha),
         this.backface ? -this.size : this.size,
-        this.params.height
+        this.params.height,
       );
 
       return this.params.life <= 0;
@@ -16492,7 +16499,7 @@ function BeeSwarmSimulator(DATA) {
         this.params.col[2],
         this.params.life * this.lifespan * this.params.alpha,
         this.backface ? -s : s,
-        this.transformHeight ? this.params.height : this.params.height / s
+        this.transformHeight ? this.params.height : this.params.height / s,
       );
 
       return this.params.life <= 0;
@@ -16539,17 +16546,17 @@ function BeeSwarmSimulator(DATA) {
 
         player.pollen -= Math.min(
           Math.ceil(player.convertTotal * 0.02),
-          player.pollen
+          player.pollen,
         );
         player.honey += Math.ceil(
           Math.min(Math.ceil(player.convertTotal * 0.02), player.pollen) *
-            player.honeyPerPollen
+            player.honeyPerPollen,
         );
         if (player.extraInfo.enablePollenText)
           textRenderer.add(
             Math.ceil(
               Math.min(Math.ceil(player.convertTotal * 0.02), player.pollen) *
-                player.honeyPerPollen
+                player.honeyPerPollen,
             ),
             [
               player.body.position.x,
@@ -16558,7 +16565,7 @@ function BeeSwarmSimulator(DATA) {
             ],
             COLORS.honey,
             0,
-            "+"
+            "+",
           );
       }
     }
@@ -16579,7 +16586,7 @@ function BeeSwarmSimulator(DATA) {
             size: 2,
             alpha: 1,
             height: 3,
-          })
+          }),
         );
 
         this.dark = true;
@@ -16588,17 +16595,17 @@ function BeeSwarmSimulator(DATA) {
           this.life *= 1.5;
           player.pollen -= Math.min(
             Math.ceil(player.convertTotal * 0.02),
-            player.pollen
+            player.pollen,
           );
           player.honey += Math.ceil(
             Math.min(Math.ceil(player.convertTotal * 0.02), player.pollen) *
-              player.honeyPerPollen
+              player.honeyPerPollen,
           );
           if (player.extraInfo.enablePollenText)
             textRenderer.add(
               Math.ceil(
                 Math.min(Math.ceil(player.convertTotal * 0.02), player.pollen) *
-                  player.honeyPerPollen
+                  player.honeyPerPollen,
               ),
               [
                 player.body.position.x,
@@ -16607,7 +16614,7 @@ function BeeSwarmSimulator(DATA) {
               ],
               COLORS.honey,
               0,
-              "+"
+              "+",
             );
           this.getRidOfOilTrailTimer = 2;
           this.oilT = 0;
@@ -16819,7 +16826,7 @@ function BeeSwarmSimulator(DATA) {
           size: 4,
           speed: 0.5,
           aftershock: 0.05,
-        })
+        }),
       );
       let g = this.golden ? 1.5 * player.bubblePollen : player.bubblePollen;
 
@@ -16876,8 +16883,8 @@ function BeeSwarmSimulator(DATA) {
             "honey",
             Math.ceil(p * 0.5),
             true,
-            "Gold Bubble"
-          )
+            "Gold Bubble",
+          ),
         );
       }
 
@@ -16906,7 +16913,7 @@ function BeeSwarmSimulator(DATA) {
         this.col[2] * player.isNight,
         Math.min(this.life * 0.35, this.golden ? 0.8 : 0.7),
         Math.min((TIME - this.birth) * 15, 3),
-        1
+        1,
       );
 
       return this.life <= 0;
@@ -16971,7 +16978,7 @@ function BeeSwarmSimulator(DATA) {
             this.func,
             true,
             false,
-            false
+            false,
           );
         }
 
@@ -16988,7 +16995,7 @@ function BeeSwarmSimulator(DATA) {
             speed: 0.15,
             aftershock: 0.01,
             height: 0.075,
-          })
+          }),
         );
       }
     }
@@ -17067,7 +17074,7 @@ function BeeSwarmSimulator(DATA) {
           0,
           1,
           0.45,
-          1
+          1,
         );
 
         if (this.type === "honeyMark") {
@@ -17078,9 +17085,9 @@ function BeeSwarmSimulator(DATA) {
 
             let a = Math.min(
               Math.round(
-                (player.convertTotal * 3) / (objects.bees.length || 1)
+                (player.convertTotal * 3) / (objects.bees.length || 1),
               ),
-              player.pollen
+              player.pollen,
             );
             player.pollen -= a;
             player.honey += Math.ceil(a * player.honeyPerPollen);
@@ -17095,7 +17102,7 @@ function BeeSwarmSimulator(DATA) {
                 ],
                 COLORS.honey,
                 0,
-                "+"
+                "+",
               );
           }
         }
@@ -17109,7 +17116,7 @@ function BeeSwarmSimulator(DATA) {
           0,
           0.85,
           0.45,
-          1
+          1,
         );
       }
 
@@ -17122,7 +17129,7 @@ function BeeSwarmSimulator(DATA) {
         player.isNight,
         0.05,
         this.diameter - 0.1,
-        0.01
+        0.01,
       );
 
       meshes.cylinder_explosions.instanceData.push(
@@ -17134,7 +17141,7 @@ function BeeSwarmSimulator(DATA) {
         0.4 * player.isNight,
         1,
         0.125,
-        27
+        27,
       );
       meshes.cylinder_explosions.instanceData.push(
         this.pos[0],
@@ -17145,7 +17152,7 @@ function BeeSwarmSimulator(DATA) {
         0.4,
         1,
         0.4,
-        0.5
+        0.5,
       );
       meshes.tokens.instanceData.push(
         this.pos[0],
@@ -17155,7 +17162,7 @@ function BeeSwarmSimulator(DATA) {
         effects[this.type + "Token"].u,
         effects[this.type + "Token"].v,
         1,
-        1.35
+        1.35,
       );
 
       this.surgeAfter -= dt;
@@ -17174,7 +17181,7 @@ function BeeSwarmSimulator(DATA) {
             life: 0.3,
             size: this.diameter * 0.8,
             alpha: 0.75,
-          })
+          }),
         );
 
         if (f.type === "honeyMark") {
@@ -17286,7 +17293,7 @@ function BeeSwarmSimulator(DATA) {
           size: 4,
           speed: 0.5,
           aftershock: 0.05,
-        })
+        }),
       );
 
       objects.mobs.splice(index, 1);
@@ -17341,8 +17348,8 @@ function BeeSwarmSimulator(DATA) {
               new Bubble(
                 this.field,
                 (this.pos[0] - fieldInfo[this.field].x) | 0,
-                (this.pos[2] - fieldInfo[this.field].z) | 0
-              )
+                (this.pos[2] - fieldInfo[this.field].z) | 0,
+              ),
             );
 
           for (let i in objects.tokens) {
@@ -17362,7 +17369,7 @@ function BeeSwarmSimulator(DATA) {
                   size: 1.8,
                   speed: 0.2,
                   aftershock: 0.005,
-                })
+                }),
               );
               let bx = (b.pos[0] - fieldInfo[this.field].x) | 0,
                 bz = (b.pos[2] - fieldInfo[this.field].z) | 0;
@@ -17395,7 +17402,7 @@ function BeeSwarmSimulator(DATA) {
         gl.FLOAT,
         gl.FLASE,
         24,
-        12
+        12,
       );
       gl.uniform4fv(glCache.mob_instanceInfo1, this.pos);
       gl.uniform2f(glCache.mob_instanceInfo2, 0.9, 1);
@@ -17403,7 +17410,7 @@ function BeeSwarmSimulator(DATA) {
         gl.TRIANGLES,
         meshes[this.mesh].indexAmount,
         gl.UNSIGNED_SHORT,
-        0
+        0,
       );
 
       return this.life <= 0;
@@ -17442,7 +17449,7 @@ function BeeSwarmSimulator(DATA) {
         player.capacity *
           0.35 *
           (this.golden ? 1.35 : 1) *
-          (beeLevel * 0.0375 + 1)
+          (beeLevel * 0.0375 + 1),
       );
       this.invCap = 1 / this.cap;
       this.displaySize = 0;
@@ -17453,8 +17460,8 @@ function BeeSwarmSimulator(DATA) {
         (fieldInfo[this.field].generalColorComp.b >= 0.5
           ? 4
           : fieldInfo[this.field].generalColorComp.w >= 0.5
-          ? 2
-          : 0);
+            ? 2
+            : 0);
 
       this.prevFlowers = [];
       this.flowers = [];
@@ -17553,7 +17560,7 @@ function BeeSwarmSimulator(DATA) {
           player.isNight,
           0.5,
           0.03,
-          67
+          67,
         );
         meshes.explosions.instanceData.push(
           this.pos[0],
@@ -17564,7 +17571,7 @@ function BeeSwarmSimulator(DATA) {
           this.col[2] * player.isNight,
           this.col[3],
           this.displaySize,
-          1.03
+          1.03,
         );
 
         meshes.explosions.instanceData.push(
@@ -17576,7 +17583,7 @@ function BeeSwarmSimulator(DATA) {
           0,
           0.35,
           7,
-          0.01
+          0.01,
         );
 
         if (this.golden) {
@@ -17590,7 +17597,7 @@ function BeeSwarmSimulator(DATA) {
             0.85,
             2,
             2,
-            TIME
+            TIME,
           );
         }
 
@@ -17601,7 +17608,7 @@ function BeeSwarmSimulator(DATA) {
           -0.465,
           true,
           true,
-          0.175
+          0.175,
         );
 
         textRenderer.addDecalRaw(
@@ -17614,7 +17621,7 @@ function BeeSwarmSimulator(DATA) {
           0,
           1,
           0.25,
-          0
+          0,
         );
 
         textRenderer.addDecalRaw(
@@ -17628,7 +17635,7 @@ function BeeSwarmSimulator(DATA) {
           0.1,
           this.pollen * this.invCap,
           0.25,
-          0
+          0,
         );
         textRenderer.addDecalRaw(
           ...this.pos,
@@ -17640,7 +17647,7 @@ function BeeSwarmSimulator(DATA) {
           1,
           -0.44,
           -0.44,
-          0
+          0,
         );
 
         if (
@@ -17696,7 +17703,7 @@ function BeeSwarmSimulator(DATA) {
           this.moveDir = vec3.sub(
             [],
             [player.hivePos[0] + 1.5, player.hivePos[1], player.hivePos[2]],
-            this.pos
+            this.pos,
           );
           vec3.normalize(this.moveDir, this.moveDir);
 
@@ -17738,7 +17745,7 @@ function BeeSwarmSimulator(DATA) {
           player.isNight,
           0.5,
           0.03,
-          67
+          67,
         );
 
         meshes.explosions.instanceData.push(
@@ -17750,7 +17757,7 @@ function BeeSwarmSimulator(DATA) {
           this.col[2] * player.isNight,
           this.col[3],
           this.displaySize,
-          1.05
+          1.05,
         );
 
         if (this.golden) {
@@ -17764,7 +17771,7 @@ function BeeSwarmSimulator(DATA) {
             0.85,
             2,
             2,
-            TIME
+            TIME,
           );
         }
 
@@ -17775,7 +17782,7 @@ function BeeSwarmSimulator(DATA) {
           -0.465,
           true,
           true,
-          0.175
+          0.175,
         );
 
         textRenderer.addDecalRaw(
@@ -17788,7 +17795,7 @@ function BeeSwarmSimulator(DATA) {
           1,
           -0.44,
           -0.44,
-          0
+          0,
         );
 
         if (vec3.sqrDist(this.pos, player.hivePos) < 9) {
@@ -17830,7 +17837,7 @@ function BeeSwarmSimulator(DATA) {
           size: 3,
           alpha: 1,
           height: 3,
-        })
+        }),
       );
 
       if (
@@ -17847,7 +17854,7 @@ function BeeSwarmSimulator(DATA) {
               player.convertRate *
               player[beeInfo[this.bee.type].color + "ConvertRate"] *
               (player.flameHeatStack * 10),
-          player.pollen
+          player.pollen,
         );
 
         player.pollen -= amountToConvert;
@@ -17862,7 +17869,7 @@ function BeeSwarmSimulator(DATA) {
             ],
             COLORS.honey,
             0,
-            "+"
+            "+",
           );
 
         let hpt = amountToConvert / 5;
@@ -17879,8 +17886,8 @@ function BeeSwarmSimulator(DATA) {
               "honey",
               Math.ceil(hpt),
               true,
-              "Target Practice"
-            )
+              "Target Practice",
+            ),
           );
         }
 
@@ -17915,7 +17922,7 @@ function BeeSwarmSimulator(DATA) {
         this.col[2],
         0.5,
         1.75,
-        0.75
+        0.75,
       );
 
       return this.splice;
@@ -17969,7 +17976,7 @@ function BeeSwarmSimulator(DATA) {
             tx,
             tz,
             bx,
-            bz
+            bz,
           ) &&
           !(objects.tokens[i] instanceof DupedToken)
         ) {
@@ -17992,7 +17999,7 @@ function BeeSwarmSimulator(DATA) {
             tx,
             tz,
             bx,
-            bz
+            bz,
           )
         ) {
           extraPollenFromMarks = 1.5;
@@ -18037,7 +18044,7 @@ function BeeSwarmSimulator(DATA) {
           size: 2,
           alpha: 1,
           height: 1,
-        })
+        }),
       );
       objects.explosions.push(
         new ReverseExplosion({
@@ -18047,7 +18054,7 @@ function BeeSwarmSimulator(DATA) {
           size: 2,
           alpha: 1,
           height: 1,
-        })
+        }),
       );
       objects.explosions.push(
         new ReverseExplosion({
@@ -18061,7 +18068,7 @@ function BeeSwarmSimulator(DATA) {
           size: 2,
           alpha: 1,
           height: 1,
-        })
+        }),
       );
 
       objects.triangulates.splice(index, 1);
@@ -18105,7 +18112,7 @@ function BeeSwarmSimulator(DATA) {
           0,
           0,
         ],
-        [0, 1, 2, 2, 1, 0]
+        [0, 1, 2, 2, 1, 0],
       );
 
       this.mesh.setBuffers();
@@ -18145,7 +18152,7 @@ function BeeSwarmSimulator(DATA) {
           size: 4,
           speed: 0.5,
           aftershock: 0.05,
-        })
+        }),
       );
     }
 
@@ -18165,7 +18172,7 @@ function BeeSwarmSimulator(DATA) {
             size: 4,
             speed: 0.5,
             aftershock: 0.05,
-          })
+          }),
         );
         let p = [
           [0, 0],
@@ -18219,7 +18226,7 @@ function BeeSwarmSimulator(DATA) {
               },
               true,
               false,
-              true
+              true,
             );
           }
         }
@@ -18307,7 +18314,7 @@ function BeeSwarmSimulator(DATA) {
         0,
         Math.min(this.life, 0.85),
         1.25,
-        1
+        1,
       );
 
       return this.life <= 0;
@@ -18354,7 +18361,7 @@ function BeeSwarmSimulator(DATA) {
               size: 1.2,
               speed: 0.35,
               aftershock: 0.005,
-            })
+            }),
           );
 
           this.hitBees.push(i);
@@ -18365,8 +18372,8 @@ function BeeSwarmSimulator(DATA) {
               10000 +
                 b.convertAmount *
                   7.5 *
-                  player[beeInfo[b.type].color + "ConvertRate"]
-            )
+                  player[beeInfo[b.type].color + "ConvertRate"],
+            ),
           );
 
           player.pollen -= amountToConvert;
@@ -18378,7 +18385,7 @@ function BeeSwarmSimulator(DATA) {
               [b.pos[0], b.pos[1] + 0.75, b.pos[2]],
               COLORS.honey,
               1,
-              "⇆"
+              "⇆",
             );
         }
       }
@@ -18419,7 +18426,7 @@ function BeeSwarmSimulator(DATA) {
         gl.FLOAT,
         gl.FLASE,
         24,
-        12
+        12,
       );
       gl.uniform4fv(glCache.mob_instanceInfo1, this.pos);
       gl.uniform2f(glCache.mob_instanceInfo2, 1, this.life * 1.75);
@@ -18427,7 +18434,7 @@ function BeeSwarmSimulator(DATA) {
         gl.TRIANGLES,
         meshes.petalShuriken.indexAmount,
         gl.UNSIGNED_SHORT,
-        0
+        0,
       );
 
       return this.life <= 0;
@@ -18492,7 +18499,7 @@ function BeeSwarmSimulator(DATA) {
         [255, 0, 0],
         crit ? (superCrit ? 2 : 1) : 0,
         "",
-        1.25
+        1.25,
       );
     }
 
@@ -18870,13 +18877,13 @@ function BeeSwarmSimulator(DATA) {
                     amulet.push(
                       "+1 redBeeAttack",
                       "+1 blueBeeAttack",
-                      "+1 whiteBeeAttack"
+                      "+1 whiteBeeAttack",
                     );
                   } else {
                     amulet.push(
                       Math.random() < 0.5
                         ? "+1 redBeeAttack"
-                        : "+1 blueBeeAttack"
+                        : "+1 blueBeeAttack",
                     );
                   }
 
@@ -18890,8 +18897,8 @@ function BeeSwarmSimulator(DATA) {
                           MATH.random(1.05, 1.15).toFixed(2) +
                           " whitePollen",
                       ],
-                      2
-                    )
+                      2,
+                    ),
                   );
 
                   player.showGeneratedAmulet("kingBeetleAmulet", amulet);
@@ -19006,9 +19013,9 @@ function BeeSwarmSimulator(DATA) {
                     (this.type === "tunnelBear"
                       ? 0.3
                       : this.type === "kingBeetle"
-                      ? 0.25
-                      : 0.2),
-                  player.lootLuck * 1.5
+                        ? 0.25
+                        : 0.2),
+                  player.lootLuck * 1.5,
                 );
 
               if (this.type === "tunnelBear") {
@@ -19028,8 +19035,8 @@ function BeeSwarmSimulator(DATA) {
                       ty,
                       am,
                       true,
-                      MATH.doGrammar(this.type)
-                    )
+                      MATH.doGrammar(this.type),
+                    ),
                   );
                 } else {
                   objects.tokens.push(
@@ -19039,8 +19046,8 @@ function BeeSwarmSimulator(DATA) {
                       "honey",
                       12500,
                       true,
-                      MATH.doGrammar(this.type)
-                    )
+                      MATH.doGrammar(this.type),
+                    ),
                   );
                 }
               } else {
@@ -19062,8 +19069,8 @@ function BeeSwarmSimulator(DATA) {
                       ty,
                       am,
                       true,
-                      MATH.doGrammar(this.type)
-                    )
+                      MATH.doGrammar(this.type),
+                    ),
                   );
                 } else {
                   objects.tokens.push(
@@ -19085,8 +19092,8 @@ function BeeSwarmSimulator(DATA) {
                         kingBeetle: 2500,
                       }[this.type],
                       true,
-                      MATH.doGrammar(this.type)
-                    )
+                      MATH.doGrammar(this.type),
+                    ),
                   );
                 }
               }
@@ -19155,7 +19162,7 @@ function BeeSwarmSimulator(DATA) {
                   mantis: 30,
                   kingBeetle: 75,
                   tunnelBear: 10000,
-                }[this.type]
+                }[this.type],
               );
               this.damageTimer = 1.5;
             }
@@ -19223,7 +19230,7 @@ function BeeSwarmSimulator(DATA) {
                           mantis: 30,
                           kingBeetle: 75,
                           tunnelBear: 10000,
-                        }[this.type]
+                        }[this.type],
                       );
                     }
                   }
@@ -19267,7 +19274,7 @@ function BeeSwarmSimulator(DATA) {
               0,
               -2,
               -2,
-              0
+              0,
             );
           }
 
@@ -19281,7 +19288,7 @@ function BeeSwarmSimulator(DATA) {
             gl.FLOAT,
             gl.FLASE,
             24,
-            0
+            0,
           );
           gl.vertexAttribPointer(
             glCache.mob_vertColor,
@@ -19289,13 +19296,13 @@ function BeeSwarmSimulator(DATA) {
             gl.FLOAT,
             gl.FLASE,
             24,
-            12
+            12,
           );
           gl.drawElements(
             gl.TRIANGLES,
             meshes[this.type].indexAmount,
             gl.UNSIGNED_SHORT,
-            0
+            0,
           );
 
           this.pos[1] +=
@@ -19308,7 +19315,7 @@ function BeeSwarmSimulator(DATA) {
             MATH.doGrammar(this.type) + " (Level " + this.level + ")",
             [this.pos[0], this.pos[1] + 0.4, this.pos[2]],
             COLORS.whiteArr,
-            100
+            100,
           );
 
           textRenderer.addDecalRaw(
@@ -19323,7 +19330,7 @@ function BeeSwarmSimulator(DATA) {
             0,
             2.5,
             0.4,
-            0
+            0,
           );
           textRenderer.addDecalRaw(
             this.pos[0],
@@ -19338,7 +19345,7 @@ function BeeSwarmSimulator(DATA) {
             0.2,
             (this.health * 2.5) / this.maxHealth,
             0.4,
-            0
+            0,
           );
 
           textRenderer.addSingle(
@@ -19347,7 +19354,7 @@ function BeeSwarmSimulator(DATA) {
             COLORS.whiteArr,
             -1,
             false,
-            false
+            false,
           );
           this.pos[1] -=
             this.type === "werewolf" ||
@@ -19405,7 +19412,7 @@ function BeeSwarmSimulator(DATA) {
             gl.FLOAT,
             gl.FLASE,
             24,
-            0
+            0,
           );
           gl.vertexAttribPointer(
             glCache.mob_vertColor,
@@ -19413,13 +19420,13 @@ function BeeSwarmSimulator(DATA) {
             gl.FLOAT,
             gl.FLASE,
             24,
-            12
+            12,
           );
           gl.drawElements(
             gl.TRIANGLES,
             meshes[this.type].indexAmount,
             gl.UNSIGNED_SHORT,
-            0
+            0,
           );
 
           this.pos[1] +=
@@ -19428,7 +19435,7 @@ function BeeSwarmSimulator(DATA) {
             "Rhino Beetle (Level " + this.level + ")",
             [this.pos[0], this.pos[1] + 0.4, this.pos[2]],
             COLORS.whiteArr,
-            100
+            100,
           );
 
           textRenderer.addDecalRaw(
@@ -19443,7 +19450,7 @@ function BeeSwarmSimulator(DATA) {
             0,
             2.5,
             0.4,
-            0
+            0,
           );
           textRenderer.addDecalRaw(
             this.pos[0],
@@ -19458,7 +19465,7 @@ function BeeSwarmSimulator(DATA) {
             0.2,
             (this.health * 2.5) / this.maxHealth,
             0.4,
-            0
+            0,
           );
 
           textRenderer.addSingle(
@@ -19467,7 +19474,7 @@ function BeeSwarmSimulator(DATA) {
             COLORS.whiteArr,
             -1,
             false,
-            false
+            false,
           );
           this.pos[1] -=
             this.type === "werewolf" || this.type === "mantis" ? 3 : 1;
@@ -19493,7 +19500,7 @@ function BeeSwarmSimulator(DATA) {
               false,
               false,
               0,
-              0.2
+              0.2,
             );
             textRenderer.addSingle(
               MATH.doTime(this.respawnTimer),
@@ -19503,7 +19510,7 @@ function BeeSwarmSimulator(DATA) {
               false,
               false,
               0,
-              -0.2
+              -0.2,
             );
           }
 
@@ -19564,7 +19571,7 @@ function BeeSwarmSimulator(DATA) {
         [255, 0, 0],
         crit ? (superCrit ? 2 : 1) : 0,
         "",
-        [0, 1.25, 1.275, 1.3, 1.65, 1.75][(Math.min(d.toString().length), 5)]
+        [0, 1.25, 1.275, 1.3, 1.65, 1.75][(Math.min(d.toString().length), 5)],
       );
     }
 
@@ -19588,14 +19595,14 @@ function BeeSwarmSimulator(DATA) {
             loots += "honey,".repeat((MATH.random(100, 225) * 0.5 * decay) | 0);
             loots += "treat,".repeat((MATH.random(50, 125) * 0.5 * decay) | 0);
             loots += "bitterberry,".repeat(
-              (MATH.random(8, 15) * 0.5 * decay) | 0
+              (MATH.random(8, 15) * 0.5 * decay) | 0,
             );
             loots += "neonberry,".repeat(
-              (MATH.random(4, 10) * 0.5 * decay) | 0
+              (MATH.random(4, 10) * 0.5 * decay) | 0,
             );
             loots += "fieldDice,".repeat((MATH.random(1, 7) * 0.5 * decay) | 0);
             loots += "microConverter,".repeat(
-              (MATH.random(1, 5) * 0.5 * decay) | 0
+              (MATH.random(1, 5) * 0.5 * decay) | 0,
             );
             loots += "magicBean,".repeat((MATH.random(1, 4) * 0.5 * decay) | 0);
 
@@ -19623,8 +19630,8 @@ function BeeSwarmSimulator(DATA) {
                       ? MATH.random(500, 1500) | 0
                       : MATH.random(1, 4) | 0,
                     true,
-                    "Mondo Chick"
-                  )
+                    "Mondo Chick",
+                  ),
                 );
 
                 loots.splice(i, 1);
@@ -19717,7 +19724,7 @@ function BeeSwarmSimulator(DATA) {
               0,
               -2,
               -2,
-              0
+              0,
             );
           }
 
@@ -19726,7 +19733,7 @@ function BeeSwarmSimulator(DATA) {
             "Mondo Chick (Level " + this.level + ")",
             [this.pos[0], this.pos[1] + 0.9, this.pos[2]],
             COLORS.whiteArr,
-            100
+            100,
           );
           textRenderer.addDecalRaw(
             this.pos[0],
@@ -19740,7 +19747,7 @@ function BeeSwarmSimulator(DATA) {
             0.27 * 0.5,
             2.5,
             0.4,
-            0
+            0,
           );
           textRenderer.addDecalRaw(
             this.pos[0],
@@ -19755,7 +19762,7 @@ function BeeSwarmSimulator(DATA) {
             0.27,
             (this.timeLimit * 2.5) / this.maxTimeLimit,
             0.4,
-            0
+            0,
           );
 
           textRenderer.addDecalRaw(
@@ -19770,7 +19777,7 @@ function BeeSwarmSimulator(DATA) {
             0,
             2.5,
             0.4,
-            0
+            0,
           );
           textRenderer.addDecalRaw(
             this.pos[0],
@@ -19785,7 +19792,7 @@ function BeeSwarmSimulator(DATA) {
             0.2,
             (this.health * 2.5) / this.maxHealth,
             0.4,
-            0
+            0,
           );
 
           textRenderer.addSingle(
@@ -19794,7 +19801,7 @@ function BeeSwarmSimulator(DATA) {
             COLORS.whiteArr,
             -1,
             false,
-            false
+            false,
           );
           textRenderer.addSingle(
             "Time: " + MATH.doTime((this.timeLimit | 0) + ""),
@@ -19804,7 +19811,7 @@ function BeeSwarmSimulator(DATA) {
             false,
             false,
             0,
-            0.6
+            0.6,
           );
 
           this.pos[1] -= 2.4;
@@ -19819,7 +19826,7 @@ function BeeSwarmSimulator(DATA) {
             0.9 * player.isNight,
             this.fallenEggShellEffect * 0.5 + 1,
             4,
-            1.15
+            1.15,
           );
 
           if (!this.running) {
@@ -19841,7 +19848,7 @@ function BeeSwarmSimulator(DATA) {
             gl.FLOAT,
             gl.FLASE,
             24,
-            0
+            0,
           );
           gl.vertexAttribPointer(
             glCache.mob_vertColor,
@@ -19849,13 +19856,13 @@ function BeeSwarmSimulator(DATA) {
             gl.FLOAT,
             gl.FLASE,
             24,
-            12
+            12,
           );
           gl.drawElements(
             gl.TRIANGLES,
             meshes.mondoChick.indexAmount,
             gl.UNSIGNED_SHORT,
-            0
+            0,
           );
 
           break;
@@ -19918,7 +19925,7 @@ function BeeSwarmSimulator(DATA) {
         [255, 0, 0],
         crit ? (superCrit ? 2 : 1) : 0,
         "",
-        [0, 1.25, 1.275, 1.3, 1.65, 1.75][(Math.min(d.toString().length), 5)]
+        [0, 1.25, 1.275, 1.3, 1.65, 1.75][(Math.min(d.toString().length), 5)],
       );
     }
 
@@ -19944,12 +19951,12 @@ function BeeSwarmSimulator(DATA) {
                 size: 5,
                 speed: 0.25,
                 aftershock: 0.005,
-              })
+              }),
             );
 
             player.addMessage(
               "⚠️You've found a Rogue Vicious Bee!⚠️",
-              [0, 0, 0]
+              [0, 0, 0],
             );
             this.state = "attack";
             player.damage(20);
@@ -19963,7 +19970,7 @@ function BeeSwarmSimulator(DATA) {
             gl.FLOAT,
             gl.FLASE,
             24,
-            0
+            0,
           );
           gl.vertexAttribPointer(
             glCache.mob_vertColor,
@@ -19971,7 +19978,7 @@ function BeeSwarmSimulator(DATA) {
             gl.FLOAT,
             gl.FLASE,
             24,
-            12
+            12,
           );
           gl.uniform2f(glCache.mob_instanceInfo2, 0.55, 1);
           gl.uniform4fv(glCache.mob_instanceInfo1, [
@@ -19984,7 +19991,7 @@ function BeeSwarmSimulator(DATA) {
             gl.TRIANGLES,
             meshes.spike.indexAmount,
             gl.UNSIGNED_SHORT,
-            0
+            0,
           );
 
           break;
@@ -19997,7 +20004,7 @@ function BeeSwarmSimulator(DATA) {
             this.state = "dead";
 
             let am = Math.floor(
-                this.level * this.level * this.level * 1000 + 2500
+                this.level * this.level * this.level * 1000 + 2500,
               ),
               sm = ((this.level * 0.5) | 0) + 3;
 
@@ -20013,15 +20020,15 @@ function BeeSwarmSimulator(DATA) {
               ],
               COLORS.honey,
               0,
-              "+"
+              "+",
             );
             player.addMessage(
-              "+" + MATH.addCommas(am + "") + " Honey (from Rogue Vicious Bee)"
+              "+" + MATH.addCommas(am + "") + " Honey (from Rogue Vicious Bee)",
             );
             player.addMessage(
               "+" +
                 MATH.addCommas(sm + "") +
-                " Stingers (from Rogue Vicious Bee)"
+                " Stingers (from Rogue Vicious Bee)",
             );
 
             player.updateInventory();
@@ -20081,7 +20088,7 @@ function BeeSwarmSimulator(DATA) {
                 BEE_FLY,
                 beeInfo.vicious.u,
                 beeInfo.vicious.v,
-                beeInfo.vicious.meshPartId
+                beeInfo.vicious.meshPartId,
               );
             }
 
@@ -20111,7 +20118,7 @@ function BeeSwarmSimulator(DATA) {
                 BEE_FLY,
                 beeInfo.vicious.u,
                 beeInfo.vicious.v,
-                beeInfo.vicious.meshPartId
+                beeInfo.vicious.meshPartId,
               );
 
               if (this.addSpikeAttackTimer <= 0) {
@@ -20146,7 +20153,7 @@ function BeeSwarmSimulator(DATA) {
                 BEE_FLY,
                 beeInfo.vicious.u,
                 beeInfo.vicious.v,
-                beeInfo.vicious.meshPartId
+                beeInfo.vicious.meshPartId,
               );
 
               if (this.addSpikeAttackTimer <= 0) {
@@ -20174,7 +20181,7 @@ function BeeSwarmSimulator(DATA) {
               gl.FLOAT,
               gl.FLASE,
               24,
-              0
+              0,
             );
             gl.vertexAttribPointer(
               glCache.mob_vertColor,
@@ -20182,7 +20189,7 @@ function BeeSwarmSimulator(DATA) {
               gl.FLOAT,
               gl.FLASE,
               24,
-              12
+              12,
             );
             gl.uniform2f(glCache.mob_instanceInfo2, 0.5, 1);
 
@@ -20204,7 +20211,7 @@ function BeeSwarmSimulator(DATA) {
                   0,
                   s.glow,
                   1.5,
-                  0.001
+                  0.001,
                 );
               } else if (s.life < 0.5) {
                 s.pos[1] += (s.y - 10 - s.pos[1]) * dt * 10;
@@ -20218,7 +20225,7 @@ function BeeSwarmSimulator(DATA) {
                   0,
                   s.glow,
                   1.5,
-                  0.001
+                  0.001,
                 );
               }
 
@@ -20238,7 +20245,7 @@ function BeeSwarmSimulator(DATA) {
                 gl.TRIANGLES,
                 meshes.spike.indexAmount,
                 gl.UNSIGNED_SHORT,
-                0
+                0,
               );
 
               if (s.life <= 0) {
@@ -20257,7 +20264,7 @@ function BeeSwarmSimulator(DATA) {
               BEE_FLY,
               beeInfo.vicious.u,
               beeInfo.vicious.v,
-              beeInfo.vicious.meshPartId
+              beeInfo.vicious.meshPartId,
             );
 
             textRenderer.addDecalRaw(
@@ -20272,7 +20279,7 @@ function BeeSwarmSimulator(DATA) {
               0,
               -2,
               -2,
-              0
+              0,
             );
           }
 
@@ -20281,7 +20288,7 @@ function BeeSwarmSimulator(DATA) {
             "Rogue Vicious Bee (Level " + this.level + ")",
             [this.pos[0], this.pos[1] + 0.9, this.pos[2]],
             COLORS.whiteArr,
-            100
+            100,
           );
           textRenderer.addDecalRaw(
             this.pos[0],
@@ -20295,7 +20302,7 @@ function BeeSwarmSimulator(DATA) {
             0.27 * 0.5,
             2.5,
             0.4,
-            0
+            0,
           );
           textRenderer.addDecalRaw(
             this.pos[0],
@@ -20310,7 +20317,7 @@ function BeeSwarmSimulator(DATA) {
             0.27,
             (this.timeLimit * 2.5) / this.maxTimeLimit,
             0.4,
-            0
+            0,
           );
 
           textRenderer.addDecalRaw(
@@ -20325,7 +20332,7 @@ function BeeSwarmSimulator(DATA) {
             0,
             2.5,
             0.4,
-            0
+            0,
           );
           textRenderer.addDecalRaw(
             this.pos[0],
@@ -20340,7 +20347,7 @@ function BeeSwarmSimulator(DATA) {
             0.2,
             (this.health * 2.5) / this.maxHealth,
             0.4,
-            0
+            0,
           );
 
           textRenderer.addSingle(
@@ -20349,7 +20356,7 @@ function BeeSwarmSimulator(DATA) {
             COLORS.whiteArr,
             -1,
             false,
-            false
+            false,
           );
           textRenderer.addSingle(
             "Time: " + MATH.doTime((this.timeLimit | 0) + ""),
@@ -20359,7 +20366,7 @@ function BeeSwarmSimulator(DATA) {
             false,
             false,
             0,
-            0.6
+            0.6,
           );
           this.pos[1] -= 1.25;
 
@@ -20470,7 +20477,7 @@ function BeeSwarmSimulator(DATA) {
         [255, 0, 0],
         crit ? (superCrit ? 2 : 1) : 0,
         "",
-        [0, 1.25, 1.275, 1.3, 1.65, 1.75][(Math.min(d.toString().length), 5)]
+        [0, 1.25, 1.275, 1.3, 1.65, 1.75][(Math.min(d.toString().length), 5)],
       );
     }
 
@@ -20498,7 +20505,7 @@ function BeeSwarmSimulator(DATA) {
             BEE_FLY,
             beeInfo.windy.u,
             beeInfo.windy.v,
-            beeInfo.windy.meshPartId
+            beeInfo.windy.meshPartId,
           );
 
           if (this.pos[1] > 55) {
@@ -20524,7 +20531,7 @@ function BeeSwarmSimulator(DATA) {
             BEE_FLY,
             beeInfo.windy.u,
             beeInfo.windy.v,
-            beeInfo.windy.meshPartId
+            beeInfo.windy.meshPartId,
           );
 
           if (TIME > this.timeAtArrival) {
@@ -20563,8 +20570,8 @@ function BeeSwarmSimulator(DATA) {
                 this.field,
                 (fieldInfo[this.field].width * 0.5) | 0,
                 (fieldInfo[this.field].length * 0.5) | 0,
-                3 * 60
-              )
+                3 * 60,
+              ),
             );
 
             this.tornados = [];
@@ -20631,8 +20638,8 @@ function BeeSwarmSimulator(DATA) {
                     1,
                     true,
                     "Wild Windy Bee",
-                    ["tokensFromWildWindyBee"]
-                  )
+                    ["tokensFromWildWindyBee"],
+                  ),
                 );
               } else {
                 objects.tokens.push(
@@ -20647,8 +20654,8 @@ function BeeSwarmSimulator(DATA) {
                     (this.level - 2) * 10000 + 1000,
                     true,
                     "Wild Windy Bee",
-                    ["tokensFromWildWindyBee"]
-                  )
+                    ["tokensFromWildWindyBee"],
+                  ),
                 );
               }
             }
@@ -20684,7 +20691,7 @@ function BeeSwarmSimulator(DATA) {
 
             player.addMessage(
               "☁️Wild Windy Bee is fleeing...☁️",
-              [160, 160, 160]
+              [160, 160, 160],
             );
 
             return;
@@ -20751,10 +20758,10 @@ function BeeSwarmSimulator(DATA) {
                   this.whipWarning.addPos(vec3.add([], this.whipA, c));
                   this.whipWarning.addPos(vec3.sub([], this.whipA, c));
                   this.whipWarning.addPos(
-                    vec3.add([], vec3.sub([], this.whipB, c), dir)
+                    vec3.add([], vec3.sub([], this.whipB, c), dir),
                   );
                   this.whipWarning.addPos(
-                    vec3.add([], vec3.add([], this.whipB, c), dir)
+                    vec3.add([], vec3.add([], this.whipB, c), dir),
                   );
                   this.whipWarning.addPos(vec3.add([], this.whipA, c));
 
@@ -20771,7 +20778,7 @@ function BeeSwarmSimulator(DATA) {
                     t.target = vec3.add(
                       [],
                       vec3.add([], this.whipB, [c[0] * s, y, c[2] * s]),
-                      [dir[0] * l, 0, dir[2] * l]
+                      [dir[0] * l, 0, dir[2] * l],
                     );
                   }
                 }
@@ -20793,7 +20800,7 @@ function BeeSwarmSimulator(DATA) {
                 BEE_FLY,
                 beeInfo.windy.u,
                 beeInfo.windy.v,
-                beeInfo.windy.meshPartId
+                beeInfo.windy.meshPartId,
               );
             }
 
@@ -20831,7 +20838,7 @@ function BeeSwarmSimulator(DATA) {
                 BEE_FLY,
                 beeInfo.windy.u,
                 beeInfo.windy.v,
-                beeInfo.windy.meshPartId
+                beeInfo.windy.meshPartId,
               );
             } else if (this.attackState === 1) {
               this.nextAttackTimer -= dt;
@@ -20847,7 +20854,7 @@ function BeeSwarmSimulator(DATA) {
                 BEE_FLY,
                 beeInfo.windy.u,
                 beeInfo.windy.v,
-                beeInfo.windy.meshPartId
+                beeInfo.windy.meshPartId,
               );
             }
 
@@ -20922,7 +20929,7 @@ function BeeSwarmSimulator(DATA) {
               gl.FLOAT,
               gl.FLASE,
               24,
-              0
+              0,
             );
             gl.vertexAttribPointer(
               glCache.mob_vertColor,
@@ -20930,7 +20937,7 @@ function BeeSwarmSimulator(DATA) {
               gl.FLOAT,
               gl.FLASE,
               24,
-              12
+              12,
             );
             gl.uniform2f(glCache.mob_instanceInfo2, 0.6, 0.7);
 
@@ -21052,7 +21059,7 @@ function BeeSwarmSimulator(DATA) {
                 gl.TRIANGLES,
                 meshes[m].indexAmount,
                 gl.UNSIGNED_SHORT,
-                0
+                0,
               );
             }
           } else {
@@ -21067,7 +21074,7 @@ function BeeSwarmSimulator(DATA) {
               BEE_FLY,
               beeInfo.windy.u,
               beeInfo.windy.v,
-              beeInfo.windy.meshPartId
+              beeInfo.windy.meshPartId,
             );
 
             textRenderer.addDecalRaw(
@@ -21082,7 +21089,7 @@ function BeeSwarmSimulator(DATA) {
               0,
               -2,
               -2,
-              0
+              0,
             );
           }
 
@@ -21091,7 +21098,7 @@ function BeeSwarmSimulator(DATA) {
             "Wild Windy Bee (Level " + this.level + ")",
             [this.pos[0], this.pos[1] + 0.9, this.pos[2]],
             COLORS.whiteArr,
-            100
+            100,
           );
           textRenderer.addDecalRaw(
             this.pos[0],
@@ -21105,7 +21112,7 @@ function BeeSwarmSimulator(DATA) {
             0.27 * 0.5,
             2.5,
             0.4,
-            0
+            0,
           );
           textRenderer.addDecalRaw(
             this.pos[0],
@@ -21120,7 +21127,7 @@ function BeeSwarmSimulator(DATA) {
             0.27,
             (this.timeLimit * 2.5) / this.maxTimeLimit,
             0.4,
-            0
+            0,
           );
 
           textRenderer.addDecalRaw(
@@ -21135,7 +21142,7 @@ function BeeSwarmSimulator(DATA) {
             0,
             2.5,
             0.4,
-            0
+            0,
           );
           textRenderer.addDecalRaw(
             this.pos[0],
@@ -21150,7 +21157,7 @@ function BeeSwarmSimulator(DATA) {
             0.2,
             (this.health * 2.5) / this.maxHealth,
             0.4,
-            0
+            0,
           );
 
           textRenderer.addSingle(
@@ -21159,7 +21166,7 @@ function BeeSwarmSimulator(DATA) {
             COLORS.whiteArr,
             -1,
             false,
-            false
+            false,
           );
           textRenderer.addSingle(
             "Time: " + MATH.doTime((this.timeLimit | 0) + ""),
@@ -21169,7 +21176,7 @@ function BeeSwarmSimulator(DATA) {
             false,
             false,
             0,
-            0.6
+            0.6,
           );
           this.pos[1] -= 1.25;
 
@@ -21229,7 +21236,7 @@ function BeeSwarmSimulator(DATA) {
         [255, 0, 0],
         crit ? (superCrit ? 2 : 1) : 0,
         "",
-        [0, 1.25, 1.275, 1.3, 1.65, 1.75][(Math.min(d.toString().length), 5)]
+        [0, 1.25, 1.275, 1.3, 1.65, 1.75][(Math.min(d.toString().length), 5)],
       );
     }
 
@@ -21246,7 +21253,7 @@ function BeeSwarmSimulator(DATA) {
           false,
           false,
           0,
-          0.2
+          0.2,
         );
         textRenderer.addSingle(
           MATH.doTime(this.isDead),
@@ -21256,7 +21263,7 @@ function BeeSwarmSimulator(DATA) {
           false,
           false,
           0,
-          -0.2
+          -0.2,
         );
 
         return this.isDead <= 0;
@@ -21273,7 +21280,7 @@ function BeeSwarmSimulator(DATA) {
           decay = MATH.constrain(
             Math.pow(2, -0.001 * this.timeToDefeat),
             0.1,
-            1
+            1,
           );
 
         loots += "coconut,".repeat((MATH.random(60, 110) * 0.5 * decay) | 0);
@@ -21307,8 +21314,8 @@ function BeeSwarmSimulator(DATA) {
                 loots[it],
                 loots[it] === "coconut" ? MATH.random(1, 4) | 0 : 1,
                 true,
-                "Coconut Crab"
-              )
+                "Coconut Crab",
+              ),
             );
             loots.splice(i, 1);
           }, i * 300);
@@ -21470,11 +21477,11 @@ function BeeSwarmSimulator(DATA) {
                     Math.sign(
                       fieldInfo[this.field].x +
                         fieldInfo[this.field].width * 0.5 -
-                        this.pos[0]
+                        this.pos[0],
                     ) *
                     6.5,
                 fieldInfo[this.field].x,
-                fieldInfo[this.field].x + fieldInfo[this.field].width
+                fieldInfo[this.field].x + fieldInfo[this.field].width,
               );
 
               this.clawA = [
@@ -21494,7 +21501,7 @@ function BeeSwarmSimulator(DATA) {
                 Math.abs(
                   fieldInfo[this.field].x +
                     fieldInfo[this.field].width * 0.5 -
-                    this.pos[0]
+                    this.pos[0],
                 ) < 0.5 &&
                 player.fieldIn === this.field
               ) {
@@ -21504,47 +21511,53 @@ function BeeSwarmSimulator(DATA) {
 
                 let DIS = this;
 
-                window.setTimeout(function () {
-                  DIS.state = "alignClaws";
-                }, 1000 * 7 + 2000);
+                window.setTimeout(
+                  function () {
+                    DIS.state = "alignClaws";
+                  },
+                  1000 * 7 + 2000,
+                );
 
                 for (let i = 0; i < 7; i++) {
-                  window.setTimeout(function () {
-                    DIS._cm = 14;
+                  window.setTimeout(
+                    function () {
+                      DIS._cm = 14;
 
-                    objects.mobs.push(
-                      new Coconut(
-                        i
-                          ? (MATH.random(0.1, 0.9) *
-                              fieldInfo[DIS.field].width) |
-                            0
-                          : player.flowerIn.x,
-                        i
-                          ? (MATH.random(0.5, 0.9) *
-                              fieldInfo[DIS.field].length) |
-                            0
-                          : player.flowerIn.z,
-                        0,
-                        true
-                      )
-                    );
-
-                    window.setTimeout(function () {
-                      objects.explosions.push(
-                        new Explosion({
-                          col: [0.8, 0.8, 0.8],
-                          pos: DIS.pos.slice(),
-                          life: 0.5,
-                          size: 11,
-                          speed: 0.2,
-                          aftershock: 0.03,
-                          maxAlpha: 0.15,
-                          primitive: "cylinder_explosions",
-                          height: 0.1,
-                        })
+                      objects.mobs.push(
+                        new Coconut(
+                          i
+                            ? (MATH.random(0.1, 0.9) *
+                                fieldInfo[DIS.field].width) |
+                                0
+                            : player.flowerIn.x,
+                          i
+                            ? (MATH.random(0.5, 0.9) *
+                                fieldInfo[DIS.field].length) |
+                                0
+                            : player.flowerIn.z,
+                          0,
+                          true,
+                        ),
                       );
-                    }, 500);
-                  }, 1000 * i + 1000);
+
+                      window.setTimeout(function () {
+                        objects.explosions.push(
+                          new Explosion({
+                            col: [0.8, 0.8, 0.8],
+                            pos: DIS.pos.slice(),
+                            life: 0.5,
+                            size: 11,
+                            speed: 0.2,
+                            aftershock: 0.03,
+                            maxAlpha: 0.15,
+                            primitive: "cylinder_explosions",
+                            height: 0.1,
+                          }),
+                        );
+                      }, 500);
+                    },
+                    1000 * i + 1000,
+                  );
                 }
               }
 
@@ -21590,7 +21603,7 @@ function BeeSwarmSimulator(DATA) {
           0,
           -2,
           -2,
-          0
+          0,
         );
       }
 
@@ -21600,7 +21613,7 @@ function BeeSwarmSimulator(DATA) {
         "Coconut Crab (Level " + this.level + ")",
         [this.pos[0], this.pos[1] + 0.4, this.pos[2]],
         COLORS.whiteArr,
-        100
+        100,
       );
 
       textRenderer.addDecalRaw(
@@ -21615,7 +21628,7 @@ function BeeSwarmSimulator(DATA) {
         0,
         2.5,
         0.4,
-        0
+        0,
       );
       textRenderer.addDecalRaw(
         this.pos[0],
@@ -21630,7 +21643,7 @@ function BeeSwarmSimulator(DATA) {
         0.2,
         (this.health * 2.5) / this.maxHealth,
         0.4,
-        0
+        0,
       );
 
       textRenderer.addSingle(
@@ -21639,7 +21652,7 @@ function BeeSwarmSimulator(DATA) {
         COLORS.whiteArr,
         -1,
         false,
-        false
+        false,
       );
 
       this.pos[1] -= 4.3;
@@ -21655,13 +21668,13 @@ function BeeSwarmSimulator(DATA) {
         gl.FLOAT,
         gl.FLASE,
         24,
-        12
+        12,
       );
       gl.drawElements(
         gl.TRIANGLES,
         meshes.coconutCrab.indexAmount,
         gl.UNSIGNED_SHORT,
-        0
+        0,
       );
 
       gl.uniform4fv(glCache.mob_instanceInfo1, this.clawA);
@@ -21675,13 +21688,13 @@ function BeeSwarmSimulator(DATA) {
         gl.FLOAT,
         gl.FLASE,
         24,
-        12
+        12,
       );
       gl.drawElements(
         gl.TRIANGLES,
         meshes.crabClaw.indexAmount,
         gl.UNSIGNED_SHORT,
-        0
+        0,
       );
 
       gl.uniform4fv(glCache.mob_instanceInfo1, this.clawB);
@@ -21695,13 +21708,13 @@ function BeeSwarmSimulator(DATA) {
         gl.FLOAT,
         gl.FLASE,
         24,
-        12
+        12,
       );
       gl.drawElements(
         gl.TRIANGLES,
         meshes.crabClaw.indexAmount,
         gl.UNSIGNED_SHORT,
-        0
+        0,
       );
     }
   }
@@ -21760,7 +21773,7 @@ function BeeSwarmSimulator(DATA) {
         [255, 0, 0],
         crit ? (superCrit ? 2 : 1) : 0,
         "",
-        [0, 1.25, 1.275, 1.3, 1.65, 1.75][(Math.min(d.toString().length), 5)]
+        [0, 1.25, 1.275, 1.3, 1.65, 1.75][(Math.min(d.toString().length), 5)],
       );
     }
 
@@ -21777,7 +21790,7 @@ function BeeSwarmSimulator(DATA) {
           false,
           false,
           0,
-          0.2
+          0.2,
         );
         textRenderer.addSingle(
           MATH.doTime(this.isDead),
@@ -21787,7 +21800,7 @@ function BeeSwarmSimulator(DATA) {
           false,
           false,
           0,
-          -0.2
+          -0.2,
         );
 
         return this.isDead <= 0;
@@ -21827,13 +21840,13 @@ function BeeSwarmSimulator(DATA) {
                 MATH.random(1.01 + g * 0.01, 1.05 + g * 0.015).toFixed(2) +
                 " honeyFromTokens",
             ],
-            (g * 0.5 + 2) | 0
-          )
+            (g * 0.5 + 2) | 0,
+          ),
         );
 
         player.showGeneratedAmulet(
           ["bronze", "silver", "gold", "diamond", "supreme"][g] + "SnailAmulet",
-          amulet
+          amulet,
         );
 
         let loots = "",
@@ -21895,8 +21908,8 @@ function BeeSwarmSimulator(DATA) {
                 loots[it],
                 MATH.random(1, 4) | 0,
                 true,
-                "Stump Snail"
-              )
+                "Stump Snail",
+              ),
             );
             loots.splice(i, 1);
           }, i * 300);
@@ -22003,7 +22016,7 @@ function BeeSwarmSimulator(DATA) {
           0,
           -2,
           -2,
-          0
+          0,
         );
       }
 
@@ -22013,7 +22026,7 @@ function BeeSwarmSimulator(DATA) {
         "Stump Snail (Level " + this.level + ")",
         [this.pos[0], this.pos[1] + 0.4, this.pos[2]],
         COLORS.whiteArr,
-        100
+        100,
       );
 
       textRenderer.addDecalRaw(
@@ -22028,7 +22041,7 @@ function BeeSwarmSimulator(DATA) {
         0,
         2.5,
         0.4,
-        0
+        0,
       );
       textRenderer.addDecalRaw(
         this.pos[0],
@@ -22043,7 +22056,7 @@ function BeeSwarmSimulator(DATA) {
         0.2,
         (this.health * 2.5) / this.maxHealth,
         0.4,
-        0
+        0,
       );
 
       textRenderer.addSingle(
@@ -22052,7 +22065,7 @@ function BeeSwarmSimulator(DATA) {
         COLORS.whiteArr,
         -1,
         false,
-        false
+        false,
       );
 
       this.pos[1] -= 2.5;
@@ -22068,23 +22081,26 @@ function BeeSwarmSimulator(DATA) {
         gl.FLOAT,
         gl.FLASE,
         24,
-        12
+        12,
       );
       gl.drawElements(
         gl.TRIANGLES,
         meshes.stumpSnail.indexAmount,
         gl.UNSIGNED_SHORT,
-        0
+        0,
       );
     }
   }
 
   class FireflyPatch {
     constructor() {
-      window.setTimeout(() => {
-        this.flyBack = true;
-        window.setTimeout(() => (this.splice = true), 20 * 1000);
-      }, 1.75 * 60 * 1000);
+      window.setTimeout(
+        () => {
+          this.flyBack = true;
+          window.setTimeout(() => (this.splice = true), 20 * 1000);
+        },
+        1.75 * 60 * 1000,
+      );
 
       this.fireflies = [];
       this.cycle = 3;
@@ -22158,7 +22174,7 @@ function BeeSwarmSimulator(DATA) {
                     fieldInfo[this.field].y + 0.75,
                     fieldInfo[this.field].z + this.z,
                   ],
-                  f.pos
+                  f.pos,
                 );
               }
 
@@ -22200,8 +22216,8 @@ function BeeSwarmSimulator(DATA) {
                     tt,
                     1,
                     false,
-                    "Fireflies"
-                  )
+                    "Fireflies",
+                  ),
                 );
               }
 
@@ -22228,7 +22244,7 @@ function BeeSwarmSimulator(DATA) {
                     fieldInfo[this.field].y + 0.75,
                     fieldInfo[this.field].z + this.z,
                   ],
-                  f.pos
+                  f.pos,
                 );
               }
 
@@ -22252,7 +22268,7 @@ function BeeSwarmSimulator(DATA) {
           BEE_FLY,
           0.875,
           0.625,
-          0
+          0,
         );
         textRenderer.addDecalRaw(
           ...f.pos,
@@ -22264,7 +22280,7 @@ function BeeSwarmSimulator(DATA) {
           0.2,
           2.5,
           2.5,
-          0
+          0,
         );
         textRenderer.addDecalRaw(
           ...f.pos,
@@ -22276,7 +22292,7 @@ function BeeSwarmSimulator(DATA) {
           0.2,
           3,
           3,
-          TIME + i * 0.5
+          TIME + i * 0.5,
         );
         meshes.explosions.instanceData.push(...f.pos, 1, 1, 0.2, 0.2, 0.95, 1);
       }
@@ -22299,8 +22315,8 @@ function BeeSwarmSimulator(DATA) {
             tt,
             1,
             false,
-            "Fireflies"
-          )
+            "Fireflies",
+          ),
         );
 
         objects.explosions.push(
@@ -22315,7 +22331,7 @@ function BeeSwarmSimulator(DATA) {
             size: 6,
             speed: 0.2,
             aftershock: 0.05,
-          })
+          }),
         );
 
         this.cycle--;
@@ -22425,7 +22441,7 @@ function BeeSwarmSimulator(DATA) {
         [255, 0, 0],
         crit ? (superCrit ? 2 : 1) : 0,
         "",
-        [0, 1.25, 1.275, 1.3, 1.65, 1.75][(Math.min(d.toString().length), 5)]
+        [0, 1.25, 1.275, 1.3, 1.65, 1.75][(Math.min(d.toString().length), 5)],
       );
     }
 
@@ -22595,7 +22611,7 @@ function BeeSwarmSimulator(DATA) {
                 this.bullets[i].pos,
                 this.bullets[i].pos,
                 this.bullets[i].vel,
-                dt
+                dt,
               );
 
               if (
@@ -22625,7 +22641,7 @@ function BeeSwarmSimulator(DATA) {
               0,
               -2,
               -2,
-              0
+              0,
             );
           }
 
@@ -22634,7 +22650,7 @@ function BeeSwarmSimulator(DATA) {
             MATH.doGrammar(this.mega) + " (Level " + this.level + ")",
             [this.pos[0], this.pos[1] + 0.4, this.pos[2]],
             COLORS.whiteArr,
-            100
+            100,
           );
 
           textRenderer.addDecalRaw(
@@ -22649,7 +22665,7 @@ function BeeSwarmSimulator(DATA) {
             0,
             2.5,
             0.4,
-            0
+            0,
           );
           textRenderer.addDecalRaw(
             this.pos[0],
@@ -22664,7 +22680,7 @@ function BeeSwarmSimulator(DATA) {
             0.2,
             (this.health * 2.5) / this.maxHealth,
             0.4,
-            0
+            0,
           );
 
           textRenderer.addSingle(
@@ -22673,7 +22689,7 @@ function BeeSwarmSimulator(DATA) {
             COLORS.whiteArr,
             -1,
             false,
-            false
+            false,
           );
 
           this.pos[1] -= 1;
@@ -22688,7 +22704,7 @@ function BeeSwarmSimulator(DATA) {
             gl.FLOAT,
             gl.FLASE,
             24,
-            0
+            0,
           );
           gl.vertexAttribPointer(
             glCache.mob_vertColor,
@@ -22696,13 +22712,13 @@ function BeeSwarmSimulator(DATA) {
             gl.FLOAT,
             gl.FLASE,
             24,
-            12
+            12,
           );
           gl.drawElements(
             gl.TRIANGLES,
             meshes[this.mega].indexAmount,
             gl.UNSIGNED_SHORT,
-            0
+            0,
           );
 
           break;
@@ -22774,7 +22790,7 @@ function BeeSwarmSimulator(DATA) {
         [255, 0, 0],
         crit ? (superCrit ? 2 : 1) : 0,
         "",
-        [0, 1.25, 1.275, 1.3, 1.65, 1.75][(Math.min(d.toString().length), 5)]
+        [0, 1.25, 1.275, 1.3, 1.65, 1.75][(Math.min(d.toString().length), 5)],
       );
     }
 
@@ -22882,7 +22898,7 @@ function BeeSwarmSimulator(DATA) {
               0,
               -2,
               -2,
-              0
+              0,
             );
           }
 
@@ -22891,7 +22907,7 @@ function BeeSwarmSimulator(DATA) {
             MATH.doGrammar(this.gold) + " (Level " + this.level + ")",
             [this.pos[0], this.pos[1] + 0.4, this.pos[2]],
             COLORS.whiteArr,
-            100
+            100,
           );
 
           textRenderer.addDecalRaw(
@@ -22906,7 +22922,7 @@ function BeeSwarmSimulator(DATA) {
             0,
             2.5,
             0.4,
-            0
+            0,
           );
           textRenderer.addDecalRaw(
             this.pos[0],
@@ -22921,7 +22937,7 @@ function BeeSwarmSimulator(DATA) {
             0.2,
             (this.health * 2.5) / this.maxHealth,
             0.4,
-            0
+            0,
           );
 
           textRenderer.addSingle(
@@ -22930,7 +22946,7 @@ function BeeSwarmSimulator(DATA) {
             COLORS.whiteArr,
             -1,
             false,
-            false
+            false,
           );
 
           this.pos[1] -= 1;
@@ -22945,7 +22961,7 @@ function BeeSwarmSimulator(DATA) {
             gl.FLOAT,
             gl.FLASE,
             24,
-            0
+            0,
           );
           gl.vertexAttribPointer(
             glCache.mob_vertColor,
@@ -22953,13 +22969,13 @@ function BeeSwarmSimulator(DATA) {
             gl.FLOAT,
             gl.FLASE,
             24,
-            12
+            12,
           );
           gl.drawElements(
             gl.TRIANGLES,
             meshes[this.gold].indexAmount,
             gl.UNSIGNED_SHORT,
-            0
+            0,
           );
 
           break;
@@ -23078,7 +23094,7 @@ function BeeSwarmSimulator(DATA) {
         [255, 0, 0],
         crit ? (superCrit ? 2 : 1) : 0,
         "",
-        [0, 1.25, 1.275, 1.3, 1.65, 1.75][(Math.min(d.toString().length), 5)]
+        [0, 1.25, 1.275, 1.3, 1.65, 1.75][(Math.min(d.toString().length), 5)],
       );
     }
 
@@ -23124,7 +23140,7 @@ function BeeSwarmSimulator(DATA) {
                 v[2 - this.constraintAxis] =
                   Math.sign(
                     player.body.position[this.constraintAxis ? "x" : "z"] -
-                      this.pos[2 - this.constraintAxis]
+                      this.pos[2 - this.constraintAxis],
                   ) * 8;
 
                 this.cogs.push({
@@ -23140,7 +23156,7 @@ function BeeSwarmSimulator(DATA) {
               this.desiredPos = MATH.constrain(
                 player.body.position[this.constraintAxis ? "z" : "x"],
                 this.constraintRange[0],
-                this.constraintRange[1]
+                this.constraintRange[1],
               );
 
               this.pos[this.constraintAxis] +=
@@ -23172,7 +23188,7 @@ function BeeSwarmSimulator(DATA) {
               0,
               -2,
               -2,
-              0
+              0,
             );
           }
 
@@ -23181,7 +23197,7 @@ function BeeSwarmSimulator(DATA) {
             "Cogturret (Level " + this.level + ")",
             [this.pos[0], this.pos[1] + 0.4, this.pos[2]],
             COLORS.whiteArr,
-            100
+            100,
           );
 
           textRenderer.addDecalRaw(
@@ -23196,7 +23212,7 @@ function BeeSwarmSimulator(DATA) {
             0,
             2.5,
             0.4,
-            0
+            0,
           );
           textRenderer.addDecalRaw(
             this.pos[0],
@@ -23211,7 +23227,7 @@ function BeeSwarmSimulator(DATA) {
             0.2,
             (this.health * 2.5) / this.maxHealth,
             0.4,
-            0
+            0,
           );
 
           textRenderer.addSingle(
@@ -23220,7 +23236,7 @@ function BeeSwarmSimulator(DATA) {
             COLORS.whiteArr,
             -1,
             false,
-            false
+            false,
           );
 
           this.pos[1] -= 1;
@@ -23235,7 +23251,7 @@ function BeeSwarmSimulator(DATA) {
             gl.FLOAT,
             gl.FLASE,
             24,
-            0
+            0,
           );
           gl.vertexAttribPointer(
             glCache.mob_vertColor,
@@ -23243,13 +23259,13 @@ function BeeSwarmSimulator(DATA) {
             gl.FLOAT,
             gl.FLASE,
             24,
-            12
+            12,
           );
           gl.drawElements(
             gl.TRIANGLES,
             meshes.cogTurret.indexAmount,
             gl.UNSIGNED_SHORT,
-            0
+            0,
           );
 
           gl.bindBuffer(gl.ARRAY_BUFFER, meshes.cog.vertBuffer);
@@ -23260,7 +23276,7 @@ function BeeSwarmSimulator(DATA) {
             gl.FLOAT,
             gl.FLASE,
             24,
-            0
+            0,
           );
           gl.vertexAttribPointer(
             glCache.mob_vertColor,
@@ -23268,7 +23284,7 @@ function BeeSwarmSimulator(DATA) {
             gl.FLOAT,
             gl.FLASE,
             24,
-            12
+            12,
           );
           gl.uniform2f(glCache.mob_instanceInfo2, 0.6, 1);
 
@@ -23323,7 +23339,7 @@ function BeeSwarmSimulator(DATA) {
               gl.TRIANGLES,
               meshes.cog.indexAmount,
               gl.UNSIGNED_SHORT,
-              0
+              0,
             );
 
             if (s.pos[1] < s.deathY) {
@@ -23437,7 +23453,7 @@ function BeeSwarmSimulator(DATA) {
         [255, 0, 0],
         crit ? (superCrit ? 2 : 1) : 0,
         "",
-        [0, 1.25, 1.275, 1.3, 1.65, 1.75][(Math.min(d.toString().length), 5)]
+        [0, 1.25, 1.275, 1.3, 1.65, 1.75][(Math.min(d.toString().length), 5)],
       );
     }
 
@@ -23460,7 +23476,7 @@ function BeeSwarmSimulator(DATA) {
             gl.FLOAT,
             gl.FLASE,
             24,
-            0
+            0,
           );
           gl.vertexAttribPointer(
             glCache.mob_vertColor,
@@ -23468,7 +23484,7 @@ function BeeSwarmSimulator(DATA) {
             gl.FLOAT,
             gl.FLASE,
             24,
-            12
+            12,
           );
           gl.uniform2f(glCache.mob_instanceInfo2, this.meshScale, 1);
           gl.uniform4fv(glCache.mob_instanceInfo1, [
@@ -23481,7 +23497,7 @@ function BeeSwarmSimulator(DATA) {
             gl.TRIANGLES,
             meshes[this.mesh].indexAmount,
             gl.UNSIGNED_SHORT,
-            0
+            0,
           );
 
           break;
@@ -23588,7 +23604,7 @@ function BeeSwarmSimulator(DATA) {
               0,
               -2,
               -2,
-              0
+              0,
             );
           }
 
@@ -23597,7 +23613,7 @@ function BeeSwarmSimulator(DATA) {
             this.displayName + " (Level " + this.level + ")",
             [this.pos[0], this.pos[1] + 0.5, this.pos[2]],
             COLORS.whiteArr,
-            100
+            100,
           );
 
           textRenderer.addDecalRaw(
@@ -23612,7 +23628,7 @@ function BeeSwarmSimulator(DATA) {
             0,
             2.5,
             0.4,
-            0
+            0,
           );
           textRenderer.addDecalRaw(
             this.pos[0],
@@ -23627,7 +23643,7 @@ function BeeSwarmSimulator(DATA) {
             0.2,
             (this.health * 2.5) / this.maxHealth,
             0.4,
-            0
+            0,
           );
 
           textRenderer.addSingle(
@@ -23636,7 +23652,7 @@ function BeeSwarmSimulator(DATA) {
             COLORS.whiteArr,
             -1,
             false,
-            false
+            false,
           );
 
           this.pos[1] -= 1.25;
@@ -23649,7 +23665,7 @@ function BeeSwarmSimulator(DATA) {
             gl.FLOAT,
             gl.FLASE,
             24,
-            0
+            0,
           );
           gl.vertexAttribPointer(
             glCache.mob_vertColor,
@@ -23657,7 +23673,7 @@ function BeeSwarmSimulator(DATA) {
             gl.FLOAT,
             gl.FLASE,
             24,
-            12
+            12,
           );
           gl.uniform4fv(glCache.mob_instanceInfo1, this.pos);
           gl.uniform2f(glCache.mob_instanceInfo2, this.meshScale, 1);
@@ -23665,7 +23681,7 @@ function BeeSwarmSimulator(DATA) {
             gl.TRIANGLES,
             meshes[this.mesh].indexAmount,
             gl.UNSIGNED_SHORT,
-            0
+            0,
           );
 
           break;
@@ -23752,7 +23768,7 @@ function BeeSwarmSimulator(DATA) {
           gl.bindBuffer(gl.ARRAY_BUFFER, meshes.lawnMowerWarning.vertBuffer);
           gl.bindBuffer(
             gl.ELEMENT_ARRAY_BUFFER,
-            meshes.lawnMowerWarning.indexBuffer
+            meshes.lawnMowerWarning.indexBuffer,
           );
           gl.vertexAttribPointer(
             glCache.mob_vertPos,
@@ -23760,7 +23776,7 @@ function BeeSwarmSimulator(DATA) {
             gl.FLOAT,
             gl.FLASE,
             24,
-            0
+            0,
           );
           gl.vertexAttribPointer(
             glCache.mob_vertColor,
@@ -23768,7 +23784,7 @@ function BeeSwarmSimulator(DATA) {
             gl.FLOAT,
             gl.FLASE,
             24,
-            12
+            12,
           );
           gl.uniform2f(glCache.mob_instanceInfo2, 1, 1);
           gl.uniform4fv(glCache.mob_instanceInfo1, [
@@ -23781,7 +23797,7 @@ function BeeSwarmSimulator(DATA) {
             gl.TRIANGLES,
             meshes.lawnMowerWarning.indexAmount,
             gl.UNSIGNED_SHORT,
-            0
+            0,
           );
         }
       } else {
@@ -23805,7 +23821,7 @@ function BeeSwarmSimulator(DATA) {
           gl.FLOAT,
           gl.FLASE,
           24,
-          0
+          0,
         );
         gl.vertexAttribPointer(
           glCache.mob_vertColor,
@@ -23813,7 +23829,7 @@ function BeeSwarmSimulator(DATA) {
           gl.FLOAT,
           gl.FLASE,
           24,
-          12
+          12,
         );
         gl.uniform2f(glCache.mob_instanceInfo2, 1, 1);
         gl.uniform4fv(glCache.mob_instanceInfo1, this.pos);
@@ -23821,7 +23837,7 @@ function BeeSwarmSimulator(DATA) {
           gl.TRIANGLES,
           meshes.lawnMower.indexAmount,
           gl.UNSIGNED_SHORT,
-          0
+          0,
         );
       }
 
@@ -23873,7 +23889,7 @@ function BeeSwarmSimulator(DATA) {
           speed: 0.25,
           aftershock: 0.05,
           maxAlpha: 0.5,
-        })
+        }),
       );
 
       objects.explosions.push(
@@ -23885,7 +23901,7 @@ function BeeSwarmSimulator(DATA) {
           speed: 0.7,
           aftershock: 0.1,
           maxAlpha: 0.3,
-        })
+        }),
       );
 
       if (player.fieldIn) {
@@ -23894,8 +23910,8 @@ function BeeSwarmSimulator(DATA) {
             new Bubble(
               player.fieldIn,
               (Math.random() * fieldInfo[player.fieldIn].width) | 0,
-              (Math.random() * fieldInfo[player.fieldIn].length) | 0
-            )
+              (Math.random() * fieldInfo[player.fieldIn].length) | 0,
+            ),
           );
         }
       }
@@ -23918,7 +23934,7 @@ function BeeSwarmSimulator(DATA) {
         gl.FLOAT,
         gl.FLASE,
         24,
-        12
+        12,
       );
 
       let dir = player.bodyDir.slice(),
@@ -23953,7 +23969,7 @@ function BeeSwarmSimulator(DATA) {
           1,
           1,
           0.5,
-          1
+          1,
         );
 
         if (
@@ -23972,7 +23988,7 @@ function BeeSwarmSimulator(DATA) {
         gl.TRIANGLES,
         meshes.popStar.indexAmount,
         gl.UNSIGNED_SHORT,
-        0
+        0,
       );
 
       p[0] += player.cameraDir[0];
@@ -23983,7 +23999,7 @@ function BeeSwarmSimulator(DATA) {
         this.value.toString(),
         p.slice(),
         COLORS.whiteArr,
-        -2
+        -2,
       );
       p[1] -= 0.3;
       textRenderer.addSingle(MATH.doTime(this.life), p, COLORS.whiteArr, -1);
@@ -24031,7 +24047,7 @@ function BeeSwarmSimulator(DATA) {
           speed: 0.25,
           aftershock: 0.05,
           maxAlpha: 0.5,
-        })
+        }),
       );
 
       objects.explosions.push(
@@ -24043,7 +24059,7 @@ function BeeSwarmSimulator(DATA) {
           speed: 0.7,
           aftershock: 0.1,
           maxAlpha: 0.3,
-        })
+        }),
       );
 
       objects.mobs.splice(index, 1);
@@ -24064,7 +24080,7 @@ function BeeSwarmSimulator(DATA) {
         gl.FLOAT,
         gl.FLASE,
         24,
-        12
+        12,
       );
 
       let dir = player.bodyDir.slice(),
@@ -24112,7 +24128,7 @@ function BeeSwarmSimulator(DATA) {
         gl.TRIANGLES,
         meshes.scorchingStar.indexAmount,
         gl.UNSIGNED_SHORT,
-        0
+        0,
       );
 
       p[0] += player.cameraDir[0];
@@ -24123,7 +24139,7 @@ function BeeSwarmSimulator(DATA) {
         (this.value | 0).toString(),
         p.slice(),
         COLORS.whiteArr,
-        -2
+        -2,
       );
       p[1] -= 0.3;
       textRenderer.addSingle(MATH.doTime(this.life), p, COLORS.whiteArr, -1);
@@ -24170,7 +24186,7 @@ function BeeSwarmSimulator(DATA) {
           speed: 0.25,
           aftershock: 0.05,
           maxAlpha: 0.5,
-        })
+        }),
       );
 
       objects.explosions.push(
@@ -24182,7 +24198,7 @@ function BeeSwarmSimulator(DATA) {
           speed: 0.7,
           aftershock: 0.1,
           maxAlpha: 0.3,
-        })
+        }),
       );
 
       if (player.fieldIn) {
@@ -24202,8 +24218,8 @@ function BeeSwarmSimulator(DATA) {
               "honey",
               amountPerToken,
               false,
-              "Gummy Star"
-            )
+              "Gummy Star",
+            ),
           );
         }
       }
@@ -24226,7 +24242,7 @@ function BeeSwarmSimulator(DATA) {
         gl.FLOAT,
         gl.FLASE,
         24,
-        12
+        12,
       );
 
       let dir = player.bodyDir.slice(),
@@ -24253,7 +24269,7 @@ function BeeSwarmSimulator(DATA) {
         gl.TRIANGLES,
         meshes.gummyStar.indexAmount,
         gl.UNSIGNED_SHORT,
-        0
+        0,
       );
 
       p[0] += player.cameraDir[0];
@@ -24264,7 +24280,7 @@ function BeeSwarmSimulator(DATA) {
         this.value.toString(),
         p.slice(),
         COLORS.whiteArr,
-        -2
+        -2,
       );
       p[1] -= 0.3;
       textRenderer.addSingle(MATH.doTime(this.life), p, COLORS.whiteArr, -1);
@@ -24301,7 +24317,7 @@ function BeeSwarmSimulator(DATA) {
           aftershock: 0.05,
           maxAlpha: 0.5,
           height: 0.25,
-        })
+        }),
       );
 
       objects.mobs.splice(index, 1);
@@ -24319,7 +24335,7 @@ function BeeSwarmSimulator(DATA) {
         gl.FLOAT,
         gl.FLASE,
         24,
-        12
+        12,
       );
 
       let theta = TIME * 3.5,
@@ -24339,7 +24355,7 @@ function BeeSwarmSimulator(DATA) {
         gl.TRIANGLES,
         meshes.starSaw.indexAmount,
         gl.UNSIGNED_SHORT,
-        0
+        0,
       );
 
       for (let i in objects.bubbles) {
@@ -24405,7 +24421,7 @@ function BeeSwarmSimulator(DATA) {
               stackHeight: 0.5,
               instantConversion: 1,
             }),
-            player.pollen
+            player.pollen,
           );
 
         if (a) {
@@ -24451,7 +24467,7 @@ function BeeSwarmSimulator(DATA) {
         gl.FLOAT,
         gl.FLASE,
         24,
-        12
+        12,
       );
 
       let theta = TIME * 0.75,
@@ -24471,7 +24487,7 @@ function BeeSwarmSimulator(DATA) {
         gl.TRIANGLES,
         meshes.guidingStar.indexAmount,
         gl.UNSIGNED_SHORT,
-        0
+        0,
       );
 
       this.particleTimer -= dt;
@@ -24566,7 +24582,7 @@ function BeeSwarmSimulator(DATA) {
       gl.bindBuffer(gl.ARRAY_BUFFER, meshes.levitatingStarShower.vertBuffer);
       gl.bindBuffer(
         gl.ELEMENT_ARRAY_BUFFER,
-        meshes.levitatingStarShower.indexBuffer
+        meshes.levitatingStarShower.indexBuffer,
       );
       gl.vertexAttribPointer(glCache.mob_vertPos, 3, gl.FLOAT, gl.FLASE, 24, 0);
       gl.vertexAttribPointer(
@@ -24575,20 +24591,20 @@ function BeeSwarmSimulator(DATA) {
         gl.FLOAT,
         gl.FLASE,
         24,
-        12
+        12,
       );
 
       gl.uniform4fv(glCache.mob_instanceInfo1, this.pos);
       gl.uniform2f(
         glCache.mob_instanceInfo2,
         Math.min(this.life * 3, 1) * 1.5,
-        Math.min((3 - this.life) * 0.5, 1)
+        Math.min((3 - this.life) * 0.5, 1),
       );
       gl.drawElements(
         gl.TRIANGLES,
         meshes.levitatingStarShower.indexAmount,
         gl.UNSIGNED_SHORT,
-        0
+        0,
       );
 
       return this.life <= 0;
@@ -24641,7 +24657,7 @@ function BeeSwarmSimulator(DATA) {
       ) {
         let amountToConvert = Math.min(
           player.convertTotal * 0.1,
-          player.pollen
+          player.pollen,
         );
 
         player.pollen -= amountToConvert;
@@ -24656,7 +24672,7 @@ function BeeSwarmSimulator(DATA) {
             ],
             COLORS.honey,
             0,
-            "+"
+            "+",
           );
 
         player.addEffect("inspire");
@@ -24687,7 +24703,7 @@ function BeeSwarmSimulator(DATA) {
         0,
         (2.25 - this.life) * 3,
         1.5,
-        0.001
+        0.001,
       );
 
       gl.bindBuffer(gl.ARRAY_BUFFER, meshes.fallingStar.vertBuffer);
@@ -24699,7 +24715,7 @@ function BeeSwarmSimulator(DATA) {
         gl.FLOAT,
         gl.FLASE,
         24,
-        12
+        12,
       );
 
       gl.uniform4fv(glCache.mob_instanceInfo1, this.pos);
@@ -24708,7 +24724,7 @@ function BeeSwarmSimulator(DATA) {
         gl.TRIANGLES,
         meshes.fallingStar.indexAmount,
         gl.UNSIGNED_SHORT,
-        0
+        0,
       );
 
       return this.life <= 0;
@@ -24763,7 +24779,7 @@ function BeeSwarmSimulator(DATA) {
               size: 1.2,
               speed: 0.35,
               aftershock: 0.005,
-            })
+            }),
           );
 
           this.hitBees.push(i);
@@ -24774,8 +24790,8 @@ function BeeSwarmSimulator(DATA) {
               10000 +
                 b.convertAmount *
                   10 *
-                  player[beeInfo[b.type].color + "ConvertRate"]
-            )
+                  player[beeInfo[b.type].color + "ConvertRate"],
+            ),
           );
 
           player.pollen -= amountToConvert;
@@ -24787,7 +24803,7 @@ function BeeSwarmSimulator(DATA) {
               [b.pos[0], b.pos[1] + 0.75, b.pos[2]],
               COLORS.honey,
               1,
-              "⇆"
+              "⇆",
             );
         }
       }
@@ -24841,7 +24857,7 @@ function BeeSwarmSimulator(DATA) {
                 size: b.displaySize * 1.5,
                 speed: 0.4,
                 aftershock: 0.01,
-              })
+              }),
             );
 
             let am = Math.round(Math.min(b.pollen, b.cap * 0.01));
@@ -24863,15 +24879,15 @@ function BeeSwarmSimulator(DATA) {
                     "honey",
                     hpt,
                     true,
-                    "Balloon"
-                  )
+                    "Balloon",
+                  ),
                 );
               }
             }
 
             player.addEffect(
               "tideBlessing",
-              ((b.golden ? 45 : 30) / (4 * 60 * 60)) * 2
+              ((b.golden ? 45 : 30) / (4 * 60 * 60)) * 2,
             );
 
             if (b.pollen <= 0) {
@@ -24890,7 +24906,7 @@ function BeeSwarmSimulator(DATA) {
         gl.FLOAT,
         gl.FLASE,
         24,
-        12
+        12,
       );
       gl.uniform4fv(glCache.mob_instanceInfo1, this.pos);
       gl.uniform2f(glCache.mob_instanceInfo2, this.size, 0.6);
@@ -24898,7 +24914,7 @@ function BeeSwarmSimulator(DATA) {
         gl.TRIANGLES,
         meshes.wave.indexAmount,
         gl.UNSIGNED_SHORT,
-        0
+        0,
       );
 
       this.collectTimer -= dt;
@@ -25117,7 +25133,7 @@ function BeeSwarmSimulator(DATA) {
           this.bee.gifted ? 1 : 0,
           1,
           0.1,
-          10000
+          10000,
         );
 
         return this.life <= 0;
@@ -25224,7 +25240,7 @@ function BeeSwarmSimulator(DATA) {
             false,
             false,
             undefined,
-            b.type === "honey" ? 3 : 1
+            b.type === "honey" ? 3 : 1,
           );
           this.amount += b.type === "honey" ? 3 : 1;
         }
@@ -25251,7 +25267,7 @@ function BeeSwarmSimulator(DATA) {
             false,
             false,
             undefined,
-            b.type === "precise" ? 30 : 8
+            b.type === "precise" ? 30 : 8,
           );
           this.amount += b.type === "precise" ? 30 : 8;
         }
@@ -25268,7 +25284,7 @@ function BeeSwarmSimulator(DATA) {
         gl.FLOAT,
         gl.FLASE,
         24,
-        12
+        12,
       );
       gl.uniform4fv(glCache.mob_instanceInfo1, this.pos);
       gl.uniform2f(glCache.mob_instanceInfo2, this.rad * 2, this.life * 0.5);
@@ -25276,7 +25292,7 @@ function BeeSwarmSimulator(DATA) {
         gl.TRIANGLES,
         meshes.gummyBall.indexAmount,
         gl.UNSIGNED_SHORT,
-        0
+        0,
       );
 
       textRenderer.addSingle(
@@ -25285,7 +25301,7 @@ function BeeSwarmSimulator(DATA) {
         COLORS.whiteArr,
         -3,
         true,
-        false
+        false,
       );
 
       this.collectTimer -= dt;
@@ -25317,7 +25333,7 @@ function BeeSwarmSimulator(DATA) {
       x = player.flowerIn.x,
       z = player.flowerIn.z,
       delay = 0,
-      isBigFatBully
+      isBigFatBully,
     ) {
       this.isBigFatBully = isBigFatBully;
       this.delay = delay;
@@ -25392,7 +25408,7 @@ function BeeSwarmSimulator(DATA) {
 
           if (hpt) {
             player.pollen -= Math.ceil(
-              Math.min(player.convertTotal, player.pollen)
+              Math.min(player.convertTotal, player.pollen),
             );
 
             for (let i = 0; i < MATH.TWO_PI; i += MATH.TWO_PI / 5) {
@@ -25407,8 +25423,8 @@ function BeeSwarmSimulator(DATA) {
                   "honey",
                   Math.ceil(hpt),
                   true,
-                  "Coconut"
-                )
+                  "Coconut",
+                ),
               );
             }
           }
@@ -25448,7 +25464,7 @@ function BeeSwarmSimulator(DATA) {
           0,
           this.glow * 0.75,
           this.displaySize,
-          0.001
+          0.001,
         );
         meshes.explosions.instanceData.push(
           this.pos[0],
@@ -25459,7 +25475,7 @@ function BeeSwarmSimulator(DATA) {
           1,
           0.15,
           -this.displaySize - 1,
-          1
+          1,
         );
         meshes.explosions.instanceData.push(
           this.pos[0],
@@ -25470,7 +25486,7 @@ function BeeSwarmSimulator(DATA) {
           0,
           1,
           this.displaySize,
-          1
+          1,
         );
 
         return this.y + this.displaySize < this.pos[1];
@@ -25500,7 +25516,7 @@ function BeeSwarmSimulator(DATA) {
       player.addMessage(
         "+" +
           MATH.addCommas(Math.ceil(am * 2 * player.honeyPerPollen) + "") +
-          " Honey (from Diamond Drain)"
+          " Honey (from Diamond Drain)",
       );
 
       objects.mobs.splice(index, 1);
@@ -25520,7 +25536,7 @@ function BeeSwarmSimulator(DATA) {
         gl.bindBuffer(gl.ARRAY_BUFFER, meshes.drainingDiamond.vertBuffer);
         gl.bindBuffer(
           gl.ELEMENT_ARRAY_BUFFER,
-          meshes.drainingDiamond.indexBuffer
+          meshes.drainingDiamond.indexBuffer,
         );
         gl.vertexAttribPointer(
           glCache.mob_vertPos,
@@ -25528,7 +25544,7 @@ function BeeSwarmSimulator(DATA) {
           gl.FLOAT,
           gl.FLASE,
           24,
-          0
+          0,
         );
         gl.vertexAttribPointer(
           glCache.mob_vertColor,
@@ -25536,7 +25552,7 @@ function BeeSwarmSimulator(DATA) {
           gl.FLOAT,
           gl.FLASE,
           24,
-          12
+          12,
         );
         gl.uniform4fv(glCache.mob_instanceInfo1, this.pos);
         gl.uniform2f(glCache.mob_instanceInfo2, 1.6, 0.75);
@@ -25544,13 +25560,13 @@ function BeeSwarmSimulator(DATA) {
           gl.TRIANGLES,
           meshes.drainingDiamond.indexAmount,
           gl.UNSIGNED_SHORT,
-          0
+          0,
         );
       } else {
         gl.bindBuffer(gl.ARRAY_BUFFER, meshes.shiningDiamond.vertBuffer);
         gl.bindBuffer(
           gl.ELEMENT_ARRAY_BUFFER,
-          meshes.shiningDiamond.indexBuffer
+          meshes.shiningDiamond.indexBuffer,
         );
         gl.vertexAttribPointer(
           glCache.mob_vertPos,
@@ -25558,7 +25574,7 @@ function BeeSwarmSimulator(DATA) {
           gl.FLOAT,
           gl.FLASE,
           24,
-          0
+          0,
         );
         gl.vertexAttribPointer(
           glCache.mob_vertColor,
@@ -25566,7 +25582,7 @@ function BeeSwarmSimulator(DATA) {
           gl.FLOAT,
           gl.FLASE,
           24,
-          12
+          12,
         );
         gl.uniform4fv(glCache.mob_instanceInfo1, this.pos);
         gl.uniform2f(glCache.mob_instanceInfo2, 1.6, 1);
@@ -25574,7 +25590,7 @@ function BeeSwarmSimulator(DATA) {
           gl.TRIANGLES,
           meshes.shiningDiamond.indexAmount,
           gl.UNSIGNED_SHORT,
-          0
+          0,
         );
       }
 
@@ -25699,7 +25715,7 @@ function BeeSwarmSimulator(DATA) {
                 },
                 true,
                 false,
-                false
+                false,
               );
             }
           }
@@ -25734,7 +25750,7 @@ function BeeSwarmSimulator(DATA) {
         c,
         0.8,
         2.1,
-        0.9
+        0.9,
       );
       meshes.explosions.instanceData.push(
         this.pos[0] + 0.45,
@@ -25745,7 +25761,7 @@ function BeeSwarmSimulator(DATA) {
         c,
         0.8,
         1.8,
-        0.9
+        0.9,
       );
       meshes.explosions.instanceData.push(
         this.pos[0] - 0.5,
@@ -25756,7 +25772,7 @@ function BeeSwarmSimulator(DATA) {
         c,
         0.8,
         1.9,
-        0.9
+        0.9,
       );
       meshes.explosions.instanceData.push(
         this.pos[0] + 0.75,
@@ -25767,7 +25783,7 @@ function BeeSwarmSimulator(DATA) {
         c,
         0.8,
         2.2,
-        0.9
+        0.9,
       );
 
       if (
@@ -25809,7 +25825,7 @@ function BeeSwarmSimulator(DATA) {
           BEE_FLY,
           beeInfo.windy.u,
           beeInfo.windy.v,
-          beeInfo.windy.meshPartId
+          beeInfo.windy.meshPartId,
         );
 
         if (!(frameCount % 12)) {
@@ -25963,7 +25979,7 @@ function BeeSwarmSimulator(DATA) {
         gl.FLOAT,
         gl.FLASE,
         24,
-        12
+        12,
       );
       this.pos[3] = TIME * (this.speed + 5);
       gl.uniform4fv(glCache.mob_instanceInfo1, this.pos);
@@ -25972,7 +25988,7 @@ function BeeSwarmSimulator(DATA) {
         gl.TRIANGLES,
         meshes.tornado.indexAmount,
         gl.UNSIGNED_SHORT,
-        0
+        0,
       );
 
       return this.life <= 0;
@@ -25986,7 +26002,7 @@ function BeeSwarmSimulator(DATA) {
       x = player.flowerIn.x,
       z = player.flowerIn.z,
       growth = 0,
-      glis
+      glis,
     ) {
       this.growth = growth;
       this.maxGrowth = {
@@ -26149,7 +26165,7 @@ function BeeSwarmSimulator(DATA) {
         (bee.planterSipTime *
           player.nectarMultiplier *
           (bee.type === "shy" ? (bee.gifted ? 2.5 : 2) : 1)) /
-          (6 * 60 * 60)
+          (6 * 60 * 60),
       );
     }
 
@@ -26157,7 +26173,7 @@ function BeeSwarmSimulator(DATA) {
       fieldInfo[this.field].degration = Math.min(
         fieldInfo[this.field].degration +
           (this.maxGrowth / this.growthRate + 10 * 60) * 0.00027777777 * 2,
-        1
+        1,
       );
       fieldInfo[this.field].planter = undefined;
 
@@ -26194,10 +26210,10 @@ function BeeSwarmSimulator(DATA) {
                 perc +
                 Math.round(MATH.random(-1, 1))) |
                 0,
-              1
+              1,
             ),
-            "puffshroom"
-          )
+            "puffshroom",
+          ),
         );
       }
 
@@ -26312,7 +26328,7 @@ function BeeSwarmSimulator(DATA) {
 
       player.addEffect(
         fieldInfo[this.field].nectarType,
-        seconds / (6 * 60 * 60)
+        seconds / (6 * 60 * 60),
       );
 
       player.stats.hoursOfNectar += seconds / (60 * 60);
@@ -26340,7 +26356,7 @@ function BeeSwarmSimulator(DATA) {
           }[this.type] *
             perc *
             perc *
-            (1 - fieldInfo[this.field].degration * 0.666)
+            (1 - fieldInfo[this.field].degration * 0.666),
         ),
         dropTable = [],
         dropRates = {};
@@ -26600,12 +26616,12 @@ function BeeSwarmSimulator(DATA) {
                 }[DIS.type] *
                   (perc * 0.5 + 0.5)) /
                   items[it].value +
-                  1
+                  1,
               ) | 0,
               true,
               "Planter",
-              ["tokensFromPlanters"]
-            )
+              ["tokensFromPlanters"],
+            ),
           );
         }, 225 * i);
       }
@@ -26653,7 +26669,7 @@ function BeeSwarmSimulator(DATA) {
         ],
         COLORS.whiteArr,
         -0.6,
-        false
+        false,
       );
 
       textRenderer.addDecalRaw(
@@ -26668,7 +26684,7 @@ function BeeSwarmSimulator(DATA) {
         0,
         2.25,
         0.35,
-        0
+        0,
       );
 
       textRenderer.addDecalRaw(
@@ -26684,7 +26700,7 @@ function BeeSwarmSimulator(DATA) {
         0.1,
         this.growth * this.invGrowth * 2.25,
         0.35,
-        0
+        0,
       );
 
       this.displaySize =
@@ -26712,13 +26728,13 @@ function BeeSwarmSimulator(DATA) {
         0,
         1,
         this.displaySize,
-        1.03
+        1.03,
       );
 
       gl.bindBuffer(gl.ARRAY_BUFFER, meshes[this.type + "Planter"].vertBuffer);
       gl.bindBuffer(
         gl.ELEMENT_ARRAY_BUFFER,
-        meshes[this.type + "Planter"].indexBuffer
+        meshes[this.type + "Planter"].indexBuffer,
       );
       gl.vertexAttribPointer(glCache.mob_vertPos, 3, gl.FLOAT, gl.FLASE, 24, 0);
       gl.vertexAttribPointer(
@@ -26727,7 +26743,7 @@ function BeeSwarmSimulator(DATA) {
         gl.FLOAT,
         gl.FLASE,
         24,
-        12
+        12,
       );
       gl.uniform4fv(glCache.mob_instanceInfo1, this.pos);
       gl.uniform2f(glCache.mob_instanceInfo2, 1, 1);
@@ -26735,7 +26751,7 @@ function BeeSwarmSimulator(DATA) {
         gl.TRIANGLES,
         meshes[this.type + "Planter"].indexAmount,
         gl.UNSIGNED_SHORT,
-        0
+        0,
       );
 
       if (this.glistering) {
@@ -26871,7 +26887,7 @@ function BeeSwarmSimulator(DATA) {
         gl.FLOAT,
         gl.FLASE,
         24,
-        12
+        12,
       );
 
       gl.uniform4fv(glCache.mob_instanceInfo1, this.pos);
@@ -26880,7 +26896,7 @@ function BeeSwarmSimulator(DATA) {
         gl.TRIANGLES,
         meshes[this.mesh].indexAmount,
         gl.UNSIGNED_SHORT,
-        0
+        0,
       );
 
       return this.life <= 0;
@@ -26937,7 +26953,7 @@ function BeeSwarmSimulator(DATA) {
         this.control1,
         this.control2,
         this.startPos,
-        MATH.constrain(this.life * (1 / this.lifespan), 0, 1)
+        MATH.constrain(this.life * (1 / this.lifespan), 0, 1),
       );
 
       vec3.add(p, p, this.bodyPos);
@@ -27029,7 +27045,7 @@ function BeeSwarmSimulator(DATA) {
         gl.FLOAT,
         gl.FLASE,
         24,
-        12
+        12,
       );
       gl.uniform4fv(glCache.mob_instanceInfo1, this.pos);
       gl.uniform2f(glCache.mob_instanceInfo2, 1, 1);
@@ -27037,7 +27053,7 @@ function BeeSwarmSimulator(DATA) {
         gl.TRIANGLES,
         meshes.spike.indexAmount,
         gl.UNSIGNED_SHORT,
-        0
+        0,
       );
 
       return this.life <= 0;
@@ -27099,7 +27115,7 @@ function BeeSwarmSimulator(DATA) {
           ...b.col,
           b.alpha,
           b.rad,
-          b.hei
+          b.hei,
         );
       }
 
@@ -27157,8 +27173,8 @@ function BeeSwarmSimulator(DATA) {
           new Token(
             effects[this.type].tokenLife,
             [this.pos[0], this.pos[1] + 1.1, this.pos[2]],
-            this.type
-          )
+            this.type,
+          ),
         );
       }
 
@@ -27422,8 +27438,8 @@ function BeeSwarmSimulator(DATA) {
               1,
               false,
               "Sprout",
-              ["tokensFromSprouts"]
-            )
+              ["tokensFromSprouts"],
+            ),
           );
         }, 200 * i);
       }
@@ -27439,7 +27455,7 @@ function BeeSwarmSimulator(DATA) {
           maxAlpha: 1,
           primitive: "cylinder_explosions",
           height: 500,
-        })
+        }),
       );
 
       objects.mobs.splice(index, 1);
@@ -27448,7 +27464,7 @@ function BeeSwarmSimulator(DATA) {
     update() {
       let pollen = Math.max(
         this.pollenBefore - player.stats["pollenFrom" + this.field],
-        0
+        0,
       );
 
       this.growth += (pollen * this.invAmount - this.growth) * dt * 15;
@@ -27458,7 +27474,7 @@ function BeeSwarmSimulator(DATA) {
         [this.pos[0], this.pos[1] + 4, this.pos[2]],
         COLORS.whiteArr,
         -3.5,
-        false
+        false,
       );
 
       meshes.cylinder_explosions.instanceData.push(
@@ -27470,13 +27486,13 @@ function BeeSwarmSimulator(DATA) {
         0.6,
         0.15,
         5,
-        500
+        500,
       );
 
       gl.bindBuffer(gl.ARRAY_BUFFER, meshes[this.type + "Sprout"].vertBuffer);
       gl.bindBuffer(
         gl.ELEMENT_ARRAY_BUFFER,
-        meshes[this.type + "Sprout"].indexBuffer
+        meshes[this.type + "Sprout"].indexBuffer,
       );
       gl.vertexAttribPointer(glCache.mob_vertPos, 3, gl.FLOAT, gl.FLASE, 24, 0);
       gl.vertexAttribPointer(
@@ -27485,7 +27501,7 @@ function BeeSwarmSimulator(DATA) {
         gl.FLOAT,
         gl.FLASE,
         24,
-        12
+        12,
       );
       gl.uniform4fv(glCache.mob_instanceInfo1, this.pos);
       gl.uniform2f(glCache.mob_instanceInfo2, 0.6 + (1 - this.growth) * 1.6, 1);
@@ -27493,7 +27509,7 @@ function BeeSwarmSimulator(DATA) {
         gl.TRIANGLES,
         meshes[this.type + "Sprout"].indexAmount,
         gl.UNSIGNED_SHORT,
-        0
+        0,
       );
 
       return pollen <= 0;
@@ -27631,7 +27647,7 @@ function BeeSwarmSimulator(DATA) {
           size: this.displayScale * 2,
           speed: 0.2,
           aftershock: 0.05,
-        })
+        }),
       );
 
       if (this.life <= 0) {
@@ -27703,8 +27719,8 @@ function BeeSwarmSimulator(DATA) {
             "turpentine",
             1,
             true,
-            "Puffshroom"
-          )
+            "Puffshroom",
+          ),
         );
       }
 
@@ -27775,8 +27791,8 @@ function BeeSwarmSimulator(DATA) {
               it,
               am,
               true,
-              "Puffshroom"
-            )
+              "Puffshroom",
+            ),
           );
         }, 150 * i);
       }
@@ -27821,7 +27837,7 @@ function BeeSwarmSimulator(DATA) {
                 j,
                 vec2.sqrDist(
                   [this.pos[0], this.pos[2]],
-                  [fieldInfo[j].x + x, fieldInfo[j].z + z]
+                  [fieldInfo[j].x + x, fieldInfo[j].z + z],
                 ),
                 x,
                 z,
@@ -27878,8 +27894,8 @@ function BeeSwarmSimulator(DATA) {
               lvl,
               this.life,
               this.prevFields,
-              type
-            )
+              type,
+            ),
           );
         }
       }
@@ -27902,7 +27918,7 @@ function BeeSwarmSimulator(DATA) {
         false,
         false,
         0,
-        0.7
+        0.7,
       );
 
       textRenderer.addSingle(
@@ -27913,7 +27929,7 @@ function BeeSwarmSimulator(DATA) {
         false,
         false,
         0,
-        0.6
+        0.6,
       );
       textRenderer.addDecalRaw(
         this.pos[0],
@@ -27927,7 +27943,7 @@ function BeeSwarmSimulator(DATA) {
         0.27 * 0.5,
         3,
         0.6,
-        0
+        0,
       );
       textRenderer.addDecalRaw(
         this.pos[0],
@@ -27941,7 +27957,7 @@ function BeeSwarmSimulator(DATA) {
         0.27,
         this.life * 0.0033333333 * 3,
         0.6,
-        0
+        0,
       );
 
       textRenderer.addSingle(
@@ -27951,7 +27967,7 @@ function BeeSwarmSimulator(DATA) {
         -1.25,
         true,
         true,
-        0.175
+        0.175,
       );
       textRenderer.addDecalRaw(
         this.pos[0],
@@ -27965,7 +27981,7 @@ function BeeSwarmSimulator(DATA) {
         0,
         3,
         0.6,
-        0
+        0,
       );
       textRenderer.addDecalRaw(
         this.pos[0],
@@ -27979,7 +27995,7 @@ function BeeSwarmSimulator(DATA) {
         0.1,
         Math.min(this.pollen * this.invCap, 1) * 3,
         0.6,
-        0
+        0,
       );
       textRenderer.addDecalRaw(
         this.pos[0],
@@ -27993,7 +28009,7 @@ function BeeSwarmSimulator(DATA) {
         1,
         -1.25,
         -1.25,
-        0
+        0,
       );
 
       this.pos[1] -= this.displayScale * 1.75 + 0.25;
@@ -28007,7 +28023,7 @@ function BeeSwarmSimulator(DATA) {
         gl.FLOAT,
         gl.FLASE,
         24,
-        12
+        12,
       );
 
       gl.uniform4fv(glCache.mob_instanceInfo1, this.pos);
@@ -28016,7 +28032,7 @@ function BeeSwarmSimulator(DATA) {
         gl.TRIANGLES,
         meshes[this.type].indexAmount,
         gl.UNSIGNED_SHORT,
-        0
+        0,
       );
 
       return this.pollen >= this.cap || this.life <= 0;
@@ -28057,8 +28073,8 @@ function BeeSwarmSimulator(DATA) {
           this.z,
           this.plife,
           this.level,
-          this.type
-        )
+          this.type,
+        ),
       );
 
       objects.explosions.push(
@@ -28074,7 +28090,7 @@ function BeeSwarmSimulator(DATA) {
           size: this.displayScale * 2,
           speed: 0.2,
           aftershock: 0.05,
-        })
+        }),
       );
 
       objects.mobs.splice(index, 1);
@@ -28087,7 +28103,7 @@ function BeeSwarmSimulator(DATA) {
         this.pos,
         vec3.lerp([], this.startPos, this.controlPos, this.t),
         vec3.lerp([], this.controlPos, this.endPos, this.t),
-        this.t
+        this.t,
       );
 
       meshes.explosions.instanceData.push(
@@ -28099,7 +28115,7 @@ function BeeSwarmSimulator(DATA) {
         0.1,
         0.85,
         this.displayScale,
-        1
+        1,
       );
 
       return this.t >= 1;
@@ -28151,8 +28167,8 @@ function BeeSwarmSimulator(DATA) {
             30,
             [this.body.position.x, this.body.position.y, this.body.position.z],
             "treat",
-            this.treat.amount
-          )
+            this.treat.amount,
+          ),
         );
 
         this.treat.amount = this.treat.amount * 2;
@@ -28188,7 +28204,7 @@ function BeeSwarmSimulator(DATA) {
         0.1,
         this.life,
         1,
-        1
+        1,
       );
 
       let arr = [
@@ -28391,22 +28407,22 @@ function BeeSwarmSimulator(DATA) {
           lerp(
             fx,
             grad3d(perm[p01], x, y - 1, z),
-            grad3d(perm[p11], x - 1, y - 1, z)
-          )
+            grad3d(perm[p11], x - 1, y - 1, z),
+          ),
         ),
         lerp(
           fy,
           lerp(
             fx,
             grad3d(perm[p00 + 1], x, y, z - 1),
-            grad3d(perm[p10 + 1], x - 1, y, z - 1)
+            grad3d(perm[p10 + 1], x - 1, y, z - 1),
           ),
           lerp(
             fx,
             grad3d(perm[p01 + 1], x, y - 1, z - 1),
-            grad3d(perm[p11 + 1], x - 1, y - 1, z - 1)
-          )
-        )
+            grad3d(perm[p11 + 1], x - 1, y - 1, z - 1),
+          ),
+        ),
       );
     };
 
@@ -28425,8 +28441,8 @@ function BeeSwarmSimulator(DATA) {
         lerp(
           fx,
           grad2d(perm[p0 + 1], x, y - 1),
-          grad2d(perm[p1 + 1], x - 1, y - 1)
-        )
+          grad2d(perm[p1 + 1], x - 1, y - 1),
+        ),
       );
     };
 
@@ -28481,13 +28497,13 @@ function BeeSwarmSimulator(DATA) {
       .replaceAll("ASPECT", aspect + 0.000001)
       .replaceAll(
         "SCREEN_CHANGE",
-        (((width + height) * 0.5) / 600) * 1.5 + 0.00001
+        (((width + height) * 0.5) / 600) * 1.5 + 0.00001,
       );
     let fshText = window["glsl_" + fsh]
       .trim()
       .replaceAll(
         "LIGHT_DIR",
-        "vec3(" + lightDir[0] + "," + lightDir[1] + "," + lightDir[2] + ")"
+        "vec3(" + lightDir[0] + "," + lightDir[1] + "," + lightDir[2] + ")",
       )
       .replaceAll("INV_AVG_HALF_WIDTH_HEIGHT", 2 / ((width + height) * 0.5))
       .replaceAll("INV_HALF_WIDTH", 1 / (width * 0.5))
@@ -28500,7 +28516,7 @@ function BeeSwarmSimulator(DATA) {
       .replaceAll("ASPECT", aspect + 0.00001)
       .replaceAll(
         "SCREEN_CHANGE",
-        (((width + height) * 0.5) / 600) * 1.5 + 0.00001
+        (((width + height) * 0.5) / 600) * 1.5 + 0.00001,
       );
 
     vsh = gl.createShader(gl.VERTEX_SHADER);
@@ -28520,145 +28536,145 @@ function BeeSwarmSimulator(DATA) {
 
   let staticGeometryProgram = createProgram(
       "static_geometry_vsh",
-      "static_geometry_fsh"
+      "static_geometry_fsh",
     ),
     dynamicGeometryProgram = createProgram(
       "dynamic_geometry_vsh",
-      "dynamic_geometry_fsh"
+      "dynamic_geometry_fsh",
     ),
     tokenGeometryProgram = createProgram(
       "token_geometry_vsh",
-      "token_geometry_fsh"
+      "token_geometry_fsh",
     ),
     flowerGeometryProgram = createProgram(
       "flower_geometry_vsh",
-      "flower_geometry_fsh"
+      "flower_geometry_fsh",
     ),
     beeGeometryProgram = createProgram("bee_geometry_vsh", "bee_geometry_fsh"),
     particleRendererProgram = createProgram(
       "particle_renderer_vsh",
-      "particle_renderer_fsh"
+      "particle_renderer_fsh",
     ),
     explosionRendererProgram = createProgram(
       "explosion_renderer_vsh",
-      "explosion_renderer_fsh"
+      "explosion_renderer_fsh",
     ),
     textRendererProgram = createProgram(
       "text_renderer_vsh",
-      "text_renderer_fsh"
+      "text_renderer_fsh",
     ),
     mobRendererProgram = createProgram("mob_renderer_vsh", "mob_renderer_fsh"),
     trailRendererProgram = createProgram(
       "trail_renderer_vsh",
-      "trail_renderer_fsh"
+      "trail_renderer_fsh",
     );
 
   let initGlCache = function (glCache) {
     glCache.static_viewMatrix = gl.getUniformLocation(
       staticGeometryProgram,
-      "viewMatrix"
+      "viewMatrix",
     );
     glCache.static_isNight = gl.getUniformLocation(
       staticGeometryProgram,
-      "isNight"
+      "isNight",
     );
     glCache.static_vertPos = gl.getAttribLocation(
       staticGeometryProgram,
-      "vertPos"
+      "vertPos",
     );
     gl.enableVertexAttribArray(glCache.static_vertPos);
     glCache.static_vertColor = gl.getAttribLocation(
       staticGeometryProgram,
-      "vertColor"
+      "vertColor",
     );
     gl.enableVertexAttribArray(glCache.static_vertColor);
     glCache.static_vertUV = gl.getAttribLocation(
       staticGeometryProgram,
-      "vertUV"
+      "vertUV",
     );
     gl.enableVertexAttribArray(glCache.static_vertUV);
 
     glCache.dynamic_viewMatrix = gl.getUniformLocation(
       dynamicGeometryProgram,
-      "viewMatrix"
+      "viewMatrix",
     );
     glCache.dynamic_modelMatrix = gl.getUniformLocation(
       dynamicGeometryProgram,
-      "modelMatrix"
+      "modelMatrix",
     );
     glCache.dynamic_isNight = gl.getUniformLocation(
       dynamicGeometryProgram,
-      "isNight"
+      "isNight",
     );
     glCache.dynamic_vertPos = gl.getAttribLocation(
       dynamicGeometryProgram,
-      "vertPos"
+      "vertPos",
     );
     gl.enableVertexAttribArray(glCache.dynamic_vertPos);
     glCache.dynamic_vertColor = gl.getAttribLocation(
       dynamicGeometryProgram,
-      "vertColor"
+      "vertColor",
     );
     gl.enableVertexAttribArray(glCache.dynamic_vertColor);
     glCache.dynamic_vertNormal = gl.getAttribLocation(
       dynamicGeometryProgram,
-      "vertNormal"
+      "vertNormal",
     );
     gl.enableVertexAttribArray(glCache.dynamic_vertNormal);
 
     glCache.token_viewMatrix = gl.getUniformLocation(
       tokenGeometryProgram,
-      "viewMatrix"
+      "viewMatrix",
     );
     glCache.token_isNight = gl.getUniformLocation(
       tokenGeometryProgram,
-      "isNight"
+      "isNight",
     );
     glCache.token_vertPos = gl.getAttribLocation(
       tokenGeometryProgram,
-      "vertPos"
+      "vertPos",
     );
     gl.enableVertexAttribArray(glCache.token_vertPos);
     glCache.token_vertUV = gl.getAttribLocation(tokenGeometryProgram, "vertUV");
     gl.enableVertexAttribArray(glCache.token_vertUV);
     glCache.token_instancePos = gl.getAttribLocation(
       tokenGeometryProgram,
-      "instance_pos"
+      "instance_pos",
     );
     gl.enableVertexAttribArray(glCache.token_instancePos);
     glCache.token_instanceUV = gl.getAttribLocation(
       tokenGeometryProgram,
-      "instance_uv"
+      "instance_uv",
     );
     gl.enableVertexAttribArray(glCache.token_instanceUV);
 
     glCache.flower_viewMatrix = gl.getUniformLocation(
       flowerGeometryProgram,
-      "viewMatrix"
+      "viewMatrix",
     );
     glCache.flower_isNight = gl.getUniformLocation(
       flowerGeometryProgram,
-      "isNight"
+      "isNight",
     );
     glCache.flower_vertPos = gl.getAttribLocation(
       flowerGeometryProgram,
-      "vertPos"
+      "vertPos",
     );
     gl.enableVertexAttribArray(glCache.flower_vertPos);
     glCache.flower_vertUV = gl.getAttribLocation(
       flowerGeometryProgram,
-      "vertUV"
+      "vertUV",
     );
     gl.enableVertexAttribArray(glCache.flower_vertUV);
     glCache.flower_vertGoo = gl.getAttribLocation(
       flowerGeometryProgram,
-      "vertGoo"
+      "vertGoo",
     );
     gl.enableVertexAttribArray(glCache.flower_vertGoo);
 
     glCache.bee_viewMatrix = gl.getUniformLocation(
       beeGeometryProgram,
-      "viewMatrix"
+      "viewMatrix",
     );
     glCache.bee_isNight = gl.getUniformLocation(beeGeometryProgram, "isNight");
     glCache.bee_vertPos = gl.getAttribLocation(beeGeometryProgram, "vertPos");
@@ -28667,68 +28683,68 @@ function BeeSwarmSimulator(DATA) {
     gl.enableVertexAttribArray(glCache.bee_vertUV);
     glCache.bee_instancePos = gl.getAttribLocation(
       beeGeometryProgram,
-      "instance_pos"
+      "instance_pos",
     );
     gl.enableVertexAttribArray(glCache.bee_instancePos);
     glCache.bee_instanceRotation = gl.getAttribLocation(
       beeGeometryProgram,
-      "instance_rotation"
+      "instance_rotation",
     );
     gl.enableVertexAttribArray(glCache.bee_instanceRotation);
     glCache.bee_instanceUV = gl.getAttribLocation(
       beeGeometryProgram,
-      "instance_uv"
+      "instance_uv",
     );
     gl.enableVertexAttribArray(glCache.bee_instanceUV);
 
     glCache.particle_vertPos = gl.getAttribLocation(
       particleRendererProgram,
-      "vertPos"
+      "vertPos",
     );
     gl.enableVertexAttribArray(glCache.particle_vertPos);
     glCache.particle_vertColor = gl.getAttribLocation(
       particleRendererProgram,
-      "vertColor"
+      "vertColor",
     );
     gl.enableVertexAttribArray(glCache.particle_vertColor);
     glCache.particle_vertSize = gl.getAttribLocation(
       particleRendererProgram,
-      "vertSize"
+      "vertSize",
     );
     gl.enableVertexAttribArray(glCache.particle_vertSize);
     glCache.particle_vertRot = gl.getAttribLocation(
       particleRendererProgram,
-      "vertRot"
+      "vertRot",
     );
     gl.enableVertexAttribArray(glCache.particle_vertRot);
     glCache.particle_viewMatrix = gl.getUniformLocation(
       particleRendererProgram,
-      "viewMatrix"
+      "viewMatrix",
     );
 
     glCache.explosion_vertPos = gl.getAttribLocation(
       explosionRendererProgram,
-      "vertPos"
+      "vertPos",
     );
     gl.enableVertexAttribArray(glCache.explosion_vertPos);
     glCache.explosion_instancePos = gl.getAttribLocation(
       explosionRendererProgram,
-      "instance_pos"
+      "instance_pos",
     );
     gl.enableVertexAttribArray(glCache.explosion_instancePos);
     glCache.explosion_instanceColor = gl.getAttribLocation(
       explosionRendererProgram,
-      "instance_color"
+      "instance_color",
     );
     gl.enableVertexAttribArray(glCache.explosion_instanceColor);
     glCache.explosion_instanceScale = gl.getAttribLocation(
       explosionRendererProgram,
-      "instance_scale"
+      "instance_scale",
     );
     gl.enableVertexAttribArray(glCache.explosion_instanceScale);
     glCache.explosion_viewMatrix = gl.getUniformLocation(
       explosionRendererProgram,
-      "viewMatrix"
+      "viewMatrix",
     );
 
     glCache.text_vertPos = gl.getAttribLocation(textRendererProgram, "vertPos");
@@ -28737,72 +28753,72 @@ function BeeSwarmSimulator(DATA) {
     gl.enableVertexAttribArray(glCache.text_vertUV);
     glCache.text_instanceOrigin = gl.getAttribLocation(
       textRendererProgram,
-      "instance_origin"
+      "instance_origin",
     );
     gl.enableVertexAttribArray(glCache.text_instanceOrigin);
     glCache.text_instanceOffset = gl.getAttribLocation(
       textRendererProgram,
-      "instance_offset"
+      "instance_offset",
     );
     gl.enableVertexAttribArray(glCache.text_instanceOffset);
     glCache.text_instanceUV = gl.getAttribLocation(
       textRendererProgram,
-      "instance_uv"
+      "instance_uv",
     );
     gl.enableVertexAttribArray(glCache.text_instanceUV);
     glCache.text_instanceColor = gl.getAttribLocation(
       textRendererProgram,
-      "instance_color"
+      "instance_color",
     );
     gl.enableVertexAttribArray(glCache.text_instanceColor);
     glCache.text_instanceInfo = gl.getAttribLocation(
       textRendererProgram,
-      "instance_info"
+      "instance_info",
     );
     gl.enableVertexAttribArray(glCache.text_instanceInfo);
     glCache.text_viewMatrix = gl.getUniformLocation(
       textRendererProgram,
-      "viewMatrix"
+      "viewMatrix",
     );
 
     glCache.mob_viewMatrix = gl.getUniformLocation(
       mobRendererProgram,
-      "viewMatrix"
+      "viewMatrix",
     );
     glCache.mob_isNight = gl.getUniformLocation(mobRendererProgram, "isNight");
     glCache.mob_vertPos = gl.getAttribLocation(mobRendererProgram, "vertPos");
     gl.enableVertexAttribArray(glCache.mob_vertPos);
     glCache.mob_vertColor = gl.getAttribLocation(
       mobRendererProgram,
-      "vertColor"
+      "vertColor",
     );
     gl.enableVertexAttribArray(glCache.mob_vertColor);
     glCache.mob_instanceInfo1 = gl.getUniformLocation(
       mobRendererProgram,
-      "instance_info1"
+      "instance_info1",
     );
     glCache.mob_instanceInfo2 = gl.getUniformLocation(
       mobRendererProgram,
-      "instance_info2"
+      "instance_info2",
     );
 
     glCache.trail_viewMatrix = gl.getUniformLocation(
       trailRendererProgram,
-      "viewMatrix"
+      "viewMatrix",
     );
     glCache.trail_vertPos = gl.getAttribLocation(
       trailRendererProgram,
-      "vertPos"
+      "vertPos",
     );
     gl.enableVertexAttribArray(glCache.trail_vertPos);
     glCache.trail_vertColor = gl.getAttribLocation(
       trailRendererProgram,
-      "vertCol"
+      "vertCol",
     );
     gl.enableVertexAttribArray(glCache.trail_vertColor);
     glCache.trail_isNight = gl.getUniformLocation(
       trailRendererProgram,
-      "isNight"
+      "isNight",
     );
 
     return glCache;
@@ -28870,14 +28886,14 @@ function BeeSwarmSimulator(DATA) {
           _col,
           physics = true,
           textures = true,
-          mesh = true
+          mesh = true,
         ) {
           let col = (
             _col === true
               ? [0, 0.8, 0, 0.6]
               : typeof _col === "string"
-              ? [1, 0, 0, 0.6]
-              : _col
+                ? [1, 0, 0, 0.6]
+                : _col
           ).slice();
 
           rot = rot || [0, 0, 0];
@@ -29197,7 +29213,7 @@ function BeeSwarmSimulator(DATA) {
             a,
             w,
             l,
-            0
+            0,
           );
 
           index.push(
@@ -29236,7 +29252,7 @@ function BeeSwarmSimulator(DATA) {
             20 + vl,
             23 + vl,
             22 + vl,
-            20 + vl
+            20 + vl,
           );
         };
 
@@ -29293,7 +29309,7 @@ function BeeSwarmSimulator(DATA) {
             1,
             _x,
             _y,
-            isNull
+            isNull,
           );
 
           index.push(vl, vl + 1, vl + 2, vl + 2, vl + 3, vl);
@@ -29310,7 +29326,7 @@ function BeeSwarmSimulator(DATA) {
             false,
             [100, 100, 0],
             false,
-            false
+            false,
           );
         };
 
@@ -29329,7 +29345,7 @@ function BeeSwarmSimulator(DATA) {
           lb = 0.25,
           rx = 0,
           ry = 0,
-          rz = 0
+          rz = 0,
         ) {
           let rotQuat = quat.fromEuler([], rx, ry, rz);
 
@@ -29421,7 +29437,7 @@ function BeeSwarmSimulator(DATA) {
             21,
             9,
             10,
-            0
+            0,
           );
 
           ix.push(
@@ -29487,7 +29503,7 @@ function BeeSwarmSimulator(DATA) {
             59,
             60,
             61,
-            62
+            62,
           );
 
           for (let i = 0; i < 10; i++) {
@@ -29498,7 +29514,7 @@ function BeeSwarmSimulator(DATA) {
               i * 6 + 2,
               i * 6 + 3,
               i * 6 + 4,
-              i * 6 + 5
+              i * 6 + 5,
             );
           }
 
@@ -29525,7 +29541,7 @@ function BeeSwarmSimulator(DATA) {
             let n = vec3.cross(
               [],
               [a[0] - b[0], a[1] - b[1], a[2] - b[2]],
-              [a[0] - c[0], a[1] - c[1], a[2] - c[2]]
+              [a[0] - c[0], a[1] - c[1], a[2] - c[2]],
             );
 
             return vec3.normalize(n, n);
@@ -29562,7 +29578,7 @@ function BeeSwarmSimulator(DATA) {
               1,
               0,
               0,
-              0
+              0,
             );
           }
 
@@ -29588,7 +29604,7 @@ function BeeSwarmSimulator(DATA) {
           ry,
           rz,
           r2,
-          shading = true
+          shading = true,
         ) {
           let rad2 = r2 ?? rad,
             vl = verts.length / 10,
@@ -29643,7 +29659,7 @@ function BeeSwarmSimulator(DATA) {
               a,
               0,
               0,
-              0
+              0,
             );
 
             let _vl = _verts.length / 10;
@@ -29679,7 +29695,7 @@ function BeeSwarmSimulator(DATA) {
               a,
               0,
               0,
-              0
+              0,
             );
           }
           for (let l = _verts.length / 10, i = _v; i < l; i++) {
@@ -29713,7 +29729,7 @@ function BeeSwarmSimulator(DATA) {
               a,
               0,
               0,
-              0
+              0,
             );
           }
           for (let l = _verts.length / 10, i = _v; i < l; i++) {
@@ -29733,7 +29749,7 @@ function BeeSwarmSimulator(DATA) {
               let rotated = vec3.transformQuat(
                 [],
                 [_verts[i], _verts[i + 1], _verts[i + 2]],
-                rotQuat
+                rotQuat,
               );
               _verts[i] = rotated[0] + x;
               _verts[i + 1] = rotated[1] + y;
@@ -29742,7 +29758,7 @@ function BeeSwarmSimulator(DATA) {
               rotated = vec3.transformQuat(
                 rotated,
                 [_verts[i + 7], _verts[i + 8], _verts[i + 9]],
-                rotQuat
+                rotQuat,
               );
 
               _verts[i + 7] = rotated[0];
@@ -29774,7 +29790,7 @@ function BeeSwarmSimulator(DATA) {
               a,
               0,
               0,
-              0
+              0,
             );
           }
 
@@ -29797,7 +29813,7 @@ function BeeSwarmSimulator(DATA) {
           rot,
           u,
           _v,
-          useTex = false
+          useTex = false,
         ) {
           rot = rot || [0, 0, 0];
 
@@ -30117,7 +30133,7 @@ function BeeSwarmSimulator(DATA) {
             a,
             u,
             _v,
-            0
+            0,
           );
 
           index.push(
@@ -30156,7 +30172,7 @@ function BeeSwarmSimulator(DATA) {
             20 + vl,
             23 + vl,
             22 + vl,
-            20 + vl
+            20 + vl,
           );
         };
 
@@ -30176,7 +30192,7 @@ function BeeSwarmSimulator(DATA) {
           ry,
           rz,
           u,
-          __v
+          __v,
         ) {
           u += 1 / 1024;
           __v += 1 / 1024;
@@ -30234,7 +30250,7 @@ function BeeSwarmSimulator(DATA) {
               a,
               u,
               __v,
-              0
+              0,
             );
 
             let _vl = _verts.length / 10;
@@ -30270,7 +30286,7 @@ function BeeSwarmSimulator(DATA) {
               a,
               u,
               __v,
-              0
+              0,
             );
           }
           for (let l = _verts.length / 10, i = _v; i < l; i++) {
@@ -30304,7 +30320,7 @@ function BeeSwarmSimulator(DATA) {
               a,
               u,
               __v,
-              0
+              0,
             );
           }
           for (let l = _verts.length / 10, i = _v; i < l; i++) {
@@ -30324,7 +30340,7 @@ function BeeSwarmSimulator(DATA) {
               let rotated = vec3.transformQuat(
                 [],
                 [_verts[i], _verts[i + 1], _verts[i + 2]],
-                rotQuat
+                rotQuat,
               );
               _verts[i] = rotated[0] + x;
               _verts[i + 1] = rotated[1] + y;
@@ -30333,7 +30349,7 @@ function BeeSwarmSimulator(DATA) {
               rotated = vec3.transformQuat(
                 rotated,
                 [_verts[i + 7], _verts[i + 8], _verts[i + 9]],
-                rotQuat
+                rotQuat,
               );
 
               _verts[i + 7] = rotated[0];
@@ -30633,7 +30649,7 @@ function BeeSwarmSimulator(DATA) {
             col[2],
             n[5][0],
             n[5][1],
-            n[5][2]
+            n[5][2],
           );
 
           index.push(
@@ -30672,7 +30688,7 @@ function BeeSwarmSimulator(DATA) {
             20 + vl,
             23 + vl,
             22 + vl,
-            20 + vl
+            20 + vl,
           );
         };
 
@@ -30689,7 +30705,7 @@ function BeeSwarmSimulator(DATA) {
           rx,
           ry,
           rz,
-          r2
+          r2,
         ) {
           let rad2 = r2 ?? rad,
             vl = verts.length / 9,
@@ -30739,7 +30755,7 @@ function BeeSwarmSimulator(DATA) {
               b,
               Math.cos(t2),
               Math.sin(t2),
-              0
+              0,
             );
 
             let _vl = _verts.length / 9;
@@ -30773,7 +30789,7 @@ function BeeSwarmSimulator(DATA) {
               b,
               0,
               0,
-              1
+              1,
             );
           }
           for (let l = _verts.length / 9, i = _v; i < l - 1; i++) {
@@ -30805,7 +30821,7 @@ function BeeSwarmSimulator(DATA) {
               b,
               0,
               0,
-              -1
+              -1,
             );
           }
           for (let l = _verts.length / 9, i = _v; i < l; i++) {
@@ -30825,7 +30841,7 @@ function BeeSwarmSimulator(DATA) {
               let rotated = vec3.transformQuat(
                 [],
                 [_verts[i], _verts[i + 1], _verts[i + 2]],
-                rotQuat
+                rotQuat,
               );
               _verts[i] = rotated[0] + x;
               _verts[i + 1] = rotated[1] + y;
@@ -30834,7 +30850,7 @@ function BeeSwarmSimulator(DATA) {
               rotated = vec3.transformQuat(
                 rotated,
                 [_verts[i + 6], _verts[i + 7], _verts[i + 8]],
-                rotQuat
+                rotQuat,
               );
 
               _verts[i + 6] = rotated[0];
@@ -30849,7 +30865,7 @@ function BeeSwarmSimulator(DATA) {
             [_verts[i], _verts[i + 1], _verts[i + 2]] = vec3.transformMat4(
               [],
               [_verts[i], _verts[i + 1], _verts[i + 2]],
-              DIS.matrix
+              DIS.matrix,
             );
           }
 
@@ -30871,7 +30887,7 @@ function BeeSwarmSimulator(DATA) {
               b,
               _m.verts[i],
               _m.verts[i + 1],
-              _m.verts[i + 2]
+              _m.verts[i + 2],
             );
           }
 
@@ -30883,7 +30899,7 @@ function BeeSwarmSimulator(DATA) {
             [_verts[i], _verts[i + 1], _verts[i + 2]] = vec3.transformMat4(
               [],
               [_verts[i], _verts[i + 1], _verts[i + 2]],
-              DIS.matrix
+              DIS.matrix,
             );
           }
 
@@ -30906,7 +30922,7 @@ function BeeSwarmSimulator(DATA) {
           lb = 0.25,
           rx = 0,
           ry = 0,
-          rz = 0
+          rz = 0,
         ) {
           let rotQuat = quat.fromEuler([], rx, ry, rz);
 
@@ -30998,7 +31014,7 @@ function BeeSwarmSimulator(DATA) {
             21,
             9,
             10,
-            0
+            0,
           );
 
           ix.push(
@@ -31064,7 +31080,7 @@ function BeeSwarmSimulator(DATA) {
             59,
             60,
             61,
-            62
+            62,
           );
 
           for (let i = 0; i < 10; i++) {
@@ -31075,7 +31091,7 @@ function BeeSwarmSimulator(DATA) {
               i * 6 + 2,
               i * 6 + 3,
               i * 6 + 4,
-              i * 6 + 5
+              i * 6 + 5,
             );
           }
 
@@ -31103,7 +31119,7 @@ function BeeSwarmSimulator(DATA) {
             let n = vec3.cross(
               [],
               [a[0] - b[0], a[1] - b[1], a[2] - b[2]],
-              [a[0] - c[0], a[1] - c[1], a[2] - c[2]]
+              [a[0] - c[0], a[1] - c[1], a[2] - c[2]],
             );
 
             return vec3.normalize(n, n);
@@ -31137,7 +31153,7 @@ function BeeSwarmSimulator(DATA) {
               b * shade,
               0,
               1,
-              0
+              0,
             );
           }
 
@@ -31157,7 +31173,7 @@ function BeeSwarmSimulator(DATA) {
             let v = vec3.transformQuat(
               [],
               [verts[i], verts[i + 1], verts[i + 2]],
-              q
+              q,
             );
 
             verts[i] = v[0];
@@ -31176,7 +31192,7 @@ function BeeSwarmSimulator(DATA) {
         addGiftedRing,
         addStar,
         addLimbBox,
-        addLimbCylinder
+        addLimbCylinder,
       );
       this.setMesh(verts, index);
     }
@@ -31190,7 +31206,7 @@ function BeeSwarmSimulator(DATA) {
         gl.bufferData(
           gl.ELEMENT_ARRAY_BUFFER,
           this.mesh.data.index,
-          gl.STATIC_DRAW
+          gl.STATIC_DRAW,
         );
       } else {
         gl.bindBuffer(gl.ARRAY_BUFFER, this.mesh.buffers.verts);
@@ -31200,7 +31216,7 @@ function BeeSwarmSimulator(DATA) {
         gl.bufferData(
           gl.ELEMENT_ARRAY_BUFFER,
           this.mesh.data.index,
-          gl.STATIC_DRAW
+          gl.STATIC_DRAW,
         );
       }
     }
@@ -31217,7 +31233,7 @@ function BeeSwarmSimulator(DATA) {
           gl.FLOAT,
           gl.FALSE,
           40,
-          0
+          0,
         );
         gl.vertexAttribPointer(
           glCache.static_vertColor,
@@ -31225,7 +31241,7 @@ function BeeSwarmSimulator(DATA) {
           gl.FLOAT,
           gl.FALSE,
           40,
-          12
+          12,
         );
         gl.vertexAttribPointer(
           glCache.static_vertUV,
@@ -31233,7 +31249,7 @@ function BeeSwarmSimulator(DATA) {
           gl.FLOAT,
           gl.FALSE,
           40,
-          28
+          28,
         );
       } else {
         gl.bindBuffer(gl.ARRAY_BUFFER, this.mesh.buffers.verts);
@@ -31246,7 +31262,7 @@ function BeeSwarmSimulator(DATA) {
           gl.FLOAT,
           gl.FALSE,
           36,
-          0
+          0,
         );
         gl.vertexAttribPointer(
           glCache.dynamic_vertColor,
@@ -31254,7 +31270,7 @@ function BeeSwarmSimulator(DATA) {
           gl.FLOAT,
           gl.FALSE,
           36,
-          12
+          12,
         );
         gl.vertexAttribPointer(
           glCache.dynamic_vertNormal,
@@ -31262,7 +31278,7 @@ function BeeSwarmSimulator(DATA) {
           gl.FLOAT,
           gl.FALSE,
           36,
-          24
+          24,
         );
       }
 
@@ -31270,7 +31286,7 @@ function BeeSwarmSimulator(DATA) {
         gl.TRIANGLES,
         this.mesh.indexAmount,
         gl.UNSIGNED_SHORT,
-        0
+        0,
       );
     }
   }
@@ -31284,7 +31300,7 @@ function BeeSwarmSimulator(DATA) {
         MATH.random(12, 500),
         MATH.random(12, 500),
         MATH.random(25, 45),
-        MATH.random(25, 45)
+        MATH.random(25, 45),
       );
 
       tex_ctx.fillStyle = "rgba(0,0,0,0.015)";
@@ -31314,7 +31330,7 @@ function BeeSwarmSimulator(DATA) {
       0,
       gl.RGBA,
       gl.UNSIGNED_BYTE,
-      tex_ctx.getImageData(0, 0, 512, 512)
+      tex_ctx.getImageData(0, 0, 512, 512),
     );
 
     gl.generateMipmap(gl.TEXTURE_2D);
@@ -31331,7 +31347,7 @@ function BeeSwarmSimulator(DATA) {
       0,
       gl.RGBA,
       gl.UNSIGNED_BYTE,
-      tex_ctx.getImageData(0, 0, 2048, 2048)
+      tex_ctx.getImageData(0, 0, 2048, 2048),
     );
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
@@ -31349,7 +31365,7 @@ function BeeSwarmSimulator(DATA) {
       0,
       gl.RGBA,
       gl.UNSIGNED_BYTE,
-      tex_ctx.getImageData(0, 0, 1024, 1024)
+      tex_ctx.getImageData(0, 0, 1024, 1024),
     );
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
@@ -31428,7 +31444,7 @@ function BeeSwarmSimulator(DATA) {
       0,
       gl.RGBA,
       gl.UNSIGNED_BYTE,
-      tex_ctx.getImageData(0, 0, 512, 600)
+      tex_ctx.getImageData(0, 0, 512, 600),
     );
     gl.generateMipmap(gl.TEXTURE_2D);
 
@@ -31445,7 +31461,7 @@ function BeeSwarmSimulator(DATA) {
       0,
       gl.RGBA,
       gl.UNSIGNED_BYTE,
-      data
+      data,
     );
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
@@ -31468,7 +31484,7 @@ function BeeSwarmSimulator(DATA) {
       0,
       gl.RGBA,
       gl.UNSIGNED_BYTE,
-      tex_ctx.getImageData(0, 0, 1024, 1024)
+      tex_ctx.getImageData(0, 0, 1024, 1024),
     );
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
@@ -31486,7 +31502,7 @@ function BeeSwarmSimulator(DATA) {
       0,
       gl.RGBA,
       gl.UNSIGNED_BYTE,
-      tex_ctx.getImageData(0, 0, 1024, 1024)
+      tex_ctx.getImageData(0, 0, 1024, 1024),
     );
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
@@ -31548,7 +31564,7 @@ function BeeSwarmSimulator(DATA) {
           0.1,
           0.5,
           [0, 20, 0],
-          [0.4, 0.4, 0.4]
+          [0.4, 0.4, 0.4],
         );
         box(
           -0.3 + 0.2,
@@ -31558,7 +31574,7 @@ function BeeSwarmSimulator(DATA) {
           0.1,
           0.5,
           [0, 40, 0],
-          [0.4, 0.4, 0.4]
+          [0.4, 0.4, 0.4],
         );
         box(
           -0.3 - 0.1,
@@ -31568,7 +31584,7 @@ function BeeSwarmSimulator(DATA) {
           0.1,
           0.5,
           [0, -20, 0],
-          [0.4, 0.4, 0.4]
+          [0.4, 0.4, 0.4],
         );
         box(
           -0.3 - 0.2,
@@ -31578,7 +31594,7 @@ function BeeSwarmSimulator(DATA) {
           0.1,
           0.5,
           [0, -40, 0],
-          [0.4, 0.4, 0.4]
+          [0.4, 0.4, 0.4],
         );
         box(-0.3, 0, 0.6 + 0.65, 0.1, 0.1, 0.4, false, [0.4, 0.4, 0.4]);
       },
@@ -31599,7 +31615,7 @@ function BeeSwarmSimulator(DATA) {
           0.25,
           0.1,
           [0, 0, -30],
-          [1.3, 1.3, 0]
+          [1.3, 1.3, 0],
         );
         box(
           -0.2 + 0.15,
@@ -31609,7 +31625,7 @@ function BeeSwarmSimulator(DATA) {
           0.25,
           0.1,
           [0, 0, 30],
-          [1.3, 1.3, 0]
+          [1.3, 1.3, 0],
         );
         box(
           -0.2 + 0.15 - Math.sin(30 * MATH.TO_RAD) * 0.41,
@@ -31619,7 +31635,7 @@ function BeeSwarmSimulator(DATA) {
           0.6,
           0.1,
           [0, 0, 30],
-          [1.3, 1.3, 1.3]
+          [1.3, 1.3, 1.3],
         );
         box(
           -0.2 - 0.15 + Math.sin(30 * MATH.TO_RAD) * 0.41,
@@ -31629,7 +31645,7 @@ function BeeSwarmSimulator(DATA) {
           0.6,
           0.1,
           [0, 0, -30],
-          [1.3, 1.3, 1.3]
+          [1.3, 1.3, 1.3],
         );
       },
       desc: "A little pair of yellow clippers.<br><br>Collects 9 pollen from 1 flowers every 0.6s.",
@@ -31764,7 +31780,7 @@ function BeeSwarmSimulator(DATA) {
           0,
           0,
           0,
-          0.25
+          0.25,
         );
         cylinder(
           -0.3,
@@ -31779,7 +31795,7 @@ function BeeSwarmSimulator(DATA) {
           0.001,
           90,
           0,
-          0.25
+          0.25,
         );
         cylinder(
           -0.3,
@@ -31794,7 +31810,7 @@ function BeeSwarmSimulator(DATA) {
           90,
           0,
           0,
-          0.25
+          0.25,
         );
       },
       particles: function () {
@@ -31880,7 +31896,7 @@ function BeeSwarmSimulator(DATA) {
           0.6,
           0.1,
           [0, 0, 30],
-          [1.3, 1.3, 1.3]
+          [1.3, 1.3, 1.3],
         );
         box(
           -0.2 - 0.15 + Math.sin(30 * MATH.TO_RAD) * 0.41,
@@ -31890,7 +31906,7 @@ function BeeSwarmSimulator(DATA) {
           0.6,
           0.1,
           [0, 0, -30],
-          [1.3, 1.3, 1.3]
+          [1.3, 1.3, 1.3],
         );
       },
       desc: "A pair of school scissors.<br><br>Collects 50 pollen from 1 flowers every 0.5s.",
@@ -31966,7 +31982,7 @@ function BeeSwarmSimulator(DATA) {
           0.4 * 1.4,
           90,
           0,
-          0
+          0,
         );
         cylinder(
           -0.3,
@@ -31980,7 +31996,7 @@ function BeeSwarmSimulator(DATA) {
           0.4 * 1.4,
           90,
           0,
-          0
+          0,
         );
         cylinder(
           -0.3,
@@ -31994,7 +32010,7 @@ function BeeSwarmSimulator(DATA) {
           0.4 * 1.4,
           90,
           0,
-          0
+          0,
         );
         cylinder(
           -0.3,
@@ -32008,7 +32024,7 @@ function BeeSwarmSimulator(DATA) {
           0.2,
           90,
           0,
-          0
+          0,
         );
       },
       desc: "A giant honey dipper.<br><br>Collects 2 pollen from 49 flowers every 0.8s.",
@@ -32051,7 +32067,7 @@ function BeeSwarmSimulator(DATA) {
           1.5,
           0,
           0,
-          0
+          0,
         );
         cylinder(
           -0.3,
@@ -32065,7 +32081,7 @@ function BeeSwarmSimulator(DATA) {
           1.2,
           0,
           0,
-          0
+          0,
         );
       },
       particles: function () {
@@ -32112,8 +32128,8 @@ function BeeSwarmSimulator(DATA) {
             new Bubble(
               player.fieldIn,
               (Math.random() * fieldInfo[player.fieldIn].width) | 0,
-              (Math.random() * fieldInfo[player.fieldIn].length) | 0
-            )
+              (Math.random() * fieldInfo[player.fieldIn].length) | 0,
+            ),
           );
         }
       },
@@ -32184,7 +32200,7 @@ function BeeSwarmSimulator(DATA) {
         if (player.toolUses % 10 === 0) {
           if (player.fieldIn) {
             objects.flames.push(
-              new Flame(player.fieldIn, player.flowerIn.x, player.flowerIn.z)
+              new Flame(player.fieldIn, player.flowerIn.x, player.flowerIn.z),
             );
           } else {
             objects.flames.push(
@@ -32192,8 +32208,8 @@ function BeeSwarmSimulator(DATA) {
                 player.body.position.x,
                 player.body.position.y,
                 player.body.position.z,
-                true
-              )
+                true,
+              ),
             );
           }
         }
@@ -32233,7 +32249,7 @@ function BeeSwarmSimulator(DATA) {
           0.1,
           0.5,
           [0, 20, 0],
-          [1.3, 1.3, 0.4]
+          [1.3, 1.3, 0.4],
         );
         box(
           -0.3 + 0.2,
@@ -32243,7 +32259,7 @@ function BeeSwarmSimulator(DATA) {
           0.1,
           0.5,
           [0, 40, 0],
-          [1.3, 1.3, 0.4]
+          [1.3, 1.3, 0.4],
         );
         box(
           -0.3 - 0.1,
@@ -32253,7 +32269,7 @@ function BeeSwarmSimulator(DATA) {
           0.1,
           0.5,
           [0, -20, 0],
-          [1.3, 1.3, 0.4]
+          [1.3, 1.3, 0.4],
         );
         box(
           -0.3 - 0.2,
@@ -32263,14 +32279,14 @@ function BeeSwarmSimulator(DATA) {
           0.1,
           0.5,
           [0, -40, 0],
-          [1.3, 1.3, 0.4]
+          [1.3, 1.3, 0.4],
         );
         box(-0.3, 0, 0.6 + 0.65, 0.1, 0.1, 0.4, false, [1.3, 1.3, 0.4]);
       },
       ability: function () {
         if (player.toolUses % 5 === 0 && player.fieldIn) {
           objects.mobs.push(
-            new Scratch(null, player.flowerIn.x, player.flowerIn.z, true)
+            new Scratch(null, player.flowerIn.x, player.flowerIn.z, true),
           );
         }
       },
@@ -32296,7 +32312,7 @@ function BeeSwarmSimulator(DATA) {
           0.1,
           0.1,
           false,
-          [1.2, 1.2, 0]
+          [1.2, 1.2, 0],
         );
         box(
           -0.3 + 0.3 * 0.4,
@@ -32306,7 +32322,7 @@ function BeeSwarmSimulator(DATA) {
           0.1,
           0.1,
           false,
-          [1.2, 1.2, 0]
+          [1.2, 1.2, 0],
         );
         box(
           -0.3,
@@ -32316,7 +32332,7 @@ function BeeSwarmSimulator(DATA) {
           0.1,
           0.1,
           false,
-          [1.2, 1.2, 0]
+          [1.2, 1.2, 0],
         );
         box(-0.3, 0.4 + 1.25 * 0.5, 0.4, 0.1, 0.1, 0.1, false, [1.2, 1.2, 0]);
       },
@@ -32499,7 +32515,7 @@ function BeeSwarmSimulator(DATA) {
           1.5,
           90,
           0,
-          0
+          0,
         );
         cylinder(
           -0.3,
@@ -32513,7 +32529,7 @@ function BeeSwarmSimulator(DATA) {
           1.5,
           90,
           0,
-          0
+          0,
         );
         cylinder(
           -0.3,
@@ -32527,7 +32543,7 @@ function BeeSwarmSimulator(DATA) {
           1.5,
           90,
           0,
-          0
+          0,
         );
         cylinder(
           -0.3,
@@ -32541,7 +32557,7 @@ function BeeSwarmSimulator(DATA) {
           1.4,
           90,
           0,
-          0
+          0,
         );
         box(-0.5, 1, 0.4, 0.175, 0.5, 0.12, [0, 0, 70], [0, 0, 1.4]);
         box(-0.5, 0.825, 0.4, 0.175, 0.4, 0.12, [0, 0, -70], [0, 0, 1.4]);
@@ -32596,7 +32612,7 @@ function BeeSwarmSimulator(DATA) {
               size: 5,
               alpha: 2,
               height: 500,
-            })
+            }),
           );
 
           if (player.fieldIn) {
@@ -32728,7 +32744,7 @@ function BeeSwarmSimulator(DATA) {
           0.3,
           0.3,
           [45, 0, 45],
-          [1.5, 1.2, 0]
+          [1.5, 1.2, 0],
         );
         for (let i = 0; i < MATH.TWO_PI; i += MATH.TWO_PI / 3) {
           box(
@@ -32739,7 +32755,7 @@ function BeeSwarmSimulator(DATA) {
             0.1,
             0.7,
             [Math.sin(i) * -30, 0, Math.cos(i) * -30],
-            [1.2, 1.2, 1.2]
+            [1.2, 1.2, 1.2],
           );
         }
 
@@ -32756,7 +32772,7 @@ function BeeSwarmSimulator(DATA) {
             0.1,
             0.7,
             [Math.sin(i) * 30, 0, Math.cos(i) * 30],
-            [1.2, 1.2, 1.2]
+            [1.2, 1.2, 1.2],
           );
         }
 
@@ -32769,7 +32785,7 @@ function BeeSwarmSimulator(DATA) {
             0.1,
             0.7,
             [60, i * MATH.TO_DEG, 0],
-            [1.2, 1.2, 1.2]
+            [1.2, 1.2, 1.2],
           );
           box(
             -0.3 - 0.1 + Math.sin(i) * 0.25,
@@ -32779,7 +32795,7 @@ function BeeSwarmSimulator(DATA) {
             0.1,
             0.7,
             [-60, i * MATH.TO_DEG, 0],
-            [1.2, 1.2, 1.2]
+            [1.2, 1.2, 1.2],
           );
         }
       },
@@ -32792,8 +32808,8 @@ function BeeSwarmSimulator(DATA) {
                 player.body.position.y + 0.25,
                 player.body.position.z,
               ],
-              player.bodyDir.slice()
-            )
+              player.bodyDir.slice(),
+            ),
           );
         }
       },
@@ -32876,7 +32892,7 @@ function BeeSwarmSimulator(DATA) {
           0.15,
           [0, 0, 0],
           [0.1, 0, 0],
-          [0, 0, 30]
+          [0, 0, 30],
         );
         box(
           -0.55,
@@ -32887,7 +32903,7 @@ function BeeSwarmSimulator(DATA) {
           1.2,
           [0, 0, 0],
           [0.1, 0, 0],
-          [0, 0, 30]
+          [0, 0, 30],
         );
         box(-0.55, 1.5, 2, 0.15, 0.5, 1, [20, 0, 0], [0.1, 0, 0], [0, 0, 30]);
         box(
@@ -32899,7 +32915,7 @@ function BeeSwarmSimulator(DATA) {
           1,
           [40, 0, 0],
           [0.1, 0, 0],
-          [0, 0, 30]
+          [0, 0, 30],
         );
 
         box(
@@ -32911,7 +32927,7 @@ function BeeSwarmSimulator(DATA) {
           1.2,
           [0, 0, 0],
           [1.2, 0, 0.4],
-          [0, 0, 30]
+          [0, 0, 30],
         );
         box(
           -0.55,
@@ -32922,7 +32938,7 @@ function BeeSwarmSimulator(DATA) {
           1,
           [20, 0, 0],
           [1.2, 0, 0.4],
-          [0, 0, 30]
+          [0, 0, 30],
         );
         box(
           -0.55,
@@ -32933,7 +32949,7 @@ function BeeSwarmSimulator(DATA) {
           0.5,
           [40, 0, 0],
           [1.2, 0, 0.4],
-          [0, 0, 30]
+          [0, 0, 30],
         );
 
         box(
@@ -32945,7 +32961,7 @@ function BeeSwarmSimulator(DATA) {
           1.3,
           [20, 0, 0],
           [0.1, 0, 0],
-          [0, 0, 30]
+          [0, 0, 30],
         );
         box(
           -0.55,
@@ -32956,7 +32972,7 @@ function BeeSwarmSimulator(DATA) {
           0.9,
           [-20, 0, 0],
           [0.1, 0, 0],
-          [0, 0, 30]
+          [0, 0, 30],
         );
       },
       ability: function (arr) {
@@ -32964,10 +32980,10 @@ function BeeSwarmSimulator(DATA) {
 
         if (player.fieldIn && !player.attacked.length) {
           let x = Math.round(
-              player.body.position.x - fieldInfo[player.fieldIn].x
+              player.body.position.x - fieldInfo[player.fieldIn].x,
             ),
             z = Math.round(
-              player.body.position.z - fieldInfo[player.fieldIn].z
+              player.body.position.z - fieldInfo[player.fieldIn].z,
             ),
             a = [];
 
@@ -33105,8 +33121,8 @@ function BeeSwarmSimulator(DATA) {
                 player.body.position.y + 0.25,
                 player.body.position.z,
               ],
-              player.bodyDir.slice()
-            )
+              player.bodyDir.slice(),
+            ),
           );
         }
       },
@@ -33202,7 +33218,7 @@ function BeeSwarmSimulator(DATA) {
           90,
           0,
           0,
-          0.15
+          0.15,
         );
         cylinder(-0.4, 0.8, 0.4, 0.1, 1.75, 15, 1.5, 0.15, 1.5, 90, 0, 0, 0.1);
         sphere(-0.4, 1.6, 0.4, 0.5, 1, 0.26, 2.7, 1.1);
@@ -33219,7 +33235,7 @@ function BeeSwarmSimulator(DATA) {
           90,
           0,
           0,
-          0.6
+          0.6,
         );
         sphere(-0.4 - 0.3, 1.85, 0.4, 0.25, 1, 0.26, 2.7, 1.1);
         sphere(-0.4 + 0.3, 1.85, 0.4, 0.25, 1, 0.26, 2.7, 1.1);
@@ -33231,7 +33247,7 @@ function BeeSwarmSimulator(DATA) {
           1,
           1.5 * 1.75,
           0.65 * 1.75,
-          1.5 * 1.75
+          1.5 * 1.75,
         );
         sphere(
           -0.4,
@@ -33241,7 +33257,7 @@ function BeeSwarmSimulator(DATA) {
           1,
           1.5 * 1.75,
           0.65 * 1.75,
-          1.5 * 1.75
+          1.5 * 1.75,
         );
       },
       particles: function () {
@@ -33264,7 +33280,7 @@ function BeeSwarmSimulator(DATA) {
           0.9 * player.isNight,
           1,
           player.gummyBallSize * 0.5,
-          1
+          1,
         );
 
         toolParticle -= dt;
@@ -33398,7 +33414,7 @@ function BeeSwarmSimulator(DATA) {
         "The Robo Challenge is over! Your score is " +
           out.roboChallenge.round +
           "!",
-        [0, 150, 0]
+        [0, 150, 0],
       );
 
       let arr = [
@@ -33437,8 +33453,8 @@ function BeeSwarmSimulator(DATA) {
             ["microConverter", MATH.random(1, 4) | 0],
             ["jellyBeans", MATH.random(1, 6) | 0],
           ],
-          Math.min(out.roboChallenge.round / 6, 3) | 0
-        )
+          Math.min(out.roboChallenge.round / 6, 3) | 0,
+        ),
       );
 
       if (out.roboChallenge.round > 11 && Math.random() < 0.25)
@@ -33460,7 +33476,7 @@ function BeeSwarmSimulator(DATA) {
             " " +
             MATH.doGrammar(arr[i][0]) +
             " (from Robo Challenge)",
-          [35, 75, 255]
+          [35, 75, 255],
         );
       }
 
@@ -33483,10 +33499,10 @@ function BeeSwarmSimulator(DATA) {
         switch (t) {
           case "bronze":
             amulet.push(
-              "*" + MATH.random(1.1, 1.2).toFixed(2) + " capacityMultiplier"
+              "*" + MATH.random(1.1, 1.2).toFixed(2) + " capacityMultiplier",
             );
             amulet.push(
-              "*" + MATH.random(1.03, 1.05).toFixed(2) + " beeAttack"
+              "*" + MATH.random(1.03, 1.05).toFixed(2) + " beeAttack",
             );
 
             if (Math.random() < 0.25) {
@@ -33497,7 +33513,7 @@ function BeeSwarmSimulator(DATA) {
                   MATH.random(1.05, 1.1).toFixed(2) +
                   " " +
                   ["red", "blue", "white"][(Math.random() * 3) | 0] +
-                  "Pollen"
+                  "Pollen",
               );
             }
 
@@ -33505,19 +33521,19 @@ function BeeSwarmSimulator(DATA) {
               amulet.push(
                 "+" +
                   MATH.random(0.01, 0.03).toFixed(2) +
-                  " instantRedConversion"
+                  " instantRedConversion",
               );
             } else if (Math.random() < 0.5) {
               amulet.push(
                 "+" +
                   MATH.random(0.01, 0.03).toFixed(2) +
-                  " instantWhiteConversion"
+                  " instantWhiteConversion",
               );
             } else {
               amulet.push(
                 "+" +
                   MATH.random(0.01, 0.03).toFixed(2) +
-                  " instantBlueConversion"
+                  " instantBlueConversion",
               );
             }
 
@@ -33525,10 +33541,10 @@ function BeeSwarmSimulator(DATA) {
 
           case "silver":
             amulet.push(
-              "*" + MATH.random(1.2, 1.3).toFixed(2) + " capacityMultiplier"
+              "*" + MATH.random(1.2, 1.3).toFixed(2) + " capacityMultiplier",
             );
             amulet.push(
-              "*" + MATH.random(1.05, 1.08).toFixed(2) + " beeAttack"
+              "*" + MATH.random(1.05, 1.08).toFixed(2) + " beeAttack",
             );
 
             if (Math.random() < 0.25) {
@@ -33539,7 +33555,7 @@ function BeeSwarmSimulator(DATA) {
                   MATH.random(1.07, 1.15).toFixed(2) +
                   " " +
                   ["red", "blue", "white"][(Math.random() * 3) | 0] +
-                  "Pollen"
+                  "Pollen",
               );
             }
 
@@ -33547,33 +33563,33 @@ function BeeSwarmSimulator(DATA) {
               amulet.push(
                 "+" +
                   MATH.random(0.02, 0.03).toFixed(2) +
-                  " instantRedConversion"
+                  " instantRedConversion",
               );
             } else if (Math.random() < 0.5) {
               amulet.push(
                 "+" +
                   MATH.random(0.02, 0.03).toFixed(2) +
-                  " instantWhiteConversion"
+                  " instantWhiteConversion",
               );
             } else {
               amulet.push(
                 "+" +
                   MATH.random(0.02, 0.03).toFixed(2) +
-                  " instantBlueConversion"
+                  " instantBlueConversion",
               );
             }
 
             if (Math.random() < 0.333) {
               amulet.push(
-                "*" + MATH.random(1.02, 1.06).toFixed(2) + " flamePollen"
+                "*" + MATH.random(1.02, 1.06).toFixed(2) + " flamePollen",
               );
             } else if (Math.random() < 0.5) {
               amulet.push(
-                "*" + MATH.random(1.02, 1.06).toFixed(2) + " bubblePollen"
+                "*" + MATH.random(1.02, 1.06).toFixed(2) + " bubblePollen",
               );
             } else {
               amulet.push(
-                "*" + MATH.random(1.02, 1.06).toFixed(2) + " markDuration"
+                "*" + MATH.random(1.02, 1.06).toFixed(2) + " markDuration",
               );
             }
 
@@ -33581,7 +33597,7 @@ function BeeSwarmSimulator(DATA) {
 
           case "gold":
             amulet.push(
-              "*" + MATH.random(1.3, 1.4).toFixed(2) + " capacityMultiplier"
+              "*" + MATH.random(1.3, 1.4).toFixed(2) + " capacityMultiplier",
             );
             amulet.push("*" + MATH.random(1.06, 1.1).toFixed(2) + " beeAttack");
 
@@ -33593,7 +33609,7 @@ function BeeSwarmSimulator(DATA) {
                   MATH.random(1.15, 1.2).toFixed(2) +
                   " " +
                   ["red", "blue", "white"][(Math.random() * 3) | 0] +
-                  "Pollen"
+                  "Pollen",
               );
             }
 
@@ -33601,33 +33617,33 @@ function BeeSwarmSimulator(DATA) {
               amulet.push(
                 "+" +
                   MATH.random(0.02, 0.05).toFixed(2) +
-                  " instantRedConversion"
+                  " instantRedConversion",
               );
             } else if (Math.random() < 0.5) {
               amulet.push(
                 "+" +
                   MATH.random(0.02, 0.05).toFixed(2) +
-                  " instantWhiteConversion"
+                  " instantWhiteConversion",
               );
             } else {
               amulet.push(
                 "+" +
                   MATH.random(0.02, 0.05).toFixed(2) +
-                  " instantBlueConversion"
+                  " instantBlueConversion",
               );
             }
 
             if (Math.random() < 0.333) {
               amulet.push(
-                "*" + MATH.random(1.04, 1.08).toFixed(2) + " flamePollen"
+                "*" + MATH.random(1.04, 1.08).toFixed(2) + " flamePollen",
               );
             } else if (Math.random() < 0.5) {
               amulet.push(
-                "*" + MATH.random(1.04, 1.08).toFixed(2) + " bubblePollen"
+                "*" + MATH.random(1.04, 1.08).toFixed(2) + " bubblePollen",
               );
             } else {
               amulet.push(
-                "*" + MATH.random(1.04, 1.08).toFixed(2) + " markDuration"
+                "*" + MATH.random(1.04, 1.08).toFixed(2) + " markDuration",
               );
             }
 
@@ -33635,10 +33651,10 @@ function BeeSwarmSimulator(DATA) {
 
           case "diamond":
             amulet.push(
-              "*" + MATH.random(1.4, 1.5).toFixed(2) + " capacityMultiplier"
+              "*" + MATH.random(1.4, 1.5).toFixed(2) + " capacityMultiplier",
             );
             amulet.push(
-              "*" + MATH.random(1.07, 1.12).toFixed(2) + " beeAttack"
+              "*" + MATH.random(1.07, 1.12).toFixed(2) + " beeAttack",
             );
 
             if (Math.random() < 0.25) {
@@ -33649,7 +33665,7 @@ function BeeSwarmSimulator(DATA) {
                   MATH.random(1.2, 1.25).toFixed(2) +
                   " " +
                   ["red", "blue", "white"][(Math.random() * 3) | 0] +
-                  "Pollen"
+                  "Pollen",
               );
             }
 
@@ -33657,33 +33673,33 @@ function BeeSwarmSimulator(DATA) {
               amulet.push(
                 "+" +
                   MATH.random(0.04, 0.09).toFixed(2) +
-                  " instantRedConversion"
+                  " instantRedConversion",
               );
             } else if (Math.random() < 0.5) {
               amulet.push(
                 "+" +
                   MATH.random(0.04, 0.09).toFixed(2) +
-                  " instantWhiteConversion"
+                  " instantWhiteConversion",
               );
             } else {
               amulet.push(
                 "+" +
                   MATH.random(0.04, 0.09).toFixed(2) +
-                  " instantBlueConversion"
+                  " instantBlueConversion",
               );
             }
 
             if (Math.random() < 0.333) {
               amulet.push(
-                "*" + MATH.random(1.05, 1.12).toFixed(2) + " flamePollen"
+                "*" + MATH.random(1.05, 1.12).toFixed(2) + " flamePollen",
               );
             } else if (Math.random() < 0.5) {
               amulet.push(
-                "*" + MATH.random(1.05, 1.12).toFixed(2) + " bubblePollen"
+                "*" + MATH.random(1.05, 1.12).toFixed(2) + " bubblePollen",
               );
             } else {
               amulet.push(
-                "*" + MATH.random(1.04, 1.08).toFixed(2) + " markDuration"
+                "*" + MATH.random(1.04, 1.08).toFixed(2) + " markDuration",
               );
             }
 
@@ -33692,17 +33708,17 @@ function BeeSwarmSimulator(DATA) {
                 amulet.push("*1.05 nectarMultiplier");
               } else {
                 amulet.push(
-                  "*" + MATH.random(1.15, 1.35).toFixed(2) + " honeyFromTokens"
+                  "*" + MATH.random(1.15, 1.35).toFixed(2) + " honeyFromTokens",
                 );
               }
             } else {
               if (Math.random() < 0.5) {
                 amulet.push(
-                  "*" + MATH.random(1.05, 1.11).toFixed(2) + " superCritPower"
+                  "*" + MATH.random(1.05, 1.11).toFixed(2) + " superCritPower",
                 );
               } else {
                 amulet.push(
-                  "*" + MATH.random(1.1, 1.2).toFixed(2) + " tokenLifespan"
+                  "*" + MATH.random(1.1, 1.2).toFixed(2) + " tokenLifespan",
                 );
               }
             }
@@ -33711,7 +33727,7 @@ function BeeSwarmSimulator(DATA) {
 
           case "supreme":
             amulet.push(
-              "*" + MATH.random(1.5, 1.6).toFixed(2) + " capacityMultiplier"
+              "*" + MATH.random(1.5, 1.6).toFixed(2) + " capacityMultiplier",
             );
             amulet.push("*" + MATH.random(1.1, 1.15).toFixed(2) + " beeAttack");
 
@@ -33723,7 +33739,7 @@ function BeeSwarmSimulator(DATA) {
                   MATH.random(1.2, 1.3).toFixed(2) +
                   " " +
                   ["red", "blue", "white"][(Math.random() * 3) | 0] +
-                  "Pollen"
+                  "Pollen",
               );
             }
 
@@ -33731,33 +33747,33 @@ function BeeSwarmSimulator(DATA) {
               amulet.push(
                 "+" +
                   MATH.random(0.07, 0.13).toFixed(2) +
-                  " instantRedConversion"
+                  " instantRedConversion",
               );
             } else if (Math.random() < 0.5) {
               amulet.push(
                 "+" +
                   MATH.random(0.07, 0.13).toFixed(2) +
-                  " instantWhiteConversion"
+                  " instantWhiteConversion",
               );
             } else {
               amulet.push(
                 "+" +
                   MATH.random(0.07, 0.13).toFixed(2) +
-                  " instantBlueConversion"
+                  " instantBlueConversion",
               );
             }
 
             if (Math.random() < 0.333) {
               amulet.push(
-                "*" + MATH.random(1.07, 1.15).toFixed(2) + " flamePollen"
+                "*" + MATH.random(1.07, 1.15).toFixed(2) + " flamePollen",
               );
             } else if (Math.random() < 0.5) {
               amulet.push(
-                "*" + MATH.random(1.07, 1.15).toFixed(2) + " bubblePollen"
+                "*" + MATH.random(1.07, 1.15).toFixed(2) + " bubblePollen",
               );
             } else {
               amulet.push(
-                "*" + MATH.random(1.04, 1.08).toFixed(2) + " markDuration"
+                "*" + MATH.random(1.04, 1.08).toFixed(2) + " markDuration",
               );
             }
 
@@ -33766,17 +33782,17 @@ function BeeSwarmSimulator(DATA) {
                 amulet.push("*1.05 nectarMultiplier");
               } else {
                 amulet.push(
-                  "*" + MATH.random(1.35, 1.6).toFixed(2) + " honeyFromTokens"
+                  "*" + MATH.random(1.35, 1.6).toFixed(2) + " honeyFromTokens",
                 );
               }
             } else {
               if (Math.random() < 0.5) {
                 amulet.push(
-                  "*" + MATH.random(1.08, 1.15).toFixed(2) + " superCritPower"
+                  "*" + MATH.random(1.08, 1.15).toFixed(2) + " superCritPower",
                 );
               } else {
                 amulet.push(
-                  "*" + MATH.random(1.2, 1.3).toFixed(2) + " tokenLifespan"
+                  "*" + MATH.random(1.2, 1.3).toFixed(2) + " tokenLifespan",
                 );
               }
             }
@@ -34240,8 +34256,8 @@ function BeeSwarmSimulator(DATA) {
             n = Number(
               _u.substring(
                 1,
-                _u.indexOf("%") > -1 ? _u.indexOf("%") : _u.indexOf(" ")
-              )
+                _u.indexOf("%") > -1 ? _u.indexOf("%") : _u.indexOf(" "),
+              ),
             );
 
           if (
@@ -34279,7 +34295,7 @@ function BeeSwarmSimulator(DATA) {
       effects.roboChallengeBuff.update = Object.constructor(
         "amount",
         "player",
-        ef
+        ef,
       );
 
       effects.roboChallengeBuff.getMessage = function () {
@@ -34375,9 +34391,9 @@ function BeeSwarmSimulator(DATA) {
                 m === CogTurret
                   ? MATH.random(0, 4) | 0
                   : out.roboChallenge.round > 5
-                  ? Math.random() < 0.8
-                  : 0
-              )
+                    ? Math.random() < 0.8
+                    : 0,
+              ),
             );
           }
         } else {
@@ -34414,8 +34430,8 @@ function BeeSwarmSimulator(DATA) {
               new m(
                 f[(Math.random() * f.length) | 0],
                 (out.roboChallenge.round * MATH.random(0.5, 0.6) + 1) | 0,
-                m === CogTurret ? MATH.random(0, 4) | 0 : Math.random() < 0.8
-              )
+                m === CogTurret ? MATH.random(0, 4) | 0 : Math.random() < 0.8,
+              ),
             );
           }
         }
@@ -34460,8 +34476,8 @@ function BeeSwarmSimulator(DATA) {
           new m(
             f,
             (out.roboChallenge.round * MATH.random(0.5, 0.6) + 1) | 0,
-            m === CogTurret ? MATH.random(0, 4) | 0 : Math.random() < 0.8
-          )
+            m === CogTurret ? MATH.random(0, 4) | 0 : Math.random() < 0.8,
+          ),
         );
       }, 20000);
     };
@@ -34529,7 +34545,7 @@ function BeeSwarmSimulator(DATA) {
               ((MATH.random(3, 7) +
                 { common: 0, rare: 2, epic: 5, legendary: 9 }[_u.rarity]) /
                 ((_u.maxStacks - 1) * 0.1 + 1.25)) |
-                0
+                0,
             );
 
             u.splice(r, 1);
@@ -34570,19 +34586,19 @@ function BeeSwarmSimulator(DATA) {
                   MATH.addCommas(
                     n.substring(
                       1,
-                      n.indexOf("%") > -1 ? n.indexOf("%") : n.indexOf(" ")
-                    )
+                      n.indexOf("%") > -1 ? n.indexOf("%") : n.indexOf(" "),
+                    ),
                   ) +
                   n.substring(
                     n.indexOf("%") > -1 ? n.indexOf("%") : n.indexOf(" "),
-                    n.length
+                    n.length,
                   );
 
               s += n + "<br></div>";
             }
 
             document.getElementById(
-              "roboUpgradeChoice" + i
+              "roboUpgradeChoice" + i,
             ).style.backgroundColor = rarityColor[upgrades[c[i - 1]].rarity];
 
             document.getElementById("roboUpgradeChoice" + i).innerHTML =
@@ -34649,12 +34665,12 @@ function BeeSwarmSimulator(DATA) {
                   MATH.addCommas(
                     n.substring(
                       1,
-                      n.indexOf("%") > -1 ? n.indexOf("%") : n.indexOf(" ")
-                    )
+                      n.indexOf("%") > -1 ? n.indexOf("%") : n.indexOf(" "),
+                    ),
                   ) +
                   n.substring(
                     n.indexOf("%") > -1 ? n.indexOf("%") : n.indexOf(" "),
-                    n.length
+                    n.length,
                   );
 
               s += n + "<br></div>";
@@ -34894,7 +34910,7 @@ function BeeSwarmSimulator(DATA) {
               0,
               0,
               35,
-              35
+              35,
             );
 
             document.getElementById("roboActiveBees").appendChild(img);
@@ -34921,13 +34937,13 @@ function BeeSwarmSimulator(DATA) {
             document.getElementById("roboBeeChoice" + (i + 1)).style.display =
               "block";
             document.getElementById(
-              "roboBeeChoice" + (i + 1)
+              "roboBeeChoice" + (i + 1),
             ).style.backgroundColor =
               beeInfo[bee.type].color === "red"
                 ? "rgb(255,50,50,0.6)"
                 : beeInfo[bee.type].color === "blue"
-                ? "rgb(50,50,255,0.6)"
-                : "rgb(255,255,255,0.6)";
+                  ? "rgb(50,50,255,0.6)"
+                  : "rgb(255,255,255,0.6)";
 
             let img = document.createElement("canvas");
 
@@ -34949,7 +34965,7 @@ function BeeSwarmSimulator(DATA) {
               0,
               0,
               80,
-              80
+              80,
             );
 
             let descStr =
@@ -35020,7 +35036,7 @@ function BeeSwarmSimulator(DATA) {
         "The Ant Challenge is over! Your score is " +
           out.antChallenge.score +
           "!",
-        [35, 75, 255]
+        [35, 75, 255],
       );
 
       let arr = [
@@ -35050,8 +35066,8 @@ function BeeSwarmSimulator(DATA) {
               (Math.sqrt(out.antChallenge.score * 1.25) * 0.2 + 1) | 0,
             ],
           ],
-          1
-        )
+          1,
+        ),
       );
 
       for (let i in arr) {
@@ -35067,7 +35083,7 @@ function BeeSwarmSimulator(DATA) {
             " " +
             MATH.doGrammar(arr[i][0]) +
             " (from Robo Challenge)",
-          [35, 75, 255]
+          [35, 75, 255],
         );
       }
 
@@ -35085,7 +35101,7 @@ function BeeSwarmSimulator(DATA) {
         "*1." + (g + 1) + " capacityMultiplier",
         "*" +
           MATH.random(1.05 + g * 0.15, 1.15 + g * 0.15).toFixed(2) +
-          " convertRate"
+          " convertRate",
       );
 
       amulet.push(
@@ -35114,8 +35130,8 @@ function BeeSwarmSimulator(DATA) {
               MATH.random(1.03 + g * 0.05, 1.1 + g * 0.05).toFixed(2) +
               " pollenFromBees",
           ],
-          g + 1
-        )
+          g + 1,
+        ),
       );
 
       player.showGeneratedAmulet(t + "AntAmulet", amulet);
@@ -35150,7 +35166,7 @@ function BeeSwarmSimulator(DATA) {
         objects.mobs.push(new LawnMower(out.antChallenge.round));
         out.antChallenge.lawnMowerTimer = Math.max(
           -0.33333 * out.antChallenge.round + 15,
-          2
+          2,
         );
       }
 
@@ -35230,8 +35246,8 @@ function BeeSwarmSimulator(DATA) {
             new Ant(
               out.antChallenge.round,
               ...p[i],
-              t[(Math.random() * t.length) | 0]
-            )
+              t[(Math.random() * t.length) | 0],
+            ),
           );
         }
 
@@ -35244,8 +35260,8 @@ function BeeSwarmSimulator(DATA) {
                 new Ant(
                   out.antChallenge.round,
                   ...p[i],
-                  t[(Math.random() * t.length) | 0]
-                )
+                  t[(Math.random() * t.length) | 0],
+                ),
               );
             }
           }, 750);
@@ -35258,13 +35274,13 @@ function BeeSwarmSimulator(DATA) {
             out.antChallenge.pollenReq -
               (out.stats.pollenFromAntField -
                 out.antChallenge.pollenBeforeReq) +
-              ""
+              "",
           ),
           [-21, 8, -61],
           COLORS.whiteArr,
           -3,
           false,
-          false
+          false,
         );
       } else {
         out.antChallenge.pollenBeforeReq = out.stats.pollenFromAntField;
@@ -35274,7 +35290,7 @@ function BeeSwarmSimulator(DATA) {
           COLORS.whiteArr,
           -3,
           false,
-          false
+          false,
         );
       }
 
@@ -35286,7 +35302,7 @@ function BeeSwarmSimulator(DATA) {
         false,
         false,
         0,
-        0.5
+        0.5,
       );
       textRenderer.addSingle(
         "Round: " + out.antChallenge.round,
@@ -35296,7 +35312,7 @@ function BeeSwarmSimulator(DATA) {
         false,
         false,
         0,
-        0
+        0,
       );
       textRenderer.addSingle(
         "Score: " + out.antChallenge.score,
@@ -35306,7 +35322,7 @@ function BeeSwarmSimulator(DATA) {
         false,
         false,
         0,
-        -0.5
+        -0.5,
       );
     };
 
@@ -35336,7 +35352,7 @@ function BeeSwarmSimulator(DATA) {
           final.push(
             amulet[i].replace("POLLEN", "redPollen"),
             amulet[i].replace("POLLEN", "bluePollen"),
-            amulet[i].replace("POLLEN", "whitePollen")
+            amulet[i].replace("POLLEN", "whitePollen"),
           );
           continue;
         }
@@ -35344,7 +35360,7 @@ function BeeSwarmSimulator(DATA) {
           final.push(
             amulet[i].replace("INSTANT_CONVERSION", "instantRedConversion"),
             amulet[i].replace("INSTANT_CONVERSION", "instantBlueConversion"),
-            amulet[i].replace("INSTANT_CONVERSION", "instantWhiteConversion")
+            amulet[i].replace("INSTANT_CONVERSION", "instantWhiteConversion"),
           );
           continue;
         }
@@ -35429,7 +35445,7 @@ function BeeSwarmSimulator(DATA) {
               .replaceAll("Blue", "")
               .replaceAll("red", "")
               .replaceAll("blue", "")
-              .replaceAll("white", "")
+              .replaceAll("white", ""),
           );
         } else {
           cleaned.push(a);
@@ -35456,7 +35472,7 @@ function BeeSwarmSimulator(DATA) {
                   ((Number(x.substr(1, x.indexOf(" "))) * 100) | 0) +
                   "%" +
                   x.substr(x.indexOf(" "), x.length)
-                : x
+                : x,
             )
             .join("<br>")
             .replaceAll("*", "x")
@@ -35474,8 +35490,8 @@ function BeeSwarmSimulator(DATA) {
               x
                 .split(" ")[1]
                 .replace("INSTANT_CONVERSION", "instantConversion")
-                .replace("POLLEN", "pollen")
-            )
+                .replace("POLLEN", "pollen"),
+            ),
         )
         .map((x) =>
           x[0] === "+"
@@ -35483,7 +35499,7 @@ function BeeSwarmSimulator(DATA) {
               ((Number(x.substr(1, x.indexOf(" "))) * 100) | 0) +
               "%" +
               x.substr(x.indexOf(" "), x.length)
-            : x
+            : x,
         )
         .join("<br>")
         .replaceAll("*", "x")
@@ -35547,7 +35563,7 @@ function BeeSwarmSimulator(DATA) {
         [255, 0, 0],
         0,
         "",
-        2
+        2,
       );
     };
 
@@ -35712,7 +35728,7 @@ function BeeSwarmSimulator(DATA) {
         req[i].push(
           req[i][0] === "beeTypes" || req[i][0].indexOf("beesToLevel") > -1
             ? 0
-            : out.stats[req[i][0]]
+            : out.stats[req[i][0]],
         );
       }
 
@@ -35808,7 +35824,7 @@ function BeeSwarmSimulator(DATA) {
                     player.roboChallenge.round++;
                     items.cog.amount += player.roboChallenge.cogsPerRound;
                     player.addMessage(
-                      "+" + player.roboChallenge.cogsPerRound + " Cogs"
+                      "+" + player.roboChallenge.cogsPerRound + " Cogs",
                     );
                     player.updateInventory();
                     player.updateRoboUI();
@@ -35820,7 +35836,7 @@ function BeeSwarmSimulator(DATA) {
           } else {
             player.addMessage(
               MATH.doGrammar(i) + " has nothing to say anymore!",
-              COLORS.redArr
+              COLORS.redArr,
             );
             return;
           }
@@ -35857,7 +35873,7 @@ function BeeSwarmSimulator(DATA) {
       out.viewMatrixCopy = out.viewMatrix.slice();
       out.easeAmount = 0;
       itemName.innerHTML = MATH.doGrammar(
-        shops[out.currentShop].items[shops[out.currentShop].currentIndex].name
+        shops[out.currentShop].items[shops[out.currentShop].currentIndex].name,
       );
 
       itemCostSVG.innerHTML = "";
@@ -35903,7 +35919,7 @@ function BeeSwarmSimulator(DATA) {
         if (typeof cost[i] === "function") {
           cost[i] = cost[i](
             shops[out.currentShop].items[shops[out.currentShop].currentIndex]
-              .amountPurchased
+              .amountPurchased,
           );
         }
 
@@ -35923,7 +35939,7 @@ function BeeSwarmSimulator(DATA) {
           "px'>" +
           itemSVGCode[c[1]].replace(
             "SCALE",
-            "scale(0.7,0.7);margin-top:-10px;margin-bottom:0px;margin-left:-10px"
+            "scale(0.7,0.7);margin-top:-10px;margin-bottom:0px;margin-left:-10px",
           ) +
           "<div style='position:absolute;top:15px;left:50px;font-size:16px;'><svg style='position:absolute;'><text x='3' y='20' stroke='black' stroke-width='3' style='font-size:15px'>" +
           text +
@@ -35962,7 +35978,7 @@ function BeeSwarmSimulator(DATA) {
         itemName.innerHTML =
           MATH.doGrammar(
             shops[out.currentShop].items[shops[out.currentShop].currentIndex]
-              .name
+              .name,
           ) + (incre > 1 ? " x" + MATH.abvNumber(incre + "") : "");
 
         itemCostSVG.innerHTML = "";
@@ -36009,7 +36025,7 @@ function BeeSwarmSimulator(DATA) {
             cost[i] = cost[i](
               shops[out.currentShop].items[shops[out.currentShop].currentIndex]
                 .amountPurchased,
-              incre
+              incre,
             );
           }
 
@@ -36029,7 +36045,7 @@ function BeeSwarmSimulator(DATA) {
             "px'>" +
             itemSVGCode[c[1]].replace(
               "SCALE",
-              "scale(0.7,0.7);margin-top:-10px;margin-bottom:0px;margin-left:-10px"
+              "scale(0.7,0.7);margin-top:-10px;margin-bottom:0px;margin-left:-10px",
             ) +
             "<div style='position:absolute;top:15px;left:50px;font-size:16px;'><svg style='position:absolute;'><text x='3' y='20' stroke='black' stroke-width='3' style='font-size:15px'>" +
             text +
@@ -36064,7 +36080,7 @@ function BeeSwarmSimulator(DATA) {
         itemName.innerHTML =
           MATH.doGrammar(
             shops[out.currentShop].items[shops[out.currentShop].currentIndex]
-              .name
+              .name,
           ) + (incre > 1 ? " x" + MATH.abvNumber(incre + "") : "");
 
         itemCostSVG.innerHTML = "";
@@ -36111,7 +36127,7 @@ function BeeSwarmSimulator(DATA) {
             cost[i] = cost[i](
               shops[out.currentShop].items[shops[out.currentShop].currentIndex]
                 .amountPurchased,
-              incre
+              incre,
             );
           }
 
@@ -36131,7 +36147,7 @@ function BeeSwarmSimulator(DATA) {
             "px'>" +
             itemSVGCode[c[1]].replace(
               "SCALE",
-              "scale(0.7,0.7);margin-top:-10px;margin-bottom:0px;margin-left:-10px"
+              "scale(0.7,0.7);margin-top:-10px;margin-bottom:0px;margin-left:-10px",
             ) +
             "<div style='position:absolute;top:15px;left:50px;font-size:16px;'><svg style='position:absolute;'><text x='3' y='20' stroke='black' stroke-width='3' style='font-size:15px'>" +
             text +
@@ -36211,7 +36227,7 @@ function BeeSwarmSimulator(DATA) {
             cost[i] = cost[i](
               shops[out.currentShop].items[shops[out.currentShop].currentIndex]
                 .amountPurchased,
-              incre
+              incre,
             );
           }
 
@@ -36248,7 +36264,7 @@ function BeeSwarmSimulator(DATA) {
             ].cost[i](
               shops[out.currentShop].items[shops[out.currentShop].currentIndex]
                 .amountPurchased + incre,
-              incre
+              incre,
             ).split(" ");
           }
 
@@ -36267,7 +36283,7 @@ function BeeSwarmSimulator(DATA) {
             "px'>" +
             itemSVGCode[c[1]].replace(
               "SCALE",
-              "scale(0.7,0.7);margin-top:-10px;margin-bottom:0px;margin-left:-10px"
+              "scale(0.7,0.7);margin-top:-10px;margin-bottom:0px;margin-left:-10px",
             ) +
             "<div style='position:absolute;top:15px;left:50px;font-size:16px;'><svg style='position:absolute;'><text x='3' y='20' stroke='black' stroke-width='3' style='font-size:15px'>" +
             text +
@@ -36309,12 +36325,12 @@ function BeeSwarmSimulator(DATA) {
                   ? MATH.doPlural(
                       shops[out.currentShop].items[
                         shops[out.currentShop].currentIndex
-                      ].name
+                      ].name,
                     )
                   : shops[out.currentShop].items[
                       shops[out.currentShop].currentIndex
-                    ].name
-              )
+                    ].name,
+              ),
           );
 
           if (
@@ -36334,7 +36350,7 @@ function BeeSwarmSimulator(DATA) {
           if (out.currentGear.beequips.length >= 6) {
             player.addMessage(
               "You can't hold more than 6 beequips!",
-              COLORS.redArr
+              COLORS.redArr,
             );
 
             for (let i in cost) {
@@ -36349,15 +36365,15 @@ function BeeSwarmSimulator(DATA) {
           } else {
             out.generateBeequip(
               shops[out.currentShop].items[shops[out.currentShop].currentIndex]
-                .name
+                .name,
             );
             out.addMessage(
               "Recieived " +
                 MATH.doGrammar(
                   shops[out.currentShop].items[
                     shops[out.currentShop].currentIndex
-                  ].name
-                )
+                  ].name,
+                ),
             );
           }
         } else {
@@ -36378,8 +36394,8 @@ function BeeSwarmSimulator(DATA) {
               MATH.doGrammar(
                 shops[out.currentShop].items[
                   shops[out.currentShop].currentIndex
-                ].name
-              )
+                ].name,
+              ),
           );
         }
 
@@ -36434,7 +36450,7 @@ function BeeSwarmSimulator(DATA) {
             hotbarSlots[j].innerHTML =
               itemSVGCode[i].replace(
                 "SCALE",
-                "scale(0.512,0.512);margin-left:-18px;margin-top:-19px"
+                "scale(0.512,0.512);margin-left:-18px;margin-top:-19px",
               ) +
               "<div style='font-size:9px;text-align:right;margin-top:-30px'>x" +
               items[i].amount +
@@ -36480,12 +36496,12 @@ function BeeSwarmSimulator(DATA) {
                   "The hive balloon granted x" +
                     out.hiveBalloon.blessing +
                     " balloon blessing!",
-                  [205, 205, 0]
+                  [205, 205, 0],
                 );
               } else {
                 out.addMessage(
                   "The hive balloon refreshed your balloon blessing!",
-                  [205, 205, 0]
+                  [205, 205, 0],
                 );
               }
             }
@@ -36527,7 +36543,7 @@ function BeeSwarmSimulator(DATA) {
         0.6 * player.isNight,
         0.75,
         out.hiveBalloon.displaySize,
-        1.05
+        1.05,
       );
 
       meshes.cylinder_explosions.instanceData.push(
@@ -36539,7 +36555,7 @@ function BeeSwarmSimulator(DATA) {
         player.isNight,
         1,
         0.05,
-        40
+        40,
       );
 
       textRenderer.addSingle(
@@ -36550,14 +36566,14 @@ function BeeSwarmSimulator(DATA) {
           out.hivePos[2] + 3,
         ],
         COLORS.whiteArr,
-        -1
+        -1,
       );
 
       p = Math.round(out.hiveBalloon.maxPollen).toString();
 
       out.hiveBalloon.blessing = Math.max(
         Math.ceil(Math.pow(out.hiveBalloon.maxPollen, 1 / 7) * 2 - 4),
-        1
+        1,
       );
 
       textRenderer.addSingle(
@@ -36570,7 +36586,7 @@ function BeeSwarmSimulator(DATA) {
         [0, 100, 255],
         -1,
         true,
-        false
+        false,
       );
     };
 
@@ -36600,7 +36616,7 @@ function BeeSwarmSimulator(DATA) {
       bond = 0,
       mutation,
       radioactive,
-      beequip
+      beequip,
     ) {
       if (out.hive[out.hive.length - 1].length < 5) {
         out.hive[out.hive.length - 1].push({
@@ -36644,7 +36660,7 @@ function BeeSwarmSimulator(DATA) {
             effects[type].maxCooldown,
             effects[type].maxCooldown * amplify +
               out.effects[found].cooldown +
-              dt
+              dt,
           );
 
           return;
@@ -36669,12 +36685,12 @@ function BeeSwarmSimulator(DATA) {
           if (refresh) {
             out.effects[found].amount = Math.min(
               Math.max(out.effects[found].amount, refresh),
-              effects[type].maxAmount
+              effects[type].maxAmount,
             );
           } else {
             out.effects[found].amount = Math.min(
               setAmount ?? out.effects[found].amount + (addAmount || 1),
-              effects[type].maxAmount
+              effects[type].maxAmount,
             );
           }
 
@@ -36686,7 +36702,7 @@ function BeeSwarmSimulator(DATA) {
         out.effects.push({
           cooldown: effects[type].maxCooldown,
           type: type,
-          amount: refresh ? refresh : setAmount ?? (addAmount || 1),
+          amount: refresh ? refresh : (setAmount ?? (addAmount || 1)),
         });
       }
 
@@ -36808,7 +36824,7 @@ function BeeSwarmSimulator(DATA) {
               ] *=
                 Number(str.substr(1, str.indexOf(" ") - 1)) +
                 Number(
-                  str.substr(str.indexOf("(") + 2, str.length).replace(")", "")
+                  str.substr(str.indexOf("(") + 2, str.length).replace(")", ""),
                 );
             } else {
               player.defaultStats[
@@ -36816,7 +36832,7 @@ function BeeSwarmSimulator(DATA) {
               ] +=
                 Number(str.substr(1, str.indexOf(" ") - 1)) +
                 Number(
-                  str.substr(str.indexOf("(") + 2, str.length).replace(")", "")
+                  str.substr(str.indexOf("(") + 2, str.length).replace(")", ""),
                 );
             }
           }
@@ -36833,7 +36849,7 @@ function BeeSwarmSimulator(DATA) {
             if (s[j].indexOf("Conversion") > -1) {
               out.defaultStats[s[j]] = MATH.applyPercentage(
                 out.defaultStats[s[j]],
-                b.num
+                b.num,
               );
             } else {
               out.defaultStats[s[j]] += b.num;
@@ -36985,7 +37001,7 @@ function BeeSwarmSimulator(DATA) {
             toAdd =
               toAdd.substr(0, toAdd.indexOf(" ") + 1) +
               MATH.doGrammar(
-                toAdd.substring(toAdd.indexOf(" ") + 1, toAdd.indexOf("("))
+                toAdd.substring(toAdd.indexOf(" ") + 1, toAdd.indexOf("(")),
               ) +
               '<l style="color:rgb(20,160,20)">' +
               toAdd.substring(toAdd.indexOf("("), toAdd.length) +
@@ -37004,7 +37020,7 @@ function BeeSwarmSimulator(DATA) {
 
         s =
           out.currentGear.beequips[out.beequipLookingAt].stats.player.split(
-            ","
+            ",",
           );
 
         if (
@@ -37021,7 +37037,7 @@ function BeeSwarmSimulator(DATA) {
             toAdd =
               toAdd.substr(0, toAdd.indexOf(" ") + 1) +
               MATH.doGrammar(
-                toAdd.substring(toAdd.indexOf(" ") + 1, toAdd.indexOf("("))
+                toAdd.substring(toAdd.indexOf(" ") + 1, toAdd.indexOf("(")),
               ) +
               toAdd.substring(toAdd.indexOf("("), toAdd.length);
 
@@ -37041,12 +37057,12 @@ function BeeSwarmSimulator(DATA) {
             w
               ? itemSVGCode[w.substring(1)].replace(
                   "SCALE",
-                  "translate(-24px,-22px) scale(0.5,0.5)"
+                  "translate(-24px,-22px) scale(0.5,0.5)",
                 ) +
                   "<div style='font-size:14px;margin-top:-55px;margin-left:10px'>" +
                   (Number(w[0]) ? "✔️" : "❌") +
                   "</div>"
-              : ""
+              : "",
           );
         }
 
@@ -37064,14 +37080,14 @@ function BeeSwarmSimulator(DATA) {
           MATH.doGrammar(
             out.currentGear.beequips[out.beequipLookingAt].type.replaceAll(
               "candycane",
-              "candyCane"
-            )
+              "candyCane",
+            ),
           ) +
           "</div><div style='position:fixed;background-color:rgb(240,240,240);margin-left:80px;margin-top:29px;border-radius:10px;font-size:13px;padding-top:0px;font-family:trebuchet ms;width:113px;padding-left:7px;padding-top:3px;padding-bottom:3px;'>Level: " +
           beequips[out.currentGear.beequips[out.beequipLookingAt].type].level +
           "</div><div style='position:fixed;background-color:rgb(240,240,240);margin-left:80px;margin-top:55px;border-radius:10px;padding-left:7px;padding-top:3px;padding-bottom:3px;font-size:13px;font-family:trebuchet ms;width:113px;'>Color: " +
           MATH.doGrammar(
-            beequips[out.currentGear.beequips[out.beequipLookingAt].type].color
+            beequips[out.currentGear.beequips[out.beequipLookingAt].type].color,
           ) +
           "</div><div style='position:fixed;background-color:rgb(240,240,240);margin-left:80px;margin-top:81px;border-radius:10px;padding-left:7px;padding-top:3px;padding-bottom:3px;font-size:13px;font-family:trebuchet ms;width:113px;'>Potential: " +
           out.currentGear.beequips[out.beequipLookingAt].potential +
@@ -37095,7 +37111,7 @@ function BeeSwarmSimulator(DATA) {
               MATH.doGrammar(
                 beequips[
                   out.currentGear.beequips[out.beequipLookingAt].type
-                ].extraAbility.split("_")[1]
+                ].extraAbility.split("_")[1],
               ) +
               "</p>"
             : "") +
@@ -37138,7 +37154,7 @@ function BeeSwarmSimulator(DATA) {
           0,
           0,
           76,
-          76
+          76,
         );
 
         let count = 0,
@@ -37180,7 +37196,7 @@ function BeeSwarmSimulator(DATA) {
                   beeInfo.basic[c + "Amount"] / beeInfo.basic[c + "Speed"]) *
                   0.05,
                 -1,
-                1
+                1,
               ),
               _v = value;
 
@@ -37196,7 +37212,7 @@ function BeeSwarmSimulator(DATA) {
                 (beeInfo[out.beesPageBee][c] - beeInfo.basic[c]) *
                   { attack: 0.4, energy: 0.15, speed: 0.3 }[c],
                 -1,
-                1
+                1,
               ),
               _v = value;
 
@@ -37407,11 +37423,11 @@ function BeeSwarmSimulator(DATA) {
         unsorted.sort(
           (a, b) =>
             ["common", "rare", "epic", "legendary", "mythic", "event"].indexOf(
-              beeInfo[a].rarity
+              beeInfo[a].rarity,
             ) -
             ["common", "rare", "epic", "legendary", "mythic", "event"].indexOf(
-              beeInfo[b].rarity
-            )
+              beeInfo[b].rarity,
+            ),
         );
 
         for (let i in unsorted)
@@ -37431,8 +37447,8 @@ function BeeSwarmSimulator(DATA) {
             beeInfo[i].color === "red"
               ? "rgb(255,0,0,0.5)"
               : beeInfo[i].color === "blue"
-              ? "rgb(0,0,255,0.5)"
-              : "rgb(255,255,255,0.5)";
+                ? "rgb(0,0,255,0.5)"
+                : "rgb(255,255,255,0.5)";
 
           img.width = 70;
           img.height = 70;
@@ -37450,7 +37466,7 @@ function BeeSwarmSimulator(DATA) {
             0,
             0,
             70,
-            70
+            70,
           );
 
           text.innerHTML =
@@ -37492,182 +37508,165 @@ function BeeSwarmSimulator(DATA) {
 
       out.computeStats(merelyAGliderStateChange);
 
-      out.toolMesh.setMeshFromFunction(function (
-        box,
-        a,
-        cylinder,
-        sphere,
-        applyFinalRotation,
-        c,
-        star
-      ) {
-        gear.tool[out.currentGear.tool].mesh(
-          box,
-          cylinder,
-          sphere,
-          star,
-          applyFinalRotation
-        );
-      });
+      out.toolMesh.setMeshFromFunction(
+        function (box, a, cylinder, sphere, applyFinalRotation, c, star) {
+          gear.tool[out.currentGear.tool].mesh(
+            box,
+            cylinder,
+            sphere,
+            star,
+            applyFinalRotation,
+          );
+        },
+      );
 
       out.toolMesh.setBuffers();
 
-      playerMesh.setMeshFromFunction(function (
-        box,
-        a,
-        cylinder,
-        sphere,
-        applyFinalRotation,
-        c,
-        star
-      ) {
-        box(0, 0, 0, 0.5, 1, 0.5, false, [1.45, 1.45, 1]);
+      playerMesh.setMeshFromFunction(
+        function (box, a, cylinder, sphere, applyFinalRotation, c, star) {
+          box(0, 0, 0, 0.5, 1, 0.5, false, [1.45, 1.45, 1]);
 
-        let totalAmulets = 0,
-          currentAmulet = 0;
+          let totalAmulets = 0,
+            currentAmulet = 0;
 
-        for (let i in out.currentGear)
-          if (i.indexOf("Amulet") > -1) totalAmulets++;
+          for (let i in out.currentGear)
+            if (i.indexOf("Amulet") > -1) totalAmulets++;
 
-        for (let i in out.currentGear) {
-          if (i === "tool" || i === "sprinkler") continue;
+          for (let i in out.currentGear) {
+            if (i === "tool" || i === "sprinkler") continue;
 
-          if (i.indexOf("Amulet") < 0 && i !== "beequips") {
-            if (i === "glider" || i === "parachute") {
-              if (player.isGliding)
+            if (i.indexOf("Amulet") < 0 && i !== "beequips") {
+              if (i === "glider" || i === "parachute") {
+                if (player.isGliding)
+                  gear[i][out.currentGear[i]].mesh(
+                    box,
+                    cylinder,
+                    sphere,
+                    star,
+                    applyFinalRotation,
+                  );
+              } else {
                 gear[i][out.currentGear[i]].mesh(
                   box,
                   cylinder,
                   sphere,
                   star,
-                  applyFinalRotation
+                  applyFinalRotation,
                 );
-            } else {
-              gear[i][out.currentGear[i]].mesh(
-                box,
-                cylinder,
-                sphere,
-                star,
-                applyFinalRotation
-              );
+              }
+            } else if (i !== "beequips") {
+              let theta =
+                ((currentAmulet++ + 1) / (totalAmulets + 1) - 0.5) *
+                (totalAmulets * 0.25 + 1);
+
+              let x = Math.sin(theta) * 1.5,
+                y = Math.cos(theta) * 1.5;
+
+              window.amuletOffset = [x, y - 1.5];
+
+              gear[i].mesh(box, cylinder, sphere, star);
             }
-          } else if (i !== "beequips") {
-            let theta =
-              ((currentAmulet++ + 1) / (totalAmulets + 1) - 0.5) *
-              (totalAmulets * 0.25 + 1);
-
-            let x = Math.sin(theta) * 1.5,
-              y = Math.cos(theta) * 1.5;
-
-            window.amuletOffset = [x, y - 1.5];
-
-            gear[i].mesh(box, cylinder, sphere, star);
           }
-        }
-      });
+        },
+      );
 
       playerMesh.setBuffers();
     };
 
     out.updateHive = function () {
-      out.hiveMesh.setMeshFromFunction(function (
-        box,
-        hiveSlot,
-        useless1,
-        useless2,
-        useless3,
-        giftedRing
-      ) {
-        for (let i in objects.bees) {
-          for (let j in objects.bees[i].trails) {
-            objects.bees[i].trails[j].splice = true;
-          }
-        }
-
-        objects.bees = [];
-
-        for (let i in raycastWorld.bodies) {
-          raycastWorld.removeBody(raycastWorld.bodies[i]);
-        }
-
-        for (let y = 0; y < out.hive.length; y++) {
-          for (let x = 0; x < out.hive[y].length; x++) {
-            let bond = out.hive[y][x].bond;
-
-            let l,
-              r = [
-                0, 10, 50, 250, 750, 1500, 3000, 6000, 125000, 25000, 50000,
-                100000, 200000, 400000, 800000, 1600000, 3200000, 6400000,
-                12800000, 25600000,
-              ];
-
-            for (let i in r) {
-              if (bond >= r[i]) l = i;
+      out.hiveMesh.setMeshFromFunction(
+        function (box, hiveSlot, useless1, useless2, useless3, giftedRing) {
+          for (let i in objects.bees) {
+            for (let j in objects.bees[i].trails) {
+              objects.bees[i].trails[j].splice = true;
             }
+          }
 
-            if (l < 20) l++;
+          objects.bees = [];
 
-            if (!l || l > 20) l = 20;
+          for (let i in raycastWorld.bodies) {
+            raycastWorld.removeBody(raycastWorld.bodies[i]);
+          }
 
-            out.hive[y][x].level = l;
+          for (let y = 0; y < out.hive.length; y++) {
+            for (let x = 0; x < out.hive[y].length; x++) {
+              let bond = out.hive[y][x].bond;
 
-            hiveSlot(
-              out.hivePos[0] + x * 0.8,
-              out.hivePos[1] + y * 0.8 - 2.25,
-              out.hivePos[2],
-              0.35,
-              0.35,
-              out.hive[y][x].type,
-              out.hive[y][x].gifted
-            );
+              let l,
+                r = [
+                  0, 10, 50, 250, 750, 1500, 3000, 6000, 125000, 25000, 50000,
+                  100000, 200000, 400000, 800000, 1600000, 3200000, 6400000,
+                  12800000, 25600000,
+                ];
 
-            if (out.hive[y][x].type !== null) {
-              if (out.hive[y][x].gifted)
-                giftedRing(
-                  out.hivePos[0] + x * 0.8,
-                  out.hivePos[1] + y * 0.8 - 2.25,
-                  out.hivePos[2] - 0.2,
-                  0.45,
-                  0.45,
-                  out.hive[y][x].type
-                );
+              for (let i in r) {
+                if (bond >= r[i]) l = i;
+              }
 
-              let _b = new Bee(
-                [
-                  out.hivePos[0] + x * 0.8,
-                  out.hivePos[1] + y * 0.8 - 2.25,
-                  out.hivePos[2],
-                ],
+              if (l < 20) l++;
+
+              if (!l || l > 20) l = 20;
+
+              out.hive[y][x].level = l;
+
+              hiveSlot(
+                out.hivePos[0] + x * 0.8,
+                out.hivePos[1] + y * 0.8 - 2.25,
+                out.hivePos[2],
+                0.35,
+                0.35,
                 out.hive[y][x].type,
-                out.hive[y][x].level,
                 out.hive[y][x].gifted,
-                x,
-                y,
-                out.hive[y][x].mutation
               );
 
-              out.hive[y][x].bee = _b;
-              objects.bees.push(_b);
+              if (out.hive[y][x].type !== null) {
+                if (out.hive[y][x].gifted)
+                  giftedRing(
+                    out.hivePos[0] + x * 0.8,
+                    out.hivePos[1] + y * 0.8 - 2.25,
+                    out.hivePos[2] - 0.2,
+                    0.45,
+                    0.45,
+                    out.hive[y][x].type,
+                  );
+
+                let _b = new Bee(
+                  [
+                    out.hivePos[0] + x * 0.8,
+                    out.hivePos[1] + y * 0.8 - 2.25,
+                    out.hivePos[2],
+                  ],
+                  out.hive[y][x].type,
+                  out.hive[y][x].level,
+                  out.hive[y][x].gifted,
+                  x,
+                  y,
+                  out.hive[y][x].mutation,
+                );
+
+                out.hive[y][x].bee = _b;
+                objects.bees.push(_b);
+              }
+
+              let b = new CANNON.Body({
+                position: new CANNON.Vec3(
+                  player.hivePos[0] + x * 0.8,
+                  player.hivePos[1] + y * 0.8 - 2.25,
+                  player.hivePos[2] - 0.2,
+                ),
+                shape: new CANNON.Box(new CANNON.Vec3(0.4, 0.4, 0.1)),
+                mass: 0,
+              });
+
+              b.hiveIndex = [x, y];
+
+              raycastWorld.addBody(b);
             }
-
-            let b = new CANNON.Body({
-              position: new CANNON.Vec3(
-                player.hivePos[0] + x * 0.8,
-                player.hivePos[1] + y * 0.8 - 2.25,
-                player.hivePos[2] - 0.2
-              ),
-              shape: new CANNON.Box(new CANNON.Vec3(0.4, 0.4, 0.1)),
-              mass: 0,
-            });
-
-            b.hiveIndex = [x, y];
-
-            raycastWorld.addBody(b);
           }
-        }
 
-        out.computeStats();
-      });
+          out.computeStats();
+        },
+      );
 
       out.hiveMesh.setBuffers();
     };
@@ -37763,7 +37762,7 @@ function BeeSwarmSimulator(DATA) {
         "/" +
         MATH.addCommas(player.capacity.toString());
       honeyAmount2.textContent = honeyAmount.textContent = MATH.addCommas(
-        out.honey.toString()
+        out.honey.toString(),
       );
 
       let p = Math.min(out.pollen / out.capacity, 1);
@@ -37803,7 +37802,7 @@ function BeeSwarmSimulator(DATA) {
         out.sprinklers[out.currentSprinkler].set(
           player.fieldIn,
           player.flowerIn.x,
-          player.flowerIn.z
+          player.flowerIn.z,
         );
         out.currentSprinkler =
           (out.currentSprinkler + 1) % out.sprinklers.length;
@@ -37822,7 +37821,7 @@ function BeeSwarmSimulator(DATA) {
                 y,
                 z,
                 box,
-                cylinder
+                cylinder,
               );
             }
           }
@@ -37840,12 +37839,12 @@ function BeeSwarmSimulator(DATA) {
         ctx.strokeText(
           MATH.doGrammar(out.itemDragging || out.beequipDragging.type),
           user.mouseX,
-          user.mouseY
+          user.mouseY,
         );
         ctx.fillText(
           MATH.doGrammar(out.itemDragging || out.beequipDragging.type),
           user.mouseX,
-          user.mouseY
+          user.mouseY,
         );
         ctx.textAlign = "center";
       }
@@ -37882,7 +37881,7 @@ function BeeSwarmSimulator(DATA) {
 
                 let taskAction = MATH.doStatGrammar(out.quests[i].req[j][0]);
                 let taskAmount = MATH.addCommas(
-                  out.quests[i].req[j][1].toString()
+                  out.quests[i].req[j][1].toString(),
                 );
                 let taskFocus =
                   out.quests[i].req[j][1] > 1 &&
@@ -37903,7 +37902,7 @@ function BeeSwarmSimulator(DATA) {
                         out.quests[i].req[j][2]) /
                         out.quests[i].req[j][1],
                       0,
-                      1
+                      1,
                     ) * 100
                   ).toFixed(0);
 
@@ -37915,7 +37914,7 @@ function BeeSwarmSimulator(DATA) {
                         out.quests[i].req[j][2]) /
                         out.quests[i].req[j][1]) *
                         190,
-                      190
+                      190,
                     )) +
                   "px;bottom:0px;background-color:rgb(0,250,0);'></div><div style='position:absolute;left:0px;top:0px;border-radius:2px;right:0px;bottom:0px'>" +
                   c +
@@ -38019,7 +38018,7 @@ function BeeSwarmSimulator(DATA) {
           "%<br>Ability Duplication Chance: " +
           Math.round(
             player.abilityDuplicationChance * 100 +
-              (player.hasDigitalBee && player.extraInfo.drives.maxed ? 1 : 0)
+              (player.hasDigitalBee && player.extraInfo.drives.maxed ? 1 : 0),
           ) +
           "%<br>Bond From Treats: " +
           Math.round(player.bondFromTreats * 100) +
@@ -38144,7 +38143,7 @@ function BeeSwarmSimulator(DATA) {
                   ? shops[out.currentShop].increments[
                       shops[out.currentShop].currentIncrement
                     ]
-                  : 1
+                  : 1,
               );
             }
 
@@ -38169,16 +38168,16 @@ function BeeSwarmSimulator(DATA) {
             ].owned
               ? "Sold Out"
               : canBuy
-              ? "Purchase"
-              : "Not Enough";
+                ? "Purchase"
+                : "Not Enough";
 
             purchaseButton.style.backgroundColor = shops[out.currentShop].items[
               shops[out.currentShop].currentIndex
             ].owned
               ? "rgb(255,50,50)"
               : canBuy
-              ? "rgb(0,200,0)"
-              : "rgb(225,0,0)";
+                ? "rgb(0,200,0)"
+                : "rgb(225,0,0)";
           } else {
             purchaseButton.innerHTML = shops[out.currentShop].items[
               shops[out.currentShop].currentIndex
@@ -38194,8 +38193,8 @@ function BeeSwarmSimulator(DATA) {
                 ? "Equipped"
                 : "Equip"
               : canBuy
-              ? "Purchase"
-              : "Not Enough";
+                ? "Purchase"
+                : "Not Enough";
 
             purchaseButton.style.backgroundColor = shops[out.currentShop].items[
               shops[out.currentShop].currentIndex
@@ -38211,8 +38210,8 @@ function BeeSwarmSimulator(DATA) {
                 ? "rgb(100,200,100)"
                 : "rgb(0,200,0)"
               : canBuy
-              ? "rgb(0,200,0)"
-              : "rgb(225,0,0)";
+                ? "rgb(0,200,0)"
+                : "rgb(225,0,0)";
           }
 
           if (user.clickedKeys.e) {
@@ -38257,7 +38256,7 @@ function BeeSwarmSimulator(DATA) {
         ctx.translate(half_width + 40, half_height + 20);
         ctx.scale(
           Math.min(1, (TIME - player.beePopup.time) * 10),
-          Math.min(1, (TIME - player.beePopup.time) * 10)
+          Math.min(1, (TIME - player.beePopup.time) * 10),
         );
         ctx.fillStyle = player.beePopup.gifted
           ? "rgb(" +
@@ -38322,10 +38321,10 @@ function BeeSwarmSimulator(DATA) {
                 legendary: 3,
                 mythic: 4,
                 event: 5,
-              }[beeInfo[bee].rarity]
+              }[beeInfo[bee].rarity],
             ),
           0,
-          -120
+          -120,
         );
         ctx.strokeText(
           (player.beePopup.gifted ? "Gifted " : "") +
@@ -38338,10 +38337,10 @@ function BeeSwarmSimulator(DATA) {
                 legendary: 3,
                 mythic: 4,
                 event: 5,
-              }[beeInfo[bee].rarity]
+              }[beeInfo[bee].rarity],
             ),
           0,
-          -120
+          -120,
         );
 
         ctx.font = "bold 13px arial";
@@ -38381,7 +38380,7 @@ function BeeSwarmSimulator(DATA) {
             " " +
             MATH.doGrammar(beeInfo[bee].rarity),
           0,
-          23
+          23,
         );
 
         ctx.rotate(Math.cos(TIME * 5) * 0.1);
@@ -38394,7 +38393,7 @@ function BeeSwarmSimulator(DATA) {
           -45,
           -95 + Math.sin(TIME * 2) * 7,
           90,
-          90
+          90,
         );
 
         ctx.setTransform(1, 0, 0, 1, 0, 0);
@@ -38441,9 +38440,9 @@ function BeeSwarmSimulator(DATA) {
                     Ro: [5, 8],
                     Mo: [6, 9],
                     Pe: [9, 12],
-                  }[f.substring(0, 2)]
-                ) | 0
-              )
+                  }[f.substring(0, 2)],
+                ) | 0,
+              ),
             );
           }
         }
@@ -38457,13 +38456,13 @@ function BeeSwarmSimulator(DATA) {
           out.isNight +
             dt * 0.0666667 * Math.sign(out.targetLight - out.isNight),
           NIGHT_DARKNESS,
-          1
+          1,
         );
 
         vec3.scale(
           out.skyColor,
           [0.4, 0.6, 1],
-          MATH.map(out.isNight, NIGHT_DARKNESS, 1, 0, 1)
+          MATH.map(out.isNight, NIGHT_DARKNESS, 1, 0, 1),
         );
 
         gl.useProgram(staticGeometryProgram);
@@ -38489,7 +38488,7 @@ function BeeSwarmSimulator(DATA) {
         let p = MATH.constrain(
             (player.isCrafting.time - TIME) / player.isCrafting.waitTime,
             0,
-            1
+            1,
           ),
           a = (player.isCrafting.amount * (1 - p)) | 0,
           n = Math.ceil(p * player.isCrafting.amount * 0.25);
@@ -38542,7 +38541,7 @@ function BeeSwarmSimulator(DATA) {
                 (a > 1
                   ? MATH.doPlural(MATH.doGrammar(player.isCrafting.item))
                   : MATH.doGrammar(player.isCrafting.item)) +
-                " (from Blender)"
+                " (from Blender)",
             );
 
           for (let i in blenderRecipes) {
@@ -38562,7 +38561,7 @@ function BeeSwarmSimulator(DATA) {
                       (f > 1
                         ? MATH.doPlural(MATH.doGrammar(b.req[j][0]))
                         : MATH.doGrammar(b.req[j][0])) +
-                      " (from Blender Refund)"
+                      " (from Blender Refund)",
                   );
               }
 
@@ -38580,7 +38579,7 @@ function BeeSwarmSimulator(DATA) {
 
           items.ticket.amount -= n;
           player.addMessage(
-            "-" + MATH.addCommas(n + "") + (n === 1 ? " Ticket" : " Tickets")
+            "-" + MATH.addCommas(n + "") + (n === 1 ? " Ticket" : " Tickets"),
           );
           items[player.isCrafting.item].amount += player.isCrafting.amount;
           player.addMessage(
@@ -38590,7 +38589,7 @@ function BeeSwarmSimulator(DATA) {
               (player.isCrafting.amount > 1
                 ? MATH.doPlural(MATH.doGrammar(player.isCrafting.item))
                 : MATH.doGrammar(player.isCrafting.item)) +
-              " (from Blender)"
+              " (from Blender)",
           );
           player.stats.itemsUsingTheBlender += player.isCrafting.amount;
           player.isCrafting = false;
@@ -38656,11 +38655,11 @@ function BeeSwarmSimulator(DATA) {
         document.getElementById("shrineX").onclick();
         out.addMessage(
           "You're supposed to donate, not get donations here lol",
-          COLORS.redArr
+          COLORS.redArr,
         );
         out.addMessage(
           "Stop being poor(haha) and get an item that you can donate",
-          COLORS.redArr
+          COLORS.redArr,
         );
         return;
       }
@@ -38671,7 +38670,7 @@ function BeeSwarmSimulator(DATA) {
 
       document.getElementById("shrineMenu").style.display = "block";
       document.getElementById("shrineItemName").innerHTML = MATH.doGrammar(
-        windShrineDonations[out.shrineIndex].item
+        windShrineDonations[out.shrineIndex].item,
       );
       document.getElementById("shrineItem").innerHTML = itemSVGCode[
         windShrineDonations[out.shrineIndex].item
@@ -38703,13 +38702,13 @@ function BeeSwarmSimulator(DATA) {
 
       document.getElementById("shrineAmount").value = Math.min(
         document.getElementById("shrineAmount").value,
-        items[windShrineDonations[out.shrineIndex].item].amount
+        items[windShrineDonations[out.shrineIndex].item].amount,
       );
 
       document.getElementById("shrineAmount").oninput = function () {
         document.getElementById("shrineAmount").value = Math.min(
           document.getElementById("shrineAmount").value,
-          items[windShrineDonations[out.shrineIndex].item].amount
+          items[windShrineDonations[out.shrineIndex].item].amount,
         );
       };
 
@@ -38768,41 +38767,47 @@ function BeeSwarmSimulator(DATA) {
         ];
 
         for (let i in mess) {
-          window.setTimeout(function () {
-            out.addMessage(mess[i][(Math.random() * mess[i].length) | 0], [
-              160 * 0.6,
-              235 * 0.6,
-              255 * 0.6,
-            ]);
-          }, i * 3250 + 750);
+          window.setTimeout(
+            function () {
+              out.addMessage(mess[i][(Math.random() * mess[i].length) | 0], [
+                160 * 0.6,
+                235 * 0.6,
+                255 * 0.6,
+              ]);
+            },
+            i * 3250 + 750,
+          );
         }
 
         if (windShrineDonations[out.shrineIndex].item === "spiritPetal") {
-          window.setTimeout(function () {
-            if (items.windyBeeEgg.amount > 0) {
-              player.addMessage(
-                "Hey! Stop being greedy! You have a Windy Bee already! >:(",
-                COLORS.redArr
-              );
-              return;
-            }
+          window.setTimeout(
+            function () {
+              if (items.windyBeeEgg.amount > 0) {
+                player.addMessage(
+                  "Hey! Stop being greedy! You have a Windy Bee already! >:(",
+                  COLORS.redArr,
+                );
+                return;
+              }
 
-            out.addMessage("🎉 You've tamed a Windy Bee! 🎉", [
-              160 * 0.75,
-              235 * 0.75,
-              255 * 0.75,
-            ]);
-            out.addMessage("+1 Windy Bee Egg");
-            items[windShrineDonations[out.shrineIndex].item].amount--;
-            out.updateInventory();
+              out.addMessage("🎉 You've tamed a Windy Bee! 🎉", [
+                160 * 0.75,
+                235 * 0.75,
+                255 * 0.75,
+              ]);
+              out.addMessage("+1 Windy Bee Egg");
+              items[windShrineDonations[out.shrineIndex].item].amount--;
+              out.updateInventory();
 
-            if (document.getElementById("shrineAmount").value > 1) {
-              out.addMessage(
-                "Hey! No soft-locking! You donated 1+ petals! >:(",
-                COLORS.redArr
-              );
-            }
-          }, 3 * 3250 + 750);
+              if (document.getElementById("shrineAmount").value > 1) {
+                out.addMessage(
+                  "Hey! No soft-locking! You donated 1+ petals! >:(",
+                  COLORS.redArr,
+                );
+              }
+            },
+            3 * 3250 + 750,
+          );
         } else {
           items[windShrineDonations[out.shrineIndex].item].amount -=
             document.getElementById("shrineAmount").value;
@@ -38814,150 +38819,153 @@ function BeeSwarmSimulator(DATA) {
 
         out.updateInventory();
 
-        window.setTimeout(function () {
-          if (
-            windShrineDonations[out.shrineIndex].item === "spiritPetal" &&
-            items.windyBeeEgg.amount > 0
-          )
-            return;
+        window.setTimeout(
+          function () {
+            if (
+              windShrineDonations[out.shrineIndex].item === "spiritPetal" &&
+              items.windyBeeEgg.amount > 0
+            )
+              return;
 
-          let info = windShrineDonations[out.shrineIndex],
-            amountOfTokens,
-            amountDonated =
-              windShrineDonations[out.shrineIndex].item === "spiritPetal"
-                ? 1000
-                : document.getElementById("shrineAmount").value;
+            let info = windShrineDonations[out.shrineIndex],
+              amountOfTokens,
+              amountDonated =
+                windShrineDonations[out.shrineIndex].item === "spiritPetal"
+                  ? 1000
+                  : document.getElementById("shrineAmount").value;
 
-          switch (info.rewardType) {
-            case "honey":
-              amountOfTokens = (3 + info.rewardAmount * 0.5) | 0;
+            switch (info.rewardType) {
+              case "honey":
+                amountOfTokens = (3 + info.rewardAmount * 0.5) | 0;
 
-              for (let i = 0; i < amountOfTokens; i++) {
-                let theta = (i - (amountOfTokens - 1) * 0.5) * 0.5,
-                  x = -Math.cos(theta) * 4.5,
-                  z = Math.sin(theta) * 4.5;
+                for (let i = 0; i < amountOfTokens; i++) {
+                  let theta = (i - (amountOfTokens - 1) * 0.5) * 0.5,
+                    x = -Math.cos(theta) * 4.5,
+                    z = Math.sin(theta) * 4.5;
 
-                window.setTimeout(function () {
-                  objects.tokens.push(
-                    new LootToken(
-                      60,
-                      [68 + x, 23.75, -21.5 + z],
-                      "honey",
-                      ((info.rewardAmount *
-                        info.rewardAmount *
-                        info.rewardAmount *
-                        40 *
-                        (amountDonated * 0.025 + 1) -
-                        20) *
-                        MATH.random(0.8, 1 / 0.8)) |
-                        0,
-                      false,
-                      "Wind Shrine"
-                    )
-                  );
-                }, i * 150);
-              }
-
-              let _fields = [];
-
-              for (let i in fieldInfo) if (i !== "AntField") _fields.push(i);
-
-              _fields = _fields[(Math.random() * _fields.length) | 0];
-
-              objects.mobs.push(
-                new Cloud(
-                  _fields,
-                  (Math.random() * fieldInfo[_fields].width) | 0,
-                  (Math.random() * fieldInfo[_fields].length) | 0,
-                  5 * 60,
-                  true
-                )
-              );
-
-              window.setTimeout(
-                () =>
-                  player.addMessage(
-                    "☁️A Wild Windy Bee has appeared!☁️",
-                    [160, 160, 160]
-                  ),
-                750
-              );
-
-              break;
-
-            case "winds":
-              amountOfTokens = (3 + info.rewardAmount * 0.6) | 0;
-
-              let fields = [];
-
-              for (let i in fieldInfo) if (i !== "AntField") fields.push(i);
-
-              for (let i = 0; i < amountOfTokens; i++) {
-                let theta = (i - (amountOfTokens - 1) * 0.5) * 0.5,
-                  x = -Math.cos(theta) * 4.5,
-                  z = Math.sin(theta) * 4.5;
-
-                if (Math.random() < 0.2) {
                   window.setTimeout(function () {
                     objects.tokens.push(
                       new LootToken(
                         60,
                         [68 + x, 23.75, -21.5 + z],
                         "honey",
-                        (info.rewardAmount *
+                        ((info.rewardAmount *
                           info.rewardAmount *
-                          2500 *
-                          (amountDonated * 0.02 + 1) *
+                          info.rewardAmount *
+                          40 *
+                          (amountDonated * 0.025 + 1) -
+                          20) *
                           MATH.random(0.8, 1 / 0.8)) |
                           0,
                         false,
-                        "Wind Shrine"
-                      )
-                    );
-                  }, i * 150);
-                } else {
-                  let field = (Math.random() * fields.length) | 0,
-                    eff = fields[field];
-
-                  fields.splice(field, 1);
-
-                  for (let j = 0, _j = Math.random() * 2.5; j < _j; j++)
-                    objects.mobs.push(
-                      new Cloud(
-                        eff,
-                        (Math.random() * fieldInfo[eff].width) | 0,
-                        (Math.random() * fieldInfo[eff].length) | 0,
-                        5 * 60
-                      )
-                    );
-
-                  eff += "Winds";
-                  eff = eff[0].toLowerCase() + eff.substring(1);
-
-                  window.setTimeout(function () {
-                    objects.tokens.push(
-                      new Token(
-                        60,
-                        [68 + x, 23.75, -21.5 + z],
-                        eff,
-                        {},
-                        false,
-                        Math.max(
-                          Math.ceil(
-                            info.rewardAmount +
-                              Math.round(MATH.random(-1.25, 1.25))
-                          ),
-                          1
-                        )
-                      )
+                        "Wind Shrine",
+                      ),
                     );
                   }, i * 150);
                 }
-              }
 
-              break;
-          }
-        }, 2 * 3250 + 1750);
+                let _fields = [];
+
+                for (let i in fieldInfo) if (i !== "AntField") _fields.push(i);
+
+                _fields = _fields[(Math.random() * _fields.length) | 0];
+
+                objects.mobs.push(
+                  new Cloud(
+                    _fields,
+                    (Math.random() * fieldInfo[_fields].width) | 0,
+                    (Math.random() * fieldInfo[_fields].length) | 0,
+                    5 * 60,
+                    true,
+                  ),
+                );
+
+                window.setTimeout(
+                  () =>
+                    player.addMessage(
+                      "☁️A Wild Windy Bee has appeared!☁️",
+                      [160, 160, 160],
+                    ),
+                  750,
+                );
+
+                break;
+
+              case "winds":
+                amountOfTokens = (3 + info.rewardAmount * 0.6) | 0;
+
+                let fields = [];
+
+                for (let i in fieldInfo) if (i !== "AntField") fields.push(i);
+
+                for (let i = 0; i < amountOfTokens; i++) {
+                  let theta = (i - (amountOfTokens - 1) * 0.5) * 0.5,
+                    x = -Math.cos(theta) * 4.5,
+                    z = Math.sin(theta) * 4.5;
+
+                  if (Math.random() < 0.2) {
+                    window.setTimeout(function () {
+                      objects.tokens.push(
+                        new LootToken(
+                          60,
+                          [68 + x, 23.75, -21.5 + z],
+                          "honey",
+                          (info.rewardAmount *
+                            info.rewardAmount *
+                            2500 *
+                            (amountDonated * 0.02 + 1) *
+                            MATH.random(0.8, 1 / 0.8)) |
+                            0,
+                          false,
+                          "Wind Shrine",
+                        ),
+                      );
+                    }, i * 150);
+                  } else {
+                    let field = (Math.random() * fields.length) | 0,
+                      eff = fields[field];
+
+                    fields.splice(field, 1);
+
+                    for (let j = 0, _j = Math.random() * 2.5; j < _j; j++)
+                      objects.mobs.push(
+                        new Cloud(
+                          eff,
+                          (Math.random() * fieldInfo[eff].width) | 0,
+                          (Math.random() * fieldInfo[eff].length) | 0,
+                          5 * 60,
+                        ),
+                      );
+
+                    eff += "Winds";
+                    eff = eff[0].toLowerCase() + eff.substring(1);
+
+                    window.setTimeout(function () {
+                      objects.tokens.push(
+                        new Token(
+                          60,
+                          [68 + x, 23.75, -21.5 + z],
+                          eff,
+                          {},
+                          false,
+                          Math.max(
+                            Math.ceil(
+                              info.rewardAmount +
+                                Math.round(MATH.random(-1.25, 1.25)),
+                            ),
+                            1,
+                          ),
+                        ),
+                      );
+                    }, i * 150);
+                  }
+                }
+
+                break;
+            }
+          },
+          2 * 3250 + 1750,
+        );
       };
     };
 
@@ -39034,14 +39042,14 @@ function BeeSwarmSimulator(DATA) {
           let r = blenderRecipes[player.blenderIndex].req[i];
           maximumCanCraft = Math.min(
             maximumCanCraft,
-            (items[r[0]].amount / r[1]) | 0
+            (items[r[0]].amount / r[1]) | 0,
           );
         }
 
         document.getElementById("blenderCraftAmount").value = MATH.constrain(
           document.getElementById("blenderCraftAmount").value,
           maximumCanCraft ? 1 : 0,
-          maximumCanCraft
+          maximumCanCraft,
         );
 
         if (!Number(document.getElementById("blenderCraftAmount").value)) {
@@ -39053,7 +39061,7 @@ function BeeSwarmSimulator(DATA) {
             "rgb(0,170,0)";
           document.getElementById("blenderCraft").onclick = function () {
             let am = Number(
-                document.getElementById("blenderCraftAmount").value
+                document.getElementById("blenderCraftAmount").value,
               ),
               waitTime = am + 45;
 
@@ -39077,7 +39085,7 @@ function BeeSwarmSimulator(DATA) {
                       " " +
                       (am > 1
                         ? MATH.doPlural(MATH.doGrammar(b.req[j][0]))
-                        : MATH.doGrammar(b.req[j][0]))
+                        : MATH.doGrammar(b.req[j][0])),
                   );
                 }
 
@@ -39098,7 +39106,7 @@ function BeeSwarmSimulator(DATA) {
           let r = blenderRecipes[player.blenderIndex].req[i],
             h = itemSVGCode[r[0]].replace(
               "SCALE",
-              "translate(-20px,-10px) scale(0.5,0.5)"
+              "translate(-20px,-10px) scale(0.5,0.5)",
             );
 
           document.getElementById("blenderReq").innerHTML +=
@@ -39198,7 +39206,7 @@ function BeeSwarmSimulator(DATA) {
         MATH.xRotate(
           MATH.yRotate(out.viewMatrix, out.cosYaw, out.sinYaw),
           out.cosPitch,
-          out.sinPitch
+          out.sinPitch,
         );
 
         out.cameraDir[0] = out.viewMatrix[2];
@@ -39208,14 +39216,14 @@ function BeeSwarmSimulator(DATA) {
         out.cameraRaycastPoint.set(
           player.body.position.x + out.cameraDir[0] * out.zoom,
           player.body.position.y + 0.5 + out.cameraDir[1] * out.zoom,
-          player.body.position.z + out.cameraDir[2] * out.zoom
+          player.body.position.z + out.cameraDir[2] * out.zoom,
         );
 
         world.raycastClosest(
           out.body.position,
           out.cameraRaycastPoint,
           out.cameraRaycastFilter,
-          out.cameraRaycastResult
+          out.cameraRaycastResult,
         );
 
         let d =
@@ -39231,7 +39239,7 @@ function BeeSwarmSimulator(DATA) {
           out.viewMatrix,
           -player.body.position.x - out.cameraDir[0] * d + normalizedCamDir[1],
           -player.body.position.y - 0.5 - out.cameraDir[1] * d,
-          -player.body.position.z - out.cameraDir[2] * d - normalizedCamDir[0]
+          -player.body.position.z - out.cameraDir[2] * d - normalizedCamDir[0],
         );
 
         MATH.mult(out.viewMatrix, out.projectionMatrix, out.viewMatrix);
@@ -39251,7 +39259,7 @@ function BeeSwarmSimulator(DATA) {
         MATH.xRotate(
           MATH.yRotate(out.viewMatrix, out.cosYaw, out.sinYaw),
           out.cosPitch,
-          out.sinPitch
+          out.sinPitch,
         );
 
         out.cameraDir[0] = out.viewMatrix[2];
@@ -39261,14 +39269,14 @@ function BeeSwarmSimulator(DATA) {
         out.cameraRaycastPoint.set(
           player.body.position.x + out.cameraDir[0] * out.zoom,
           player.body.position.y + 0.5 + out.cameraDir[1] * out.zoom,
-          player.body.position.z + out.cameraDir[2] * out.zoom
+          player.body.position.z + out.cameraDir[2] * out.zoom,
         );
 
         world.raycastClosest(
           out.body.position,
           out.cameraRaycastPoint,
           out.cameraRaycastFilter,
-          out.cameraRaycastResult
+          out.cameraRaycastResult,
         );
 
         let d =
@@ -39280,7 +39288,7 @@ function BeeSwarmSimulator(DATA) {
           out.viewMatrix,
           -player.body.position.x - out.cameraDir[0] * d,
           -player.body.position.y - 0.5 - out.cameraDir[1] * d,
-          -player.body.position.z - out.cameraDir[2] * d
+          -player.body.position.z - out.cameraDir[2] * d,
         );
         MATH.mult(out.viewMatrix, out.projectionMatrix, out.viewMatrix);
 
@@ -39310,7 +39318,7 @@ function BeeSwarmSimulator(DATA) {
       mat4.rotateX(
         out.toolMatrix,
         out.toolMatrix,
-        Math.max(0, (-Math.abs(out.toolRot - 2) + 2) * MATH.QUATER_PI)
+        Math.max(0, (-Math.abs(out.toolRot - 2) + 2) * MATH.QUATER_PI),
       );
 
       if (out.viewMatrixToChange) {
@@ -39318,7 +39326,7 @@ function BeeSwarmSimulator(DATA) {
         MATH.lerpMatrix(
           out.viewMatrixCopy,
           out.viewMatrixToChange,
-          out.easeAmount
+          out.easeAmount,
         );
         out.viewMatrix = out.viewMatrixCopy.slice();
       }
@@ -39478,7 +39486,7 @@ function BeeSwarmSimulator(DATA) {
                   player.hivePos[2] + 0.1,
                 ],
                 c,
-                -1.5
+                -1.5,
               );
             }
 
@@ -39490,7 +39498,7 @@ function BeeSwarmSimulator(DATA) {
                   player.hivePos[2] + 0.2,
                 ],
                 player.hive[y][x].beequip.type,
-                [-1, -1]
+                [-1, -1],
               );
             }
 
@@ -39504,7 +39512,7 @@ function BeeSwarmSimulator(DATA) {
                   player.hivePos[2] + 0.1,
                 ],
                 "radioactive",
-                [1.3, 1.3]
+                [1.3, 1.3],
               );
 
               if (player.radioactiveParticleTimer <= 0) {
@@ -39537,12 +39545,12 @@ function BeeSwarmSimulator(DATA) {
       for (let i in fieldInfo) {
         fieldInfo[i].degration = Math.max(
           fieldInfo[i].degration - dt * 0.00027777777,
-          0
+          0,
         );
         fieldInfo[i].corruption = MATH.constrain(
           fieldInfo[i].corruption - dt * 0.6,
           0,
-          100
+          100,
         );
 
         updateFlower(
@@ -39596,7 +39604,7 @@ function BeeSwarmSimulator(DATA) {
           },
           true,
           true,
-          true
+          true,
         );
 
         if (!player.fieldIn) {
@@ -39619,7 +39627,7 @@ function BeeSwarmSimulator(DATA) {
                 "corruption",
                 false,
                 false,
-                fieldInfo[i].corruption | 0
+                fieldInfo[i].corruption | 0,
               );
           }
         }
@@ -39680,8 +39688,8 @@ function BeeSwarmSimulator(DATA) {
               tt,
               1,
               false,
-              "Leaves"
-            )
+              "Leaves",
+            ),
           );
         }
       }
@@ -39797,7 +39805,7 @@ function BeeSwarmSimulator(DATA) {
             "Cogs can be used to buy more quest rerolls and items like drives. There are 4 colors of drives, which can be used to buff your pollen and bee attack depending on which color the drives are.",
             "The challenge ends when you run out of time. You can get many rewards based on how many rounds you completed. You can also get Cog Amulets, which give many permanent buffs to your hive.",
             " Amulet stats are increased based on how many rounds you do. With enough drives, you can also buy a Digital Bee, which is an event bee that can be hatched and used in your hive!",
-            "That's it! Have fun!"
+            "That's it! Have fun!",
           );
           NPCs.roboBear.dialogueIndex++;
         },
@@ -39812,16 +39820,16 @@ function BeeSwarmSimulator(DATA) {
                 (function (s) {
                   return (
                     (s >= 3600 ? ((0.00027777777 * s) | 0) + "h " : "") +
-                    (s >= 60 ? ((0.0166666667 * s) % 60 | 0) + "m " : "") +
+                    (s >= 60 ? (((0.0166666667 * s) % 60) | 0) + "m " : "") +
                     ((s | 0) % 60) +
                     "s"
                   );
                 })(
                   60 * 60 -
                     (Date.now() - player.extraInfo.freeRoboPass) * 0.001 +
-                    ""
+                    "",
                 ) +
-                "!"
+                "!",
             );
           } else {
             NPCs.roboBear.dialogue.push("", "Ok!", function () {
@@ -39854,7 +39862,7 @@ function BeeSwarmSimulator(DATA) {
           } else {
             NPCs.roboBear.dialogue.push(
               "",
-              "You need a Robo Pass to start the challenge!"
+              "You need a Robo Pass to start the challenge!",
             );
           }
           NPCs.roboBear.dialogueIndex++;
@@ -41088,7 +41096,7 @@ function BeeSwarmSimulator(DATA) {
             (n, i = 1) =>
               Math.min(
                 Math.floor(5000 * Math.pow(1.003, n) * i),
-                1000000000000
+                1000000000000,
               ) + " honey",
           ],
           desc: "Can be used to purchase special items and activate machines!",
@@ -41329,64 +41337,58 @@ function BeeSwarmSimulator(DATA) {
     },
   };
 
-  shopGearMesh.setMeshFromFunction(function (
-    box,
-    a,
-    cylinder,
-    sphere,
-    applyFinalRotation,
-    c,
-    star
-  ) {
-    let num = 0;
+  shopGearMesh.setMeshFromFunction(
+    function (box, a, cylinder, sphere, applyFinalRotation, c, star) {
+      let num = 0;
 
-    for (let i in shops) {
-      let s = shops[i].items;
+      for (let i in shops) {
+        let s = shops[i].items;
 
-      for (let j in s) {
-        let si = s[j];
+        for (let j in s) {
+          let si = s[j];
 
-        if (si.slot !== "item" && si.slot !== "beequip") {
-          mat4.fromRotationTranslationScale(
-            shopGearMesh.matrix,
-            quat.fromEuler([], ...(si.displayRot || [0, 0, 0])),
-            si.displayPos,
-            si.displayScale || [1, 1, 1]
-          );
-
-          if (si.slot === "sprinkler") {
-            gear[si.slot][si.name].shopMesh(
-              0,
-              0,
-              0,
-              box,
-              cylinder,
-              sphere,
-              star,
-              applyFinalRotation,
-              false
+          if (si.slot !== "item" && si.slot !== "beequip") {
+            mat4.fromRotationTranslationScale(
+              shopGearMesh.matrix,
+              quat.fromEuler([], ...(si.displayRot || [0, 0, 0])),
+              si.displayPos,
+              si.displayScale || [1, 1, 1],
             );
-          } else {
-            gear[si.slot][si.name].mesh(
-              box,
-              cylinder,
-              sphere,
-              star,
-              applyFinalRotation,
-              false
-            );
+
+            if (si.slot === "sprinkler") {
+              gear[si.slot][si.name].shopMesh(
+                0,
+                0,
+                0,
+                box,
+                cylinder,
+                sphere,
+                star,
+                applyFinalRotation,
+                false,
+              );
+            } else {
+              gear[si.slot][si.name].mesh(
+                box,
+                cylinder,
+                sphere,
+                star,
+                applyFinalRotation,
+                false,
+              );
+            }
           }
         }
       }
-    }
-  });
+    },
+  );
 
   shopGearMesh.setBuffers();
 
   for (let i in shops) {
     for (let j in shops[i].items) {
       shops[i].items[j].viewMatrix = computeSceneViewMatrix(
-        ...shops[i].items[j].viewMatrix
+        ...shops[i].items[j].viewMatrix,
       );
     }
   }
@@ -41512,10 +41514,10 @@ function BeeSwarmSimulator(DATA) {
                 "Item is on a cooldown of " +
                   MATH.doTime(
                     items[player.itemDragging].maxCooldown -
-                      (TIME - items[player.itemDragging].cooldown)
+                      (TIME - items[player.itemDragging].cooldown),
                   ) +
                   "!",
-                COLORS.redArr
+                COLORS.redArr,
               );
             }
 
@@ -41607,10 +41609,10 @@ function BeeSwarmSimulator(DATA) {
               "Item is on a cooldown of " +
                 MATH.doTime(
                   items[hotbarSlots[n].itemType].maxCooldown -
-                    (TIME - items[hotbarSlots[n].itemType].cooldown)
+                    (TIME - items[hotbarSlots[n].itemType].cooldown),
                 ) +
                 "!",
-              COLORS.redArr
+              COLORS.redArr,
             );
           }
         }
@@ -41809,7 +41811,7 @@ function BeeSwarmSimulator(DATA) {
       critType,
       prefix = "+",
       scale = 1,
-      addCommas = true
+      addCommas = true,
     ) {
       let m, s;
 
@@ -41853,7 +41855,7 @@ function BeeSwarmSimulator(DATA) {
       splitCommas = true,
       addCommas = true,
       offx = 0,
-      offy = 0
+      offy = 0,
     ) {
       let m = message;
 
@@ -41861,7 +41863,7 @@ function BeeSwarmSimulator(DATA) {
         m = message.split("/");
 
         if (m.length > 1) {
-          (m = MATH.abvNumber(m[0]) + "/" + MATH.abvNumber(m[1])), s;
+          ((m = MATH.abvNumber(m[0]) + "/" + MATH.abvNumber(m[1])), s);
         } else {
           m = addCommas ? MATH.addCommas(m[0]) : m[0];
         }
@@ -41887,7 +41889,7 @@ function BeeSwarmSimulator(DATA) {
           color[2] * MATH.INV_255,
           s,
           s,
-          0
+          0,
         );
       }
     };
@@ -41913,7 +41915,7 @@ function BeeSwarmSimulator(DATA) {
         1,
         1,
         ...size,
-        rot
+        rot,
       );
     };
 
@@ -41935,14 +41937,14 @@ function BeeSwarmSimulator(DATA) {
         gl.FLOAT,
         gl.FALSE,
         16,
-        0
+        0,
       );
       gl.vertexAttribPointer(glCache.text_vertUV, 2, gl.FLOAT, gl.FALSE, 16, 8);
       gl.bindBuffer(gl.ARRAY_BUFFER, out.instanceBuffer);
       gl.bufferData(
         gl.ARRAY_BUFFER,
         Float32Array.from(out.decal_instanceData),
-        gl.DYNAMIC_DRAW
+        gl.DYNAMIC_DRAW,
       );
       gl.vertexAttribPointer(
         glCache.text_instanceOrigin,
@@ -41950,7 +41952,7 @@ function BeeSwarmSimulator(DATA) {
         gl.FLOAT,
         gl.FALSE,
         52,
-        0
+        0,
       );
       gl.vertexAttribDivisor(glCache.text_instanceOrigin, 1);
       gl.vertexAttribPointer(
@@ -41959,7 +41961,7 @@ function BeeSwarmSimulator(DATA) {
         gl.FLOAT,
         gl.FALSE,
         52,
-        12
+        12,
       );
       gl.vertexAttribDivisor(glCache.text_instanceOffset, 1);
       gl.vertexAttribPointer(
@@ -41968,7 +41970,7 @@ function BeeSwarmSimulator(DATA) {
         gl.FLOAT,
         gl.FALSE,
         52,
-        20
+        20,
       );
       gl.vertexAttribDivisor(glCache.text_instanceUV, 1);
       gl.vertexAttribPointer(
@@ -41977,7 +41979,7 @@ function BeeSwarmSimulator(DATA) {
         gl.FLOAT,
         gl.FALSE,
         52,
-        28
+        28,
       );
       gl.vertexAttribDivisor(glCache.text_instanceColor, 1);
       gl.vertexAttribPointer(
@@ -41986,7 +41988,7 @@ function BeeSwarmSimulator(DATA) {
         gl.FLOAT,
         gl.FALSE,
         52,
-        40
+        40,
       );
       gl.vertexAttribDivisor(glCache.text_instanceInfo, 1);
       gl.drawElementsInstanced(
@@ -41994,7 +41996,7 @@ function BeeSwarmSimulator(DATA) {
         out.decal_indexAmount,
         gl.UNSIGNED_SHORT,
         0,
-        out.decal_instanceData.length * MATH.INV_13
+        out.decal_instanceData.length * MATH.INV_13,
       );
 
       let n = player.isNight * 0.85,
@@ -42474,7 +42476,7 @@ function BeeSwarmSimulator(DATA) {
             d.col[2] * t,
             s,
             s,
-            SIN_TIME * 0.4
+            SIN_TIME * 0.4,
           );
         } else if (d.critType === 2) {
           out.instanceData.push(
@@ -42490,7 +42492,7 @@ function BeeSwarmSimulator(DATA) {
             MATH.lerp(0.7, d.col[2], _t),
             s,
             s,
-            SIN_TIME * 0.4
+            SIN_TIME * 0.4,
           );
         } else {
           out.instanceData.push(
@@ -42506,7 +42508,7 @@ function BeeSwarmSimulator(DATA) {
             d.col[2],
             s,
             s,
-            0
+            0,
           );
         }
 
@@ -42524,14 +42526,14 @@ function BeeSwarmSimulator(DATA) {
         gl.FLOAT,
         gl.FALSE,
         16,
-        0
+        0,
       );
       gl.vertexAttribPointer(glCache.text_vertUV, 2, gl.FLOAT, gl.FALSE, 16, 8);
       gl.bindBuffer(gl.ARRAY_BUFFER, out.instanceBuffer);
       gl.bufferData(
         gl.ARRAY_BUFFER,
         Float32Array.from(out.instanceData),
-        gl.DYNAMIC_DRAW
+        gl.DYNAMIC_DRAW,
       );
       gl.vertexAttribPointer(
         glCache.text_instanceOrigin,
@@ -42539,7 +42541,7 @@ function BeeSwarmSimulator(DATA) {
         gl.FLOAT,
         gl.FALSE,
         52,
-        0
+        0,
       );
       gl.vertexAttribPointer(
         glCache.text_instanceOffset,
@@ -42547,7 +42549,7 @@ function BeeSwarmSimulator(DATA) {
         gl.FLOAT,
         gl.FALSE,
         52,
-        12
+        12,
       );
       gl.vertexAttribPointer(
         glCache.text_instanceUV,
@@ -42555,7 +42557,7 @@ function BeeSwarmSimulator(DATA) {
         gl.FLOAT,
         gl.FALSE,
         52,
-        20
+        20,
       );
       gl.vertexAttribPointer(
         glCache.text_instanceColor,
@@ -42563,7 +42565,7 @@ function BeeSwarmSimulator(DATA) {
         gl.FLOAT,
         gl.FALSE,
         52,
-        28
+        28,
       );
       gl.vertexAttribPointer(
         glCache.text_instanceInfo,
@@ -42571,14 +42573,14 @@ function BeeSwarmSimulator(DATA) {
         gl.FLOAT,
         gl.FALSE,
         52,
-        40
+        40,
       );
       gl.drawElementsInstanced(
         gl.TRIANGLES,
         out.indexAmount,
         gl.UNSIGNED_SHORT,
         0,
-        out.instanceData.length * MATH.INV_13
+        out.instanceData.length * MATH.INV_13,
       );
 
       gl.vertexAttribDivisor(glCache.text_instanceOrigin, 0);
@@ -42613,12 +42615,12 @@ function BeeSwarmSimulator(DATA) {
           ctx.strokeText(
             t.message,
             p[0] * half_width + half_width,
-            height - (p[1] * half_height + half_height)
+            height - (p[1] * half_height + half_height),
           );
           ctx.fillText(
             t.message,
             p[0] * half_width + half_width,
-            height - (p[1] * half_height + half_height)
+            height - (p[1] * half_height + half_height),
           );
         }
       }
@@ -42665,7 +42667,7 @@ function BeeSwarmSimulator(DATA) {
           d.col[2],
           d.col[3],
           d.size,
-          d.rot
+          d.rot,
         );
 
         if (d.life <= 0) {
@@ -42677,14 +42679,14 @@ function BeeSwarmSimulator(DATA) {
       gl.uniformMatrix4fv(
         glCache.particle_viewMatrix,
         gl.FALSE,
-        player.viewMatrix
+        player.viewMatrix,
       );
 
       gl.bindBuffer(gl.ARRAY_BUFFER, out.vertBuffer);
       gl.bufferData(
         gl.ARRAY_BUFFER,
         Float32Array.from(out.verts),
-        gl.DYNAMIC_DRAW
+        gl.DYNAMIC_DRAW,
       );
       gl.vertexAttribPointer(
         glCache.particle_vertPos,
@@ -42692,7 +42694,7 @@ function BeeSwarmSimulator(DATA) {
         gl.FLOAT,
         gl.FALSE,
         36,
-        0
+        0,
       );
       gl.vertexAttribPointer(
         glCache.particle_vertColor,
@@ -42700,7 +42702,7 @@ function BeeSwarmSimulator(DATA) {
         gl.FLOAT,
         gl.FALSE,
         36,
-        12
+        12,
       );
       gl.vertexAttribPointer(
         glCache.particle_vertSize,
@@ -42708,7 +42710,7 @@ function BeeSwarmSimulator(DATA) {
         gl.FLOAT,
         gl.FALSE,
         36,
-        28
+        28,
       );
       gl.vertexAttribPointer(
         glCache.particle_vertRot,
@@ -42716,7 +42718,7 @@ function BeeSwarmSimulator(DATA) {
         gl.FLOAT,
         gl.FALSE,
         36,
-        32
+        32,
       );
       gl.drawArrays(gl.POINTS, 0, out.verts.length / 9);
     };
@@ -42754,7 +42756,7 @@ function BeeSwarmSimulator(DATA) {
       gl.bufferData(
         gl.ELEMENT_ARRAY_BUFFER,
         out.constantTrailIndex,
-        gl.STATIC_DRAW
+        gl.STATIC_DRAW,
       );
     };
 
@@ -42977,7 +42979,7 @@ function BeeSwarmSimulator(DATA) {
           gl.FLOAT,
           gl.FALSE,
           28,
-          0
+          0,
         );
         gl.vertexAttribPointer(
           glCache.trail_vertColor,
@@ -42985,7 +42987,7 @@ function BeeSwarmSimulator(DATA) {
           gl.FLOAT,
           gl.FALSE,
           28,
-          12
+          12,
         );
         gl.drawElements(gl.TRIANGLES, this.index.length, gl.UNSIGNED_SHORT, 0);
       };
@@ -43266,7 +43268,7 @@ function BeeSwarmSimulator(DATA) {
       gl.uniformMatrix4fv(
         glCache.trail_viewMatrix,
         gl.FALSE,
-        player.viewMatrix
+        player.viewMatrix,
       );
 
       for (let i in out.trails) {
@@ -43295,7 +43297,7 @@ function BeeSwarmSimulator(DATA) {
         gl.FLOAT,
         gl.FALSE,
         28,
-        0
+        0,
       );
       gl.vertexAttribPointer(
         glCache.trail_vertColor,
@@ -43303,13 +43305,13 @@ function BeeSwarmSimulator(DATA) {
         gl.FLOAT,
         gl.FALSE,
         28,
-        12
+        12,
       );
       gl.drawElements(
         gl.TRIANGLES,
         out.constantTrailIndex.length,
         gl.UNSIGNED_SHORT,
-        0
+        0,
       );
     };
 
@@ -43355,8 +43357,8 @@ function BeeSwarmSimulator(DATA) {
             life * ((funcParams.bee.level - 1) * 0.1 + 2),
             p,
             type,
-            fp
-          )
+            fp,
+          ),
         );
 
         objects.mobs.push(new GlitchEffect(player.fieldIn, 1));
@@ -43392,7 +43394,7 @@ function BeeSwarmSimulator(DATA) {
         } else {
           if (this.type.indexOf("Winds") > -1) {
             player.addMessage(
-              "x" + this.amplify + ' "' + MATH.doGrammar(this.type) + '"'
+              "x" + this.amplify + ' "' + MATH.doGrammar(this.type) + '"',
             );
             player.addEffect(this.type, false, false, this.amplify);
           } else {
@@ -43417,7 +43419,7 @@ function BeeSwarmSimulator(DATA) {
           effects[this.type].u,
           effects[this.type].v,
           this.life * 5,
-          1
+          1,
         );
       } else {
         this.rotation += dt * 2.6;
@@ -43430,7 +43432,7 @@ function BeeSwarmSimulator(DATA) {
           effects[this.type].u,
           effects[this.type].v,
           this.life * 0.3,
-          1
+          1,
         );
 
         if (
@@ -43455,7 +43457,7 @@ function BeeSwarmSimulator(DATA) {
       amount,
       canBeLinked = false,
       source,
-      statsToAdd
+      statsToAdd,
     ) {
       this.statsToAdd = statsToAdd || [];
       this.life = life;
@@ -43501,13 +43503,13 @@ function BeeSwarmSimulator(DATA) {
               ],
               COLORS.honey,
               0,
-              "+"
+              "+",
             );
           player.addMessage(
             "+" +
               MATH.addCommas(this.amount + "") +
               " Honey" +
-              (this.from ? " (from " + this.from + ")" : "")
+              (this.from ? " (from " + this.from + ")" : ""),
           );
           player.stats.honeyTokens++;
         } else {
@@ -43519,7 +43521,7 @@ function BeeSwarmSimulator(DATA) {
               (this.amount > 1
                 ? MATH.doPlural(MATH.doGrammar(this.type))
                 : MATH.doGrammar(this.type) +
-                  (this.from ? " (from " + this.from + ")" : ""))
+                  (this.from ? " (from " + this.from + ")" : "")),
           );
         }
       }
@@ -43540,7 +43542,7 @@ function BeeSwarmSimulator(DATA) {
           this.u,
           this.v,
           this.life * 5,
-          1
+          1,
         );
       } else {
         this.rotation += dt * 2.6;
@@ -43553,7 +43555,7 @@ function BeeSwarmSimulator(DATA) {
           this.u,
           this.v,
           this.life * 0.3,
-          1
+          1,
         );
 
         if (
@@ -43633,7 +43635,7 @@ function BeeSwarmSimulator(DATA) {
           0.85,
           -3,
           -3,
-          0
+          0,
         );
       } else {
         textRenderer.addDecalRaw(
@@ -43648,7 +43650,7 @@ function BeeSwarmSimulator(DATA) {
           0.1,
           3,
           3,
-          0
+          0,
         );
 
         textRenderer.addDecalRaw(
@@ -43663,7 +43665,7 @@ function BeeSwarmSimulator(DATA) {
           1,
           -3,
           -3,
-          MATH.dupedTokenLoadingArcRotation(this.activationTimer)
+          MATH.dupedTokenLoadingArcRotation(this.activationTimer),
         );
 
         this.rotation += dt * 2.6;
@@ -43676,7 +43678,7 @@ function BeeSwarmSimulator(DATA) {
           effects[this.type].u,
           effects[this.type].v,
           this.life * 0.15,
-          1.5
+          1.5,
         );
 
         if (
@@ -43722,7 +43724,7 @@ function BeeSwarmSimulator(DATA) {
       c * r,
       -0.05,
       (s * 0.495 + 0.5) * texSize,
-      (-c * 0.495 + 0.5) * texSize
+      (-c * 0.495 + 0.5) * texSize,
     );
   }
 
@@ -43735,7 +43737,7 @@ function BeeSwarmSimulator(DATA) {
       i % vl,
       (i + 1) % vl,
       (i + 2) % vl,
-      (i + 3) % vl
+      (i + 3) % vl,
     );
   }
 
@@ -43750,7 +43752,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.token.indexAmount = index.length;
@@ -43942,7 +43944,7 @@ function BeeSwarmSimulator(DATA) {
       v[7][2],
       r * s6,
       g * s6,
-      b * s6
+      b * s6,
     );
 
     index.push(
@@ -43994,7 +43996,7 @@ function BeeSwarmSimulator(DATA) {
       27 + vl,
       27 + vl,
       26 + vl,
-      24 + vl
+      24 + vl,
     );
   }
 
@@ -44010,7 +44012,7 @@ function BeeSwarmSimulator(DATA) {
     lb = 0.25,
     x = 0,
     y = 0,
-    z = 0
+    z = 0,
   ) {
     innerRad *= 0.8;
     let _verts = [],
@@ -44099,7 +44101,7 @@ function BeeSwarmSimulator(DATA) {
       21,
       9,
       10,
-      0
+      0,
     );
 
     ix.push(
@@ -44165,7 +44167,7 @@ function BeeSwarmSimulator(DATA) {
       59,
       60,
       61,
-      62
+      62,
     );
 
     for (let i = 0; i < 10; i++) {
@@ -44191,7 +44193,7 @@ function BeeSwarmSimulator(DATA) {
       let n = vec3.cross(
         [],
         [a[0] - b[0], a[1] - b[1], a[2] - b[2]],
-        [a[0] - c[0], a[1] - c[1], a[2] - c[2]]
+        [a[0] - c[0], a[1] - c[1], a[2] - c[2]],
       );
 
       return vec3.normalize(n, n);
@@ -44215,7 +44217,7 @@ function BeeSwarmSimulator(DATA) {
         ...vs[i3],
         r * shade,
         g * shade,
-        b * shade
+        b * shade,
       );
     }
 
@@ -44238,7 +44240,7 @@ function BeeSwarmSimulator(DATA) {
     r2,
     bottom = true,
     top = true,
-    shading = true
+    shading = true,
   ) {
     let rad2 = r2 ?? rad,
       vl = verts.length / 6,
@@ -44273,7 +44275,7 @@ function BeeSwarmSimulator(DATA) {
           -hei * 0.5,
           r * (Math.cos(t2) * 0.1 + 0.9),
           g * (Math.cos(t2) * 0.1 + 0.9),
-          b * (Math.cos(t2) * 0.1 + 0.9)
+          b * (Math.cos(t2) * 0.1 + 0.9),
         );
 
         let _vl = _verts.length / 6;
@@ -44307,7 +44309,7 @@ function BeeSwarmSimulator(DATA) {
           -hei * 0.5,
           r,
           g,
-          b
+          b,
         );
 
         let _vl = _verts.length / 6;
@@ -44332,7 +44334,7 @@ function BeeSwarmSimulator(DATA) {
         hei * 0.5,
         r,
         g,
-        b
+        b,
       );
     }
 
@@ -44356,7 +44358,7 @@ function BeeSwarmSimulator(DATA) {
         -hei * 0.5,
         r,
         g,
-        b
+        b,
       );
     }
     for (let l = _verts.length / 6, i = _v; i < l && bottom; i++) {
@@ -44376,7 +44378,7 @@ function BeeSwarmSimulator(DATA) {
         let rotated = vec3.transformQuat(
           [],
           [_verts[i], _verts[i + 1], _verts[i + 2]],
-          rotQuat
+          rotQuat,
         );
         _verts[i] = rotated[0] + x;
         _verts[i + 1] = rotated[1] + y;
@@ -44404,7 +44406,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.explosion.indexAmount = index.length;
@@ -44432,7 +44434,7 @@ function BeeSwarmSimulator(DATA) {
       i % vl,
       (i + 1) % vl,
       (i + 2) % vl,
-      (i + 3) % vl
+      (i + 3) % vl,
     );
   }
 
@@ -44449,7 +44451,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.cylinder_explosion.indexAmount = index.length;
@@ -44475,7 +44477,7 @@ function BeeSwarmSimulator(DATA) {
     [0.5 * w, -0.5 * h, -0.5 * l],
   ];
 
-  (w = 128 / 2048), (e = 1 / 2048);
+  ((w = 128 / 2048), (e = 1 / 2048));
   h = w;
   l = w;
 
@@ -44681,7 +44683,7 @@ function BeeSwarmSimulator(DATA) {
     0,
     0,
     0,
-    0
+    0,
   );
 
   index.push(
@@ -44733,7 +44735,7 @@ function BeeSwarmSimulator(DATA) {
     27,
     27,
     26,
-    24
+    24,
   );
 
   _b(-0.085, 0.05, 0, 0.05, 0.5, 0.5, 0.01, 0.01, 1, 0, 0, 20);
@@ -44758,7 +44760,7 @@ function BeeSwarmSimulator(DATA) {
     0,
     0,
     0,
-    0.2
+    0.2,
   );
   let ico = MATH.icosphere(1);
   for (let i in ico.index) index.push(ico.index[i] + verts.length / 7);
@@ -44770,7 +44772,7 @@ function BeeSwarmSimulator(DATA) {
       0.04,
       0.09,
       100,
-      3
+      3,
     );
 
   _c(0.075, 0.185, -0.35, 0.075, 0.2, 8, -0.04, 0.01, 4, -10, 0, 0);
@@ -44854,7 +44856,7 @@ function BeeSwarmSimulator(DATA) {
     0,
     0,
     0.1,
-    0.85
+    0.85,
   );
   _c(
     -0.2,
@@ -44870,7 +44872,7 @@ function BeeSwarmSimulator(DATA) {
     0,
     0,
     0.1,
-    0.85
+    0.85,
   );
 
   _c(0.275, 0.04, 0.15, 0.2, 0.02, 10, 0.01, 0.09, 17, 0, 0, -60, 0.2, 0.9);
@@ -44885,7 +44887,7 @@ function BeeSwarmSimulator(DATA) {
     0.4 * 0.5 + 0.05,
     0.03,
     0.09,
-    18
+    18,
   );
   _b(
     0,
@@ -44896,7 +44898,7 @@ function BeeSwarmSimulator(DATA) {
     0.4 * 0.5 + 0.05,
     0.03,
     0.09,
-    18
+    18,
   );
   _b(0, 0.175, 0, 0.375 + 0.1, 0.2, 0.4 * 0.5, 0.01, 0.01, 18);
   _c(0, 0.2 + 0.1 + 0.02, 0, 0.13, 0.04, 4, 0.001, 0.001, 18, 0, 45, 0, 0.05);
@@ -44918,7 +44920,7 @@ function BeeSwarmSimulator(DATA) {
     0,
     0,
     0,
-    1.25
+    1.25,
   );
   _c(0, 0.2 + 0.05, 0.2, 0.075, 0.02, 10, 0.01, 0.12, 19, 0, 0, 0);
   _c(0, 0.2 + 0.1, 0.2, 0.02, 0.1, 10, 0.01, 0.12, 19, 0, 0, 0);
@@ -44961,7 +44963,7 @@ function BeeSwarmSimulator(DATA) {
       0.01,
       0.01,
       shade,
-      7
+      7,
     );
 
     index.push(vl, vl + 1, vl + 2, vl + 2, vl + 1, vl);
@@ -44980,7 +44982,7 @@ function BeeSwarmSimulator(DATA) {
     rx = 0,
     ry = 0,
     rz = 0,
-    shade
+    shade,
   ) {
     shade = shade ?? 1;
 
@@ -45177,7 +45179,7 @@ function BeeSwarmSimulator(DATA) {
       uvcolx,
       uvcoly,
       0.95 * shade,
-      id
+      id,
     );
 
     let ind = [
@@ -45206,7 +45208,7 @@ function BeeSwarmSimulator(DATA) {
     ry = 0,
     rz = 0,
     r2,
-    shade
+    shade,
   ) {
     let si = verts.length,
       vl = si / 7;
@@ -45230,7 +45232,7 @@ function BeeSwarmSimulator(DATA) {
         uvcolx,
         uvcoly,
         shade ? shade : c * 0.25 + 0.75,
-        id
+        id,
       );
     }
 
@@ -45273,7 +45275,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.bee.indexAmount = index.length;
@@ -45303,7 +45305,7 @@ function BeeSwarmSimulator(DATA) {
     0,
     0.25,
     true,
-    true
+    true,
   );
   c(
     0.5,
@@ -45320,7 +45322,7 @@ function BeeSwarmSimulator(DATA) {
     0,
     0.25,
     true,
-    true
+    true,
   );
   c(0.5, 0.77, -0.42, 0.2, 0.4, 9, 1, 1, 1, 30, -20, 0, 0.2, true, false);
   c(-0.5, 0.77, -0.42, 0.2, 0.4, 9, 1, 1, 1, 30, 20, 0, 0.2, true, false);
@@ -45333,7 +45335,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.frog.indexAmount = index.length;
@@ -45351,7 +45353,7 @@ function BeeSwarmSimulator(DATA) {
       [],
       [verts[i], verts[i + 1], verts[i + 2]],
       [0, 1, 0],
-      MATH.TO_RAD * -60
+      MATH.TO_RAD * -60,
     );
 
     verts[i] = a[0];
@@ -45372,7 +45374,7 @@ function BeeSwarmSimulator(DATA) {
     0.8 * 1.35,
     30,
     0,
-    0
+    0,
   );
   b(0.5, -0.5, -0.2, 0.75, 0.4, 1.3, 0.3, 0.4, 0.8, 0.00001, -20, 0);
   b(-0.5, -0.5, -0.2, 0.75, 0.4, 1.3, 0.3, 0.4, 0.8, 0.00001, 20, 0);
@@ -45391,7 +45393,7 @@ function BeeSwarmSimulator(DATA) {
     0,
     0.25,
     true,
-    true
+    true,
   );
   c(
     0.5,
@@ -45408,7 +45410,7 @@ function BeeSwarmSimulator(DATA) {
     0,
     0.25,
     true,
-    true
+    true,
   );
   c(0.5, 0.77, -0.42, 0.2, 0.4, 9, 1, 1, 1, 30, -20, 0, 0.2, true, false);
   c(-0.5, 0.77, -0.42, 0.2, 0.4, 9, 1, 1, 1, 30, 20, 0, 0.2, true, false);
@@ -45421,7 +45423,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.giftedFrog.indexAmount = index.length;
@@ -45446,7 +45448,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.rhinoBeetle.indexAmount = index.length;
@@ -45471,7 +45473,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.ladybug.indexAmount = index.length;
@@ -45508,7 +45510,7 @@ function BeeSwarmSimulator(DATA) {
     0.05,
     0.0001,
     0,
-    -35
+    -35,
   );
   b(
     1.6 + 0.3,
@@ -45522,7 +45524,7 @@ function BeeSwarmSimulator(DATA) {
     0.05,
     0.0001,
     0,
-    45
+    45,
   );
   b(
     -0.75 - 0.3,
@@ -45536,7 +45538,7 @@ function BeeSwarmSimulator(DATA) {
     0.05,
     0.0001,
     0,
-    35
+    35,
   );
   b(
     -1.6 - 0.3,
@@ -45550,7 +45552,7 @@ function BeeSwarmSimulator(DATA) {
     0.05,
     0.0001,
     0,
-    -45
+    -45,
   );
 
   b(
@@ -45565,7 +45567,7 @@ function BeeSwarmSimulator(DATA) {
     0.05,
     0.0001,
     0,
-    -35
+    -35,
   );
   b(
     1.6 + 0.3,
@@ -45579,7 +45581,7 @@ function BeeSwarmSimulator(DATA) {
     0.05,
     0.0001,
     0,
-    45
+    45,
   );
   b(
     -0.75 - 0.3,
@@ -45593,7 +45595,7 @@ function BeeSwarmSimulator(DATA) {
     0.05,
     0.0001,
     0,
-    35
+    35,
   );
   b(
     -1.6 - 0.3,
@@ -45607,7 +45609,7 @@ function BeeSwarmSimulator(DATA) {
     0.05,
     0.0001,
     0,
-    -45
+    -45,
   );
 
   b(0.25, 0.2, -0.9 * 1.3, 0.1, 0.1, 0.15, 0.7, 0, 0);
@@ -45619,7 +45621,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.spider.indexAmount = index.length;
@@ -45657,7 +45659,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.werewolf.indexAmount = index.length;
@@ -45681,7 +45683,7 @@ function BeeSwarmSimulator(DATA) {
     0.2 * 0.75,
     215,
     0,
-    0
+    0,
   );
   b(
     0.275,
@@ -45695,7 +45697,7 @@ function BeeSwarmSimulator(DATA) {
     0.2 * 0.75,
     155,
     0,
-    0
+    0,
   );
   b(
     0.275,
@@ -45709,7 +45711,7 @@ function BeeSwarmSimulator(DATA) {
     0.2 * 0.75,
     235,
     0,
-    0
+    0,
   );
   b(
     -0.275,
@@ -45723,7 +45725,7 @@ function BeeSwarmSimulator(DATA) {
     0.2 * 0.75,
     215,
     0,
-    0
+    0,
   );
   b(
     -0.275,
@@ -45737,7 +45739,7 @@ function BeeSwarmSimulator(DATA) {
     0.2 * 0.75,
     155,
     0,
-    0
+    0,
   );
   b(
     -0.275,
@@ -45751,7 +45753,7 @@ function BeeSwarmSimulator(DATA) {
     0.2 * 0.75,
     235,
     0,
-    0
+    0,
   );
 
   b(
@@ -45766,7 +45768,7 @@ function BeeSwarmSimulator(DATA) {
     0.2 * 0.75,
     0.001,
     0,
-    -40
+    -40,
   );
   b(
     0.5,
@@ -45780,7 +45782,7 @@ function BeeSwarmSimulator(DATA) {
     0.2 * 0.75,
     0.001,
     0,
-    40
+    40,
   );
 
   b(-0.3, 2.15, -0.7, 0.2, 0.2, 0.2, 0.2, 0.5, 0.5);
@@ -45792,7 +45794,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.mantis.indexAmount = index.length;
@@ -45821,7 +45823,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.scorpion.indexAmount = index.length;
@@ -45846,7 +45848,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.kingBeetle.indexAmount = index.length;
@@ -45872,7 +45874,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.tunnelBear.indexAmount = index.length;
@@ -45947,7 +45949,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.mechsquito.indexAmount = index.length;
@@ -45983,7 +45985,7 @@ function BeeSwarmSimulator(DATA) {
       _s.verts[i + 2] + 0.75,
       0.1,
       0.1,
-      0.1
+      0.1,
     );
   }
 
@@ -46000,7 +46002,7 @@ function BeeSwarmSimulator(DATA) {
       _s.verts[i + 2] + 0.75 * 2,
       0.1,
       0.1,
-      0.1
+      0.1,
     );
   }
 
@@ -46062,7 +46064,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.megaMechsquito.indexAmount = index.length;
@@ -46101,7 +46103,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.cogmower.indexAmount = index.length;
@@ -46140,7 +46142,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.goldenCogmower.indexAmount = index.length;
@@ -46174,7 +46176,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.cogTurret.indexAmount = index.length;
@@ -46196,7 +46198,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.cog.indexAmount = index.length;
@@ -46221,7 +46223,7 @@ function BeeSwarmSimulator(DATA) {
     -90 + 6,
     0,
     0,
-    0.3
+    0.3,
   );
   c(
     0,
@@ -46236,7 +46238,7 @@ function BeeSwarmSimulator(DATA) {
     -90 + 14,
     0,
     0,
-    0.27
+    0.27,
   );
 
   c(
@@ -46252,7 +46254,7 @@ function BeeSwarmSimulator(DATA) {
     -90 + 10,
     0,
     0,
-    0.75
+    0.75,
   );
   c(
     0,
@@ -46267,7 +46269,7 @@ function BeeSwarmSimulator(DATA) {
     -90 + 10,
     0,
     0,
-    0.65
+    0.65,
   );
   c(
     0,
@@ -46282,7 +46284,7 @@ function BeeSwarmSimulator(DATA) {
     -90 + 10,
     0,
     0,
-    0.4
+    0.4,
   );
 
   gl.bindBuffer(gl.ARRAY_BUFFER, meshes.puffshroom.vertBuffer);
@@ -46291,7 +46293,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.puffshroom.indexAmount = index.length;
@@ -46316,7 +46318,7 @@ function BeeSwarmSimulator(DATA) {
     -90 + 6,
     0,
     0,
-    0.3
+    0.3,
   );
   c(
     0,
@@ -46331,7 +46333,7 @@ function BeeSwarmSimulator(DATA) {
     -90 + 14,
     0,
     0,
-    0.27
+    0.27,
   );
 
   c(
@@ -46347,7 +46349,7 @@ function BeeSwarmSimulator(DATA) {
     -90 + 10,
     0,
     0,
-    0.75
+    0.75,
   );
   c(
     0,
@@ -46362,7 +46364,7 @@ function BeeSwarmSimulator(DATA) {
     -90 + 10,
     0,
     0,
-    0.65
+    0.65,
   );
   c(
     0,
@@ -46377,7 +46379,7 @@ function BeeSwarmSimulator(DATA) {
     -90 + 10,
     0,
     0,
-    0.4
+    0.4,
   );
 
   gl.bindBuffer(gl.ARRAY_BUFFER, meshes.rarePuffshroom.vertBuffer);
@@ -46386,7 +46388,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.rarePuffshroom.indexAmount = index.length;
@@ -46412,7 +46414,7 @@ function BeeSwarmSimulator(DATA) {
     -90 + 14,
     0,
     0,
-    0.27
+    0.27,
   );
 
   c(
@@ -46428,7 +46430,7 @@ function BeeSwarmSimulator(DATA) {
     -90 + 10,
     0,
     0,
-    0.75
+    0.75,
   );
   c(
     0,
@@ -46443,7 +46445,7 @@ function BeeSwarmSimulator(DATA) {
     -90 + 10,
     0,
     0,
-    0.65
+    0.65,
   );
   c(
     0,
@@ -46458,7 +46460,7 @@ function BeeSwarmSimulator(DATA) {
     -90 + 10,
     0,
     0,
-    0.4
+    0.4,
   );
 
   gl.bindBuffer(gl.ARRAY_BUFFER, meshes.epicPuffshroom.vertBuffer);
@@ -46467,7 +46469,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.epicPuffshroom.indexAmount = index.length;
@@ -46493,7 +46495,7 @@ function BeeSwarmSimulator(DATA) {
     -90 + 14,
     0,
     0,
-    0.27
+    0.27,
   );
 
   c(
@@ -46509,7 +46511,7 @@ function BeeSwarmSimulator(DATA) {
     -90 + 10,
     0,
     0,
-    0.75
+    0.75,
   );
   c(
     0,
@@ -46524,7 +46526,7 @@ function BeeSwarmSimulator(DATA) {
     -90 + 10,
     0,
     0,
-    0.65
+    0.65,
   );
   c(
     0,
@@ -46539,19 +46541,19 @@ function BeeSwarmSimulator(DATA) {
     -90 + 10,
     0,
     0,
-    0.4
+    0.4,
   );
 
   gl.bindBuffer(gl.ARRAY_BUFFER, meshes.legendaryPuffshroom.vertBuffer);
   gl.bufferData(gl.ARRAY_BUFFER, Float32Array.from(verts), gl.STATIC_DRAW);
   gl.bindBuffer(
     gl.ELEMENT_ARRAY_BUFFER,
-    meshes.legendaryPuffshroom.indexBuffer
+    meshes.legendaryPuffshroom.indexBuffer,
   );
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.legendaryPuffshroom.indexAmount = index.length;
@@ -46577,7 +46579,7 @@ function BeeSwarmSimulator(DATA) {
     -90 + 14,
     0,
     0,
-    0.27
+    0.27,
   );
 
   c(
@@ -46593,7 +46595,7 @@ function BeeSwarmSimulator(DATA) {
     -90 + 10,
     0,
     0,
-    0.75
+    0.75,
   );
   c(
     0,
@@ -46608,7 +46610,7 @@ function BeeSwarmSimulator(DATA) {
     -90 + 10,
     0,
     0,
-    0.65
+    0.65,
   );
   c(
     0,
@@ -46623,7 +46625,7 @@ function BeeSwarmSimulator(DATA) {
     -90 + 10,
     0,
     0,
-    0.4
+    0.4,
   );
 
   gl.bindBuffer(gl.ARRAY_BUFFER, meshes.mythicPuffshroom.vertBuffer);
@@ -46632,7 +46634,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.mythicPuffshroom.indexAmount = index.length;
@@ -46660,7 +46662,7 @@ function BeeSwarmSimulator(DATA) {
     1.2,
     true,
     true,
-    true
+    true,
   );
   c(
     0,
@@ -46678,7 +46680,7 @@ function BeeSwarmSimulator(DATA) {
     0.7,
     true,
     true,
-    true
+    true,
   );
 
   for (let i = 0; i < verts.length; i += 6) {
@@ -46686,7 +46688,7 @@ function BeeSwarmSimulator(DATA) {
       [],
       [verts[i], verts[i + 1], verts[i + 2]],
       MATH.ORIGIN,
-      0.3
+      0.3,
     );
 
     verts[i] = _t[0];
@@ -46711,7 +46713,7 @@ function BeeSwarmSimulator(DATA) {
     0.7,
     true,
     true,
-    true
+    true,
   );
   c(
     0,
@@ -46729,7 +46731,7 @@ function BeeSwarmSimulator(DATA) {
     0.2,
     true,
     true,
-    true
+    true,
   );
 
   for (let i = 0; i < verts.length; i += 6) {
@@ -46787,7 +46789,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.mondoChick.indexAmount = index.length;
@@ -46842,7 +46844,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.coconutCrab.indexAmount = index.length;
@@ -46863,7 +46865,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.crabClaw.indexAmount = index.length;
@@ -46888,7 +46890,7 @@ function BeeSwarmSimulator(DATA) {
       _s.verts[i + 2] - 2.5,
       0.3,
       0.7,
-      0.4
+      0.4,
     );
   }
 
@@ -46913,7 +46915,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.stumpSnail.indexAmount = index.length;
@@ -46938,7 +46940,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.ant.indexAmount = index.length;
@@ -46964,7 +46966,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.armyAnt.indexAmount = index.length;
@@ -46992,7 +46994,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.flyingAnt.indexAmount = index.length;
@@ -47017,7 +47019,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.fireAnt.indexAmount = index.length;
@@ -47041,7 +47043,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.petalShuriken.indexAmount = index.length;
@@ -47068,7 +47070,7 @@ function BeeSwarmSimulator(DATA) {
     0.6,
     0.00001,
     0,
-    -50
+    -50,
   );
 
   gl.bindBuffer(gl.ARRAY_BUFFER, meshes.lawnMower.vertBuffer);
@@ -47077,7 +47079,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.lawnMower.indexAmount = index.length;
@@ -47096,7 +47098,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.lawnMowerWarning.indexAmount = index.length;
@@ -47115,7 +47117,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.popStar.indexAmount = index.length;
@@ -47134,7 +47136,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.scorchingStar.indexAmount = index.length;
@@ -47164,7 +47166,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.gummyStar.indexAmount = index.length;
@@ -47182,7 +47184,7 @@ function BeeSwarmSimulator(DATA) {
       [],
       [verts[i], verts[i + 1], verts[i + 2]],
       MATH.ORIGIN,
-      MATH.HALF_PI
+      MATH.HALF_PI,
     );
 
     verts[i] = a[0];
@@ -47196,7 +47198,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.starSaw.indexAmount = index.length;
@@ -47214,7 +47216,7 @@ function BeeSwarmSimulator(DATA) {
       [],
       [verts[i], verts[i + 1], verts[i + 2]],
       MATH.ORIGIN,
-      MATH.HALF_PI * 0.75
+      MATH.HALF_PI * 0.75,
     );
 
     verts[i] = a[0];
@@ -47228,7 +47230,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.guidingStar.indexAmount = index.length;
@@ -47246,7 +47248,7 @@ function BeeSwarmSimulator(DATA) {
       [],
       [verts[i], verts[i + 1], verts[i + 2]],
       MATH.ORIGIN,
-      -MATH.HALF_PI
+      -MATH.HALF_PI,
     );
 
     verts[i] = a[0];
@@ -47258,12 +47260,12 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(gl.ARRAY_BUFFER, Float32Array.from(verts), gl.STATIC_DRAW);
   gl.bindBuffer(
     gl.ELEMENT_ARRAY_BUFFER,
-    meshes.levitatingStarShower.indexBuffer
+    meshes.levitatingStarShower.indexBuffer,
   );
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.levitatingStarShower.indexAmount = index.length;
@@ -47282,7 +47284,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.fallingStar.indexAmount = index.length;
@@ -47304,7 +47306,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.wave.indexAmount = index.length;
@@ -47331,7 +47333,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.gummyBall.indexAmount = index.length;
@@ -47351,7 +47353,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.drainingDiamond.indexAmount = index.length;
@@ -47371,7 +47373,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.shiningDiamond.indexAmount = index.length;
@@ -47398,7 +47400,7 @@ function BeeSwarmSimulator(DATA) {
       0,
       i * 0.5 + 1,
       true,
-      true
+      true,
     );
   }
 
@@ -47408,7 +47410,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.tornado.indexAmount = index.length;
@@ -47435,7 +47437,7 @@ function BeeSwarmSimulator(DATA) {
       0,
       i * 0.5 + 1,
       true,
-      true
+      true,
     );
   }
 
@@ -47445,7 +47447,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.tornado_red.indexAmount = index.length;
@@ -47469,7 +47471,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.scratch.indexAmount = index.length;
@@ -47493,7 +47495,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.goldenRakeScratch.indexAmount = index.length;
@@ -47518,7 +47520,7 @@ function BeeSwarmSimulator(DATA) {
     0.3 * 0.6,
     0.001,
     0,
-    45
+    45,
   );
   b(
     -0.275,
@@ -47532,7 +47534,7 @@ function BeeSwarmSimulator(DATA) {
     0.3 * 0.6,
     0.001,
     0,
-    -45
+    -45,
   );
 
   gl.bindBuffer(gl.ARRAY_BUFFER, meshes.paperPlanter.vertBuffer);
@@ -47541,7 +47543,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.paperPlanter.indexAmount = index.length;
@@ -47569,7 +47571,7 @@ function BeeSwarmSimulator(DATA) {
     0.75,
     true,
     true,
-    true
+    true,
   );
   c(
     0,
@@ -47587,7 +47589,7 @@ function BeeSwarmSimulator(DATA) {
     0.89,
     true,
     true,
-    true
+    true,
   );
   c(
     0,
@@ -47605,7 +47607,7 @@ function BeeSwarmSimulator(DATA) {
     0.65,
     true,
     true,
-    true
+    true,
   );
 
   c(0, 0.2, 0, 0.7, 0.1, 10, 1, 1, 1, -90, 0, 0, 0.7, true, true, true);
@@ -47632,7 +47634,7 @@ function BeeSwarmSimulator(DATA) {
       0.1,
       true,
       true,
-      true
+      true,
     );
   }
 
@@ -47642,7 +47644,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.candyPlanter.indexAmount = index.length;
@@ -47670,7 +47672,7 @@ function BeeSwarmSimulator(DATA) {
     0.75,
     true,
     true,
-    true
+    true,
   );
   c(
     0,
@@ -47688,7 +47690,7 @@ function BeeSwarmSimulator(DATA) {
     0.89,
     true,
     true,
-    true
+    true,
   );
   c(
     0,
@@ -47706,7 +47708,7 @@ function BeeSwarmSimulator(DATA) {
     0.65,
     true,
     true,
-    true
+    true,
   );
 
   gl.bindBuffer(gl.ARRAY_BUFFER, meshes.plasticPlanter.vertBuffer);
@@ -47715,7 +47717,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.plasticPlanter.indexAmount = index.length;
@@ -47745,7 +47747,7 @@ function BeeSwarmSimulator(DATA) {
     0.3,
     true,
     true,
-    true
+    true,
   );
   c(
     0,
@@ -47763,7 +47765,7 @@ function BeeSwarmSimulator(DATA) {
     0.7,
     true,
     true,
-    true
+    true,
   );
 
   c(
@@ -47782,7 +47784,7 @@ function BeeSwarmSimulator(DATA) {
     0.25,
     true,
     true,
-    true
+    true,
   );
   c(
     0,
@@ -47800,7 +47802,7 @@ function BeeSwarmSimulator(DATA) {
     0.25,
     true,
     true,
-    true
+    true,
   );
 
   c(
@@ -47819,7 +47821,7 @@ function BeeSwarmSimulator(DATA) {
     0.075,
     true,
     true,
-    true
+    true,
   );
   c(
     0,
@@ -47837,7 +47839,7 @@ function BeeSwarmSimulator(DATA) {
     0.075,
     true,
     true,
-    true
+    true,
   );
 
   c(
@@ -47856,7 +47858,7 @@ function BeeSwarmSimulator(DATA) {
     0.05,
     true,
     true,
-    true
+    true,
   );
   c(
     0,
@@ -47874,7 +47876,7 @@ function BeeSwarmSimulator(DATA) {
     0.05,
     true,
     true,
-    true
+    true,
   );
 
   c(
@@ -47893,7 +47895,7 @@ function BeeSwarmSimulator(DATA) {
     0.05,
     true,
     true,
-    true
+    true,
   );
   c(
     0,
@@ -47911,7 +47913,7 @@ function BeeSwarmSimulator(DATA) {
     0.05,
     true,
     true,
-    true
+    true,
   );
   c(
     -0.15,
@@ -47929,7 +47931,7 @@ function BeeSwarmSimulator(DATA) {
     0.05,
     true,
     true,
-    true
+    true,
   );
   c(
     0,
@@ -47947,7 +47949,7 @@ function BeeSwarmSimulator(DATA) {
     0.05,
     true,
     true,
-    true
+    true,
   );
 
   c(
@@ -47966,7 +47968,7 @@ function BeeSwarmSimulator(DATA) {
     0.27,
     true,
     true,
-    true
+    true,
   );
 
   gl.bindBuffer(gl.ARRAY_BUFFER, meshes.pesticidePlanter.vertBuffer);
@@ -47975,7 +47977,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.pesticidePlanter.indexAmount = index.length;
@@ -48003,7 +48005,7 @@ function BeeSwarmSimulator(DATA) {
     0.75,
     true,
     true,
-    true
+    true,
   );
   c(
     0,
@@ -48021,7 +48023,7 @@ function BeeSwarmSimulator(DATA) {
     0.89,
     true,
     true,
-    true
+    true,
   );
   c(
     0,
@@ -48039,7 +48041,7 @@ function BeeSwarmSimulator(DATA) {
     0.65,
     true,
     true,
-    true
+    true,
   );
 
   for (let i = 0; i < MATH.TWO_PI; i += MATH.TWO_PI * 0.1) {
@@ -48059,7 +48061,7 @@ function BeeSwarmSimulator(DATA) {
       0.1,
       true,
       true,
-      true
+      true,
     );
   }
 
@@ -48069,7 +48071,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.redClayPlanter.indexAmount = index.length;
@@ -48097,7 +48099,7 @@ function BeeSwarmSimulator(DATA) {
     0.75,
     true,
     true,
-    true
+    true,
   );
   c(
     0,
@@ -48115,7 +48117,7 @@ function BeeSwarmSimulator(DATA) {
     0.89,
     true,
     true,
-    true
+    true,
   );
   c(
     0,
@@ -48133,7 +48135,7 @@ function BeeSwarmSimulator(DATA) {
     0.65,
     true,
     true,
-    true
+    true,
   );
 
   for (let i = 0; i < MATH.TWO_PI; i += MATH.TWO_PI * 0.1) {
@@ -48153,7 +48155,7 @@ function BeeSwarmSimulator(DATA) {
       0.1,
       true,
       true,
-      true
+      true,
     );
   }
 
@@ -48163,7 +48165,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.blueClayPlanter.indexAmount = index.length;
@@ -48183,7 +48185,7 @@ function BeeSwarmSimulator(DATA) {
       _ico.verts[i + 2] * 1.75,
       0.4 * (_ico.verts[i + 1] * 0.2 + 0.8),
       1.1 * (_ico.verts[i + 1] * 0.2 + 0.8),
-      0.4 * (_ico.verts[i + 1] * 0.2 + 0.8)
+      0.4 * (_ico.verts[i + 1] * 0.2 + 0.8),
     );
   }
 
@@ -48205,7 +48207,7 @@ function BeeSwarmSimulator(DATA) {
     0.825,
     true,
     true,
-    true
+    true,
   );
   c(
     0,
@@ -48223,7 +48225,7 @@ function BeeSwarmSimulator(DATA) {
     0.65,
     true,
     true,
-    true
+    true,
   );
 
   c(0, 0.25, 0, 0.92, 0.1, 10, 0.1, 0.1, 0.8, 45, 0, 0, 0.92, true, true, true);
@@ -48243,7 +48245,7 @@ function BeeSwarmSimulator(DATA) {
     0.92,
     true,
     true,
-    true
+    true,
   );
 
   c(
@@ -48262,7 +48264,7 @@ function BeeSwarmSimulator(DATA) {
     0.92,
     true,
     true,
-    true
+    true,
   );
   c(
     0,
@@ -48280,7 +48282,7 @@ function BeeSwarmSimulator(DATA) {
     0.92,
     true,
     true,
-    true
+    true,
   );
 
   for (let i = 0; i < MATH.TWO_PI; i += MATH.TWO_PI * 0.2) {
@@ -48300,7 +48302,7 @@ function BeeSwarmSimulator(DATA) {
       0.1,
       true,
       true,
-      true
+      true,
     );
   }
 
@@ -48317,7 +48319,7 @@ function BeeSwarmSimulator(DATA) {
       0,
       0.01,
       i * MATH.TO_DEG,
-      0
+      0,
     );
   }
 
@@ -48327,7 +48329,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.tackyPlanter.indexAmount = index.length;
@@ -48345,7 +48347,7 @@ function BeeSwarmSimulator(DATA) {
       _ico.verts[i + 2] * 1.75,
       1 * (_ico.verts[i + 1] * 0.2 + 0.8),
       1 * (_ico.verts[i + 1] * 0.2 + 0.8),
-      0.5 * (_ico.verts[i + 1] * 0.2 + 0.8)
+      0.5 * (_ico.verts[i + 1] * 0.2 + 0.8),
     );
   }
 
@@ -48362,7 +48364,7 @@ function BeeSwarmSimulator(DATA) {
       0.85,
       45,
       i * MATH.TO_DEG,
-      0
+      0,
     );
   }
 
@@ -48384,7 +48386,7 @@ function BeeSwarmSimulator(DATA) {
     0.825,
     true,
     true,
-    true
+    true,
   );
   c(
     0,
@@ -48402,7 +48404,7 @@ function BeeSwarmSimulator(DATA) {
     0.65,
     true,
     true,
-    true
+    true,
   );
 
   for (let i = 0, co = 0; i < MATH.TWO_PI; i += MATH.TWO_PI * 0.25, co++) {
@@ -48423,7 +48425,7 @@ function BeeSwarmSimulator(DATA) {
       0.25,
       true,
       true,
-      true
+      true,
     );
   }
 
@@ -48433,7 +48435,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.petalPlanter.indexAmount = index.length;
@@ -48451,7 +48453,7 @@ function BeeSwarmSimulator(DATA) {
       _ico.verts[i + 2] * 1.75,
       1 * (_ico.verts[i + 1] * 0.2 + 0.8),
       0.75 * (_ico.verts[i + 1] * 0.2 + 0.8),
-      0.1 * (_ico.verts[i + 1] * 0.2 + 0.8)
+      0.1 * (_ico.verts[i + 1] * 0.2 + 0.8),
     );
   }
 
@@ -48476,7 +48478,7 @@ function BeeSwarmSimulator(DATA) {
     0.8,
     true,
     true,
-    true
+    true,
   );
   c(
     0,
@@ -48494,7 +48496,7 @@ function BeeSwarmSimulator(DATA) {
     0.65,
     true,
     true,
-    true
+    true,
   );
 
   b(0, 1.5 - 0.25, 0, 2.25, 0.15, 0.15, 1, 0.75, 0.1);
@@ -48518,7 +48520,7 @@ function BeeSwarmSimulator(DATA) {
     1.9 * 0.5,
     true,
     true,
-    true
+    true,
   );
   c(
     0,
@@ -48536,7 +48538,7 @@ function BeeSwarmSimulator(DATA) {
     1.9 * 0.5,
     true,
     true,
-    true
+    true,
   );
 
   gl.bindBuffer(gl.ARRAY_BUFFER, meshes.plentyPlanter.vertBuffer);
@@ -48545,7 +48547,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.plentyPlanter.indexAmount = index.length;
@@ -48572,7 +48574,7 @@ function BeeSwarmSimulator(DATA) {
     0.35 * 2,
     true,
     true,
-    true
+    true,
   );
 
   gl.bindBuffer(gl.ARRAY_BUFFER, meshes.spike.vertBuffer);
@@ -48581,7 +48583,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.spike.indexAmount = index.length;
@@ -48603,7 +48605,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.basicSprout.indexAmount = index.length;
@@ -48625,7 +48627,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.rareSprout.indexAmount = index.length;
@@ -48647,7 +48649,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.epicSprout.indexAmount = index.length;
@@ -48669,7 +48671,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.legendarySprout.indexAmount = index.length;
@@ -48691,7 +48693,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.supremeSprout.indexAmount = index.length;
@@ -48713,7 +48715,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.gummySprout.indexAmount = index.length;
@@ -48735,7 +48737,7 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(index),
-    gl.STATIC_DRAW
+    gl.STATIC_DRAW,
   );
 
   meshes.moonSprout.indexAmount = index.length;
@@ -48758,7 +48760,7 @@ function BeeSwarmSimulator(DATA) {
         "e",
         "star",
         "INFO",
-        player.createdMesh
+        player.createdMesh,
       );
 
       f(box, a, cylinder, sphere, d, e, star, player.restrictionInfo);
@@ -48798,7 +48800,7 @@ function BeeSwarmSimulator(DATA) {
       gooColor:
         noise(
           x * 0.2 + fieldInfo[field].x * 10,
-          z * 0.2 + fieldInfo[field].z * 10
+          z * 0.2 + fieldInfo[field].z * 10,
         ) < 0.49
           ? -1
           : 1,
@@ -48941,7 +48943,7 @@ function BeeSwarmSimulator(DATA) {
       0,
       1,
       -10000,
-      0
+      0,
     );
 
     index.push(
@@ -48974,7 +48976,7 @@ function BeeSwarmSimulator(DATA) {
       vl + 7,
       vl + 1,
       vl + 2,
-      vl + 5
+      vl + 5,
     );
   }
 
@@ -48985,14 +48987,14 @@ function BeeSwarmSimulator(DATA) {
     func,
     updateHeight,
     updateGoo,
-    updatePollination
+    updatePollination,
   ) {
     func(flowers[field][z][x]);
 
     flowers[field][z][x].height = MATH.constrain(
       flowers[field][z][x].height,
       0,
-      1
+      1,
     );
 
     let i = flowers[field][z][x].id * 64;
@@ -49151,22 +49153,22 @@ function BeeSwarmSimulator(DATA) {
       (crit.r === 0
         ? 1
         : crit.r === 1
-        ? player.criticalPower
-        : player.criticalPower * player.superCritPower);
+          ? player.criticalPower
+          : player.criticalPower * player.superCritPower);
     multiplier.b *=
       player.bluePollen *
       (crit.b === 0
         ? 1
         : crit.b === 1
-        ? player.criticalPower
-        : player.criticalPower * player.superCritPower);
+          ? player.criticalPower
+          : player.criticalPower * player.superCritPower);
     multiplier.w *=
       player.whitePollen *
       (crit.w === 0
         ? 1
         : crit.w === 1
-        ? player.criticalPower
-        : player.criticalPower * player.superCritPower);
+          ? player.criticalPower
+          : player.criticalPower * player.superCritPower);
 
     let instantConversion = {
       r: params.instantConversion
@@ -49190,7 +49192,7 @@ function BeeSwarmSimulator(DATA) {
 
       f.height -= Math.min(
         params.depleteAll ? f.height : amp / ((f.level - 1) * 0.2 + 1),
-        f.height
+        f.height,
       );
 
       amountToCollect *= multiplier[f.color[0]];
@@ -49243,7 +49245,7 @@ function BeeSwarmSimulator(DATA) {
           collectFunction,
           true,
           params.gooTrail || params.isGummyBaller,
-          false
+          false,
         );
       }
     }
@@ -49302,7 +49304,7 @@ function BeeSwarmSimulator(DATA) {
                 f.z + z,
               ],
           COLORS[stack[i].c + "Arr"],
-          crit[stack[i].c[0]]
+          crit[stack[i].c[0]],
         );
       }
     }
@@ -49314,11 +49316,11 @@ function BeeSwarmSimulator(DATA) {
 
     player.pollen = Math.min(
       player.pollen + Math.ceil(total.w + total.r + total.b - totalHoney),
-      player.capacity
+      player.capacity,
     );
 
     totalHoney = Math.ceil(
-      (totalHoney + totalGoo * 0.1) * player.honeyPerPollen
+      (totalHoney + totalGoo * 0.1) * player.honeyPerPollen,
     );
 
     player.honey += totalHoney;
@@ -49334,7 +49336,7 @@ function BeeSwarmSimulator(DATA) {
         COLORS.honey,
         0,
         "+",
-        0.85
+        0.85,
       );
     }
 
@@ -49363,7 +49365,7 @@ function BeeSwarmSimulator(DATA) {
     c,
     _l,
     generalColorComp,
-    nectarType
+    nectarType,
   ) {
     player.stats["pollenFrom" + name] = 0;
 
@@ -49411,7 +49413,7 @@ function BeeSwarmSimulator(DATA) {
       return 3;
     },
     { w: 0.9, b: 0.04, r: 0.06 },
-    "refreshing"
+    "refreshing",
   );
 
   createField(
@@ -49430,7 +49432,7 @@ function BeeSwarmSimulator(DATA) {
       return 3;
     },
     { b: 0, r: 0.9, w: 0.1 },
-    "invigorating"
+    "invigorating",
   );
 
   createField(
@@ -49449,7 +49451,7 @@ function BeeSwarmSimulator(DATA) {
       return Math.random() < 0.5 ? 3 : Math.random() < 0.12 ? 1 : 2;
     },
     { r: 0.88, w: 0.12, b: 0 },
-    "motivating"
+    "motivating",
   );
 
   createField(
@@ -49468,7 +49470,7 @@ function BeeSwarmSimulator(DATA) {
       return Math.random() < 0.46 ? 3 : Math.random() < 0.6 ? 1 : 2;
     },
     { w: 0.1, b: 0.9, r: 0 },
-    "comforting"
+    "comforting",
   );
 
   createField(
@@ -49484,14 +49486,14 @@ function BeeSwarmSimulator(DATA) {
       return Math.random() < 0.57
         ? "white"
         : Math.random() < 0.52
-        ? "red"
-        : "blue";
+          ? "red"
+          : "blue";
     },
     function () {
       return Math.random() < 0.76 ? 3 : 2;
     },
     { w: 0.57, r: (1 - 0.57) * 0.52, b: (1 - 0.57) * 0.48 },
-    "satisfying"
+    "satisfying",
   );
 
   createField(
@@ -49507,14 +49509,14 @@ function BeeSwarmSimulator(DATA) {
       return Math.random() < 0.06
         ? "white"
         : Math.random() < 0.58
-        ? "blue"
-        : "red";
+          ? "blue"
+          : "red";
     },
     function () {
       return Math.random() < 0.56 ? 3 : 2;
     },
     { w: 0.06, b: (1 - 0.06) * 0.58, r: (1 - 0.06) * 0.42 },
-    "invigorating"
+    "invigorating",
   );
 
   createField(
@@ -49533,7 +49535,7 @@ function BeeSwarmSimulator(DATA) {
       return 3;
     },
     { r: 0.5, b: 0.5, w: 0 },
-    "invigorating"
+    "invigorating",
   );
 
   createField(
@@ -49556,7 +49558,7 @@ function BeeSwarmSimulator(DATA) {
       return Math.random() < 0.1 ? 2 : 1;
     },
     { w: 0.7, b: 0.15, r: 0.15 },
-    "satisfying"
+    "satisfying",
   );
 
   createField(
@@ -49575,7 +49577,7 @@ function BeeSwarmSimulator(DATA) {
       return Math.random() < 0.9 ? 1 : 2;
     },
     { w: 0.31, b: 0, r: 0.69 },
-    "motivating"
+    "motivating",
   );
 
   createField(
@@ -49594,7 +49596,7 @@ function BeeSwarmSimulator(DATA) {
       return Math.random() < 0.04 ? 3 : Math.random() < 0.8 ? 2 : 1;
     },
     { w: 0.31, b: 0, r: 0.69 },
-    "refreshing"
+    "refreshing",
   );
 
   createField(
@@ -49613,7 +49615,7 @@ function BeeSwarmSimulator(DATA) {
       return Math.random() < 0.8 ? 2 : Math.random() < 0.5 ? 3 : 1;
     },
     { w: 1, b: 0, r: 0 },
-    "motivating"
+    "motivating",
   );
 
   createField(
@@ -49632,7 +49634,7 @@ function BeeSwarmSimulator(DATA) {
       return Math.random() < 0.75 ? 2 : Math.random() < 0.25 ? 3 : 1;
     },
     { w: 0.25, b: 0.75, r: 0 },
-    "comforting"
+    "comforting",
   );
 
   createField(
@@ -49648,14 +49650,14 @@ function BeeSwarmSimulator(DATA) {
       return Math.random() < 0.89
         ? "white"
         : Math.random() > 0.56
-        ? "blue"
-        : "red";
+          ? "blue"
+          : "red";
     },
     function () {
       return Math.random() < 0.5 ? 2 : Math.random() < 0.38 ? 1 : 3;
     },
     { w: 0.89, b: 0.05, r: 0.06 },
-    "satisfying"
+    "satisfying",
   );
 
   createField(
@@ -49671,14 +49673,14 @@ function BeeSwarmSimulator(DATA) {
       return Math.random() < 0.8
         ? "blue"
         : Math.random() > 0.2
-        ? "white"
-        : "red";
+          ? "white"
+          : "red";
     },
     function () {
       return 3;
     },
     { w: 0.15, b: 0.8, r: 0.05 },
-    "motivating"
+    "motivating",
   );
 
   createField(
@@ -49697,7 +49699,7 @@ function BeeSwarmSimulator(DATA) {
       return Math.random() < 0.89 ? 1 : 2;
     },
     { w: 0.31, r: 0, b: 0.69 },
-    "refreshing"
+    "refreshing",
   );
 
   createField(
@@ -49713,14 +49715,14 @@ function BeeSwarmSimulator(DATA) {
       return Math.random() < 0.32
         ? "white"
         : Math.random() < 0.5
-        ? "blue"
-        : "red";
+          ? "blue"
+          : "red";
     },
     function () {
       return Math.random() < 0.51 ? 1 : 2;
     },
     { w: 0.32, r: 0.34, b: 0.34 },
-    "invigorating"
+    "invigorating",
   );
 
   createField(
@@ -49736,14 +49738,14 @@ function BeeSwarmSimulator(DATA) {
       return Math.random() < 0.85
         ? "white"
         : Math.random() < 0.366
-        ? "blue"
-        : "red";
+          ? "blue"
+          : "red";
     },
     function () {
       return Math.random() < 0.871 ? 1 : 2;
     },
     { w: 0.85, r: 0.05, b: 0.1 },
-    "comforting"
+    "comforting",
   );
 
   createField(
@@ -49759,13 +49761,13 @@ function BeeSwarmSimulator(DATA) {
       return Math.random() < 0.333333
         ? "white"
         : Math.random() < 0.5
-        ? "blue"
-        : "red";
+          ? "blue"
+          : "red";
     },
     function () {
       return 1;
     },
-    { w: 0.33333, r: 0.33333, b: 0.33333 }
+    { w: 0.33333, r: 0.33333, b: 0.33333 },
   );
 
   flowers.mesh = {};
@@ -49779,13 +49781,13 @@ function BeeSwarmSimulator(DATA) {
   gl.bufferData(
     gl.ARRAY_BUFFER,
     Float32Array.from(flowers.mesh.verts),
-    gl.DYNAMIC_DRAW
+    gl.DYNAMIC_DRAW,
   );
   gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, flowers.mesh.indexBuffer);
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
     Uint16Array.from(flowers.mesh.index),
-    gl.DYNAMIC_DRAW
+    gl.DYNAMIC_DRAW,
   );
 
   for (let i = 0; i < 25; i++) player.addSlot(null);
@@ -49799,14 +49801,19 @@ function BeeSwarmSimulator(DATA) {
       if (i.indexOf("Planter") > -1) continue;
 
       objects.tokens.push(
-        new LootToken(10000, [(ct % 9) - 2, -1, -7 + ((ct / 9) | 0)], i, 100000)
+        new LootToken(
+          10000,
+          [(ct % 9) - 2, -1, -7 + ((ct / 9) | 0)],
+          i,
+          100000,
+        ),
       );
 
       ct++;
     }
 
     objects.tokens.push(
-      new LootToken(10000, [0, 1, 0], "honey", 100000000000000)
+      new LootToken(10000, [0, 1, 0], "honey", 100000000000000),
     );
   }
 
@@ -50063,7 +50070,7 @@ function BeeSwarmSimulator(DATA) {
       save = JSON.parse(string);
     } catch (e) {
       alert(
-        "\nSave code is invalid! The save code may contain other errors not detected by this program.\n\nAn empty new game will now be loaded."
+        "\nSave code is invalid! The save code may contain other errors not detected by this program.\n\nAn empty new game will now be loaded.",
       );
 
       return;
@@ -50117,7 +50124,7 @@ function BeeSwarmSimulator(DATA) {
           h.bond,
           h.mutation,
           h.radioactive,
-          h.beequip
+          h.beequip,
         );
       }
     }
@@ -50171,8 +50178,8 @@ function BeeSwarmSimulator(DATA) {
           save.planters[i].x,
           save.planters[i].z,
           save.planters[i].growth,
-          save.planters[i].glistering
-        )
+          save.planters[i].glistering,
+        ),
       );
     }
   }
@@ -50513,20 +50520,22 @@ function BeeSwarmSimulator(DATA) {
     }
   }
 
+  // Inside BeeSwarmSimulator(DATA) in index.js
   function SAVE_GAME(saveLocationChoice) {
     let code = GENERATE_SAVE_CODE();
 
-    if (saveLocationChoice === 1) {
-      fetchGame("https://bssbackendgo.onrender.com/gamecheckpoints");
+    // Check if we are running in the React context
+    if (window.__bssSave) {
+      // This sends the code back to the React frontend
+      window.__bssSave(code);
     } else {
-      console.error(code);
+      // Original local logic
+      saveToDB(DATA.id, {
+        lastSaved: Date.now(),
+        saveCode: code,
+        name: DATA.name,
+      });
     }
-
-    saveToDB(DATA.id, {
-      lastSaved: Date.now(),
-      saveCode: code,
-      name: DATA.name,
-    });
   }
 
   SAVE_GAME(1);
@@ -50545,8 +50554,8 @@ function BeeSwarmSimulator(DATA) {
       2,
       15,
       "rhinoBeetle",
-      "mob_bamb1"
-    )
+      "mob_bamb1",
+    ),
   );
   objects.mobs.push(
     new BugMob(
@@ -50555,8 +50564,8 @@ function BeeSwarmSimulator(DATA) {
       3,
       18,
       "rhinoBeetle",
-      "mob_bamb2"
-    )
+      "mob_bamb2",
+    ),
   );
 
   //bluf
@@ -50567,8 +50576,8 @@ function BeeSwarmSimulator(DATA) {
       1,
       8,
       "rhinoBeetle",
-      "mob_bluf1"
-    )
+      "mob_bluf1",
+    ),
   );
 
   //clov
@@ -50586,8 +50595,8 @@ function BeeSwarmSimulator(DATA) {
       2,
       12,
       "rhinoBeetle",
-      "mob_clov1"
-    )
+      "mob_clov1",
+    ),
   );
   objects.mobs.push(
     new BugMob(
@@ -50603,8 +50612,8 @@ function BeeSwarmSimulator(DATA) {
       2,
       10,
       "ladybug",
-      "mob_clov2"
-    )
+      "mob_clov2",
+    ),
   );
 
   //pineap
@@ -50622,8 +50631,8 @@ function BeeSwarmSimulator(DATA) {
       5,
       20,
       "rhinoBeetle",
-      "mob_pinea1"
-    )
+      "mob_pinea1",
+    ),
   );
   objects.mobs.push(
     new BugMob(
@@ -50639,8 +50648,8 @@ function BeeSwarmSimulator(DATA) {
       4,
       25,
       "mantis",
-      "mob_pinea2"
-    )
+      "mob_pinea2",
+    ),
   );
 
   //straw
@@ -50651,8 +50660,8 @@ function BeeSwarmSimulator(DATA) {
       2,
       10,
       "ladybug",
-      "mob_straw1"
-    )
+      "mob_straw1",
+    ),
   );
   objects.mobs.push(
     new BugMob(
@@ -50661,8 +50670,8 @@ function BeeSwarmSimulator(DATA) {
       3,
       12,
       "ladybug",
-      "mob_straw2"
-    )
+      "mob_straw2",
+    ),
   );
 
   //mush
@@ -50673,8 +50682,8 @@ function BeeSwarmSimulator(DATA) {
       1,
       6,
       "ladybug",
-      "mob_mush1"
-    )
+      "mob_mush1",
+    ),
   );
 
   //spi
@@ -50692,8 +50701,8 @@ function BeeSwarmSimulator(DATA) {
       4,
       25,
       "spider",
-      "mob_spi1"
-    )
+      "mob_spi1",
+    ),
   );
 
   objects.mobs.push(
@@ -50710,8 +50719,8 @@ function BeeSwarmSimulator(DATA) {
       6,
       75,
       "werewolf",
-      "mob_were1"
-    )
+      "mob_were1",
+    ),
   );
 
   //pine
@@ -50722,8 +50731,8 @@ function BeeSwarmSimulator(DATA) {
       5,
       35,
       "mantis",
-      "mob_pine1"
-    )
+      "mob_pine1",
+    ),
   );
   objects.mobs.push(
     new BugMob(
@@ -50732,8 +50741,8 @@ function BeeSwarmSimulator(DATA) {
       6,
       45,
       "mantis",
-      "mob_pine2"
-    )
+      "mob_pine2",
+    ),
   );
 
   //rose
@@ -50751,8 +50760,8 @@ function BeeSwarmSimulator(DATA) {
       5,
       35,
       "scorpion",
-      "mob_rose1"
-    )
+      "mob_rose1",
+    ),
   );
   objects.mobs.push(
     new BugMob(
@@ -50768,8 +50777,8 @@ function BeeSwarmSimulator(DATA) {
       5,
       35,
       "scorpion",
-      "mob_rose2"
-    )
+      "mob_rose2",
+    ),
   );
 
   objects.mobs.push(
@@ -50786,8 +50795,8 @@ function BeeSwarmSimulator(DATA) {
       7,
       2500,
       "kingBeetle",
-      "mob_king1"
-    )
+      "mob_king1",
+    ),
   );
 
   objects.mobs.push(
@@ -50797,8 +50806,8 @@ function BeeSwarmSimulator(DATA) {
       9,
       10000,
       "tunnelBear",
-      "mob_tun1"
-    )
+      "mob_tun1",
+    ),
   );
 
   objects.mobs.push(new CoconutCrab());
@@ -50809,7 +50818,7 @@ function BeeSwarmSimulator(DATA) {
     function (e) {
       player.pointerLocked = document.pointerLockElement === uiCanvas;
     },
-    false
+    false,
   );
 
   // CHQ: stop the pointer lock, which intereferes with menu selection
@@ -50819,40 +50828,46 @@ function BeeSwarmSimulator(DATA) {
     SAVE_GAME(1);
     player.addMessage("Game Autosaved!");
     console.error(
-      "\n\n\n\n\nGame automatically saved on " + Date.now() + "\n\n\n\n\n"
+      "\n\n\n\n\nGame automatically saved on " + Date.now() + "\n\n\n\n\n",
     );
   }, 30000);
 
   function setGlobalPuffshroomSpawn() {
-    window.setTimeout(() => {
-      let field = [];
+    window.setTimeout(
+      () => {
+        let field = [];
 
-      for (let i in fieldInfo) if (i !== "AntField") field.push(i);
+        for (let i in fieldInfo) if (i !== "AntField") field.push(i);
 
-      field = field[(Math.random() * field.length) | 0];
+        field = field[(Math.random() * field.length) | 0];
 
-      objects.mobs.push(
-        new Puffshroom(
-          field,
-          (MATH.random(0.25, 0.75) * fieldInfo[field].width) | 0,
-          (z = (MATH.random(0.25, 0.75) * fieldInfo[field].length) | 0),
-          5 * 60,
-          1,
-          "puffshroom"
-        )
-      );
+        objects.mobs.push(
+          new Puffshroom(
+            field,
+            (MATH.random(0.25, 0.75) * fieldInfo[field].width) | 0,
+            (z = (MATH.random(0.25, 0.75) * fieldInfo[field].length) | 0),
+            5 * 60,
+            1,
+            "puffshroom",
+          ),
+        );
 
-      setGlobalPuffshroomSpawn();
-    }, (60 * 30 - ((Date.now() * 0.001) % (60 * 30))) * 1000);
+        setGlobalPuffshroomSpawn();
+      },
+      (60 * 30 - ((Date.now() * 0.001) % (60 * 30))) * 1000,
+    );
   }
   setGlobalPuffshroomSpawn();
 
   function setGlobalMondoChickSpawn() {
-    window.setTimeout(() => {
-      objects.mobs.push(new MondoChick());
+    window.setTimeout(
+      () => {
+        objects.mobs.push(new MondoChick());
 
-      setGlobalMondoChickSpawn();
-    }, (60 * 60 - ((Date.now() * 0.001) % (60 * 60))) * 1000);
+        setGlobalMondoChickSpawn();
+      },
+      (60 * 60 - ((Date.now() * 0.001) % (60 * 60))) * 1000,
+    );
   }
   setGlobalMondoChickSpawn();
 
@@ -50936,12 +50951,12 @@ function BeeSwarmSimulator(DATA) {
             "height",
             30 -
               (player.effects[i].cooldown * 30) /
-                effects[player.effects[i].type].maxCooldown || 30
+                effects[player.effects[i].type].maxCooldown || 30,
           );
 
           effects[player.effects[i].type].update(
             player.effects[i].amount,
-            player
+            player,
           );
 
           if (player.effects[i].cooldown <= 0) {
@@ -51042,13 +51057,13 @@ function BeeSwarmSimulator(DATA) {
     gl.uniformMatrix4fv(
       glCache.dynamic_viewMatrix,
       gl.FALSE,
-      player.viewMatrix
+      player.viewMatrix,
     );
 
     gl.uniformMatrix4fv(
       glCache.dynamic_modelMatrix,
       gl.FALSE,
-      MATH.IDENTITY_MATRIX
+      MATH.IDENTITY_MATRIX,
     );
     shopGearMesh.render();
 
@@ -51056,7 +51071,7 @@ function BeeSwarmSimulator(DATA) {
       gl.uniformMatrix4fv(
         glCache.dynamic_modelMatrix,
         gl.FALSE,
-        player.modelMatrix
+        player.modelMatrix,
       );
       playerMesh.render();
     }
@@ -51064,7 +51079,7 @@ function BeeSwarmSimulator(DATA) {
     gl.uniformMatrix4fv(
       glCache.dynamic_modelMatrix,
       gl.FALSE,
-      player.toolMatrix
+      player.toolMatrix,
     );
     player.toolMesh.render();
 
@@ -51079,7 +51094,7 @@ function BeeSwarmSimulator(DATA) {
       gl.bufferData(
         gl.ARRAY_BUFFER,
         Float32Array.from(flowers.mesh.verts),
-        gl.DYNAMIC_DRAW
+        gl.DYNAMIC_DRAW,
       );
 
     UPDATE_FLOWER_MESH = false;
@@ -51090,7 +51105,7 @@ function BeeSwarmSimulator(DATA) {
       gl.FLOAT,
       gl.FALSE,
       32,
-      0
+      0,
     );
     gl.vertexAttribPointer(
       glCache.flower_vertUV,
@@ -51098,7 +51113,7 @@ function BeeSwarmSimulator(DATA) {
       gl.FLOAT,
       gl.FALSE,
       32,
-      12
+      12,
     );
     gl.vertexAttribPointer(
       glCache.flower_vertGoo,
@@ -51106,14 +51121,14 @@ function BeeSwarmSimulator(DATA) {
       gl.FLOAT,
       gl.FALSE,
       32,
-      28
+      28,
     );
 
     gl.drawElements(
       gl.TRIANGLES,
       flowers.mesh.indexAmount,
       gl.UNSIGNED_SHORT,
-      0
+      0,
     );
 
     gl.bindTexture(gl.TEXTURE_2D, textures.default);
@@ -51150,10 +51165,10 @@ function BeeSwarmSimulator(DATA) {
         new CANNON.Vec3(
           d[0] + dir[0] * 10000,
           d[1] + dir[1] * 10000,
-          d[2] + dir[2] * 10000
+          d[2] + dir[2] * 10000,
         ),
         {},
-        result
+        result,
       );
       x = result.hitPointWorld.x;
       y = result.hitPointWorld.y;
@@ -51172,11 +51187,11 @@ function BeeSwarmSimulator(DATA) {
           if (
             (player.itemDragging &&
               items[player.itemDragging].canUseOnSlot(
-                player.hive[player.hiveIndex[1]][player.hiveIndex[0]]
+                player.hive[player.hiveIndex[1]][player.hiveIndex[0]],
               )) ||
             (player.beequipDragging &&
               beequips[player.beequipDragging.type].canUseOnSlot(
-                player.hive[player.hiveIndex[1]][player.hiveIndex[0]]
+                player.hive[player.hiveIndex[1]][player.hiveIndex[0]],
               ))
           ) {
             box(
@@ -51189,7 +51204,7 @@ function BeeSwarmSimulator(DATA) {
               false,
               [0, 100, 0],
               false,
-              false
+              false,
             );
           } else {
             player.canUseItem = false;
@@ -51203,7 +51218,7 @@ function BeeSwarmSimulator(DATA) {
               false,
               [100, 0, 0],
               false,
-              false
+              false,
             );
           }
         });
@@ -51269,7 +51284,7 @@ function BeeSwarmSimulator(DATA) {
           1,
           5,
           4,
-          Math.PI
+          Math.PI,
         );
       }
 
@@ -51278,225 +51293,227 @@ function BeeSwarmSimulator(DATA) {
         !NPCs[minNPC].doesntHaveMesh &&
         !player.fieldIn
       ) {
-        NPCs[minNPC].mesh.setMeshFromFunction(function (
-          box,
-          a,
-          cylinder,
-          sphere,
-          d,
-          e,
-          star,
-          limbBox,
-          limbCylinder
-        ) {
-          NPCs[minNPC].animation += dt + dt + dt;
+        NPCs[minNPC].mesh.setMeshFromFunction(
+          function (
+            box,
+            a,
+            cylinder,
+            sphere,
+            d,
+            e,
+            star,
+            limbBox,
+            limbCylinder,
+          ) {
+            NPCs[minNPC].animation += dt + dt + dt;
 
-          let x = NPCs[minNPC].meshParams.x,
-            y = NPCs[minNPC].meshParams.y,
-            z = NPCs[minNPC].meshParams.z,
-            r = NPCs[minNPC].meshParams.r,
-            s = NPCs[minNPC].meshParams.s,
-            t = NPCs[minNPC].animation,
-            t1 = Math.sin(t * 2.1) * 5 - 0.5;
+            let x = NPCs[minNPC].meshParams.x,
+              y = NPCs[minNPC].meshParams.y,
+              z = NPCs[minNPC].meshParams.z,
+              r = NPCs[minNPC].meshParams.r,
+              s = NPCs[minNPC].meshParams.s,
+              t = NPCs[minNPC].animation,
+              t1 = Math.sin(t * 2.1) * 5 - 0.5;
 
-          limbBox(
-            r,
-            x,
-            y + Math.cos(t1 * MATH.TO_RAD * 2) * s * 0.6,
-            z + Math.sin(t1 * MATH.TO_RAD * 2) * s * 0.6,
-            1.1 * s,
-            0.9 * s,
-            0.6 * s,
-            [t1 * 2, 0, 0],
-            (NPCs[minNPC].meshParams.texture.torso.u * 128) / 1024,
-            (NPCs[minNPC].meshParams.texture.torso.v * 128) / 1024,
-            NPCs[minNPC].meshParams.texture.torso.texture
-          );
-          limbBox(
-            r,
-            x,
-            y + Math.cos(t1 * MATH.TO_RAD * 2.75) * s * 1.65,
-            z + Math.sin(t1 * MATH.TO_RAD * 2.75) * s * 1.65,
-            1.2 * s,
-            1.15 * s,
-            0.6 * s,
-            [t1 * 4, 0, 0],
-            (NPCs[minNPC].meshParams.texture.face.u * 128) / 1024,
-            (NPCs[minNPC].meshParams.texture.face.v * 128) / 1024,
-            true
-          );
-          limbBox(
-            r,
-            x,
-            y,
-            z,
-            1.1 * s,
-            0.25 * s,
-            0.6 * s,
-            [t1, 0, 0],
-            (NPCs[minNPC].meshParams.texture.torso.u * 128) / 1024,
-            (NPCs[minNPC].meshParams.texture.torso.v * 128) / 1024
-          );
-          limbBox(
-            r,
-            x + s / 1.25,
-            y - Math.cos(t1 * MATH.TO_RAD * 3.5 * 2) * s * 0.65 + s * 1.15,
-            z - Math.sin(t1 * MATH.TO_RAD * 3.5 * 2) * s * 0.2,
-            0.5 * s,
-            1.15 * s,
-            0.5 * s,
-            [t1 * 3.5 * 2, 0, 9],
-            ((NPCs[minNPC].meshParams.texture.face.u +
-              NPCs[minNPC].meshParams.texture.extremities.u) *
-              128) /
-              1024,
-            ((NPCs[minNPC].meshParams.texture.face.v +
-              NPCs[minNPC].meshParams.texture.extremities.v) *
-              128) /
-              1024
-          );
-          s /= 1.25;
-          limbBox(
-            r,
-            x - 0.35 * s,
-            y - 0.55 * s,
-            z + 0.1 * s,
-            0.55 * s * 1.25,
-            0.6 * s * 1.25,
-            0.55 * s * 1.25,
-            [t1 * 1.25 - 10, 0, -5],
-            ((NPCs[minNPC].meshParams.texture.face.u +
-              NPCs[minNPC].meshParams.texture.extremities.u) *
-              128) /
-              1024,
-            ((NPCs[minNPC].meshParams.texture.face.v +
-              NPCs[minNPC].meshParams.texture.extremities.v) *
-              128) /
-              1024
-          );
-          limbBox(
-            r,
-            x - 0.42 * s,
-            y - 1.15 * s,
-            z + 0.1 * s,
-            0.55 * s * 1.25,
-            0.6 * s * 1.25,
-            0.55 * s * 1.25,
-            [10 - t1 * 0.5, 0, -5],
-            ((NPCs[minNPC].meshParams.texture.face.u +
-              NPCs[minNPC].meshParams.texture.extremities.u) *
-              128) /
-              1024,
-            ((NPCs[minNPC].meshParams.texture.face.v +
-              NPCs[minNPC].meshParams.texture.extremities.v) *
-              128) /
-              1024
-          );
-          limbBox(
-            r,
-            x + 0.35 * s,
-            y - 0.55 * s,
-            z + 0.1 * s,
-            0.55 * s * 1.25,
-            0.6 * s * 1.25,
-            0.55 * s * 1.25,
-            [t1 * 1.25 - 10, 0, 5],
-            ((NPCs[minNPC].meshParams.texture.face.u +
-              NPCs[minNPC].meshParams.texture.extremities.u) *
-              128) /
-              1024,
-            ((NPCs[minNPC].meshParams.texture.face.v +
-              NPCs[minNPC].meshParams.texture.extremities.v) *
-              128) /
-              1024
-          );
-          limbBox(
-            r,
-            x + 0.42 * s,
-            y - 1.15 * s,
-            z + 0.1 * s,
-            0.55 * s * 1.25,
-            0.6 * s * 1.25,
-            0.55 * s * 1.25,
-            [10 - t1 * 0.5, 0, 5],
-            ((NPCs[minNPC].meshParams.texture.face.u +
-              NPCs[minNPC].meshParams.texture.extremities.u) *
-              128) /
-              1024,
-            ((NPCs[minNPC].meshParams.texture.face.v +
-              NPCs[minNPC].meshParams.texture.extremities.v) *
-              128) /
-              1024
-          );
-          s *= 1.25;
-          limbCylinder(
-            r,
-            x - 0.6 * s,
-            y + Math.cos(t1 * MATH.TO_RAD * 3) * s * 2.2,
-            z + Math.sin(t1 * MATH.TO_RAD * 3) * s * 2.2,
-            0.3 * s,
-            0.65 * s,
-            10,
-            0.9,
-            0.9,
-            0.9,
-            1,
-            t1 * 4,
-            0,
-            0,
-            ((NPCs[minNPC].meshParams.texture.face.u +
-              NPCs[minNPC].meshParams.texture.ears.u) *
-              128) /
-              1024,
-            ((NPCs[minNPC].meshParams.texture.face.v +
-              NPCs[minNPC].meshParams.texture.ears.v) *
-              128) /
-              1024
-          );
-          limbCylinder(
-            r,
-            x + 0.6 * s,
-            y + Math.cos(t1 * MATH.TO_RAD * 3) * s * 2.2,
-            z + Math.sin(t1 * MATH.TO_RAD * 3) * s * 2.2,
-            0.3 * s,
-            0.65 * s,
-            10,
-            0.9,
-            0.9,
-            0.9,
-            1,
-            t1 * 4,
-            0,
-            0,
-            ((NPCs[minNPC].meshParams.texture.face.u +
-              NPCs[minNPC].meshParams.texture.ears.u) *
-              128) /
-              1024,
-            ((NPCs[minNPC].meshParams.texture.face.v +
-              NPCs[minNPC].meshParams.texture.ears.v) *
-              128) /
-              1024
-          );
-          t1 = Math.sin(t * 2.1 + 0.5) * 5 - 0.5;
-          limbBox(
-            r,
-            x - (1 * s) / 1.25,
-            y - Math.cos(t1 * MATH.TO_RAD * 3.5 * 2) * s * 0.65 + s * 1.15,
-            z - Math.sin(t1 * MATH.TO_RAD * 3.5 * 2) * s * 0.2,
-            0.5 * s,
-            1.15 * s,
-            0.5 * s,
-            [t1 * 3.5 * 2, 0, -9],
-            ((NPCs[minNPC].meshParams.texture.face.u +
-              NPCs[minNPC].meshParams.texture.extremities.u) *
-              128) /
-              1024,
-            ((NPCs[minNPC].meshParams.texture.face.v +
-              NPCs[minNPC].meshParams.texture.extremities.v) *
-              128) /
-              1024
-          );
-        });
+            limbBox(
+              r,
+              x,
+              y + Math.cos(t1 * MATH.TO_RAD * 2) * s * 0.6,
+              z + Math.sin(t1 * MATH.TO_RAD * 2) * s * 0.6,
+              1.1 * s,
+              0.9 * s,
+              0.6 * s,
+              [t1 * 2, 0, 0],
+              (NPCs[minNPC].meshParams.texture.torso.u * 128) / 1024,
+              (NPCs[minNPC].meshParams.texture.torso.v * 128) / 1024,
+              NPCs[minNPC].meshParams.texture.torso.texture,
+            );
+            limbBox(
+              r,
+              x,
+              y + Math.cos(t1 * MATH.TO_RAD * 2.75) * s * 1.65,
+              z + Math.sin(t1 * MATH.TO_RAD * 2.75) * s * 1.65,
+              1.2 * s,
+              1.15 * s,
+              0.6 * s,
+              [t1 * 4, 0, 0],
+              (NPCs[minNPC].meshParams.texture.face.u * 128) / 1024,
+              (NPCs[minNPC].meshParams.texture.face.v * 128) / 1024,
+              true,
+            );
+            limbBox(
+              r,
+              x,
+              y,
+              z,
+              1.1 * s,
+              0.25 * s,
+              0.6 * s,
+              [t1, 0, 0],
+              (NPCs[minNPC].meshParams.texture.torso.u * 128) / 1024,
+              (NPCs[minNPC].meshParams.texture.torso.v * 128) / 1024,
+            );
+            limbBox(
+              r,
+              x + s / 1.25,
+              y - Math.cos(t1 * MATH.TO_RAD * 3.5 * 2) * s * 0.65 + s * 1.15,
+              z - Math.sin(t1 * MATH.TO_RAD * 3.5 * 2) * s * 0.2,
+              0.5 * s,
+              1.15 * s,
+              0.5 * s,
+              [t1 * 3.5 * 2, 0, 9],
+              ((NPCs[minNPC].meshParams.texture.face.u +
+                NPCs[minNPC].meshParams.texture.extremities.u) *
+                128) /
+                1024,
+              ((NPCs[minNPC].meshParams.texture.face.v +
+                NPCs[minNPC].meshParams.texture.extremities.v) *
+                128) /
+                1024,
+            );
+            s /= 1.25;
+            limbBox(
+              r,
+              x - 0.35 * s,
+              y - 0.55 * s,
+              z + 0.1 * s,
+              0.55 * s * 1.25,
+              0.6 * s * 1.25,
+              0.55 * s * 1.25,
+              [t1 * 1.25 - 10, 0, -5],
+              ((NPCs[minNPC].meshParams.texture.face.u +
+                NPCs[minNPC].meshParams.texture.extremities.u) *
+                128) /
+                1024,
+              ((NPCs[minNPC].meshParams.texture.face.v +
+                NPCs[minNPC].meshParams.texture.extremities.v) *
+                128) /
+                1024,
+            );
+            limbBox(
+              r,
+              x - 0.42 * s,
+              y - 1.15 * s,
+              z + 0.1 * s,
+              0.55 * s * 1.25,
+              0.6 * s * 1.25,
+              0.55 * s * 1.25,
+              [10 - t1 * 0.5, 0, -5],
+              ((NPCs[minNPC].meshParams.texture.face.u +
+                NPCs[minNPC].meshParams.texture.extremities.u) *
+                128) /
+                1024,
+              ((NPCs[minNPC].meshParams.texture.face.v +
+                NPCs[minNPC].meshParams.texture.extremities.v) *
+                128) /
+                1024,
+            );
+            limbBox(
+              r,
+              x + 0.35 * s,
+              y - 0.55 * s,
+              z + 0.1 * s,
+              0.55 * s * 1.25,
+              0.6 * s * 1.25,
+              0.55 * s * 1.25,
+              [t1 * 1.25 - 10, 0, 5],
+              ((NPCs[minNPC].meshParams.texture.face.u +
+                NPCs[minNPC].meshParams.texture.extremities.u) *
+                128) /
+                1024,
+              ((NPCs[minNPC].meshParams.texture.face.v +
+                NPCs[minNPC].meshParams.texture.extremities.v) *
+                128) /
+                1024,
+            );
+            limbBox(
+              r,
+              x + 0.42 * s,
+              y - 1.15 * s,
+              z + 0.1 * s,
+              0.55 * s * 1.25,
+              0.6 * s * 1.25,
+              0.55 * s * 1.25,
+              [10 - t1 * 0.5, 0, 5],
+              ((NPCs[minNPC].meshParams.texture.face.u +
+                NPCs[minNPC].meshParams.texture.extremities.u) *
+                128) /
+                1024,
+              ((NPCs[minNPC].meshParams.texture.face.v +
+                NPCs[minNPC].meshParams.texture.extremities.v) *
+                128) /
+                1024,
+            );
+            s *= 1.25;
+            limbCylinder(
+              r,
+              x - 0.6 * s,
+              y + Math.cos(t1 * MATH.TO_RAD * 3) * s * 2.2,
+              z + Math.sin(t1 * MATH.TO_RAD * 3) * s * 2.2,
+              0.3 * s,
+              0.65 * s,
+              10,
+              0.9,
+              0.9,
+              0.9,
+              1,
+              t1 * 4,
+              0,
+              0,
+              ((NPCs[minNPC].meshParams.texture.face.u +
+                NPCs[minNPC].meshParams.texture.ears.u) *
+                128) /
+                1024,
+              ((NPCs[minNPC].meshParams.texture.face.v +
+                NPCs[minNPC].meshParams.texture.ears.v) *
+                128) /
+                1024,
+            );
+            limbCylinder(
+              r,
+              x + 0.6 * s,
+              y + Math.cos(t1 * MATH.TO_RAD * 3) * s * 2.2,
+              z + Math.sin(t1 * MATH.TO_RAD * 3) * s * 2.2,
+              0.3 * s,
+              0.65 * s,
+              10,
+              0.9,
+              0.9,
+              0.9,
+              1,
+              t1 * 4,
+              0,
+              0,
+              ((NPCs[minNPC].meshParams.texture.face.u +
+                NPCs[minNPC].meshParams.texture.ears.u) *
+                128) /
+                1024,
+              ((NPCs[minNPC].meshParams.texture.face.v +
+                NPCs[minNPC].meshParams.texture.ears.v) *
+                128) /
+                1024,
+            );
+            t1 = Math.sin(t * 2.1 + 0.5) * 5 - 0.5;
+            limbBox(
+              r,
+              x - (1 * s) / 1.25,
+              y - Math.cos(t1 * MATH.TO_RAD * 3.5 * 2) * s * 0.65 + s * 1.15,
+              z - Math.sin(t1 * MATH.TO_RAD * 3.5 * 2) * s * 0.2,
+              0.5 * s,
+              1.15 * s,
+              0.5 * s,
+              [t1 * 3.5 * 2, 0, -9],
+              ((NPCs[minNPC].meshParams.texture.face.u +
+                NPCs[minNPC].meshParams.texture.extremities.u) *
+                128) /
+                1024,
+              ((NPCs[minNPC].meshParams.texture.face.v +
+                NPCs[minNPC].meshParams.texture.extremities.v) *
+                128) /
+                1024,
+            );
+          },
+        );
 
         NPCs[minNPC].mesh.setBuffers();
       }
@@ -51536,7 +51553,7 @@ function BeeSwarmSimulator(DATA) {
     gl.bufferData(
       gl.ARRAY_BUFFER,
       Float32Array.from(meshes.bees.instanceData),
-      gl.DYNAMIC_DRAW
+      gl.DYNAMIC_DRAW,
     );
 
     gl.vertexAttribPointer(
@@ -51545,7 +51562,7 @@ function BeeSwarmSimulator(DATA) {
       gl.FLOAT,
       gl.FLASE,
       44,
-      0
+      0,
     );
     gl.vertexAttribDivisor(glCache.bee_instancePos, 1);
     gl.vertexAttribPointer(
@@ -51554,7 +51571,7 @@ function BeeSwarmSimulator(DATA) {
       gl.FLOAT,
       gl.FLASE,
       44,
-      16
+      16,
     );
     gl.vertexAttribDivisor(glCache.bee_instanceRotation, 1);
     gl.vertexAttribPointer(
@@ -51563,7 +51580,7 @@ function BeeSwarmSimulator(DATA) {
       gl.FLOAT,
       gl.FLASE,
       44,
-      32
+      32,
     );
     gl.vertexAttribDivisor(glCache.bee_instanceUV, 1);
 
@@ -51572,7 +51589,7 @@ function BeeSwarmSimulator(DATA) {
       meshes.bee.indexAmount,
       gl.UNSIGNED_SHORT,
       0,
-      meshes.bees.instanceData.length * MATH.INV_11
+      meshes.bees.instanceData.length * MATH.INV_11,
     );
 
     gl.vertexAttribDivisor(glCache.bee_instancePos, 0);
@@ -51847,7 +51864,7 @@ function BeeSwarmSimulator(DATA) {
     gl.bufferData(
       gl.ARRAY_BUFFER,
       Float32Array.from(meshes.tokens.instanceData),
-      gl.DYNAMIC_DRAW
+      gl.DYNAMIC_DRAW,
     );
 
     gl.vertexAttribPointer(
@@ -51856,7 +51873,7 @@ function BeeSwarmSimulator(DATA) {
       gl.FLOAT,
       gl.FALSE,
       32,
-      0
+      0,
     );
     gl.vertexAttribDivisor(glCache.token_instancePos, 1);
     gl.vertexAttribPointer(
@@ -51865,7 +51882,7 @@ function BeeSwarmSimulator(DATA) {
       gl.FLOAT,
       gl.FALSE,
       32,
-      16
+      16,
     );
     gl.vertexAttribDivisor(glCache.token_instanceUV, 1);
 
@@ -51874,7 +51891,7 @@ function BeeSwarmSimulator(DATA) {
       meshes.token.indexAmount,
       gl.UNSIGNED_SHORT,
       0,
-      meshes.tokens.instanceData.length * 0.125
+      meshes.tokens.instanceData.length * 0.125,
     );
 
     gl.vertexAttribDivisor(glCache.token_instancePos, 0);
@@ -51907,7 +51924,7 @@ function BeeSwarmSimulator(DATA) {
     gl.uniformMatrix4fv(
       glCache.explosion_viewMatrix,
       gl.FALSE,
-      player.viewMatrix
+      player.viewMatrix,
     );
 
     for (let i = objects.bubbles.length; i--; ) {
@@ -51949,7 +51966,7 @@ function BeeSwarmSimulator(DATA) {
     gl.bindBuffer(gl.ARRAY_BUFFER, meshes.cylinder_explosion.vertBuffer);
     gl.bindBuffer(
       gl.ELEMENT_ARRAY_BUFFER,
-      meshes.cylinder_explosion.indexBuffer
+      meshes.cylinder_explosion.indexBuffer,
     );
     gl.vertexAttribPointer(
       glCache.explosion_vertPos,
@@ -51957,14 +51974,14 @@ function BeeSwarmSimulator(DATA) {
       gl.FLOAT,
       gl.FLASE,
       12,
-      0
+      0,
     );
 
     gl.bindBuffer(gl.ARRAY_BUFFER, meshes.cylinder_explosions.instanceBuffer);
     gl.bufferData(
       gl.ARRAY_BUFFER,
       Float32Array.from(meshes.cylinder_explosions.instanceData),
-      gl.DYNAMIC_DRAW
+      gl.DYNAMIC_DRAW,
     );
     gl.vertexAttribPointer(
       glCache.explosion_instancePos,
@@ -51972,7 +51989,7 @@ function BeeSwarmSimulator(DATA) {
       gl.FLOAT,
       gl.FLASE,
       36,
-      0
+      0,
     );
     gl.vertexAttribDivisor(glCache.explosion_instancePos, 1);
     gl.vertexAttribPointer(
@@ -51981,7 +51998,7 @@ function BeeSwarmSimulator(DATA) {
       gl.FLOAT,
       gl.FLASE,
       36,
-      12
+      12,
     );
     gl.vertexAttribDivisor(glCache.explosion_instanceColor, 1);
     gl.vertexAttribPointer(
@@ -51990,7 +52007,7 @@ function BeeSwarmSimulator(DATA) {
       gl.FLOAT,
       gl.FLASE,
       36,
-      28
+      28,
     );
     gl.vertexAttribDivisor(glCache.explosion_instanceScale, 1);
     gl.drawElementsInstanced(
@@ -51998,7 +52015,7 @@ function BeeSwarmSimulator(DATA) {
       meshes.cylinder_explosion.indexAmount,
       gl.UNSIGNED_SHORT,
       0,
-      meshes.cylinder_explosions.instanceData.length * MATH.INV_9
+      meshes.cylinder_explosions.instanceData.length * MATH.INV_9,
     );
 
     gl.bindBuffer(gl.ARRAY_BUFFER, meshes.explosion.vertBuffer);
@@ -52009,13 +52026,13 @@ function BeeSwarmSimulator(DATA) {
       gl.FLOAT,
       gl.FLASE,
       12,
-      0
+      0,
     );
     gl.bindBuffer(gl.ARRAY_BUFFER, meshes.explosions.instanceBuffer);
     gl.bufferData(
       gl.ARRAY_BUFFER,
       Float32Array.from(meshes.explosions.instanceData),
-      gl.DYNAMIC_DRAW
+      gl.DYNAMIC_DRAW,
     );
     gl.vertexAttribPointer(
       glCache.explosion_instancePos,
@@ -52023,7 +52040,7 @@ function BeeSwarmSimulator(DATA) {
       gl.FLOAT,
       gl.FLASE,
       36,
-      0
+      0,
     );
     gl.vertexAttribPointer(
       glCache.explosion_instanceColor,
@@ -52031,7 +52048,7 @@ function BeeSwarmSimulator(DATA) {
       gl.FLOAT,
       gl.FLASE,
       36,
-      12
+      12,
     );
     gl.vertexAttribPointer(
       glCache.explosion_instanceScale,
@@ -52039,14 +52056,14 @@ function BeeSwarmSimulator(DATA) {
       gl.FLOAT,
       gl.FLASE,
       36,
-      28
+      28,
     );
     gl.drawElementsInstanced(
       gl.TRIANGLES,
       meshes.explosion.indexAmount,
       gl.UNSIGNED_SHORT,
       0,
-      meshes.explosions.instanceData.length * MATH.INV_9
+      meshes.explosions.instanceData.length * MATH.INV_9,
     );
 
     gl.depthMask(true);
@@ -52099,4 +52116,6 @@ function BeeSwarmSimulator(DATA) {
   };
 }
 
-console.log = 0;
+// properly silence console output for production
+// console.log = function() {};
+// console.log = 0; // CHQ: Claude AI commented out
