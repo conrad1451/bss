@@ -133,9 +133,9 @@ export const TableHeaderCells = (props: {
 
 export const TableBodyRows = (props: TableBodyRowsProps) => {
   const { data, theColumnKeys, visibleColumns, onOpenActionModal } = props;
-  console.log("TableBodyRows data:", data);
-  console.log("TableBodyRows theColumnKeys:", theColumnKeys);
-  console.log("TableBodyRows visibleColumns:", visibleColumns);
+  // console.log("TableBodyRows data:", data);
+  // console.log("TableBodyRows theColumnKeys:", theColumnKeys);
+  // console.log("TableBodyRows visibleColumns:", visibleColumns);
   return (
     <TableBody>
       {data.map((row) => (

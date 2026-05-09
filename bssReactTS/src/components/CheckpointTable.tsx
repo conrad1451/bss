@@ -35,9 +35,10 @@ const CheckpointActionModal = (props: {
   open: boolean;
   onClose: () => void;
   checkpoint: Checkpoint | null;
+  onPlay: (checkpoint: Checkpoint) => void;
   onDelete: (checkpoint: Checkpoint) => void;
 }) => {
-  const { checkpoint, open, onClose, onDelete } = props;
+  const { checkpoint, open, onClose, onPlay, onDelete } = props;
   if (!checkpoint) return null;
 
   return (
@@ -64,7 +65,19 @@ const CheckpointActionModal = (props: {
           {student.myID}) */}
           Actions for checkpoint
         </Typography>
-
+        <Button
+          variant="outlined"
+          color="primary"
+          onClick={() => onPlay(checkpoint!)}
+          sx={{
+            borderColor: "primary.main",
+            color: "primary.main",
+            "&:hover": { bgcolor: "primary.light" },
+            borderRadius: "8px",
+          }}
+        >
+          Play Game at checkpoint
+        </Button>
         <Button
           variant="outlined"
           color="error"
@@ -177,7 +190,7 @@ const CheckpointActionModal = (props: {
 // };
 
 // Deletion Confirmation Modal component, now controlled by the hook
-const DeletionConfirmationModal = (props: {
+const ConfirmationModal = (props: {
   open: boolean;
   onClose: () => void;
   onConfirm: () => void;
@@ -185,8 +198,13 @@ const DeletionConfirmationModal = (props: {
   loading: boolean;
   successMessage: string | null;
   errorMessage: string | null;
+
+  confirmLabel?: string;
+  confirmColor?: "error" | "primary" | "info";
 }) => {
   const {
+    confirmLabel = "Confirm",
+    confirmColor = "primary",
     open,
     onClose,
     onConfirm,
@@ -225,12 +243,12 @@ const DeletionConfirmationModal = (props: {
         <Box sx={{ display: "flex", justifyContent: "space-around", mt: 2 }}>
           <Button
             variant="contained"
-            color="error"
+            color={confirmColor}
             onClick={onConfirm}
             sx={{ borderRadius: "8px" }}
             disabled={loading}
           >
-            Confirm Delete
+            {confirmLabel}
           </Button>
           <Button
             variant="outlined"
@@ -314,26 +332,26 @@ const CheckpointTable = (props: {
   };
 
   // Handler to open the update confirmation modal
-  //   const handleEditStudent = (student: RowPage) => {
-  //     setUpdateFirstName(student.FirstName);
-  //     setUpdateLastName(student.LastName);
-  //     setUpdateEmail(student.Email);
-  //     setUpdateMajor(student.Major || "");
-  //     handleCloseActionModal(); // Close the action modal first
-
-  //     // Now use the hook to show the update confirmation modal
-  //     confirmationModal.showConfirmation(
-  //       `Are you sure you want to update student ID ${student.myID}?`,
-  //       confirmUpdateStudent,
-  //       student,
-  //       "update"
-  //     );
-  //   };
+  const handlePlayCheckpoint = (checkpoint: Checkpoint) => {
+    handleCloseActionModal();
+    setSuccessMessage(null); // clear stale msgs
+    setErrorMessage(null); // clear stale msgs
+    if (checkpoint.id !== null && checkpoint.id !== undefined) {
+      confirmationModal.showConfirmation(
+        `Enter game at checkpoint ${checkpoint.id} - ${checkpoint.title}?`,
+        confirmPlayCheckpoint,
+        checkpoint,
+        "play",
+      );
+    }
+  };
 
   // CHQ: Claude AI updated this
   // Handler to open the delete confirmation modal
   const handleDeleteCheckpoint = (checkpoint: Checkpoint) => {
     handleCloseActionModal();
+    setSuccessMessage(null); // clear stale msgs
+    setErrorMessage(null); // clear stale msgs;
     if (checkpoint.id !== null && checkpoint.id !== undefined) {
       confirmationModal.showConfirmation(
         `Are you sure you want to delete checkpoint ${checkpoint.id} - ${checkpoint.title}? This action cannot be undone.`,
@@ -378,117 +396,8 @@ const CheckpointTable = (props: {
     }
   };
 
-  // Handler to confirm update and make the API call
-  //   const confirmUpdateStudent = async (
-  //     dataPayload: ConfirmUpdateProps | RowPage
-  //   ) => {
-  //     const studentToUpdate = dataPayload as RowPage;
-
-  //     // Create a new payload with only the fields that have been changed
-  //     const updatePayload: {
-  //       first_name?: string;
-  //       last_name?: string;
-  //       email?: string;
-  //       major?: string | null;
-  //     } = {};
-
-  //     // Check which fields were actually changed and add them to the payload.
-  //     // The user's input fields (`update...`) contain the potential new values.
-  //     if (
-  //       updateFirstName.trim() !== "" &&
-  //       updateFirstName !== studentToUpdate.FirstName
-  //     ) {
-  //       updatePayload.first_name = updateFirstName;
-  //     }
-  //     if (
-  //       updateLastName.trim() !== "" &&
-  //       updateLastName !== studentToUpdate.LastName
-  //     ) {
-  //       updatePayload.last_name = updateLastName;
-  //     }
-  //     if (updateEmail.trim() !== "" && updateEmail !== studentToUpdate.Email) {
-  //       updatePayload.email = updateEmail;
-  //     }
-  //     const newMajor = updateMajor.trim() === "" ? null : updateMajor;
-  //     if (newMajor !== (studentToUpdate.Major || null)) {
-  //       updatePayload.major = newMajor;
-  //     }
-
-  //     if (Object.keys(updatePayload).length === 0) {
-  //       setErrorMessage("No changes detected. Nothing to update.");
-  //       setLoading(false);
-  //       return;
-  //     }
-
-  //     setLoading(true);
-  //     setErrorMessage(null);
-  //     setSuccessMessage(null);
-
-  //     try {
-  //       //  import.meta.env.VITE_API_URL || import.meta.env.VITE_API_URL_LOCALHOST;
-  //       const BASE_URL = apiURL;
-  //       const sessionToken = theToken;
-  //       // The method is now "PATCH" as the server requires a partial payload.
-  //       const response = await fetch(`${BASE_URL}/${studentToUpdate.myID}`, {
-  //         method: "PATCH", // Changed back to "PATCH" from "PUT"
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //           Authorization: `Bearer ${sessionToken}`,
-  //         },
-  //         body: JSON.stringify(updatePayload), // Now sending only the changed fields
-  //       });
-
-  //       if (!response.ok) {
-  //         const errorData = await response.json();
-  //         throw new Error(errorData.message || "Server error during update");
-  //       }
-
-  //       const result: ApiResponse = await response.json();
-  //       console.log("Student updated successfully:", result);
-  //       setSuccessMessage("Student updated successfully!");
-
-  //       // New and improved logic for updating local state
-  //       // Create an object with the new values using the correct local PascalCase keys
-  //       const updatedLocalData = {
-  //         ...(updatePayload.first_name !== undefined && {
-  //           FirstName: updatePayload.first_name,
-  //         }),
-  //         ...(updatePayload.last_name !== undefined && {
-  //           LastName: updatePayload.last_name,
-  //         }),
-  //         ...(updatePayload.email !== undefined && {
-  //           Email: updatePayload.email,
-  //         }),
-  //         ...(updatePayload.major !== undefined && {
-  //           Major: updatePayload.major,
-  //         }),
-  //       };
-
-  //       // Update the local state by merging the old student data with the new values
-  //       setRawTableData((prevData) =>
-  //         prevData.map((student) =>
-  //           student.myID === studentToUpdate.myID
-  //             ? {
-  //                 ...student,
-  //                 ...updatedLocalData,
-  //               }
-  //             : student
-  //         )
-  //       );
-
-  //       setUpdateFirstName("");
-  //       setUpdateLastName("");
-  //       setUpdateEmail("");
-  //       setUpdateMajor("");
-  //     } catch (error: any) {
-  //       console.error("Error updating student:", error);
-  //       setErrorMessage(
-  //         error.message || "Failed to update student. Please try again."
-  //       );
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
+  // Handler to confirm entering game at checkpoint and make the API call
+  const confirmPlayCheckpoint = async (dataPayload: Checkpoint) => {};
 
   return (
     <Box sx={{ width: "100%", overflowX: "auto" }}>
@@ -559,28 +468,14 @@ const CheckpointTable = (props: {
         open={isActionModalOpen}
         onClose={handleCloseActionModal}
         checkpoint={selectedCheckpointForActions}
-        // onEdit={handleEditStudent}
+        onPlay={handlePlayCheckpoint}
         onDelete={handleDeleteCheckpoint}
       />
 
-      {/* Update Confirmation Modal (now controlled by the hook) */}
-      {/* {confirmationModal.confirmationType === "update" && (
-        <UpdateConfirmationModal
-          open={confirmationModal.isOpen}
-          onClose={confirmationModal.cancelAction}
-          onConfirm={confirmationModal.confirmAction}
-          message={confirmationModal.message}
-          currentCheckpointData={updateFirstName}
-          setCheckpointData={setUpdateFirstName}
-          loading={loading}
-          successMessage={successMessage}
-          errorMessage={errorMessage}
-        />
-      )} */}
-
-      {/* Deletion Confirmation Modal (now controlled by the hook) */}
-      {confirmationModal.confirmationType === "delete" && (
-        <DeletionConfirmationModal
+      {/* Play Confirmation Modal */}
+      {(confirmationModal.confirmationType === "delete" ||
+        confirmationModal.confirmationType === "play") && (
+        <ConfirmationModal
           open={confirmationModal.isOpen}
           onClose={confirmationModal.cancelAction}
           onConfirm={confirmationModal.confirmAction}
@@ -588,6 +483,16 @@ const CheckpointTable = (props: {
           loading={loading}
           successMessage={successMessage}
           errorMessage={errorMessage}
+          confirmLabel={
+            confirmationModal.confirmationType === "delete"
+              ? "Confirm Delete"
+              : "Confirm"
+          }
+          confirmColor={
+            confirmationModal.confirmationType === "delete"
+              ? "error"
+              : "primary"
+          }
         />
       )}
     </Box>

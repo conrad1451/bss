@@ -3,11 +3,11 @@
 // CHQ: Gemimi AI generated this hook
 
 import { useState } from "react";
-import type { ConfirmUpdateProps } from "../utils/dataTypes";
-import type { RowPage } from "../utils/dataTypes";
+
+import type { Checkpoint } from "../utils/dataTypes";
 
 // Define the type for the data that the modal will carry
-type ConfirmationData = RowPage | ConfirmUpdateProps;
+type ConfirmationData = Checkpoint;
 
 // Define the type for the confirmation callback function
 type ConfirmationAction = (data: ConfirmationData) => Promise<void> | void;
@@ -37,7 +37,7 @@ export const useConfirmationModal = () => {
     msg: string,
     action: ConfirmationAction,
     data: ConfirmationData,
-    type: string
+    type: string,
   ) => {
     setMessage(msg);
     setActionToConfirm(() => action); // Use a function to set the state correctly
