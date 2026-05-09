@@ -1,15 +1,19 @@
 // src/game/engine.ts
 // import { setupShaders } from "./GLSLShaders";
 // import { buildMap } from "./mapMesh";
-// ... other imports
+// import { main as startMainMenu } from "./index"; // if you export it, or call directly
 
+// import { BeeSwarmSimulator } from "./index";
+import { BeeSwarmSimulator } from "./index.js";
+import type { Checkpoint } from "../utils/dataTypes";
 let animFrameId: number;
 
-export function initGame(
-  canvas: HTMLCanvasElement,
-  saveData: unknown | null,
-  onSave?: (data: string) => void,
-) {
+export function initGame(checkpoint: Checkpoint) {
+  // export function initGame(
+  //   canvas: HTMLCanvasElement,
+  //   saveData: unknown | null,
+  //   onSave?: (data: string) => void,
+  // ) {
   //   const gl = canvas.getContext("webgl2");
   //   if (!gl) throw new Error("WebGL2 not supported");
 
@@ -28,12 +32,27 @@ export function initGame(
   // buildMap(gl);
   // if (saveData) loadState(saveData);
 
-  if (onSave) (window as any).__bssSave = onSave;
+  //   if (onSave) (window as any).__bssSave = onSave;
   // animFrameId = requestAnimationFrame(gameLoop);
+  const saved = checkpoint.data ? JSON.parse(checkpoint.data) : null;
+
+  BeeSwarmSimulator({
+    id: checkpoint.id,
+    name: checkpoint.title,
+    saveCode: saved?.saveCode ?? undefined, // undefined = new game
+  });
 }
 
-export function destroyGame(_canvas: HTMLCanvasElement) {
-  cancelAnimationFrame(animFrameId);
-  delete (window as any).__bssSave;
-  // tear down event listeners the game registered
+// export function destroyGame(_canvas: HTMLCanvasElement) {
+//   cancelAnimationFrame(animFrameId);
+//   delete (window as any).__bssSave;
+//   // tear down event listeners the game registered
+// }
+
+export function destroyGame() {
+  const w = window.parent as any;
+  if (w.raf) {
+    cancelAnimationFrame(w.raf);
+    w.raf = undefined;
+  }
 }
