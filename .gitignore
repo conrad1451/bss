@@ -6,13 +6,18 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
-
+tree-generator.ps1
+.vite/
+dist/
 bssReactTs/node_modules
 bssReactTs/.env
 
 bssReactTs/dist
 bssReactTs/dist-ssr
+bssReactTs/stash_analysis
 *.local
+
+dataFilesForRepo/
 
 # Editor directories and files
 .vscode/*
