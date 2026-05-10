@@ -2,6 +2,8 @@ import { beeInfo } from "./data/bees.js";
 import { effects } from "./data/effects.js";
 import { upgrades } from "./data/upgrades.js";
 // import { blenderRecipes, windShrineDonations } from "./recipes";
+import { createInitialState } from "./state/gameState.js";
+import { Renderer } from "./engine/renderer.js";
 
 import { createField } from "./engine/world.js";
 import { fieldDefinitions } from "./data/fieldData.js";
@@ -422,9 +424,66 @@ function main() {
 
 var _M = Math;
 
-function BeeSwarmSimulator(DATA) {
-  document.onpaste = undefined;
+// function BeeSwarmSimulator(DATA) {
+async function BeeSwarmSimulator(saveData) {
+  // --- 1. SETUP GOES HERE ---
+  const canvas = document.getElementById("gl-canvas");
+  const gl = canvas.getContext("webgl2");
 
+  if (!gl) {
+    alert("WebGL 2.0 not supported by your browser.");
+    return;
+  }
+
+  // --- 2. RENDERER INITIALIZATION ---
+  // Now that you have 'gl', you can pass it into the Renderer
+  const renderer = new Renderer(gl, canvas.width, canvas.height);
+  // document.onpaste = undefined;
+
+  // --- 3. STATE INITIALIZATION ---
+  const gameState = createInitialState(saveData);
+
+  // // 2. Initialize the renderer
+  // const renderer = new Renderer(gl, canvas.width, canvas.height);
+
+  // --- 4. ENGINE STARTUP ---
+  initGameWorld(gameState);
+
+  // 3. Compile Shaders and Initialize Cache
+  // We use the keys defined in your engine/shaders.js
+  renderer.programs.static = renderer.createProgram("staticVSH", "staticFSH");
+  renderer.programs.bee = renderer.createProgram("beeVSH", "beeFSH");
+  renderer.programs.flower = renderer.createProgram("flowerVSH", "flowerFSH");
+  renderer.programs.token = renderer.createProgram("tokenVSH", "tokenFSH");
+  renderer.programs.particle = renderer.createProgram(
+    "particleVSH",
+    "particleFSH",
+  );
+  renderer.programs.text = renderer.createProgram("textVSH", "textFSH");
+
+  // Map all the attribute/uniform locations
+  renderer.initCache(renderer.programs);
+
+  // 4. Initialize Game State with Save Data
+  // (Assuming you've moved the state logic to a helper or gameState.js)
+  const currentGameState = initializeState(saveData);
+
+  // 5. Start the Game Loop
+  function gameLoop(now) {
+    const dt = calculateDelta(now);
+
+    // updateEngine(currentGameState, dt);
+
+    // Use your new modular renderer!
+    renderer.render(currentGameState, dt);
+
+    requestAnimationFrame(gameLoop);
+  }
+
+  requestAnimationFrame(gameLoop);
+}
+
+async function BeeSwarmSimulatorOldPart(saveData) {
   let Math = _M,
     GIFTED_BEE_TEXTURE_OFFSET = 768 / 2048;
 
@@ -18345,56 +18404,7 @@ function BeeSwarmSimulator(DATA) {
     return sum;
   };
 
-  function createProgram(vsh, fsh) {
-    let vshText = window["glsl_" + vsh]
-      .trim()
-      .replaceAll("INV_AVG_HALF_WIDTH_HEIGHT", 2 / ((width + height) * 0.5))
-      .replaceAll("INV_HALF_WIDTH", 1 / (width * 0.5))
-      .replaceAll("INV_HALF_HEIGHT", 1 / (height * 0.5))
-      .replaceAll("INV_WIDTH", 1 / width)
-      .replaceAll("INV_HEIGHT", 1 / height)
-      .replaceAll("HALF_WIDTH", width * 0.5 + 0.0000001)
-      .replaceAll("HALF_HEIGHT", height * 0.5 + 0.0000001)
-      .replaceAll("INV_ASPECT", 1 / aspect + 0.00001)
-      .replaceAll("ASPECT", aspect + 0.000001)
-      .replaceAll(
-        "SCREEN_CHANGE",
-        (((width + height) * 0.5) / 600) * 1.5 + 0.00001,
-      );
-    let fshText = window["glsl_" + fsh]
-      .trim()
-      .replaceAll(
-        "LIGHT_DIR",
-        "vec3(" + lightDir[0] + "," + lightDir[1] + "," + lightDir[2] + ")",
-      )
-      .replaceAll("INV_AVG_HALF_WIDTH_HEIGHT", 2 / ((width + height) * 0.5))
-      .replaceAll("INV_HALF_WIDTH", 1 / (width * 0.5))
-      .replaceAll("INV_HALF_HEIGHT", 1 / (height * 0.5))
-      .replaceAll("INV_WIDTH", 1 / width)
-      .replaceAll("INV_HEIGHT", 1 / height)
-      .replaceAll("HALF_WIDTH", width * 0.5 + 0.0000001)
-      .replaceAll("HALF_HEIGHT", height * 0.5 + 0.0000001)
-      .replaceAll("INV_ASPECT", 1 / aspect + 0.00001)
-      .replaceAll("ASPECT", aspect + 0.00001)
-      .replaceAll(
-        "SCREEN_CHANGE",
-        (((width + height) * 0.5) / 600) * 1.5 + 0.00001,
-      );
-
-    vsh = gl.createShader(gl.VERTEX_SHADER);
-    fsh = gl.createShader(gl.FRAGMENT_SHADER);
-    gl.shaderSource(vsh, vshText);
-    gl.shaderSource(fsh, fshText);
-    gl.compileShader(vsh);
-    gl.compileShader(fsh);
-
-    let p = gl.createProgram();
-    gl.attachShader(p, vsh);
-    gl.attachShader(p, fsh);
-    gl.linkProgram(p);
-
-    return p;
-  }
+  // FIXME: createProgram now called from renderer.js
 
   let staticGeometryProgram = createProgram(
       "static_geometry_vsh",
@@ -18431,260 +18441,7 @@ function BeeSwarmSimulator(DATA) {
       "trail_renderer_fsh",
     );
 
-  let initGlCache = function (glCache) {
-    glCache.static_viewMatrix = gl.getUniformLocation(
-      staticGeometryProgram,
-      "viewMatrix",
-    );
-    glCache.static_isNight = gl.getUniformLocation(
-      staticGeometryProgram,
-      "isNight",
-    );
-    glCache.static_vertPos = gl.getAttribLocation(
-      staticGeometryProgram,
-      "vertPos",
-    );
-    gl.enableVertexAttribArray(glCache.static_vertPos);
-    glCache.static_vertColor = gl.getAttribLocation(
-      staticGeometryProgram,
-      "vertColor",
-    );
-    gl.enableVertexAttribArray(glCache.static_vertColor);
-    glCache.static_vertUV = gl.getAttribLocation(
-      staticGeometryProgram,
-      "vertUV",
-    );
-    gl.enableVertexAttribArray(glCache.static_vertUV);
-
-    glCache.dynamic_viewMatrix = gl.getUniformLocation(
-      dynamicGeometryProgram,
-      "viewMatrix",
-    );
-    glCache.dynamic_modelMatrix = gl.getUniformLocation(
-      dynamicGeometryProgram,
-      "modelMatrix",
-    );
-    glCache.dynamic_isNight = gl.getUniformLocation(
-      dynamicGeometryProgram,
-      "isNight",
-    );
-    glCache.dynamic_vertPos = gl.getAttribLocation(
-      dynamicGeometryProgram,
-      "vertPos",
-    );
-    gl.enableVertexAttribArray(glCache.dynamic_vertPos);
-    glCache.dynamic_vertColor = gl.getAttribLocation(
-      dynamicGeometryProgram,
-      "vertColor",
-    );
-    gl.enableVertexAttribArray(glCache.dynamic_vertColor);
-    glCache.dynamic_vertNormal = gl.getAttribLocation(
-      dynamicGeometryProgram,
-      "vertNormal",
-    );
-    gl.enableVertexAttribArray(glCache.dynamic_vertNormal);
-
-    glCache.token_viewMatrix = gl.getUniformLocation(
-      tokenGeometryProgram,
-      "viewMatrix",
-    );
-    glCache.token_isNight = gl.getUniformLocation(
-      tokenGeometryProgram,
-      "isNight",
-    );
-    glCache.token_vertPos = gl.getAttribLocation(
-      tokenGeometryProgram,
-      "vertPos",
-    );
-    gl.enableVertexAttribArray(glCache.token_vertPos);
-    glCache.token_vertUV = gl.getAttribLocation(tokenGeometryProgram, "vertUV");
-    gl.enableVertexAttribArray(glCache.token_vertUV);
-    glCache.token_instancePos = gl.getAttribLocation(
-      tokenGeometryProgram,
-      "instance_pos",
-    );
-    gl.enableVertexAttribArray(glCache.token_instancePos);
-    glCache.token_instanceUV = gl.getAttribLocation(
-      tokenGeometryProgram,
-      "instance_uv",
-    );
-    gl.enableVertexAttribArray(glCache.token_instanceUV);
-
-    glCache.flower_viewMatrix = gl.getUniformLocation(
-      flowerGeometryProgram,
-      "viewMatrix",
-    );
-    glCache.flower_isNight = gl.getUniformLocation(
-      flowerGeometryProgram,
-      "isNight",
-    );
-    glCache.flower_vertPos = gl.getAttribLocation(
-      flowerGeometryProgram,
-      "vertPos",
-    );
-    gl.enableVertexAttribArray(glCache.flower_vertPos);
-    glCache.flower_vertUV = gl.getAttribLocation(
-      flowerGeometryProgram,
-      "vertUV",
-    );
-    gl.enableVertexAttribArray(glCache.flower_vertUV);
-    glCache.flower_vertGoo = gl.getAttribLocation(
-      flowerGeometryProgram,
-      "vertGoo",
-    );
-    gl.enableVertexAttribArray(glCache.flower_vertGoo);
-
-    glCache.bee_viewMatrix = gl.getUniformLocation(
-      beeGeometryProgram,
-      "viewMatrix",
-    );
-    glCache.bee_isNight = gl.getUniformLocation(beeGeometryProgram, "isNight");
-    glCache.bee_vertPos = gl.getAttribLocation(beeGeometryProgram, "vertPos");
-    gl.enableVertexAttribArray(glCache.bee_vertPos);
-    glCache.bee_vertUV = gl.getAttribLocation(beeGeometryProgram, "vertUV");
-    gl.enableVertexAttribArray(glCache.bee_vertUV);
-    glCache.bee_instancePos = gl.getAttribLocation(
-      beeGeometryProgram,
-      "instance_pos",
-    );
-    gl.enableVertexAttribArray(glCache.bee_instancePos);
-    glCache.bee_instanceRotation = gl.getAttribLocation(
-      beeGeometryProgram,
-      "instance_rotation",
-    );
-    gl.enableVertexAttribArray(glCache.bee_instanceRotation);
-    glCache.bee_instanceUV = gl.getAttribLocation(
-      beeGeometryProgram,
-      "instance_uv",
-    );
-    gl.enableVertexAttribArray(glCache.bee_instanceUV);
-
-    glCache.particle_vertPos = gl.getAttribLocation(
-      particleRendererProgram,
-      "vertPos",
-    );
-    gl.enableVertexAttribArray(glCache.particle_vertPos);
-    glCache.particle_vertColor = gl.getAttribLocation(
-      particleRendererProgram,
-      "vertColor",
-    );
-    gl.enableVertexAttribArray(glCache.particle_vertColor);
-    glCache.particle_vertSize = gl.getAttribLocation(
-      particleRendererProgram,
-      "vertSize",
-    );
-    gl.enableVertexAttribArray(glCache.particle_vertSize);
-    glCache.particle_vertRot = gl.getAttribLocation(
-      particleRendererProgram,
-      "vertRot",
-    );
-    gl.enableVertexAttribArray(glCache.particle_vertRot);
-    glCache.particle_viewMatrix = gl.getUniformLocation(
-      particleRendererProgram,
-      "viewMatrix",
-    );
-
-    glCache.explosion_vertPos = gl.getAttribLocation(
-      explosionRendererProgram,
-      "vertPos",
-    );
-    gl.enableVertexAttribArray(glCache.explosion_vertPos);
-    glCache.explosion_instancePos = gl.getAttribLocation(
-      explosionRendererProgram,
-      "instance_pos",
-    );
-    gl.enableVertexAttribArray(glCache.explosion_instancePos);
-    glCache.explosion_instanceColor = gl.getAttribLocation(
-      explosionRendererProgram,
-      "instance_color",
-    );
-    gl.enableVertexAttribArray(glCache.explosion_instanceColor);
-    glCache.explosion_instanceScale = gl.getAttribLocation(
-      explosionRendererProgram,
-      "instance_scale",
-    );
-    gl.enableVertexAttribArray(glCache.explosion_instanceScale);
-    glCache.explosion_viewMatrix = gl.getUniformLocation(
-      explosionRendererProgram,
-      "viewMatrix",
-    );
-
-    glCache.text_vertPos = gl.getAttribLocation(textRendererProgram, "vertPos");
-    gl.enableVertexAttribArray(glCache.text_vertPos);
-    glCache.text_vertUV = gl.getAttribLocation(textRendererProgram, "vertUV");
-    gl.enableVertexAttribArray(glCache.text_vertUV);
-    glCache.text_instanceOrigin = gl.getAttribLocation(
-      textRendererProgram,
-      "instance_origin",
-    );
-    gl.enableVertexAttribArray(glCache.text_instanceOrigin);
-    glCache.text_instanceOffset = gl.getAttribLocation(
-      textRendererProgram,
-      "instance_offset",
-    );
-    gl.enableVertexAttribArray(glCache.text_instanceOffset);
-    glCache.text_instanceUV = gl.getAttribLocation(
-      textRendererProgram,
-      "instance_uv",
-    );
-    gl.enableVertexAttribArray(glCache.text_instanceUV);
-    glCache.text_instanceColor = gl.getAttribLocation(
-      textRendererProgram,
-      "instance_color",
-    );
-    gl.enableVertexAttribArray(glCache.text_instanceColor);
-    glCache.text_instanceInfo = gl.getAttribLocation(
-      textRendererProgram,
-      "instance_info",
-    );
-    gl.enableVertexAttribArray(glCache.text_instanceInfo);
-    glCache.text_viewMatrix = gl.getUniformLocation(
-      textRendererProgram,
-      "viewMatrix",
-    );
-
-    glCache.mob_viewMatrix = gl.getUniformLocation(
-      mobRendererProgram,
-      "viewMatrix",
-    );
-    glCache.mob_isNight = gl.getUniformLocation(mobRendererProgram, "isNight");
-    glCache.mob_vertPos = gl.getAttribLocation(mobRendererProgram, "vertPos");
-    gl.enableVertexAttribArray(glCache.mob_vertPos);
-    glCache.mob_vertColor = gl.getAttribLocation(
-      mobRendererProgram,
-      "vertColor",
-    );
-    gl.enableVertexAttribArray(glCache.mob_vertColor);
-    glCache.mob_instanceInfo1 = gl.getUniformLocation(
-      mobRendererProgram,
-      "instance_info1",
-    );
-    glCache.mob_instanceInfo2 = gl.getUniformLocation(
-      mobRendererProgram,
-      "instance_info2",
-    );
-
-    glCache.trail_viewMatrix = gl.getUniformLocation(
-      trailRendererProgram,
-      "viewMatrix",
-    );
-    glCache.trail_vertPos = gl.getAttribLocation(
-      trailRendererProgram,
-      "vertPos",
-    );
-    gl.enableVertexAttribArray(glCache.trail_vertPos);
-    glCache.trail_vertColor = gl.getAttribLocation(
-      trailRendererProgram,
-      "vertCol",
-    );
-    gl.enableVertexAttribArray(glCache.trail_vertColor);
-    glCache.trail_isNight = gl.getUniformLocation(
-      trailRendererProgram,
-      "isNight",
-    );
-
-    return glCache;
-  };
+  // FIXME: initGlCache WAS defined here - now we just import it
 
   let glCache = initGlCache({}),
     globalMeshID = 0;
