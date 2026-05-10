@@ -15,16 +15,53 @@ export class Renderer {
     this.glCache = {};
   }
 
+  // NEW METHOD: This replaces the .replaceAll logic from index.js
+  prepareShaderSource(source) {
+    const width = this.width;
+    const height = this.height;
+
+    // Original math from line 2410
+    const invHalfWidth = 1 / (width * 0.5);
+    const invHalfHeight = 1 / (height * 0.5);
+    const aspect = width / height;
+    const invAspect = 1 / aspect;
+    const screenChange = (width + height) * 0.5;
+    const invAvgHalfWidthHeight = 2 / screenChange;
+
+    return source
+      .replaceAll("INV_HALF_WIDTH", invHalfWidth)
+      .replaceAll("INV_HALF_HEIGHT", invHalfHeight)
+      .replaceAll("HALF_WIDTH", width * 0.5)
+      .replaceAll("HALF_HEIGHT", height * 0.5)
+      .replaceAll("INV_ASPECT", invAspect)
+      .replaceAll("ASPECT", aspect)
+      .replaceAll("SCREEN_CHANGE", screenChange)
+      .replaceAll("INV_AVG_HALF_WIDTH_HEIGHT", invAvgHalfWidthHeight)
+      .replaceAll("LIGHT_DIR", "vec3(0.5, 0.8, 0.2)"); // Hardcoded in your original engine
+  }
+
   // Refactored from index.js (Line 2450)
   createProgram(vshSource, fshSource) {
     const gl = this.gl;
+
+    // Prepare the sources first!
+    const finalVsh = this.prepareShaderSource(vshSource);
+    const finalFsh = this.prepareShaderSource(fshSource);
+
     const vsh = gl.createShader(gl.VERTEX_SHADER);
     const fsh = gl.createShader(gl.FRAGMENT_SHADER);
 
-    gl.shaderSource(vsh, vshSource);
-    gl.shaderSource(fsh, fshSource);
+    gl.shaderSource(vsh, finalVsh);
+    gl.shaderSource(fsh, finalFsh);
     gl.compileShader(vsh);
+    if (!gl.getShaderParameter(vsh, gl.COMPILE_STATUS)) {
+      console.error("VSH Error: ", gl.getShaderInfoLog(vsh));
+    }
+
     gl.compileShader(fsh);
+    if (!gl.getShaderParameter(fsh, gl.COMPILE_STATUS)) {
+      console.error("FSH Error: ", gl.getShaderInfoLog(fsh));
+    }
 
     const program = gl.createProgram();
     gl.attachShader(program, vsh);
@@ -319,17 +356,25 @@ export class Renderer {
     );
   }
 
-  render(gameState) {
+  // CHQ: Gemini AI refactored
+  render(gameState, dt) {
     const gl = this.gl;
-    // 1. Clear the screen
-    gl.clearColor(...gameState.player.skyColor, 1);
+    const { player, objects } = gameState;
+
+    gl.clearColor(...player.skyColor, 1);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-    // 2. Bind textures (effects, bees, etc.)
+    // Set global uniforms (Night/Day)
+    gl.useProgram(this.programs.static);
+    gl.uniform1f(this.glCache.static_isNight, gameState.isNight ? 0.4 : 1.0);
 
-    // 3. Draw Static Geometry (Map)
+    // Draw Bees
+    gl.useProgram(this.programs.bee);
+    objects.bees.forEach((bee) => {
+      // ... logic from index.js for drawing bees
+    });
 
-    // 4. Draw Dynamic Geometry (Bees, Mobs, Tokens)
-    // Use gameState.objects.bees.forEach(...)
+    // Draw UI Text
+    // textRenderer.render(dt, Math.sin(gameState.TIME * 20));
   }
 }
