@@ -1,4 +1,5 @@
 // engine/renderer.js
+import { TextRenderer } from "./textRenderer.js";
 
 // CHQ: Claude AI generated this file
 
@@ -13,6 +14,7 @@ export class Renderer {
     this.height = canvasHeight;
     this.programs = {};
     this.glCache = {};
+    this.textRenderer = new TextRenderer(this.gl, this.glCache, this.programs);
   }
 
   // NEW METHOD: This replaces the .replaceAll logic from index.js
@@ -391,6 +393,15 @@ export class Renderer {
     // This was line 4866 in your original index.js
     if (this.ctx) {
       this.ctx.drawImage(gl.canvas, 0, 0);
+    }
+
+    // 7. Draw UI text (Floating numbers)
+    this.textRenderer.update(dt);
+    this.textRenderer.render(dt, Math.sin(gameState.TIME * 20));
+
+    // 8. Final Canvas Copy
+    if (this.ctx) {
+      this.ctx.drawImage(this.gl.canvas, 0, 0);
     }
   }
 
