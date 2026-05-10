@@ -148,11 +148,15 @@ export class Renderer {
       "vertUV",
     );
     this.gl.enableVertexAttribArray(this.glCache.token_vertUV);
+
+    // CHQ: token instance position
     this.glCache.token_instancePos = this.gl.getAttribLocation(
       programs.token,
       "instance_pos",
     );
     this.gl.enableVertexAttribArray(this.glCache.token_instancePos);
+
+    // CHQ: token instance UV
     this.glCache.token_instanceUV = this.gl.getAttribLocation(
       programs.token,
       "instance_uv",
@@ -371,7 +375,6 @@ export class Renderer {
     const nightFactor = gameState.isNight ? 0.4 : 1.0;
 
     // 3. Draw Opaque World Objects (Solid geometry first)
-
     this.renderStaticFields(gameState, nightFactor); // CHQ: Static Geometry
     this.renderFlowers(gameState, nightFactor); // CHQ: Static Geometry
     this.renderBees(gameState, nightFactor); // CHQ: Instanced
@@ -380,28 +383,42 @@ export class Renderer {
     // 4. Draw Transparent/Additive Effects
     // We disable depth writing so particles don't block the things behind them
     gl.depthMask(false);
-
     this.renderParticles(gameState); // CHQ: Instanced
     this.renderExplosions(gameState); // Don't forget the explosions!
-
     gl.depthMask(true); // Re-enable for the UI
 
-    // 5. Draw UI text (Floating numbers)
-    this.renderUI(gameState, dt);
+    // // 5. Draw UI text (Floating numbers)
+    // this.renderUI(gameState, dt);
 
-    // 6. Copy the WebGL canvas to the 2D display canvas
-    // This was line 4866 in your original index.js
-    if (this.ctx) {
-      this.ctx.drawImage(gl.canvas, 0, 0);
+    // // 6. Copy the WebGL canvas to the 2D display canvas
+    // // This was line 4866 in your original index.js
+    // if (this.ctx) {
+    //   this.ctx.drawImage(gl.canvas, 0, 0);
+    // }
+
+    // 5. Draw 3D Floating UI Text (Last thing in WebGL)
+    // Using the wiggle effect from your original logic [cite: 1440-1443]
+    if (this.textRenderer) {
+      this.textRenderer.update(dt);
+      this.textRenderer.render(
+        dt,
+        Math.sin(gameState.TIME * 20),
+        gameState.viewMatrix,
+      );
     }
 
-    // 7. Draw UI text (Floating numbers)
-    this.textRenderer.update(dt);
-    this.textRenderer.render(dt, Math.sin(gameState.TIME * 20));
+    // // 7. Draw UI text (Floating numbers)
+    // this.textRenderer.update(dt);
+    // this.textRenderer.render(dt, Math.sin(gameState.TIME * 20));
 
-    // 8. Final Canvas Copy
-    if (this.ctx) {
-      this.ctx.drawImage(this.gl.canvas, 0, 0);
+    // // 8. Final Canvas Copy
+    // if (this.ctx) {
+    //   this.ctx.drawImage(this.gl.canvas, 0, 0);
+    // }
+
+    // 7. Draw 2D Overlay Text (If any)
+    if (this.textRenderer) {
+      this.textRenderer.draw(); // Draws context-based labels
     }
   }
 
@@ -568,6 +585,82 @@ export class Renderer {
 
     gl.drawArrays(gl.POINTS, 0, meshes.particles.vertCount);
   }
+
+  renderTokens(gameState, nightFactor) {
+    const { gl, glCache, programs } = this;
+    const { objects, meshes, viewMatrix } = gameState;
+
+    if (objects.tokens.length === 0) return;
+
+    gl.useProgram(programs.token);
+    gl.uniformMatrix4fv(glCache.token_viewMatrix, false, viewMatrix);
+    gl.uniform1f(glCache.token_isNight, nightFactor);
+
+    // 1. Pack instance data [x, y, z, rotation, u, v, scale, ?]
+    let instanceData = [];
+    for (let token of objects.tokens) {
+      instanceData.push(
+        token.pos[0],
+        token.pos[1],
+        token.pos[2],
+        token.rotation, // Current rotation angle
+        token.u, // Texture U coordinate
+        token.v, // Texture V coordinate
+        token.life * (token instanceof DupedToken ? 0.15 : 0.3), // Life-based scale [cite: 1479, 1488]
+        1.0, // Uniform scale multiplier
+      );
+    }
+
+    // 2. Upload to the token instance buffer
+    gl.bindBuffer(gl.ARRAY_BUFFER, meshes.tokens.instanceBuffer);
+    gl.bufferData(
+      gl.ARRAY_BUFFER,
+      new Float32Array(instanceData),
+      gl.DYNAMIC_DRAW,
+    );
+
+    // 3. Set attribute pointers (8 floats per instance = 32 bytes)
+    const stride = 32;
+
+    // instance_pos
+    gl.vertexAttribPointer(
+      glCache.token_instancePos,
+      4,
+      gl.FLOAT,
+      false,
+      stride,
+      0,
+    );
+    gl.vertexAttribDivisor(glCache.token_instancePos, 1);
+
+    // instance_uv
+    gl.vertexAttribPointer(
+      glCache.token_instanceUV,
+      4,
+      gl.FLOAT,
+      false,
+      stride,
+      16,
+    );
+    gl.vertexAttribDivisor(glCache.token_instanceUV, 1);
+
+    // 4. Draw the token mesh for all active instances
+    gl.bindBuffer(gl.ARRAY_BUFFER, gameState.meshes.token.vertBuffer);
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, gameState.meshes.token.indexBuffer);
+    gl.drawElementsInstanced(
+      gl.TRIANGLES,
+      gameState.meshes.token.indexAmount,
+      gl.UNSIGNED_SHORT,
+      0,
+      objects.tokens.length,
+    );
+
+    // 5. Cleanup
+    gl.vertexAttribDivisor(glCache.token_instancePos, 0);
+    gl.vertexAttribDivisor(glCache.token_instanceUV, 0);
+  }
+
+  renderExplosions() {}
 
   renderUI(gameState, dt) {
     const { player, TIME } = gameState;

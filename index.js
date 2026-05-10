@@ -8,6 +8,9 @@ import { Renderer } from "./engine/renderer.js";
 import { createField } from "./engine/world.js";
 import { fieldDefinitions } from "./data/fieldData.js";
 
+import { initInputHandlers } from "./utils/input.js";
+import { TextRenderer } from "./engine/textRenderer.js";
+
 function initGameWorld(gameState) {
   fieldDefinitions.forEach((f) => {
     createField(
@@ -426,6 +429,20 @@ var _M = Math;
 
 // function BeeSwarmSimulator(DATA) {
 async function BeeSwarmSimulator(saveData) {
+  let width = window.thisProgramIsInFullScreen ? 500 : window.innerWidth + 1;
+  let height = window.thisProgramIsInFullScreen ? 500 : window.innerHeight + 1;
+
+  const glCanvas = document.getElementById("gl-canvas");
+  const uiCanvas = document.getElementById("ui-canvas");
+  const ctx = uiCanvas.getContext("2d"); // Needed for Renderer.renderUI
+
+  glCanvas.width = width;
+  glCanvas.height = height;
+  uiCanvas.width = width;
+  uiCanvas.height = height;
+
+  gl.viewport(0, 0, width, height);
+
   // --- 1. SETUP GOES HERE ---
   const canvas = document.getElementById("gl-canvas");
   const gl = canvas.getContext("webgl2");
@@ -440,12 +457,45 @@ async function BeeSwarmSimulator(saveData) {
   const renderer = new Renderer(gl, canvas.width, canvas.height);
   // document.onpaste = undefined;
 
+  window.onresize = () => {
+    width = window.thisProgramIsInFullScreen ? 500 : window.innerWidth + 1;
+    height = window.thisProgramIsInFullScreen ? 500 : window.innerHeight + 1;
+
+    glCanvas.width = width;
+    glCanvas.height = height;
+    uiCanvas.width = width;
+    uiCanvas.height = height;
+
+    gl.viewport(0, 0, width, height);
+
+    // Update the renderer's internal state
+    renderer.width = width;
+    renderer.height = height;
+
+    // Refresh projection matrix in gameState
+    gameState.player.setProjectionMatrix(
+      gameState.player.fov,
+      width / height,
+      0.1,
+      275,
+    );
+  };
+
   // --- 3. STATE INITIALIZATION ---
   const gameState = createInitialState(saveData);
 
-  // // 2. Initialize the renderer
+  // // A. Initialize the renderer
   // const renderer = new Renderer(gl, canvas.width, canvas.height);
 
+  // A. Initialize the Text system
+  const textRenderer = new TextRenderer(
+    gl,
+    renderer.glCache,
+    renderer.programs,
+  );
+
+  // B. Attach Input listeners
+  initInputHandlers(gameState, uiCanvas);
   // --- 4. ENGINE STARTUP ---
   initGameWorld(gameState);
 
@@ -473,6 +523,13 @@ async function BeeSwarmSimulator(saveData) {
     const dt = calculateDelta(now);
 
     // updateEngine(currentGameState, dt);
+
+    gl.enable(gl.BLEND);
+    gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+    gl.enable(gl.DEPTH_TEST);
+    gl.depthFunc(gl.LEQUAL);
+    gl.enable(gl.CULL_FACE);
+    gl.cullFace(gl.BACK);
 
     // Use your new modular renderer!
     renderer.render(currentGameState, dt);
@@ -28332,40 +28389,7 @@ async function BeeSwarmSimulatorOldPart(saveData) {
       }
     };
 
-    // CHQ: keys to press for certain displays
-    document.onkeydown = function (e) {
-      // 38 - up arrow
-      // 40 - down
-      // 37 - left
-      // 39 - right
-
-      out.keys[e.key.toLowerCase()] = true;
-      out.clickedKeys[e.key.toLowerCase()] = true;
-
-      if (e.keyCode == "38") {
-        player.pitch -= cameraRotationSpeed / 2;
-      } else if (e.keyCode == "40") {
-        player.pitch += cameraRotationSpeed / 2;
-      }
-      if (e.keyCode == "37") {
-        player.yaw -= cameraRotationSpeed;
-      } else if (e.keyCode == "39") {
-        player.yaw += cameraRotationSpeed;
-      }
-
-      if (e.key === "i" || e.key === "I") inventoryButton.onclick();
-      if (e.key === "q" || e.key === "Q") questButton.onclick();
-      if (e.key === "b" || e.key === "B") beesButton.onclick();
-
-      if (e.key === "o" || e.key === "O")
-        out.showTheQuests = !out.showTheQuests;
-
-      if (e.key === "n" || e.key === "N") beequipButton.onclick();
-      if (e.key === "p" || e.key === "P") settingsButton.onclick();
-
-      if (player.currentMachineTrigger && (e.key === "e" || e.key === "E"))
-        player.currentMachineTrigger.func(player);
-    };
+    // FIXME: document.onkeydown used to be here
 
     document.onkeyup = function (e) {
       out.keys[e.key.toLowerCase()] = false;
