@@ -359,22 +359,216 @@ export class Renderer {
   // CHQ: Gemini AI refactored
   render(gameState, dt) {
     const gl = this.gl;
-    const { player, objects } = gameState;
+    const { player, objects, TIME } = gameState;
 
+    // 1. Clear Screen
     gl.clearColor(...player.skyColor, 1);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-    // Set global uniforms (Night/Day)
+    // 2. Global State
+    const nightFactor = gameState.isNight ? 0.4 : 1.0;
+
+    // 3. Draw Opaque World Objects (Solid geometry first)
+
+    this.renderStaticFields(gameState, nightFactor); // CHQ: Static Geometry
+    this.renderFlowers(gameState, nightFactor); // CHQ: Static Geometry
+    this.renderBees(gameState, nightFactor); // CHQ: Instanced
+    this.renderTokens(gameState, nightFactor);
+
+    // 4. Draw Transparent/Additive Effects
+    // We disable depth writing so particles don't block the things behind them
+    gl.depthMask(false);
+
+    this.renderParticles(gameState); // CHQ: Instanced
+    this.renderExplosions(gameState); // Don't forget the explosions!
+
+    gl.depthMask(true); // Re-enable for the UI
+
+    // 5. Draw UI text (Floating numbers)
+    this.renderUI(gameState, dt);
+
+    // 6. Copy the WebGL canvas to the 2D display canvas
+    // This was line 4866 in your original index.js
+    if (this.ctx) {
+      this.ctx.drawImage(gl.canvas, 0, 0);
+    }
+  }
+
+  renderStaticFields(gameState, nightFactor) {
+    const gl = this.gl;
     gl.useProgram(this.programs.static);
-    gl.uniform1f(this.glCache.static_isNight, gameState.isNight ? 0.4 : 1.0);
 
-    // Draw Bees
-    gl.useProgram(this.programs.bee);
-    objects.bees.forEach((bee) => {
-      // ... logic from index.js for drawing bees
-    });
+    // Set uniforms
+    gl.uniformMatrix4fv(
+      this.glCache.static_viewMatrix,
+      false,
+      gameState.viewMatrix,
+    );
+    gl.uniform1f(this.glCache.static_isNight, nightFactor);
 
-    // Draw UI Text
-    // textRenderer.render(dt, Math.sin(gameState.TIME * 20));
+    // Bind field buffers and draw
+    gl.bindBuffer(gl.ARRAY_BUFFER, gameState.meshes.static.vertexBuffer);
+    // ... attribute pointers logic from index.js
+    gl.drawArrays(gl.TRIANGLES, 0, gameState.meshes.static.vertCount);
+  }
+
+  renderBees(gameState, nightFactor) {
+    const { gl, glCache, programs } = this;
+    const { objects, meshes } = gameState;
+
+    if (objects.bees.length === 0) return;
+
+    gl.useProgram(programs.bee);
+    gl.uniformMatrix4fv(glCache.bee_viewMatrix, false, gameState.viewMatrix);
+    gl.uniform1f(glCache.bee_isNight, nightFactor);
+
+    // Pack instance data [x, y, z, scale, dx, dy, dz, roll, u, v, blend]
+    let instanceData = [];
+    for (let bee of objects.bees) {
+      instanceData.push(
+        bee.pos[0],
+        bee.pos[1],
+        bee.pos[2],
+        bee.size,
+        bee.dir[0],
+        bee.dir[1],
+        bee.dir[2],
+        bee.roll,
+        bee.u,
+        bee.v,
+        bee.skinBlend,
+      );
+    }
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, meshes.bees.instanceBuffer);
+    gl.bufferData(
+      gl.ARRAY_BUFFER,
+      new Float32Array(instanceData),
+      gl.DYNAMIC_DRAW,
+    );
+
+    // Draw using the divisors you initialized in initCache
+    gl.drawElementsInstanced(
+      gl.TRIANGLES,
+      meshes.bees.indexCount,
+      gl.UNSIGNED_SHORT,
+      0,
+      objects.bees.length,
+    );
+  }
+
+  renderFlowers(gameState, nightFactor) {
+    const { gl, glCache, programs } = this;
+    const { flowers, viewMatrix } = gameState;
+
+    gl.useProgram(programs.flower);
+    gl.uniformMatrix4fv(glCache.flower_viewMatrix, false, viewMatrix);
+    gl.uniform1f(glCache.flower_isNight, nightFactor);
+
+    // If a flower was collected or grew, update the GPU buffer
+    if (gameState.flags.UPDATE_FLOWER_MESH) {
+      gl.bindBuffer(gl.ARRAY_BUFFER, flowers.mesh.vertexBuffer);
+      gl.bufferData(gl.ARRAY_BUFFER, flowers.mesh.verts, gl.DYNAMIC_DRAW);
+      gameState.flags.UPDATE_FLOWER_MESH = false;
+    }
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, flowers.mesh.vertexBuffer);
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, flowers.mesh.indexBuffer);
+
+    // Attribute pointers for flowers
+    const stride = 32; // 8 floats * 4 bytes
+    gl.vertexAttribPointer(
+      glCache.flower_vertPos,
+      3,
+      gl.FLOAT,
+      false,
+      stride,
+      0,
+    );
+    gl.vertexAttribPointer(
+      glCache.flower_vertUV,
+      4,
+      gl.FLOAT,
+      false,
+      stride,
+      12,
+    );
+    gl.vertexAttribPointer(
+      glCache.flower_vertGoo,
+      1,
+      gl.FLOAT,
+      false,
+      stride,
+      28,
+    );
+
+    gl.drawElements(
+      gl.TRIANGLES,
+      flowers.mesh.indexCount,
+      gl.UNSIGNED_SHORT,
+      0,
+    );
+  }
+
+  renderParticles(gameState) {
+    const { gl, glCache, programs } = this;
+    const { meshes, viewMatrix } = gameState;
+
+    if (meshes.particles.vertCount === 0) return;
+
+    gl.useProgram(programs.particle);
+    gl.uniformMatrix4fv(glCache.particle_viewMatrix, false, viewMatrix);
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, meshes.particles.vertexBuffer);
+
+    const stride = 36; // 9 floats * 4 bytes
+    gl.vertexAttribPointer(
+      glCache.particle_vertPos,
+      3,
+      gl.FLOAT,
+      false,
+      stride,
+      0,
+    );
+    gl.vertexAttribPointer(
+      glCache.particle_vertColor,
+      4,
+      gl.FLOAT,
+      false,
+      stride,
+      12,
+    );
+    gl.vertexAttribPointer(
+      glCache.particle_vertSize,
+      1,
+      gl.FLOAT,
+      false,
+      stride,
+      28,
+    );
+    gl.vertexAttribPointer(
+      glCache.particle_vertRot,
+      1,
+      gl.FLOAT,
+      false,
+      stride,
+      32,
+    );
+
+    gl.drawArrays(gl.POINTS, 0, meshes.particles.vertCount);
+  }
+
+  renderUI(gameState, dt) {
+    const { player, TIME } = gameState;
+
+    // Most of your UI is likely HTML-based, but floating numbers
+    // in the 3D world use the textRenderer.
+    if (this.textRenderer) {
+      // Math.sin(TIME * 20) provides the 'wiggle' effect for floating text
+      this.textRenderer.render(dt, Math.sin(TIME * 20));
+    }
+
+    // If you have a 2D canvas overlay for the joystick or HUD:
+    // this.ctx.drawImage(this.gl.canvas, 0, 0);
   }
 }
