@@ -14,7 +14,11 @@ import { TextRenderer } from "./engine/textRenderer.js";
 import { loadTextures, generateDefaultNoise } from "./engine/assetLoader.js";
 import { Bee, TempBee } from "./entities/bees.js";
 
+import { Mob, MondoChick } from "./entities/mobs.js";
+import { mobDefinitions } from "./data/mobData.js"; // Optional: keep data separate
+
 function initGameWorld(gameState) {
+  // 1. Initialize Fields (Your existing logic)
   fieldDefinitions.forEach((f) => {
     createField(
       f.name,
@@ -31,6 +35,20 @@ function initGameWorld(gameState) {
       internalAddFlowerFunction, // Pass the function that builds flower meshes
     );
   });
+
+  // 2. Initialize Mobs
+  // Instead of raw objects, we now use the Mob class
+  mobDefinitions.forEach((m) => {
+    const mobInstance =
+      m.type === "mondo"
+        ? new MondoChick(m.id, m.pos, m.hp, m.lvl, gameState)
+        : new Mob(m.id, m.type, m.pos, m.hp, m.lvl, gameState);
+
+    gameState.objects.mobs.push(mobInstance);
+  });
+
+  // 3. Initialize NPCs (Bears/Shopkeepers)
+  // This helps move trigger logic out of the main loop
 }
 
 function main() {
