@@ -39,7 +39,11 @@ export function updateEngine(gameState, dt) {
 
 function checkTriggers(gameState) {
   const { player, triggers } = gameState;
-  // Logic from source 1666 to check if player is standing in a machine zone
+
+  // CHQ: Gemini AI:  Reset the trigger so it doesn't stay active when you walk away
+  player.currentMachineTrigger = null;
+
+  // CHQ: Gemini AI: Logic to check if player is standing in a machine zone
   for (let i in triggers) {
     const t = triggers[i];
     t.colliding =
@@ -47,5 +51,9 @@ function checkTriggers(gameState) {
       player.body.position.x < t.maxX &&
       player.body.position.z > t.minZ &&
       player.body.position.z < t.maxZ;
+
+    if (t.colliding) {
+      player.currentMachineTrigger = t;
+    }
   }
 }
