@@ -12,6 +12,7 @@ import { fieldDefinitions } from "./data/fieldData.js";
 import { initInputHandlers } from "./utils/input.js";
 import { TextRenderer } from "./engine/textRenderer.js";
 import { loadTextures, generateDefaultNoise } from "./engine/assetLoader.js";
+import { Bee, TempBee } from "./entities/bees.js";
 
 function initGameWorld(gameState) {
   fieldDefinitions.forEach((f) => {
@@ -545,7 +546,8 @@ async function BeeSwarmSimulator(saveData) {
     // This updates positions, AI, and game logic
     updateEngine(currentGameState, dt);
 
-    // Use your new modular renderer!
+    // C. RUN VISUALS
+    // This draws the updated positions to the GPU
     renderer.render(currentGameState, dt);
 
     // 4. Request the next frame
@@ -553,7 +555,7 @@ async function BeeSwarmSimulator(saveData) {
     window.requestAnimationFrame(gameLoop); //
   }
 
-  requestAnimationFrame(gameLoop);
+  window.requestAnimationFrame(gameLoop);
 }
 
-console.log = 0;
+// console.log = 0;
