@@ -8,18 +8,18 @@ export function updateEngine(gameState, dt) {
   // 1. Physics Simulation [cite: 1667]
   world.step(dt);
 
-  // 2. Player State & Camera Updates [cite: 1668, 1268]
+  // 2. Player State & Camera Updates
   player.updatePhysics(dt);
   player.updateCamera(dt);
-  player.updateFields(dt); // Handles flower collection/growth [cite: 1282]
-  player.updateUI(dt); // Updates honey/pollen counters [cite: 1185]
+  player.updateFields(dt); // Handles flower collection/growth
+  player.updateUI(dt); // Updates honey/pollen counters
 
-  // 3. Entity AI: Bees [cite: 1694]
+  // 3. Entity AI: Bees
   for (let bee of objects.bees) {
     bee.update(dt, gameState);
   }
 
-  // 4. Entity AI: Mobs [cite: 1705]
+  // 4. Entity AI: Mobs
   for (let i = objects.mobs.length - 1; i >= 0; i--) {
     if (objects.mobs[i].update(dt, gameState)) {
       objects.mobs[i].die(i);
@@ -33,7 +33,7 @@ export function updateEngine(gameState, dt) {
     }
   }
 
-  // 6. Proximity & Trigger Logic [cite: 1665, 1666]
+  // 6. Proximity & Trigger Logic
   checkTriggers(gameState);
 }
 
