@@ -4,6 +4,7 @@ import { upgrades } from "./data/upgrades.js";
 // import { blenderRecipes, windShrineDonations } from "./recipes";
 import { createInitialState } from "./state/gameState.js";
 import { Renderer } from "./engine/renderer.js";
+import { updateEngine } from "./engine/updateEngine.js";
 
 import { createField } from "./engine/world.js";
 import { fieldDefinitions } from "./data/fieldData.js";
@@ -525,23 +526,24 @@ async function BeeSwarmSimulator(saveData) {
   // (Assuming you've moved the state logic to a helper or gameState.js)
   const currentGameState = initializeState(saveData);
 
+  let then = 0;
   // 5. Start the Game Loop
   function gameLoop(now) {
-    const dt = calculateDelta(now);
+    // A. Delta Time calculation
+    // const dt = calculateDelta(now);
+    const dt = Math.min((now - then) * 0.001, 0.07); //
+    then = now; //
 
-    // updateEngine(currentGameState, dt);
-
-    gl.enable(gl.BLEND);
-    gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
-    gl.enable(gl.DEPTH_TEST);
-    gl.depthFunc(gl.LEQUAL);
-    gl.enable(gl.CULL_FACE);
-    gl.cullFace(gl.BACK);
+    // B. RUN SIMULATION (Logic Phase)
+    // This updates positions, AI, and game logic
+    updateEngine(currentGameState, dt);
 
     // Use your new modular renderer!
     renderer.render(currentGameState, dt);
 
-    requestAnimationFrame(gameLoop);
+    // 4. Request the next frame
+    // requestAnimationFrame(gameLoop);
+    window.requestAnimationFrame(gameLoop); //
   }
 
   requestAnimationFrame(gameLoop);
