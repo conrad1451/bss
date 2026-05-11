@@ -434,17 +434,6 @@ async function BeeSwarmSimulator(saveData) {
   let width = window.thisProgramIsInFullScreen ? 500 : window.innerWidth + 1;
   let height = window.thisProgramIsInFullScreen ? 500 : window.innerHeight + 1;
 
-  const glCanvas = document.getElementById("gl-canvas");
-  const uiCanvas = document.getElementById("ui-canvas");
-  const ctx = uiCanvas.getContext("2d"); // Needed for Renderer.renderUI
-
-  glCanvas.width = width;
-  glCanvas.height = height;
-  uiCanvas.width = width;
-  uiCanvas.height = height;
-
-  gl.viewport(0, 0, width, height);
-
   // --- 1. SETUP GOES HERE ---
   const canvas = document.getElementById("gl-canvas");
   const gl = canvas.getContext("webgl2");
@@ -453,6 +442,24 @@ async function BeeSwarmSimulator(saveData) {
     alert("WebGL 2.0 not supported by your browser.");
     return;
   }
+  gl.viewport(0, 0, width, height);
+
+  // WebGL State Settings (SET ONCE)
+  gl.enable(gl.BLEND);
+  gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+  gl.enable(gl.DEPTH_TEST);
+  gl.depthFunc(gl.LEQUAL);
+  gl.enable(gl.CULL_FACE);
+  gl.cullFace(gl.BACK);
+
+  const glCanvas = document.getElementById("gl-canvas");
+  const uiCanvas = document.getElementById("ui-canvas");
+  const ctx = uiCanvas.getContext("2d"); // Needed for Renderer.renderUI
+
+  glCanvas.width = width;
+  glCanvas.height = height;
+  uiCanvas.width = width;
+  uiCanvas.height = height;
 
   // --- 2. RENDERER INITIALIZATION ---
   // Now that you have 'gl', you can pass it into the Renderer
