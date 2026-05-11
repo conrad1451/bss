@@ -1,29 +1,38 @@
 // index.js
-import { beeInfo } from "./data/bees.js";
-import { effects } from "./data/effects.js";
-import { upgrades } from "./data/upgrades.js";
-// import { blenderRecipes, windShrineDonations } from "./recipes";
-import { createInitialState } from "./state/gameState.js";
+import { initMainMenu } from "./ui/menu.js";
 import { Renderer } from "./engine/renderer.js";
 import { updateEngine } from "./engine/updateEngine.js";
-
-import { createField } from "./engine/world.js";
-import { fieldDefinitions } from "./data/fieldData.js";
-
+import { createInitialState } from "./state/gameState.js";
 import { initInputHandlers } from "./utils/input.js";
 import { TextRenderer } from "./engine/textRenderer.js";
-import { loadTextures, generateDefaultNoise } from "./engine/assetLoader.js";
-import { Bee, TempBee } from "./entities/bees.js";
+import { loadTextures } from "./engine/assetLoader.js";
 
-import { Mob, MondoChick } from "./entities/mobs.js";
-import { mobDefinitions } from "./data/mobData.js"; // Optional: keep data separate
+import { NPC } from "./entities/npcs.js";
+// // index.js
+// import { effects } from "./data/effects.js";
+// import { upgrades } from "./data/upgrades.js";
+// // import { blenderRecipes, windShrineDonations } from "./recipes";
+// import { createInitialState } from "./state/gameState.js";
+// import { Renderer } from "./engine/renderer.js";
+// import { updateEngine } from "./engine/updateEngine.js";
 
-import {
-  createDatabase,
-  loadFromDB,
-  saveToDB,
-  deleteFromDB,
-} from "./utils/db.js";
+// import { createField } from "./engine/world.js";
+// import { fieldDefinitions } from "./data/fieldData.js";
+
+// import { initInputHandlers } from "./utils/input.js";
+// import { TextRenderer } from "./engine/textRenderer.js";
+// import { loadTextures, generateDefaultNoise } from "./engine/assetLoader.js";
+// import { Bee, TempBee } from "./entities/bees.js";
+
+// import { Mob, MondoChick } from "./entities/mobs.js";
+// import { mobDefinitions } from "./data/mobData.js"; // Optional: keep data separate
+
+// import {
+//   createDatabase,
+//   loadFromDB,
+//   saveToDB,
+//   deleteFromDB,
+// } from "./utils/db.js";
 
 function initGameWorld(gameState) {
   // 1. Initialize Fields (Your existing logic)
@@ -56,300 +65,40 @@ function initGameWorld(gameState) {
   });
 
   // 3. Initialize NPCs (Bears/Shopkeepers)
-  // This helps move trigger logic out of the main loop
-}
-
-function main() {
-  const fetchGame = async (apiURL) => {
-    // setLoading(true); // Set loading to true on every fetch attempt
-    // setError(null); // Clear any previous errors
-
-    // if (!apiURL) {
-    //   setError("API URL is not defined in environment variables.");
-    //   setLoading(false);
-    //   console.error("VITE_API_URL is not set.");
-    //   return;
-    // }
-
-    try {
-      const response = await fetch(apiURL);
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      const data = await response.json();
-      setStudents(data);
-    } catch (e) {
-      setError(e.message);
-      console.error("Failed to fetch students:", e);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // window.createDatabase = createDatabase;
-  window.loadFromDB = loadFromDB;
-  window.saveToDB = saveToDB;
-  window.deleteFromDB = deleteFromDB;
-
-  function copyThumbnail(t) {
-    let canv = document.getElementById(t + "_thumbnailCanvCopy");
-
-    let ctx = canv.getContext("2d");
-
-    canv.width = window.innerWidth;
-    canv.height = window.innerHeight;
-
-    ctx.drawImage(document.getElementById("thumbnailCanv"), 0, 0);
-  }
-
-  document.getElementById("mainNew").onclick = function () {
-    for (let i in addedDivsToSplice) {
-      document.getElementById("savedGames").removeChild(addedDivsToSplice[i]);
-    }
-
-    let w = window.open();
-    w.document.open();
-    w.document.write(
-      "<!doctype html><html>" + document.querySelector("html").innerHTML,
-    );
-    w.document.close();
-  };
-
-  let addedDivsToSplice = [],
-    ableToImport,
-    printedCode;
-
-  document.getElementById("mainPlay").onclick = function () {
-    copyThumbnail("select");
-
-    document.getElementById("mainMenu").style.display = "none";
-    document.getElementById("mainSelectMenu").style.display = "block";
-
-    document.getElementById("createNewGame").onclick = function () {
-      document.getElementById("mainSelectMenu").style.display = "none";
-      document.getElementById("mainMenu").style.display = "none";
-
-      BeeSwarmSimulator({ id: Date.now(), name: "Untitled Save" });
-    };
-
-    document.getElementById("createImportedGame").onclick = function () {
-      alert(
-        "\nTo import a game, you'll need a string containing the saved data of the game. Copy the string, and then use CTRL+V in this program to start the game.\n\nAn invalid code will create an error message. There is a chance errors in the save code are not detected and pass through. This may corrupt the game, resulting in crashes.",
-      );
-    };
-
-    document.onpaste = (e) => {
-      if (!ableToImport) return;
-
-      ableToImport = false;
-
-      let text = e.clipboardData.getData("text/plain");
-
-      document.getElementById("mainSelectMenu").style.display = "none";
-      document.getElementById("mainMenu").style.display = "none";
-
-      BeeSwarmSimulator({
-        id: Date.now(),
-        saveCode: text,
-        name: "Untitled Import",
-      });
-    };
-
-    for (let i in addedDivsToSplice) {
-      document.getElementById("savedGames").removeChild(addedDivsToSplice[i]);
-    }
-
-    let div = document.createElement("div");
-
-    ableToImport = true;
-    addedDivsToSplice = [div];
-
-    div.innerHTML =
-      "<p style='text-align:center;color:rgb(60,60,60)'>You have no saves. Start a new game or import one.<br><br>Data is saved to this computer and only this computer's browser. To transfer data across multiple devices, use the save code feature.<br><br>Data may not be saved after abruptly closing the game. Data will not be saved while in incognito/private browser modes.</p>";
-
-    document.getElementById("savedGames").appendChild(div);
-
-    loadFromDB()
-      .then((res) => {
-        window.initSave = function (index) {
-          document.getElementById("mainSelectMenu").style.display = "none";
-          document.getElementById("mainInfoMenu").style.display = "none";
-          document.getElementById("mainMenu").style.display = "none";
-          BeeSwarmSimulator({
-            id: res[index].id,
-            name: res[index].data.name,
-            saveCode: res[index].data.saveCode,
-          });
-        };
-
-        window.deleteSave = function (index) {
-          if (
-            confirm(
-              '\nDo you really want to delete save "' +
-                res[index].data.name +
-                '"?',
-            )
-          ) {
-            deleteSaveConfirmation = false;
-            deleteFromDB(res[index].id);
-            document.getElementById("mainPlay").onclick();
-          }
-        };
-
-        window.renameSave = function (index) {
-          deleteFromDB(res[index].id);
-
-          saveToDB(res[index].id, {
-            lastSaved: Date.now(),
-            saveCode: res[index].data.saveCode,
-            name: document.getElementById("saveName" + index).value,
-          });
-
-          document.getElementById("mainPlay").onclick();
-        };
-
-        window.getSave = function (index) {
-          navigator.clipboard
-            .writeText(res[index].data.saveCode)
-            .then(() => {
-              alert(
-                '\nThe save code for save "' +
-                  res[index].data.name +
-                  '" has been copied to your clipboard.',
-              );
-            })
-            .catch((e) => {
-              if (printedCode) {
-                document.getElementById("savedGames").removeChild(printedCode);
-              }
-
-              let div = document.createElement("div");
-
-              printedCode = div;
-
-              div.innerHTML =
-                "<div style='font-size:10px;font-family:trebuchet ms;word-break:break-all;padding-left:10px;padding-right:10px;user-select:text'><br><br>" +
-                res[index].data.saveCode +
-                "<br><br><br><br><br></div>";
-
-              document.getElementById("savedGames").appendChild(div);
-              addedDivsToSplice.push(div);
-
-              alert(
-                '\nThere was an error copying the save code for save "' +
-                  res[index].data.name +
-                  '" to your clipboard. The code has been printed at the bottom of the page instead.',
-              );
-            });
-        };
-
-        res.sort((a, b) => b.data.lastSaved - a.data.lastSaved);
-
-        if (res.length) {
-          for (let i in addedDivsToSplice) {
-            document
-              .getElementById("savedGames")
-              .removeChild(addedDivsToSplice[i]);
-          }
-
-          addedDivsToSplice = [];
-        }
-
-        for (let i in res) {
-          let div = document.createElement("div");
-
-          div.style.marginLeft = ((window.innerWidth * 0.5 - 250) | 0) + "px";
-          div.style.width = "500px";
-          div.style.height = "70px";
-          div.style.borderRadius = "5px";
-          div.style.border = "4px solid rgb(180,160,0)";
-          div.style.backgroundColor = "rgb(250,230,50)";
-          div.style.marginBottom = "15px";
-
-          addedDivsToSplice.push(div);
-
-          let date = new Date(res[i].data.lastSaved),
-            dgh = date.getHours();
-
-          let lastSavedDate = `${(date.getMonth() + 1)
-            .toString()
-            .padStart(2, "0")}/${date
-            .getDate()
-            .toString()
-            .padStart(2, "0")}/${date.getFullYear()}&nbsp;&nbsp;${(dgh >= 12
-            ? dgh - 12
-            : dgh
-          )
-            .toString()
-            .padStart(2, "0")
-            .replace("00", "12")}:${date
-            .getMinutes()
-            .toString()
-            .padStart(2, "0")}:${date
-            .getSeconds()
-            .toString()
-            .padStart(2, "0")} ${dgh >= 12 ? "PM" : "AM"}`;
-
-          div.innerHTML =
-            "<input id='saveName" +
-            i +
-            "' style='margin-top:3px;margin-left:3px;font-size:22px;background-color:rgb(0,0,0,0);border:none;font-family:comic sans ms;padding-left:4px;padding-bottom:5px;background-color:rgb(0,0,0,0.1)' spellcheck='false' size='17' value='" +
-            res[i].data.name +
-            "' onchange='window.renameSave(" +
-            i +
-            ")'><div style='margin-top:7px;margin-left:5px;font-size:14px;color:rgb(60,60,60)'>Last Saved: " +
-            lastSavedDate +
-            "</div><div style='margin-left:460px;margin-top:-25px;width:52px;height:27px;transform:translate(-50%,-50%);background-color:rgb(210,50,50);border-radius:4px;border:2px solid black;text-align:center;font-size:16px;cursor:pointer' onclick='window.deleteSave(" +
-            i +
-            ")'>Delete</div><div style='margin-left:395px;margin-top:-31px;width:52px;height:27px;transform:translate(-50%,-50%);background-color:rgb(195,100,255);border-radius:4px;border:2px solid black;text-align:center;font-size:16px;cursor:pointer' onclick='window.getSave(" +
-            i +
-            ")'>Export</div><div style='margin-left:330px;margin-top:-31px;width:52px;height:27px;transform:translate(-50%,-50%);background-color:rgb(50,210,50);border-radius:4px;border:2px solid black;text-align:center;font-size:16px;cursor:pointer' onclick='window.initSave(" +
-            i +
-            ")'>Play</div>";
-
-          document.getElementById("savedGames").appendChild(div);
-        }
-      })
-      .catch((e) => {
-        let div = document.createElement("div");
-
-        addedDivsToSplice.push(div);
-
-        div.innerHTML =
-          "<p style='text-align:center;color:rgb(150,0,0)'>Error loading from IndexedDB. IndexedDB may not be supported.</p>";
-
-        document.getElementById("savedGames").appendChild(div);
-      });
-  };
-
-  document.getElementById("mainInfo").onclick = function () {
-    copyThumbnail("info");
-
-    document.getElementById("mainMenu").style.display = "none";
-    document.getElementById("mainInfoMenu").style.display = "block";
-  };
-
-  document.getElementById("info_mainBack").onclick = document.getElementById(
-    "select_mainBack",
-  ).onclick = function () {
-    document.getElementById("mainInfoMenu").style.display = "none";
-    document.getElementById("mainSelectMenu").style.display = "none";
-    document.getElementById("mainMenu").style.display = "block";
-  };
-
-  window.drawThumbnail(document.getElementById("thumbnailCanv"));
+  const blackBear = new NPC(
+    "Black Bear",
+    [50, 0, -20],
+    "quest-giver",
+    gameState,
+  );
+  gameState.objects.npcs.push(blackBear);
 }
 
 var _M = Math;
 
-// function BeeSwarmSimulator(DATA) {
+// --- 1. ENTRY POINT ---
+function main() {
+  initMainMenu(BeeSwarmSimulator);
+}
+
+// --- 2. THE ENGINE ---
 async function BeeSwarmSimulator(saveData) {
-  let width = window.thisProgramIsInFullScreen ? 500 : window.innerWidth + 1;
-  let height = window.thisProgramIsInFullScreen ? 500 : window.innerHeight + 1;
+  // let width = window.thisProgramIsInFullScreen ? 500 : window.innerWidth + 1;
+  // let height = window.thisProgramIsInFullScreen ? 500 : window.innerHeight + 1;
 
   // --- 1. SETUP GOES HERE ---
   const canvas = document.getElementById("gl-canvas");
+  const uiCanvas = document.getElementById("ui-canvas");
   const gl = canvas.getContext("webgl2");
+
+  // State & Systems Initialization
+  const gameState = createInitialState(saveData);
+  const renderer = new Renderer(gl, canvas.width, canvas.height);
+  const textRenderer = new TextRenderer(
+    gl,
+    renderer.glCache,
+    renderer.programs,
+  );
 
   if (!gl) {
     alert("WebGL 2.0 not supported by your browser.");
@@ -365,12 +114,10 @@ async function BeeSwarmSimulator(saveData) {
   gl.enable(gl.CULL_FACE);
   gl.cullFace(gl.BACK);
 
-  const glCanvas = document.getElementById("gl-canvas");
-  const uiCanvas = document.getElementById("ui-canvas");
   const ctx = uiCanvas.getContext("2d"); // Needed for Renderer.renderUI
 
-  glCanvas.width = width;
-  glCanvas.height = height;
+  canvas.width = width;
+  canvas.height = height;
   uiCanvas.width = width;
   uiCanvas.height = height;
 
@@ -385,29 +132,29 @@ async function BeeSwarmSimulator(saveData) {
   // Pass these textures to your renderer or store in gameState
   renderer.textures = textures;
 
-  window.onresize = () => {
-    width = window.thisProgramIsInFullScreen ? 500 : window.innerWidth + 1;
-    height = window.thisProgramIsInFullScreen ? 500 : window.innerHeight + 1;
+  // window.onresize = () => {
+  //   width = window.thisProgramIsInFullScreen ? 500 : window.innerWidth + 1;
+  //   height = window.thisProgramIsInFullScreen ? 500 : window.innerHeight + 1;
 
-    glCanvas.width = width;
-    glCanvas.height = height;
-    uiCanvas.width = width;
-    uiCanvas.height = height;
+  //   canvas.width = width;
+  //   canvas.height = height;
+  //   uiCanvas.width = width;
+  //   uiCanvas.height = height;
 
-    gl.viewport(0, 0, width, height);
+  //   gl.viewport(0, 0, width, height);
 
-    // Update the renderer's internal state
-    renderer.width = width;
-    renderer.height = height;
+  //   // Update the renderer's internal state
+  //   renderer.width = width;
+  //   renderer.height = height;
 
-    // Refresh projection matrix in gameState
-    gameState.player.setProjectionMatrix(
-      gameState.player.fov,
-      width / height,
-      0.1,
-      275,
-    );
-  };
+  //   // Refresh projection matrix in gameState
+  //   gameState.player.setProjectionMatrix(
+  //     gameState.player.fov,
+  //     width / height,
+  //     0.1,
+  //     275,
+  //   );
+  // };
 
   // --- 3. STATE INITIALIZATION ---
   const gameState = createInitialState(saveData);

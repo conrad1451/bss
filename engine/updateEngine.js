@@ -33,7 +33,13 @@ export function updateEngine(gameState, dt) {
     }
   }
 
-  // 6. Proximity & Trigger Logic
+  // 6. NPC Logic
+  // We don't usually "die" or splice NPCs, so a simple for...of is fine
+  for (let npc of objects.npcs) {
+    npc.update(dt, gameState);
+  }
+
+  // 7. Proximity & Trigger Logic
   checkTriggers(gameState);
 }
 
@@ -52,6 +58,7 @@ function checkTriggers(gameState) {
       player.body.position.z > t.minZ &&
       player.body.position.z < t.maxZ;
 
+    // CHQ: Gemini AI added
     if (t.colliding) {
       player.currentMachineTrigger = t;
     }
