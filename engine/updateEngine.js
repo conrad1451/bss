@@ -64,3 +64,27 @@ function checkTriggers(gameState) {
     }
   }
 }
+
+function checkTokenCollection(gameState) {
+  const { player, objects } = gameState;
+
+  for (let i = objects.tokens.length - 1; i >= 0; i--) {
+    const t = objects.tokens[i];
+    const dist = Math.sqrt(
+      Math.pow(player.body.position.x - t.pos[0], 2) +
+        Math.pow(player.body.position.z - t.pos[2], 2),
+    );
+
+    if (dist < 5) {
+      // Collection radius
+      applyLoot(t, gameState);
+      objects.tokens.splice(i, 1);
+    }
+  }
+}
+
+function applyLoot(token, gameState) {
+  if (token.type === "honey") gameState.honey += token.amount;
+  if (token.type === "ticket") gameState.tickets += token.amount;
+  // ... etc
+}
