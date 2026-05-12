@@ -36,7 +36,7 @@ export function generateDefaultNoise(tex_ctx) {
 }
 
 
-export function loadTextures(gl, tex_ctx) {
+export function loadTexture(gl, tex_ctx) {
     const out = {};
     
     // 1. Clear the scratchpad canvas
@@ -83,6 +83,17 @@ export function loadTextures(gl, tex_ctx) {
     out.bear = createGLTexture(gl, tex_ctx, 1024); //[cite: 883]
 
     return out;
+}
+
+export function loadTextures(gl) {
+  return {
+    honey: loadTexture(gl, "./assets/tokens/honey.png"),
+    ticket: loadTexture(gl, "./assets/tokens/ticket.png"),
+    strawberry: loadTexture(gl, "./assets/tokens/strawberry.png"),
+    blueberry: loadTexture(gl, "./assets/tokens/blueberry.png"),
+    treat: loadTexture(gl, "./assets/tokens/treat.png"),
+    neonberry: loadTexture(gl, "./assets/tokens/neonberry.png"),
+  };
 }
 
 // Internal helper for repetitive WebGL texture boiler-plate

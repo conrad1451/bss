@@ -1,7 +1,137 @@
 // engine/renderer.js
 import { TextRenderer } from "./textRenderer.js";
+import { questDefinitions } from "../data/quests.js";
 
 // CHQ: Claude AI generated this file
+
+export class DupedToken {
+  constructor(life, pos, type, funcParams) {
+    if (
+      Math.random() < 0.1 + player.extraInfo.drives.glitched * 0.001 ||
+      type === "glitch" ||
+      type === "mapCorruption"
+    ) {
+      type = "smiley";
+    }
+
+    this.funcParams = funcParams;
+    this.life = life * player.tokenLifespan * 1.5;
+    this.pos = pos;
+    this.type = type;
+    this.rotation = Math.random() * MATH.TWO_PI;
+    this.func = effects[type].svg ? false : effects[type].func;
+    this.canBeLinked =
+      effects[type].canBeLinked === undefined || effects[type].canBeLinked;
+
+    this.activationTimer = 0;
+    this.pos[1] += 3.5;
+  }
+
+  die(index) {
+    objects.tokens.splice(index, 1);
+  }
+
+  collect() {
+    if (!this.collected) {
+      this.collected = true;
+      this.life = 0.75;
+      player.stats.abilityTokens++;
+
+      if (effects[this.type].statsToAddTo) {
+        for (let i in effects[this.type].statsToAddTo) {
+          player.stats[effects[this.type].statsToAddTo[i]]++;
+        }
+      }
+
+      if (this.func) {
+        this.func(this.funcParams);
+      } else {
+        player.addEffect(this.type);
+      }
+    }
+  }
+
+  update() {
+    this.life -= dt;
+
+    if (this.collected) {
+      textRenderer.addDecalRaw(
+        this.pos[0],
+        this.pos[1],
+        this.pos[2],
+        0,
+        0,
+        ...textRenderer.decalUV.smiley,
+        1,
+        0,
+        0.85,
+        -3,
+        -3,
+        0,
+      );
+    } else {
+      textRenderer.addDecalRaw(
+        this.pos[0],
+        this.pos[1],
+        this.pos[2],
+        0,
+        0,
+        ...textRenderer.decalUV.circle,
+        0.1,
+        0.1,
+        0.1,
+        3,
+        3,
+        0,
+      );
+
+      textRenderer.addDecalRaw(
+        this.pos[0],
+        this.pos[1],
+        this.pos[2],
+        0,
+        0,
+        ...textRenderer.decalUV.arc,
+        1,
+        1,
+        1,
+        -3,
+        -3,
+        MATH.dupedTokenLoadingArcRotation(this.activationTimer),
+      );
+
+      this.rotation += dt * 2.6;
+
+      meshes.tokens.instanceData.push(
+        this.pos[0],
+        this.pos[1],
+        this.pos[2],
+        this.rotation,
+        effects[this.type].u,
+        effects[this.type].v,
+        this.life * 0.15,
+        1.5,
+      );
+
+      if (
+        Math.abs(this.pos[0] - player.body.position.x) +
+          Math.abs(this.pos[1] - 3.5 - player.body.position.y) +
+          Math.abs(this.pos[2] - player.body.position.z) <
+        3.5
+      ) {
+        this.activationTimer += dt;
+      } else {
+        this.activationTimer = Math.max(this.activationTimer - dt, 0);
+      }
+
+      if (this.activationTimer >= 1) {
+        this.collect();
+      }
+    }
+
+    return this.life <= 0;
+  }
+}
 
 let initGlCache = function (glCache) {
   return glCache;
@@ -362,15 +492,89 @@ export class Renderer {
     );
   }
 
-  // CHQ: Gemini AI refactored
-  render(gameState, dt) {
-    const gl = this.gl;
-    const { player, objects, TIME } = gameState;
+  // Inside engine/renderer.js or tokens.js
 
-    // 1. Clear Screen
-    gl.clearColor(...player.skyColor, 1);
-    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+  // CHQ: Gemini AI renamed drawQuad to drawTokens
+  drawTokens(gameState) {
+    const { gl, glCache, programs } = this;
+    const { objects, meshes, viewMatrix } = gameState;
 
+    const nightFactor = gameState.isNight ? 0.4 : 1.0;
+
+    // 1. Uniforms
+    gl.uniformMatrix4fv(glCache.token_viewMatrix, false, viewMatrix);
+    gl.uniform1f(glCache.token_isNight, nightFactor);
+
+    // 2. Pack instance data [x, y, z, rotation, u, v, scale, ?]
+    // CHQ: Gemini AI changed instanceData to a TypedArray for faster GPU processing
+    const instanceData = new Float32Array(tokens.length * 8);
+    for (let i = 0; i < tokens.length; i++) {
+      const token = tokens[i];
+      const baseIndex = i * 8;
+
+      const lifeScale = token instanceof DupedToken ? 0.15 : 0.3;
+
+      instanceData[baseIndex + 0] = token.pos[0];
+      instanceData[baseIndex + 1] = token.pos[1];
+      instanceData[baseIndex + 2] = token.pos[2];
+      instanceData[baseIndex + 3] = token.rotation;
+      instanceData[baseIndex + 4] = token.u;
+      instanceData[baseIndex + 5] = token.v;
+      instanceData[baseIndex + 6] = token.life * lifeScale;
+      instanceData[baseIndex + 7] = 1.0; // Uniform scale multiplier
+    }
+
+    // 2. Upload to the token instance buffer
+    gl.bindBuffer(gl.ARRAY_BUFFER, meshes.token.instanceBuffer);
+    gl.bufferData(
+      gl.ARRAY_BUFFER,
+      new Float32Array(instanceData),
+      gl.DYNAMIC_DRAW,
+    );
+
+    // 3. Set attribute pointers (8 floats per instance = 32 bytes)
+    const stride = 32;
+
+    // instance_pos
+    gl.vertexAttribPointer(
+      glCache.token_instancePos,
+      4,
+      gl.FLOAT,
+      false,
+      stride,
+      0,
+    );
+    gl.vertexAttribDivisor(glCache.token_instancePos, 1);
+
+    // instance_uv
+    gl.vertexAttribPointer(
+      glCache.token_instanceUV,
+      4,
+      gl.FLOAT,
+      false,
+      stride,
+      16,
+    );
+    gl.vertexAttribDivisor(glCache.token_instanceUV, 1);
+
+    // 4. Draw the token mesh for all active instances
+    gl.bindBuffer(gl.ARRAY_BUFFER, gameState.meshes.token.vertBuffer);
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, gameState.meshes.token.indexBuffer);
+    gl.drawElementsInstanced(
+      gl.TRIANGLES,
+      gameState.meshes.token.indexAmount,
+      gl.UNSIGNED_SHORT,
+      0,
+      objects.tokens.length,
+    );
+
+    // 5. Cleanup
+    gl.vertexAttribDivisor(glCache.token_instancePos, 0);
+    gl.vertexAttribDivisor(glCache.token_instanceUV, 0);
+  }
+
+  // CHQ: encapsulated logic for drawing world into its own method
+  renderWorld(gameState, gl, dt) {
     // 2. Global State
     const nightFactor = gameState.isNight ? 0.4 : 1.0;
 
@@ -386,15 +590,6 @@ export class Renderer {
     this.renderParticles(gameState); // CHQ: Instanced
     this.renderExplosions(gameState); // Don't forget the explosions!
     gl.depthMask(true); // Re-enable for the UI
-
-    // // 5. Draw UI text (Floating numbers)
-    // this.renderUI(gameState, dt);
-
-    // // 6. Copy the WebGL canvas to the 2D display canvas
-    // // This was line 4866 in your original index.js
-    // if (this.ctx) {
-    //   this.ctx.drawImage(gl.canvas, 0, 0);
-    // }
 
     // 5. Draw 3D Floating UI Text (Last thing in WebGL)
     // Using the wiggle effect from your original logic [cite: 1440-1443]
@@ -419,6 +614,40 @@ export class Renderer {
     // 7. Draw 2D Overlay Text (If any)
     if (this.textRenderer) {
       this.textRenderer.draw(); // Draws context-based labels
+    }
+  }
+
+  // CHQ: Gemini AI refactored
+  render(gameState, dt) {
+    const gl = this.gl;
+    const { player, objects, TIME } = gameState;
+
+    // 1. Clear Screen
+    gl.clearColor(...player.skyColor, 1);
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+    // 2. DRAW 3D WORLD (Fields, Bees, Mobs, NPCs)
+    this.renderWorld(gameState, gl, dt);
+
+    // CHQ: Gemini AI created condtiional for drawing Quest log UI overlay
+    // 3. DRAW UI OVERLAY (The Quest Log)
+    if (gameState.showTheQuests) {
+      // We use the textRenderer we initialized in index.js
+      gameState.activeQuests.forEach((quest, index) => {
+        const data = questDefinitions[quest.id];
+
+        // Offset the Y position so quests don't overlap
+        const yOffset = index * 60;
+
+        textRenderer.draw(data.title, 20, 40 + yOffset, {
+          size: 20,
+          color: [1, 1, 1],
+        });
+        textRenderer.draw(data.description, 20, 65 + yOffset, {
+          size: 14,
+          color: [0.8, 0.8, 0.8],
+        });
+      });
     }
   }
 
@@ -592,87 +821,45 @@ export class Renderer {
 
     if (objects.tokens.length === 0) return;
 
-    gl.useProgram(programs.token);
-    gl.uniformMatrix4fv(glCache.token_viewMatrix, false, viewMatrix);
-    gl.uniform1f(glCache.token_isNight, nightFactor);
+    const program = programs.token;
+    gl.useProgram(program);
 
-    // 1. Pack instance data [x, y, z, rotation, u, v, scale, ?]
-    let instanceData = [];
-    for (let token of objects.tokens) {
-      instanceData.push(
-        token.pos[0],
-        token.pos[1],
-        token.pos[2],
-        token.rotation, // Current rotation angle
-        token.u, // Texture U coordinate
-        token.v, // Texture V coordinate
-        token.life * (token instanceof DupedToken ? 0.15 : 0.3), // Life-based scale [cite: 1479, 1488]
-        1.0, // Uniform scale multiplier
-      );
-    }
+    tokens.forEach((token) => {
+      // 1. Select the texture based on type
+      // These keys should match what you loaded in assetLoader.js
+      const texture = this.textures[token.type] || this.textures["honey"];
 
-    // 2. Upload to the token instance buffer
-    gl.bindBuffer(gl.ARRAY_BUFFER, meshes.tokens.instanceBuffer);
-    gl.bufferData(
-      gl.ARRAY_BUFFER,
-      new Float32Array(instanceData),
-      gl.DYNAMIC_DRAW,
-    );
+      this.gl.activeTexture(this.gl.TEXTURE0);
+      this.gl.bindTexture(this.gl.TEXTURE_2D, texture);
 
-    // 3. Set attribute pointers (8 floats per instance = 32 bytes)
-    const stride = 32;
+      // 2. Set uniforms for position and scale
+      // CHQ: Gemini AI adds slight bobbing and rotation motion to tokens
+      const bob = Math.sin(Date.now() * 0.005) * 0.2;
+      const renderPos = [token.pos[0], token.pos[1] + bob, token.pos[2]];
+      this.gl.uniform3fv(this.glCache.token.uPosition, renderPos);
 
-    // instance_pos
-    gl.vertexAttribPointer(
-      glCache.token_instancePos,
-      4,
-      gl.FLOAT,
-      false,
-      stride,
-      0,
-    );
-    gl.vertexAttribDivisor(glCache.token_instancePos, 1);
+      // Optional: Make boss loot slightly larger
+      const scale = token.type === "ticket" ? 1.5 : 1.0;
+      this.gl.uniform1f(this.glCache.token.uScale, scale);
 
-    // instance_uv
-    gl.vertexAttribPointer(
-      glCache.token_instanceUV,
-      4,
-      gl.FLOAT,
-      false,
-      stride,
-      16,
-    );
-    gl.vertexAttribDivisor(glCache.token_instanceUV, 1);
-
-    // 4. Draw the token mesh for all active instances
-    gl.bindBuffer(gl.ARRAY_BUFFER, gameState.meshes.token.vertBuffer);
-    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, gameState.meshes.token.indexBuffer);
-    gl.drawElementsInstanced(
-      gl.TRIANGLES,
-      gameState.meshes.token.indexAmount,
-      gl.UNSIGNED_SHORT,
-      0,
-      objects.tokens.length,
-    );
-
-    // 5. Cleanup
-    gl.vertexAttribDivisor(glCache.token_instancePos, 0);
-    gl.vertexAttribDivisor(glCache.token_instanceUV, 0);
+      // 3. Draw the quad
+      this.drawTokens(gameState);
+    });
   }
 
   renderExplosions() {}
 
-  renderUI(gameState, dt) {
-    const { player, TIME } = gameState;
+  // renderUI(gameState, dt) {
+  //   const { player, TIME } = gameState;
 
-    // Most of your UI is likely HTML-based, but floating numbers
-    // in the 3D world use the textRenderer.
-    if (this.textRenderer) {
-      // Math.sin(TIME * 20) provides the 'wiggle' effect for floating text
-      this.textRenderer.render(dt, Math.sin(TIME * 20));
-    }
+  //   // Most of your UI is likely HTML-based, but floating numbers
+  //   // in the 3D world use the textRenderer.
+  //   if (this.textRenderer) {
+  //     // Math.sin(TIME * 20) provides the 'wiggle' effect for floating text
+  //     this.textRenderer.render(dt, Math.sin(TIME * 20));
+  //   }
 
-    // If you have a 2D canvas overlay for the joystick or HUD:
-    // this.ctx.drawImage(this.gl.canvas, 0, 0);
-  }
+  //   // If you have a 2D canvas overlay for the joystick or HUD:
+  //   // this.ctx.drawImage(this.gl.canvas, 0, 0);
+  // }
 }
