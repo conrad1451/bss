@@ -103,7 +103,7 @@ export class DupedToken {
       this.rotation += dt * 2.6;
 
       // meshes.tokens.instanceData.push(
-      meshes.token.instanceData.push(
+      meshes.tokens.instanceData.push(
         this.pos[0],
         this.pos[1],
         this.pos[2],
@@ -526,7 +526,7 @@ export class Renderer {
     }
 
     // 2. Upload to the token instance buffer
-    gl.bindBuffer(gl.ARRAY_BUFFER, meshes.token.instanceBuffer);
+    gl.bindBuffer(gl.ARRAY_BUFFER, meshes.tokens.instanceBuffer);
     gl.bufferData(
       gl.ARRAY_BUFFER,
       new Float32Array(instanceData),
@@ -559,11 +559,11 @@ export class Renderer {
     gl.vertexAttribDivisor(glCache.token_instanceUV, 1);
 
     // 4. Draw the token mesh for all active instances
-    gl.bindBuffer(gl.ARRAY_BUFFER, gameState.meshes.token.vertBuffer);
-    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, gameState.meshes.token.indexBuffer);
+    gl.bindBuffer(gl.ARRAY_BUFFER, gameState.meshes.tokens.vertBuffer);
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, gameState.meshes.tokens.indexBuffer);
     gl.drawElementsInstanced(
       gl.TRIANGLES,
-      gameState.meshes.token.indexAmount,
+      gameState.meshes.tokens.indexAmount,
       gl.UNSIGNED_SHORT,
       0,
       objects.tokens.length,
