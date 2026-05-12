@@ -3,7 +3,8 @@ import { MATH } from "../utils/math.js";
 
 export function createInitialState(saveData = {}) {
   // Use saveData values if they exist, otherwise fall back to defaults
-  const data = saveData.data || {};
+  // const data = saveData.data || {};
+  const data = (saveData && saveData.data) || {};
 
   return {
     globalId: 0,
@@ -20,6 +21,7 @@ export function createInitialState(saveData = {}) {
     // flags: {
     //   UPDATE_FLOWER_MESH: false,
     // },
+
     player: {
       // Identity from IndexedDB
       id: saveData.id,
@@ -70,10 +72,34 @@ export function createInitialState(saveData = {}) {
       fuzzBombs: [],
       planters: [],
     },
+    showTheQuests: false, // Default to hidden
+
     meshes: {
-      static: { vertexBuffer: null, vertCount: 0 },
+      static: { vertexBuffer: null, vertCount: 0 }, // Terrain, buildings
       bees: { instanceBuffer: null, indexCount: 0 },
-      // ... other mesh containers
+
+      // Dynamic Instanced Meshes
+      flowers: { instanceBuffer: null, vertCount: 0 }, // Essential for fields
+      tokens: { instanceBuffer: null, indexCount: 0 }, // Abilities/Honey dropped
+      mobs: { instanceBuffer: null, indexCount: 0 }, // Ladybugs, Rhinos, etc.
+
+      // VFX / Transparent Pass
+      particles: { vertexBuffer: null, vertCount: 0 }, // Flames, bubbles, explosions
+      marks: { instanceBuffer: null, indexCount: 0 }, // Boost circles on the floor
+
+      // UI / Overlay (if rendering via WebGL)
+      text: { vertexBuffer: null, vertCount: 0 }, // Floating numbers/Quest text
+    },
+    activeQuests: [], // Quests currently in progress
+    completedQuests: [], // IDs of finished quests to prevent repeats
+    stats: {
+      whitePollenCollected: 0,
+      treatsFed: 0,
+      // These are used to check quest progress
+    },
+    user: {
+      keys: {},
+      clickedKeys: {},
     },
   };
 }

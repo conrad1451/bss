@@ -1,7 +1,7 @@
 // engine/renderer.js
 import { TextRenderer } from "./textRenderer.js";
 import { questDefinitions } from "../data/quests.js";
-
+import { MATH } from "../utils/math.js";
 // CHQ: Claude AI generated this file
 
 export class DupedToken {
@@ -51,7 +51,7 @@ export class DupedToken {
     }
   }
 
-  update() {
+  update(dt) {
     this.life -= dt;
 
     if (this.collected) {
@@ -847,7 +847,47 @@ export class Renderer {
     });
   }
 
-  renderExplosions() {}
+  renderExplosions(gameState) {
+    const { gl, glCache, programs } = this;
+    const { objects, meshes } = gameState;
+
+    if (objects.explosions.length === 0) return;
+
+    gl.useProgram(programs.explosion);
+    gl.uniformMatrix4fv(
+      glCache.explosion_viewMatrix,
+      false,
+      gameState.viewMatrix,
+    );
+
+    let instanceData = new Float32Array(objects.explosions.length * 7);
+    objects.explosions.forEach((exp, i) => {
+      const offset = i * 7;
+      instanceData.set(
+        [
+          exp.pos[0],
+          exp.pos[1],
+          exp.pos[2], // pos
+          exp.color[0],
+          exp.color[1],
+          exp.color[2], // color
+          exp.scale, // scale
+        ],
+        offset,
+      );
+    });
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, meshes.explosion.instanceBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, instanceData, gl.DYNAMIC_DRAW);
+
+    gl.drawElementsInstanced(
+      gl.TRIANGLES,
+      meshes.explosion.indexCount,
+      gl.UNSIGNED_SHORT,
+      0,
+      objects.explosions.length,
+    );
+  }
 
   // renderUI(gameState, dt) {
   //   const { player, TIME } = gameState;
