@@ -1,13 +1,14 @@
 // index.js
-import { initMainMenu } from "./ui/menu.js";
+import { createInitialState, getSaveSnapshot } from "./state/gameState.js";
 import { Renderer } from "./engine/renderer.js";
+import { initMainMenu } from "./ui/menu.js";
 import { updateEngine } from "./engine/updateEngine.js";
-import { createInitialState } from "./state/gameState.js";
 import { initInputHandlers } from "./utils/input.js";
 import { TextRenderer } from "./engine/textRenderer.js";
 import { loadTextures } from "./engine/assetLoader.js";
-
 import { NPC } from "./entities/npcs.js";
+import { saveCheckpoint } from "./utils/db.js";
+
 // // index.js
 // import { effects } from "./data/effects.js";
 // import { upgrades } from "./data/upgrades.js";
@@ -83,15 +84,34 @@ function main() {
 
 // --- 2. THE ENGINE ---
 async function BeeSwarmSimulator(saveData) {
+  // --- A. DOM & CONTEXT SETUP ---
+
   // let width = window.thisProgramIsInFullScreen ? 500 : window.innerWidth + 1;
   // let height = window.thisProgramIsInFullScreen ? 500 : window.innerHeight + 1;
 
   // --- 1. SETUP GOES HERE ---
   const canvas = document.getElementById("gl-canvas");
   const uiCanvas = document.getElementById("ui-canvas");
-  const gl = canvas.getContext("webgl2");
+  const saveButton = document.getElementById("save-btn");
 
-  // State & Systems Initialization
+  const gl = canvas.getContext("webgl2");
+  const ctx = uiCanvas.getContext("2d");
+
+  if (!gl) {
+    alert("WebGL 2.0 not supported by your browser.");
+    return;
+  }
+
+  // Define width/height based on window or fixed size
+  const width = window.innerWidth;
+  const height = window.innerHeight;
+
+  canvas.width = width;
+  canvas.height = height;
+  uiCanvas.width = width;
+  uiCanvas.height = height;
+
+  // --- B. STATE & SYSTEMS ---
   const gameState = createInitialState(saveData);
   const renderer = new Renderer(gl, canvas.width, canvas.height);
   const textRenderer = new TextRenderer(
@@ -100,13 +120,25 @@ async function BeeSwarmSimulator(saveData) {
     renderer.programs,
   );
 
-  if (!gl) {
-    alert("WebGL 2.0 not supported by your browser.");
-    return;
-  }
-  gl.viewport(0, 0, width, height);
+  // ASSET LOADING
+  // Load textures and pass to renderer
+  const textures = loadTextures(gl);
+  renderer.textures = textures;
 
-  // WebGL State Settings (SET ONCE)
+  //  SHADERS
+  renderer.programs.static = renderer.createProgram("staticVSH", "staticFSH");
+  renderer.programs.bee = renderer.createProgram("beeVSH", "beeFSH");
+  renderer.programs.flower = renderer.createProgram("flowerVSH", "flowerFSH");
+  renderer.programs.token = renderer.createProgram("tokenVSH", "tokenFSH");
+  renderer.programs.particle = renderer.createProgram(
+    "particleVSH",
+    "particleFSH",
+  );
+  renderer.programs.text = renderer.createProgram("textVSH", "textFSH");
+  renderer.initCache(renderer.programs);
+
+  // --- C. GL STATE SETTINGS ---
+  gl.viewport(0, 0, width, height);
   gl.enable(gl.BLEND);
   gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
   gl.enable(gl.DEPTH_TEST);
@@ -114,23 +146,29 @@ async function BeeSwarmSimulator(saveData) {
   gl.enable(gl.CULL_FACE);
   gl.cullFace(gl.BACK);
 
-  const ctx = uiCanvas.getContext("2d"); // Needed for Renderer.renderUI
+  // --- D. WORLD & INPUT ---
+  initInputHandlers(gameState, uiCanvas); // Attach Input listeners
+  initGameWorld(gameState); // Populates NPCs, Mobs, Fields //ENGINE STARTUP --
 
-  canvas.width = width;
-  canvas.height = height;
-  uiCanvas.width = width;
-  uiCanvas.height = height;
+  // --- E. CHECKPOINT LOGIC ---
+  async function handleSave() {
+    console.log("Checkpoint triggered...");
+    const snapshot = getSaveSnapshot(gameState);
+    try {
+      await saveCheckpoint(snapshot);
+      // Assuming you have a showSaveToast function elsewhere
+      if (typeof showSaveToast === "function") showSaveToast("Game Saved!");
+      console.log("Game Saved Successfully!");
+    } catch (err) {
+      console.error("Save failed:", err);
+    }
+  }
 
-  // --- 2. RENDERER INITIALIZATION ---
-  // Now that you have 'gl', you can pass it into the Renderer
-  const renderer = new Renderer(gl, canvas.width, canvas.height);
-  // document.onpaste = undefined;
+  if (saveButton) {
+    saveButton.addEventListener("click", handleSave);
+  }
 
-  // Run the modular asset loader
-  const textures = loadTextures(gl, tex_ctx); // [cite: 878]
-
-  // Pass these textures to your renderer or store in gameState
-  renderer.textures = textures;
+  // const ctx = uiCanvas.getContext("2d"); // Needed for Renderer.renderUI
 
   // window.onresize = () => {
   //   width = window.thisProgramIsInFullScreen ? 500 : window.innerWidth + 1;
@@ -156,39 +194,7 @@ async function BeeSwarmSimulator(saveData) {
   //   );
   // };
 
-  // --- 3. STATE INITIALIZATION ---
-  const gameState = createInitialState(saveData);
-
-  // // A. Initialize the renderer
-  // const renderer = new Renderer(gl, canvas.width, canvas.height);
-
-  // A. Initialize the Text system
-  const textRenderer = new TextRenderer(
-    gl,
-    renderer.glCache,
-    renderer.programs,
-  );
-
-  // B. Attach Input listeners
-  initInputHandlers(gameState, uiCanvas);
-  // --- 4. ENGINE STARTUP ---
-  initGameWorld(gameState);
-
-  // 3. Compile Shaders and Initialize Cache
-  // We use the keys defined in your engine/shaders.js
-  renderer.programs.static = renderer.createProgram("staticVSH", "staticFSH");
-  renderer.programs.bee = renderer.createProgram("beeVSH", "beeFSH");
-  renderer.programs.flower = renderer.createProgram("flowerVSH", "flowerFSH");
-  renderer.programs.token = renderer.createProgram("tokenVSH", "tokenFSH");
-  renderer.programs.particle = renderer.createProgram(
-    "particleVSH",
-    "particleFSH",
-  );
-  renderer.programs.text = renderer.createProgram("textVSH", "textFSH");
-
-  // Map all the attribute/uniform locations
-  renderer.initCache(renderer.programs);
-
+  // --- 7. GAME LOOP ---
   let then = 0;
   // 5. Start the Game Loop
   function gameLoop(now) {
@@ -197,20 +203,14 @@ async function BeeSwarmSimulator(saveData) {
     const dt = Math.min((now - then) * 0.001, 0.07); //
     then = now; //
 
-    // B. RUN SIMULATION (Logic Phase)
-    // This updates positions, AI, and game logic
-    updateEngine(gameState, dt);
+    updateEngine(gameState, dt); // updates positions, AI, and game logic
+    renderer.render(gameState, dt); // draws updated positions to the GPU
 
-    // C. RUN VISUALS
-    // This draws the updated positions to the GPU
-    renderer.render(gameState, dt);
-
-    // 4. Request the next frame
-    // requestAnimationFrame(gameLoop);
-    window.requestAnimationFrame(gameLoop); //
+    window.requestAnimationFrame(gameLoop); // Request the next frame
   }
 
   window.requestAnimationFrame(gameLoop);
 }
 
+main();
 // console.log = 0;

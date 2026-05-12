@@ -1,6 +1,32 @@
 // state/gameState.js
 import { MATH } from "../utils/math.js";
 
+// CHQ: Gemini AI created function
+// Function to strip the "heavy" stuff (buffers, classes) for storage
+export function getSaveSnapshot(gameState) {
+  return {
+    id: gameState.player.id || "player_1",
+    // timestamp: Date.now(),
+    lastSaved: Date.now(),
+    data: {
+      name: gameState.player.name,
+      honey: gameState.player.honey,
+      pollen: gameState.player.pollen,
+      capacity: gameState.player.capacity,
+      pos: gameState.player.pos, // Save position so they reload where they stood
+      inventory: { ...gameState.player.inventory },
+      stats: { ...gameState.player.stats },
+      currentGear: { ...gameState.player.currentGear },
+      completedQuests: [...gameState.completedQuests],
+      // We save activeQuest IDs and their current progress values
+      activeQuests: gameState.activeQuests.map((q) => ({
+        id: q.id,
+        progress: q.progress,
+      })),
+    },
+  };
+}
+
 export function createInitialState(saveData = {}) {
   // Use saveData values if they exist, otherwise fall back to defaults
   // const data = saveData.data || {};
@@ -47,10 +73,16 @@ export function createInitialState(saveData = {}) {
         playTime: 0,
       },
 
-      currentGear: d.currentGear || {
+      currentGear: data.currentGear || {
         collector: "Pouch",
         boots: "none",
         hat: "none",
+      },
+      extraInfo: {
+        beequipIds: 0,
+        enablePollenText: true,
+        drives: { red: 0, blue: 0, white: 0, glitched: 0 },
+        freeRoboPass: 0,
       },
 
       effects: [],

@@ -102,7 +102,8 @@ export class DupedToken {
 
       this.rotation += dt * 2.6;
 
-      meshes.tokens.instanceData.push(
+      // meshes.tokens.instanceData.push(
+      meshes.token.instanceData.push(
         this.pos[0],
         this.pos[1],
         this.pos[2],
