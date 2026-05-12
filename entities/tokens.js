@@ -3,12 +3,22 @@
 // CHQ: Gemini AI generated file
 
 export class Token {
-  constructor(type, amount, pos) {
+  constructor(type, amount, pos, isBossDrop = false) {
     this.type = type; // 'honey', 'ticket', 'treat', 'strawberry'
     this.amount = amount;
     this.pos = [...pos];
-    this.velocity = [Math.random() - 0.5, 2, Math.random() - 0.5]; // Initial jump
-    this.lifeSpan = 15.0; // Seconds before it despawns
+
+    // CHQ: Gemini AI increased explosion radius for boss drops
+    // If it's a boss drop, give it a wider horizontal "explosion"
+    const spread = isBossDrop ? 5 : 1;
+    this.velocity = [
+      (Math.random() - 0.5) * spread,
+      Math.random() * 4 + 2, // Upward bounce
+      (Math.random() - 0.5) * spread,
+    ];
+
+    // CHQ: Gemini AI increased lifespan of loot from boss drops
+    this.lifeSpan = isBossDrop ? 30.0 : 15.0; // Boss loot lasts longer
   }
 
   update(dt) {
