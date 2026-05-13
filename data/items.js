@@ -1,5 +1,6 @@
 // data/items.js
 import { MATH } from "../utils/math.js";
+import { beeInfo } from "./data/bees.js";
 
 export const items = {
   //   translator: {
