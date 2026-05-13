@@ -125,7 +125,10 @@ export function createInitialState(saveData = {}) {
     activeQuests: [], // Quests currently in progress
     completedQuests: [], // IDs of finished quests to prevent repeats
     stats: {
-      whitePollenCollected: 0,
+      whitePollen: 0,
+      bluePollen: 0,
+      redPollen: 0,
+      totalPollen: 0, // New aggregate stat
       treatsFed: 0,
       // These are used to check quest progress
     },

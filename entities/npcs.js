@@ -65,8 +65,8 @@ export class NPC {
       );
 
       // Reward the player (optional logic)
-      if (definition.reward) {
-        gameState.honey += definition.reward.honey || 0;
+      if (definition.rewards) {
+        gameState.honey += definition.rewards.honey || 0;
       }
     } else {
       gameState.ui.dialogue = `You still need more resources for ${definition.name}. Keep going!`;
