@@ -163,9 +163,11 @@ async function BeeSwarmSimulator(saveData) {
       console.error("Save failed:", err);
     }
   }
-
   if (saveButton) {
-    saveButton.addEventListener("click", handleSave);
+    saveButton.addEventListener("click", () => {
+      // Use the new function name here
+      saveCheckpoint(gameState);
+    });
   }
 
   // const ctx = uiCanvas.getContext("2d"); // Needed for Renderer.renderUI
@@ -212,5 +214,9 @@ async function BeeSwarmSimulator(saveData) {
   window.requestAnimationFrame(gameLoop);
 }
 
-main();
+// At the bottom of index.js
+window.addEventListener("load", () => {
+  main();
+});
+// main();
 // console.log = 0;
