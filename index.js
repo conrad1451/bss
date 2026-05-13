@@ -7,7 +7,7 @@ import { initInputHandlers } from "./utils/input.js";
 import { TextRenderer } from "./engine/textRenderer.js";
 import { loadTextures } from "./engine/assetLoader.js";
 import { NPC } from "./entities/npcs.js";
-import { saveCheckpoint } from "./utils/db.js";
+import { saveCheckpoint, loadCheckpoint } from "./utils/db.js";
 
 // // index.js
 // import { effects } from "./data/effects.js";
