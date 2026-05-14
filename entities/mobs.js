@@ -105,3 +105,23 @@ export class MondoChick extends Mob {
     return table;
   }
 }
+
+// CHQ: Gemini AI created function
+export function handleMobDeath(mob, gameState) {
+  // 1. Identify the mob type (e.g., "werewolf", "ladybug", "scorpion")
+  const mobType = mob.type.toLowerCase();
+
+  // 2. Increment the specific stat for quest tracking
+  if (gameState.player.stats[mobType] !== undefined) {
+    gameState.player.stats[mobType] += 1;
+  } else {
+    // If the key doesn't exist yet, initialize it
+    gameState.player.stats[mobType] = 1;
+  }
+
+  // 3. Logic from dialogue.js: Handle rewards or specific messages
+  console.log(`Defeated ${mob.type}! Stat updated for quests.`);
+
+  // Existing death logic (e.g., play animation, remove from world, drop loot)
+  mob.isDead = true;
+}

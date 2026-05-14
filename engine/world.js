@@ -188,9 +188,12 @@ export function collectPollen(params, gameState) {
   player.stats.redPollen += accum.r + otherAccum.r;
   player.stats.bluePollen += accum.b + otherAccum.b;
   player.stats.whitePollen += accum.w + otherAccum.w;
+
+  player.stats.totalPollen += totalCollected; // CHQ: Gemini AI added
+
   player.stats.goo += totalGoo;
   player.stats["pollenFrom" + f.name] += totalCollected;
-  player.stats.pollen += totalCollected;
+  player.stats.pollen += totalCollected; // CHQ: may be redundant, may remove later
 
   return Math.round(totalCollected);
 }
