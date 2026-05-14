@@ -13,6 +13,8 @@ export function getSaveSnapshot(gameState) {
       honey: gameState.player.honey,
       pollen: gameState.player.pollen,
       capacity: gameState.player.capacity,
+      criticalChance: gameState.player.criticalChance,
+      criticalPower: gameState.player.criticalPower,
       pos: gameState.player.pos, // Save position so they reload where they stood
       inventory: { ...gameState.player.inventory },
       stats: { ...gameState.player.stats },
@@ -53,24 +55,47 @@ export function createInitialState(saveData = {}) {
       id: saveData.id,
       name: data.name || "New Explorer",
 
-      // Loaded Progress
+      // Resources
       honey: data.honey || 0,
       pollen: data.pollen || 0,
       capacity: data.capacity || 100,
+
+      // Combat/Collection Scaling
+      criticalChance: data.criticalChance || 0.1,
+      criticalPower: data.criticalPower || 2,
+      superCritChance: data.superCritChance || 0, // Used in world.js Section 2
+      superCritPower: data.superCritPower || 3, // Used in world.js Section 3
       health: 100,
 
+      // Transform/Multipliers (Needed for world.js and bees.js)
+      redPollen: data.redPollen || 1,
+      bluePollen: data.bluePollen || 1,
+      whitePollen: data.whitePollen || 1,
+      pollenFromBees: data.pollenFromBees || 1,
+      tabbyLoveStacks: data.tabbyLoveStacks || 1,
+
+      // Movement
       pos: data.pos || [0, 5, 0],
       velocity: [0, 0, 0],
+      fieldIn: null,
+
+      // IMPORTANT: Stats Alignment
+      stats: data.stats || {
+        whitePollen: 1, // 0, // Matched to questDefinitions
+        bluePollen: 1, // 0, // Matched to questDefinitions
+        redPollen: 1, // 0, // Matched to questDefinitions
+        totalPollen: 1, // 0, // Added for overall progress tracking
+        treatsFed: 1, // 0, // For Mother Bear style quests
+        goo: 1, // 0, // Used in world.js Section 8
+        honeyTokens: 0,
+        // pollenCollected: 0,
+        playTime: 0,
+      },
 
       inventory: {
         translators: data.translators || 0,
         spiritPetals: data.spiritPetals || 0,
         cogs: 0, // Cogs usually reset per session
-      },
-      stats: data.stats || {
-        honeyTokens: 0,
-        pollenCollected: 0,
-        playTime: 0,
       },
 
       currentGear: data.currentGear || {
@@ -86,7 +111,6 @@ export function createInitialState(saveData = {}) {
       },
 
       effects: [],
-      fieldIn: null,
       flowerIn: { x: 0, z: 0 },
     },
     objects: {
@@ -130,6 +154,9 @@ export function createInitialState(saveData = {}) {
       redPollen: 0,
       totalPollen: 0, // New aggregate stat
       treatsFed: 0,
+      pollenFromBees: 0,
+      tabbyLoveStacks: 0,
+      instantRedConversion: 0,
       // These are used to check quest progress
     },
     user: {
