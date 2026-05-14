@@ -1,32 +1,32 @@
 // index.js
 import { createInitialState, getSaveSnapshot } from "./state/gameState.js";
+
 import { Renderer } from "./engine/renderer.js";
-import { initMainMenu } from "./ui/menu.js";
-import { updateEngine } from "./engine/updateEngine.js";
-import { initInputHandlers } from "./utils/input.js";
 import { TextRenderer } from "./engine/textRenderer.js";
+import { updateEngine } from "./engine/updateEngine.js";
 import { loadTextures } from "./engine/assetLoader.js";
-import { NPC } from "./entities/npcs.js";
+import { addFlower } from "./engine/flowerBuilder.js";
+import { createField } from "./engine/world.js";
+import { Player } from "./entities/Player.js";
+
+import { initMainMenu } from "./ui/menu.js";
+import { updateQuestUI } from "./ui/questRenderer.js";
+
+import { initInputHandlers } from "./utils/input.js";
 import { saveCheckpoint, loadCheckpoint } from "./utils/db.js";
+
+import { mobDefinitions } from "./data/mobData.js"; // Optional: keep data separate
+
+import { NPC } from "./entities/npcs.js";
+import { Mob, MondoChick } from "./entities/mobs.js";
 
 // // index.js
 // import { effects } from "./data/effects.js";
 // import { upgrades } from "./data/upgrades.js";
 // // import { blenderRecipes, windShrineDonations } from "./recipes";
-// import { createInitialState } from "./state/gameState.js";
-// import { Renderer } from "./engine/renderer.js";
-// import { updateEngine } from "./engine/updateEngine.js";
-
-// import { createField } from "./engine/world.js";
 // import { fieldDefinitions } from "./data/fieldData.js";
-
-// import { initInputHandlers } from "./utils/input.js";
-// import { TextRenderer } from "./engine/textRenderer.js";
 // import { loadTextures, generateDefaultNoise } from "./engine/assetLoader.js";
 // import { Bee, TempBee } from "./entities/bees.js";
-
-// import { Mob, MondoChick } from "./entities/mobs.js";
-// import { mobDefinitions } from "./data/mobData.js"; // Optional: keep data separate
 
 // import {
 //   createDatabase,
@@ -50,7 +50,9 @@ function initGameWorld(gameState) {
       f.composition,
       f.nectar,
       gameState,
-      internalAddFlowerFunction, // Pass the function that builds flower meshes
+      addFlower,
+      // addFlower(renderer), // Pass the function that builds flower meshes
+      // renderer.addFlower.bind(renderer), // Pass the function that builds flower meshes
     );
   });
 
@@ -69,10 +71,12 @@ function initGameWorld(gameState) {
   const blackBear = new NPC(
     "Black Bear",
     [50, 0, -20],
-    "quest-giver",
+    "Black Bear",
     gameState,
   );
-  gameState.objects.npcs.push(blackBear);
+  const brownBear = new NPC("Brown Bear", [10, 0, 50], "Brown Bear", gameState);
+
+  gameState.objects.npcs.push(blackBear, brownBear);
 }
 
 var _M = Math;
@@ -112,7 +116,13 @@ async function BeeSwarmSimulator(saveData) {
   uiCanvas.height = height;
 
   // --- B. STATE & SYSTEMS ---
-  const gameState = createInitialState(saveData);
+  const rawState = createInitialState(saveData);
+
+  //  "Upgrade" the player object with methods
+  rawState.player = new Player(rawState.player);
+
+  const gameState = rawState;
+
   const renderer = new Renderer(gl, canvas.width, canvas.height);
   const textRenderer = new TextRenderer(
     gl,
@@ -165,10 +175,30 @@ async function BeeSwarmSimulator(saveData) {
   }
   if (saveButton) {
     saveButton.addEventListener("click", () => {
-      // Use the new function name here
-      saveCheckpoint(gameState);
+      const snapshot = getSaveSnapshot(gameState);
+      saveCheckpoint(snapshot);
     });
   }
+
+  // Inside index.js UI logic
+  document.getElementById("questButton").addEventListener("click", () => {
+    const page = document.getElementById("questPage");
+    const isHidden = page.style.display === "none" || page.style.display === "";
+
+    // Hide all other pages first (standard BSS UI behavior)
+    document
+      .querySelectorAll(".uiPage")
+      .forEach((p) => (p.style.display = "none"));
+
+    page.style.display = isHidden ? "block" : "none";
+
+    if (isHidden) {
+      page.style.display = "block";
+      updateQuestUI(gameState); // Pulls current stats into progress bars
+    } else {
+      page.style.display = "none";
+    }
+  });
 
   // const ctx = uiCanvas.getContext("2d"); // Needed for Renderer.renderUI
 
