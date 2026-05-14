@@ -1,7 +1,7 @@
 // entities/bees.js
 import { MATH } from "../utils/math.js";
 import { vec3, vec2 } from "../utils/gl-matrix.js";
-
+import { beeInfo } from "./data/bees.js";
 export class Bee {
   constructor(pos, type, lvl, gifted, x, y, mutation, gameState) {
     this.meshScale = type === "baby" || type === "tadpole" ? 0.65 : 1; // [cite: 141, 1441]
@@ -1442,7 +1442,7 @@ export class Bee {
                   0.5,
                 yOffset: 2 + Math.random() * 0.4,
                 stackHeight: 0.5 + Math.random() * 0.5,
-                instantConversion: (player.flameHeatStack - 1) * 0.5,
+                instantConversion: (player.flameHeatStack - 1) * 0.5, // CHQ: let's bee generate honey directly into the player's inventory while still contributing the full raw amount to the quest stats
                 multiplier: player.flameHeatStack * 3,
                 field: _t.field,
               });
