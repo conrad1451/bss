@@ -26,8 +26,20 @@ export function getSaveSnapshot(gameState) {
         progress: q.progress,
       })),
     },
+    player: { ...gameState.player },
+    npcProgress: {
+      "Brown Bear": gameState.npcs["Brown Bear"].portionsDone,
+      "Polar Bear": gameState.npcs["Polar Bear"].portionsDone,
+      "Honey Bee": gameState.npcs["Honey Bee"].portionsDone,
+    },
+    activeQuests: [...gameState.activeQuests],
+    completedQuests: [...gameState.completedQuests],
   };
 }
+
+export function updateInventory() {}
+
+export function addMessage() {}
 
 export function createInitialState(saveData = {}) {
   // Use saveData values if they exist, otherwise fall back to defaults
@@ -81,15 +93,17 @@ export function createInitialState(saveData = {}) {
 
       // IMPORTANT: Stats Alignment
       stats: data.stats || {
-        whitePollen: 1, // 0, // Matched to questDefinitions
-        bluePollen: 1, // 0, // Matched to questDefinitions
-        redPollen: 1, // 0, // Matched to questDefinitions
-        totalPollen: 1, // 0, // Added for overall progress tracking
-        treatsFed: 1, // 0, // For Mother Bear style quests
-        goo: 1, // 0, // Used in world.js Section 8
+        whitePollen: 0, // Matched to questDefinitions
+        bluePollen: 0, // Matched to questDefinitions
+        redPollen: 0, // Matched to questDefinitions
+        totalPollen: 0, // Added for overall progress tracking
+        treatsFed: 0, // For Mother Bear style quests
+        goo: 0, // Used in world.js Section 8
         honeyTokens: 0,
         // pollenCollected: 0,
         playTime: 0,
+        polarPowerStacks: 0,
+        werewolf: 0,
       },
 
       inventory: {
@@ -130,6 +144,12 @@ export function createInitialState(saveData = {}) {
     },
     showTheQuests: false, // Default to hidden
 
+    npcs: {
+      "Brown Bear": { portionsDone: 0 },
+      "Polar Bear": { portionsDone: 0 },
+      "Honey Bee": { portionsDone: 0 },
+    },
+    savedNPCs: 0,
     meshes: {
       static: { vertexBuffer: null, vertCount: 0 }, // Terrain, buildings
       bees: { instanceBuffer: null, indexCount: 0 },
