@@ -504,7 +504,7 @@ export class Bee {
       case "moveToPlanter":
         if (
           !player.fieldIn ||
-          player.pollen >= player.capacity ||
+          player.pollenInBag >= player.capacity ||
           !fieldInfo[player.fieldIn].planter
         ) {
           this.state = "moveToPlayer";
@@ -558,7 +558,7 @@ export class Bee {
       case "collectPlanter":
         if (
           !player.fieldIn ||
-          player.pollen >= player.capacity ||
+          player.pollenInBag >= player.capacity ||
           !fieldInfo[player.fieldIn].planter
         ) {
           this.state = "moveToPlayer";
@@ -635,7 +635,7 @@ export class Bee {
         break;
 
       case "moveToFlower":
-        if (!player.fieldIn || player.pollen >= player.capacity) {
+        if (!player.fieldIn || player.pollenInBag >= player.capacity) {
           this.state = "moveToPlayer";
           break;
         }
@@ -706,7 +706,7 @@ export class Bee {
         break;
 
       case "collectPollen":
-        if (!player.fieldIn || player.pollen >= player.capacity) {
+        if (!player.fieldIn || player.pollenInBag >= player.capacity) {
           this.state = "moveToPlayer";
           return;
         }

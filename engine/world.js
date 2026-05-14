@@ -9,7 +9,7 @@ import { gameState } from "../state/gameState.js";
 import { FIELD_CONFIGS } from "../data/fieldData.js";
 // export function collectPollen(params) {
 //   // Use gameState.player and gameState.fieldInfo directly
-//   if (gameState.player.pollen >= gameState.player.capacity) return 0;
+//   if (gameState.player.pollenInBag >= gameState.player.capacity) return 0;
 //   // ... rest of logic
 // }
 
@@ -25,7 +25,7 @@ export function collectPollen(params, gameState) {
   if (
     !fieldName ||
     !fieldInfo[fieldName] ||
-    player.pollen >= player.capacity ||
+    player.pollenInBag >= player.capacity ||
     params.pattern.length < 1
   ) {
     return 0;
@@ -176,7 +176,7 @@ export function collectPollen(params, gameState) {
       accum.w * (1 - instantConversion.w),
   );
 
-  player.pollen = Math.min(player.pollen + bagGain, player.capacity);
+  player.pollenInBag = Math.min(player.pollenInBag + bagGain, player.capacity);
   // 7. Trigger UI Text (if enabled)
   if (player.extraInfo.enablePollenText) {
     // Call your refactored TextRenderer module here...
@@ -192,8 +192,9 @@ export function collectPollen(params, gameState) {
   player.stats.totalPollen += totalCollected; // CHQ: Gemini AI added
 
   player.stats.goo += totalGoo;
-  player.stats["pollenFrom" + f.name] += totalCollected;
-  player.stats.pollen += totalCollected; // CHQ: may be redundant, may remove later
+  player.stats["pollenFrom" + f.name] =
+    (player.stats["pollenFrom" + f.name] || 0) + totalCollected;
+  player.stats.pollenInBag += totalCollected; // CHQ: may be redundant, may remove later
 
   return Math.round(totalCollected);
 }

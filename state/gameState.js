@@ -11,7 +11,7 @@ export function getSaveSnapshot(gameState) {
     data: {
       name: gameState.player.name,
       honey: gameState.player.honey,
-      pollen: gameState.player.pollen,
+      pollenInBag: gameState.player.pollenInBag,
       capacity: gameState.player.capacity,
       criticalChance: gameState.player.criticalChance,
       criticalPower: gameState.player.criticalPower,
@@ -69,7 +69,7 @@ export function createInitialState(saveData = {}) {
 
       // Resources
       honey: data.honey || 0,
-      pollen: data.pollen || 0,
+      pollenInBag: data.pollenInBag || 0,
       capacity: data.capacity || 100,
 
       // Combat/Collection Scaling
