@@ -194,8 +194,10 @@ export function collectPollen(params, gameState) {
   player.stats.goo += totalGoo;
   player.stats["pollenFrom" + f.name] =
     (player.stats["pollenFrom" + f.name] || 0) + totalCollected;
-  player.stats.pollenInBag += totalCollected; // CHQ: may be redundant, may remove later
-
+  player.pollenInBag = Math.min(
+    player.capacity,
+    (player.pollenInBag || 0) + totalCollected,
+  );
   return Math.round(totalCollected);
 }
 export function createField(name, config, gameState, meshData) {
