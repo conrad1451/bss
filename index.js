@@ -5,7 +5,7 @@ import { Renderer } from "./engine/renderer.js";
 import { TextRenderer } from "./engine/textRenderer.js";
 import { updateEngine } from "./engine/updateEngine.js";
 import { loadTextures } from "./engine/assetLoader.js";
-import { addFlower } from "./engine/flowerBuilder.js";
+// import { addFlower } from "./engine/flowerBuilder.js";
 import { createField } from "./engine/world.js";
 import { useItem } from "./engine/inventory.js";
 import { SHADERS } from "./engine/shaders.js";
@@ -17,6 +17,8 @@ import { initInputHandlers } from "./utils/input.js";
 import { saveCheckpoint, loadCheckpoint } from "./utils/db.js";
 
 import { mobDefinitions } from "./data/mobData.js"; // Optional: keep data separate
+// import { fieldDefinitions } from "./data/fieldData.js";
+import { FIELD_CONFIGS } from "./data/fieldData.js";
 
 import { Player } from "./entities/Player.js";
 import { NPC } from "./entities/npcs.js";
@@ -26,7 +28,6 @@ import { Mob, MondoChick } from "./entities/mobs.js";
 // import { effects } from "./data/effects.js";
 // import { upgrades } from "./data/upgrades.js";
 // // import { blenderRecipes, windShrineDonations } from "./recipes";
-// import { fieldDefinitions } from "./data/fieldData.js";
 // import { loadTextures, generateDefaultNoise } from "./engine/assetLoader.js";
 // import { Bee, TempBee } from "./entities/bees.js";
 
@@ -39,25 +40,36 @@ import { Mob, MondoChick } from "./entities/mobs.js";
 
 function initGameWorld(gameState) {
   // 1. Initialize Fields (Your existing logic)
-  fieldDefinitions.forEach((f) => {
-    createField(
-      f.name,
-      f.x,
-      f.y,
-      f.z,
-      f.w,
-      f.l,
-      f.colorLogic,
-      f.levelLogic,
-      f.composition,
-      f.nectar,
-      gameState,
-      addFlower,
-      // addFlower(renderer), // Pass the function that builds flower meshes
-      // renderer.addFlower.bind(renderer), // Pass the function that builds flower meshes
-    );
-  });
+  // FIELD_CONFIGS
+  //   fieldDefinitions.forEach((f) => {
 
+  // FIELD_CONFIGS.forEach((f) => {
+  //   createField(
+  //     f.name,
+  //     f.x,
+  //     f.y,
+  //     f.z,
+  //     f.w,
+  //     f.l,
+  //     // f.colorLogic,
+  //     // f.levelLogic,
+  //     f.composition,
+  //     f.nectar,
+  //     gameState,
+  //     // addFlower,
+  //     // addFlower(renderer), // Pass the function that builds flower meshes
+  //     // renderer.addFlower.bind(renderer), // Pass the function that builds flower meshes
+  //   );
+  // });
+
+  // FIELD_CONFIGS.forEach((f) => {
+  //   createField(
+  //     f.name, // Parameter 1: Field identifier string
+  //     f, // Parameter 2: Pass the entire config object wrapper directly!
+  //     gameState, // Parameter 3: Pass your main active global game state container
+  //     gameState.meshes.flowers, // Parameter 4: Pass your instanced flower mesh reference channel
+  //   );
+  // });
   // 2. Initialize Mobs
   // Instead of raw objects, we now use the Mob class
   mobDefinitions.forEach((m) => {
@@ -70,6 +82,10 @@ function initGameWorld(gameState) {
   });
 
   // 3. Initialize NPCs (Bears/Shopkeepers)
+  // CRITICAL CLEANUP: You named your array gameState.objects.npcs below,
+  // but your gameState template defines it under gameState.npcs object keys.
+  // Let's protect the collections safely here:
+  if (!gameState.objects.npcs) gameState.objects.npcs = [];
   const blackBear = new NPC(
     "Black Bear",
     [50, 0, -20],
@@ -139,21 +155,142 @@ async function BeeSwarmSimulator(saveData) {
     renderer.programs,
   );
 
+  // Defensive function to ensure we catch the exact missing string name in the console
+  function safeCreateProgram(programName, vshString, fshString) {
+    if (!vshString) {
+      console.error(
+        `❌ SHADER INIT ERROR: Vertex shader for '${programName}' evaluated to undefined!`,
+      );
+    }
+    if (!fshString) {
+      console.error(
+        `❌ SHADER INIT ERROR: Fragment shader for '${programName}' evaluated to undefined!`,
+      );
+    }
+    return renderer.createProgram(vshString, fshString);
+  }
+
   // ASSET LOADING
   // Load textures and pass to renderer
   const textures = loadTextures(gl, ctx); // Pass the 2D context as the second parameter!
   renderer.textures = textures;
 
   //  SHADERS
-  renderer.programs.static = renderer.createProgram(SHADERS.staticVSH, SHADERS.staticFSH);
-  renderer.programs.bee = renderer.createProgram(SHADERS.beeVSH , SHADERS.beeFSH);
-  renderer.programs.flower = renderer.createProgram(SHADERS.flowerVSH, SHADERS.flowerFSH);
-  renderer.programs.token = renderer.createProgram(SHADERS.tokenVSH, SHADERS.tokenFSH);
-  renderer.programs.particle = renderer.createProgram(
-    SHADERS.particleVSH,
-    SHADERS.particleFSH,
+  // Map everything explicitly to your actual SHADERS dictionary keys
+  renderer.programs.static = safeCreateProgram(
+    "static",
+    SHADERS.staticVSH,
+    SHADERS.staticFSH,
   );
-  renderer.programs.text = renderer.createProgram(SHADERS.textVSH, SHADERS.textFSH);
+  renderer.programs.dynamic = safeCreateProgram(
+    "dynamic",
+    SHADERS.dynamicVSH,
+    SHADERS.dynamicFSH,
+  );
+  renderer.programs.bee = safeCreateProgram(
+    "bee",
+    SHADERS.beeVSH,
+    SHADERS.beeFSH,
+  );
+  renderer.programs.flower = safeCreateProgram(
+    "flower",
+    SHADERS.flowerVSH,
+    SHADERS.flowerFSH,
+  );
+  renderer.programs.token = safeCreateProgram(
+    "token",
+    SHADERS.tokenVSH,
+    SHADERS.tokenFSH,
+  );
+  renderer.programs.particle = safeCreateProgram(
+    "particle",
+    SHADERS.particleRendererVSH,
+    SHADERS.particleRendererFSH,
+  );
+  renderer.programs.text = safeCreateProgram(
+    "text",
+    SHADERS.textRendererVSH,
+    SHADERS.textRendererFSH,
+  );
+  renderer.programs.mob = safeCreateProgram(
+    "mob",
+    SHADERS.mobRendererVSH,
+    SHADERS.mobRendererFSH,
+  );
+
+  renderer.programs.explosion = safeCreateProgram(
+    "explosion",
+    SHADERS.explosionRendererVSH,
+    SHADERS.explosionRendererFSH,
+  );
+
+  renderer.programs.trail = safeCreateProgram(
+    "trail",
+    SHADERS.trailRendererVSH,
+    SHADERS.trailRendererFSH,
+  );
+
+  renderer.programs.mob = safeCreateProgram(
+    "mob",
+    SHADERS.mobRendererVSH,
+    SHADERS.mobRendererFSH,
+  );
+
+  // Double check if your engine/renderer.js initializes a mob program lane:
+  if (SHADERS.mobRendererVSH) {
+    renderer.programs.mob = safeCreateProgram(
+      "mob",
+      SHADERS.mobRendererVSH,
+      SHADERS.mobRendererFSH,
+    );
+  }
+  // --- Add this temporary diagnostic block right BEFORE renderer.initCache ---
+  console.log("--- WebGL Program Linking Status Audit ---");
+  Object.keys(renderer.programs).forEach((key) => {
+    const prog = renderer.programs[key];
+    if (!prog) {
+      console.warn(`⚠️ program '${key}' is completely null or undefined!`);
+    } else {
+      // Check if WebGL validates it as a real, linked program object
+      const isProgram = gl.isProgram(prog);
+      const linkStatus = gl.getProgramParameter(prog, gl.LINK_STATUS);
+      console.log(
+        `Program [${key}] -> Valid WebGL Object: ${isProgram}, Link Successful: ${linkStatus}`,
+      );
+
+      if (!linkStatus) {
+        console.error(`❌ LINK FAILURE DETECTED ON PROGRAM: '${key}'!`);
+        console.error("Program Info Log:", gl.getProgramInfoLog(prog));
+      }
+    }
+  });
+  console.log("------------------------------------------");
+
+  // --- Keep this block right before renderer.initCache to stop any more hidden key crashes ---
+  const masterEngineKeys = [
+    "static",
+    "dynamic",
+    "bee",
+    "flower",
+    "token",
+    "particle",
+    "text",
+    "mob",
+    "explosion",
+    "trail",
+  ];
+
+  masterEngineKeys.forEach((key) => {
+    if (!renderer.programs[key]) {
+      console.warn(
+        `Genius Patch: Lane '${key}' was missing. Injecting fallback binary.`,
+      );
+      // If you didn't keep the dummyProgram from earlier, just map it to renderer.programs.static
+      renderer.programs[key] = renderer.programs.static;
+    }
+  });
+
+  // This is your line 202 where it crashes
   renderer.initCache(renderer.programs);
 
   // --- C. GL STATE SETTINGS ---
@@ -167,7 +304,45 @@ async function BeeSwarmSimulator(saveData) {
 
   // --- D. WORLD & INPUT ---
   initInputHandlers(gameState, uiCanvas); // Attach Input listeners
-  initGameWorld(gameState); // Populates NPCs, Mobs, Fields //ENGINE STARTUP --
+
+  // 🛠️ THE GOLDEN SAFEGUARD:
+  // Force-verify that the required engine state objects exist on gameState
+  // right before passing it down to the world builder loop!
+  if (!gameState.fieldInfo) gameState.fieldInfo = {};
+  if (!gameState.flowers) gameState.flowers = {};
+
+  // 🛠️ Step A: Create the CPU staging arrays that addFlower demands
+  const flowerMeshDataStaging = {
+    verts: [],
+    index: [],
+  };
+
+  // 🛠️ Step B: FIELD_CONFIGS runs here
+  FIELD_CONFIGS.forEach((f) => {
+    createField(
+      f.name, // Parameter 1: Field identifier string
+      f, // Parameter 2: Pass the entire config object wrapper directly!
+      gameState, // Parameter 3: Pass your main active global game state container
+      flowerMeshDataStaging,
+      // gameState.meshes.flowers, // Parameter 4: Pass your instanced flower mesh reference channel
+    );
+  });
+
+  // 🛠️ Step C: Link the metadata lengths back to your mesh engine
+  if (flowerMeshDataStaging.verts.length > 0) {
+    console.log(
+      `Successfully generated ${flowerMeshDataStaging.index.length / 3} procedural triangles.`,
+    );
+
+    // Pass the flat item count metadata directly to your active tracker
+    gameState.meshes.flowers.vertCount = flowerMeshDataStaging.index.length;
+
+    // NOTE: If you have an explicit vertex buffer upload step, call it here:
+    // uploadToGPU(gl, gameState.meshes.flowers, flowerMeshDataStaging);
+  }
+
+  // 🛠️ Step D: Fire off the remaining asset placements
+  initGameWorld(gameState); // Populates NPCs and Mobs  //ENGINE STARTUP --
 
   // --- E. CHECKPOINT LOGIC ---
   async function handleSave() {
@@ -192,7 +367,7 @@ async function BeeSwarmSimulator(saveData) {
   // Inside index.js UI logic
   document.getElementById("questButton").addEventListener("click", () => {
     const page = document.getElementById("questPage");
-    const isHidden = page.style.display === "none" || page.style.display === ;
+    const isHidden = page.style.display === "none" || page.style.display === "";
 
     // Hide all other pages first (standard BSS UI behavior)
     document

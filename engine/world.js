@@ -5,7 +5,7 @@ import { MATH } from "../utils/math.js";
 
 import { addFlower } from "./flowerBuilder.js";
 
-import { FIELD_CONFIGS } from "../data/fieldData.js";
+// import { FIELD_CONFIGS } from "../data/fieldData.js";
 // export function collectPollen(params) {
 //   // Use gameState.player and gameState.fieldInfo directly
 //   if (gameState.player.pollenInBag >= gameState.player.capacity) return 0;
@@ -206,11 +206,14 @@ export function collectPollen(params, gameState) {
   return Math.round(totalCollected);
 }
 
+// export function createField(name, config, gameState) {
 export function createField(name, config, gameState, meshData) {
   const { player, fieldInfo, flowers } = gameState;
 
-  // Set initial field stats
-  player.stats["pollenFrom" + name] = 0;
+  // ✅ Fixed: Only initialize the pollen tracking stat if the player object actually exists!
+  if (player && player.stats) {
+    player.stats["pollenFrom" + name] = 0;
+  }
 
   // Config initialization
   fieldInfo[name] = {
@@ -357,8 +360,10 @@ export function updateFlower(
   }
 }
 
-export function initFields(gameState, meshData) {
-  FIELD_CONFIGS.forEach((config) => {
-    createField(config.name, config, gameState, meshData);
-  });
-}
+// export function initFields(gameState, meshData) {
+//   FIELD_CONFIGS.forEach((config) => {
+//     // createField(config.name, config, gameState);
+
+//     createField(config.name, config, gameState, meshData);
+//   });
+// }
