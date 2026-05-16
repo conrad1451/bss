@@ -376,7 +376,8 @@ export const SHADERS = {
         gl_Position = pos;
         
         // Calculate projected particle size based on depth
-        float projSize = (vertSize / pos.z) * SCREEN_CHANGE;
+        // ✅ Fixed: Wrapped macro in float() constructor to satisfy the compiler operand type check
+        float projSize = (vertSize / pos.z) * float(SCREEN_CHANGE);
         gl_PointSize = projSize;
         particleSize = projSize * 0.5;
         
@@ -404,19 +405,21 @@ export const SHADERS = {
         // Calculate vector from particle center to fragment
         vec2 del = particlePos - ssPos;
         
-        // Apply aspect ratio correction
-        del.x *= ASPECT;
+        // ✅ Fixed: Explicitly wrap ASPECT in float() to prevent strict type mismatch crashes
+        del.x *= float(ASPECT); 
         
         // Apply inverse rotation to fragment position
         del = vec2(
             del.x * particleRot.x - del.y * particleRot.y,
             del.x * particleRot.y + del.y * particleRot.x
         );
-        
-        // Discard fragment if outside particle bounds (using Manhattan distance)
-        if (abs(del.x) + abs(del.y) > particleSize * INV_AVG_HALF_WIDTH_HEIGHT)
+
+        // ✅ Fixed: Separate the macros so the pre-processor replaces them cleanly 
+        // without destroying a larger variable identifier name.
+        float screenAvg = (float(HALF_WIDTH) + float(HALF_HEIGHT)) * 0.5;
+        if (abs(del.x) + abs(del.y) > particleSize * (1.0 / screenAvg))
             discard;
-        
+
         // Output particle color
         fragColor = pixColor;
     }
