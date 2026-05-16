@@ -1,7 +1,7 @@
 // engine/world.js
 import { MATH } from "../utils/math.js";
 import { textRenderer } from "./textRenderer.js"; // For floating numbers
-import { flowers, fieldInfo, objects } from "./state.js"; // If using a central state file
+import { flowers, fieldInfo, objects } from "../state/gameState.js";
 
 import { addFlower } from "./flowerBuilder.js";
 import { gameState } from "../state/gameState.js";

@@ -2,7 +2,7 @@
 
 // CHQ: Gemini AI created function
 
-import { updateQuestUI } from "./ui/questRenderer.js";
+import { updateQuestUI } from "../ui/questRenderer";
 
 export class Player {
   constructor(data) {

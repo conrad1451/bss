@@ -19,20 +19,27 @@ export function getSaveSnapshot(gameState) {
       inventory: { ...gameState.player.inventory },
       stats: { ...gameState.player.stats },
       currentGear: { ...gameState.player.currentGear },
-      completedQuests: [...gameState.completedQuests],
+      fieldBoosts: { ...gameState.player.fieldBoosts }, // Added this!
       effects: [],
       // We save activeQuest IDs and their current progress values
       activeQuests: gameState.activeQuests.map((q) => ({
         id: q.id,
         progress: q.progress,
       })),
+      completedQuests: [...gameState.completedQuests],
+      npcProgress: Object.fromEntries(
+        Object.entries(gameState.npcs).map(([name, obj]) => [
+          name,
+          obj.portionsDone,
+        ]),
+      ),
     },
     player: { ...gameState.player },
-    npcProgress: {
-      "Brown Bear": gameState.npcs["Brown Bear"].portionsDone,
-      "Polar Bear": gameState.npcs["Polar Bear"].portionsDone,
-      "Honey Bee": gameState.npcs["Honey Bee"].portionsDone,
-    },
+    // npcProgress: {
+    //   "Brown Bear": gameState.npcs["Brown Bear"].portionsDone,
+    //   "Polar Bear": gameState.npcs["Polar Bear"].portionsDone,
+    //   "Honey Bee": gameState.npcs["Honey Bee"].portionsDone,
+    // },
     activeQuests: [...gameState.activeQuests],
     completedQuests: [...gameState.completedQuests],
   };
@@ -49,6 +56,7 @@ export function createInitialState(saveData = {}) {
 
   return {
     globalId: 0,
+    paused: false,
     TIME: 0,
     frameCount: 0,
 
@@ -63,6 +71,7 @@ export function createInitialState(saveData = {}) {
     //   UPDATE_FLOWER_MESH: false,
     // },
 
+    // 1. Permanent Player Data (Saved to IndexedDB)
     player: {
       // Identity from IndexedDB
       id: saveData.id,
@@ -147,6 +156,11 @@ export function createInitialState(saveData = {}) {
       effects: data.effects || [],
       flowerIn: { x: 0, z: 0 },
     },
+    // 2. Static World Data / Grids
+    flowers: {}, // Initialize as an empty object/grid [cite: 60]
+    fieldInfo: {},
+
+    // 3. Live Entities (Not typically saved in the snapshot)
     objects: {
       tokens: [],
       bees: [],
