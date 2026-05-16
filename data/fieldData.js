@@ -231,3 +231,14 @@ export const FIELD_CONFIGS = [
     composition: { w: 0.33333, r: 0.33333, b: 0.33333 },
   },
 ];
+
+// Map it so your old engine files targeting "fieldDefinitions" don't break!
+export const fieldDefinitions = FIELD_CONFIGS.map((config) => ({
+  name: config.name,
+  x: config.x,
+  y: config.y,
+  z: config.z,
+  isSafeZone: false, // Legacy engine fallback flag
+  getColor: () => config.colorLogic(),
+  getLevel: () => config.levelLogic(),
+}));

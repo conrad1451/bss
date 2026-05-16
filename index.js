@@ -8,6 +8,7 @@ import { loadTextures } from "./engine/assetLoader.js";
 import { addFlower } from "./engine/flowerBuilder.js";
 import { createField } from "./engine/world.js";
 import { useItem } from "./engine/inventory.js";
+import { SHADERS } from "./engine/shaders.js";
 
 import { initMainMenu } from "./ui/menu.js";
 import { updateQuestUI } from "./ui/questRenderer.js";
@@ -140,19 +141,19 @@ async function BeeSwarmSimulator(saveData) {
 
   // ASSET LOADING
   // Load textures and pass to renderer
-  const textures = loadTextures(gl);
+  const textures = loadTextures(gl, ctx); // Pass the 2D context as the second parameter!
   renderer.textures = textures;
 
   //  SHADERS
-  renderer.programs.static = renderer.createProgram("staticVSH", "staticFSH");
-  renderer.programs.bee = renderer.createProgram("beeVSH", "beeFSH");
-  renderer.programs.flower = renderer.createProgram("flowerVSH", "flowerFSH");
-  renderer.programs.token = renderer.createProgram("tokenVSH", "tokenFSH");
+  renderer.programs.static = renderer.createProgram(SHADERS.staticVSH, SHADERS.staticFSH);
+  renderer.programs.bee = renderer.createProgram(SHADERS.beeVSH , SHADERS.beeFSH);
+  renderer.programs.flower = renderer.createProgram(SHADERS.flowerVSH, SHADERS.flowerFSH);
+  renderer.programs.token = renderer.createProgram(SHADERS.tokenVSH, SHADERS.tokenFSH);
   renderer.programs.particle = renderer.createProgram(
-    "particleVSH",
-    "particleFSH",
+    SHADERS.particleVSH,
+    SHADERS.particleFSH,
   );
-  renderer.programs.text = renderer.createProgram("textVSH", "textFSH");
+  renderer.programs.text = renderer.createProgram(SHADERS.textVSH, SHADERS.textFSH);
   renderer.initCache(renderer.programs);
 
   // --- C. GL STATE SETTINGS ---
@@ -191,7 +192,7 @@ async function BeeSwarmSimulator(saveData) {
   // Inside index.js UI logic
   document.getElementById("questButton").addEventListener("click", () => {
     const page = document.getElementById("questPage");
-    const isHidden = page.style.display === "none" || page.style.display === "";
+    const isHidden = page.style.display === "none" || page.style.display === ;
 
     // Hide all other pages first (standard BSS UI behavior)
     document

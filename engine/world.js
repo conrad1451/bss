@@ -1,10 +1,9 @@
 // engine/world.js
 import { MATH } from "../utils/math.js";
-import { textRenderer } from "./textRenderer.js"; // For floating numbers
-import { flowers, fieldInfo, objects } from "../state/gameState.js";
+// import { textRenderer } from "./textRenderer.js"; // For floating numbers
+// import { flowers, fieldInfo, objects } from "../state/gameState.js";
 
 import { addFlower } from "./flowerBuilder.js";
-import { gameState } from "../state/gameState.js";
 
 import { FIELD_CONFIGS } from "../data/fieldData.js";
 // export function collectPollen(params) {
@@ -247,6 +246,7 @@ export function updateFlower(
   updateHeight,
   updateGoo,
   updatePollination,
+  gameState,
 ) {
   const { flowers } = gameState;
   const flower = flowers.data[field][z][x]; // Access the specific flower data
