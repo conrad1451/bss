@@ -9,9 +9,28 @@ export function updateEngine(gameState, dt) {
   world.step(dt);
 
   // 2. Player State & Camera Updates
-  player.updatePhysics(dt);
-  player.updateCamera(dt);
-  player.updateFields(dt); // Handles flower collection/growth
+  player.updatePhysics(dt); // 🏃‍♂️ Player moves to their new predicted position first
+
+  // 3. Evaluate Trigger Zones Collision Status
+  triggers.forEach((zone) => {
+    // Simple 2D distance check between player and zone center coordinates
+    const dx = player.pos[0] - zone.x;
+    const dz = player.pos[2] - zone.z;
+    const distance = Math.sqrt(dx * dx + dz * dz);
+
+    if (distance < zone.radius) {
+      if (!zone.colliding) {
+        zone.colliding = true;
+        if (typeof zone.onEnter === "function") zone.onEnter(gameState);
+      }
+    } else {
+      zone.colliding = false; // Player stepped away
+    }
+  });
+
+  // 3. Camera & Systems Alignment
+  player.updateCamera(dt); //  Snap the camera to follow the newly verified position
+  player.updateFields(dt); //  Process pollen collection based on where they stand
   player.updateUI(dt); // Updates honey/pollen counters
 
   // 3. Entity AI: Bees
@@ -48,7 +67,7 @@ function checkTriggers(gameState) {
 
   // CHQ: Gemini AI:  Reset the trigger so it doesn't stay active when you walk away
   player.currentMachineTrigger = null;
-
+  // triggers[ {colliding: boolean}   ]
   // CHQ: Gemini AI: Logic to check if player is standing in a machine zone
   for (let i in triggers) {
     const t = triggers[i];

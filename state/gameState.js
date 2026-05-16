@@ -60,6 +60,44 @@ export function createInitialState(saveData = {}) {
     TIME: 0,
     frameCount: 0,
 
+    // 🛠️ ADD THIS MASTER WORLD SIMULATION OBJECT
+    world: {
+      // Keep track of internal physics configuration or elapsed step counts
+      gravity: -9.81,
+      airResistance: 0.01,
+
+      // The step method called by updateEngine.js
+      step(dt) {
+        // This is a perfect place to update global environment loops later,
+        // such as daytime cycle increments, wind vectors, or floating tokens physics!
+        // console.log("World physics ticking with delta time:", dt);
+      },
+    },
+
+    // 🛠️ Your Trigger Zones Array Structure
+    triggers: [
+      {
+        name: "SunflowerFieldZone",
+        colliding: false,
+        x: 0,
+        z: 0,
+        radius: 15, // coordinates for boundary tracking
+        onEnter: (gameState) => {
+          console.log("Entered Sunflower Field!");
+        },
+      },
+      {
+        name: "BlackBearTalkZone",
+        colliding: false,
+        x: 50,
+        z: -20,
+        radius: 5,
+        onEnter: (gameState) => {
+          console.log("Near Black Bear!");
+        },
+      },
+    ],
+
     // Engine Flags
     flags: {
       UPDATE_FLOWER_MESH: false,

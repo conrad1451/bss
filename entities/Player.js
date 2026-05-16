@@ -17,6 +17,10 @@ export class Player {
     /* camera logic */
   }
 
+  updateFields(dt) {
+    /* field logic */
+  }
+
   updateUI(dt, gameState) {
     // 1. Update the numerical text
     const pollenEl = document.getElementById("pollenAmount");
