@@ -189,17 +189,24 @@ export function collectPollen(params, gameState) {
   player.stats.bluePollen += accum.b + otherAccum.b;
   player.stats.whitePollen += accum.w + otherAccum.w;
 
-  player.stats.totalPollen += totalCollected; // CHQ: Gemini AI added
+  // CHQ: Gemini AI added code for field-specific boosts
+  // Apply Field-Specific Boost
+  const fieldBoost = player.fieldBoosts[f.name] || 1;
+  const boostedPollen = totalCollected * fieldBoost;
+
+  player.pollenInBag = Math.min(
+    player.capacity,
+    (player.pollenInBag || 0) + boostedPollen,
+  );
+  player.stats.totalPollen += boostedPollen; // CHQ: Gemini AI added
 
   player.stats.goo += totalGoo;
   player.stats["pollenFrom" + f.name] =
-    (player.stats["pollenFrom" + f.name] || 0) + totalCollected;
-  player.pollenInBag = Math.min(
-    player.capacity,
-    (player.pollenInBag || 0) + totalCollected,
-  );
+    (player.stats["pollenFrom" + f.name] || 0) + boostedPollen;
+
   return Math.round(totalCollected);
 }
+
 export function createField(name, config, gameState, meshData) {
   const { player, fieldInfo, flowers } = gameState;
 

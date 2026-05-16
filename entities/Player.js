@@ -42,5 +42,23 @@ export class Player {
     if (questPage && questPage.style.display !== "none") {
       updateQuestUI(gameState);
     }
+
+    // CHQ: Gemini AI added for effects
+    this.effects.forEach((effect) => {
+      const timeLeft = effect.endTime - Date.now();
+      const cooldownEl = document.getElementById(`${effect.id}_cooldown`);
+
+      if (cooldownEl && timeLeft > 0) {
+        const totalTime = 15 * 60 * 1000;
+        const height = (timeLeft / totalTime) * 30; // 30 is the SVG height in your index.html
+        cooldownEl.setAttribute("height", height);
+        document.getElementById(effect.id).style.display = "block";
+      } else if (timeLeft <= 0) {
+        // Remove multiplier and hide icon
+        this.fieldBoosts[effect.target] -= effect.multiplier;
+        document.getElementById(effect.id).style.display = "none";
+        // Logic to splice this effect from player.effects should go here
+      }
+    });
   }
 }

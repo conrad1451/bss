@@ -20,6 +20,7 @@ export function getSaveSnapshot(gameState) {
       stats: { ...gameState.player.stats },
       currentGear: { ...gameState.player.currentGear },
       completedQuests: [...gameState.completedQuests],
+      effects: [],
       // We save activeQuest IDs and their current progress values
       activeQuests: gameState.activeQuests.map((q) => ({
         id: q.id,
@@ -142,7 +143,8 @@ export function createInitialState(saveData = {}) {
         freeRoboPass: 0,
       },
 
-      effects: [],
+      fieldBoosts: data.fieldBoosts || {}, // CHQ: Gemini AI: e.g., { SunflowerField: 2.0 }
+      effects: data.effects || [],
       flowerIn: { x: 0, z: 0 },
     },
     objects: {

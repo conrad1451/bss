@@ -35,6 +35,24 @@ import { Mob, MondoChick } from "./entities/mobs.js";
 //   deleteFromDB,
 // } from "./utils/db.js";
 
+// CHQ: Gemini AI added
+const consumableIds = [
+  "fieldDice",
+  "redExtract",
+  "microConverter",
+  "blueExtract",
+  "glitter",
+];
+
+consumableIds.forEach((id) => {
+  const el = document.getElementById(id);
+  if (el) {
+    el.addEventListener("click", () => {
+      useItem(id, gameState);
+    });
+  }
+});
+
 function initGameWorld(gameState) {
   // 1. Initialize Fields (Your existing logic)
   fieldDefinitions.forEach((f) => {
