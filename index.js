@@ -7,7 +7,7 @@ import { updateEngine } from "./engine/updateEngine.js";
 import { loadTextures } from "./engine/assetLoader.js";
 import { addFlower } from "./engine/flowerBuilder.js";
 import { createField } from "./engine/world.js";
-import { Player } from "./entities/Player.js";
+import { useItem } from "./engine/inventory.js";
 
 import { initMainMenu } from "./ui/menu.js";
 import { updateQuestUI } from "./ui/questRenderer.js";
@@ -17,6 +17,7 @@ import { saveCheckpoint, loadCheckpoint } from "./utils/db.js";
 
 import { mobDefinitions } from "./data/mobData.js"; // Optional: keep data separate
 
+import { Player } from "./entities/Player.js";
 import { NPC } from "./entities/npcs.js";
 import { Mob, MondoChick } from "./entities/mobs.js";
 
@@ -34,24 +35,6 @@ import { Mob, MondoChick } from "./entities/mobs.js";
 //   saveToDB,
 //   deleteFromDB,
 // } from "./utils/db.js";
-
-// CHQ: Gemini AI added
-const consumableIds = [
-  "fieldDice",
-  "redExtract",
-  "microConverter",
-  "blueExtract",
-  "glitter",
-];
-
-consumableIds.forEach((id) => {
-  const el = document.getElementById(id);
-  if (el) {
-    el.addEventListener("click", () => {
-      useItem(id, gameState);
-    });
-  }
-});
 
 function initGameWorld(gameState) {
   // 1. Initialize Fields (Your existing logic)
@@ -135,6 +118,13 @@ async function BeeSwarmSimulator(saveData) {
 
   // --- B. STATE & SYSTEMS ---
   const rawState = createInitialState(saveData);
+  const consumableIds = [
+    "fieldDice",
+    "redExtract",
+    "microConverter",
+    "blueExtract",
+    "glitter",
+  ];
 
   //  "Upgrade" the player object with methods
   rawState.player = new Player(rawState.player);
@@ -243,6 +233,17 @@ async function BeeSwarmSimulator(saveData) {
   //     275,
   //   );
   // };
+
+  // CHQ: Gemini AI added
+  // Attach Listeners ONCE (outside the loop)
+  consumableIds.forEach((id) => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.addEventListener("click", () => {
+        useItem(id, gameState);
+      });
+    }
+  });
 
   // --- 7. GAME LOOP ---
   let then = 0;
