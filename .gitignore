@@ -29,3 +29,9 @@ dataFilesForRepo/
 *.njsproj
 *.sln
 *.sw?
+    
+BeeSwarmSimulator_broken_in_two.txt
+bssGitCommitsPastTwoWeeks.txt
+bssGitCommitsPastWeek.txt
+node_modules/
+oldIndex.js
