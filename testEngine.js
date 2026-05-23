@@ -15,6 +15,8 @@ import {
   resolveObstacleCollisions,
 } from "./engine/physics.js";
 
+import { createEngine } from "./engine/index.js";
+
 console.log("🚀 Starting Vanilla JS Game Engine Simulation Test...\n");
 
 // 1. Initialize our clean, primitive-safe state
@@ -279,6 +281,44 @@ try {
     !inputState.user.keys["w"],
     "Input listener state cleanly confirms unrelated directions remain unpressed.",
   );
+
+  // --- Test 7: Core Engine Heartbeat Initialization ---
+  console.log("\n💓 Initializing Core Engine Heartbeat loop tests...");
+
+  // Mock requestAnimationFrame for the headless environment
+  global.requestAnimationFrame = (callback) =>
+    setTimeout(() => callback(Date.now()), 16);
+  global.cancelAnimationFrame = (id) => clearTimeout(id);
+
+  const loopState = createInitialState();
+  let tickCount = 0;
+
+  // PASS: Pass your actual static EventManager export directly here
+  const engine = createEngine(loopState, EventManager, mockObstacles);
+
+  // Subscribe to the loop broadcast to ensure ticks propagate state safely
+  EventManager.on("ENGINE_TICK", () => {
+    tickCount++;
+  });
+
+  // Start the engine, let it cycle briefly, then freeze it
+  engine.start();
+
+  // Wrap the verification in a timeout deferral to let the mock clock fire
+  await new Promise((resolve) => {
+    setTimeout(() => {
+      engine.stop();
+      assert(
+        tickCount > 0,
+        `Engine loop ticking actively. Captured ${tickCount} execution frame states.`,
+      );
+      console.log(
+        `✅ PASS: Engine heartbeat loops cleanly and emits event state cycles.`,
+      );
+      resolve();
+    }, 50);
+  });
+
   console.log("\n=========================================");
   assert(true, "ALL ENGINE INTEGRATION TESTS COMPLETED SUCCESSFULLY!");
   console.log("=========================================");
