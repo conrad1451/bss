@@ -4,34 +4,38 @@
 
 /**
  * Checks for Axis-Aligned Bounding Box (AABB) collision between two entities.
- * @param {Object} rect1 - Object with x, y, width, height properties
- * @param {Object} rect2 - Object with x, y, width, height properties
+ * Adjusted to handle our array-based state structures.
+ * @param {Object} entity - The moving entity tracking an array [x, y, z]
+ * @param {Object} obstacle - Static object with x, y, width, height properties
  * @returns {boolean} True if they overlap
  */
-export function checkCollision(rect1, rect2) {
+export function checkCollision(entity, obstacle) {
+  // Map player array positions to local comparison bounds
+  const entityX = entity.pos[0];
+  const entityY = entity.pos[1]; // Using Y as our 2D height/vertical axis
+
   return (
-    rect1.x < rect2.x + rect2.width &&
-    rect1.x + rect1.width > rect2.x &&
-    rect1.y < rect2.y + rect2.height &&
-    rect1.y + rect1.height > rect2.y
+    entityX < obstacle.x + obstacle.width &&
+    entityX + entity.width > obstacle.x &&
+    entityY < obstacle.y + obstacle.height &&
+    entityY + entity.height > obstacle.y
   );
 }
-
 /**
- * Updates an entity's position based on velocity and delta time, applying gravity.
- * @param {Object} entity - The moving entity (must have x, y, vx, vy, width, height)
+ * Updates an entity's position array based on velocity and delta time, applying gravity.
+ * @param {Object} entity - The moving entity (must have pos: [x,y,z], velocity: [vx,vy,vz], width, height)
  * @param {Object} worldSettings - Config containing gravity and bounds
  * @param {number} dt - Delta time in seconds
  */
 export function updatePhysicsEntity(entity, worldSettings, dt) {
   const gravity = worldSettings.gravity || 0;
 
-  // 1. Apply gravity to vertical velocity
-  entity.vy += gravity * dt;
+  // 1. Apply gravity to vertical velocity (index 1 is our Y axis)
+  entity.velocity[1] += gravity * dt;
 
-  // 2. Predict next positions
-  entity.x += entity.vx * dt;
-  entity.y += entity.vy * dt;
+  // 2. Predict next positions by integrating forces
+  entity.pos[0] += entity.velocity[0] * dt; // X axis
+  entity.pos[1] += entity.velocity[1] * dt; // Y axis
 }
 
 /**
@@ -43,30 +47,33 @@ export function updatePhysicsEntity(entity, worldSettings, dt) {
 export function resolveObstacleCollisions(entity, obstacles) {
   for (const obstacle of obstacles) {
     if (checkCollision(entity, obstacle)) {
-      // Basic resolution: Determine shallowest penetration axis and push out
+      const entityX = entity.pos[0];
+      const entityY = entity.pos[1];
+
+      // Determine shallowest penetration axis and push out
       const overlapX =
-        Math.min(entity.x + entity.width, obstacle.x + obstacle.width) -
-        Math.max(entity.x, obstacle.x);
+        Math.min(entityX + entity.width, obstacle.x + obstacle.width) -
+        Math.max(entityX, obstacle.x);
       const overlapY =
-        Math.min(entity.y + entity.height, obstacle.y + obstacle.height) -
-        Math.max(entity.y, obstacle.y);
+        Math.min(entityY + entity.height, obstacle.y + obstacle.height) -
+        Math.max(entityY, obstacle.y);
 
       if (overlapX < overlapY) {
         // Push along X axis
-        if (entity.x + entity.width / 2 < obstacle.x + obstacle.width / 2) {
-          entity.x -= overlapX;
+        if (entityX + entity.width / 2 < obstacle.x + obstacle.width / 2) {
+          entity.pos[0] -= overlapX;
         } else {
-          entity.x += overlapX;
+          entity.pos[0] += overlapX;
         }
-        entity.vx = 0; // Kill horizontal velocity on impact
+        entity.velocity[0] = 0; // Kill horizontal velocity on impact
       } else {
         // Push along Y axis
-        if (entity.y + entity.height / 2 < obstacle.y + obstacle.height / 2) {
-          entity.y -= overlapY;
+        if (entityY + entity.height / 2 < obstacle.y + obstacle.height / 2) {
+          entity.pos[1] -= overlapY;
         } else {
-          entity.y += overlapY;
+          entity.pos[1] += overlapY;
         }
-        entity.vy = 0; // Kill vertical velocity (ground hit / ceiling bump)
+        entity.velocity[1] = 0; // Kill vertical velocity (ground hit / ceiling bump)
       }
     }
   }

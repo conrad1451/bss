@@ -1,10 +1,19 @@
 // testEngine.js
+
+// CHQ: Gemini AI generated
+
 import { createInitialState, getSaveSnapshot } from "./state/gameState.js";
 import {
   EventManager,
   updateInventory,
   addMessage,
 } from "./engine/eventManager.js";
+
+import {
+  checkCollision,
+  updatePhysicsEntity,
+  resolveObstacleCollisions,
+} from "./engine/physics.js";
 
 console.log("🚀 Starting Vanilla JS Game Engine Simulation Test...\n");
 
@@ -208,3 +217,49 @@ try {
   console.error(error);
   process.exit(1);
 }
+
+// --- Test 5: Physics Integration & Collision Processing ---
+console.log("\n🏃 Initializing Physics and AABB Collision tests...");
+
+const physicsState = createInitialState();
+// Assign explicit bounding sizes to our player entity for bounding box calculation
+physicsState.player.width = 2;
+physicsState.player.height = 2;
+
+// Set position directly above a target block
+physicsState.player.pos = [10, 5, 0];
+physicsState.player.velocity = [0, 0, 0];
+
+// Define a static obstacle block directly underneath the player
+const mockObstacles = [
+  { x: 9, y: 0, width: 4, height: 2 }, // Top boundary is at Y = 2
+];
+
+// Verify no initial collision
+assert(
+  !checkCollision(physicsState.player, mockObstacles[0]),
+  "Player initialized cleanly outside of obstacle boundary.",
+);
+
+// Apply a high velocity downward to force an overlap step
+physicsState.player.velocity[1] = -200; // Moving down fast
+updatePhysicsEntity(physicsState.player, physicsState.world, 0.016); // step 1 frame
+
+// Ensure collision is detected post-update
+assert(
+  checkCollision(physicsState.player, mockObstacles[0]),
+  "Collision correctly flagged when player vector intersects obstacle space.",
+);
+
+// Resolve the collision intersection
+resolveObstacleCollisions(physicsState.player, mockObstacles[0]);
+
+// Assertions to verify the snapping resolution pushed the player out and cleared downward velocity
+assert(
+  physicsState.player.pos[1] === 2,
+  `Collision resolved: Player snapped perfectly to obstacle top surface (Expected: 2, Got: ${physicsState.player.pos[1]}).`,
+);
+assert(
+  physicsState.player.velocity[1] === 0,
+  "Collision resolved: Downward velocity zeroed out safely upon hard impact surface.",
+);
