@@ -1,12 +1,14 @@
 // state/gameState.js
-import { MATH } from "../utils/math.js";
 
-// CHQ: Gemini AI created function
-// Function to strip the "heavy" stuff (buffers, classes) for storage
+// CHQ: Gemini AI refactored file
+
+/**
+ * Strips heavy runtime references (like WebGL buffers, arrays of live objects)
+ * leaving only raw data fields to cleanly save to IndexedDB or LocalStorage.
+ */
 export function getSaveSnapshot(gameState) {
   return {
     id: gameState.player.id || "player_1",
-    // timestamp: Date.now(),
     lastSaved: Date.now(),
     data: {
       name: gameState.player.name,
@@ -15,13 +17,12 @@ export function getSaveSnapshot(gameState) {
       capacity: gameState.player.capacity,
       criticalChance: gameState.player.criticalChance,
       criticalPower: gameState.player.criticalPower,
-      pos: gameState.player.pos, // Save position so they reload where they stood
+      pos: [...gameState.player.pos],
       inventory: { ...gameState.player.inventory },
       stats: { ...gameState.player.stats },
       currentGear: { ...gameState.player.currentGear },
-      fieldBoosts: { ...gameState.player.fieldBoosts }, // Added this!
-      effects: [],
-      // We save activeQuest IDs and their current progress values
+      fieldBoosts: { ...gameState.player.fieldBoosts },
+      effects: [...gameState.player.effects],
       activeQuests: gameState.activeQuests.map((q) => ({
         id: q.id,
         progress: q.progress,
@@ -34,24 +35,14 @@ export function getSaveSnapshot(gameState) {
         ]),
       ),
     },
-    player: { ...gameState.player },
-    // npcProgress: {
-    //   "Brown Bear": gameState.npcs["Brown Bear"].portionsDone,
-    //   "Polar Bear": gameState.npcs["Polar Bear"].portionsDone,
-    //   "Honey Bee": gameState.npcs["Honey Bee"].portionsDone,
-    // },
-    activeQuests: [...gameState.activeQuests],
-    completedQuests: [...gameState.completedQuests],
   };
 }
 
-export function updateInventory() {}
-
-export function addMessage() {}
-
+/**
+ * Factory function to instantiate a fresh engine state object.
+ * Perfectly populates fields using a saved snapshot data layout if available.
+ */
 export function createInitialState(saveData = {}) {
-  // Use saveData values if they exist, otherwise fall back to defaults
-  // const data = saveData.data || {};
   const data = (saveData && saveData.data) || {};
 
   return {
@@ -60,122 +51,67 @@ export function createInitialState(saveData = {}) {
     TIME: 0,
     frameCount: 0,
 
-    // 🛠️ ADD THIS MASTER WORLD SIMULATION OBJECT
+    // 🛠️ Pure physics configuration data for engine/physics.js
     world: {
-      // Keep track of internal physics configuration or elapsed step counts
       gravity: -9.81,
       airResistance: 0.01,
-
-      // The step method called by updateEngine.js
-      step(dt) {
-        // This is a perfect place to update global environment loops later,
-        // such as daytime cycle increments, wind vectors, or floating tokens physics!
-        // console.log("World physics ticking with delta time:", dt);
-      },
+      bounds: { width: 800, height: 600 }, // Used by our canvas renderer bounds check
     },
 
-    // 🛠️ Your Trigger Zones Array Structure
+    // 🛠️ Simple trigger data fields (The logic shifts to the engine update loop)
     triggers: [
-      {
-        name: "SunflowerFieldZone",
-        colliding: false,
-        x: 0,
-        z: 0,
-        radius: 15, // coordinates for boundary tracking
-        onEnter: (gameState) => {
-          console.log("Entered Sunflower Field!");
-        },
-      },
-      {
-        name: "BlackBearTalkZone",
-        colliding: false,
-        x: 50,
-        z: -20,
-        radius: 5,
-        onEnter: (gameState) => {
-          console.log("Near Black Bear!");
-        },
-      },
+      { name: "SunflowerFieldZone", colliding: false, x: 0, z: 0, radius: 15 },
+      { name: "BlackBearTalkZone", colliding: false, x: 50, z: -20, radius: 5 },
     ],
 
-    // Engine Flags
     flags: {
       UPDATE_FLOWER_MESH: false,
       isNight: false,
     },
-    // TIME: 0,
-    // isNight: false,
-    // flags: {
-    //   UPDATE_FLOWER_MESH: false,
-    // },
 
-    // 1. Permanent Player Data (Saved to IndexedDB)
     player: {
-      // Identity from IndexedDB
-      id: saveData.id,
+      id: saveData.id || "player_1",
       name: data.name || "New Explorer",
-
-      // Resources
       honey: data.honey || 0,
       pollenInBag: data.pollenInBag || 0,
       capacity: data.capacity || 100,
 
-      // Combat/Collection Scaling
       criticalChance: data.criticalChance || 0.1,
       criticalPower: data.criticalPower || 2,
-      superCritChance: data.superCritChance || 0, // Used in world.js Section 2
-      superCritPower: data.superCritPower || 3, // Used in world.js Section 3
+      superCritChance: data.superCritChance || 0,
+      superCritPower: data.superCritPower || 3,
       health: 100,
 
-      // Transform/Multipliers (Needed for world.js and bees.js)
       redPollen: data.redPollen || 1,
       bluePollen: data.bluePollen || 1,
       whitePollen: data.whitePollen || 1,
       pollenFromBees: data.pollenFromBees || 1,
       tabbyLoveStacks: data.tabbyLoveStacks || 1,
 
-      // Movement
       pos: data.pos || [0, 5, 0],
       velocity: [0, 0, 0],
       fieldIn: null,
 
-      // IMPORTANT: Stats Alignment
       stats: data.stats || {
-        whitePollen: 0, // Matched to questDefinitions
-        bluePollen: 0, // Matched to questDefinitions
-        redPollen: 0, // Matched to questDefinitions
-        totalPollen: 0, // Added for overall progress tracking
-        treatsFed: 0, // For Mother Bear style quests
-        goo: 0, // Used in world.js Section 8
+        whitePollen: 0,
+        bluePollen: 0,
+        redPollen: 0,
+        totalPollen: 0,
+        treatsFed: 0,
+        goo: 0,
         honeyTokens: 0,
-        // pollenCollected: 0,
         playTime: 0,
         polarPowerStacks: 0,
         werewolf: 0,
         pollenFromSunflowerField: 0,
         pollenFromDandelionField: 0,
         pollenFromBambooField: 0,
-        pollenFromSpiderField: 0,
-        pollenFromCloverField: 0,
-        pollenFromPineapplePatch: 0,
-        pollenFromBlueFlowerField: 0,
-        pollenFromMushroomField: 0,
-        pollenFromCactusField: 0,
-        pollenFromPumpkinPatch: 0,
-        pollenFromPineTreeForest: 0,
-        pollenFromRoseField: 0,
-        pollenFromStrawberryField: 0,
-        pollenFromMountainTopField: 0,
-        pollenFromStumpField: 0,
-        pollenFromAntField: 0,
-        pollenFromPepperPatch: 0,
-        pollenFromCoconutField: 0,
       },
 
       inventory: {
         translators: data.translators || 0,
         spiritPetals: data.spiritPetals || 0,
-        cogs: 0, // Cogs usually reset per session
+        cogs: 0,
       },
 
       currentGear: data.currentGear || {
@@ -190,15 +126,15 @@ export function createInitialState(saveData = {}) {
         freeRoboPass: 0,
       },
 
-      fieldBoosts: data.fieldBoosts || {}, // CHQ: Gemini AI: e.g., { SunflowerField: 2.0 }
+      fieldBoosts: data.fieldBoosts || {},
       effects: data.effects || [],
       flowerIn: { x: 0, z: 0 },
     },
-    // 2. Static World Data / Grids
-    flowers: {}, // Initialize as an empty object/grid [cite: 60]
+
+    flowers: {},
     fieldInfo: {},
 
-    // 3. Live Entities (Not typically saved in the snapshot)
+    // Transient environment arrays (Cleared/populated during frame execution)
     objects: {
       tokens: [],
       bees: [],
@@ -210,47 +146,18 @@ export function createInitialState(saveData = {}) {
       balloons: [],
       mobs: [],
       targets: [],
-      triangulates: [],
-      fuzzBombs: [],
-      planters: [],
     },
-    showTheQuests: false, // Default to hidden
+    showTheQuests: false,
 
     npcs: {
       "Brown Bear": { portionsDone: 0 },
       "Polar Bear": { portionsDone: 0 },
       "Honey Bee": { portionsDone: 0 },
     },
-    savedNPCs: 0,
-    meshes: {
-      static: { vertexBuffer: null, vertCount: 0 }, // Terrain, buildings
-      bees: { instanceBuffer: null, indexCount: 0 },
 
-      // Dynamic Instanced Meshes
-      flowers: { instanceBuffer: null, vertCount: 0 }, // Essential for fields
-      tokens: { instanceBuffer: null, indexCount: 0 }, // Abilities/Honey dropped
-      mobs: { instanceBuffer: null, indexCount: 0 }, // Ladybugs, Rhinos, etc.
+    activeQuests: data.activeQuests || [],
+    completedQuests: data.completedQuests || [],
 
-      // VFX / Transparent Pass
-      particles: { vertexBuffer: null, vertCount: 0 }, // Flames, bubbles, explosions
-      marks: { instanceBuffer: null, indexCount: 0 }, // Boost circles on the floor
-
-      // UI / Overlay (if rendering via WebGL)
-      text: { vertexBuffer: null, vertCount: 0 }, // Floating numbers/Quest text
-    },
-    activeQuests: [], // Quests currently in progress
-    completedQuests: [], // IDs of finished quests to prevent repeats
-    stats: {
-      whitePollen: 0,
-      bluePollen: 0,
-      redPollen: 0,
-      totalPollen: 0, // New aggregate stat
-      treatsFed: 0,
-      pollenFromBees: 0,
-      tabbyLoveStacks: 0,
-      instantRedConversion: 0,
-      // These are used to check quest progress
-    },
     user: {
       keys: {},
       clickedKeys: {},

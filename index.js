@@ -424,19 +424,19 @@ async function BeeSwarmSimulator(saveData) {
   // --- 7. GAME LOOP ---
   let then = 0;
   // 5. Start the Game Loop
-  function gameLoop(now) {
-    // A. Delta Time calculation
-    // const dt = calculateDelta(now);
-    const dt = Math.min((now - then) * 0.001, 0.07); //
-    then = now; //
+  // function gameLoop(now) {
+  //   // A. Delta Time calculation
+  //   // const dt = calculateDelta(now);
+  //   const dt = Math.min((now - then) * 0.001, 0.07); //
+  //   then = now; //
 
-    updateEngine(gameState, dt); // updates positions, AI, and game logic
-    renderer.render(gameState, dt); // draws updated positions to the GPU
+  //   updateEngine(gameState, dt); // updates positions, AI, and game logic
+  //   renderer.render(gameState, dt); // draws updated positions to the GPU
 
-    window.requestAnimationFrame(gameLoop); // Request the next frame
-  }
+  //   window.requestAnimationFrame(gameLoop); // Request the next frame
+  // }
 
-  window.requestAnimationFrame(gameLoop);
+  // window.requestAnimationFrame(gameLoop);
 }
 
 // At the bottom of index.js
