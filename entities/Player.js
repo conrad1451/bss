@@ -9,6 +9,13 @@ export class Player {
   constructor(data) {
     // Attach all the data properties
     Object.assign(this, data);
+
+    // Fallback initializations to prevent undefined array iterations
+    this.effects = this.effects || [];
+    this.fieldBoosts = this.fieldBoosts || {};
+    this.pollenInBag = this.pollenInBag || 0;
+    this.capacity = this.capacity || 100;
+    this.honey = this.honey || 0;
   }
 
   updatePhysics(dt) {
@@ -28,6 +35,9 @@ export class Player {
    * Notice: All direct DOM manipulation has been extracted!
    */
   updateUI(dt, gameState) {
+    // Guard clause: If engine ticks before gameState finishes loading fully
+    if (!gameState) return;
+
     const now = Date.now();
     let effectsChanged = false;
 
@@ -58,7 +68,9 @@ export class Player {
     }
 
     // Optional: Only trigger heavy UI state updates occasionally, not every frame
-    if (gameState.frameCount % 10 === 0) {
+    // Safely check frame counts using an inline fallback if frameCount isn't set yet
+    const currentFrame = gameState.frameCount || 0;
+    if (currentFrame % 10 === 0) {
       EventManager.emit("QUEST_TICK", gameState);
     }
   }
