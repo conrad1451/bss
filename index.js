@@ -1,5 +1,6 @@
 // index.js
-import { createInitialState, getSaveSnapshot } from "./state/gameState.js";
+// import { createInitialState, getSaveSnapshot } from "./state/gameState.js";
+import { createInitialState } from "./state/gameState.js";
 
 import { Renderer } from "./engine/renderer.js";
 import { TextRenderer } from "./engine/textRenderer.js";
@@ -9,8 +10,9 @@ import { loadTextures } from "./engine/assetLoader.js";
 import { createField } from "./engine/world.js";
 import { useItem } from "./engine/inventory.js";
 import { SHADERS } from "./engine/shaders.js";
+import { createEngine } from "./engine/index.js";
 
-import { initMainMenu } from "./ui/menu.js";
+import { initMainMenu, setupUserInterfaceListeners } from "./ui/menu.js";
 import { updateQuestUI } from "./ui/questRenderer.js";
 
 import { initInputHandlers } from "./utils/input.js";
@@ -112,12 +114,16 @@ async function BeeSwarmSimulator(saveData) {
   // let height = window.thisProgramIsInFullScreen ? 500 : window.innerHeight + 1;
 
   // --- 1. SETUP GOES HERE ---
-  const canvas = document.getElementById("gl-canvas");
-  const uiCanvas = document.getElementById("ui-canvas");
-  const saveButton = document.getElementById("save-btn");
+  // const canvas = document.getElementById("gl-canvas");
+  // const uiCanvas = document.getElementById("ui-canvas");
+  // const saveButton = document.getElementById("save-btn");
 
+  // const gl = canvas.getContext("webgl2");
+  // const ctx = uiCanvas.getContext("2d");
+  // --- A. SETUP CONTEXTS & STATE ---
+  const canvas = document.getElementById("gl-canvas");
   const gl = canvas.getContext("webgl2");
-  const ctx = uiCanvas.getContext("2d");
+  const gameState = createInitialState(saveData);
 
   if (!gl) {
     alert("WebGL 2.0 not supported by your browser.");
@@ -135,116 +141,24 @@ async function BeeSwarmSimulator(saveData) {
 
   // --- B. STATE & SYSTEMS ---
   const rawState = createInitialState(saveData);
-  const consumableIds = [
-    "fieldDice",
-    "redExtract",
-    "microConverter",
-    "blueExtract",
-    "glitter",
-  ];
 
   //  "Upgrade" the player object with methods
   rawState.player = new Player(rawState.player);
 
   const gameState = rawState;
 
-  const renderer = new Renderer(gl, canvas.width, canvas.height);
+  const renderer = new Renderer(gl, canvas.width, canvas.height, SHADERS);
   const textRenderer = new TextRenderer(
     gl,
     renderer.glCache,
     renderer.programs,
   );
 
-  // Defensive function to ensure we catch the exact missing string name in the console
-  function safeCreateProgram(programName, vshString, fshString) {
-    if (!vshString) {
-      console.error(
-        `❌ SHADER INIT ERROR: Vertex shader for '${programName}' evaluated to undefined!`,
-      );
-    }
-    if (!fshString) {
-      console.error(
-        `❌ SHADER INIT ERROR: Fragment shader for '${programName}' evaluated to undefined!`,
-      );
-    }
-    return renderer.createProgram(vshString, fshString);
-  }
-
   // ASSET LOADING
   // Load textures and pass to renderer
   const textures = loadTextures(gl, ctx); // Pass the 2D context as the second parameter!
   renderer.textures = textures;
 
-  //  SHADERS
-  // Map everything explicitly to your actual SHADERS dictionary keys
-  renderer.programs.static = safeCreateProgram(
-    "static",
-    SHADERS.staticVSH,
-    SHADERS.staticFSH,
-  );
-  renderer.programs.dynamic = safeCreateProgram(
-    "dynamic",
-    SHADERS.dynamicVSH,
-    SHADERS.dynamicFSH,
-  );
-  renderer.programs.bee = safeCreateProgram(
-    "bee",
-    SHADERS.beeVSH,
-    SHADERS.beeFSH,
-  );
-  renderer.programs.flower = safeCreateProgram(
-    "flower",
-    SHADERS.flowerVSH,
-    SHADERS.flowerFSH,
-  );
-  renderer.programs.token = safeCreateProgram(
-    "token",
-    SHADERS.tokenVSH,
-    SHADERS.tokenFSH,
-  );
-  renderer.programs.particle = safeCreateProgram(
-    "particle",
-    SHADERS.particleRendererVSH,
-    SHADERS.particleRendererFSH,
-  );
-  renderer.programs.text = safeCreateProgram(
-    "text",
-    SHADERS.textRendererVSH,
-    SHADERS.textRendererFSH,
-  );
-  renderer.programs.mob = safeCreateProgram(
-    "mob",
-    SHADERS.mobRendererVSH,
-    SHADERS.mobRendererFSH,
-  );
-
-  renderer.programs.explosion = safeCreateProgram(
-    "explosion",
-    SHADERS.explosionRendererVSH,
-    SHADERS.explosionRendererFSH,
-  );
-
-  renderer.programs.trail = safeCreateProgram(
-    "trail",
-    SHADERS.trailRendererVSH,
-    SHADERS.trailRendererFSH,
-  );
-
-  renderer.programs.mob = safeCreateProgram(
-    "mob",
-    SHADERS.mobRendererVSH,
-    SHADERS.mobRendererFSH,
-  );
-
-  // Double check if your engine/renderer.js initializes a mob program lane:
-  if (SHADERS.mobRendererVSH) {
-    renderer.programs.mob = safeCreateProgram(
-      "mob",
-      SHADERS.mobRendererVSH,
-      SHADERS.mobRendererFSH,
-    );
-  }
-  // --- Add this temporary diagnostic block right BEFORE renderer.initCache ---
   console.log("--- WebGL Program Linking Status Audit ---");
   Object.keys(renderer.programs).forEach((key) => {
     const prog = renderer.programs[key];
@@ -303,7 +217,7 @@ async function BeeSwarmSimulator(saveData) {
   gl.cullFace(gl.BACK);
 
   // --- D. WORLD & INPUT ---
-  initInputHandlers(gameState, uiCanvas); // Attach Input listeners
+  // initInputHandlers(gameState, uiCanvas); // Attach Input listeners
 
   // 🛠️ THE GOLDEN SAFEGUARD:
   // Force-verify that the required engine state objects exist on gameState
@@ -328,120 +242,21 @@ async function BeeSwarmSimulator(saveData) {
     );
   });
 
-  // 🛠️ Step C: Link the metadata lengths back to your mesh engine
-  if (flowerMeshDataStaging.verts.length > 0) {
-    console.log(
-      `Successfully generated ${flowerMeshDataStaging.index.length / 3} procedural triangles.`,
-    );
-
-    // Pass the flat item count metadata directly to your active tracker
-    gameState.meshes.flowers.vertCount = flowerMeshDataStaging.index.length;
-
-    // NOTE: If you have an explicit vertex buffer upload step, call it here:
-    // uploadToGPU(gl, gameState.meshes.flowers, flowerMeshDataStaging);
-  }
+  // --- C. HAND OFF DATA TO GPU ---
+  // One declarative method handle call hides all raw WebGL buffer assignments! 💎
+  renderer.uploadFlowerMesh(flowerMeshDataStaging);
 
   // 🛠️ Step D: Fire off the remaining asset placements
   initGameWorld(gameState); // Populates NPCs and Mobs  //ENGINE STARTUP --
-
-  // --- E. CHECKPOINT LOGIC ---
-  async function handleSave() {
-    console.log("Checkpoint triggered...");
-    const snapshot = getSaveSnapshot(gameState);
-    try {
-      await saveCheckpoint(snapshot);
-      // Assuming you have a showSaveToast function elsewhere
-      if (typeof showSaveToast === "function") showSaveToast("Game Saved!");
-      console.log("Game Saved Successfully!");
-    } catch (err) {
-      console.error("Save failed:", err);
-    }
-  }
-  if (saveButton) {
-    saveButton.addEventListener("click", () => {
-      const snapshot = getSaveSnapshot(gameState);
-      saveCheckpoint(snapshot);
-    });
-  }
-
-  // Inside index.js UI logic
-  document.getElementById("questButton").addEventListener("click", () => {
-    const page = document.getElementById("questPage");
-    const isHidden = page.style.display === "none" || page.style.display === "";
-
-    // Hide all other pages first (standard BSS UI behavior)
-    document
-      .querySelectorAll(".uiPage")
-      .forEach((p) => (p.style.display = "none"));
-
-    page.style.display = isHidden ? "block" : "none";
-
-    if (isHidden) {
-      page.style.display = "block";
-      updateQuestUI(gameState); // Pulls current stats into progress bars
-    } else {
-      page.style.display = "none";
-    }
-  });
-
-  // const ctx = uiCanvas.getContext("2d"); // Needed for Renderer.renderUI
-
-  // window.onresize = () => {
-  //   width = window.thisProgramIsInFullScreen ? 500 : window.innerWidth + 1;
-  //   height = window.thisProgramIsInFullScreen ? 500 : window.innerHeight + 1;
-
-  //   canvas.width = width;
-  //   canvas.height = height;
-  //   uiCanvas.width = width;
-  //   uiCanvas.height = height;
-
-  //   gl.viewport(0, 0, width, height);
-
-  //   // Update the renderer's internal state
-  //   renderer.width = width;
-  //   renderer.height = height;
-
-  //   // Refresh projection matrix in gameState
-  //   gameState.player.setProjectionMatrix(
-  //     gameState.player.fov,
-  //     width / height,
-  //     0.1,
-  //     275,
-  //   );
-  // };
-
-  // CHQ: Gemini AI added
-  // Attach Listeners ONCE (outside the loop)
-  consumableIds.forEach((id) => {
-    const el = document.getElementById(id);
-    if (el) {
-      el.addEventListener("click", () => {
-        useItem(id, gameState);
-      });
-    }
-  });
+  initInputHandlers(gameState, uiCanvas); // Attach Input listeners
+  setupUserInterfaceListeners(gameState);
 
   // --- 7. GAME LOOP ---
-  let then = 0;
-  // 5. Start the Game Loop
-  // function gameLoop(now) {
-  //   // A. Delta Time calculation
-  //   // const dt = calculateDelta(now);
-  //   const dt = Math.min((now - then) * 0.001, 0.07); //
-  //   then = now; //
-
-  //   updateEngine(gameState, dt); // updates positions, AI, and game logic
-  //   renderer.render(gameState, dt); // draws updated positions to the GPU
-
-  //   window.requestAnimationFrame(gameLoop); // Request the next frame
-  // }
-
-  // window.requestAnimationFrame(gameLoop);
+  const engine = createEngine(gameState, renderer, updateEngine);
+  engine.start();
 }
 
 // At the bottom of index.js
 window.addEventListener("load", () => {
   main();
 });
-// main();
-// console.log = 0;

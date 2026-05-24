@@ -2,17 +2,19 @@
 
 // CHQ: Gemini AI created function
 
-import { updateQuestUI } from "../ui/questRenderer";
+// import { updateQuestUI } from "../ui/questRenderer";
+import { EventManager } from "../engine/eventManager.js";
 
 export class Player {
   constructor(data) {
     // Attach all the data properties
     Object.assign(this, data);
   }
-  // updateFields
+
   updatePhysics(dt) {
     /* physics logic */
   }
+
   updateCamera(dt) {
     /* camera logic */
   }
@@ -21,48 +23,70 @@ export class Player {
     /* field logic */
   }
 
+  /**
+   * Data-driven changes that depend on time progression.
+   * Notice: All direct DOM manipulation has been extracted!
+   */
   updateUI(dt, gameState) {
-    // 1. Update the numerical text
-    const pollenEl = document.getElementById("pollenAmount");
-    const pollenEl2 = document.getElementById("pollenAmount2");
-    const honeyEl = document.getElementById("honeyAmount");
+    const now = Date.now();
+    let effectsChanged = false;
 
-    if (pollenEl)
-      pollenEl.textContent = Math.floor(this.pollenInBag).toLocaleString();
-    if (pollenEl2)
-      pollenEl2.textContent = Math.floor(this.pollenInBag).toLocaleString();
-    if (honeyEl) honeyEl.textContent = Math.floor(this.honey).toLocaleString();
+    // Process temporary active buffs/effects over time
+    this.effects = this.effects.filter((effect) => {
+      const timeLeft = effect.endTime - now;
 
-    // 2. Update the Capacity Bar width
-    const capacityBar = document.getElementById("capacityBar");
-    if (capacityBar) {
-      const capPercent = (this.pollenInBag / this.capacity) * 100;
-      // 1.96 scales 0-100% to the 196px width defined in your SVG
-      capacityBar.setAttribute("width", Math.min(capPercent * 1.96, 196));
-    }
-
-    // 3. Update Quests if the menu is visible
-    const questPage = document.getElementById("questPage");
-    if (questPage && questPage.style.display !== "none") {
-      updateQuestUI(gameState);
-    }
-
-    // CHQ: Gemini AI added for effects
-    this.effects.forEach((effect) => {
-      const timeLeft = effect.endTime - Date.now();
-      const cooldownEl = document.getElementById(`${effect.id}_cooldown`);
-
-      if (cooldownEl && timeLeft > 0) {
-        const totalTime = 15 * 60 * 1000;
-        const height = (timeLeft / totalTime) * 30; // 30 is the SVG height in your index.html
-        cooldownEl.setAttribute("height", height);
-        document.getElementById(effect.id).style.display = "block";
-      } else if (timeLeft <= 0) {
-        // Remove multiplier and hide icon
-        this.fieldBoosts[effect.target] -= effect.multiplier;
-        document.getElementById(effect.id).style.display = "none";
-        // Logic to splice this effect from player.effects should go here
+      if (timeLeft <= 0) {
+        // 1. Revert the stat multiplier cleanly
+        if (this.fieldBoosts[effect.target] !== undefined) {
+          this.fieldBoosts[effect.target] -= effect.multiplier;
+        }
+        effectsChanged = true;
+        return false; // Automatically filters/splices this effect out of the array
       }
+      return true; // Keep the active effect
+    });
+
+    // If an effect expired, broadcast the state change to update menus/bars asynchronously
+    if (effectsChanged) {
+      EventManager.emit("EFFECTS_UPDATED", {
+        effects: [...this.effects],
+        fieldBoosts: { ...this.fieldBoosts },
+      });
+    } else if (this.effects.length > 0) {
+      // If effects are active, broadcast their current durations for smooth clock countdown overlays
+      EventManager.emit("EFFECT_TICK", { effects: this.effects });
+    }
+
+    // Optional: Only trigger heavy UI state updates occasionally, not every frame
+    if (gameState.frameCount % 10 === 0) {
+      EventManager.emit("QUEST_TICK", gameState);
+    }
+  }
+
+  /**
+   * Call this mutator method whenever the player collects pollen in fields.
+   */
+  addPollen(amount, colorType) {
+    const oldPollen = this.pollenInBag;
+    this.pollenInBag = Math.min(this.capacity, this.pollenInBag + amount);
+
+    if (this.pollenInBag !== oldPollen) {
+      EventManager.emit("POLLEN_CHANGED", {
+        pollenInBag: this.pollenInBag,
+        capacity: this.capacity,
+        delta: this.pollenInBag - oldPollen,
+      });
+    }
+  }
+
+  /**
+   * Call this mutator method when converting pollen to honey at the hive.
+   */
+  addHoney(amount) {
+    this.honey += amount;
+    EventManager.emit("HONEY_CHANGED", {
+      honey: this.honey,
+      delta: amount,
     });
   }
 }
