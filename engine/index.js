@@ -5,7 +5,7 @@
 import { loadTextures } from "./assetLoader.js";
 import { createGameLoop } from "./gameLoop.js";
 import { updatePhysicsEntity, resolveObstacleCollisions } from "./physics.js";
-import { updateInventory, addMessage } from "./eventManager.js";
+// import { updateInventory, addMessage } from "./eventManager.js";
 // import { updateInventory, addMessage, EventManager } from "./eventManager.js";
 
 // 1. Setup the Central Engine State (Single Source of Truth)
@@ -110,7 +110,18 @@ export function createEngine(gameState, eventManager, obstacles = []) {
   let lastTime = 0;
   let isRunning = false;
 
-  // 1. Defensively check and initialize assets ONLY if runtime graphic contexts exist.
+  // CHQ: Gemini AI made edits
+  // 1. Defensively guarantee structural mesh nodes exist to support frontend loading
+  if (!gameState.meshes) {
+    gameState.meshes = {
+      flowers: null,
+      bees: null,
+      fields: null,
+      world: null,
+    };
+  }
+
+  // 2. Defensively check and initialize assets ONLY if runtime graphic contexts exist.
   // This keeps your integration tests fully green in headless Node.js environments!
   if (gameState.renderContexts?.gl) {
     const gl = gameState.renderContexts.gl;

@@ -38,6 +38,12 @@ export function getSaveSnapshot(gameState) {
   };
 }
 
+export function getPollenMultiplier(gameState, type) {
+  const base = gameState.player[`${type}Pollen`] || 1;
+  const boost = gameState.player.fieldBoosts[type] || 0;
+  return base + boost;
+}
+
 /**
  * Factory function to instantiate a fresh engine state object.
  * Perfectly populates fields using a saved snapshot data layout if available.
@@ -161,6 +167,14 @@ export function createInitialState(saveData = {}) {
     user: {
       keys: {},
       clickedKeys: {},
+    },
+
+    // CHQ: Gemini: Core Mesh Allocation Trackers (Pre-empts frontend structural binding panics)
+    meshes: {
+      flowers: { vertCount: 0, vertexBuffer: null, indexBuffer: null },
+      bees: null,
+      fields: null,
+      world: null,
     },
   };
 }
