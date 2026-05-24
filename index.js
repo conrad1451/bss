@@ -10,7 +10,7 @@ import { loadTextures } from "./engine/assetLoader.js";
 import { createField } from "./engine/world.js";
 import { useItem } from "./engine/inventory.js";
 import { SHADERS } from "./engine/shaders.js";
-import { createEngine } from "./engine/index.js";
+// import { createEngine } from "./engine/index.js";
 
 import { initMainMenu, setupUserInterfaceListeners } from "./ui/menu.js";
 import { updateQuestUI } from "./ui/questRenderer.js";
@@ -23,6 +23,7 @@ import { FIELD_CONFIGS } from "./data/fieldData.js";
 import { Player } from "./entities/Player.js";
 import { NPC } from "./entities/npcs.js";
 import { Mob, MondoChick } from "./entities/mobs.js";
+import { createGameLoop } from "./engine/gameLoop.js";
 
 function initGameWorld(gameState) {
   // 1. Initialize Mobs
@@ -67,16 +68,18 @@ async function BeeSwarmSimulator(saveData) {
   // let height = window.thisProgramIsInFullScreen ? 500 : window.innerHeight + 1;
 
   // --- 1. SETUP GOES HERE ---
-  // const canvas = document.getElementById("gl-canvas");
-  // const uiCanvas = document.getElementById("ui-canvas");
-  // const saveButton = document.getElementById("save-btn");
-
-  // const gl = canvas.getContext("webgl2");
-  // const ctx = uiCanvas.getContext("2d");
-  // --- A. SETUP CONTEXTS & STATE ---
   const canvas = document.getElementById("gl-canvas");
+  const uiCanvas = document.getElementById("ui-canvas");
+
+  if (!canvas || !uiCanvas) {
+    console.error(
+      "Critical Error: Required HTML5 canvases were not found in the DOM.",
+    );
+    return;
+  }
+
   const gl = canvas.getContext("webgl2");
-  const gameState = createInitialState(saveData);
+  const ctx = uiCanvas.getContext("2d");
 
   if (!gl) {
     alert("WebGL 2.0 not supported by your browser.");
@@ -93,13 +96,22 @@ async function BeeSwarmSimulator(saveData) {
   uiCanvas.height = height;
 
   // --- B. STATE & SYSTEMS ---
-  const rawState = createInitialState(saveData);
+  // 1. Initialize the baseline state tree
+  const gameState = createInitialState(saveData);
 
-  //  "Upgrade" the player object with methods
-  rawState.player = new Player(rawState.player);
+  // 2. Upgrade the raw player object with class methods 💎
+  gameState.player = new Player(gameState.player);
 
-  const gameState = rawState;
+  // // Define width/height based on window or fixed size
+  // const width = window.innerWidth;
+  // const height = window.innerHeight;
 
+  // canvas.width = width;
+  // canvas.height = height;
+  // uiCanvas.width = width;
+  // uiCanvas.height = height;
+
+  // --- B. RENDERER INITIALIZATION ---
   const renderer = new Renderer(gl, canvas.width, canvas.height, SHADERS);
   const textRenderer = new TextRenderer(
     gl,
@@ -112,6 +124,7 @@ async function BeeSwarmSimulator(saveData) {
   const textures = loadTextures(gl, ctx); // Pass the 2D context as the second parameter!
   renderer.textures = textures;
 
+  // --- C. WEBGL PROGRAM AUDIT & PATCHES ---
   console.log("--- WebGL Program Linking Status Audit ---");
   Object.keys(renderer.programs).forEach((key) => {
     const prog = renderer.programs[key];
@@ -160,7 +173,7 @@ async function BeeSwarmSimulator(saveData) {
   // This is your line 202 where it crashes
   renderer.initCache(renderer.programs);
 
-  // --- C. GL STATE SETTINGS ---
+  // --- D. GL STATE SETTINGS ---
   gl.viewport(0, 0, width, height);
   gl.enable(gl.BLEND);
   gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
@@ -169,7 +182,7 @@ async function BeeSwarmSimulator(saveData) {
   gl.enable(gl.CULL_FACE);
   gl.cullFace(gl.BACK);
 
-  // --- D. WORLD & INPUT ---
+  // --- E. WORLD & INPUT ---
   // initInputHandlers(gameState, uiCanvas); // Attach Input listeners
 
   // 🛠️ THE GOLDEN SAFEGUARD:
@@ -178,13 +191,12 @@ async function BeeSwarmSimulator(saveData) {
   if (!gameState.fieldInfo) gameState.fieldInfo = {};
   if (!gameState.flowers) gameState.flowers = {};
 
-  // 🛠️ Step A: Create the CPU staging arrays that addFlower demands
   const flowerMeshDataStaging = {
     verts: [],
     index: [],
   };
 
-  // 🛠️ Step B: FIELD_CONFIGS runs here
+  // Build the fileds and pass data into staging
   FIELD_CONFIGS.forEach((f) => {
     createField(
       f.name, // Parameter 1: Field identifier string
@@ -195,21 +207,30 @@ async function BeeSwarmSimulator(saveData) {
     );
   });
 
-  // --- C. HAND OFF DATA TO GPU ---
-  // One declarative method handle call hides all raw WebGL buffer assignments! 💎
+  // CHQ: Gemini AI: Handoff compiled mesh geometry to the GPU
   renderer.uploadFlowerMesh(flowerMeshDataStaging);
 
-  // 🛠️ Step D: Fire off the remaining asset placements
+  // 🛠️ ---------------- Step F: ENGINE STARTUP & EVENT LISTENERS -----------------
   initGameWorld(gameState); // Populates NPCs and Mobs  //ENGINE STARTUP --
   initInputHandlers(gameState, uiCanvas); // Attach Input listeners
   setupUserInterfaceListeners(gameState);
 
   // --- 7. GAME LOOP ---
-  const engine = createEngine(gameState, renderer, updateEngine);
-  engine.start();
+  // const engine = createEngine(gameState, renderer, updateEngine);
+  // engine.start();
+
+  // const engineLoop = createGameLoop(updateEngine, renderer.render, gameState);
+  const engineLoop = createGameLoop(
+    updateEngine,
+    (state, dt) => renderer.render(state, dt),
+    gameState,
+  );
+
+  // Start it immediately for vanilla execution
+  engineLoop.start();
 }
 
-// At the bottom of index.js
+// --- 3. LIFECYCLE ---
 window.addEventListener("load", () => {
   main();
 });
