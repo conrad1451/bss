@@ -84,7 +84,12 @@ export function initializeEngine(canvasElement) {
   loadTextures(texCtx);
 
   // Instantiate the isolated game loop
-  const engineLoop = createGameLoop(updateEngine, renderer.render, gameState);
+  // const engineLoop = createGameLoop(updateEngine, renderer.render, gameState);
+  const engineLoop = createGameLoop(
+    updateEngine,
+    (state, dt) => renderer.render(state, dt),
+    gameState,
+  );
 
   // Start the frame cycles
   engineLoop.start();
