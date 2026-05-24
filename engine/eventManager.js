@@ -1,8 +1,7 @@
 // engine/eventManager.js
 
-// CHQ: Gemini AI created
+// CHQ: Gemini AI optimized
 
-// A simple map to keep track of event string names and their bound callback functions
 const listeners = {};
 
 export const EventManager = {
@@ -26,13 +25,27 @@ export const EventManager = {
   },
 
   /**
-   * Broadcast an event out to all subscribed listeners.
+   * Broadcast an event out to all subscribed listeners asynchronously
+   * to ensure UI updates never block the core engine loop.
    * @param {string} eventName - Name of the event to fire
    * @param {any} data - Content payload accompanying the event
    */
   emit(eventName, data) {
     if (!listeners[eventName]) return;
-    listeners[eventName].forEach((callback) => callback(data));
+
+    // CHQ: Defer the callback execution to the next event
+    //      loop tick to keep engine loop non-blocking
+    listeners[eventName].forEach((callback) => {
+      // queueMicrotask drops the execution to the end of the current tick,
+      // protecting game updates from slow DOM/UI rendering.
+      queueMicrotask(() => {
+        try {
+          callback(data);
+        } catch (error) {
+          console.error(`Error in event listener for ${eventName}:`, error);
+        }
+      });
+    });
   },
 };
 
@@ -67,8 +80,12 @@ export function updateInventory(gameState, itemKey, amount) {
  * @param {string} type - Message classification styling ('info', 'quest', 'warning')
  */
 export function addMessage(text, type = "info") {
+  // CHQ: explicit check to prevent calling without first safely checking execution context
+  const hasCryptoUUID =
+    typeof crypto !== "undefined" && typeof crypto.randomUUID === "function";
+
   EventManager.emit("NEW_MESSAGE", {
-    id: crypto.randomUUID
+    id: hasCryptoUUID
       ? crypto.randomUUID()
       : Math.random().toString(36).substring(2, 9),
     timestamp: Date.now(),

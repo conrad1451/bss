@@ -4,9 +4,78 @@
 
 import { loadCheckpoint, saveCheckpoint, deleteFromDB } from "../utils/db.js";
 
+import { useItem } from "../engine/inventory.js";
+import { updateQuestUI } from "./questRenderer.js";
+import { getSaveSnapshot } from "../state/gameState.js";
+import { saveCheckpoint } from "../utils/db.js";
+
 let addedDivsToSplice = [];
 let ableToImport = true;
 let printedCode = null;
+
+/**
+ * Binds all HTML overlay DOM elements to the active running game state.
+ * @param {Object} gameState - The single source of truth state object
+ */
+export function setupUserInterfaceListeners(gameState) {
+  const saveButton = document.getElementById("save-btn");
+  const questButton = document.getElementById("questButton");
+
+  const consumableIds = [
+    "fieldDice",
+    "redExtract",
+    "microConverter",
+    "blueExtract",
+    "glitter",
+  ];
+
+  // 1. Consumable Hotbar Buttons
+  consumableIds.forEach((id) => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.addEventListener("click", () => {
+        useItem(id, gameState);
+      });
+    }
+  });
+
+  // 2. Quest Menu Toggle
+  if (questButton) {
+    questButton.addEventListener("click", () => {
+      const page = document.getElementById("questPage");
+      if (!page) return;
+
+      const isHidden =
+        page.style.display === "none" || page.style.display === "";
+
+      // Hide all other UI windows first (Classic BSS style)
+      document.querySelectorAll(".uiPage").forEach((p) => {
+        p.style.display = "none";
+      });
+
+      if (isHidden) {
+        page.style.display = "block";
+        updateQuestUI(gameState);
+      } else {
+        page.style.display = "none";
+      }
+    });
+  }
+
+  // 3. Database Checkpoint Save Button
+  if (saveButton) {
+    saveButton.addEventListener("click", async () => {
+      console.log("Checkpoint triggered via UI...");
+      const snapshot = getSaveSnapshot(gameState);
+      try {
+        await saveCheckpoint(snapshot);
+        console.log("Game Saved Successfully!");
+      } catch (err) {
+        console.error("Save failed:", err);
+      }
+    });
+  }
+}
 
 export function initMainMenu(BeeSwarmSimulator) {
   //   const addedDivsToSplice = [];
