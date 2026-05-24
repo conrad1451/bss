@@ -1,12 +1,12 @@
 // index.js
-// import { createInitialState, getSaveSnapshot } from "./state/gameState.js";
+
 import { createInitialState } from "./state/gameState.js";
 
 import { Renderer } from "./engine/renderer.js";
 import { TextRenderer } from "./engine/textRenderer.js";
 import { updateEngine } from "./engine/updateEngine.js";
 import { loadTextures } from "./engine/assetLoader.js";
-// import { addFlower } from "./engine/flowerBuilder.js";
+
 import { createField } from "./engine/world.js";
 import { useItem } from "./engine/inventory.js";
 import { SHADERS } from "./engine/shaders.js";
@@ -16,63 +16,16 @@ import { initMainMenu, setupUserInterfaceListeners } from "./ui/menu.js";
 import { updateQuestUI } from "./ui/questRenderer.js";
 
 import { initInputHandlers } from "./utils/input.js";
-import { saveCheckpoint, loadCheckpoint } from "./utils/db.js";
 
 import { mobDefinitions } from "./data/mobData.js"; // Optional: keep data separate
-// import { fieldDefinitions } from "./data/fieldData.js";
 import { FIELD_CONFIGS } from "./data/fieldData.js";
 
 import { Player } from "./entities/Player.js";
 import { NPC } from "./entities/npcs.js";
 import { Mob, MondoChick } from "./entities/mobs.js";
 
-// // index.js
-// import { effects } from "./data/effects.js";
-// import { upgrades } from "./data/upgrades.js";
-// // import { blenderRecipes, windShrineDonations } from "./recipes";
-// import { loadTextures, generateDefaultNoise } from "./engine/assetLoader.js";
-// import { Bee, TempBee } from "./entities/bees.js";
-
-// import {
-//   createDatabase,
-//   loadFromDB,
-//   saveToDB,
-//   deleteFromDB,
-// } from "./utils/db.js";
-
 function initGameWorld(gameState) {
-  // 1. Initialize Fields (Your existing logic)
-  // FIELD_CONFIGS
-  //   fieldDefinitions.forEach((f) => {
-
-  // FIELD_CONFIGS.forEach((f) => {
-  //   createField(
-  //     f.name,
-  //     f.x,
-  //     f.y,
-  //     f.z,
-  //     f.w,
-  //     f.l,
-  //     // f.colorLogic,
-  //     // f.levelLogic,
-  //     f.composition,
-  //     f.nectar,
-  //     gameState,
-  //     // addFlower,
-  //     // addFlower(renderer), // Pass the function that builds flower meshes
-  //     // renderer.addFlower.bind(renderer), // Pass the function that builds flower meshes
-  //   );
-  // });
-
-  // FIELD_CONFIGS.forEach((f) => {
-  //   createField(
-  //     f.name, // Parameter 1: Field identifier string
-  //     f, // Parameter 2: Pass the entire config object wrapper directly!
-  //     gameState, // Parameter 3: Pass your main active global game state container
-  //     gameState.meshes.flowers, // Parameter 4: Pass your instanced flower mesh reference channel
-  //   );
-  // });
-  // 2. Initialize Mobs
+  // 1. Initialize Mobs
   // Instead of raw objects, we now use the Mob class
   mobDefinitions.forEach((m) => {
     const mobInstance =
@@ -83,7 +36,7 @@ function initGameWorld(gameState) {
     gameState.objects.mobs.push(mobInstance);
   });
 
-  // 3. Initialize NPCs (Bears/Shopkeepers)
+  // 2. Initialize NPCs (Bears/Shopkeepers)
   // CRITICAL CLEANUP: You named your array gameState.objects.npcs below,
   // but your gameState template defines it under gameState.npcs object keys.
   // Let's protect the collections safely here:

@@ -7,7 +7,6 @@ import { loadCheckpoint, saveCheckpoint, deleteFromDB } from "../utils/db.js";
 import { useItem } from "../engine/inventory.js";
 import { updateQuestUI } from "./questRenderer.js";
 import { getSaveSnapshot } from "../state/gameState.js";
-import { saveCheckpoint } from "../utils/db.js";
 
 let addedDivsToSplice = [];
 let ableToImport = true;
