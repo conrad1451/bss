@@ -1,0 +1,104 @@
+<svg id="cloverFieldBoost" viewBox="0 0 30 30" width="30" height="30">
+  <rect width="30" height="30" fill="rgb(217, 194, 60)" />
+  <rect
+    id="cloverFieldBoost_cooldown"
+    width="30"
+    height="0"
+    opacity="0.45"
+    fill="rgb(0, 0, 0)"
+  />
+  <g transform="translate(4,-4) rotate(10)">
+    <path
+      d="M 18 16C 13 19 16 22 20.3 26"
+      fill="rgb(0,0,0,0)"
+      stroke="#57b5b1"
+      stroke-width="5"
+    />
+    <path
+      d="M 18 16C 13 19 16 22 19 25"
+      fill="rgb(0,0,0,0)"
+      stroke="rgb(0,170,0)"
+      stroke-width="2"
+    />
+    <g transform="rotate(24)">
+      <circle
+        cx="0"
+        cy="0"
+        r="5"
+        fill="rgb(150,220,150)"
+        stroke="#57b5b1"
+        stroke-width="2"
+        transform="translate(13,8) scale(1,0.6)"
+      />
+      <circle
+        cx="0"
+        cy="0"
+        r="1.5"
+        fill="rgb(0,150,0)"
+        transform="translate(13,8) scale(1,0.3)"
+      />
+    </g>
+    <g transform="rotate(24)">
+      <circle
+        cx="0"
+        cy="0"
+        r="5"
+        fill="rgb(150,220,150)"
+        stroke="#57b5b1"
+        stroke-width="2"
+        transform="translate(24,8) scale(1,0.6)"
+      />
+      <circle
+        cx="0"
+        cy="0"
+        r="1.5"
+        fill="rgb(0,150,0)"
+        transform="translate(24,8) scale(1,0.3)"
+      />
+    </g>
+    <g transform="rotate(114)">
+      <circle
+        cx="0"
+        cy="0"
+        r="5"
+        fill="rgb(150,220,150)"
+        stroke="#57b5b1"
+        stroke-width="2"
+        transform="translate(13,-18) scale(1,0.6)"
+      />
+      <circle
+        cx="0"
+        cy="0"
+        r="1.5"
+        fill="rgb(0,150,0)"
+        transform="translate(13,-18) scale(1,0.3)"
+      />
+    </g>
+    <g transform="rotate(114)">
+      <circle
+        cx="0"
+        cy="0"
+        r="5"
+        fill="rgb(150,220,150)"
+        stroke="#57b5b1"
+        stroke-width="2"
+        transform="translate(3,-18) scale(1,0.6)"
+      />
+      <circle
+        cx="0"
+        cy="0"
+        r="1.5"
+        fill="rgb(0,150,0)"
+        transform="translate(3,-18) scale(1,0.3)"
+      />
+    </g>
+  </g>
+  <text
+    id="cloverFieldBoost_amount"
+    x="28"
+    y="28"
+    text-anchor="end"
+    font-family="calibri"
+    font-size="11px"
+  />
+</svg>

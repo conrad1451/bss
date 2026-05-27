@@ -1,0 +1,9 @@
+<svg id="coconutFieldBoost" viewBox="0 0 30 30" width="30" height="30">
+  <rect width="30" height="30" fill="rgb(217, 194, 60)"/>
+  <rect id="coconutFieldBoost_cooldown" width="30" height="0" opacity="0.45" fill="rgb(0, 0, 0)"/>
+  <circle cx="15" cy="15" r="8" fill="rgb(168, 86, 18)" stroke="#57b5b1" stroke-width="1"/>
+  <circle cx="20" cy="14" r="1.25" fill="rgb(0,0,0,0.3)"/>
+  <circle cx="15" cy="13" r="1.25" fill="rgb(0,0,0,0.3)"/>
+  <circle cx="17" cy="17" r="1.25" fill="rgb(0,0,0,0.3)"/>
+  <text id="coconutFieldBoost_amount" x="28" y="28" text-anchor="end" font-family="calibri" font-size="11px"/>
+</svg>

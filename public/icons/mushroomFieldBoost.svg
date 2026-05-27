@@ -1,0 +1,50 @@
+<svg id="mushroomFieldBoost" style="width: 30px; height: 30px; display: none">
+  <rect width="30" height="30" fill="rgb(217, 194, 60)"></rect>
+  <rect
+    id="mushroomFieldBoost_cooldown"
+    width="30"
+    height="0"
+    style="fill: rgb(0, 0, 0)"
+    opacity="0.45"
+  ></rect>
+
+  <path
+    d="M11 17C 2 18 2 4 15 5M19 17C 28 18 29 4 15 5"
+    fill="rgb(255,40,60)"
+    stroke="#57b5b1"
+    stroke-width="2"
+  ></path>
+  <path
+    d="M15 18C 2 18 2 4 15 5M15 18C 28 18 29 4 15 5"
+    fill="rgb(255,40,60)"
+  ></path>
+  <path
+    d="M11 17C 8 30 22 30 19 17"
+    fill="rgb(240,240,240)"
+    stroke="#57b5b1"
+    stroke-width="2"
+  ></path>
+  <circle cx="11" cy="9" r="1.5" fill="rgb(240,240,240)"></circle>
+  <circle
+    cx="26"
+    cy="10"
+    r="2"
+    fill="rgb(240,240,240)"
+    transform="scale(0.8,1)"
+  ></circle>
+  <circle
+    cx="15"
+    cy="19"
+    r="1.75"
+    fill="rgb(240,240,240)"
+    transform="scale(1,0.7)"
+  ></circle>
+
+  <text
+    id="mushroomFieldBoost_amount"
+    x="28"
+    y="28"
+    style="font-family: calibri; font-size: 11px"
+    text-anchor="end"
+  ></text>
+</svg>
