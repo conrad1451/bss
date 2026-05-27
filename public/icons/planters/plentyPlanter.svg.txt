@@ -1,0 +1,103 @@
+<svg
+  id="plentyPlanter"
+  style="cursor: pointer; border-radius: 5px"
+  viewBox="0 0 200 70"
+  width="200"
+  height="70"
+>
+  <rect width="200" height="70" fill="rgb(255,255,255)" />
+  <rect width="70" height="70" fill="rgb(225,225,225)" />
+  <text
+    x="134"
+    y="19"
+    fill="rgb(0,0,0)"
+    text-anchor="middle"
+    font-family="trebuchet ms"
+    font-size="16px"
+  >
+    Planter O' Plenty
+  </text>
+  <text
+    x="132"
+    y="35"
+    fill="rgb(0,0,0)"
+    text-anchor="middle"
+    font-family="trebuchet ms"
+    font-size="10.5px"
+  >
+    Grows in 60m, but faster
+  </text>
+  <text
+    x="135"
+    y="50"
+    fill="rgb(0,0,0)"
+    text-anchor="middle"
+    font-family="trebuchet ms"
+    font-size="10.5px"
+  >
+    in end-game fields. Gives
+  </text>
+  <text
+    x="136"
+    y="64"
+    fill="rgb(0,0,0)"
+    text-anchor="middle"
+    font-family="trebuchet ms"
+    font-size="10.5px"
+  >
+    many bonus rare items!
+  </text>
+  <text
+    id="plentyPlanter_amount"
+    x="67"
+    y="67"
+    fill="rgb(0,0,0)"
+    text-anchor="end"
+    font-family="calibri"
+    font-size="14px"
+  />
+  <path
+    stroke="black"
+    stroke-width="1.5"
+    fill="rgb(255, 210, 0)"
+    d="M 25 51 C 20 54 40 54 40 50C 37 46 35 42 37 33C 44 34 51 27 51 20C 42 9 14 14 13 20C 13 27 19 35 25 33C 31 36 28 51 24 52"
+  />
+  <path
+    stroke="black"
+    stroke-width="1.5"
+    fill="rgb(0,0,0,0)"
+    d="M 14 23C 5 18 6 36 17 31M 50 23C 60 18 55 37 46 31"
+  />
+  <path
+    stroke="rgb(255,0,0)"
+    stroke-width="3"
+    fill="rgb(0,0,0,0)"
+    d="M 15 27C 22 25 20 29 31 26"
+  />
+  <path
+    stroke="rgb(0,0,255)"
+    stroke-width="3"
+    fill="rgb(0,0,0,0)"
+    d="M 49 26C 49 25 42 29 32 26"
+  />
+  <text
+    x="29"
+    y="34"
+    fill="rgb(255,255,255)"
+    stroke="rgb(0,255,0)"
+    stroke-width="0.5"
+    font-family="comic sans ms"
+    font-size="17px"
+  >
+    P
+  </text>
+  <circle
+    cx="32"
+    cy="36"
+    r="13"
+    stroke-width="7"
+    stroke="rgb(102, 179, 242)"
+    fill="rgb(135, 110, 0)"
+    transform="scale(1,0.4)"
+  />
+</svg>

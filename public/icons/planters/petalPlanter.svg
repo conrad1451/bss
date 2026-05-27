@@ -1,0 +1,124 @@
+<svg
+  id="petalPlanter"
+  style="cursor: pointer; border-radius: 5px"
+  viewBox="0 0 200 70"
+  width="200"
+  height="70"
+>
+  <rect width="200" height="70" fill="rgb(255,255,255)" />
+  <rect width="70" height="70" fill="rgb(225,225,225)" />
+  <text
+    x="134"
+    y="19"
+    fill="rgb(0,0,0)"
+    text-anchor="middle"
+    font-family="trebuchet ms"
+    font-size="17px"
+  >
+    Petal Planter
+  </text>
+  <text
+    x="132"
+    y="35"
+    fill="rgb(0,0,0)"
+    text-anchor="middle"
+    font-family="trebuchet ms"
+    font-size="10.5px"
+  >
+    Grows in 51m, but faster
+  </text>
+  <text
+    x="135"
+    y="50"
+    fill="rgb(0,0,0)"
+    text-anchor="middle"
+    font-family="trebuchet ms"
+    font-size="10.5px"
+  >
+    by white flowers. Gives
+  </text>
+  <text
+    x="136"
+    y="65"
+    fill="rgb(0,0,0)"
+    text-anchor="middle"
+    font-family="trebuchet ms"
+    font-size="10.5px"
+  >
+    bonus glitter and dice!
+  </text>
+  <text
+    id="petalPlanter_amount"
+    x="67"
+    y="67"
+    fill="rgb(0,0,0)"
+    text-anchor="end"
+    font-family="calibri"
+    font-size="14px"
+  />
+  <g transform="translate(0,-4)">
+    <circle
+      cx="35"
+      cy="49"
+      r="16"
+      stroke="black"
+      stroke-width="1.5"
+      fill="rgb(240, 240, 178)"
+    />
+    <path
+      stroke="black"
+      stroke-width="1.5"
+      fill="rgb(240, 240, 178)"
+      d="M 21 33 C 20 39 50 39 49 33L49 25C49 16 21 16 21 25z"
+    />
+    <circle
+      cx="35"
+      cy="60"
+      r="10"
+      fill="rgb(0,0,0,0.4)"
+      transform="scale(1,0.4)"
+    />
+    <circle
+      cx="35"
+      cy="42"
+      r="3"
+      fill="rgb(0,200,80)"
+      transform="scale(1,1.25)"
+    />
+    <circle
+      cx="25"
+      cy="42"
+      r="2"
+      fill="rgb(255,255,0)"
+      transform="scale(1,1.25)"
+    />
+    <circle
+      cx="45"
+      cy="42"
+      r="2"
+      fill="rgb(255,255,0)"
+      transform="scale(1,1.25)"
+    />
+    <path
+      stroke="black"
+      stroke-width="1"
+      fill="rgb(255,255,255)"
+      d="M 30 30 C 22 45 30 37 35 47C 37 37 44 45 40 30"
+      transform="translate(-7,-8) scale(1.2,1.2)"
+    />
+    <path
+      stroke="black"
+      stroke-width="1"
+      fill="rgb(255,255,255)"
+      d="M 30 30 C 22 45 30 37 35 47C 37 37 44 45 40 30"
+      transform="translate(8,-26) scale(1.2,1.2) rotate(30)"
+    />
+    <path
+      stroke="black"
+      stroke-width="1"
+      fill="rgb(255,255,255)"
+      d="M 30 30 C 22 45 30 37 35 47C 37 37 44 45 40 30"
+      transform="translate(-11,16) scale(1.2,1.2) rotate(-30)"
+    />
+  </g>
+</svg>

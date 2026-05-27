@@ -1,0 +1,22 @@
+<svg
+  id="leftShopButton"
+  style="
+    position: fixed;
+    left: 13%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgb(30, 90, 255);
+    border-radius: 10px;
+    cursor: pointer;
+  "
+  viewBox="0 0 30 30"
+  width="30"
+  height="30"
+>
+  <path
+    stroke="white"
+    d="M20 10L10 15 L 20 20"
+    stroke-width="3"
+    fill="rgb(0,0,0,0)"
+  />
+</svg>

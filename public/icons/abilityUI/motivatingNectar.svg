@@ -1,0 +1,35 @@
+<svg id="motivatingNectar" viewBox="0 0 30 30" width="30" height="30">
+  <rect width="30" height="30" fill="rgb(140,116,165)" />
+  <rect
+    id="motivatingNectar_cooldown"
+    width="30"
+    height="0"
+    opacity="0.45"
+    fill="rgb(0, 0, 0)"
+  />
+  <g transform="translate(1,0) scale(0.95,0.95)">
+    <path fill="rgb(200, 166, 236)" d="M 10 20 C 0 1 30 0 20 20" />
+    <rect
+      fill="rgb(200, 166, 236)"
+      x="10"
+      y="22"
+      width="10"
+      height="4"
+      rx="2"
+    />
+    <path
+      stroke="rgb(140,116,165)"
+      fill="rgb(0,0,0,0)"
+      stroke-width="2"
+      d="M 11 15 L 13 12L 15 15L 17 12L19 15"
+    />
+  </g>
+  <text
+    id="motivatingNectar_amount"
+    x="28"
+    y="28"
+    text-anchor="end"
+    font-family="calibri"
+    font-size="11px"
+  />
+</svg>

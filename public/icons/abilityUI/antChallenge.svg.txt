@@ -1,0 +1,42 @@
+<svg id="antChallenge" viewBox="0 0 30 30" width="30" height="30">
+  <rect width="30" height="30" fill="rgb(148, 148, 148,0)" />
+  <text
+    id="antChallenge_amount"
+    x="29"
+    y="29"
+    text-anchor="end"
+    fill="rgb(0,0,0)"
+    font-family="calibri"
+    font-size="12px"
+  />
+  <rect
+    id="antChallenge_cooldown"
+    width="30"
+    height="0"
+    opacity="0"
+    fill="rgb(0, 0, 0)"
+  />
+  <g transform="translate(15,15) scale(0.6,0.6)">
+    <path
+      fill="rgb(255, 255, 160)"
+      stroke="black"
+      stroke-width="2"
+      d="M -20 -15L 15 -15L 20 -10L 20 10L 15 15L-20 15L-20 -15"
+    />
+    <path
+      fill="rgb(0,0,0,0)"
+      stroke="rgb(0,170,0)"
+      stroke-width="4"
+      d="M -17 -14L -17 14M 13 -14L 18 -8L 18 8L 13 14M -8 -4L7 -4L4 -8L-4 -8L-8 -2"
+    />
+    <path fill="rgb(50,50,50)" d="M -8 -4L8 -4L8 8L-8 8" />
+    <path
+      stroke="rgb(50,50,50)"
+      fill="rgb(0,0,0,0)"
+      stroke-width="2"
+      d="M -3 -5L-7 -10M 3 -5L7 -10"
+    />
+    <circle cx="-4" cy="0" r="2" fill="rgb(255,40,40)" />
+    <circle cx="4" cy="0" r="2" fill="rgb(255,40,40)" />
+  </g>
+</svg>

@@ -1,0 +1,81 @@
+<svg id="blueDriveBuff" viewBox="0 0 30 30" width="30" height="30">
+  <rect width="30" height="30" fill="rgb(148, 148, 148,0)" />
+  <text
+    id="blueDriveBuff_amount"
+    x="29"
+    y="29"
+    text-anchor="end"
+    fill="rgb(0,0,0)"
+    font-family="calibri"
+    font-size="12px"
+  />
+  <rect
+    id="blueDriveBuff_cooldown"
+    width="30"
+    height="0"
+    opacity="0"
+    fill="rgb(0, 0, 0)"
+  />
+  <g transform="translate(15,13) scale(0.5,0.5)">
+    <path
+      fill="rgb(100,100,100)"
+      stroke="black"
+      stroke-width="2"
+      d="M -20 0L0 -15L20 0L0 15z"
+    />
+    <path
+      fill="rgb(85,85,85)"
+      stroke="black"
+      stroke-width="2"
+      d="M0 25L-20 10L-20 0L0 15z"
+    />
+    <path
+      fill="rgb(70,70,70)"
+      stroke="black"
+      stroke-width="2"
+      d="M0 25L20 10L20 0L0 15z"
+    />
+    <circle
+      cx="0"
+      cy="0"
+      r="8"
+      stroke="rgb(0,0,155)"
+      stroke-width="8"
+      fill="rgb(0,0,0,0)"
+      transform="scale(1,0.75)"
+    />
+    <circle
+      cx="0"
+      cy="-5"
+      r="8"
+      stroke="rgb(0,0,255)"
+      stroke-width="8"
+      fill="rgb(0,0,0,0)"
+      transform="scale(1,0.75)"
+    />
+    <rect
+      x="-19"
+      y="8"
+      width="4"
+      height="8"
+      fill="rgb(255,220,50,0.9)"
+      rx="2"
+    />
+    <rect
+      x="-13"
+      y="11"
+      width="4"
+      height="8"
+      fill="rgb(255,220,50,0.9)"
+      rx="2"
+    />
+    <rect
+      x="-7"
+      y="14"
+      width="4"
+      height="8"
+      fill="rgb(255,220,50,0.9)"
+      rx="2"
+    />
+  </g>
+</svg>
