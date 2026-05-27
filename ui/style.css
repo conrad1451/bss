@@ -1,0 +1,230 @@
+body {
+  overflow: hidden;
+  margin: 0;
+  font-family: comic sans ms;
+  user-select: none;
+
+  /* CHQ: Gemini AI: Add these vendor prefixes to support Safari, iOS, and older browsers */
+  -webkit-user-select: none; /* Safari 3+, Safari on iOS 3+ */
+  -moz-user-select: none; /* Older Firefox builds */
+  -ms-user-select: none; /* Internet Explorer / Old Edge */
+}
+
+input {
+  height: 24px;
+  outline: none;
+  background-color: rgb(255, 255, 255);
+  border: none;
+  border-bottom: 4px solid black;
+  transition-duration: 0.4s;
+  border-radius: 5px;
+}
+
+input:hover {
+  background-color: rgb(200, 200, 255);
+}
+
+input:focus {
+  background-color: rgb(170, 200, 255);
+}
+
+button {
+  width: 60px;
+  height: 30px;
+  transition-duration: 0.4s;
+  border-radius: 8px;
+  font-size: 16px;
+  background-color: rgb(255, 255, 255);
+}
+
+button:hover {
+  cursor: pointer;
+  border-radius: 13px;
+  background-color: rgb(150, 255, 205);
+}
+
+#purchaseButton {
+  transition-duration: 0s;
+  border: none;
+}
+
+#purchaseButton:hover {
+  outline: 2px solid rgb(0, 0, 0, 0.4);
+}
+
+#leftShopButton:hover,
+#rightShopButton:hover {
+  outline: 2px solid rgb(0, 0, 0, 0.4);
+}
+
+#gl-canvas,
+#tex-canvas {
+  display: none;
+}
+
+#ui-canvas {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: -3;
+}
+
+div::-webkit-scrollbar {
+  width: 5px;
+  height: 8px;
+  background-color: rgb(0, 0, 0, 0);
+}
+
+div::-webkit-scrollbar-thumb {
+  background: rgb(120, 120, 120);
+  border-radius: 10px;
+}
+
+#roboActiveUpgrades::-webkit-scrollbar {
+  width: 5px;
+  height: 8px;
+  background-color: rgb(0, 0, 0, 0);
+}
+
+#roboActiveUpgrades::-webkit-scrollbar-thumb {
+  background: rgb(40, 80, 40);
+  border-radius: 10px;
+}
+
+#inventoryButton:hover,
+#questButton:hover,
+#beesButton:hover,
+#settingsButton:hover,
+#beequipButton:hover {
+  transition-duration: 0.4s;
+  background-color: rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+}
+
+#feedThisAmount {
+  margin-top: 50px;
+  margin-left: 5px;
+  transition-duration: 0s;
+  border-radius: 6px;
+  position: fixed;
+  background-color: rgb(0, 200, 0);
+  border: none;
+  color: rgb(255, 255, 255);
+  font-size: 17px;
+  font-family: trebuchet ms;
+}
+
+#feedUntilGifted {
+  margin-top: 100px;
+  margin-left: 160px;
+  transition-duration: 0s;
+  border-radius: 6px;
+  position: fixed;
+  background-color: rgb(255, 200, 0);
+  border: none;
+  color: rgb(255, 255, 255);
+  font-size: 16.5px;
+  width: 135px;
+  font-family: trebuchet ms;
+}
+
+#feedThisAmount:hover {
+  background-color: rgb(0, 170, 0);
+}
+
+#feedAmount,
+#blenderCraftAmount,
+#shrineAmount {
+  margin-top: 50px;
+  margin-left: 75px;
+  transition-duration: 0s;
+  border-radius: 6px;
+  position: fixed;
+  background-color: rgb(0, 30, 205);
+  border: none;
+  color: rgb(255, 255, 255);
+  font-size: 17px;
+  font-family: arial;
+  height: 19px;
+  width: 200px;
+  padding: 5px;
+  padding-left: 10px;
+}
+
+#cancelFeeding {
+  margin-top: 100px;
+  margin-left: 5px;
+  transition-duration: 0s;
+  border-radius: 6px;
+  position: fixed;
+  background-color: rgb(255, 30, 30);
+  border: none;
+  color: rgb(255, 255, 255);
+  font-size: 17px;
+  width: 70px;
+  font-family: trebuchet ms;
+}
+
+#cancelFeeding:hover {
+  background-color: rgb(200, 0, 0);
+}
+
+#actionHoverDarken:hover {
+  background-color: rgb(0, 0, 0, 0.3);
+}
+
+#blenderX {
+  background-color: rgb(255, 0, 0);
+  transition-duration: 0s;
+}
+
+#blenderX:hover {
+  background-color: rgb(200, 0, 0);
+}
+
+#leftBlenderButton,
+#rightBlenderButton {
+  background-color: rgb(30, 90, 255);
+}
+
+#blenderCraft {
+  background-color: rgb(0, 170, 0);
+  transition-duration: 0s;
+}
+
+#blenderCraft:hover {
+  background-color: rgb(0, 100, 0);
+}
+
+#leftBlenderButton:hover,
+#rightBlenderButton:hover {
+  background-color: rgb(19, 54, 150);
+}
+
+#blenderSpeed,
+#blenderEnd {
+  transition-duration: 0s;
+}
+
+#shrineX:hover {
+  background-color: rgb(200, 0, 0);
+}
+
+#shrineX {
+  background-color: rgb(255, 0, 0);
+}
+
+#shrineDonate {
+  background-color: rgb(0, 190, 0);
+}
+
+#shrineDonate:hover {
+  cursor: pointer;
+  background-color: rgb(0, 140, 0);
+}
+
+#shrineLeft:hover,
+#shrineRight:hover {
+  cursor: pointer;
+  background: rgb(0, 0, 0, 0.1);
+}
