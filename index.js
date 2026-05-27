@@ -248,5 +248,16 @@ async function BeeSwarmSimulator(saveData) {
 
 // --- 3. LIFECYCLE ---
 window.addEventListener("load", () => {
+  // CHQ: Gemini AI: Add this block right here to intercept mobile pinch-to-zoom ghosting
+  document.addEventListener(
+    "touchmove",
+    (e) => {
+      if (e.scale && e.scale !== 1) {
+        e.preventDefault();
+      }
+    },
+    { passive: false },
+  );
+
   main();
 });
