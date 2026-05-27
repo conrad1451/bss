@@ -25,6 +25,12 @@ import { NPC } from "./entities/npcs.js";
 import { Mob, MondoChick } from "./entities/mobs.js";
 import { createGameLoop } from "./engine/gameLoop.js";
 
+import { injectMenuHTML } from "./ui/components/menuLayout.js";
+import { injectShopHTML } from "./ui/components/shopLayout.js";
+import { injectAmuletUIWarnHTML } from "./ui/components/amuletUIWarnLayout.js";
+
+import "./ui/style.css"; // CHQ: Claude AI: Vite automatically extracts and injects this
+
 function initGameWorld(gameState) {
   // 1. Initialize Mobs
   // Instead of raw objects, we now use the Mob class
@@ -94,6 +100,16 @@ async function BeeSwarmSimulator(saveData) {
   canvas.height = height;
   uiCanvas.width = width;
   uiCanvas.height = height;
+
+  // --- 2. DYNAMICALLY INJECT MODULAR UI OVERLAYS NOW ---
+  // The canvases are safely bound to WebGL contexts, so we can build the UI panels!
+  // Grab the body or a UI wrapper element
+  const uiWrapper = document.body;
+
+  // Cleanly inject your massive interface modules
+  injectMenuHTML(uiWrapper); // CHQ: Gemini AI made and imported function to generate hundreds of lines
+  injectShopHTML(uiWrapper); // CHQ: Gemini AI made and imported function to generate hundreds of lines
+  injectAmuletUIWarnHTML(uiWrapper); // CHQ: I made and imported function
 
   // --- B. STATE & SYSTEMS ---
   // 1. Initialize the baseline state tree
