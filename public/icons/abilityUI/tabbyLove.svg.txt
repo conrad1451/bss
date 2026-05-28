@@ -1,0 +1,32 @@
+<svg id="tabbyLove" viewBox="0 0 30 30" width="30" height="30">
+  <rect width="30" height="30" fill="rgb(252, 186, 3)" />
+  <rect
+    id="tabbyLove_cooldown"
+    width="30"
+    height="0"
+    opacity="0"
+    fill="rgb(0, 0, 0)"
+  />
+  <circle cx="10" cy="13" r="2.2" />
+  <circle cx="20" cy="13" r="2.1" />
+  <path
+    fill="rgb(0,0,0,0)"
+    stroke="rgb(0,0,0)"
+    stroke-width="1.25"
+    d="M12 17C 12 19 18 19 18 17M15 18L15 21M10 21C10 23 15 23 15 21M15 18L15 21M20 21C20 23 15 23 15 21M0 16L8 18M0 23L8 21M30 16L22 18M30 23L22 21"
+  />
+  <path
+    fill="rgb(0,0,0,0)"
+    stroke="rgb(166, 129, 43)"
+    stroke-width="2.5"
+    d="M10 0L10 5M15 0 L 15 6M20 0 L20 5"
+  />
+  <text
+    id="tabbyLove_amount"
+    x="28"
+    y="28"
+    text-anchor="end"
+    font-family="calibri"
+    font-size="11px"
+  />
+</svg>
