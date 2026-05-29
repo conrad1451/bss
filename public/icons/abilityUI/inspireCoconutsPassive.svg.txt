@@ -1,0 +1,43 @@
+<svg id="inspireCoconutsPassive" viewBox="0 0 30 30" width="30" height="30">
+  <circle
+    cx="15"
+    cy="15"
+    r="14"
+    fill="rgb(115,163,0)"
+    stroke="rgb(0,0,0)"
+    stroke-width="2"
+  />
+  <circle
+    cx="16"
+    cy="14"
+    r="8"
+    fill="rgb(150,75,0)"
+    stroke="rgb(0,0,0)"
+    stroke-width="1"
+  />
+  <circle cx="18" cy="15" r="1.5" fill="rgb(94, 51, 7)" />
+  <circle cx="13" cy="12" r="1.5" fill="rgb(94, 51, 7)" />
+  <circle cx="18" cy="11" r="1.5" fill="rgb(94, 51, 7)" />
+  <path
+    d="M0.00000 3.00000L4.70228 6.47214L2.85317 0.92705L7.60845 -2.47214L1.76336 -2.42705L0.00000 -8.00000L-1.76336 -2.42705L-7.60845 -2.47214L-2.85317 0.92705L-4.70228 6.47214Z"
+    transform="translate(12,19) scale(0.75,0.75)"
+    fill="rgb(255,255,0)"
+    stroke="rgb(200,200,0)"
+  />
+  <rect
+    id="inspireCoconutsPassive_cooldown"
+    width="30"
+    height="0"
+    opacity="0.45"
+    fill="rgb(0, 0, 0)"
+  />
+  <text
+    id="inspireCoconutsPassive_amount"
+    x="29"
+    y="29"
+    text-anchor="end"
+    fill="rgb(255,255,255)"
+    font-family="tahoma"
+    font-size="12px"
+  />
+</svg>

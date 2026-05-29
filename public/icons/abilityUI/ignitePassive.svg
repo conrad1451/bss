@@ -1,0 +1,34 @@
+<svg id="ignitePassive" viewBox="0 0 30 30" width="30" height="30">
+  <circle
+    cx="15"
+    cy="15"
+    r="14"
+    fill="rgb(115,163,0)"
+    stroke="rgb(0,0,0)"
+    stroke-width="2"
+  />
+  <path
+    d="M15 25C5 24 5 13 15 5M15 25C25 24 25 13 15 5"
+    fill="rgb(255,150,20)"
+  />
+  <path
+    d="M15 25C10 24 10 17 15 10M15 25C20 24 20 17 15 10"
+    fill="rgb(255,0,0)"
+  />
+  <rect
+    id="ignitePassive_cooldown"
+    width="30"
+    height="0"
+    opacity="0.45"
+    fill="rgb(0, 0, 0)"
+  />
+  <text
+    id="ignitePassive_amount"
+    x="29"
+    y="29"
+    text-anchor="end"
+    fill="rgb(255,255,255)"
+    font-family="tahoma"
+    font-size="12px"
+  />
+</svg>

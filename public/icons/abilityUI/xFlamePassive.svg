@@ -1,0 +1,29 @@
+<svg id="xFlamePassive" viewBox="0 0 30 30" width="30" height="30">
+  <circle
+    cx="15"
+    cy="15"
+    r="14"
+    fill="rgb(115,163,0)"
+    stroke="rgb(0,0,0)"
+    stroke-width="2"
+  />
+  <path stroke="rgb(255,0,0)" stroke-width="6" d="M8 8L22 22M22 8L8 22" />
+  <path stroke="rgb(255,100,0)" stroke-width="5" d="M8 8L22 22M22 8L8 22" />
+  <path stroke="rgb(255,200,0)" stroke-width="1.5" d="M8 8L22 22M22 8L8 22" />
+  <rect
+    id="xFlamePassive_cooldown"
+    width="30"
+    height="0"
+    opacity="0.45"
+    fill="rgb(0, 0, 0)"
+  />
+  <text
+    id="xFlamePassive_amount"
+    x="29"
+    y="29"
+    text-anchor="end"
+    fill="rgb(255,255,255)"
+    font-family="tahoma"
+    font-size="12px"
+  />
+</svg>

@@ -1,0 +1,35 @@
+<svg id="gummyMorphPassive" viewBox="0 0 30 30" width="30" height="30">
+  <circle
+    cx="15"
+    cy="15"
+    r="14"
+    fill="rgb(115,163,0)"
+    stroke="rgb(0,0,0)"
+    stroke-width="2"
+  />
+  <rect x="9" y="10" width="12" height="12" fill="rgb(255,50,255,0.75)" />
+  <path
+    fill="rgb(25,255,126,0.75)"
+    d="M9 21 C11 10 14 10 14 19C13 20 13 20 16 19C16 10 19 10 21 21"
+  />
+  <circle cx="10" cy="10" r="3" fill="rgb(25,255,126,0.75)" />
+  <circle cx="20" cy="10" r="3" fill="rgb(25,255,126,0.75)" />
+  <circle cx="13" cy="15" r="0.7" fill="rgb(0,0,0)" />
+  <circle cx="17" cy="15" r="0.7" fill="rgb(0,0,0)" />
+  <rect
+    id="gummyMorphPassive_cooldown"
+    width="30"
+    height="0"
+    opacity="0.45"
+    fill="rgb(0, 0, 0)"
+  />
+  <text
+    id="gummyMorphPassive_amount"
+    x="29"
+    y="29"
+    text-anchor="end"
+    fill="rgb(255,255,255)"
+    font-family="tahoma"
+    font-size="12px"
+  />
+</svg>

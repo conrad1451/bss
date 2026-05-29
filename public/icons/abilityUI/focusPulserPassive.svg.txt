@@ -1,0 +1,33 @@
+<svg id="focusPulserPassive" viewBox="0 0 30 30" width="30" height="30">
+  <circle
+    cx="15"
+    cy="15"
+    r="14"
+    fill="rgb(115,163,0)"
+    stroke="rgb(0,0,0)"
+    stroke-width="2"
+  />
+  <path
+    fill="rgb(255,255,255)"
+    d="M15 25L7 18L12 15L 8 11C6 6 15 5 19 13L 20 15L13 20Z"
+    transform="translate(2,0)"
+    stroke="rgb(255,0,0)"
+    stroke-width="2"
+  />
+  <rect
+    id="focusPulserPassive_cooldown"
+    width="30"
+    height="0"
+    opacity="0.45"
+    fill="rgb(0, 0, 0)"
+  />
+  <text
+    id="focusPulserPassive_amount"
+    x="29"
+    y="29"
+    text-anchor="end"
+    fill="rgb(255,255,255)"
+    font-family="tahoma"
+    font-size="12px"
+  />
+</svg>
