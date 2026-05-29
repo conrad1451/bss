@@ -16,6 +16,11 @@ export class Renderer {
         indexBuffer: null,
         vertCount: 0,
       },
+      // --- 🛠️ NEW: Static Quad buffer node for screen-space UI elements ---
+      uiQuad: {
+        vertexBuffer: null,
+        vertCount: 4,
+      },
     };
 
     // Internal WebGL program storage lane
@@ -37,6 +42,25 @@ export class Renderer {
 
     // Run your cache initialization
     this.initCache(this.programs);
+
+    // --- 🛠️ NEW: Prime screen-space static mesh layout geometry ---
+    this.initUIQuadBuffer();
+  }
+
+  // --- 🛠️ NEW: Initialize dynamic quad vertices for UI texture rendering ---
+  initUIQuadBuffer() {
+    const gl = this.gl;
+
+    // Normalized device coordinates mapping standard texture bounds
+    const vertices = new Float32Array([
+      // X,    Y,    U,   V
+      -1.0, 1.0, 0.0, 0.0, -1.0, -1.0, 0.0, 1.0, 1.0, 1.0, 1.0, 0.0, 1.0, -1.0,
+      1.0, 1.0,
+    ]);
+
+    this.meshes.uiQuad.vertexBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, this.meshes.uiQuad.vertexBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
   }
 
   /**
@@ -235,13 +259,40 @@ export class Renderer {
       if (!program) return;
 
       this.glCache[key] = {
-        // Example standard uniform locations you'd cache:
         uProjectionMatrix: this.gl.getUniformLocation(
           program,
           "uProjectionMatrix",
         ),
         uViewMatrix: this.gl.getUniformLocation(program, "uViewMatrix"),
         uModelMatrix: this.gl.getUniformLocation(program, "uModelMatrix"),
+        // Specific lookup bindings needed by token pipelines
+        uPosition: this.gl.getUniformLocation(program, "uPosition"),
+        uScale: this.gl.getUniformLocation(program, "uScale"),
+        // Attribute pointers
+        vertPos: this.gl.getAttribLocation(program, "vertPos"),
+        vertUV: this.gl.getAttribLocation(program, "vertUV"),
+        // Standard shader locations from active engines
+        token_uPosition: this.gl.getUniformLocation(program, "uPosition"),
+        token_uScale: this.gl.getUniformLocation(program, "uScale"),
+        token_viewMatrix: this.gl.getUniformLocation(program, "uViewMatrix"),
+        flower_viewMatrix: this.gl.getUniformLocation(program, "uViewMatrix"),
+        flower_isNight: this.gl.getUniformLocation(program, "uIsNight"),
+        flower_vertPos: this.gl.getAttribLocation(program, "vertPos"),
+        flower_vertUV: this.gl.getAttribLocation(program, "vertUV"),
+        flower_vertGoo: this.gl.getAttribLocation(program, "vertGoo"),
+        static_viewMatrix: this.gl.getUniformLocation(program, "uViewMatrix"),
+        static_isNight: this.gl.getUniformLocation(program, "uIsNight"),
+        bee_viewMatrix: this.gl.getUniformLocation(program, "uViewMatrix"),
+        bee_isNight: this.gl.getUniformLocation(program, "uIsNight"),
+        particle_viewMatrix: this.gl.getUniformLocation(program, "uViewMatrix"),
+        particle_vertPos: this.gl.getAttribLocation(program, "vertPos"),
+        particle_vertColor: this.gl.getAttribLocation(program, "vertColor"),
+        particle_vertSize: this.gl.getAttribLocation(program, "vertSize"),
+        particle_vertRot: this.gl.getAttribLocation(program, "vertRot"),
+        explosion_viewMatrix: this.gl.getUniformLocation(
+          program,
+          "uViewMatrix",
+        ),
       };
     });
 
