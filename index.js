@@ -27,6 +27,7 @@ import { createGameLoop } from "./engine/gameLoop.js";
 
 import { injectMenuHTML } from "./ui/components/menuLayout.js";
 import { injectShopHTML } from "./ui/components/shopLayout.js";
+import { injectAbilityUI } from "./ui/components/abilityLayout.js"; // CHQ: Gemini AI added this
 import { injectAmuletUIWarnHTML } from "./ui/components/amuletUIWarnLayout.js";
 
 import "./ui/style.css"; // CHQ: Claude AI: Vite automatically extracts and injects this
@@ -110,6 +111,7 @@ async function BeeSwarmSimulator(saveData) {
   injectMenuHTML(uiWrapper); // CHQ: Gemini AI made and imported function to generate hundreds of lines
   injectShopHTML(uiWrapper); // CHQ: Gemini AI made and imported function to generate hundreds of lines
   injectAmuletUIWarnHTML(uiWrapper); // CHQ: I made and imported function
+  injectAbilityUI(uiWrapper); // CHQ: Gemini AI added this
 
   // --- B. STATE & SYSTEMS ---
   // 1. Initialize the baseline state tree
