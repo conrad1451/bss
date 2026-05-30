@@ -1,0 +1,43 @@
+<svg
+  id="emergencyCoconutShieldPassive"
+  style="width: 30px; height: 30px; display: none"
+>
+  <circle
+    cx="15"
+    cy="15"
+    r="14"
+    fill="rgb(115,163,0)"
+    stroke="rgb(0,0,0)"
+    stroke-width="2"
+  ></circle>
+
+  <circle cx="15" cy="15" r="11" fill="rgb(255,255,255,0.5)"></circle>
+  <circle
+    cx="15"
+    cy="15"
+    r="8"
+    fill="rgb(150,75,0)"
+    stroke="rgb(0,0,0)"
+    stroke-width="1"
+  ></circle>
+
+  <circle cx="17" cy="16" r="1.5" fill="rgb(94, 51, 7)"></circle>
+  <circle cx="12" cy="13" r="1.5" fill="rgb(94, 51, 7)"></circle>
+  <circle cx="17" cy="12" r="1.5" fill="rgb(94, 51, 7)"></circle>
+
+  <rect
+    id="emergencyCoconutShieldPassive_cooldown"
+    width="30"
+    height="0"
+    style="fill: rgb(0, 0, 0)"
+    opacity="0.45"
+  ></rect>
+  <text
+    id="emergencyCoconutShieldPassive_amount"
+    x="29"
+    y="29"
+    style="font-family: tahoma; font-size: 12px"
+    text-anchor="end"
+    fill="rgb(255,255,255)"
+  ></text>
+</svg>

@@ -1,0 +1,30 @@
+<svg id="mountainTopFieldWinds" viewBox="0 0 30 30" width="30" height="30">
+  <rect width="30" height="30" fill="rgb(230,230,255)" />
+  <rect
+    id="mountainTopFieldWinds_cooldown"
+    width="30"
+    height="0"
+    opacity="0.45"
+    fill="rgb(0, 0, 0)"
+  />
+  <g transform="rotate(-10) scale(1.2,1.2) translate(-4,-1)">
+    <path
+      d="M 6 20L 11 9L 15 17L 18 12L 22 20z"
+      fill="rgb(100,100,100)"
+      stroke="#57b5b1"
+      stroke-width="1"
+    />
+    <path
+      d="M 9.5 14L 11 10L 12.75 14M 17 15L 18 13L 19 15"
+      fill="rgb(240,240,245)"
+    />
+  </g>
+  <text
+    id="mountainTopFieldWinds_amount"
+    x="28"
+    y="28"
+    text-anchor="end"
+    font-family="calibri"
+    font-size="11px"
+  />
+</svg>

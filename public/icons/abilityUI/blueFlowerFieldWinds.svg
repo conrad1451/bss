@@ -1,0 +1,42 @@
+<svg id="blueFlowerFieldWinds" viewBox="0 0 30 30" width="30" height="30">
+  <rect width="30" height="30" fill="rgb(230,230,255)" />
+  <rect
+    id="blueFlowerFieldWinds_cooldown"
+    width="30"
+    height="0"
+    opacity="0.45"
+    fill="rgb(0, 0, 0)"
+  />
+  <g transform="translate(5,5)scale(0.7,0.7)">
+    <path
+      d="M-2 0C -10 -18 10 -18 2 0M-2 0C -10 18 10 18 2 0"
+      fill="rgb(0,80,255)"
+      stroke="#57b5b1"
+      stroke-width="2"
+      transform="translate(15,15)"
+    />
+    <path
+      d="M-2 0C -10 -18 10 -18 2 0M-2 0C -10 18 10 18 2 0"
+      fill="rgb(0,80,255)"
+      stroke="#57b5b1"
+      stroke-width="2"
+      transform="translate(15,15) rotate(60)"
+    />
+    <path
+      d="M-2 0C -10 -18 10 -18 2 0M-2 0C -10 18 10 18 2 0"
+      fill="rgb(0,80,255)"
+      stroke="#57b5b1"
+      stroke-width="2"
+      transform="translate(15,15) rotate(120)"
+    />
+    <circle cx="15" cy="15" r="5" fill="rgb(255,255,0)" />
+  </g>
+  <text
+    id="blueFlowerFieldWinds_amount"
+    x="28"
+    y="28"
+    text-anchor="end"
+    font-family="calibri"
+    font-size="11px"
+  />
+</svg>

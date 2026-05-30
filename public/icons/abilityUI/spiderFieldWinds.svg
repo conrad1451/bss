@@ -1,0 +1,64 @@
+<svg id="spiderFieldWinds" viewBox="0 0 30 30" width="30" height="30">
+  <rect width="30" height="30" fill="rgb(230,230,255)" />
+  <rect
+    id="spiderFieldWinds_cooldown"
+    width="30"
+    height="0"
+    opacity="0.45"
+    fill="rgb(0, 0, 0)"
+  />
+  <g transform="scale(0.9,0.9) rotate(-10) translate(-1,3)">
+    <path
+      d="M 15 12C 8 11 10 11 7 10M 13 14C 8 16 7 14 5 14M 13 18C 8 19 7 19 4 18M 13 21C 11 23 7 22 11 24"
+      fill="rgb(0,0,0,0)"
+      stroke="#57b5b1"
+      stroke-width="2.75"
+    />
+    <path
+      d="M 15 12C 8 11 10 11 8 10M 13 14C 8 16 7 14 6 14M 13 18C 8 19 7 19 5 18M 13 21C 11 23 7 22 10 24"
+      fill="rgb(0,0,0,0)"
+      stroke="rgb(70,70,70)"
+      stroke-width="1"
+    />
+    <g transform="scale(-1,1) translate(-30,0)">
+      <path
+        d="M 15 12C 8 11 10 11 7 10M 13 14C 8 16 7 14 5 14M 13 18C 8 19 7 19 4 18M 13 21C 11 23 7 22 10 24"
+        fill="rgb(0,0,0,0)"
+        stroke="#57b5b1"
+        stroke-width="2.75"
+      />
+      <path
+        d="M 15 12C 8 11 10 11 8 10M 13 14C 8 16 7 14 6 14M 13 18C 8 19 7 19 5 18M 13 21C 11 23 7 22 11 24"
+        fill="rgb(0,0,0,0)"
+        stroke="rgb(70,70,70)"
+        stroke-width="1"
+      />
+    </g>
+    <circle
+      cx="18.85"
+      cy="18"
+      r="4.5"
+      fill="rgb(70,70,70)"
+      transform="scale(0.8,1)"
+      stroke="#57b5b1"
+      stroke-width="1.5"
+    />
+    <circle
+      cx="15"
+      cy="12"
+      r="3"
+      fill="rgb(70,70,70)"
+      stroke="#57b5b1"
+      stroke-width="1.5"
+    />
+    <circle cx="15" cy="15" r="1.9" fill="rgb(70,70,70)" />
+  </g>
+  <text
+    id="spiderFieldWinds_amount"
+    x="28"
+    y="28"
+    text-anchor="end"
+    font-family="calibri"
+    font-size="11px"
+  />
+</svg>

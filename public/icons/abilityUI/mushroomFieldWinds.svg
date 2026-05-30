@@ -1,0 +1,49 @@
+<svg id="mushroomFieldWinds" viewBox="0 0 30 30" width="30" height="30">
+  <rect width="30" height="30" fill="rgb(230,230,255)" />
+  <rect
+    id="mushroomFieldWinds_cooldown"
+    width="30"
+    height="0"
+    opacity="0.45"
+    fill="rgb(0, 0, 0)"
+  />
+  <path
+    d="M11 17C 2 18 2 4 15 5M19 17C 28 18 29 4 15 5"
+    fill="rgb(255,40,60)"
+    stroke="#57b5b1"
+    stroke-width="2"
+  />
+  <path
+    d="M15 18C 2 18 2 4 15 5M15 18C 28 18 29 4 15 5"
+    fill="rgb(255,40,60)"
+  />
+  <path
+    d="M11 17C 8 30 22 30 19 17"
+    fill="rgb(240,240,240)"
+    stroke="#57b5b1"
+    stroke-width="2"
+  />
+  <circle cx="11" cy="9" r="1.5" fill="rgb(240,240,240)" />
+  <circle
+    cx="26"
+    cy="10"
+    r="2"
+    fill="rgb(240,240,240)"
+    transform="scale(0.8,1)"
+  />
+  <circle
+    cx="15"
+    cy="19"
+    r="1.75"
+    fill="rgb(240,240,240)"
+    transform="scale(1,0.7)"
+  />
+  <text
+    id="mushroomFieldWinds_amount"
+    x="28"
+    y="28"
+    text-anchor="end"
+    font-family="calibri"
+    font-size="11px"
+  />
+</svg>

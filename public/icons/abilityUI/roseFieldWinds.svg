@@ -1,0 +1,75 @@
+<svg id="roseFieldWinds" viewBox="0 0 30 30" width="30" height="30">
+  <rect width="30" height="30" fill="rgb(230,230,255)" />
+  <rect
+    id="roseFieldWinds_cooldown"
+    width="30"
+    height="0"
+    opacity="0.45"
+    fill="rgb(0, 0, 0)"
+  />
+  <path
+    d="M 16 16C 17 18 17 22 15.95 25M 11 17L 17 18L 21.5 12"
+    fill="rgb(0,0,0,0)"
+    stroke="#57b5b1"
+    stroke-width="3.5"
+  />
+  <circle
+    cx="15"
+    cy="9"
+    r="5"
+    fill="rgb(237, 23, 23)"
+    transform="scale(1,1.2)"
+    stroke="#57b5b1"
+    stroke-width="1"
+  />
+  <circle
+    cx="14"
+    cy="10"
+    r="3"
+    fill="rgb(237, 23, 23)"
+    transform="scale(1,0.9)"
+    stroke="rgb(0,0,0,0.2)"
+    stroke-width="0.5"
+  />
+  <circle
+    cx="15"
+    cy="9"
+    r="3"
+    fill="rgb(237, 23, 23)"
+    transform="scale(1,0.9)"
+    stroke="rgb(0,0,0,0.2)"
+    stroke-width="0.5"
+  />
+  <circle
+    cx="14.5"
+    cy="8.5"
+    r="2"
+    fill="rgb(237, 23, 23)"
+    transform="scale(1,0.9)"
+    stroke="rgb(0,0,0,0.2)"
+    stroke-width="0.5"
+  />
+  <circle
+    cx="15.5"
+    cy="9.5"
+    r="1"
+    fill="rgb(237, 23, 23)"
+    transform="scale(1,0.9)"
+    stroke="rgb(0,0,0,0.2)"
+    stroke-width="0.5"
+  />
+  <path
+    d="M 16 16C 17 18 17 22 16 24M 12 17L 17 18L 21 13"
+    fill="rgb(0,0,0,0)"
+    stroke="rgb(0,140,0)"
+    stroke-width="2"
+  />
+  <text
+    id="roseFieldWinds_amount"
+    x="28"
+    y="28"
+    text-anchor="end"
+    font-family="calibri"
+    font-size="11px"
+  />
+</svg>
