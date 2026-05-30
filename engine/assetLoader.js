@@ -1,5 +1,7 @@
 // engine/assetLoader.js
 
+import { MATH } from "../utils/math.js"; // Added .js extension and verified pathing
+
 // CHQ: Gemini AI generated file
 
 // //  CHQ: Gemini AI generated function
@@ -48,7 +50,10 @@ export function generateDefaultNoise(tex_ctx) {
   }
 }
 
-export function loadTexture(gl, tex_ctx) {
+// CHQ: Gemini AI added: A tiny helper to yield execution back to the browser event loop
+const yieldToBrowser = () => new Promise((resolve) => setTimeout(resolve, 0));
+
+export async function loadTexture(gl, tex_ctx) {
   const out = {};
 
   // 1. Clear the scratchpad canvas
@@ -64,15 +69,23 @@ export function loadTexture(gl, tex_ctx) {
   // 2. Generate Default/World Noise
   generateDefaultNoise(tex_ctx);
 
+  // CHQ: Gemini AI added: Create default fallback surface so the 3D world map isn't pitch black
+  out.default = createGLTexture(gl, tex_ctx, 512);
+  await yieldToBrowser();
+
   // 3. Load Specialized Atlases
   // Effects, Flowers, and Bees depend on external window functions
   if (typeof window.textures_effects === "function")
     window.textures_effects(tex_ctx);
   out.effects = createGLTexture(gl, tex_ctx, 2048);
+  // CHQ: Gemini AI added:
+  await yieldToBrowser();
 
   if (typeof window.textures_flowers === "function")
     window.textures_flowers(tex_ctx);
   out.flowers = createGLTexture(gl, tex_ctx, 1024, 1024, gl.CLAMP_TO_EDGE);
+  // CHQ: Gemini AI added:
+  await yieldToBrowser();
 
   // window.textures_flowers(tex_ctx);
   // out.flowers = createGLTexture(gl, tex_ctx, 1024, gl.CLAMP_TO_EDGE);
@@ -90,6 +103,8 @@ export function loadTexture(gl, tex_ctx) {
   // Quick test string initialization if needed
   tex_ctx.fillText("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ", 256, 300);
   out.text = createGLTexture(gl, tex_ctx, 512, 600);
+  // CHQ: Gemini AI added:
+  await yieldToBrowser();
 
   // 5. Generate Bee Textures
   if (typeof window.textures_bees === "function") window.textures_bees(tex_ctx);
@@ -102,6 +117,8 @@ export function loadTexture(gl, tex_ctx) {
   if (typeof window.textures_decals === "function")
     window.textures_decals(tex_ctx);
   out.decals = createGLTexture(gl, tex_ctx, 1024);
+  // CHQ: Gemini AI added:
+  await yieldToBrowser();
 
   if (typeof window.textures_bear === "function") window.textures_bear(tex_ctx);
   out.bear = createGLTexture(gl, tex_ctx, 1024);
@@ -115,25 +132,24 @@ export function loadTexture(gl, tex_ctx) {
   return out;
 }
 
-// CHQ: Gemini AI added tex_ctx parameter for 2d context
-export function loadTextures(gl, tex_ctx) {
-  // 1. Safe context hydration to prevent frame breakage
-  // Ensure we have a high-res 2048x2048 canvas backplane to hold the largest sheets
-  // If tex_ctx is missing or isn't a true 2D context, generate an isolated offscreen board!
-  if (!tex_ctx || typeof tex_ctx.clearRect !== "function") {
-    const offscreenCanvas = document.createElement("canvas");
-    // offscreenCanvas.width = 1024; // Match your font/texture sheet resolution
-    // offscreenCanvas.height = 1024;
-    offscreenCanvas.width = 2048;
-    offscreenCanvas.height = 2048;
-    tex_ctx = offscreenCanvas.getContext("2d");
-  }
+// CHQ: Gemini AI: Updated to fully encapsulate texture generation on an isolated offscreen canvas buffer
 
-  // 2. Clear the entire 2048 area
-  tex_ctx.clearRect(0, 0, 2048, 2048);
+export async function loadTextures(gl) {
+  // export function loadTextures(gl) {
+  // export function loadTextures(gl, tex_ctx) {
+  // 1. Force texture compilation onto a dedicated offscreen canvas board.
+  // This guarantees that canvas context clearing/drawing operations don't leak or override
+  // active start menus or target UI elements on your index page.
+  const privateOffscreenCanvas = document.createElement("canvas");
+  privateOffscreenCanvas.width = 2048;
+  privateOffscreenCanvas.height = 2048;
+  const privateContext = privateOffscreenCanvas.getContext("2d");
 
-  // 3. Compile the procedural rendering pipelines and return the texture manifest map
-  return loadTexture(gl, tex_ctx);
+  // 2. Clear the private workspace
+  privateContext.clearRect(0, 0, 2048, 2048);
+
+  // 3. Compile the procedural rendering pipelines using the private canvas context and return the map
+  return await loadTexture(gl, privateContext);
 }
 
 // Internal helper for repetitive WebGL texture boiler-plate
