@@ -1,0 +1,24 @@
+﻿<svg id="diamondEgg" style="cursor: pointer; border-radius: 5px" viewBox="0 0 200 70" width="200" height="70">
+  <rect width="200" height="70" fill="rgb(255,255,255)"/>
+  <rect width="70" height="70" fill="rgb(225,225,225)"/>
+  <text x="130" y="18" fill="rgb(0,0,0)" text-anchor="middle" font-family="trebuchet ms" font-size="17px">
+    Diamond Egg
+  </text>
+  <text x="130" y="36" fill="rgb(0,0,0)" text-anchor="middle" font-family="trebuchet ms" font-size="12px">
+    Hatches into a
+  </text>
+  <text x="130" y="50" fill="rgb(0,0,0)" text-anchor="middle" font-family="trebuchet ms" font-size="12px">
+    legendary or
+  </text>
+  <text x="130" y="65" fill="rgb(0,0,0)" text-anchor="middle" font-family="trebuchet ms" font-size="12px">
+    mythic bee!
+  </text>
+  <text id="diamondEgg_amount" x="67" y="67" fill="rgb(0,0,0)" text-anchor="end" font-family="calibri" font-size="14px"/>
+  <path fill="rgb(200,255,255)" stroke="rgb(0,0,0)" stroke-width="1.5" d="M35 15C 20 17 10 55 35 55M35 15C 50 17 60 55 35 55"/>
+  <path stroke="rgb(255,255,255)" stroke-width="3" fill="rgb(0,0,0,0)" d="M 35 18C 30 20 28 22 27 26"/>
+  <path stroke="rgb(255,255,255)" stroke-width="3" fill="rgb(0,0,0,0)" d="M 35 18C 30 20 28 22 27 26M 25 16C 30 20 28 22 37 26" transform="translate(52,17) rotate(100) scale(0.5,0.5)"/>
+  <path stroke="rgb(255,255,255)" stroke-width="3" fill="rgb(0,0,0,0)" d="M 35 18C 30 20 28 22 27 26M 25 16C 30 20 28 22 37 26" transform="translate(20,22) rotate(28) scale(0.5,0.5)"/>
+  <path stroke="rgb(255,255,255)" stroke-width="3" fill="rgb(0,0,0,0)" d="M 35 18C 30 20 28 22 27 26M 25 16C 30 20 28 22 37 26" transform="translate(57,52) rotate(168) scale(0.5,0.5)"/>
+  <path fill="rgb(0,0,0,0.08)" d="M35 26C 28 30 28 45 35 45M35 26C 42 30 42 45 35 45"/>
+  <path fill="rgb(0,0,0,0.2)" d="M47 25C 57 56 35 60 23 50C 32 48 41 50 50 35"/>
+</svg>

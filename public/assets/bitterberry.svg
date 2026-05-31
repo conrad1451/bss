@@ -1,0 +1,27 @@
+﻿<svg id="bitterberry" style="cursor: pointer; border-radius: 5px" viewBox="0 0 200 70" width="200" height="70">
+  <rect width="200" height="70" fill="rgb(255,255,255)"/>
+  <rect width="70" height="70" fill="rgb(225,225,225)"/>
+  <text x="130" y="18" fill="rgb(0,0,0)" text-anchor="middle" font-family="trebuchet ms" font-size="17px">
+    Bitterberry
+  </text>
+  <text x="130" y="37" fill="rgb(0,0,0)" text-anchor="middle" font-family="trebuchet ms" font-size="11.5px">
+    Raises the bond of a
+  </text>
+  <text x="130" y="51" fill="rgb(0,0,0)" text-anchor="middle" font-family="trebuchet ms" font-size="11.5px">
+    bee by 100 and has a
+  </text>
+  <text x="130" y="64" fill="rgb(0,0,0)" text-anchor="middle" font-family="trebuchet ms" font-size="11.5px">
+    chance to mutate it.
+  </text>
+  <text id="bitterberry_amount" x="67" y="67" fill="rgb(0,0,0)" text-anchor="end" font-family="calibri" font-size="14px"/>
+  <g transform="scale(0.85,0.85) translate(6,7)">
+    <path fill="rgb(204, 189, 88)" stroke="black" stroke-width="2" d="M35 16C 66 23 45 50 24 50C 12 57 19 55 18 48C 9 15 27 15 35 16"/>
+    <path fill="rgb(129, 57, 82)" stroke="black" stroke-width="2" d="M 35 12C 64 13 49 27 36 16C -2 11 38 3 36 12" transform="translate(4,1)"/>
+    <path fill="rgb(138, 78, 18)" stroke="black" stroke-width="2" d="M 37 13C 39 12 43 7 48 5C 50 12 48 7 43 13" transform="translate(2,0)"/>
+    <circle cx="39" cy="37" r="1.5" fill="rgb(138, 89, 15,0.5)"/>
+    <circle cx="41" cy="28" r="1.5" fill="rgb(138, 89, 15,0.5)"/>
+    <circle cx="31" cy="41" r="1.5" fill="rgb(138, 89, 15,0.5)"/>
+    <circle cx="25" cy="43" r="1.5" fill="rgb(171, 119, 36,0.5)"/>
+    <circle cx="46" cy="33" r="1.5" fill="rgb(138, 89, 15,0.5)"/>
+  </g>
+</svg>

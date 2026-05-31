@@ -1,0 +1,37 @@
+﻿<svg id="glitchedDrive" style="cursor: pointer; border-radius: 5px" viewBox="0 0 200 70" width="200" height="70">
+  <rect width="200" height="70" fill="rgb(255,255,255)"/>
+  <rect width="70" height="70" fill="rgb(225,225,225)"/>
+  <text x="134" y="19" fill="rgb(0,0,0)" text-anchor="middle" font-family="trebuchet ms" font-size="17px">
+    Glitched Drive
+  </text>
+  <text x="135" y="38" fill="rgb(0,0,0)" text-anchor="middle" font-family="trebuchet ms" font-size="10.5px">
+    Gives pollen, capacity,
+  </text>
+  <text x="134" y="52" fill="rgb(0,0,0)" text-anchor="middle" font-family="trebuchet ms" font-size="10.5px">
+    and bee attack for 3 mins
+  </text>
+  <text x="132" y="65" fill="rgb(0,0,0)" text-anchor="middle" font-family="trebuchet ms" font-size="10.5px">
+    in the Robo Challenge.
+  </text>
+  <text id="glitchedDrive_amount" x="67" y="67" fill="rgb(0,0,0)" text-anchor="end" font-family="calibri" font-size="14px"/>
+  <g transform="translate(35,29)">
+    <path fill="rgb(100,100,100)" stroke="black" stroke-width="2" d="M -20 0L0 -15L20 0L0 15z"/>
+    <path fill="rgb(85,85,85)" stroke="black" stroke-width="2" d="M0 25L-20 10L-20 0L0 15z"/>
+    <path fill="rgb(70,70,70)" stroke="black" stroke-width="2" d="M0 25L20 10L20 0L0 15z"/>
+    <g transform="translate(-3,2) scale(0.9,0.9)">
+      <circle cx="0" cy="0" r="8" stroke="rgb(195,195,0,0.5)" stroke-width="8" fill="rgb(0,0,0,0)" transform="scale(1,0.75)"/>
+      <circle cx="0" cy="-5" r="8" stroke="rgb(255,255,0,0.5)" stroke-width="8" fill="rgb(0,0,0,0)" transform="scale(1,0.5)"/>
+    </g>
+    <g transform="translate(3,2) scale(0.9,0.9)">
+      <circle cx="0" cy="0" r="8" stroke="rgb(189, 100, 180,0.6)" stroke-width="8" fill="rgb(0,0,0,0)" transform="scale(1,0.75)"/>
+      <circle cx="0" cy="-5" r="8" stroke="rgb(247, 131, 235,0.6)" stroke-width="8" fill="rgb(0,0,0,0)" transform="scale(1,0.75)"/>
+    </g>
+    <g transform="translate(0,-2) scale(0.9,0.9)">
+      <circle cx="0" cy="0" r="8" stroke="rgb(0, 190, 190,0.4)" stroke-width="8" fill="rgb(0,0,0,0)" transform="scale(1,0.75)"/>
+      <circle cx="0" cy="-5" r="8" stroke="rgb(247, 255, 255,0.4)" stroke-width="8" fill="rgb(0,0,0,0)" transform="scale(1,0.75)"/>
+    </g>
+    <rect x="-19" y="8" width="4" height="8" fill="rgb(255,220,50,0.9)" rx="2"/>
+    <rect x="-13" y="11" width="4" height="8" fill="rgb(255,220,50,0.9)" rx="2"/>
+    <rect x="-7" y="14" width="4" height="8" fill="rgb(255,220,50,0.9)" rx="2"/>
+  </g>
+</svg>
