@@ -50,3 +50,18 @@ Rename-SvgById.ps1
 editsMay30.txt
 may302026_round2_edits.txt
  
+Rename-SvgBatch-Alt.ps1
+del.ps1
+indexPreRefactor_cleaned.txt
+stash_backup_new0.txt
+stash_backup_new_0.txt
+stash_backup_new_1.txt
+stash_backup_new_2.txt
+stash_backup_new_3.txt
+stash_backup_new_4.txt
+stash_backup_new_5.txt
+svgCleaningShim.ps1
+svgcleaningTXTtoSVGAlt.ps1
+svgcleaningTXTtoSVGBatch.ps1
+theCleanedSVGs/
+thesvgs/
