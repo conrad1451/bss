@@ -309,21 +309,31 @@ export class TextRenderer {
     // gl.drawElementsInstanced(...);
   }
 
+  // CHQ: Gemini AI safeguarded attribute lookup,
+  // explicitly open vertex array flags, and clean down pointers
   render(dt, SIN_TIME, viewMatrix) {
     const gl = this.gl;
     const cache = this.glCache;
 
-    gl.useProgram(this.programs.text);
-    gl.uniformMatrix4fv(cache.text_viewMatrix, false, viewMatrix);
+    // Safety Check: Avoid binding buffers if there's no text data this frame
+    if (this.data.length === 0 && this.instanceData.length === 0) return;
 
-    // 1. Process managed floating text data [cite: 1440-1443]
+    gl.useProgram(this.programs.text);
+
+    // Resolve uniform lookups safely from flat shader layout context maps
+    const uViewMatLoc = cache.text?.text_viewMatrix || cache.text?.uViewMatrix;
+    if (uViewMatLoc) {
+      gl.uniformMatrix4fv(uViewMatLoc, false, viewMatrix);
+    }
+
+    // 1. Process managed floating text data
     let t = SIN_TIME * 0.5 + 0.5;
     for (let i = this.data.length - 1; i >= 0; i--) {
       let d = this.data[i];
       let s = d.size * Math.min(d.life * 7, 1);
       d.life -= dt;
 
-      // Color/Wobble logic based on critType [cite: 1441-1443]
+      // Color/Wobble logic based on critType
       let r = d.col[0],
         g = d.col[1],
         b = d.col[2],
@@ -355,11 +365,33 @@ export class TextRenderer {
       if (d.life <= 0) this.data.splice(i, 1);
     }
 
-    // 2. Upload to GPU and Draw [cite: 1444-1446]
-    gl.bindBuffer(gl.ARRAY_BUFFER, this.vertBuffer);
-    gl.vertexAttribPointer(cache.text_vertPos, 2, gl.FLOAT, false, 16, 0);
-    gl.vertexAttribPointer(cache.text_vertUV, 2, gl.FLOAT, false, 16, 8);
+    if (this.instanceData.length === 0) return;
 
+    // 🚀 RESOLVE ATTR LOCATIONS safely from flat structures
+    const textTarget = cache.text || {};
+    const locPos = textTarget.text_vertPos ?? textTarget.vertPos;
+    const locUV = textTarget.text_vertUV ?? textTarget.vertUV;
+    const locInstOrigin =
+      textTarget.text_instanceOrigin ?? textTarget.instanceOrigin;
+    const locInstOffset =
+      textTarget.text_instanceOffset ?? textTarget.instanceOffset;
+    const locInstUV = textTarget.text_instanceUV ?? textTarget.instanceUV;
+    const locInstColor =
+      textTarget.text_instanceColor ?? textTarget.instanceColor;
+    const locInstInfo = textTarget.text_instanceInfo ?? textTarget.instanceInfo;
+
+    // 2. Upload and Setup Quad Geometry
+    gl.bindBuffer(gl.ARRAY_BUFFER, this.vertBuffer);
+    if (locPos !== undefined && locPos !== -1) {
+      gl.enableVertexAttribArray(locPos);
+      gl.vertexAttribPointer(locPos, 2, gl.FLOAT, false, 16, 0);
+    }
+    if (locUV !== undefined && locUV !== -1) {
+      gl.enableVertexAttribArray(locUV);
+      gl.vertexAttribPointer(locUV, 2, gl.FLOAT, false, 16, 8);
+    }
+
+    // 3. Upload Instanced Data (Stride is 13 floats = 52 bytes)
     gl.bindBuffer(gl.ARRAY_BUFFER, this.instanceBuffer);
     gl.bufferData(
       gl.ARRAY_BUFFER,
@@ -367,39 +399,34 @@ export class TextRenderer {
       gl.DYNAMIC_DRAW,
     );
 
-    // Stride is 13 floats (52 bytes) [cite: 1444-1445]
-    gl.vertexAttribPointer(
-      cache.text_instanceOrigin,
-      3,
-      gl.FLOAT,
-      false,
-      52,
-      0,
-    );
-    gl.vertexAttribDivisor(cache.text_instanceOrigin, 1);
-    gl.vertexAttribPointer(
-      cache.text_instanceOffset,
-      2,
-      gl.FLOAT,
-      false,
-      52,
-      12,
-    );
-    gl.vertexAttribDivisor(cache.text_instanceOffset, 1);
-    gl.vertexAttribPointer(cache.text_instanceUV, 2, gl.FLOAT, false, 52, 20);
-    gl.vertexAttribDivisor(cache.text_instanceUV, 1);
-    gl.vertexAttribPointer(
-      cache.text_instanceColor,
-      3,
-      gl.FLOAT,
-      false,
-      52,
-      28,
-    );
-    gl.vertexAttribDivisor(cache.text_instanceColor, 1);
-    gl.vertexAttribPointer(cache.text_instanceInfo, 3, gl.FLOAT, false, 52, 40);
-    gl.vertexAttribDivisor(cache.text_instanceInfo, 1);
+    if (locInstOrigin !== undefined && locInstOrigin !== -1) {
+      gl.enableVertexAttribArray(locInstOrigin);
+      gl.vertexAttribPointer(locInstOrigin, 3, gl.FLOAT, false, 52, 0);
+      gl.vertexAttribDivisor(locInstOrigin, 1);
+    }
+    if (locInstOffset !== undefined && locInstOffset !== -1) {
+      gl.enableVertexAttribArray(locInstOffset);
+      gl.vertexAttribPointer(locInstOffset, 2, gl.FLOAT, false, 52, 12);
+      gl.vertexAttribDivisor(locInstOffset, 1);
+    }
+    if (locInstUV !== undefined && locInstUV !== -1) {
+      gl.enableVertexAttribArray(locInstUV);
+      gl.vertexAttribPointer(locInstUV, 2, gl.FLOAT, false, 52, 20);
+      gl.vertexAttribDivisor(locInstUV, 1);
+    }
+    if (locInstColor !== undefined && locInstColor !== -1) {
+      gl.enableVertexAttribArray(locInstColor);
+      gl.vertexAttribPointer(locInstColor, 3, gl.FLOAT, false, 52, 28);
+      gl.vertexAttribDivisor(locInstColor, 1);
+    }
+    if (locInstInfo !== undefined && locInstInfo !== -1) {
+      gl.enableVertexAttribArray(locInstInfo);
+      gl.vertexAttribPointer(locInstInfo, 3, gl.FLOAT, false, 52, 40);
+      gl.vertexAttribDivisor(locInstInfo, 1);
+    }
 
+    // 4. Fire Draw Call
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.indexBuffer);
     gl.drawElementsInstanced(
       gl.TRIANGLES,
       this.indexAmount,
@@ -408,12 +435,18 @@ export class TextRenderer {
       this.instanceData.length / 13,
     );
 
-    // Reset divisors and clear frame data
-    gl.vertexAttribDivisor(cache.text_instanceOrigin, 0);
-    gl.vertexAttribDivisor(cache.text_instanceOffset, 0);
-    gl.vertexAttribDivisor(cache.text_instanceUV, 0);
-    gl.vertexAttribDivisor(cache.text_instanceColor, 0);
-    gl.vertexAttribDivisor(cache.text_instanceInfo, 0);
+    // 5. Clean up Divisors and State Context Arrays
+    if (locInstOrigin !== -1 && locInstOrigin !== undefined)
+      gl.vertexAttribDivisor(locInstOrigin, 0);
+    if (locInstOffset !== -1 && locInstOffset !== undefined)
+      gl.vertexAttribDivisor(locInstOffset, 0);
+    if (locInstUV !== -1 && locInstUV !== undefined)
+      gl.vertexAttribDivisor(locInstUV, 0);
+    if (locInstColor !== -1 && locInstColor !== undefined)
+      gl.vertexAttribDivisor(locInstColor, 0);
+    if (locInstInfo !== -1 && locInstInfo !== undefined)
+      gl.vertexAttribDivisor(locInstInfo, 0);
+
     this.instanceData = [];
   }
 }
