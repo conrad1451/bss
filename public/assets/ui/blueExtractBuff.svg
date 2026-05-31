@@ -1,0 +1,9 @@
+﻿<svg id=" blueExtractBuff" viewBox="0 0 30 30" width="30" height="30" xmlns="http://www.w3.org/2000/svg">
+  <rect width="30" height="30" fill=" rgb(255,200,0)" xmlns=""></rect>
+  <rect id=" blueExtractBuff_cooldown" width="30" height="0" opacity="0.45" fill="rgb(0,0,0)" xmlns=""></rect>
+  <text id=" blueExtractBuff_amount" x="28" y="28" text-anchor=" end" font-size="13px" font-family="calibri" xmlns=""></text>
+  <path d=" M 47 17L 45 42L 37 47L 23 40L 29 16" fill=" rgb(0,0,0,0.1)" stroke=" rgb(0,0,0)" stroke-width="1.5" transform=" scale(0.4285,0.4285) translate(0,7)" xmlns=""></path>
+  <path d=" M 45 34L 45 42L 37 47L 23 40L 26 30" fill=" rgb(0,0,200)" transform=" scale(0.4285,0.4285) translate(0,7)" xmlns=""></path>
+  <rect x="30" y="3" width="20" height="12" fill=" rgb(100,100,100" rx="4" transform=" scale(0.4285,0.4285)  translate(0,7) rotate(10)" xmlns=""></rect>
+  <path d=" M 47 12L 45 42L 37 47L 39 10" fill=" rgb(0,0,0,0.5)" transform=" scale(0.4285,0.4285) translate(0,7)" xmlns=""></path>
+</svg>

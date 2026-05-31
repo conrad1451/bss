@@ -1,0 +1,11 @@
+﻿<svg id=" pineTreeForestBoost" viewBox="0 0 30 30" width="30" height="30" xmlns="http://www.w3.org/2000/svg">
+  <rect width="30" height="30" fill=" rgb(217, 194, 60)" xmlns=""></rect>
+  <rect id=" pineTreeForestBoost_cooldown" width="30" height="0" opacity="0.45" fill="rgb(0,0,0)" xmlns=""></rect>
+  <g transform=" scale(0.9,1) rotate(-5) translate(1,-1)" xmlns="">
+    <path d=" M 15 22L 15 28" fill=" rgb(0,0,0,0)" stroke="#57b5b1" stroke-width="5"></path>
+    <path d=" M 15 22L 15 27" fill=" rgb(0,0,0,0)" stroke=" rgb(171, 118, 19)" stroke-width="3"></path>
+    <path d=" M 15 7L 11 12L 13 12L 8 18L 12 18L 7 23L15 23" fill=" rgb(0,160,0)" stroke="#57b5b1" stroke-width="1"></path>
+    <path d=" M 15 7L 11 12L 13 12L 8 18L 12 18L 7 23L15 23" fill=" rgb(0,160,0)" stroke="#57b5b1" stroke-width="1" transform=" translate(-15,0) scale(-1,1) translate(-44.75,0)"></path>
+  </g>
+  <text id=" pineTreeForestBoost_amount" x="28" y="28" text-anchor=" end" font-size="11px" font-family="calibri" xmlns=""></text>
+</svg>

@@ -1,0 +1,10 @@
+﻿<svg id=" bubbleBloat" viewBox="0 0 30 30" width="30" height="30" xmlns="http://www.w3.org/2000/svg">
+  <rect width="30" height="30" fill=" rgb(0,0,200)" xmlns=""></rect>
+  <rect id=" bubbleBloat_cooldown" width="30" height="0" opacity="0.45" fill="rgb(0,0,0)" xmlns=""></rect>
+  <circle cx="10" cy="6" r="2" fill=" rgb(100,100,255)" xmlns=""></circle>
+  <circle cx="19" cy="10" r="3" fill=" rgb(100,100,255)" xmlns=""></circle>
+  <circle cx="11" cy="16" r="3" fill=" rgb(100,100,255)" xmlns=""></circle>
+  <circle cx="19" cy="17" r="2" fill=" rgb(100,100,255)" xmlns=""></circle>
+  <circle cx="15" cy="26" r="5" fill=" rgb(100,100,255)" xmlns=""></circle>
+  <text id=" bubbleBloat_amount" x="29" y="29" text-anchor=" end" font-size="12px" font-family="calibri" xmlns=""></text>
+</svg>

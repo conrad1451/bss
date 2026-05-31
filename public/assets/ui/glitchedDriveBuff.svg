@@ -1,0 +1,25 @@
+﻿<svg id=" glitchedDriveBuff" viewBox="0 0 30 30" width="30" height="30" xmlns="http://www.w3.org/2000/svg">
+  <rect width="30" height="30" fill=" rgb(148, 148, 148,0)" xmlns=""></rect>
+  <text id=" glitchedDriveBuff_amount" x="29" y="29" text-anchor=" end" fill=" rgb(0,0,0)" font-size="12px" font-family="calibri" xmlns=""></text>
+  <rect id=" glitchedDriveBuff_cooldown" width="30" height="0" opacity="0" fill="rgb(0,0,0)" xmlns=""></rect>
+  <g transform=" translate(15,13) scale(0.5,0.5)" xmlns="">
+    <path fill=" rgb(100,100,100)" stroke=" black" stroke-width="2" d=" M -20 0L0 -15L20 0L0 15z"></path>
+    <path fill=" rgb(85,85,85)" stroke=" black" stroke-width="2" d=" M0 25L-20 10L-20 0L0 15z"></path>
+    <path fill=" rgb(70,70,70)" stroke=" black" stroke-width="2" d=" M0 25L20 10L20 0L0 15z"></path>
+    <g transform=" translate(-3,2) scale(0.9,0.9)">
+      <circle cx="0" cy="0" r="8" stroke=" rgb(195,195,0,0.5)" stroke-width="8" fill=" rgb(0,0,0,0)" transform=" scale(1,0.75)"></circle>
+      <circle cx="0" cy="-5" r="8" stroke=" rgb(255,255,0,0.5)" stroke-width="8" fill=" rgb(0,0,0,0)" transform=" scale(1,0.5)"></circle>
+    </g>
+    <g transform=" translate(3,2) scale(0.9,0.9)">
+      <circle cx="0" cy="0" r="8" stroke=" rgb(189, 100, 180,0.6)" stroke-width="8" fill=" rgb(0,0,0,0)" transform=" scale(1,0.75)"></circle>
+      <circle cx="0" cy="-5" r="8" stroke=" rgb(247, 131, 235,0.6)" stroke-width="8" fill=" rgb(0,0,0,0)" transform=" scale(1,0.75)"></circle>
+    </g>
+    <g transform=" translate(0,-2) scale(0.9,0.9)">
+      <circle cx="0" cy="0" r="8" stroke=" rgb(0, 190, 190,0.4)" stroke-width="8" fill=" rgb(0,0,0,0)" transform=" scale(1,0.75)"></circle>
+      <circle cx="0" cy="-5" r="8" stroke=" rgb(247, 255, 255,0.4)" stroke-width="8" fill=" rgb(0,0,0,0)" transform=" scale(1,0.75)"></circle>
+    </g>
+    <rect x="-19" y="8" width="4" height="8" fill=" rgb(255,220,50,0.9)" rx="2"></rect>
+    <rect x="-13" y="11" width="4" height="8" fill=" rgb(255,220,50,0.9)" rx="2"></rect>
+    <rect x="-7" y="14" width="4" height="8" fill=" rgb(255,220,50,0.9)" rx="2"></rect>
+  </g>
+</svg>

@@ -1,0 +1,6 @@
+﻿<svg id=" precision" viewBox="0 0 30 30" width="30" height="30" xmlns="http://www.w3.org/2000/svg">
+  <rect width="30" height="30" fill=" rgb(143,0,236)" xmlns=""></rect>
+  <rect id=" precision_cooldown" width="30" height="0" opacity="0.45" fill="rgb(0,0,0)" xmlns=""></rect>
+  <path stroke=" rgb(0,0,0)" stroke-width="2" d=" M15 9L15 22M7 12C7 8 22 8 22 12" fill=" rgb(0,0,0,0)" xmlns=""></path>
+  <text id=" precision_amount" x="28" y="28" text-anchor=" end" font-size="13px" font-family="calibri" xmlns=""></text>
+</svg>

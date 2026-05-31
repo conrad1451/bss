@@ -1,0 +1,30 @@
+﻿<svg id=" tropicalDrinkBuff" viewBox="0 0 30 30" width="30" height="30" xmlns="http://www.w3.org/2000/svg">
+  <defs xmlns="">
+    <linearGradient id=" strawStripes_" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="10%" stop-color=" rgb(235, 112, 235)" />
+      <stop offset="10%" stop-color=" rgb(240, 56, 194)" />
+      <stop offset="20%" stop-color=" rgb(240, 56, 194)" />
+      <stop offset="20%" stop-color=" rgb(235, 112, 235)" />
+      <stop offset="30%" stop-color=" rgb(235, 112, 235)" />
+      <stop offset="30%" stop-color=" rgb(240, 56, 194)" />
+      <stop offset="40%" stop-color=" rgb(240, 56, 194)" />
+      <stop offset="40%" stop-color=" rgb(235, 112, 235)" />
+      <stop offset="50%" stop-color=" rgb(235, 112, 235)" />
+      <stop offset="50%" stop-color=" rgb(240, 56, 194)" />
+      <stop offset="60%" stop-color=" rgb(240, 56, 194)" />
+      <stop offset="60%" stop-color=" rgb(235, 112, 235)" />
+      <stop offset="70%" stop-color=" rgb(235, 112, 235)" />
+      <stop offset="70%" stop-color=" rgb(240, 56, 194)" />
+      <stop offset="80%" stop-color=" rgb(240, 56, 194)" />
+      <stop offset="80%" stop-color=" rgb(235, 112, 235)" />
+      <stop offset="90%" stop-color=" rgb(235, 112, 235)" />
+      <stop offset="90%" stop-color=" rgb(240, 56, 194)" />
+    </linearGradient>
+  </defs>
+  <rect width="30" height="30" fill=" rgb(255,200,0)" xmlns=""></rect>
+  <rect id=" tropicalDrinkBuff_cooldown" width="30" height="0" opacity="0.45" fill="rgb(0,0,0)" xmlns=""></rect>
+  <text id=" tropicalDrinkBuff_amount" x="28" y="28" text-anchor=" end" font-size="13px" font-family="calibri" xmlns=""></text>
+  <path d=" M15 30C15 60 60 60 60 30C 60 15 15 15 15 30" fill=" rgb(163, 90, 18)" stroke=" rgb(0,0,0)" stroke-width="1.5" transform=" scale(0.4285,0.4285)" xmlns=""></path>
+  <path d=" M20 30C20 42 55 42 55 30C 55 20 20 20 20 30" fill=" rgb(255,255,210)" stroke=" rgb(0,0,0)" stroke-width="1.5" transform=" scale(0.4285,0.4285)" xmlns=""></path>
+  <path d=" M 44 37L 39 38L 48 12L 60 7L 61 11L 52 15Z" fill=" url(#strawStripes_)" stroke=" rgb(0,0,0)" stroke-width="1.5" transform=" scale(0.4285,0.4285)" xmlns=""></path>
+</svg>

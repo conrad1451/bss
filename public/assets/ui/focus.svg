@@ -1,0 +1,7 @@
+﻿<svg id=" focus" viewBox="0 0 30 30" width="30" height="30" xmlns="http://www.w3.org/2000/svg">
+  <rect width="30" height="30" fill=" rgb(0,200,0)" xmlns=""></rect>
+  <rect id=" focus_cooldown" width="30" height="0" opacity="0.45" fill="rgb(0,0,0)" xmlns=""></rect>
+  <path fill=" rgb(0,0,0)" d=" M5 15C10 0 20 0 25 15M5 15C10 30 20 30 25 15" xmlns=""></path>
+  <circle cx="15" cy="15" r="3" fill=" rgb(0,200,0)" xmlns=""></circle>
+  <text id=" focus_amount" x="28" y="28" text-anchor=" end" font-size="13px" font-family="calibri" xmlns=""></text>
+</svg>

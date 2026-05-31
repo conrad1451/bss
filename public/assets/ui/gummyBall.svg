@@ -1,0 +1,7 @@
+﻿<svg id=" gummyBall" viewBox="0 0 30 30" width="30" height="30" xmlns="http://www.w3.org/2000/svg">
+  <rect width="30" height="30" fill=" rgb(30,255,100)" xmlns=""></rect>
+  <rect id=" gummyBall_cooldown" width="30" height="0" opacity="0.45" fill="rgb(0,0,0)" xmlns=""></rect>
+  <!--30,255,100  255,50,255-->
+  <circle cx="15" cy="15" r="7" fill=" rgb(255,50,255)" xmlns=""></circle>
+  <text id=" gummyBall_amount" x="29" y="29" text-anchor=" end" font-size="12px" font-family="calibri" xmlns=""></text>
+</svg>

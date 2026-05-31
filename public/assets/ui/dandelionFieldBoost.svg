@@ -1,0 +1,8 @@
+﻿<svg id=" dandelionFieldBoost" viewBox="0 0 30 30" width="30" height="30" xmlns="http://www.w3.org/2000/svg">
+  <rect width="30" height="30" fill=" rgb(217, 194, 60)" xmlns=""></rect>
+  <rect id=" dandelionFieldBoost_cooldown" width="30" height="0" opacity="0.45" fill="rgb(0,0,0)" xmlns=""></rect>
+  <circle cx="13" cy="11" r="5" fill=" rgb(240,240,240)" stroke="#57b5b1" stroke-width="2" xmlns=""></circle>
+  <path d=" M16 14C 19 19 19 22 17.5 26.5" fill=" rgb(0,0,0,0)" stroke="#57b5b1" stroke-width="5" xmlns=""></path>
+  <path d=" M16 14C 19 19 19 22 18 25" fill=" rgb(0,0,0,0)" stroke=" rgb(0,170,0)" stroke-width="2" xmlns=""></path>
+  <text id=" dandelionFieldBoost_amount" x="28" y="28" text-anchor=" end" font-size="11px" font-family="calibri" xmlns=""></text>
+</svg>

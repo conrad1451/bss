@@ -1,0 +1,7 @@
+﻿<svg id=" balloonAura" viewBox="0 0 30 30" width="30" height="30" xmlns="http://www.w3.org/2000/svg">
+  <rect width="30" height="30" fill=" rgb(255,255,0)" xmlns=""></rect>
+  <rect id=" balloonAura_cooldown" width="30" height="0" opacity="0.45" fill="rgb(0,0,0)" xmlns=""></rect>
+  <circle cx="12" cy="12" r="7" fill=" rgb(0,0,255)" xmlns=""></circle>
+  <path stroke=" rgb(200,200,200)" stroke-width="2" d=" M13 18C10 20 12 25 20 26" fill=" rgba(0,0,0,0)" xmlns=""></path>
+  <text id=" balloonAura_amount" x="28" y="28" text-anchor=" end" font-size="13px" font-family="calibri" xmlns=""></text>
+</svg>

@@ -1,0 +1,6 @@
+﻿<svg id=" inspire" viewBox="0 0 30 30" width="30" height="30" xmlns="http://www.w3.org/2000/svg">
+  <rect width="30" height="30" fill=" rgb(100, 100, 100)" xmlns=""></rect>
+  <rect id=" inspire_cooldown" width="30" height="0" opacity="0.45" fill="rgb(0,0,0)" xmlns=""></rect>
+  <path stroke=" rgb(255, 241, 43)" stroke-width="1.5" d=" M23.78 7.73L29.39 40.45L0.00 25.00L-29.39 40.45L-23.78 7.73L-47.55 -15.45L-14.69 -20.23L-0.00 -50.00L14.69 -20.23L47.55 -15.45L23.78 7.73" fill=" rgb(255, 241, 43)" transform=" scale(0.2,0.2) translate(75,75)" xmlns=""></path>
+  <text id=" inspire_amount" x="28" y="28" text-anchor=" end" font-size="13px" font-family="calibri" xmlns=""></text>
+</svg>

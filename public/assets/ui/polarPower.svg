@@ -1,0 +1,6 @@
+﻿<svg id=" polarPower" viewBox="0 0 30 30" width="30" height="30" xmlns="http://www.w3.org/2000/svg">
+  <rect width="30" height="30" fill=" rgb(100,200,255)" xmlns=""></rect>
+  <rect id=" polarPower_cooldown" width="30" height="0" opacity="0" fill="rgb(0,0,0)" xmlns=""></rect>
+  <text id=" polarPower_amount" x="28" y="28" text-anchor=" end" font-size="11px" font-family="calibri" xmlns=""></text>
+  <path fill=" rgb(0,0,0,0)" stroke=" black" stroke-width="2.5" d=" M10 8C8 18 22 18 20 8M15 8 15 25" xmlns=""></path>
+</svg>

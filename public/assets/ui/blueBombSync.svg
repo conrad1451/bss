@@ -1,0 +1,9 @@
+﻿<svg id=" blueBombSync" viewBox="0 0 30 30" width="30" height="30" xmlns="http://www.w3.org/2000/svg">
+  <rect width="30" height="30" fill=" rgb(0,0,0)" xmlns=""></rect>
+  <text id=" blueBombSync_amount" x="29" y="29" text-anchor=" end" font-size="12px" font-family="calibri" xmlns=""></text>
+  <circle cx="15" cy="17.5" r="6" fill=" blue" xmlns=""></circle>
+  <rect x="11.25" y="11" width="7.5" height="3" fill=" blue" xmlns=""></rect>
+  <path fill=" white" d=" M17.5 11L18.75 11L18.75 12.5C 25 18 18.4 25.1 13 23.2C 19 17 11 17 17.5 11" xmlns=""></path>
+  <path stroke=" blue" d=" M15 11C 15 6 20 11 20 6" stroke-width="1" xmlns=""></path>
+  <rect id=" blueBombSync_cooldown" width="30" height="0" opacity="0.6" fill="rgb(0,0,0)" xmlns=""></rect>
+</svg>

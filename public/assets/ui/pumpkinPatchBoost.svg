@@ -1,0 +1,9 @@
+﻿<svg id=" pumpkinPatchBoost" viewBox="0 0 30 30" width="30" height="30" xmlns="http://www.w3.org/2000/svg">
+  <rect width="30" height="30" fill=" rgb(217, 194, 60)" xmlns=""></rect>
+  <rect id=" pumpkinPatchBoost_cooldown" width="30" height="0" opacity="0.45" fill="rgb(0,0,0)" xmlns=""></rect>
+  <path d=" M 15 10C 15 7 16 6 16.75 5.25" fill=" rgb(0,0,0,0)" stroke="#57b5b1" stroke-width="3.5" xmlns=""></path>
+  <circle cx="15" cy="19" r="8" fill=" rgb(242, 191, 51)" transform=" scale(1,0.9)" stroke="#57b5b1" stroke-width="1" xmlns=""></circle>
+  <path d=" M 15 10C 15 7 16 6 16 6" fill=" rgb(0,0,0,0)" stroke=" rgb(171, 118, 19)" stroke-width="2" xmlns=""></path>
+  <path d=" M 13 13C 11 13 11 21 13 21M 17 13C 19 13 19 21 17 21" fill=" rgb(0,0,0,0)" stroke=" rgb(0,0,0,0.2)" stroke-width="1" xmlns=""></path>
+  <text id=" pumpkinPatchBoost_amount" x="28" y="28" text-anchor=" end" font-size="11px" font-family="calibri" xmlns=""></text>
+</svg>

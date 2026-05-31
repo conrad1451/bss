@@ -1,0 +1,11 @@
+﻿<svg id=" pineapplePatchWinds" viewBox="0 0 30 30" width="30" height="30" xmlns="http://www.w3.org/2000/svg">
+  <rect width="30" height="30" fill=" rgb(230,230,255)" xmlns=""></rect>
+  <rect id=" pineapplePatchWinds_cooldown" width="30" height="0" opacity="0.45" fill="rgb(0,0,0)" xmlns=""></rect>
+  <g transform=" translate(-1,3) rotate(-4)" xmlns="">
+    <path d=" M 10.5 5.5L15 9M 20.5 5.5L15 9M 14 1L15 9M 17.5 2L15 9" fill=" rgb(0,0,0,0)" stroke="#57b5b1" stroke-width="3"></path>
+    <path d=" M 11 6L15 9M 20 6L15 9M 14 2L15 9M 17 3L15 9" fill=" rgb(0,0,0,0)" stroke=" rgb(0,220,00)" stroke-width="1.5"></path>
+    <circle cx="15" cy="13" r="5.5" fill=" rgb(255,220,0)" transform=" scale(1,1.25)" stroke="#57b5b1" stroke-width="1"></circle>
+    <path d=" M 10.5 13C 13 15 17 15 19.5 13M 10 18C 13 20.5 17 20.5 20 18M 13 12C 13 12 15 18 13 21M 16 12C 17 13 18 18 16 21" fill=" rgb(0,0,0,0)" stroke=" rgb(212, 177, 49)" stroke-width="1"></path>
+  </g>
+  <text id=" pineapplePatchWinds_amount" x="28" y="28" text-anchor=" end" font-size="11px" font-family="calibri" xmlns=""></text>
+</svg>

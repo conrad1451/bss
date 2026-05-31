@@ -1,0 +1,13 @@
+﻿<svg id=" ticket" style="cursor: pointer; border-radius: 5px" viewBox="0 0 200 70" width="200" height="70" xmlns="http://www.w3.org/2000/svg">
+  <rect width="200" height="70" fill=" rgb(255,255,255)" xmlns=""></rect>
+  <rect width="70" height="70" fill=" rgb(225,225,225)" xmlns=""></rect>
+  <text x="134" y="19" fill=" rgb(0,0,0)" text-anchor=" middle" font-size="17px" font-family="trebuchet ms" xmlns="">Ticket</text>
+  <text x="132" y="39" fill=" rgb(0,0,0)" text-anchor=" middle" font-size="11px" font-family="trebuchet ms" xmlns="">Used to activate and</text>
+  <text x="132" y="52" fill=" rgb(0,0,0)" text-anchor=" middle" font-size="11px" font-family="trebuchet ms" xmlns="">purchase special things!</text>
+  <text id=" ticket_amount" x="67" y="67" fill=" rgb(0,0,0)" text-anchor=" end" font-size="14px" font-family="calibri" xmlns=""></text>
+  <g transform=" translate(35,35) scale(1,0.6)" xmlns="">
+    <path fill=" rgb(255, 200, 5)" stroke=" black" stroke-width="2" d=" M -15 -20L 15 -20C16 -15 15 -15 20 -15L20 15C15 15 15 15 15 20L-15 20C-15 15 -15 15 -20 15L-20 -15C-15 -15 -15 -15 -15 -20"></path>
+    <path stroke=" rgb(255,0,0)" fill=" rgb(0,0,0,0)" stroke-width="1" d=" M-15 -11L15 -11L15 11L-15 11L-15 -11M11 -11L11 11M-11 -11L-11 11"></path>
+    <path stroke=" rgb(255,0,0)" fill=" rgb(0,0,0,0)" stroke-width="2" d=" M-3 -7L-3 -0M3 -7L3 -0M-3 3L0 7L3 3"></path>
+  </g>
+</svg>

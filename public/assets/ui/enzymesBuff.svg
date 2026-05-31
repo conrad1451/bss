@@ -1,0 +1,9 @@
+﻿<svg id=" enzymesBuff" viewBox="0 0 30 30" width="30" height="30" xmlns="http://www.w3.org/2000/svg">
+  <rect width="30" height="30" fill=" rgb(255,200,0)" xmlns=""></rect>
+  <rect id=" enzymesBuff_cooldown" width="30" height="0" opacity="0.45" fill="rgb(0,0,0)" xmlns=""></rect>
+  <text id=" enzymesBuff_amount" x="28" y="28" text-anchor=" end" font-size="13px" font-family="calibri" xmlns=""></text>
+  <path d=" M20 45 C20 30 50 30 50 45M20 45L20 47C20 60 50 60 50 47 L50 45" fill=" rgb(100,255,100)" stroke=" rgb(0,0,0)" strokeWeight="1.5" transform=" scale(0.4285,0.4285) translate(36,-15) scale(0.9,0.9) rotate(25)" xmlns=""></path>
+  <path d=" M20 45 C20 30 50 30 50 45M20 45L20 47C20 60 50 60 50 47 L50 45" fill=" rgb(255,255,80)" stroke=" rgb(0,0,0)" strokeWeight="1.5" transform=" scale(0.4285,0.4285) translate(-11,-9)" xmlns=""></path>
+  <path d=" M20 45 C20 30 50 30 50 45M20 45L20 47C20 60 50 60 50 47 L50 45" fill=" rgb(0,0,0,0.2)" transform=" scale(0.4285,0.4285) translate(0,11) scale(0.7,0.5)" xmlns=""></path>
+  <path d=" M20 45 C20 30 50 30 50 45M20 45L20 47C20 60 50 60 50 47 L50 45" fill=" rgb(0,0,0,0.2)" transform=" scale(0.4285,0.4285) translate(52,5) scale(0.7,0.5) rotate(44)" xmlns=""></path>
+</svg>

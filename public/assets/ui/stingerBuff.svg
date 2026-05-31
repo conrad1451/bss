@@ -1,0 +1,15 @@
+﻿<svg id=" stingerBuff" viewBox="0 0 30 30" width="30" height="30" xmlns="http://www.w3.org/2000/svg">
+  <defs xmlns="">
+    <linearGradient id=" stingerShade_" x1="-2.3" y1="0" x2="1.0" y2="0.7">
+      <stop offset="40%" stop-color=" black" />
+      <stop offset="90%" stop-color=" white" />
+    </linearGradient>
+  </defs>
+  <rect width="30" height="30" fill=" rgb(240,0,0)" xmlns=""></rect>
+  <rect id=" stingerBuff_cooldown" width="30" height="0" opacity="0.45" fill="rgb(0,0,0)" xmlns=""></rect>
+  <text id=" stingerBuff_amount" x="28" y="28" text-anchor=" end" font-size="13px" font-family="calibri" xmlns=""></text>
+  <g transform=" scale(0.4285,0.4285) translate(0,-2) scale(0.9,0.9)" xmlns="">
+    <path stroke=" black" stroke-width="2" fill=" url(#stingerShade_)" d=" M30 20L50 50C 73 53 13 71 30 54z"></path>
+    <path stroke=" black" stroke-width="1" fill=" rgb(0,0,0,0)" d=" M 48 51 C 42 56 39 55 33 56"></path>
+  </g>
+</svg>

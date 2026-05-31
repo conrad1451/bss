@@ -1,0 +1,12 @@
+﻿<svg id=" guidingStarPassive" viewBox="0 0 30 30" width="30" height="30" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="15" cy="15" r="14" fill=" rgb(115,163,0)" stroke=" rgb(0,0,0)" stroke-width="2" xmlns=""></circle>
+  <g transform=" scale(0.75,0.75) translate(5,5)" xmlns="">
+    <circle cx="15" cy="15" r="13" fill=" rgb(200,200,200)" stroke=" rgb(90,90,90)" stroke-width="3"></circle>
+    <path d=" M0 -5L-2 10L2 10Z" fill=" rgb(255,0,0)" transform=" translate(15,15) rotate(40) translate(0,-8)"></path>
+    <path d=" M0 -5L-2 10L2 10Z" fill=" rgb(0,0,255)" transform=" translate(15,15) rotate(180) translate(0,-8)"></path>
+    <path d=" M0 -5L-2 10L2 10Z" fill=" rgb(0,0,0)" transform=" translate(15,15) rotate(-40) translate(0,-8)"></path>
+    <path d=" M0.00000 3.00000L4.70228 6.47214L2.85317 0.92705L7.60845 -2.47214L1.76336 -2.42705L0.00000 -8.00000L-1.76336 -2.42705L-7.60845 -2.47214L-2.85317 0.92705L-4.70228 6.47214Z" transform=" translate(15,15) scale(1.3,1.3)" fill=" rgb(255,235,100)" stroke=" rgb(100,100,100)"></path>
+  </g>
+  <rect id=" guidingStarPassive_cooldown" width="30" height="0" opacity="0.45" fill="rgb(0,0,0)" xmlns=""></rect>
+  <text id=" guidingStarPassive_amount" x="29" y="29" text-anchor=" end" fill=" rgb(255,255,255)" font-size="12px" font-family="tahoma" xmlns=""></text>
+</svg>

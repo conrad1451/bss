@@ -1,0 +1,6 @@
+﻿<svg id=" corruption" viewBox="0 0 30 30" width="30" height="30" xmlns="http://www.w3.org/2000/svg">
+  <rect width="30" height="30" fill=" rgb(0,0,0)" xmlns=""></rect>
+  <text x="15.5" y="25" text-anchor=" middle" fill=" rgb(255,0,200)" font-size="39px" xmlns="">â˜º</text>
+  <text id=" corruption_amount" x="29" y="29" text-anchor=" end" fill=" rgb(255,255,255)" font-size="12px" font-family="calibri" xmlns=""></text>
+  <rect id=" corruption_cooldown" width="30" height="0" opacity="0.6" fill="rgb(0,0,0)" xmlns=""></rect>
+</svg>

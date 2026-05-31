@@ -1,0 +1,8 @@
+﻿<svg id=" melody" viewBox="0 0 30 30" width="30" height="30" xmlns="http://www.w3.org/2000/svg">
+  <rect width="30" height="30" fill=" rgb(255,255,255)" xmlns=""></rect>
+  <rect id=" melody_cooldown" width="30" height="0" opacity="0.45" fill="rgb(0,0,0)" xmlns=""></rect>
+  <path d=" M6 22L8 8M8 8L23 8M23 8L20 22" stroke=" rgb(0,0,0)" stroke-width="3" xmlns=""></path>
+  <circle cx="5" cy="22" r="3" fill=" rgb(0,0,0)" xmlns=""></circle>
+  <circle cx="19" cy="22" r="3" fill=" rgb(0,0,0)" xmlns=""></circle>
+  <text id=" melody_amount" x="28" y="28" text-anchor=" end" font-size="13px" font-family="calibri" xmlns=""></text>
+</svg>

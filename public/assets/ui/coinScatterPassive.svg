@@ -1,0 +1,7 @@
+﻿<svg id=" coinScatterPassive" viewBox="0 0 30 30" width="30" height="30" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="15" cy="15" r="14" fill=" rgb(115,163,0)" stroke=" rgb(0,0,0)" stroke-width="2" xmlns=""></circle>
+  <circle cx="15" cy="15" r="9" fill=" rgb(230, 208, 14)" xmlns=""></circle>
+  <path fill=" rgb(217, 184, 52)" stroke=" rgb(0,0,0)" stroke-width="1" d=" M13 10C16 10 24 17 15 20C8 12 18 15 13 10Z" xmlns=""></path>
+  <rect id=" coinScatterPassive_cooldown" width="30" height="0" opacity="0.45" fill="rgb(0,0,0)" xmlns=""></rect>
+  <text id=" coinScatterPassive_amount" x="29" y="29" text-anchor=" end" fill=" rgb(255,255,255)" font-size="12px" font-family="tahoma" xmlns=""></text>
+</svg>

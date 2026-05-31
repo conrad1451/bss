@@ -1,0 +1,19 @@
+﻿<svg id=" petalStormPassive" viewBox="0 0 30 30" width="30" height="30" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="15" cy="15" r="14" fill=" rgb(115,163,0)" stroke=" rgb(0,0,0)" stroke-width="2" xmlns=""></circle>
+  <g transform=" translate(15,15) rotate(48)" xmlns="">
+    <path fill=" rgb(255,255,255,0.25)" d=" M 0 0C 7 -20 14 5 0 0"></path>
+    <path fill=" rgb(255,255,255,0.25)" d=" M 0 0C 7 -20 14 5 0 0" transform=" rotate(122)"></path>
+    <path fill=" rgb(255,255,255,0.25)" d=" M 0 0C 7 -20 14 5 0 0" transform=" rotate(249)"></path>
+  </g>
+  <g transform=" translate(15,15) rotate(26)" xmlns="">
+    <path fill=" rgb(255,255,255,0.5)" d=" M 0 0C 7 -20 14 5 0 0"></path>
+    <path fill=" rgb(255,255,255,0.5)" d=" M 0 0C 7 -20 14 5 0 0" transform=" rotate(122)"></path>
+    <path fill=" rgb(255,255,255,0.5)" d=" M 0 0C 7 -20 14 5 0 0" transform=" rotate(249)"></path>
+  </g>
+  <path fill=" rgb(255,255,255)" d=" M 0 0C 7 -20 14 5 0 0" transform=" translate(15,15)" xmlns=""></path>
+  <path fill=" rgb(255,255,255)" d=" M 0 0C 7 -20 14 5 0 0" transform=" translate(15,15) rotate(122)" xmlns=""></path>
+  <path fill=" rgb(255,255,255)" d=" M 0 0C 7 -20 14 5 0 0" transform=" translate(15,15) rotate(249)" xmlns=""></path>
+  <circle fill=" rgb(255, 255, 120)" cx="15" cy="15" r="3" xmlns=""></circle>
+  <rect id=" petalStormPassive_cooldown" width="30" height="0" opacity="0.45" fill="rgb(0,0,0)" xmlns=""></rect>
+  <text id=" petalStormPassive_amount" x="29" y="29" text-anchor=" end" fill=" rgb(255,255,255)" font-size="12px" font-family="tahoma" xmlns=""></text>
+</svg>

@@ -1,0 +1,6 @@
+﻿<svg id=" rage" viewBox="0 0 30 30" width="30" height="30" xmlns="http://www.w3.org/2000/svg">
+  <rect width="30" height="30" fill=" rgb(255, 149, 125)" xmlns=""></rect>
+  <rect id=" rage_cooldown" width="30" height="0" opacity="0.45" fill="rgb(0,0,0)" xmlns=""></rect>
+  <path stroke=" rgb(255, 20, 0)" stroke-width="2" d=" M5 10C5 5 10 5 14 11M25 10C25 5 20 5 16 11M7 25 C 7 15 23 15 23 25M10 10L 10 15M20 10 L 20 15" fill=" rgb(0,0,0,0)" xmlns=""></path>
+  <text id=" rage_amount" x="28" y="28" text-anchor=" end" font-size="13px" font-family="calibri" xmlns=""></text>
+</svg>

@@ -1,0 +1,9 @@
+﻿<svg id=" popStarAura" viewBox="0 0 30 30" width="30" height="30" xmlns="http://www.w3.org/2000/svg">
+  <rect width="30" height="30" fill=" rgb(150,150,150)" xmlns=""></rect>
+  <rect id=" popStarAura_cooldown" width="30" height="0" opacity="0.45" fill="rgb(0,0,0)" xmlns=""></rect>
+  <circle cx="6" cy="6" r="3" fill=" rgb(30,110,205)" stroke=" rgb(0,0,0,0.4)" xmlns=""></circle>
+  <circle cx="22" cy="10" r="3" fill=" rgb(30,110,205)" stroke=" rgb(0,0,0,0.4)" xmlns=""></circle>
+  <circle cx="15" cy="22" r="3" fill=" rgb(30,110,205)" stroke=" rgb(0,0,0,0.4)" xmlns=""></circle>
+  <path d=" M0.00000 3.00000L4.70228 6.47214L2.85317 0.92705L7.60845 -2.47214L1.76336 -2.42705L0.00000 -8.00000L-1.76336 -2.42705L-7.60845 -2.47214L-2.85317 0.92705L-4.70228 6.47214Z" transform=" translate(15,15) scale(1.3,1.3)" fill=" rgb(60,170,255)" stroke=" rgb(10,80,200)" xmlns=""></path>
+  <text id=" popStarAura_amount" x="29" y="29" text-anchor=" end" font-size="12px" font-family="calibri" xmlns=""></text>
+</svg>

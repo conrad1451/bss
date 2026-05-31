@@ -1,0 +1,6 @@
+﻿<svg id=" bombCombo" viewBox="0 0 30 30" width="30" height="30" xmlns="http://www.w3.org/2000/svg">
+  <rect width="30" height="30" fill=" rgb(0,0,0)" xmlns=""></rect>
+  <path d=" M15 26 L17.169 19.505 L23.600 21.858 L19.875 16.113 L25.724 12.552 L18.909 11.883 L19.773 5.089 L15 10 L10.227 5.089 L11.091 11.883 L4.276 12.552 L10.125 16.113 L6.400 21.858 L12.831 19.505" fill=" rgb(255,255,255)" xmlns=""></path>
+  <rect id=" bombCombo_cooldown" width="30" height="0" opacity="0.45" fill="rgb(0,0,0)" xmlns=""></rect>
+  <text id=" bombCombo_amount" x="28" y="28" fill=" rgb(255,255,255)" text-anchor=" end" font-size="13px" font-family="calibri" xmlns=""></text>
+</svg>

@@ -1,0 +1,9 @@
+﻿<svg id=" bubbleBombsPassive" viewBox="0 0 30 30" width="30" height="30" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="15" cy="15" r="14" fill=" rgb(115,163,0)" stroke=" rgb(0,0,0)" stroke-width="2" xmlns=""></circle>
+  <circle cx="15" cy="18" r="7" fill=" rgb(80,200,255)" xmlns=""></circle>
+  <circle cx="15" cy="31" r="3" fill=" rgb(80,80,80)" transform=" scale(1,0.4)" xmlns=""></circle>
+  <path stroke=" rgb(222, 222, 149)" stroke-width="2" fill=" rgb(0,0,0,0)" d=" M15 12C15 10 15 6 18 8" xmlns=""></path>
+  <circle cx="18" cy="7" r="2" fill=" rgb(255,100,0)" xmlns=""></circle>
+  <rect id=" bubbleBombsPassive_cooldown" width="30" height="0" opacity="0.45" fill="rgb(0,0,0)" xmlns=""></rect>
+  <text id=" bubbleBombsPassive_amount" x="29" y="29" text-anchor=" end" fill=" rgb(255,255,255)" font-size="12px" font-family="tahoma" xmlns=""></text>
+</svg>

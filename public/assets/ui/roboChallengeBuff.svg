@@ -1,0 +1,19 @@
+﻿<svg id=" roboChallengeBuff" viewBox="0 0 30 30" width="30" height="30" xmlns="http://www.w3.org/2000/svg">
+  <rect width="30" height="30" fill=" rgb(148, 148, 148,0)" xmlns=""></rect>
+  <text id=" roboChallengeBuff_amount" x="29" y="29" text-anchor=" end" fill=" rgb(0,0,0)" font-size="12px" font-family="calibri" xmlns=""></text>
+  <rect id=" roboChallengeBuff_cooldown" width="30" height="0" opacity="0" fill="rgb(0,0,0)" xmlns=""></rect>
+  <g transform=" translate(15,15) scale(0.6,0.6)" xmlns="">
+    <path fill=" rgb(255, 255, 160)" stroke=" black" stroke-width="2" d=" M -20 -15L 15 -15L 20 -10L 20 10L 15 15L-20 15L-20 -15"></path>
+    <path fill=" rgb(0,0,0,0)" stroke=" rgb(130,160,130)" stroke-width="4" d=" M -17 -14L -17 14M 13 -14L 18 -8L 18 8L 13 14"></path>
+    <circle cx="0" cy="0" r="6" fill=" rgb(100,150,100)"></circle>
+    <circle cx="0" cy="0" r="3" fill=" rgb(255, 255, 160)"></circle>
+    <rect x="-2.5" y="-9" fill=" rgb(100,150,100)" width="5" height="4" transform=" rotate(0)"></rect>
+    <rect x="-2.5" y="-9" fill=" rgb(100,150,100)" width="5" height="4" transform=" rotate(45)"></rect>
+    <rect x="-2.5" y="-9" fill=" rgb(100,150,100)" width="5" height="4" transform=" rotate(90)"></rect>
+    <rect x="-2.5" y="-9" fill=" rgb(100,150,100)" width="5" height="4" transform=" rotate(135)"></rect>
+    <rect x="-2.5" y="-9" fill=" rgb(100,150,100)" width="5" height="4" transform=" rotate(180)"></rect>
+    <rect x="-2.5" y="-9" fill=" rgb(100,150,100)" width="5" height="4" transform=" rotate(220)"></rect>
+    <rect x="-2.5" y="-9" fill=" rgb(100,150,100)" width="5" height="4" transform=" rotate(265)"></rect>
+    <rect x="-2.5" y="-9" fill=" rgb(100,150,100)" width="5" height="4" transform=" rotate(310)"></rect>
+  </g>
+</svg>

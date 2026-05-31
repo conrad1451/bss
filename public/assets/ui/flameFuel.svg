@@ -1,0 +1,7 @@
+﻿<svg id=" flameFuel" viewBox="0 0 30 30" width="30" height="30" xmlns="http://www.w3.org/2000/svg">
+  <rect width="30" height="30" fill=" rgb(230,0,0)" xmlns=""></rect>
+  <rect id=" flameFuel_cooldown" width="30" height="0" opacity="0.45" fill="rgb(0,0,0)" xmlns=""></rect>
+  <path d=" M15 25C5 24 5 13 15 5M15 25C25 24 25 13 15 5" fill=" rgb(30,0,0)" xmlns=""></path>
+  <path d=" M15 25C10 24 10 17 15 10M15 25C20 24 20 17 15 10" fill=" rgb(105,0,0)" xmlns=""></path>
+  <text id=" flameFuel_amount" x="28" y="28" text-anchor=" end" font-size="13px" font-family="calibri" xmlns=""></text>
+</svg>

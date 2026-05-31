@@ -1,0 +1,8 @@
+﻿<svg id=" haste_" viewBox="0 0 30 30" width="30" height="30" xmlns="http://www.w3.org/2000/svg">
+  <rect width="30" height="30" fill=" rgb(255,220,10)" xmlns=""></rect>
+  <rect id=" haste__cooldown" width="30" height="0" opacity="0.45" fill="rgb(0,0,0)" xmlns=""></rect>
+  <path d=" M18 9L15 21M12 26L15 21M16 26L15 21M11 11L16 15M23 15L16 15" stroke=" rgb(130,130,130)" stroke-width="2" xmlns=""></path>
+  <path d=" M5 7 L11 7M2 15L12 15M3 23L11 23" stroke=" rgb(130,130,130)" stroke-width="1.5" opacity="0.5" xmlns=""></path>
+  <circle cx="18" cy="9" r="4" fill=" rgb(130,130,130)" xmlns=""></circle>
+  <text id=" haste__amount" x="28" y="28" text-anchor=" end" font-size="13px" font-family="calibri" xmlns=""></text>
+</svg>

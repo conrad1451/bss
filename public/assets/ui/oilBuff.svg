@@ -1,0 +1,11 @@
+﻿<svg id=" oilBuff" viewBox="0 0 30 30" width="30" height="30" xmlns="http://www.w3.org/2000/svg">
+  <rect width="30" height="30" fill=" rgb(255,200,0)" xmlns=""></rect>
+  <rect id=" oilBuff_cooldown" width="30" height="0" opacity="0.45" fill="rgb(0,0,0)" xmlns=""></rect>
+  <text id=" oilBuff_amount" x="28" y="28" text-anchor=" end" font-size="13px" font-family="calibri" xmlns=""></text>
+  <path fill=" rgb(255,255,120)" stroke=" rgb(0,0,0)" stroke-width="1.5" d=" M35 55C17 54 17 36 28 30C 31 28 31 21 30 20" transform=" scale(0.4285,0.4285)" xmlns=""></path>
+  <path fill=" rgb(255,255,120)" stroke=" rgb(0,0,0)" stroke-width="1.5" d=" M35 55C17 54 17 36 28 30C 31 28 31 21 30 20" transform=" scale(0.4285,0.4285) scale(-1,1) translate(-70,0)" xmlns=""></path>
+  <path fill=" rgb(255,255,120)" d=" M35 55L31 27L40 27Z" transform=" scale(0.4285,0.4285)" xmlns=""></path>
+  <rect x="30.5" y="11" width="8" height="10" stroke=" rgb(0,0,0)" stroke-width="1.5" rx="3" fill=" rgb(200,150,0)" transform=" scale(0.4285,0.4285)" xmlns=""></rect>
+  <rect x="21" y="38" width="28" height="6" rx="3" fill=" rgb(150,70,0)" transform=" scale(0.4285,0.4285)" xmlns=""></rect>
+  <circle cx="35" cy="41" r="5" fill=" rgb(255,255,255)" transform=" scale(0.4285,0.4285)" xmlns=""></circle>
+</svg>

@@ -1,0 +1,7 @@
+﻿<svg id=" starShowerPassive" viewBox="0 0 30 30" width="30" height="30" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="15" cy="15" r="14" fill=" rgb(115,163,0)" stroke=" rgb(0,0,0)" stroke-width="2" xmlns=""></circle>
+  <path d=" M 16 13L 20 9M 16 6L 12 10M 19 19L 25 13" stroke=" rgb(255, 255, 0,0.5)" stroke-width="2" xmlns=""></path>
+  <path d=" M0.00000 3.00000L4.70228 6.47214L2.85317 0.92705L7.60845 -2.47214L1.76336 -2.42705L0.00000 -8.00000L-1.76336 -2.42705L-7.60845 -2.47214L-2.85317 0.92705L-4.70228 6.47214Z" transform=" translate(12,18) scale(0.8,0.8)" fill=" rgb(255,235,100)" stroke=" rgb(196, 196, 57)" xmlns=""></path>
+  <rect id=" starShowerPassive_cooldown" width="30" height="0" opacity="0.45" fill="rgb(0,0,0)" xmlns=""></rect>
+  <text id=" starShowerPassive_amount" x="29" y="29" text-anchor=" end" fill=" rgb(255,255,255)" font-size="12px" font-family="tahoma" xmlns=""></text>
+</svg>

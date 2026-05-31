@@ -1,0 +1,4 @@
+﻿<svg id=" inventoryButton" style="transition-duration: 0.4s" viewBox="0 0 30 30" width="30" height="30" xmlns="http://www.w3.org/2000/svg">
+  <path fill=" rgb(255,255,255)" d=" M15 27C0 28 5 5 15 5ZM15 27C30 28 25 5 15 5" xmlns=""></path>
+  <path stroke=" rgb(195,195,195)" fill=" rgb(0,0,0,0)" stroke-width="4" d=" M5 15L 10 12L15 18L20 13L25 15" xmlns=""></path>
+</svg>

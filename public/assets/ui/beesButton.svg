@@ -1,0 +1,4 @@
+﻿<svg id=" beesButton" style="transition-duration: 0.4s" viewBox="0 0 30 30" width="30" height="30" xmlns="http://www.w3.org/2000/svg">
+  <rect fill=" rgb(255,255,255)" x="2.5" y="2.5" width="25" height="25" rx="3" xmlns=""></rect>
+  <path fill=" rgb(255,255,255,0)" stroke=" rgb(195,195,195)" stroke-width="3" d=" M10 7 L 10 14M20 7 L 20 14M11 18 L 15 22L 19 18" xmlns=""></path>
+</svg>

@@ -1,0 +1,15 @@
+﻿<svg id=" bambooFieldWinds" viewBox="0 0 30 30" width="30" height="30" xmlns="http://www.w3.org/2000/svg">
+  <rect width="30" height="30" fill=" rgb(230,230,255)" xmlns=""></rect>
+  <rect id=" bambooFieldWinds_cooldown" width="30" height="0" opacity="0.45" fill="rgb(0,0,0)" xmlns=""></rect>
+  <path d=" M 13 4.5L12 23.5" fill=" rgb(0,0,0,0)" stroke="#57b5b1" stroke-width="6" xmlns=""></path>
+  <path d=" M 13 7L12 22" fill=" rgb(0,0,0,0)" stroke=" rgb(120,200,70)" stroke-width="3" xmlns=""></path>
+  <path d=" M 11 11L 14.5 9M 11 15L 14.2 13M 10.5 20L 14 18" fill=" rgb(0,0,0,0)" stroke=" rgb(70,150,80)" stroke-width="1" xmlns=""></path>
+  <circle cx="13" cy="9" r="1.6" fill=" rgb(70,150,80)" transform=" scale(1,0.7)" xmlns=""></circle>
+  <g transform=" scale(0.75,0.75) translate(12.5,8) rotate(5)" xmlns="">
+    <path d=" M 13 4.5L12 23.5" fill=" rgb(0,0,0,0)" stroke="#57b5b1" stroke-width="6"></path>
+    <path d=" M 13 7L12 22" fill=" rgb(0,0,0,0)" stroke=" rgb(120,200,70)" stroke-width="3"></path>
+    <path d=" M 11 11L 14.5 9M 11 15L 14.2 13M 10.5 20L 14 18" fill=" rgb(0,0,0,0)" stroke=" rgb(70,150,80)" stroke-width="1"></path>
+    <circle cx="13" cy="9" r="1.6" fill=" rgb(70,150,80)" transform=" scale(1,0.7)"></circle>
+  </g>
+  <text id=" bambooFieldWinds_amount" x="28" y="28" text-anchor=" end" font-size="11px" font-family="calibri" xmlns=""></text>
+</svg>

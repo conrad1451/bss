@@ -1,0 +1,9 @@
+﻿<svg id=" mountainTopFieldBoost" viewBox="0 0 30 30" width="30" height="30" xmlns="http://www.w3.org/2000/svg">
+  <rect width="30" height="30" fill=" rgb(217, 194, 60)" xmlns=""></rect>
+  <rect id=" mountainTopFieldBoost_cooldown" width="30" height="0" opacity="0.45" fill="rgb(0,0,0)" xmlns=""></rect>
+  <g transform=" rotate(-10) scale(1.2,1.2) translate(-4,-1)" xmlns="">
+    <path d=" M 6 20L 11 9L 15 17L 18 12L 22 20z" fill=" rgb(100,100,100)" stroke="#57b5b1" stroke-width="1"></path>
+    <path d=" M 9.5 14L 11 10L 12.75 14M 17 15L 18 13L 19 15" fill=" rgb(240,240,245)"></path>
+  </g>
+  <text id=" mountainTopFieldBoost_amount" x="28" y="28" text-anchor=" end" font-size="11px" font-family="calibri" xmlns=""></text>
+</svg>

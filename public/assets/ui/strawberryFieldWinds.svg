@@ -1,0 +1,16 @@
+﻿<svg id=" strawberryFieldWinds" viewBox="0 0 30 30" width="30" height="30" xmlns="http://www.w3.org/2000/svg">
+  <rect width="30" height="30" fill=" rgb(230,230,255)" xmlns=""></rect>
+  <rect id=" strawberryFieldWinds_cooldown" width="30" height="0" opacity="0.45" fill="rgb(0,0,0)" xmlns=""></rect>
+  <g transform=" scale(0.85,0.85) translate(4,5)" xmlns="">
+    <path d=" M 13 24C 2 12 2 4 15 5M15 5C 29 5 22 18 12 24" fill=" rgb(255,40,60)" stroke="#57b5b1" stroke-width="2"></path>
+    <g transform=" rotate(62) scale(0.7,1) translate(1,-14)">
+      <path d=" M 6.8 4C 13 8 16 5 19 1M 15 -2C 13 8 13 5 14 10" fill=" rgb(0,0,0,0)" stroke="#57b5b1" stroke-width="4"></path>
+      <path d=" M 8 5C 13 8 16 5 18 2M 15 -1C 13 8 13 5 14 9" fill=" rgb(0,0,0,0)" stroke=" rgb(0,170,0)" stroke-width="2"></path>
+    </g>
+    <circle cx="10" cy="12" r="1" fill=" rgb(255,255,40)"></circle>
+    <circle cx="18" cy="10" r="1" fill=" rgb(255,255,40)"></circle>
+    <circle cx="13" cy="19" r="1" fill=" rgb(255,255,40)"></circle>
+    <circle cx="15" cy="14" r="1" fill=" rgb(255,255,40)"></circle>
+  </g>
+  <text id=" strawberryFieldWinds_amount" x="28" y="28" text-anchor=" end" font-size="11px" font-family="calibri" xmlns=""></text>
+</svg>

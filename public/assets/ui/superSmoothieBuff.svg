@@ -1,0 +1,29 @@
+﻿<svg id=" superSmoothieBuff" viewBox="0 0 30 30" width="30" height="30" xmlns="http://www.w3.org/2000/svg">
+  <defs xmlns="">
+    <linearGradient id=" greenSmoothie" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="46%" stop-color=" rgb(0,0,0,0.2)" />
+      <stop offset="50%" stop-color=" rgb(255,0,50)" />
+      <stop offset="60%" stop-color=" rgb(255,0,50)" />
+      <stop offset="60%" stop-color=" rgb(50,255,50)" />
+    </linearGradient>
+    <linearGradient id=" smoothieStraw" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="20%" stop-color=" rgb(255,0,0)" />
+      <stop offset="20%" stop-color=" rgb(255,255,225)" />
+      <stop offset="40%" stop-color=" rgb(255,255,225)" />
+      <stop offset="40%" stop-color=" rgb(255,0,0)" />
+      <stop offset="60%" stop-color=" rgb(255,0,0)" />
+      <stop offset="60%" stop-color=" rgb(255,255,225)" />
+      <stop offset="80%" stop-color=" rgb(255,255,225)" />
+      <stop offset="80%" stop-color=" rgb(255,0,0)" />
+    </linearGradient>
+  </defs>
+  <rect width="30" height="30" fill=" rgb(255,200,0)" xmlns=""></rect>
+  <rect id=" superSmoothieBuff_cooldown" width="30" height="0" opacity="0.45" fill="rgb(0,0,0)" xmlns=""></rect>
+  <text id=" superSmoothieBuff_amount" x="28" y="28" text-anchor=" end" font-size="13px" font-family="calibri" xmlns=""></text>
+  <path d=" M20 45C20 55 50 55 50 45C65 45 65 20 50 20C50 10 20 10 20 20Z" fill=" url(#greenSmoothie)" stroke=" rgb(0,0,0)" stroke-width="1.5" transform=" scale(0.4285,0.4285) translate(0,3)" xmlns=""></path>
+  <path d=" M50 40 C 60 40 60 25 50 25M50 40 L 50 25" fill=" rgb(225,225,225)" stroke=" rgb(0,0,0)" stroke-width="1.5" transform=" scale(0.4285,0.4285) translate(0,3)" xmlns=""></path>
+  <rect transform=" scale(0.4285,0.4285) translate(0,3) rotate(-17)" x="19" y="11" width="5" height="30" stroke=" rgb(0,0,0)" stroke-width="1.5" fill=" url(#smoothieStraw)" xmlns=""></rect>
+  <path d=" M50 20C50 25 20 25 20 20" fill=" rgb(0,0,0,0)" stroke=" rgb(0,0,0)" stroke-width="1.5" transform=" scale(0.4285,0.4285) translate(0,3)" xmlns=""></path>
+  <circle cx="35" cy="37.4" r="6" fill=" rgb(255,0,50)" transform=" scale(0.4285,0.4285)" xmlns=""></circle>
+  <path d=" M36 32C 30 30 30 35 35 35C 37 35 37 39 32 38" stroke=" rgb(255,255,255)" stroke-width="2" fill=" rgb(0,0,0,0)" transform=" scale(0.4285,0.4285) translate(0,3)" xmlns=""></path>
+</svg>

@@ -1,0 +1,12 @@
+﻿<svg id=" stumpFieldWinds" viewBox="0 0 30 30" width="30" height="30" xmlns="http://www.w3.org/2000/svg">
+  <rect width="30" height="30" fill=" rgb(230,230,255)" xmlns=""></rect>
+  <rect id=" stumpFieldWinds_cooldown" width="30" height="0" opacity="0.45" fill="rgb(0,0,0)" xmlns=""></rect>
+  <g transform=" scale(1,0.9) scale(0.93,0.93) rotate(-7) translate(-1,5)" xmlns="">
+    <path d=" M 8 9L 8 15 L 4 22L 10 18L 13 23L 18 18L 25 22L22 15L22 9C 22 4 8 4 8 9" fill=" rgb(184, 116, 39)" stroke="#57b5b1" stroke-width="1"></path>
+    <circle cx="15" cy="18" r="5" fill=" rgb(245, 223, 101)" transform=" scale(1,0.5)"></circle>
+    <circle cx="15" cy="18" r="4" fill=" rgb(207, 148, 54)" transform=" scale(1,0.5)"></circle>
+    <circle cx="15" cy="18" r="2.5" fill=" rgb(245, 223, 101)" transform=" scale(1,0.5)"></circle>
+    <circle cx="15" cy="18" r="1" fill=" rgb(207, 148, 54)" transform=" scale(1,0.5)"></circle>
+  </g>
+  <text id=" stumpFieldWinds_amount" x="28" y="28" text-anchor=" end" font-size="11px" font-family="calibri" xmlns=""></text>
+</svg>

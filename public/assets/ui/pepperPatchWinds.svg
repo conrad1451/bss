@@ -1,0 +1,15 @@
+﻿<svg id=" pepperPatchWinds" viewBox="0 0 30 30" width="30" height="30" xmlns="http://www.w3.org/2000/svg">
+  <rect width="30" height="30" fill=" rgb(230,230,255)" xmlns=""></rect>
+  <rect id=" pepperPatchWinds_cooldown" width="30" height="0" opacity="0.45" fill="rgb(0,0,0)" xmlns=""></rect>
+  <g transform=" scale(1.1,1.1) translate(0,-5)" xmlns="">
+    <path d=" M 6 20C 11 18 12 16 13 14L 15 15C 15 22 6 22 6 20" fill=" rgb(232, 42, 39)" stroke="#57b5b1" stroke-width="1"></path>
+    <path d=" M 14 14.5L 15.5 11.5" fill=" rgb(0,0,0,0)" stroke="#57b5b1" stroke-width="2.5"></path>
+    <path d=" M 14 14.5L 15 12" fill=" rgb(0,0,0,0)" stroke=" rgb(12, 173, 12)" stroke-width="1.5"></path>
+  </g>
+  <g transform=" scale(1.5,1.5) translate(4,-8) rotate(14)" xmlns="">
+    <path d=" M 6 20C 11 18 12 16 13 14L 15 15C 15 22 6 22 6 20" fill=" rgb(252, 13, 13)" stroke="#57b5b1" stroke-width="1"></path>
+    <path d=" M 14 14.5L 15.5 11.5" fill=" rgb(0,0,0,0)" stroke="#57b5b1" stroke-width="2.5"></path>
+    <path d=" M 14 14.5L 15 12" fill=" rgb(0,0,0,0)" stroke=" rgb(12, 173, 12)" stroke-width="1.5"></path>
+  </g>
+  <text id=" pepperPatchWinds_amount" x="28" y="28" text-anchor=" end" font-size="11px" font-family="calibri" xmlns=""></text>
+</svg>

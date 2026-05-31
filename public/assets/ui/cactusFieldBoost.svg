@@ -1,0 +1,9 @@
+﻿<svg id=" cactusFieldBoost" viewBox="0 0 30 30" width="30" height="30" xmlns="http://www.w3.org/2000/svg">
+  <rect width="30" height="30" fill=" rgb(217, 194, 60)" xmlns=""></rect>
+  <rect id=" cactusFieldBoost_cooldown" width="30" height="0" opacity="0.45" fill="rgb(0,0,0)" xmlns=""></rect>
+  <path d=" M 13 18L7 18L 7 11M 16 15L 22 15L 22 7" fill=" rgb(0,0,0,0)" stroke="#57b5b1" stroke-width="3" xmlns=""></path>
+  <circle cx="30" cy="12" r="8" fill=" rgb(0,230,50)" transform=" scale(0.5,1.2)" stroke="#57b5b1" stroke-width="1" xmlns=""></circle>
+  <path d=" M 13 18L7 18L 7 12M 16 15L 22 15L 22 8" fill=" rgb(0,0,0,0)" stroke=" rgb(0,230,50)" stroke-width="2" xmlns=""></path>
+  <path d=" M 17 21L 19 20M 12 19L 11 21M 7 19L 7 21M 8 12L 9 10M 20 14L 21 12M 15 17L 14 15M 14 9L 12 10M 17 7L 16 5" fill=" rgb(0,0,0,0)" stroke=" rgb(255,255,200)" stroke-width="1" xmlns=""></path>
+  <text id=" cactusFieldBoost_amount" x="28" y="28" text-anchor=" end" font-size="11px" font-family="calibri" xmlns=""></text>
+</svg>

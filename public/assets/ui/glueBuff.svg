@@ -1,0 +1,9 @@
+﻿<svg id=" glueBuff" viewBox="0 0 30 30" width="30" height="30" xmlns="http://www.w3.org/2000/svg">
+  <rect width="30" height="30" fill=" rgb(255,200,0)" xmlns=""></rect>
+  <rect id=" glueBuff_cooldown" width="30" height="0" opacity="0.45" fill="rgb(0,0,0)" xmlns=""></rect>
+  <text id=" glueBuff_amount" x="28" y="28" text-anchor=" end" font-size="13px" font-family="calibri" xmlns=""></text>
+  <rect x="33" y="16" rx="7" width="20" height="30" fill=" rgb(255,255,255)" stroke=" rgb(0,0,0)" stroke-width="1.5" transform=" scale(0.4285,0.4285) rotate(15)" xmlns=""></rect>
+  <rect x="39.5" y="6" rx="1" width="8" height="10" fill=" rgb(255,150,0)" stroke=" rgb(0,0,0)" stroke-width="1.5" transform=" scale(0.4285,0.4285) rotate(15)" xmlns=""></rect>
+  <path fill=" rgb(255,30,255)" d=" M10 10L20 10L10 25Z" transform=" scale(0.4285,0.4285) rotate(15) translate(28,12)" xmlns=""></path>
+  <path fill=" rgb(25,255,100)" d=" M10 10L20 10L10 25Z" transform=" scale(0.4285,0.4285) translate(44,62) rotate(195)" xmlns=""></path>
+</svg>

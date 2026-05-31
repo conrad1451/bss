@@ -1,0 +1,6 @@
+﻿<svg id=" comfortingNectar" viewBox="0 0 30 30" width="30" height="30" xmlns="http://www.w3.org/2000/svg">
+  <rect width="30" height="30" fill=" rgb(122,153,174)" xmlns=""></rect>
+  <rect id=" comfortingNectar_cooldown" width="30" height="0" opacity="0.45" fill="rgb(0,0,0)" xmlns=""></rect>
+  <path fill=" rgb(175, 218, 248)" d=" M 22 26C -2 39 0 -1 19 8C 13 5 5 25 22 24" transform=" translate(5,2) scale(0.8,0.75)" xmlns=""></path>
+  <text id=" comfortingNectar_amount" x="28" y="28" text-anchor=" end" font-size="11px" font-family="calibri" xmlns=""></text>
+</svg>

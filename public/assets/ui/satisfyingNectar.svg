@@ -1,0 +1,7 @@
+﻿<svg id=" satisfyingNectar" viewBox="0 0 30 30" width="30" height="30" xmlns="http://www.w3.org/2000/svg">
+  <rect width="30" height="30" fill=" rgb(174,148,162)" xmlns=""></rect>
+  <rect id=" satisfyingNectar_cooldown" width="30" height="0" opacity="0.45" fill="rgb(0,0,0)" xmlns=""></rect>
+  <circle cx="15" cy="15" r="10" fill=" rgb(248, 211, 231)" xmlns=""></circle>
+  <path stroke=" rgb(174,148,162)" stroke-width="3" fill=" rgb(0,0,0,0)" d=" M 19 4 C 4 25 26 3 11 27" xmlns=""></path>
+  <text id=" satisfyingNectar_amount" x="28" y="28" text-anchor=" end" font-size="11px" font-family="calibri" xmlns=""></text>
+</svg>
