@@ -1,0 +1,71 @@
+﻿<svg
+        id="settingsButton"
+        style="width: 30px; height: 30px; transition-duration: 0.4s"
+      >
+        <circle cx="15" cy="15" r="8" fill="rgb(255,255,255)"></circle>
+        <rect
+          x="-3"
+          y="-12"
+          width="6"
+          height="10"
+          fill="rgb(255,255,255)"
+          transform="translate(15,15) rotate(0)"
+        ></rect>
+        <rect
+          x="-3"
+          y="-12"
+          width="6"
+          height="10"
+          fill="rgb(255,255,255)"
+          transform="translate(15,15) rotate(45)"
+        ></rect>
+        <rect
+          x="-3"
+          y="-12"
+          width="6"
+          height="10"
+          fill="rgb(255,255,255)"
+          transform="translate(15,15) rotate(90)"
+        ></rect>
+        <rect
+          x="-3"
+          y="-12"
+          width="6"
+          height="10"
+          fill="rgb(255,255,255)"
+          transform="translate(15,15) rotate(135)"
+        ></rect>
+        <rect
+          x="-3"
+          y="-12"
+          width="6"
+          height="10"
+          fill="rgb(255,255,255)"
+          transform="translate(15,15) rotate(180)"
+        ></rect>
+        <rect
+          x="-3"
+          y="-12"
+          width="6"
+          height="10"
+          fill="rgb(255,255,255)"
+          transform="translate(15,15) rotate(225)"
+        ></rect>
+        <rect
+          x="-3"
+          y="-12"
+          width="6"
+          height="10"
+          fill="rgb(255,255,255)"
+          transform="translate(15,15) rotate(270)"
+        ></rect>
+        <rect
+          x="-3"
+          y="-12"
+          width="6"
+          height="10"
+          fill="rgb(255,255,255)"
+          transform="translate(15,15) rotate(315)"
+        ></rect>
+        <circle cx="15" cy="15" r="3" fill="rgb(195,195,195)"></circle>
+      </svg>

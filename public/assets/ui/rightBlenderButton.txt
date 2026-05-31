@@ -1,0 +1,21 @@
+﻿<svg
+        id="rightBlenderButton"
+        style="
+          position: fixed;
+          width: 50px;
+          height: 50px;
+          left: 93%;
+          top: 90.5%;
+          transform: translate(-50%, -50%);
+          border-radius: 5px;
+          cursor: pointer;
+        "
+      >
+        <path
+          stroke="white"
+          d="M30 15L17 25 L 30 35"
+          stroke-width="3"
+          fill="rgb(0,0,0,0)"
+          transform=" translate(50,0) scale(-1,1)"
+        ></path>
+      </svg>

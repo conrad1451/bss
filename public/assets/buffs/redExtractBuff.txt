@@ -1,0 +1,43 @@
+﻿<svg id="redExtractBuff" style="width: 30px; height: 30px; display: none">
+        <rect width="30" height="30" fill="rgb(255,200,0)"></rect>
+        <rect
+          id="redExtractBuff_cooldown"
+          width="30"
+          height="0"
+          style="fill: rgb(0, 0, 0)"
+          opacity="0.45"
+        ></rect>
+        <text
+          id="redExtractBuff_amount"
+          x="28"
+          y="28"
+          style="font-family: calibri; font-size: 13px"
+          text-anchor="end"
+        ></text>
+        <path
+          d="M 47 17L 45 42L 37 47L 23 40L 29 16"
+          fill="rgb(0,0,0,0.1)"
+          stroke="rgb(0,0,0)"
+          stroke-width="1.5"
+          transform="scale(0.4285,0.4285) translate(0,7)"
+        ></path>
+        <path
+          d="M 45 34L 45 42L 37 47L 23 40L 26 30"
+          fill="rgb(200,0,0)"
+          transform="scale(0.4285,0.4285) translate(0,7)"
+        ></path>
+        <rect
+          x="30"
+          y="3"
+          width="20"
+          height="12"
+          fill="rgb(100,100,100"
+          rx="4"
+          transform="scale(0.4285,0.4285) translate(0,7) rotate(10)"
+        ></rect>
+        <path
+          d="M 47 12L 45 42L 37 47L 39 10"
+          fill="rgb(0,0,0,0.5)"
+          transform="scale(0.4285,0.4285) translate(0,7)"
+        ></path>
+      </svg>

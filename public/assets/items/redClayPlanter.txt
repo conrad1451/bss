@@ -1,0 +1,77 @@
+﻿<svg
+        id="redClayPlanter"
+        style="width: 200px; height: 70px; cursor: pointer; border-radius: 5px"
+      >
+        <rect width="200" height="70" fill="rgb(255,255,255)"></rect>
+        <rect width="70" height="70" fill="rgb(225,225,225)"></rect>
+        <text
+          x="133"
+          y="19"
+          style="font-family: trebuchet ms; font-size: 16px"
+          fill="rgb(0,0,0)"
+          text-anchor="middle"
+        >
+          Red Clay Planter
+        </text>
+        <text
+          x="132"
+          y="35"
+          style="font-family: trebuchet ms; font-size: 10.5px"
+          fill="rgb(0,0,0)"
+          text-anchor="middle"
+        >
+          Grows in 32m, but faster
+        </text>
+        <text
+          x="135"
+          y="50"
+          style="font-family: trebuchet ms; font-size: 10.5px"
+          fill="rgb(0,0,0)"
+          text-anchor="middle"
+        >
+          by red flowers. Gives more
+        </text>
+        <text
+          x="136"
+          y="65"
+          style="font-family: trebuchet ms; font-size: 10.5px"
+          fill="rgb(0,0,0)"
+          text-anchor="middle"
+        >
+          red ingredients and nectar!
+        </text>
+        <text
+          id="redClayPlanter_amount"
+          x="67"
+          y="67"
+          style="font-family: calibri; font-size: 14px"
+          fill="rgb(0,0,0)"
+          text-anchor="end"
+        ></text>
+
+        <g transform="translate(-4,1)">
+          <path
+            stroke="black"
+            stroke-width="1.5"
+            fill="rgb(255, 69, 69)"
+            d="M 55 50 C 45 56 26 53 27 48L 24 30L 24 23C 31 16 47 13 58 22L 58 34z"
+          ></path>
+          <circle
+            cx="42"
+            cy="59"
+            r="11"
+            fill="rgb(0,0,0,0.3)"
+            transform="scale(1,0.4)"
+          ></circle>
+          <path
+            stroke="rgb(0,0,0,0.1)"
+            fill="rgb(0,0,0,0)"
+            stroke-width="3"
+            d="M 25 33 C 36 37 38 40 57 35"
+          ></path>
+
+          <circle cx="33" cy="43" r="2" fill="rgb(0,0,0,0.3)"></circle>
+          <circle cx="42" cy="46" r="2" fill="rgb(0,0,0,0.3)"></circle>
+          <circle cx="51" cy="43" r="2" fill="rgb(0,0,0,0.3)"></circle>
+        </g>
+      </svg>

@@ -39,3 +39,12 @@ oldIndex.js
 editsMadeMay162026.txt 
 project-tree.txt 
 ssa.txt
+Extract-SVG.ps1
+Rename-SvgBatch.ps1
+Rename-SvgById.ps1
+editsMay30.txt
+engine/theOldRenderer.js
+indexPreRefactor.html
+may302026_round2_edits.txt
+svgcleaningSVGtoSVG.ps1
+svgcleaningTXTtoSVG.ps1

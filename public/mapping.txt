@@ -1,0 +1,19 @@
+bss/
++--- public/ (or root)
+|   +--- assets/
+|   |   +--- passives/           <-- Maps to <div id="abilityUI">
+|   |   |   +--- balloonBlessing.txt
+|   |   |   +--- coconutShield.txt
+|   |   |   \--- scorchingStarAura.txt
+|   |   +--- buffs/              <-- Maps to status/buff groups
+|   |   |   +--- redBoost.txt
+|   |   |   +--- redDrive.txt
+|   |   |   +--- redExtractBuff.txt
+|   |   |   \--- superSmoothieBuff.txt
+|   |   +--- items/              <-- Maps to the inventory item templates
+|   |   |   +--- redClayPlanter.txt
+|   |   |   +--- royalJelly.txt
+|   |   |   \--- starEgg.txt
+|   |   +--- ui/                 <-- Maps to structural core buttons
+|   |   |   +--- rightBlenderButton.txt
+|   |   |   \--- settingsButton.txt

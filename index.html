@@ -9895,169 +9895,59 @@ sound is currently disabled to stop my computer from becoming a waffle cooker
         </g>
       </svg>
 
-      <svg
-        id="plasticPlanter"
-        style="width: 200px; height: 70px; cursor: pointer; border-radius: 5px"
+    <div
+      id="mainInfoMenu"
+      style="
+        position: fixed;
+        z-index: 5;
+        top: 0px;
+        left: 0px;
+        background-color: rgb(255, 255, 255);
+        bottom: 0px;
+        right: 0px;
+        display: none;
+        overflow-y: auto;
+      "
+    >
+      <canvas
+        id="info_thumbnailCanvCopy"
+        style="
+          position: fixed;
+          left: 50%;
+          top: 50%;
+          z-index: -1;
+          transform: translate(-50%, -50%);
+          filter: blur(10px);
+        "
+      ></canvas>
+
+      <div style="margin-top: 20px; font-size: 45px; text-align: center">
+        Instructions & Info
+      </div>
+
+      <button
+        id="info_mainBack"
+        style="
+          margin-left: 80px;
+          margin-top: -70px;
+          width: 120px;
+          height: 60px;
+          background-color: rgb(174, 216, 255);
+          transform: translate(-50%, -50%);
+          font-family: comic sans ms;
+          font-size: 25px;
+        "
       >
-        <rect width="200" height="70" fill="rgb(255,255,255)"></rect>
-        <rect width="70" height="70" fill="rgb(225,225,225)"></rect>
-        <text
-          x="130"
-          y="18"
-          style="font-family: trebuchet ms; font-size: 16.5px"
-          fill="rgb(0,0,0)"
-          text-anchor="middle"
-        >
-          Plastic Planter
-        </text>
-        <text
-          x="132"
-          y="35"
-          style="font-family: trebuchet ms; font-size: 10.5px"
-          fill="rgb(0,0,0)"
-          text-anchor="middle"
-        >
-          A reuseable planter that
-        </text>
-        <text
-          x="134"
-          y="50"
-          style="font-family: trebuchet ms; font-size: 10.5px"
-          fill="rgb(0,0,0)"
-          text-anchor="middle"
-        >
-          grows in 17m, giving extra
-        </text>
-        <text
-          x="132"
-          y="65"
-          style="font-family: trebuchet ms; font-size: 10.5px"
-          fill="rgb(0,0,0)"
-          text-anchor="middle"
-        >
-          rewards & nectar boosts!
-        </text>
-        <text
-          id="plasticPlanter_amount"
-          x="67"
-          y="67"
-          style="font-family: calibri; font-size: 14px"
-          fill="rgb(0,0,0)"
-          text-anchor="end"
-        ></text>
+        Back
+      </button>
 
-        <g transform="translate(-4,1)">
-          <path
-            stroke="black"
-            stroke-width="1.5"
-            fill="rgb(240, 240, 45)"
-            d="M 55 50 C 45 56 26 53 27 48L 24 30L 24 23C 31 16 47 13 58 22L 58 34z"
-          ></path>
-          <circle
-            cx="42"
-            cy="59"
-            r="11"
-            fill="rgb(0,0,0,0.3)"
-            transform="scale(1,0.4)"
-          ></circle>
-          <path
-            stroke="rgb(0,0,0,0.1)"
-            fill="rgb(0,0,0,0)"
-            stroke-width="3"
-            d="M 25 33 C 36 37 38 40 57 35"
-          ></path>
-        </g>
-      </svg>
-
-      <svg
-        id="candyPlanter"
-        style="width: 200px; height: 70px; cursor: pointer; border-radius: 5px"
-      >
-        <rect width="200" height="70" fill="rgb(255,255,255)"></rect>
-        <rect width="70" height="70" fill="rgb(225,225,225)"></rect>
-        <text
-          x="130"
-          y="18"
-          style="font-family: trebuchet ms; font-size: 16.5px"
-          fill="rgb(0,0,0)"
-          text-anchor="middle"
-        >
-          Candy Planter
-        </text>
-        <text
-          x="132"
-          y="35"
-          style="font-family: trebuchet ms; font-size: 10.5px"
-          fill="rgb(0,0,0)"
-          text-anchor="middle"
-        >
-          Alone, grows in about
-        </text>
-        <text
-          x="132"
-          y="50"
-          style="font-family: trebuchet ms; font-size: 10.5px"
-          fill="rgb(0,0,0)"
-          text-anchor="middle"
-        >
-          25m, storing pollen and
-        </text>
-        <text
-          x="132"
-          y="65"
-          style="font-family: trebuchet ms; font-size: 10.5px"
-          fill="rgb(0,0,0)"
-          text-anchor="middle"
-        >
-          gives bonus gumdrops!
-        </text>
-        <text
-          id="candyPlanter_amount"
-          x="67"
-          y="67"
-          style="font-family: calibri; font-size: 14px"
-          fill="rgb(0,0,0)"
-          text-anchor="end"
-        ></text>
-
-        <g transform="translate(-4,1)">
-          <path
-            stroke="black"
-            stroke-width="1.5"
-            fill="rgb(255, 145, 250)"
-            d="M 55 50 C 45 56 26 53 27 48L 24 30L 24 23C 31 16 47 13 58 22L 58 34z"
-          ></path>
-          <circle
-            cx="42"
-            cy="59"
-            r="11"
-            fill="rgb(0,0,0,0.3)"
-            transform="scale(1,0.4)"
-          ></circle>
-          <path
-            stroke="rgb(0,0,0,0.1)"
-            fill="rgb(0,0,0,0)"
-            stroke-width="3"
-            d="M 25 33 C 36 37 38 40 57 35"
-          ></path>
-
-          <path
-            stroke="rgb(255,255,255)"
-            fill="rgb(0,0,0,0)"
-            stroke-width="3.5"
-            d="M 27 47 C 34 46 41 42 41 39M 34 52 C 56 44 49 42 51 38"
-          ></path>
-
-          <circle cx="30" cy="30" r="2.5" fill="rgb(0,205,0)"></circle>
-          <circle cx="38" cy="33" r="2.5" fill="rgb(255,255,0)"></circle>
-          <circle cx="48" cy="32" r="2.5" fill="rgb(0,105,255)"></circle>
-          <circle cx="54" cy="28" r="2" fill="rgb(255,0,0)"></circle>
-        </g>
-      </svg>
-
-      <svg
-        id="redClayPlanter"
-        style="width: 200px; height: 70px; cursor: pointer; border-radius: 5px"
+      <div
+        style="
+          margin-left: 10px;
+          font-size: 19px;
+          text-align: center;
+          user-select: text;
+        "
       >
         <rect width="200" height="70" fill="rgb(255,255,255)"></rect>
         <rect width="70" height="70" fill="rgb(225,225,225)"></rect>
@@ -10127,62 +10017,25 @@ sound is currently disabled to stop my computer from becoming a waffle cooker
             d="M 25 33 C 36 37 38 40 57 35"
           ></path>
 
-          <circle cx="33" cy="43" r="2" fill="rgb(0,0,0,0.3)"></circle>
-          <circle cx="42" cy="46" r="2" fill="rgb(0,0,0,0.3)"></circle>
-          <circle cx="51" cy="43" r="2" fill="rgb(0,0,0,0.3)"></circle>
-        </g>
-      </svg>
+      <div style="margin-top: 20px; font-size: 45px; text-align: center">
+        Saved Games
+      </div>
 
-      <svg
-        id="blueClayPlanter"
-        style="width: 200px; height: 70px; cursor: pointer; border-radius: 5px"
+      <button
+        id="select_mainBack"
+        style="
+          margin-left: 80px;
+          margin-top: -70px;
+          width: 120px;
+          height: 60px;
+          background-color: rgb(174, 216, 255);
+          transform: translate(-50%, -50%);
+          font-family: comic sans ms;
+          font-size: 25px;
+        "
       >
-        <rect width="200" height="70" fill="rgb(255,255,255)"></rect>
-        <rect width="70" height="70" fill="rgb(225,225,225)"></rect>
-        <text
-          x="134"
-          y="19"
-          style="font-family: trebuchet ms; font-size: 15.5px"
-          fill="rgb(0,0,0)"
-          text-anchor="middle"
-        >
-          Blue Clay Planter
-        </text>
-        <text
-          x="132"
-          y="35"
-          style="font-family: trebuchet ms; font-size: 10.5px"
-          fill="rgb(0,0,0)"
-          text-anchor="middle"
-        >
-          Grows in 32m, but faster
-        </text>
-        <text
-          x="135"
-          y="50"
-          style="font-family: trebuchet ms; font-size: 10px"
-          fill="rgb(0,0,0)"
-          text-anchor="middle"
-        >
-          by blue flowers. Gives more
-        </text>
-        <text
-          x="136"
-          y="65"
-          style="font-family: trebuchet ms; font-size: 10px"
-          fill="rgb(0,0,0)"
-          text-anchor="middle"
-        >
-          blue ingredients and nectar!
-        </text>
-        <text
-          id="blueClayPlanter_amount"
-          x="67"
-          y="67"
-          style="font-family: calibri; font-size: 14px"
-          fill="rgb(0,0,0)"
-          text-anchor="end"
-        ></text>
+        Back
+      </button>
 
         <g transform="translate(-4,1)">
           <path
@@ -10205,132 +10058,43 @@ sound is currently disabled to stop my computer from becoming a waffle cooker
             d="M 25 33 C 36 37 38 40 57 35"
           ></path>
 
-          <circle cx="33" cy="43" r="2" fill="rgb(0,0,0,0.3)"></circle>
-          <circle cx="42" cy="46" r="2" fill="rgb(0,0,0,0.3)"></circle>
-          <circle cx="51" cy="43" r="2" fill="rgb(0,0,0,0.3)"></circle>
-        </g>
-      </svg>
+    <div
+      id="UIBar"
+      style="
+        position: absolute;
+        margin: 0px;
+        z-index: 2;
+        width: 170px;
+        height: 30px;
+        background-color: rgba(195, 195, 195);
+        margin-top: 103px;
+        padding: 2px;
+        border-radius: 2px;
+      "
+    ></div>
 
-      <svg
-        id="tackyPlanter"
-        style="width: 200px; height: 70px; cursor: pointer; border-radius: 5px"
+    <div
+      class="uiPageOld"
+      style="
+        position: absolute;
+        margin: 0px;
+        z-index: 2;
+        overflow-y: auto;
+        overflow-x: hidden;
+        width: 200px;
+        height: 455px;
+        background-color: rgba(195, 195, 195, 0.9);
+        margin-top: 140px;
+        display: none;
+        padding: 3px;
+      "
+    >
+      <div
+        id="noItemsMessage"
+        style="text-align: center; font-size: 17px; color: rgb(0, 0, 0, 0.5)"
       >
-        <rect width="200" height="70" fill="rgb(255,255,255)"></rect>
-        <rect width="70" height="70" fill="rgb(225,225,225)"></rect>
-        <text
-          x="134"
-          y="19"
-          style="font-family: trebuchet ms; font-size: 17px"
-          fill="rgb(0,0,0)"
-          text-anchor="middle"
-        >
-          Tacky Planter
-        </text>
-        <text
-          x="132"
-          y="35"
-          style="font-family: trebuchet ms; font-size: 10.5px"
-          fill="rgb(0,0,0)"
-          text-anchor="middle"
-        >
-          Grows in 39m, but faster
-        </text>
-        <text
-          x="135"
-          y="50"
-          style="font-family: trebuchet ms; font-size: 10.5px"
-          fill="rgb(0,0,0)"
-          text-anchor="middle"
-        >
-          near the hives. Gives more
-        </text>
-        <text
-          x="136"
-          y="65"
-          style="font-family: trebuchet ms; font-size: 10.5px"
-          fill="rgb(0,0,0)"
-          text-anchor="middle"
-        >
-          dice & sunflower seeds!
-        </text>
-        <text
-          id="tackyPlanter_amount"
-          x="67"
-          y="67"
-          style="font-family: calibri; font-size: 14px"
-          fill="rgb(0,0,0)"
-          text-anchor="end"
-        ></text>
-
-        <g transform="translate(-2,2) rotate(-4)">
-          <circle
-            cx="35"
-            cy="46"
-            r="16"
-            stroke="black"
-            stroke-width="1.5"
-            fill="rgb(188, 222, 153)"
-          ></circle>
-          <path
-            stroke="black"
-            stroke-width="1.5"
-            fill="rgb(250,250,250)"
-            d="M 21 33 C 20 39 50 39 49 33L49 25C49 16 21 16 21 25z"
-          ></path>
-          <circle
-            cx="35"
-            cy="60"
-            r="10"
-            fill="rgb(0,0,0,0.4)"
-            transform="scale(1,0.4)"
-          ></circle>
-          <path
-            stroke="rgb(225,225,0)"
-            stroke-width="4"
-            fill="rgb(0,0,0,0)"
-            d="M 26 36 L 26 27M 35 36 L 35 29M 44 36 L 44 27"
-          ></path>
-          <path
-            stroke="rgb(255,120,0)"
-            stroke-width="3"
-            fill="rgb(0,0,0,0)"
-            d="M 26 59 L 35 38M 44 59 L 35 38"
-          ></path>
-          <path
-            stroke="rgb(0,100,240)"
-            stroke-width="3"
-            fill="rgb(0,0,0,0)"
-            d="M 21 38 L 35 62M 35 62 L 49 38"
-          ></path>
-          <circle
-            cx="35"
-            cy="25"
-            r="1.5"
-            fill="rgb(220,0,0)"
-            transform="scale(1,2)"
-          ></circle>
-          <circle
-            cx="23"
-            cy="25"
-            r="1"
-            fill="rgb(220,0,0)"
-            transform="scale(1,2)"
-          ></circle>
-          <circle
-            cx="47"
-            cy="25"
-            r="1"
-            fill="rgb(220,0,0)"
-            transform="scale(1,2)"
-          ></circle>
-        </g>
-      </svg>
-
-      <!-- pesticide planter-->
-
-      <!-- petal planter-->
-
-      <!-- plenter planter-->
+        <br />(You have no items)
+      </div>
     </div>
 
     <div
@@ -10696,49 +10460,6 @@ sound is currently disabled to stop my computer from becoming a waffle cooker
         type="number"
         min="0"
       />
-
-      <svg
-        id="leftBlenderButton"
-        style="
-          position: fixed;
-          width: 50px;
-          height: 50px;
-          left: 7%;
-          top: 90.5%;
-          transform: translate(-50%, -50%);
-          border-radius: 5px;
-          cursor: pointer;
-        "
-      >
-        <path
-          stroke="white"
-          d="M30 15L17 25 L 30 35"
-          stroke-width="3"
-          fill="rgb(0,0,0,0)"
-        ></path>
-      </svg>
-
-      <svg
-        id="rightBlenderButton"
-        style="
-          position: fixed;
-          width: 50px;
-          height: 50px;
-          left: 93%;
-          top: 90.5%;
-          transform: translate(-50%, -50%);
-          border-radius: 5px;
-          cursor: pointer;
-        "
-      >
-        <path
-          stroke="white"
-          d="M30 15L17 25 L 30 35"
-          stroke-width="3"
-          fill="rgb(0,0,0,0)"
-          transform=" translate(50,0) scale(-1,1)"
-        ></path>
-      </svg>
 
       <button
         id="blenderEnd"
