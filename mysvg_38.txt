@@ -1,0 +1,116 @@
+﻿<svg
+        id="redDrive"
+        style="width: 200px; height: 70px; cursor: pointer; border-radius: 5px"
+      >
+        <rect width="200" height="70" fill="rgb(255,255,255)"></rect>
+        <rect width="70" height="70" fill="rgb(225,225,225)"></rect>
+        <text
+          x="134"
+          y="19"
+          style="font-family: trebuchet ms; font-size: 17px"
+          fill="rgb(0,0,0)"
+          text-anchor="middle"
+        >
+          Red Drive
+        </text>
+        <text
+          x="135"
+          y="38"
+          style="font-family: trebuchet ms; font-size: 10.5px"
+          fill="rgb(0,0,0)"
+          text-anchor="middle"
+        >
+          Gives red pollen, capacity,
+        </text>
+        <text
+          x="134"
+          y="52"
+          style="font-family: trebuchet ms; font-size: 10.5px"
+          fill="rgb(0,0,0)"
+          text-anchor="middle"
+        >
+          and bee attack for 3 mins
+        </text>
+        <text
+          x="132"
+          y="65"
+          style="font-family: trebuchet ms; font-size: 10.5px"
+          fill="rgb(0,0,0)"
+          text-anchor="middle"
+        >
+          in the Robo Challenge.
+        </text>
+        <text
+          id="redDrive_amount"
+          x="67"
+          y="67"
+          style="font-family: calibri; font-size: 14px"
+          fill="rgb(0,0,0)"
+          text-anchor="end"
+        ></text>
+
+        <g transform="translate(35,29)">
+          <path
+            fill="rgb(100,100,100)"
+            stroke="black"
+            stroke-width="2"
+            d="M -20 0L0 -15L20 0L0 15z"
+          ></path>
+          <path
+            fill="rgb(85,85,85)"
+            stroke="black"
+            stroke-width="2"
+            d="M0 25L-20 10L-20 0L0 15z"
+          ></path>
+          <path
+            fill="rgb(70,70,70)"
+            stroke="black"
+            stroke-width="2"
+            d="M0 25L20 10L20 0L0 15z"
+          ></path>
+
+          <circle
+            cx="0"
+            cy="0"
+            r="8"
+            stroke="rgb(155,0,0)"
+            stroke-width="8"
+            fill="rgb(0,0,0,0)"
+            transform="scale(1,0.75)"
+          ></circle>
+          <circle
+            cx="0"
+            cy="-5"
+            r="8"
+            stroke="rgb(255,0,0)"
+            stroke-width="8"
+            fill="rgb(0,0,0,0)"
+            transform="scale(1,0.75)"
+          ></circle>
+
+          <rect
+            x="-19"
+            y="8"
+            width="4"
+            height="8"
+            fill="rgb(255,220,50,0.9)"
+            rx="2"
+          ></rect>
+          <rect
+            x="-13"
+            y="11"
+            width="4"
+            height="8"
+            fill="rgb(255,220,50,0.9)"
+            rx="2"
+          ></rect>
+          <rect
+            x="-7"
+            y="14"
+            width="4"
+            height="8"
+            fill="rgb(255,220,50,0.9)"
+            rx="2"
+          ></rect>
+        </g>
+      </svg>

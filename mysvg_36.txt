@@ -1,0 +1,66 @@
+﻿<svg
+        id="pineapple"
+        style="width: 200px; height: 70px; cursor: pointer; border-radius: 5px"
+      >
+        <rect width="200" height="70" fill="rgb(255,255,255)"></rect>
+        <rect width="70" height="70" fill="rgb(225,225,225)"></rect>
+        <text
+          x="130"
+          y="18"
+          style="font-family: trebuchet ms; font-size: 17px"
+          fill="rgb(0,0,0)"
+          text-anchor="middle"
+        >
+          Pineapple
+        </text>
+        <text
+          x="130"
+          y="39"
+          style="font-family: trebuchet ms; font-size: 12px"
+          fill="rgb(0,0,0)"
+          text-anchor="middle"
+        >
+          Improves your bee's
+        </text>
+        <text
+          x="130"
+          y="54"
+          style="font-family: trebuchet ms; font-size: 12px"
+          fill="rgb(0,0,0)"
+          text-anchor="middle"
+        >
+          bond by 25.
+        </text>
+        <text
+          id="pineapple_amount"
+          x="67"
+          y="67"
+          style="font-family: calibri; font-size: 14px"
+          fill="rgb(0,0,0)"
+          text-anchor="end"
+        ></text>
+        <path
+          transform="scale(1.1,1.1) translate(-10,-5)"
+          stroke="rgb(0,0,0)"
+          stroke-width="1.5"
+          fill="rgb(255,255,25)"
+          d="M37 20L50 25L60 45C 56 52 43 53 34 49L 22 43Z"
+        ></path>
+        <path
+          fill="rgb(0,0,0,0.1)"
+          d="M50 25L60 45C 56 52 43 53 34 49Z"
+          transform="scale(1.1,1.1) translate(-10,-5)"
+        ></path>
+        <path
+          stroke="white"
+          stroke-width="3"
+          d="M38 22L30 35"
+          transform="scale(1.1,1.1) translate(-10,-5)"
+        ></path>
+        <path
+          stroke="rgb(0,0,0,0.3)"
+          stroke-width="2"
+          d="M35 35 L 38 30M 45 52 L 46 45M 51 51 L 50 45M 58 48 L 54 44"
+          transform="scale(1.1,1.1) translate(-10,-5)"
+        ></path>
+      </svg>

@@ -1,0 +1,103 @@
+﻿<svg
+        id="cloudVial"
+        style="width: 200px; height: 70px; cursor: pointer; border-radius: 5px"
+      >
+        <rect width="200" height="70" fill="rgb(255,255,255)"></rect>
+        <rect width="70" height="70" fill="rgb(225,225,225)"></rect>
+        <text
+          x="132"
+          y="18"
+          style="font-family: trebuchet ms; font-size: 16.5px"
+          fill="rgb(0,0,0)"
+          text-anchor="middle"
+        >
+          Cloud Vial
+        </text>
+        <text
+          x="133"
+          y="39"
+          style="font-family: trebuchet ms; font-size: 12px"
+          fill="rgb(0,0,0)"
+          text-anchor="middle"
+        >
+          Summons a cloud
+        </text>
+        <text
+          x="133"
+          y="53"
+          style="font-family: trebuchet ms; font-size: 12px"
+          fill="rgb(0,0,0)"
+          text-anchor="middle"
+        >
+          on the field you're in,
+        </text>
+        <text
+          x="133"
+          y="67"
+          style="font-family: trebuchet ms; font-size: 12px"
+          fill="rgb(0,0,0)"
+          text-anchor="middle"
+        >
+          lasting for 3 mins.
+        </text>
+        <text
+          id="cloudVial_amount"
+          x="67"
+          y="67"
+          style="font-family: calibri; font-size: 14px"
+          fill="rgb(0,0,0)"
+          text-anchor="end"
+        ></text>
+
+        <g transform="translate(36,33) rotate(-7)">
+          <path
+            stroke="black"
+            stroke-width="1.5"
+            fill="rgb(0,0,0,0.25)"
+            d="M-10 -15L10 -15C10 -1 15 -14 15 15C15 25 -15 25 -15 15C-15 -15 -10 -1 -10 -15"
+          ></path>
+          <rect
+            stroke="black"
+            stroke-width="1.5"
+            fill="rgb(181, 120, 60)"
+            x="-11"
+            y="-20"
+            width="22"
+            height="6"
+            rx="2"
+          ></rect>
+
+          <g transform="translate(3,6) scale(1.1,1.1)">
+            <circle fill="rgb(255,255,255)" cx="0" cy="0" r="5"></circle>
+            <circle fill="rgb(0,0,0,0.2)" cx="0.3" cy="1.1" r="4"></circle>
+            <circle fill="rgb(255,255,255)" cx="-0.4" cy="-1.0" r="3"></circle>
+          </g>
+          <g transform="translate(-4,9) scale(1.2,1.2)">
+            <circle fill="rgb(255,255,255)" cx="0" cy="0" r="5"></circle>
+            <circle fill="rgb(0,0,0,0.2)" cx="0.3" cy="1.1" r="4"></circle>
+            <circle fill="rgb(255,255,255)" cx="-0.4" cy="-1.0" r="3"></circle>
+          </g>
+          <g transform="translate(4,11) scale(1.1,1.1)">
+            <circle fill="rgb(255,255,255)" cx="0" cy="0" r="5"></circle>
+            <circle fill="rgb(0,0,0,0.2)" cx="0.3" cy="1.1" r="4"></circle>
+            <circle fill="rgb(255,255,255)" cx="-0.4" cy="-1.0" r="3"></circle>
+          </g>
+          <g transform="translate(0,1) scale(1,1)">
+            <circle fill="rgb(255,255,255)" cx="0" cy="0" r="5"></circle>
+            <circle fill="rgb(0,0,0,0.2)" cx="0.3" cy="1.1" r="4"></circle>
+            <circle fill="rgb(255,255,255)" cx="-0.4" cy="-1.0" r="3"></circle>
+          </g>
+          <g transform="translate(-4,4) scale(1,1)">
+            <circle fill="rgb(255,255,255)" cx="0" cy="0" r="5"></circle>
+            <circle fill="rgb(0,0,0,0.2)" cx="0.3" cy="1.1" r="4"></circle>
+            <circle fill="rgb(255,255,255)" cx="-0.4" cy="-1.0" r="3"></circle>
+          </g>
+
+          <path
+            stroke="rgb(58, 127, 207)"
+            stroke-width="2.5"
+            fill="rgb(0,0,0,0)"
+            d="M-12 -6C-12 -5 12 -5 12 -6M6 -6C 16 2 1 0 11 7"
+          ></path>
+        </g>
+      </svg>

@@ -1,0 +1,30 @@
+﻿<svg id="gumdrops" style="cursor: pointer; border-radius: 5px" viewBox="0 0 200 70" width="200" height="70">
+  <rect width="200" height="70" fill="rgb(255,255,255)"/>
+  <rect width="70" height="70" fill="rgb(225,225,225)"/>
+  <text x="130" y="18" fill="rgb(0,0,0)" text-anchor="middle" font-family="trebuchet ms" font-size="17px">
+    Gumdrops
+  </text>
+  <text x="132" y="35" fill="rgb(0,0,0)" text-anchor="middle" font-family="trebuchet ms" font-size="10.5px">
+    Use while standing in a
+  </text>
+  <text x="132" y="50" fill="rgb(0,0,0)" text-anchor="middle" font-family="trebuchet ms" font-size="10.5px">
+    field to cover flowers in
+  </text>
+  <text x="132" y="65" fill="rgb(0,0,0)" text-anchor="middle" font-family="trebuchet ms" font-size="10.5px">
+    goo, giving bonus honey.
+  </text>
+  <text id="gumdrops_amount" x="67" y="67" fill="rgb(0,0,0)" text-anchor="end" font-family="calibri" font-size="14px"/>
+  <path fill="rgb(255,100,255)" stroke="black" stroke-width="2" d="M30 60C 26 25 64 25 60 60C55 67 35 67 30 60" transform="translate(10,-6) scale(0.75,0.75)"/>
+  <path fill="rgb(0,255,100)" stroke="black" stroke-width="2" d="M30 60C 26 25 64 25 60 60C55 67 35 67 30 60" transform="translate(-7,3) scale(0.75,0.75)"/>
+  <circle cx="49" cy="36" r="0.25" stroke="rgb(255,255,255)"/>
+  <circle cx="43" cy="24" r="0.25" stroke="rgb(255,255,255)"/>
+  <circle cx="50" cy="29" r="0.25" stroke="rgb(255,255,255)"/>
+  <circle cx="42" cy="32" r="0.25" stroke="rgb(255,255,255)"/>
+  <circle cx="41" cy="39" r="0.25" stroke="rgb(255,255,255)"/>
+  <circle cx="38" cy="27" r="0.25" stroke="rgb(255,255,255)"/>
+  <circle cx="25" cy="32" r="0.75" stroke="rgb(255,255,255)"/>
+  <circle cx="33" cy="40" r="0.75" stroke="rgb(255,255,255)"/>
+  <circle cx="28" cy="46" r="0.75" stroke="rgb(255,255,255)"/>
+  <circle cx="21" cy="40" r="0.75" stroke="rgb(255,255,255)"/>
+  <circle cx="27" cy="38" r="0.75" stroke="rgb(255,255,255)"/>
+</svg>

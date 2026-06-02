@@ -1,0 +1,86 @@
+﻿<svg
+        id="paperPlanter"
+        style="width: 200px; height: 70px; cursor: pointer; border-radius: 5px"
+      >
+        <rect width="200" height="70" fill="rgb(255,255,255)"></rect>
+        <rect width="70" height="70" fill="rgb(225,225,225)"></rect>
+        <text
+          x="130"
+          y="18"
+          style="font-family: trebuchet ms; font-size: 16.5px"
+          fill="rgb(0,0,0)"
+          text-anchor="middle"
+        >
+          Paper Planter
+        </text>
+        <text
+          x="132"
+          y="35"
+          style="font-family: trebuchet ms; font-size: 10.5px"
+          fill="rgb(0,0,0)"
+          text-anchor="middle"
+        >
+          A biodegradeable pot
+        </text>
+        <text
+          x="132"
+          y="50"
+          style="font-family: trebuchet ms; font-size: 10.5px"
+          fill="rgb(0,0,0)"
+          text-anchor="middle"
+        >
+          that grows in 10m, giving
+        </text>
+        <text
+          x="132"
+          y="65"
+          style="font-family: trebuchet ms; font-size: 10.5px"
+          fill="rgb(0,0,0)"
+          text-anchor="middle"
+        >
+          rewards & nectar boosts!
+        </text>
+        <text
+          id="paperPlanter_amount"
+          x="67"
+          y="67"
+          style="font-family: calibri; font-size: 14px"
+          fill="rgb(0,0,0)"
+          text-anchor="end"
+        ></text>
+
+        <g transform="translate(-2,12)">
+          <path
+            stroke="black"
+            stroke-width="1.5"
+            fill="rgb(209, 151, 57)"
+            d="M 21 44L 37 50 L 53 44 L 53 11L 38 3L 21 11z"
+          ></path>
+
+          <path fill="rgb(0,0,0,0.1)" d="M 37 50 L 53 44 L 53 11L 38 3z"></path>
+
+          <path
+            stroke="black"
+            stroke-width="1"
+            fill="rgb(89, 62, 19)"
+            d="M 21 12L 38 3 L 53 11 L 38 19z"
+          ></path>
+
+          <circle
+            stroke="black"
+            stroke-width="1"
+            cx="50"
+            cy="4"
+            r="9"
+            fill="rgb(0,190,50)"
+            transform="scale(0.75,1)"
+          ></circle>
+
+          <path
+            stroke="rgb(153, 109, 38)"
+            stroke-width="2"
+            fill="rgb(0,0,0,0)"
+            d="M 38 26L 22 20M 52 19L 38 26M 45 22L 39 48M 45 22L 52 44M 30 22L 38 50M 30 22L 22 45"
+          ></path>
+        </g>
+      </svg>

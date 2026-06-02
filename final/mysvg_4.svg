@@ -1,0 +1,21 @@
+﻿<svg id="coconut" style="cursor: pointer; border-radius: 5px" viewBox="0 0 200 70" width="200" height="70">
+  <rect width="200" height="70" fill="rgb(255,255,255)"/>
+  <rect width="70" height="70" fill="rgb(225,225,225)"/>
+  <text x="130" y="18" fill="rgb(0,0,0)" text-anchor="middle" font-family="trebuchet ms" font-size="17px">
+    Coconut
+  </text>
+  <text x="133" y="35" fill="rgb(0,0,0)" text-anchor="middle" font-family="trebuchet ms" font-size="10.5px">
+    Drops a coconut into the
+  </text>
+  <text x="133" y="50" fill="rgb(0,0,0)" text-anchor="middle" font-family="trebuchet ms" font-size="10.5px">
+    field. Catch it to convert
+  </text>
+  <text x="133" y="65" fill="rgb(0,0,0)" text-anchor="middle" font-family="trebuchet ms" font-size="10.5px">
+    pollen into honey tokens.
+  </text>
+  <text id="coconut_amount" x="67" y="67" fill="rgb(0,0,0)" text-anchor="end" font-family="calibri" font-size="14px"/>
+  <circle fill="rgb(160,80,20)" cx="35" cy="35" r="15" stroke="black" stroke-width="2"/>
+  <circle fill="rgb(70,20,0)" cx="43" cy="35" r="2.5"/>
+  <circle fill="rgb(70,20,0)" cx="36" cy="27" r="2.5"/>
+  <circle fill="rgb(70,20,0)" cx="33" cy="37" r="2.5"/>
+</svg>

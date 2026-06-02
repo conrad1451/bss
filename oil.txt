@@ -1,0 +1,91 @@
+﻿<svg
+        id="oil"
+        style="width: 200px; height: 70px; cursor: pointer; border-radius: 5px"
+      >
+        <rect width="200" height="70" fill="rgb(255,255,255)"></rect>
+        <rect width="70" height="70" fill="rgb(225,225,225)"></rect>
+        <text
+          x="130"
+          y="18"
+          style="font-family: trebuchet ms; font-size: 17px"
+          fill="rgb(0,0,0)"
+          text-anchor="middle"
+        >
+          Oil
+        </text>
+        <text
+          x="130"
+          y="35"
+          style="font-family: trebuchet ms; font-size: 12px"
+          fill="rgb(0,0,0)"
+          text-anchor="middle"
+        >
+          Grants extra bee
+        </text>
+        <text
+          x="130"
+          y="50"
+          style="font-family: trebuchet ms; font-size: 12px"
+          fill="rgb(0,0,0)"
+          text-anchor="middle"
+        >
+          and player speed
+        </text>
+        <text
+          x="130"
+          y="65"
+          style="font-family: trebuchet ms; font-size: 12px"
+          fill="rgb(0,0,0)"
+          text-anchor="middle"
+        >
+          for 10 minutes.
+        </text>
+        <text
+          id="oil_amount"
+          x="67"
+          y="67"
+          style="font-family: calibri; font-size: 14px"
+          fill="rgb(0,0,0)"
+          text-anchor="end"
+        ></text>
+        <path
+          fill="rgb(255,255,120)"
+          stroke="rgb(0,0,0)"
+          stroke-width="1.5"
+          d="M35 55C17 54 17 36 28 30C 31 28 31 21 30 20"
+          transform="translate(0,0)"
+        ></path>
+        <path
+          fill="rgb(255,255,120)"
+          stroke="rgb(0,0,0)"
+          stroke-width="1.5"
+          d="M35 55C17 54 17 36 28 30C 31 28 31 21 30 20"
+          transform="scale(-1,1) translate(-70,0)"
+        ></path>
+        <path
+          fill="rgb(255,255,120)"
+          d="M35 55L31 27L40 27Z"
+          transform="translate(0,0)"
+        ></path>
+        <rect
+          x="30.5"
+          y="11"
+          width="9"
+          height="10"
+          stroke="rgb(0,0,0)"
+          stroke-width="1.5"
+          rx="3"
+          fill="rgb(200,150,0)"
+          transform="translate(0,0)"
+        ></rect>
+        <rect
+          x="21"
+          y="38"
+          width="28"
+          height="6"
+          rx="3"
+          fill="rgb(150,70,0)"
+          transform="translate(0,0)"
+        ></rect>
+        <circle cx="35" cy="40" r="5" fill="rgb(255,255,255)"></circle>
+      </svg>

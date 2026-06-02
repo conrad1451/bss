@@ -1,0 +1,88 @@
+﻿<svg
+        id="hardWax"
+        style="width: 200px; height: 70px; cursor: pointer; border-radius: 5px"
+      >
+        <rect width="200" height="70" fill="rgb(255,255,255)"></rect>
+        <rect width="70" height="70" fill="rgb(225,225,225)"></rect>
+        <text
+          x="134"
+          y="19"
+          style="font-family: trebuchet ms; font-size: 17px"
+          fill="rgb(0,0,0)"
+          text-anchor="middle"
+        >
+          Hard Wax
+        </text>
+        <text
+          x="136"
+          y="35"
+          style="font-family: trebuchet ms; font-size: 11px"
+          fill="rgb(0,0,0)"
+          text-anchor="middle"
+        >
+          A firm hunk of beeswax.
+        </text>
+        <text
+          x="135"
+          y="50"
+          style="font-family: trebuchet ms; font-size: 11px"
+          fill="rgb(0,0,0)"
+          text-anchor="middle"
+        >
+          Has a 60% chance to
+        </text>
+        <text
+          x="136"
+          y="64"
+          style="font-family: trebuchet ms; font-size: 11px"
+          fill="rgb(0,0,0)"
+          text-anchor="middle"
+        >
+          improve a beequip.
+        </text>
+        <text
+          id="hardWax_amount"
+          x="67"
+          y="67"
+          style="font-family: calibri; font-size: 14px"
+          fill="rgb(0,0,0)"
+          text-anchor="end"
+        ></text>
+
+        <g transform="translate(-4,-2)">
+          <path
+            fill="#e26a3a"
+            stroke="black"
+            stroke-width="1.5"
+            d="M 56 54 L 49 58L 33 58L 25 54L 25 42L 28 35L 28 23L 38 15L 46 18L 52 24L 52 35L 56 47L 56 55"
+            transform="scale(0.9,0.9) translate(4,4)"
+          ></path>
+          <path
+            fill="rgb(0,0,0,0)"
+            stroke="rgb(0,0,0,0.2)"
+            stroke-width="3"
+            d="M 33 57 L 33 44M 46 48 L 46 33M 38 40 L 38 30"
+          ></path>
+          <path
+            fill="rgb(0,0,0,0)"
+            stroke="rgb(0,0,0)"
+            stroke-width="6"
+            d="M 36 20 C 32 19 42 22 40 30"
+            transform="translate(0,-5)"
+          ></path>
+          <circle
+            fill="rgb(0,0,0,0.3)"
+            cx="40"
+            cy="42"
+            r="6"
+            transform="scale(1,0.6)"
+          ></circle>
+          <path
+            fill="rgb(0,0,0,0)"
+            stroke="rgb(255, 255, 255)"
+            stroke-width="3"
+            d="M 36 20 C 32 19 42 22 40 30"
+            transform="translate(0,-5)"
+          ></path>
+        </g>
+      </svg>

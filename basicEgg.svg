@@ -1,0 +1,17 @@
+﻿<svg id="basicEgg" style="cursor: pointer; border-radius: 5px" viewBox="0 0 200 70" width="200" height="70">
+  <rect width="200" height="70" fill="rgb(255,255,255)"/>
+  <rect width="70" height="70" fill="rgb(225,225,225)"/>
+  <text x="130" y="18" fill="rgb(0,0,0)" text-anchor="middle" font-family="trebuchet ms" font-size="17px">
+    Basic Egg
+  </text>
+  <text x="130" y="39" fill="rgb(0,0,0)" text-anchor="middle" font-family="trebuchet ms" font-size="12px">
+    Hatches into a
+  </text>
+  <text x="130" y="54" fill="rgb(0,0,0)" text-anchor="middle" font-family="trebuchet ms" font-size="12px">
+    basic bee!
+  </text>
+  <text id="basicEgg_amount" x="67" y="67" fill="rgb(0,0,0)" text-anchor="end" font-family="calibri" font-size="14px"/>
+  <path fill="rgb(255,255,0)" stroke="rgb(0,0,0)" stroke-width="1.5" d="M35 15C 20 17 10 55 35 55M35 15C 50 17 60 55 35 55"/>
+  <path fill="rgb(0,0,0)" d="M20 30 C 20 40 50 40 50 30L50 40C50 50 20 50 20 40"/>
+  <path fill="rgb(0,0,0,0.3)" d="M47 25C 57 56 35 60 23 50C 32 48 41 50 50 35"/>
+</svg>

@@ -1,0 +1,63 @@
+﻿<svg
+        id="strawberry"
+        style="width: 200px; height: 70px; cursor: pointer; border-radius: 5px"
+      >
+        <rect width="200" height="70" fill="rgb(255,255,255)"></rect>
+        <rect width="70" height="70" fill="rgb(225,225,225)"></rect>
+        <text
+          x="130"
+          y="18"
+          style="font-family: trebuchet ms; font-size: 17px"
+          fill="rgb(0,0,0)"
+          text-anchor="middle"
+        >
+          Strawberry
+        </text>
+        <text
+          x="130"
+          y="39"
+          style="font-family: trebuchet ms; font-size: 12px"
+          fill="rgb(0,0,0)"
+          text-anchor="middle"
+        >
+          Improves your bee's
+        </text>
+        <text
+          x="130"
+          y="54"
+          style="font-family: trebuchet ms; font-size: 12px"
+          fill="rgb(0,0,0)"
+          text-anchor="middle"
+        >
+          bond by 25.
+        </text>
+        <text
+          id="strawberry_amount"
+          x="67"
+          y="67"
+          style="font-family: calibri; font-size: 14px"
+          fill="rgb(0,0,0)"
+          text-anchor="end"
+        ></text>
+        <path
+          stroke="rgb(0,0,0)"
+          stroke-width="1.5"
+          fill="rgb(255,0,25)"
+          d="M 24 27 L 46 22C 83 11 41 71 42 61C 20 39 15 36 24 27"
+          transform="translate(7,3) scale(0.7,0.8)"
+        ></path>
+        <path
+          stroke="rgb(0,200,0)"
+          stroke-width="3"
+          fill="rgb(0,0,0,0)"
+          d="M 38 24 C 37 16 34 16 24 11M 38 24 C 43 16 34 16 38 6M 38 24 C 37 16 21 16 24 21M 38 24 C 46 16 46 16 45 8"
+          transform="translate(7,3) scale(0.7,0.8)"
+        ></path>
+        <circle cx="35" cy="35" fill="rgb(250,170,100)" r="1"></circle>
+        <circle cx="27" cy="29" fill="rgb(250,170,100)" r="1"></circle>
+        <circle cx="35" cy="25" fill="rgb(250,170,100)" r="1"></circle>
+        <circle cx="40" cy="42" fill="rgb(250,170,100)" r="1"></circle>
+        <circle cx="43" cy="36" fill="rgb(250,170,100)" r="1"></circle>
+        <circle cx="41" cy="28" fill="rgb(250,170,100)" r="1"></circle>
+        <circle cx="31" cy="40" fill="rgb(250,170,100)" r="1"></circle>
+      </svg>
