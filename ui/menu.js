@@ -76,35 +76,78 @@ export function setupUserInterfaceListeners(gameState) {
   }
 }
 
+// Helper for cleaner, safer binding
+function onElementReady(selector, callback) {
+  const el = document.getElementById(selector);
+  if (el) {
+    callback(el);
+  } else {
+    console.warn(`Element ${selector} not found yet.`);
+  }
+}
+
 export function initMainMenu(BeeSwarmSimulator) {
   //   const addedDivsToSplice = [];
   //   let ableToImport = true;
+  // Helper: Only attach if element exists
+  const safeOnClick = (id, callback) => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.onclick = callback;
+    } else {
+      console.warn(`Element with id "${id}" not found. Skipping binding.`);
+    }
+  };
 
-  // 1. Handle Navigation
-  document.getElementById("mainInfo").onclick = function () {
-    copyThumbnail("info");
+  // CHQ: Gemini AI: A simple helper to manage UI state
+  function showPage(pageId) {
+    const pages = ["mainMenu", "mainInfoMenu", "mainSelectMenu"]; // List all your main pages
+    pages.forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) el.style.display = id === pageId ? "block" : "none";
+    });
+  }
+
+  // 1. New Game Logic
+  safeOnClick("btnNewGame", () => {
     document.getElementById("mainMenu").style.display = "none";
-    document.getElementById("mainInfoMenu").style.display = "block";
-  };
+    BeeSwarmSimulator({ id: Date.now(), name: "New Save" });
+  });
 
-  const copyThumbnail = (t) => {
-    const canv = document.getElementById(t + "_thumbnailCanvCopy");
-    const ctx = canv.getContext("2d");
-    canv.width = window.innerWidth;
-    canv.height = window.innerHeight;
-    ctx.drawImage(document.getElementById("thumbnailCanv"), 0, 0);
-  };
+  // 2. Load Game Logic (Opens your Save List)
+  safeOnClick("btnNewGame", () => {
+    document.getElementById("mainMenu").style.display = "none";
+    BeeSwarmSimulator({ id: Date.now(), name: "New Save" });
+  });
 
-  // 2. Handle Game Launching
-  document.getElementById("mainPlay").onclick = function () {
+  // 2. Load Game Logic (Opens your Save List)
+  safeOnClick("btnLoadGame", () => {
     copyThumbnail("select");
     document.getElementById("mainMenu").style.display = "none";
     document.getElementById("mainSelectMenu").style.display = "block";
-    renderSaveList(BeeSwarmSimulator, addedDivsToSplice);
-  };
+    renderSaveList(BeeSwarmSimulator);
+  });
 
-  // 3. Handle External Page Logic
-  document.getElementById("mainNew").onclick = function () {
+  // Handle Instruction Page
+  safeOnClick("mainInfo", () => {
+    copyThumbnail("info");
+    showPage("mainInfoMenu");
+    // document.getElementById("mainMenu").style.display = "none";
+    // document.getElementById("mainInfoMenu").style.display = "block";
+  });
+
+  // // 1. Handle Navigation
+  // // Usage in menu.js
+  // safeOnClick("mainInfo", (btn) => {
+  //   btn.onclick = () => {
+  //     copyThumbnail("info");
+  //     document.getElementById("mainMenu").style.display = "none";
+  //     document.getElementById("mainInfoMenu").style.display = "block";
+  //   };
+  // });
+
+  // Handle New Window
+  safeOnClick("openNewWindow", () => {
     for (let i in addedDivsToSplice) {
       document.getElementById("savedGames").removeChild(addedDivsToSplice[i]);
     }
@@ -115,28 +158,96 @@ export function initMainMenu(BeeSwarmSimulator) {
       "<!doctype html><html>" + document.querySelector("html").innerHTML,
     );
     w.document.close();
+  });
+  // safeOnClick("openNewWindow", () => {
+  //   for (let i in addedDivsToSplice) {
+  //     document.getElementById("savedGames").removeChild(addedDivsToSplice[i]);
+  //   }
+
+  //   let w = window.open();
+  //   w.document.open();
+  //   w.document.write(
+  //     "<!doctype html><html>" + document.querySelector("html").innerHTML,
+  //   );
+  //   w.document.close();
+  // });
+
+  // const mainInfoBtn = document.getElementById("mainInfo");
+  // if (mainInfoBtn) {
+  //   mainInfoBtn.onclick = function () {
+  //     copyThumbnail("info");
+  //     document.getElementById("mainMenu").style.display = "none";
+  //     document.getElementById("mainInfoMenu").style.display = "block";
+  //   };
+  // } else {
+  //   console.error("mainInfo element not found!");
+  // }
+
+  const copyThumbnail = (t) => {
+    const canv = document.getElementById(t + "_thumbnailCanvCopy");
+    const ctx = canv.getContext("2d");
+    canv.width = window.innerWidth;
+    canv.height = window.innerHeight;
+    ctx.drawImage(document.getElementById("thumbnailCanv"), 0, 0);
   };
+
+  // 3. Handle External Page Logic
+  // document.getElementById("openNewWindow").onclick = function () {
+  //   for (let i in addedDivsToSplice) {
+  //     document.getElementById("savedGames").removeChild(addedDivsToSplice[i]);
+  //   }
+
+  //   let w = window.open();
+  //   w.document.open();
+  //   w.document.write(
+  //     "<!doctype html><html>" + document.querySelector("html").innerHTML,
+  //   );
+  //   w.document.close();
+  // };
 
   // 4. Initial Visual State
   if (window.drawThumbnail) {
     window.drawThumbnail(document.getElementById("thumbnailCanv"));
   }
 
-  document.getElementById("info_mainBack").onclick = document.getElementById(
-    "select_mainBack",
-  ).onclick = function () {
+  // document.getElementById("info_mainBack").onclick = document.getElementById(
+  //   "select_mainBack",
+  // ).onclick = function () {
+  //   document.getElementById("mainInfoMenu").style.display = "none";
+  //   document.getElementById("mainSelectMenu").style.display = "none";
+  //   document.getElementById("mainMenu").style.display = "block";
+  // };
+
+  // To this safer version:
+  const backBtn1 = document.getElementById("info_mainBack");
+  const backBtn2 = document.getElementById("select_mainBack");
+
+  const backHandler = () => {
     document.getElementById("mainInfoMenu").style.display = "none";
     document.getElementById("mainSelectMenu").style.display = "none";
     document.getElementById("mainMenu").style.display = "block";
   };
 
+  if (backBtn1) backBtn1.onclick = backHandler;
+  if (backBtn2) backBtn2.onclick = backHandler;
   // Add these inside initMainMenu(...)
 
-  document.getElementById("createNewGame").onclick = function () {
-    document.getElementById("mainSelectMenu").style.display = "none";
-    document.getElementById("mainMenu").style.display = "none";
-    BeeSwarmSimulator({ id: Date.now(), name: "Untitled Save" });
-  };
+  // ✅ SAFE VERSION
+  const createNewGameBtn = document.getElementById("createNewGame");
+  if (createNewGameBtn) {
+    createNewGameBtn.onclick = function () {
+      document.getElementById("mainSelectMenu").style.display = "none";
+      document.getElementById("mainMenu").style.display = "none";
+      BeeSwarmSimulator({ id: Date.now(), name: "Untitled Save" });
+    };
+  } else {
+    console.warn("createNewGame button not found, skipping listener.");
+  }
+  // document.getElementById("createNewGame").onclick = function () {
+  //   document.getElementById("mainSelectMenu").style.display = "none";
+  //   document.getElementById("mainMenu").style.display = "none";
+  //   BeeSwarmSimulator({ id: Date.now(), name: "Untitled Save" });
+  // };
 
   document.onpaste = (e) => {
     if (!ableToImport) return;
@@ -195,9 +306,9 @@ function renderSaveList(BeeSwarmSimulator) {
       let div = document.createElement("div");
       // ... Apply your styles from the old index.js ...
       div.innerHTML = `
-        <div onclick="window.initSave(${i})">Play ${save.data.name}</div>
-        <div onclick="window.deleteSave(${i})">Delete</div>
-      `;
+  <div onclick="window.initSave(${i}, ${JSON.stringify(res).replace(/"/g, "'")})">Play ${save.data.name}</div>
+  <div onclick="window.deleteSave(${i}, ${JSON.stringify(res).replace(/"/g, "'")})">Delete</div>
+`;
       document.getElementById("savedGames").appendChild(div);
       addedDivsToSplice.push(div);
     });

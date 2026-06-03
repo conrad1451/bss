@@ -99,7 +99,7 @@ export const injectMenuHTML = (container) => {
       </button>
 
       <button
-        id="mainNew"
+        id="openNewWindow"
         style="
           position: fixed;
           left: 50%;

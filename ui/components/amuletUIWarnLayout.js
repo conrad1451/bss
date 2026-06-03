@@ -1,5 +1,5 @@
 // Inside your src/ui/components/menuLayout.js file:
-export const injectAmuletUIWarnHTML = (amuletUIWarnLayout) => {
+export const injectAmuletUIWarnHTML = (container) => {
   container.insertAdjacentHTML(
     "beforeend",
     `
