@@ -19,16 +19,17 @@ export const SHADERS = {
     
     // 3. Global constants
     uniform mat4 viewMatrix;
+    uniform mat4 projMatrix; // Make sure this is declared here!
     
     void main(){
-        vec4 pos = viewMatrix * vec4(vertPos, 1.0);
+        vec4 viewPos =  viewMatrix * vec4(vertPos, 1.0);
         
         // Passing data through to the fragment shader
         pixColor = vertColor;
         pixUV = vertUV;
-        pixFog = pos.z;
+        pixFog = viewPos.z;
         
-        gl_Position = pos;
+        gl_Position = projMatrix * viewPos;
     }
   `,
 
@@ -77,11 +78,12 @@ export const SHADERS = {
     
     // 3. Global constants
     uniform mat4 viewMatrix;
+    uniform mat4 projMatrix; // Make sure this is declared here!
     uniform mat4 modelMatrix;
     
     void main(){
         // Transform vertex position to view space
-        vec4 pos = viewMatrix * modelMatrix * vec4(vertPos, 1.0);
+        vec4 viewPos = viewMatrix * modelMatrix * vec4(vertPos, 1.0);
         
         // Pass color to fragment shader
         pixColor = vertColor;
@@ -89,7 +91,7 @@ export const SHADERS = {
         // Transform normal to world space
         pixNormal = mat3(modelMatrix) * vertNormal;
         
-        gl_Position = pos;
+        gl_Position = projMatrix * viewPos;
     }
 `,
 
@@ -132,6 +134,7 @@ export const SHADERS = {
     
     // 3. Global constants
     uniform mat4 viewMatrix;
+    uniform mat4 projMatrix; // Make sure this is declared here!
     
     void main(){
         // Apply instance UV offset
@@ -148,7 +151,7 @@ export const SHADERS = {
         vp = vec3(vp.x * s - vp.z * c, vp.y, vp.x * c + vp.z * s);
         
         // Transform to view space and apply instance position offset
-        gl_Position = viewMatrix * vec4(vp + instance_pos.xyz, 1.0);
+        gl_Position = projMatrix * viewMatrix * vec4(vp + instance_pos.xyz, 1.0);
     }
 `,
 
@@ -174,33 +177,28 @@ export const SHADERS = {
   flowerVSH: `#version 300 es
     precision highp float;
     
-    // 1. Inputs from buffers
     in vec3 vertPos;
     in vec4 vertUV;
     in float vertGoo;
     
-    // 2. Outputs to the fragment shader
     out vec4 pixUV;
     out float pixFog;
     out float goo;
     
-    // 3. Global constants
     uniform mat4 viewMatrix;
+    uniform mat4 projMatrix; // Make sure this is declared here!
     
     void main(){
-        // Transform vertex position to view space
-        vec4 pos = viewMatrix * vec4(vertPos, 1.0);
+        // Declare viewPos correctly
+        vec4 viewPos = viewMatrix * vec4(vertPos, 1.0);
         
-        // Pass UV coordinates to fragment shader
+        // Use projMatrix to set gl_Position
+        gl_Position = projMatrix * viewPos;
+        
         pixUV = vertUV;
-        
-        // Pass goo parameter to fragment shader
         goo = vertGoo;
         
-        // Calculate fog gradient based on depth
-        pixFog = smoothstep(20.0, 120.0, pos.z) * 0.7;
-        
-        gl_Position = pos;
+        pixFog = smoothstep(20.0, 120.0, viewPos.z) * 0.7;
     }
 `,
 
@@ -254,6 +252,7 @@ export const SHADERS = {
     
     // 3. Global constants
     uniform mat4 viewMatrix;
+    uniform mat4 projMatrix; // Make sure this is declared here!
     
     // Helper function to compute quaternion-rotated position
     vec4 computePos(){
@@ -296,12 +295,12 @@ export const SHADERS = {
         );
         
         // Transform to view space and apply instance position offset
-        vec4 pos = viewMatrix * vec4(vp + u * quaternion.w + uu * 2.0 + instance_pos.xyz, 1.0);
+        vec4 viewPos = viewMatrix * vec4(vp + u * quaternion.w + uu * 2.0 + instance_pos.xyz, 1.0);
         
         // Calculate fog gradient based on depth
-        pixFog = smoothstep(20.0, 120.0, pos.z) * 0.7;
+        pixFog = smoothstep(20.0, 120.0, viewPos.z) * 0.7;
         
-        return pos;
+        return projMatrix * viewPos;
     }
     
     void main(){
@@ -362,22 +361,23 @@ export const SHADERS = {
     
     // 3. Global constants
     uniform mat4 viewMatrix;
+    uniform mat4 projMatrix; // Make sure this is declared here!
     
     void main(){
         // Transform vertex position to view space
-        vec4 pos = viewMatrix * vec4(vertPos, 1.0);
+        vec4 viewPos = viewMatrix * vec4(vertPos, 1.0);
         
         // Pass color to fragment shader
         pixColor = vertColor;
         
         // Compute normalized screen position
-        particlePos = pos.xy / pos.w;
+        particlePos = viewPos.xy / viewPos.w;
         
-        gl_Position = pos;
+        gl_Position = projMatrix * viewPos;
         
         // Calculate projected particle size based on depth
         // ✅ Fixed: Wrapped macro in float() constructor to satisfy the compiler operand type check
-        float projSize = (vertSize / pos.z) * float(SCREEN_CHANGE);
+        float projSize = (vertSize / viewPos.z) * float(SCREEN_CHANGE);
         gl_PointSize = projSize;
         particleSize = projSize * 0.5;
         
@@ -439,13 +439,14 @@ export const SHADERS = {
     
     // 3. Global constants
     uniform mat4 viewMatrix;
+    uniform mat4 projMatrix; // Make sure this is declared here!
     
     void main(){
         // Pass instance color to fragment shader
         pixColor = instance_color;
         
         // Scale vertex position and apply instance transform
-        gl_Position = viewMatrix * vec4(
+        gl_Position = projMatrix * viewMatrix * vec4(
             vertPos * instance_scale.x * vec3(1.0, instance_scale.y, 1.0) + instance_pos,
             1.0
         );
@@ -486,13 +487,14 @@ export const SHADERS = {
     
     // 3. Global constants
     uniform mat4 viewMatrix;
+    uniform mat4 projMatrix; // Make sure this is declared here!
     
     void main(){
         // Apply instance UV offset
         pixUV = vertUV + instance_uv;
         
         // Transform instance origin to view space
-        vec4 originPos = viewMatrix * vec4(instance_origin, 1.0);
+        vec4 originPos = projMatrix * viewMatrix * vec4(instance_origin, 1.0);
         
         // Pre-calculate sin and cos of instance rotation
         float s = sin(instance_info.z);
@@ -508,10 +510,10 @@ export const SHADERS = {
         );
         
         // Combine scaled position with origin position
-        vec4 pos = originPos + vec4(vp, 0.0, 0.0);
+        vec4 viewPos = originPos + vec4(vp, 0.0, 0.0);
         
         // Clamp w component if in valid view frustum
-        gl_Position = pos.w < 1.0 && pos.w > 0.0 ? vec4(pos.xyz, 1.0) : pos;
+        gl_Position = viewPos.w < 1.0 && viewPos.w > 0.0 ? vec4(viewPos.xyz, 1.0) : viewPos;
         
         // Pass color to fragment shader
         pixColor = instance_color;
@@ -563,6 +565,7 @@ export const SHADERS = {
     
     // 3. Global constants
     uniform mat4 viewMatrix;
+    uniform mat4 projMatrix; // Make sure this is declared here!
     uniform vec4 instance_info1;
     uniform vec2 instance_info2;
     uniform float isNight;
@@ -576,7 +579,7 @@ export const SHADERS = {
         float c = cos(instance_info1.w);
         
         // Apply Y-axis rotation, scale, and instance position offset
-        gl_Position = viewMatrix * vec4(
+        gl_Position = projMatrix * viewMatrix * vec4(
             vec3(
                 vertPos.x * c - vertPos.z * s,
                 vertPos.y,
@@ -614,6 +617,7 @@ export const SHADERS = {
     
     // 3. Global constants
     uniform mat4 viewMatrix;
+    uniform mat4 projMatrix; // Make sure this is declared here!
     uniform float isNight;
     
     void main(){
@@ -621,7 +625,7 @@ export const SHADERS = {
         pixColor = vec4(vertCol.xyz * isNight, vertCol.w);
         
         // Transform vertex position to view space
-        gl_Position = viewMatrix * vec4(vertPos, 1.0);
+        gl_Position = projMatrix * viewMatrix * vec4(vertPos, 1.0);
     }
 `,
 
