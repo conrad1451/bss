@@ -36,6 +36,23 @@ import { injectAmuletUIWarnHTML } from "./ui/components/amuletUIWarnLayout.js";
 
 import "./ui/style.css"; // CHQ: Claude AI: Vite automatically extracts and injects this
 
+// CHQ: Gemini AI: moved canvas from the top of BeeSwarmSimulator to the top of index.js
+//      so it is created exactly once when the page loads
+const canvas = document.getElementById("gl-canvas");
+
+// Define width/height based on window or fixed size
+const width = window.innerWidth;
+const height = window.innerHeight;
+
+canvas.width = width;
+canvas.height = height;
+
+const gl = canvas.getContext("webgl2") || canvas.getContext("webgl");
+
+if (!gl) {
+  console.error("WebGL failed to initialize!");
+}
+
 function initGameWorld(gameState) {
   // 1. Initialize Mobs
   // Instead of raw objects, we now use the Mob class
@@ -98,13 +115,9 @@ function main() {
 
 // --- 2. THE ENGINE ---
 async function BeeSwarmSimulator(saveData) {
-  // --- A. DOM & CONTEXT SETUP ---
+  const width = window.innerWidth;
+  const height = window.innerHeight;
 
-  // let width = window.thisProgramIsInFullScreen ? 500 : window.innerWidth + 1;
-  // let height = window.thisProgramIsInFullScreen ? 500 : window.innerHeight + 1;
-
-  // --- 1. SETUP GOES HERE ---
-  const canvas = document.getElementById("gl-canvas");
   const uiCanvas = document.getElementById("ui-canvas");
 
   if (!canvas || !uiCanvas) {
@@ -114,51 +127,15 @@ async function BeeSwarmSimulator(saveData) {
     return;
   }
 
-  const gl = canvas.getContext("webgl2");
-  const ctx = uiCanvas.getContext("2d");
+  console.log("Starting simulator. Context valid:", !!gl);
 
-  if (!gl) {
-    alert("WebGL 2.0 not supported by your browser.");
-    return;
-  }
-
-  // Define width/height based on window or fixed size
-  const width = window.innerWidth;
-  const height = window.innerHeight;
-
-  canvas.width = width;
-  canvas.height = height;
   uiCanvas.width = width;
   uiCanvas.height = height;
 
-  // --- 2. DYNAMICALLY INJECT MODULAR UI OVERLAYS NOW ---
-  // The canvases are safely bound to WebGL contexts, so we can build the UI panels!
-  // Grab the body or a UI wrapper element
-  // const uiWrapper = document.body;
-
-  // // Cleanly inject your massive interface modules
-  // injectMenuHTML(uiWrapper); // CHQ: Gemini AI made and imported function to generate hundreds of lines
-  // injectShopHTML(uiWrapper); // CHQ: Gemini AI made and imported function to generate hundreds of lines
-  // injectAmuletUIWarnHTML(uiWrapper); // CHQ: I made and imported function
-  // injectAbilityUI(uiWrapper); // CHQ: Gemini AI added this
-
-  // --- B. STATE & SYSTEMS ---
-  // 1. Initialize the baseline state tree
   const gameState = createInitialState(saveData);
 
-  // 2. Upgrade the raw player object with class methods 💎
   gameState.player = new Player(gameState.player);
 
-  // // Define width/height based on window or fixed size
-  // const width = window.innerWidth;
-  // const height = window.innerHeight;
-
-  // canvas.width = width;
-  // canvas.height = height;
-  // uiCanvas.width = width;
-  // uiCanvas.height = height;
-
-  // --- B. RENDERER INITIALIZATION ---
   const renderer = new Renderer(gl, canvas.width, canvas.height, SHADERS);
   const textRenderer = new TextRenderer(
     gl,
@@ -168,6 +145,8 @@ async function BeeSwarmSimulator(saveData) {
 
   // ASSET LOADING
   // Load textures and pass to renderer
+  const ctx = uiCanvas.getContext("2d");
+
   const textures = loadTextures(gl, ctx); // Pass the 2D context as the second parameter!
   renderer.textures = textures;
 
@@ -217,64 +196,68 @@ async function BeeSwarmSimulator(saveData) {
     }
   });
 
-  // This is your line 202 where it crashes
-  renderer.initCache(renderer.programs);
+  try {
+    // This is your line 202 where it crashes
+    renderer.initCache(renderer.programs);
 
-  // --- D. GL STATE SETTINGS ---
-  gl.viewport(0, 0, width, height);
-  gl.enable(gl.BLEND);
-  gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
-  gl.enable(gl.DEPTH_TEST);
-  gl.depthFunc(gl.LEQUAL);
-  gl.enable(gl.CULL_FACE);
-  gl.cullFace(gl.BACK);
+    // --- D. GL STATE SETTINGS ---
+    gl.viewport(0, 0, width, height);
+    gl.enable(gl.BLEND);
+    gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+    gl.enable(gl.DEPTH_TEST);
+    gl.depthFunc(gl.LEQUAL);
+    gl.enable(gl.CULL_FACE);
+    gl.cullFace(gl.BACK);
 
-  // --- E. WORLD & INPUT ---
-  // initInputHandlers(gameState, uiCanvas); // Attach Input listeners
+    // --- E. WORLD & INPUT ---
+    // initInputHandlers(gameState, uiCanvas); // Attach Input listeners
 
-  // 🛠️ THE GOLDEN SAFEGUARD:
-  // Force-verify that the required engine state objects exist on gameState
-  // right before passing it down to the world builder loop!
-  if (!gameState.fieldInfo) gameState.fieldInfo = {};
-  if (!gameState.flowers) gameState.flowers = {};
+    // 🛠️ THE GOLDEN SAFEGUARD:
+    // Force-verify that the required engine state objects exist on gameState
+    // right before passing it down to the world builder loop!
+    if (!gameState.fieldInfo) gameState.fieldInfo = {};
+    if (!gameState.flowers) gameState.flowers = {};
 
-  const flowerMeshDataStaging = {
-    verts: [],
-    index: [],
-  };
+    const flowerMeshDataStaging = {
+      verts: [],
+      index: [],
+    };
 
-  // Build the fileds and pass data into staging
-  FIELD_CONFIGS.forEach((f) => {
-    createField(
-      f.name, // Parameter 1: Field identifier string
-      f, // Parameter 2: Pass the entire config object wrapper directly!
-      gameState, // Parameter 3: Pass your main active global game state container
-      flowerMeshDataStaging,
-      // gameState.meshes.flowers, // Parameter 4: Pass your instanced flower mesh reference channel
+    // Build the fileds and pass data into staging
+    FIELD_CONFIGS.forEach((f) => {
+      createField(
+        f.name, // Parameter 1: Field identifier string
+        f, // Parameter 2: Pass the entire config object wrapper directly!
+        gameState, // Parameter 3: Pass your main active global game state container
+        flowerMeshDataStaging,
+        // gameState.meshes.flowers, // Parameter 4: Pass your instanced flower mesh reference channel
+      );
+    });
+
+    // CHQ: Gemini AI: Handoff compiled mesh geometry to the GPU
+    renderer.uploadFlowerMesh(flowerMeshDataStaging);
+
+    // 🛠️ ---------------- Step F: ENGINE STARTUP & EVENT LISTENERS -----------------
+    initGameWorld(gameState); // Populates NPCs and Mobs  //ENGINE STARTUP --
+    initInputHandlers(gameState, uiCanvas); // Attach Input listeners
+    setupUserInterfaceListeners(gameState);
+
+    // --- 7. GAME LOOP ---
+    // const engine = createEngine(gameState, renderer, updateEngine);
+    // engine.start();
+
+    // const engineLoop = createGameLoop(updateEngine, renderer.render, gameState);
+    const engineLoop = createGameLoop(
+      updateEngine,
+      (state, dt) => renderer.render(state, dt),
+      gameState,
     );
-  });
 
-  // CHQ: Gemini AI: Handoff compiled mesh geometry to the GPU
-  renderer.uploadFlowerMesh(flowerMeshDataStaging);
-
-  // 🛠️ ---------------- Step F: ENGINE STARTUP & EVENT LISTENERS -----------------
-  initGameWorld(gameState); // Populates NPCs and Mobs  //ENGINE STARTUP --
-  initInputHandlers(gameState, uiCanvas); // Attach Input listeners
-  setupUserInterfaceListeners(gameState);
-
-  // --- 7. GAME LOOP ---
-  // const engine = createEngine(gameState, renderer, updateEngine);
-  // engine.start();
-
-  // const engineLoop = createGameLoop(updateEngine, renderer.render, gameState);
-  const engineLoop = createGameLoop(
-    updateEngine,
-    (state, dt) => renderer.render(state, dt),
-    gameState,
-  );
-
-  // Start it immediately for vanilla execution
-  engineLoop.start();
+    // Start it immediately for vanilla execution
+    engineLoop.start();
+  } catch (err) {
+    console.error("❌ FATAL ENGINE CRASH:", err);
+  }
 }
 
 // --- 3. LIFECYCLE ---
