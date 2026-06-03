@@ -1,0 +1,24 @@
+<svg id="invigoratingVial" style="cursor: pointer; border-radius: 5px" viewBox="0 0 200 70" width="200" height="70">
+  <rect width="200" height="70" fill="rgb(255,255,255)"/>
+  <rect width="70" height="70" fill="rgb(225,225,225)"/>
+  <text x="132" y="18" fill="rgb(0,0,0)" text-anchor="middle" font-family="trebuchet ms" font-size="16.5px">
+    Invigorating Vial
+  </text>
+  <text x="133" y="41" fill="rgb(0,0,0)" text-anchor="middle" font-family="trebuchet ms" font-size="12px">
+    Grants 1 hour of
+  </text>
+  <text x="133" y="55" fill="rgb(0,0,0)" text-anchor="middle" font-family="trebuchet ms" font-size="12px">
+    Invigorating Nectar.
+  </text>
+  <text id="invigoratingVial_amount" x="67" y="67" fill="rgb(0,0,0)" text-anchor="end" font-family="calibri" font-size="14px"/>
+  <g transform="translate(36,31) scale(0.85,0.85) rotate(-31)">
+    <path stroke="black" stroke-width="2" fill="rgb(0,0,0,0.25)" d="M-6 -15L5 -15C 5 9 13 -1 15 11C 16 15 13 20 13 20C10 30 -10 30 -13 20C -13 20 -16 15 -15 11C -13 -1 -5 9 -5 -15"/>
+    <rect stroke="black" stroke-width="2" fill="rgb(181, 120, 60)" x="-7" y="-22" width="14" height="9" rx="4"/>
+    <path fill="rgb(250, 97, 97)" d="M 7 2C 34 34 -34 34 -7 2"/>
+    <circle cx="0" cy="3" r="6" transform="scale(1,0.55)" fill="rgb(201, 78, 78)"/>
+    <path stroke="black" stroke-width="2.5" fill="rgb(250, 97, 97)" d="M 15 9 C -6 36 37 34 15 9" transform="scale(0.5,0.7) translate(-22,-38) rotate(48)"/>
+    <path stroke="black" stroke-width="2.5" fill="rgb(250, 97, 97)" d="M 15 9 C -6 36 37 34 15 9" transform="scale(0.5,0.6) translate(-43,-16) rotate(39)"/>
+    <path fill="rgb(30,30,30)" d="M15 25 C 1 26 5 10 8 8L 12 16L15 0L18 16L 22 8C 27 12 28 27 15 25" transform="translate(-8,7) scale(0.8,0.75) scale(0.75,0.75)"/>
+    <path stroke="rgb(250, 97, 97)" stroke-width="3" d="M15 19 L15 30" transform="translate(-8,7) scale(0.8,0.75) scale(0.75,0.75)"/>
+  </g>
+</svg>

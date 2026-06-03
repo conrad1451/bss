@@ -1,0 +1,22 @@
+<svg id="whirligig" style="cursor: pointer; border-radius: 5px" viewBox="0 0 200 70" width="200" height="70">
+  <rect width="200" height="70" fill="rgb(255,255,255)"/>
+  <rect width="70" height="70" fill="rgb(225,225,225)"/>
+  <text x="132" y="18" fill="rgb(0,0,0)" text-anchor="middle" font-family="trebuchet ms" font-size="16.5px">
+    Whirligig
+  </text>
+  <text x="133" y="39" fill="rgb(0,0,0)" text-anchor="middle" font-family="trebuchet ms" font-size="12px">
+    Swiftly carries you and
+  </text>
+  <text x="133" y="53" fill="rgb(0,0,0)" text-anchor="middle" font-family="trebuchet ms" font-size="12px">
+    your bees back to
+  </text>
+  <text x="133" y="67" fill="rgb(0,0,0)" text-anchor="middle" font-family="trebuchet ms" font-size="12px">
+    the hive!
+  </text>
+  <text id="whirligig_amount" x="67" y="67" fill="rgb(0,0,0)" text-anchor="end" font-family="calibri" font-size="14px"/>
+  <g transform="translate(-7,12) rotate(-20)">
+    <path stroke="rgb(58, 143, 27)" stroke-width="3" d="M 35 58C 33 55 31 48 34 45" fill="rgb(0,0,0,0)"/>
+    <path stroke="black" stroke-width="1.5" d="M 34 44C 11 -10 8 45 34 44" fill="rgb(128, 89, 30)"/>
+    <path stroke="black" stroke-width="1.5" d="M 34 44C 48 -17 61 45 34 44" fill="rgb(128, 89, 30)"/>
+  </g>
+</svg>

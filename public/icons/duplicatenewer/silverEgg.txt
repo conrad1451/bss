@@ -1,0 +1,17 @@
+<svg id="silverEgg" style="cursor: pointer; border-radius: 5px" viewBox="0 0 200 70" width="200" height="70">
+  <rect width="200" height="70" fill="rgb(255,255,255)"/>
+  <rect width="70" height="70" fill="rgb(225,225,225)"/>
+  <text x="130" y="18" fill="rgb(0,0,0)" text-anchor="middle" font-family="trebuchet ms" font-size="17px">
+    Silver Egg
+  </text>
+  <text x="130" y="39" fill="rgb(0,0,0)" text-anchor="middle" font-family="trebuchet ms" font-size="12px">
+    Hatches into a
+  </text>
+  <text x="130" y="54" fill="rgb(0,0,0)" text-anchor="middle" font-family="trebuchet ms" font-size="12px">
+    special bee!
+  </text>
+  <text id="silverEgg_amount" x="67" y="67" fill="rgb(0,0,0)" text-anchor="end" font-family="calibri" font-size="14px"/>
+  <path fill="rgb(200,200,200)" stroke="rgb(0,0,0)" stroke-width="1.5" d="M35 15C 20 17 10 55 35 55M35 15C 50 17 60 55 35 55"/>
+  <path stroke="rgb(255,255,255)" stroke-width="2" fill="rgb(0,0,0,0)" d="M 25 25C 25 25 40 25 40 18M 22 34C 25 35 40 35 47 28M 22 44C 25 45 40 45 49 38M 28 52C 25 53 40 53 47 47"/>
+  <path fill="rgb(0,0,0,0.3)" d="M47 25C 57 56 35 60 23 50C 32 48 41 50 50 35"/>
+</svg>

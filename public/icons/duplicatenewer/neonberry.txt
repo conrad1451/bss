@@ -1,0 +1,24 @@
+<svg id="neonberry" style="cursor: pointer; border-radius: 5px" viewBox="0 0 200 70" width="200" height="70">
+  <rect width="200" height="70" fill="rgb(255,255,255)"/>
+  <rect width="70" height="70" fill="rgb(225,225,225)"/>
+  <text x="130" y="18" fill="rgb(0,0,0)" text-anchor="middle" font-family="trebuchet ms" font-size="17px">
+    Neonberry
+  </text>
+  <text x="130" y="37" fill="rgb(0,0,0)" text-anchor="middle" font-family="trebuchet ms" font-size="11.5px">
+    Raises the bond of a
+  </text>
+  <text x="130" y="51" fill="rgb(0,0,0)" text-anchor="middle" font-family="trebuchet ms" font-size="11.5px">
+    bee by 500 and
+  </text>
+  <text x="130" y="64" fill="rgb(0,0,0)" text-anchor="middle" font-family="trebuchet ms" font-size="11.5px">
+    makes it radioactive.
+  </text>
+  <text id="neonberry_amount" x="67" y="67" fill="rgb(0,0,0)" text-anchor="end" font-family="calibri" font-size="14px"/>
+  <g transform="scale(0.825,0.825) translate(8,8)">
+    <circle fill="rgb(88, 227, 88)" cx="35" cy="35" stroke="black" stroke-width="2" r="22"/>
+    <circle fill="rgb(255,255,255,0.4)" cx="35" cy="35" r="10"/>
+    <circle fill="rgb(255,255,255,0.4)" cx="35" cy="35" r="4"/>
+    <path fill="rgb(0,0,0,0)" stroke="black" stroke-width="1" d="M 24 30C 28 12 41 22 40 20M 24 41C 24 49 37 50 36 48M 42 30C 47 28 46 43 39 43"/>
+    <path fill="rgb(138, 78, 18)" stroke="black" stroke-width="2" d="M 37 13C 39 12 43 7 42 5C 50 12 48 7 41 15" transform="translate(6,1)"/>
+  </g>
+</svg>

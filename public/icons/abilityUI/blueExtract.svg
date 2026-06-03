@@ -1,0 +1,23 @@
+<svg id="blueExtract" style="cursor: pointer; border-radius: 5px" viewBox="0 0 200 70" width="200" height="70">
+  <rect width="200" height="70" fill="rgb(255,255,255)"/>
+  <rect width="70" height="70" fill="rgb(225,225,225)"/>
+  <text x="130" y="18" fill="rgb(0,0,0)" text-anchor="middle" font-family="trebuchet ms" font-size="17px">
+    Blue Extract
+  </text>
+  <text x="130" y="35" fill="rgb(0,0,0)" text-anchor="middle" font-family="trebuchet ms" font-size="12px">
+    Grants 1.25x blue
+  </text>
+  <text x="130" y="50" fill="rgb(0,0,0)" text-anchor="middle" font-family="trebuchet ms" font-size="12px">
+    pollen for 10
+  </text>
+  <text x="130" y="65" fill="rgb(0,0,0)" text-anchor="middle" font-family="trebuchet ms" font-size="12px">
+    minutes.
+  </text>
+  <text id="blueExtract_amount" x="67" y="67" fill="rgb(0,0,0)" text-anchor="end" font-family="calibri" font-size="14px"/>
+  <g transform="translate(0,4)">
+    <path d="M 47 17L 45 42L 37 47L 23 40L 29 16" fill="rgb(0,0,0,0.1)" stroke="rgb(0,0,0)" stroke-width="1.5"/>
+    <path d="M 45 34L 45 42L 37 47L 23 40L 26 30" fill="rgb(0,0,255)"/>
+    <rect x="31" y="2" width="19" height="10" fill="rgb(100,100,100" rx="2" transform="rotate(11)"/>
+    <path d="M 48 12L 45 42L 37 47L 39 10" fill="rgb(0,0,0,0.5)"/>
+  </g>
+</svg>

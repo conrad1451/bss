@@ -1,0 +1,23 @@
+<svg id="strawberry" style="cursor: pointer; border-radius: 5px" viewBox="0 0 200 70" width="200" height="70">
+  <rect width="200" height="70" fill="rgb(255,255,255)"/>
+  <rect width="70" height="70" fill="rgb(225,225,225)"/>
+  <text x="130" y="18" fill="rgb(0,0,0)" text-anchor="middle" font-family="trebuchet ms" font-size="17px">
+    Strawberry
+  </text>
+  <text x="130" y="39" fill="rgb(0,0,0)" text-anchor="middle" font-family="trebuchet ms" font-size="12px">
+    Improves your bee's
+  </text>
+  <text x="130" y="54" fill="rgb(0,0,0)" text-anchor="middle" font-family="trebuchet ms" font-size="12px">
+    bond by 25.
+  </text>
+  <text id="strawberry_amount" x="67" y="67" fill="rgb(0,0,0)" text-anchor="end" font-family="calibri" font-size="14px"/>
+  <path stroke="rgb(0,0,0)" stroke-width="1.5" fill="rgb(255,0,25)" d="M 24 27 L 46 22C 83 11 41 71 42 61C 20 39 15 36 24 27" transform="translate(7,3) scale(0.7,0.8)"/>
+  <path stroke="rgb(0,200,0)" stroke-width="3" fill="rgb(0,0,0,0)" d="M 38 24 C 37 16 34 16 24 11M 38 24 C 43 16 34 16 38 6M 38 24 C 37 16 21 16 24 21M 38 24 C 46 16 46 16 45 8" transform="translate(7,3) scale(0.7,0.8)"/>
+  <circle cx="35" cy="35" fill="rgb(250,170,100)" r="1"/>
+  <circle cx="27" cy="29" fill="rgb(250,170,100)" r="1"/>
+  <circle cx="35" cy="25" fill="rgb(250,170,100)" r="1"/>
+  <circle cx="40" cy="42" fill="rgb(250,170,100)" r="1"/>
+  <circle cx="43" cy="36" fill="rgb(250,170,100)" r="1"/>
+  <circle cx="41" cy="28" fill="rgb(250,170,100)" r="1"/>
+  <circle cx="31" cy="40" fill="rgb(250,170,100)" r="1"/>
+</svg>

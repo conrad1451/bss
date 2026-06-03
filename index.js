@@ -25,7 +25,11 @@ import { NPC } from "./entities/npcs.js";
 import { Mob, MondoChick } from "./entities/mobs.js";
 import { createGameLoop } from "./engine/gameLoop.js";
 
-import { injectMenuHTML } from "./ui/components/menuLayout.js";
+// import { injectMenuHTML } from "./ui/components/menuLayout.js";
+import { injectMainMenuLayout } from "./ui/components/pages/mainMenuLayout.js";
+import { injectInfoLayout } from "./ui/components/pages/infoLayout.js";
+import { injectSelectLayout } from "./ui/components/pages/selectLayout.js";
+
 import { injectShopHTML } from "./ui/components/shopLayout.js";
 import { injectAbilityUI } from "./ui/components/abilityLayout.js"; // CHQ: Gemini AI added this
 import { injectAmuletUIWarnHTML } from "./ui/components/amuletUIWarnLayout.js";
@@ -64,7 +68,32 @@ var _M = Math;
 
 // --- 1. ENTRY POINT ---
 function main() {
-  initMainMenu(BeeSwarmSimulator);
+  // 1. Grab the wrapper
+  const uiWrapper = document.body;
+
+  const gameState = createInitialState();
+  // const gameState = createInitialState(saveData);
+
+  // 2. Inject the HTML first so elements exist!
+  // injectMenuHTML(uiWrapper);
+
+  injectMainMenuLayout(uiWrapper);
+  injectInfoLayout(uiWrapper);
+  injectSelectLayout(uiWrapper);
+
+  injectShopHTML(uiWrapper); // CHQ: Gemini AI made and imported function to generate hundreds of lines
+  injectAmuletUIWarnHTML(uiWrapper); // CHQ: I made and imported function
+  injectAbilityUI(uiWrapper); // CHQ: Gemini AI added this
+
+  // initMainMenu(BeeSwarmSimulator);
+
+  // 2. Use a microtask or a timeout to defer the initialization
+  // This pushes initMainMenu to the back of the browser's "to-do" list
+  // which allows the DOM to fully process the injections above.
+  setTimeout(() => {
+    initMainMenu(BeeSwarmSimulator);
+    setupUserInterfaceListeners(gameState); // Assuming gameState is defined
+  }, 0);
 }
 
 // --- 2. THE ENGINE ---
@@ -105,13 +134,13 @@ async function BeeSwarmSimulator(saveData) {
   // --- 2. DYNAMICALLY INJECT MODULAR UI OVERLAYS NOW ---
   // The canvases are safely bound to WebGL contexts, so we can build the UI panels!
   // Grab the body or a UI wrapper element
-  const uiWrapper = document.body;
+  // const uiWrapper = document.body;
 
-  // Cleanly inject your massive interface modules
-  injectMenuHTML(uiWrapper); // CHQ: Gemini AI made and imported function to generate hundreds of lines
-  injectShopHTML(uiWrapper); // CHQ: Gemini AI made and imported function to generate hundreds of lines
-  injectAmuletUIWarnHTML(uiWrapper); // CHQ: I made and imported function
-  injectAbilityUI(uiWrapper); // CHQ: Gemini AI added this
+  // // Cleanly inject your massive interface modules
+  // injectMenuHTML(uiWrapper); // CHQ: Gemini AI made and imported function to generate hundreds of lines
+  // injectShopHTML(uiWrapper); // CHQ: Gemini AI made and imported function to generate hundreds of lines
+  // injectAmuletUIWarnHTML(uiWrapper); // CHQ: I made and imported function
+  // injectAbilityUI(uiWrapper); // CHQ: Gemini AI added this
 
   // --- B. STATE & SYSTEMS ---
   // 1. Initialize the baseline state tree

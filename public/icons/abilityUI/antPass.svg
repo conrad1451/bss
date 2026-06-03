@@ -1,0 +1,22 @@
+<svg id="antPass" style="cursor: pointer; border-radius: 5px" viewBox="0 0 200 70" width="200" height="70">
+  <rect width="200" height="70" fill="rgb(255,255,255)"/>
+  <rect width="70" height="70" fill="rgb(225,225,225)"/>
+  <text x="134" y="19" fill="rgb(0,0,0)" text-anchor="middle" font-family="trebuchet ms" font-size="17px">
+    Ant Pass
+  </text>
+  <text x="132" y="39" fill="rgb(0,0,0)" text-anchor="middle" font-family="trebuchet ms" font-size="11px">
+    Grants you 1 addmission
+  </text>
+  <text x="132" y="52" fill="rgb(0,0,0)" text-anchor="middle" font-family="trebuchet ms" font-size="11px">
+    to the Ant Challenge!
+  </text>
+  <text id="antPass_amount" x="67" y="67" fill="rgb(0,0,0)" text-anchor="end" font-family="calibri" font-size="14px"/>
+  <g transform="translate(35,35)">
+    <path fill="rgb(255, 255, 160)" stroke="black" stroke-width="2" d="M -20 -15L 15 -15L 20 -10L 20 10L 15 15L-20 15L-20 -15"/>
+    <path fill="rgb(0,0,0,0)" stroke="rgb(0,170,0)" stroke-width="4" d="M -17 -14L -17 14M 13 -14L 18 -8L 18 8L 13 14M -8 -4L7 -4L4 -8L-4 -8L-8 -2"/>
+    <path fill="rgb(50,50,50)" d="M -8 -4L8 -4L8 8L-8 8"/>
+    <path stroke="rgb(50,50,50)" fill="rgb(0,0,0,0)" stroke-width="2" d="M -3 -5L-7 -10M 3 -5L7 -10"/>
+    <circle cx="-4" cy="0" r="2" fill="rgb(255,40,40)"/>
+    <circle cx="4" cy="0" r="2" fill="rgb(255,40,40)"/>
+  </g>
+</svg>

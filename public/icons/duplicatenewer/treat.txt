@@ -1,0 +1,16 @@
+<svg id="treat" style="cursor: pointer; border-radius: 5px" viewBox="0 0 200 70" width="200" height="70">
+  <rect width="200" height="70" fill="rgb(255,255,255)"/>
+  <rect width="70" height="70" fill="rgb(225,225,225)"/>
+  <text x="130" y="18" fill="rgb(0,0,0)" text-anchor="middle" font-family="trebuchet ms" font-size="16.5px">
+    Treat
+  </text>
+  <text x="130" y="37" fill="rgb(0,0,0)" text-anchor="middle" font-family="trebuchet ms" font-size="12px">
+    Improves a bee's
+  </text>
+  <text x="130" y="53" fill="rgb(0,0,0)" text-anchor="middle" font-family="trebuchet ms" font-size="12px">
+    bond by 10.
+  </text>
+  <text id="treat_amount" x="67" y="67" fill="rgb(0,0,0)" text-anchor="end" font-family="calibri" font-size="14px"/>
+  <path d="M 26 40C 14 39 4 12 30 28C 35 1 45 12 50 26C 68 10 73 31 60 41C 67 58 51 74 41 52C 37 58 2 74 26 40" stroke="rgb(0,0,0)" fill="rgb(138, 88, 18)" stroke-width="2" transform="scale(0.9,0.9) translate(-5,0)"/>
+  <path d="M 27 27L 29 34M 37 27L 39 34M 30 39 L 35 42L40 37" stroke="rgb(255,255,255)" fill="rgb(0,0,0,0)" stroke-width="2"/>
+</svg>

@@ -1,0 +1,21 @@
+<svg id="glue" style="cursor: pointer; border-radius: 5px" viewBox="0 0 200 70" width="200" height="70">
+  <rect width="200" height="70" fill="rgb(255,255,255)"/>
+  <rect width="70" height="70" fill="rgb(225,225,225)"/>
+  <text x="130" y="18" fill="rgb(0,0,0)" text-anchor="middle" font-family="trebuchet ms" font-size="17px">
+    Glue
+  </text>
+  <text x="130" y="35" fill="rgb(0,0,0)" text-anchor="middle" font-family="trebuchet ms" font-size="11px">
+    Grants 1.25x pollen
+  </text>
+  <text x="130" y="50" fill="rgb(0,0,0)" text-anchor="middle" font-family="trebuchet ms" font-size="11px">
+    from bees and tools
+  </text>
+  <text x="130" y="65" fill="rgb(0,0,0)" text-anchor="middle" font-family="trebuchet ms" font-size="11px">
+    for 10 minutes.
+  </text>
+  <text id="glue_amount" x="67" y="67" fill="rgb(0,0,0)" text-anchor="end" font-family="calibri" font-size="14px"/>
+  <rect x="33" y="16" rx="6" width="20" height="30" fill="rgb(255,255,255)" stroke="rgb(0,0,0)" stroke-width="1.5" transform="translate(0,-5) rotate(15)"/>
+  <rect x="39.5" y="6" rx="1" width="8" height="10" fill="rgb(255,150,0)" stroke="rgb(0,0,0)" stroke-width="1.5" transform="translate(0,-5) rotate(15)"/>
+  <path fill="rgb(255,30,255)" d="M10 10L20 10L10 25Z" transform="translate(0,-5) rotate(15) translate(28,12)"/>
+  <path fill="rgb(25,255,100)" d="M10 10L20 10L10 25Z" transform="translate(0,-5) translate(44,62) rotate(195)"/>
+</svg>

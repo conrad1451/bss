@@ -1,0 +1,16 @@
+<svg id="sunflowerSeed" style="cursor: pointer; border-radius: 5px" viewBox="0 0 200 70" width="200" height="70">
+  <rect width="200" height="70" fill="rgb(255,255,255)"/>
+  <rect width="70" height="70" fill="rgb(225,225,225)"/>
+  <text x="130" y="18" fill="rgb(0,0,0)" text-anchor="middle" font-family="trebuchet ms" font-size="16px">
+    Sunflower Seed
+  </text>
+  <text x="130" y="39" fill="rgb(0,0,0)" text-anchor="middle" font-family="trebuchet ms" font-size="12px">
+    Improves your bee's
+  </text>
+  <text x="130" y="54" fill="rgb(0,0,0)" text-anchor="middle" font-family="trebuchet ms" font-size="12px">
+    bond by 25.
+  </text>
+  <text id="sunflowerSeed_amount" x="67" y="67" fill="rgb(0,0,0)" text-anchor="end" font-family="calibri" font-size="14px"/>
+  <path stroke="rgb(0,0,0)" stroke-width="1.5" fill="rgb(252,231,202)" d="M37 20C 8 36 11 46 20 50C 44 63 43 31 37 20" transform="translate(5,0)"/>
+  <path stroke="rgb(98,99,90)" stroke-width="3" fill="rgb(0,0,0,0)" d="M37 20C 25 36 20 46 20 50M37 20C 14 36 17 46 20 50M37 20C 38 36 36 58 20 50M37 20C 36 36 20 49 20 50" transform="translate(5,0)"/>
+</svg>

@@ -1,0 +1,28 @@
+<svg id="causticWax" style="cursor: pointer; border-radius: 5px" viewBox="0 0 200 70" width="200" height="70">
+  <rect width="200" height="70" fill="rgb(255,255,255)"/>
+  <rect width="70" height="70" fill="rgb(225,225,225)"/>
+  <text x="134" y="19" fill="rgb(0,0,0)" text-anchor="middle" font-family="trebuchet ms" font-size="17px">
+    Caustic Wax
+  </text>
+  <text x="136" y="35" fill="rgb(0,0,0)" text-anchor="middle" font-family="trebuchet ms" font-size="10.5px">
+    A glowing hunk of wax. Has
+  </text>
+  <text x="135" y="50" fill="rgb(0,0,0)" text-anchor="middle" font-family="trebuchet ms" font-size="10.5px">
+    a 25% chance to improve,
+  </text>
+  <text x="136" y="64" fill="rgb(0,0,0)" text-anchor="middle" font-family="trebuchet ms" font-size="10.5px">
+    or else DESTROY a beequip.
+  </text>
+  <text id="causticWax_amount" x="67" y="67" fill="rgb(0,0,0)" text-anchor="end" font-family="calibri" font-size="14px"/>
+  <g transform="translate(-4,-2)">
+    <path fill="#7cec88" stroke="black" stroke-width="1.5" d="M 54 54 C 48 64 23 58 23 52C 23 45 28 49 25 37C 23 31 28 28 27 26C 23 18 49 16 50 26C 48 36 54 31 53 40C 53 50 58 44 54 54"/>
+    <circle fill="rgb(205, 242, 41)" cx="31" cy="50" r="3"/>
+    <circle fill="rgb(205, 242, 41)" cx="40" cy="42" r="2"/>
+    <circle fill="rgb(205, 242, 41)" cx="30" cy="36" r="2"/>
+    <circle fill="rgb(205, 242, 41)" cx="46" cy="32" r="2"/>
+    <circle fill="rgb(205, 242, 41)" cx="46" cy="53" r="2"/>
+    <circle fill="rgb(0,0,0,0.3)" cx="39" cy="51" r="7" transform="scale(1,0.5)"/>
+    <path fill="rgb(0,0,0,0)" stroke="rgb(0,0,0)" stroke-width="6" d="M 36 20 C 32 19 42 22 40 30" transform="translate(0,-4)"/>
+    <path fill="rgb(0,0,0,0)" stroke="rgb(255, 255, 255)" stroke-width="3" d="M 36 20 C 32 19 42 22 40 30" transform="translate(0,-4)"/>
+  </g>
+</svg>

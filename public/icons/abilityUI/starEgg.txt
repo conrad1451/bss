@@ -1,0 +1,20 @@
+<svg id="starEgg" style="cursor: pointer; border-radius: 5px" viewBox="0 0 200 70" width="200" height="70">
+  <rect width="200" height="70" fill="rgb(255,255,255)"/>
+  <rect width="70" height="70" fill="rgb(225,225,225)"/>
+  <text x="130" y="18" fill="rgb(0,0,0)" text-anchor="middle" font-family="trebuchet ms" font-size="17px">
+    Star Egg
+  </text>
+  <text x="130" y="36" fill="rgb(0,0,0)" text-anchor="middle" font-family="trebuchet ms" font-size="11px">
+    Hatches into a
+  </text>
+  <text x="130" y="49" fill="rgb(0,0,0)" text-anchor="middle" font-family="trebuchet ms" font-size="11px">
+    gifted bee you
+  </text>
+  <text x="130" y="61" fill="rgb(0,0,0)" text-anchor="middle" font-family="trebuchet ms" font-size="11px">
+    don't own!
+  </text>
+  <text id="starEgg_amount" x="67" y="67" fill="rgb(0,0,0)" text-anchor="end" font-family="calibri" font-size="14px"/>
+  <path fill="rgb(250,250,250)" stroke="rgb(0,0,0)" stroke-width="1.5" d="M35 15C 20 17 10 55 35 55M35 15C 50 17 60 55 35 55"/>
+  <path fill="rgb(0,0,0,0.25)" d="M47 25C 57 56 35 60 23 50C 32 48 41 50 50 35"/>
+  <path fill="rgb(255, 255, 89)" d="M5.71,16.85L8.23,26.33L0.00,21.00L-8.23,26.33L-5.71,16.85L-13.31,10.67L-3.53,10.15L-0.00,1.00L3.53,10.15L13.31,10.67L5.71,16.85z" transform="translate(36,28) scale(0.6,0.6)" stroke="black" stroke-width="1.5"/>
+</svg>

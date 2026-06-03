@@ -1,0 +1,25 @@
+<svg id="giftedGoldEgg" style="cursor: pointer; border-radius: 5px" viewBox="0 0 200 70" width="200" height="70">
+  <rect width="200" height="70" fill="rgb(255,255,255)"/>
+  <rect width="70" height="70" fill="rgb(225,225,225)"/>
+  <text x="130" y="18" fill="rgb(0,0,0)" text-anchor="middle" font-family="trebuchet ms" font-size="15px">
+    Gifted Gold Egg
+  </text>
+  <text x="130" y="37" fill="rgb(0,0,0)" text-anchor="middle" font-family="trebuchet ms" font-size="12px">
+    Hatches into a gifted
+  </text>
+  <text x="130" y="51" fill="rgb(0,0,0)" text-anchor="middle" font-family="trebuchet ms" font-size="12px">
+    epic, legendary, or
+  </text>
+  <text x="130" y="65" fill="rgb(0,0,0)" text-anchor="middle" font-family="trebuchet ms" font-size="12px">
+    mythic bee!
+  </text>
+  <text id="giftedGoldEgg_amount" x="67" y="67" fill="rgb(0,0,0)" text-anchor="end" font-family="calibri" font-size="14px"/>
+  <path fill="rgb(255,220,70)" stroke="rgb(0,0,0)" stroke-width="1.5" d="M35 15C 20 17 10 55 35 55M35 15C 50 17 60 55 35 55"/>
+  <path stroke="rgb(235,205,0)" stroke-width="2" fill="rgb(0,0,0,0)" d="M 25 25C 25 25 40 25 40 18M 22 34C 25 35 40 35 47 28M 22 44C 25 45 40 45 49 38M 28 52C 25 53 40 53 47 47"/>
+  <path stroke="rgb(255,255,255)" stroke-width="3" fill="rgb(0,0,0,0)" d="M 35 18C 30 20 28 22 27 26"/>
+  <path stroke="rgb(255,255,255)" stroke-width="3" fill="rgb(0,0,0,0)" d="M 35 18C 30 20 28 22 27 26M 25 16C 30 20 28 22 37 26" transform="translate(52,17) rotate(100) scale(0.5,0.5)"/>
+  <path stroke="rgb(255,255,255)" stroke-width="3" fill="rgb(0,0,0,0)" d="M 35 18C 30 20 28 22 27 26M 25 16C 30 20 28 22 37 26" transform="translate(20,22) rotate(28) scale(0.5,0.5)"/>
+  <path stroke="rgb(255,255,255)" stroke-width="3" fill="rgb(0,0,0,0)" d="M 35 18C 30 20 28 22 27 26M 25 16C 30 20 28 22 37 26" transform="translate(57,52) rotate(168) scale(0.5,0.5)"/>
+  <path fill="rgb(0,0,0,0.2)" d="M47 25C 57 56 35 60 23 50C 32 48 41 50 50 35"/>
+  <path fill="rgb(255, 255, 89)" d="M5.71,16.85L8.23,26.33L0.00,21.00L-8.23,26.33L-5.71,16.85L-13.31,10.67L-3.53,10.15L-0.00,1.00L3.53,10.15L13.31,10.67L5.71,16.85z" transform="translate(36,29) scale(0.6,0.6)" stroke="black" stroke-width="1.5"/>
+</svg>

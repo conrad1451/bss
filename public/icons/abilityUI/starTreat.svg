@@ -1,0 +1,20 @@
+<svg id="starTreat" style="cursor: pointer; border-radius: 5px" viewBox="0 0 200 70" width="200" height="70">
+  <rect width="200" height="70" fill="rgb(255,255,255)"/>
+  <rect width="70" height="70" fill="rgb(225,225,225)"/>
+  <text x="130" y="18" fill="rgb(0,0,0)" text-anchor="middle" font-family="trebuchet ms" font-size="16.5px">
+    Star Treat
+  </text>
+  <text x="130" y="35" fill="rgb(0,0,0)" text-anchor="middle" font-family="trebuchet ms" font-size="12px">
+    Improves a bee's
+  </text>
+  <text x="130" y="49" fill="rgb(0,0,0)" text-anchor="middle" font-family="trebuchet ms" font-size="12px">
+    bond by 1,000 and
+  </text>
+  <text x="130" y="64" fill="rgb(0,0,0)" text-anchor="middle" font-family="trebuchet ms" font-size="12px">
+    makes it gifted!
+  </text>
+  <text id="starTreat_amount" x="67" y="67" fill="rgb(0,0,0)" text-anchor="end" font-family="calibri" font-size="14px"/>
+  <path d="M 26 40C 14 39 4 12 30 28C 35 1 45 12 50 26C 68 10 73 31 60 41C 67 58 51 74 41 52C 37 58 2 74 26 40" stroke="rgb(0,0,0)" fill="rgb(186, 157, 54)" stroke-width="2" transform="scale(0.9,0.9) translate(-2,0)"/>
+  <path fill="rgb(255, 255, 110)" d="M5.71,16.85L8.23,26.33L0.00,21.00L-8.23,26.33L-5.71,16.85L-13.31,10.67L-3.53,10.15L-0.00,1.00L3.53,10.15L13.31,10.67L5.71,16.85z" transform="translate(34,23) scale(0.75,0.75) rotate(-7)" stroke="black" stroke-width="1.5"/>
+  <path d="M 31 14L 32 21M 52 23L 46 28M 44 52L 42 45M 16 50L 22 43M 13 25L 19 29" stroke="rgb(240, 255, 145)" fill="rgb(0,0,0,0)" stroke-width="2" transform="translate(2,0)"/>
+</svg>

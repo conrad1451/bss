@@ -1,0 +1,21 @@
+<svg id="enzymes" style="cursor: pointer; border-radius: 5px" viewBox="0 0 200 70" width="200" height="70">
+  <rect width="200" height="70" fill="rgb(255,255,255)"/>
+  <rect width="70" height="70" fill="rgb(225,225,225)"/>
+  <text x="130" y="18" fill="rgb(0,0,0)" text-anchor="middle" font-family="trebuchet ms" font-size="17px">
+    Enzymes
+  </text>
+  <text x="130" y="35" fill="rgb(0,0,0)" text-anchor="middle" font-family="trebuchet ms" font-size="11px">
+    Grants x1.5 convert
+  </text>
+  <text x="130" y="50" fill="rgb(0,0,0)" text-anchor="middle" font-family="trebuchet ms" font-size="11px">
+    rate and 10% instant
+  </text>
+  <text x="130" y="62" fill="rgb(0,0,0)" text-anchor="middle" font-family="trebuchet ms" font-size="10px">
+    conversion for 10 minutes.
+  </text>
+  <text id="enzymes_amount" x="67" y="67" fill="rgb(0,0,0)" text-anchor="end" font-family="calibri" font-size="14px"/>
+  <path d="M20 45 C20 30 50 30 50 45M20 45L20 47C20 60 50 60 50 47 L50 45" fill="rgb(100,255,100)" stroke="rgb(0,0,0)" strokeWeight="1.5" transform="translate(36,-15) scale(0.9,0.9) rotate(25)"/>
+  <path d="M20 45 C20 30 50 30 50 45M20 45L20 47C20 60 50 60 50 47 L50 45" fill="rgb(255,255,80)" stroke="rgb(0,0,0)" strokeWeight="1.5" transform="translate(-11,-9)"/>
+  <path d="M20 45 C20 30 50 30 50 45M20 45L20 47C20 60 50 60 50 47 L50 45" fill="rgb(0,0,0,0.2)" transform="translate(0,11) scale(0.7,0.5)"/>
+  <path d="M20 45 C20 30 50 30 50 45M20 45L20 47C20 60 50 60 50 47 L50 45" fill="rgb(0,0,0,0.2)" transform="translate(52,5) scale(0.7,0.5) rotate(44)"/>
+</svg>

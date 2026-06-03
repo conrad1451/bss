@@ -1,0 +1,892 @@
+﻿bss/
++--- .gitignore
++--- antPass.svg
++--- antPass.txt
++--- atomicTreat.svg
++--- atomicTreat.txt
++--- audio/
+|   +--- music_babyLove.js
+|   +--- music_bombToken.js
+|   +--- music_boostToken.js
+|   +--- music_flameFuelToken.js
+|   +--- music_focusToken.js
+|   +--- music_frog.js
+|   +--- music_gummyStar.js
+|   +--- music_haste.js
+|   +--- music_infernoToken.js
+|   +--- music_inflateBalloons.js
+|   +--- music_inspireToken.js
+|   +--- music_markToken.js
+|   +--- music_melodyToken.js
+|   +--- music_popStar.js
+|   +--- music_rageToken.js
+|   +--- music_scorchingStar.js
+|   \--- music_surpriseParty.js
++--- basicEgg.svg
++--- basicEgg.txt
++--- BeeSwarmSimulator_broken_in_two.txt
++--- bitterberry.svg
++--- bitterberry.txt
++--- blueberry.svg
++--- blueberry.txt
++--- blueDrive.svg
++--- blueDrive.txt
++--- blueExtract.svg
++--- blueExtract.txt
++--- bssGitCommitsPastTwoWeeks.txt
++--- bssGitCommitsPastWeek.txt
++--- causticWax.txt
++--- cloudVial.txt
++--- cog.txt
++--- comfortingVial.txt
++--- data/
+|   +--- bees.js
+|   +--- dialogue.js
+|   +--- effects.js
+|   +--- fieldData.js
+|   +--- itemEffects.js
+|   +--- items.js
+|   +--- mobData.js
+|   +--- quests.js
+|   +--- recipes.js
+|   \--- upgrades.js
++--- dataFilesForRepo/
+|   +--- edits since sunday may 3.txt
+|   +--- full context for commits - frontend.txt
+|   +--- full context for commits - may 9 at 751am.txt
+|   +--- new_refactor.patch
+|   \--- new_refactor.txt
++--- del.ps1
++--- dialogue.js
++--- diamondEgg.txt
++--- editsMadeMay162026.txt
++--- editsMay31_2026-231am.txt
++--- engine/
+|   +--- assetLoader.js
+|   +--- Bee.js
+|   +--- eventManager.js
+|   +--- flowerBuilder.js
+|   +--- gameLoop.js
+|   +--- index.js.unused.txt
+|   +--- input.js
+|   +--- inventory.js
+|   +--- noise.js
+|   +--- particles.js
+|   +--- physics.js
+|   +--- questManager.js
+|   +--- renderer.js
+|   +--- shaders.js
+|   +--- textRenderer.js
+|   +--- theOldRenderer.js
+|   +--- updateEngine.js
+|   \--- world.js
++--- entities/
+|   +--- bees.js
+|   +--- Mesh.js
+|   +--- mobs.js
+|   +--- npcs.js
+|   +--- Player.js
+|   +--- ReverseExplosion.js
+|   +--- tokens.js
+|   \--- Triangulate.js
++--- enzymes.txt
++--- Extract-SVG.ps1
++--- fieldDice.txt
++--- final/
+|   +--- microConverter.svg
+|   +--- mysvg_1.svg
+|   +--- mysvg_2.svg
+|   +--- mysvg_3.svg
+|   +--- mysvg_4.svg
+|   +--- mysvg_5.svg
+|   \--- settingsButton.svg
++--- FindAndNumberSvgFiles.ps1
++--- giftedDiamondEgg.txt
++--- giftedGoldEgg.txt
++--- giftedMythicEgg.txt
++--- giftedSilverEgg.txt
++--- glitchedDrive.txt
++--- glitter.txt
++--- GLSLShaders.js
++--- glue.txt
++--- goldEgg.txt
++--- hardWax.txt
++--- honeysuckle.txt
++--- icon-image.png
++--- index.html
++--- index.js
++--- index_cleaned.txt
++--- indexPreRefactor.html
++--- indexPreRefactor_cleaned.txt
++--- invigoratingVial.txt
++--- jellyBeans.txt
++--- loadedDice.txt
++--- magicBean.txt
++--- mapMesh.js
++--- MathHelper.js
++--- may302026_round2_edits.txt
++--- moonCharm.txt
++--- motivatingVial.txt
++--- movefiles.ps1
++--- mysvg_10.txt
++--- mysvg_11.txt
++--- mysvg_12.txt
++--- mysvg_13.txt
++--- mysvg_14.txt
++--- mysvg_15.txt
++--- mysvg_16.txt
++--- mysvg_17.txt
++--- mysvg_18.txt
++--- mysvg_19.txt
++--- mysvg_20.txt
++--- mysvg_21.txt
++--- mysvg_22.txt
++--- mysvg_23.txt
++--- mysvg_24.txt
++--- mysvg_25.txt
++--- mysvg_26.txt
++--- mysvg_27.txt
++--- mysvg_28.txt
++--- mysvg_29.txt
++--- mysvg_30.txt
++--- mysvg_31.txt
++--- mysvg_32.txt
++--- mysvg_33.txt
++--- mysvg_34.txt
++--- mysvg_35.txt
++--- mysvg_36.txt
++--- mysvg_37.txt
++--- mysvg_38.txt
++--- mysvg_39.txt
++--- mysvg_40.txt
++--- mysvg_41.txt
++--- mysvg_42.txt
++--- mysvg_43.txt
++--- mysvg_44.txt
++--- mysvg_45.txt
++--- mysvg_46.txt
++--- mysvg_47.txt
++--- mysvg_48.txt
++--- mysvg_49.txt
++--- mysvg_50.txt
++--- mysvg_51.txt
++--- mysvg_52.txt
++--- mysvg_53.txt
++--- mysvg_54.txt
++--- mysvg_55.txt
++--- mysvg_56.txt
++--- mysvg_57.txt
++--- mysvg_58.txt
++--- mysvg_59.txt
++--- mysvg_60.txt
++--- mysvg_61.txt
++--- mysvg_8.txt
++--- mysvg_9.txt
++--- mythicEgg.txt
++--- neonberry.txt
++--- oil.txt
++--- oldIndex.js
++--- package.json
++--- package-lock.json
++--- paperPlanter.txt
++--- pineapple.txt
++--- playerGear.js
++--- powershellScripts/
++--- project-tree-may312026at248am.txt
++--- project-tree-may312026at421am.txt
++--- public/
+|   +--- actionWarning.js
+|   +--- assets/
+|   |   +--- buffs/
+|   |   |   +--- blueBoost.svg
+|   |   |   +--- redBoost.svg
+|   |   |   +--- redDrive.svg
+|   |   |   +--- redExtractBuff.svg
+|   |   |   \--- superSmoothieBuff.svg
+|   |   +--- items/
+|   |   |   +--- redClayPlanter.svg
+|   |   |   +--- royalJelly.svg
+|   |   |   \--- starEgg.svg
+|   |   +--- passives/
+|   |   |   +--- balloonBlessing.svg
+|   |   |   \--- coconutShield.svg
+|   |   \--- ui/
+|   |       +--- antChallenge.svg
+|   |       +--- babyLove.svg
+|   |       +--- balloonAura.svg
+|   |       +--- balloonBlessing.svg
+|   |       +--- bambooFieldBoost.svg
+|   |       +--- bambooFieldWinds.svg
+|   |       +--- bearMorph.svg
+|   |       +--- bearMorph_.svg
+|   |       +--- beequipButton.svg
+|   |       +--- beesButton.svg
+|   |       +--- blackJellyBean.svg
+|   |       +--- blueBombSync.svg
+|   |       +--- blueDriveBuff.svg
+|   |       +--- blueExtractBuff.svg
+|   |       +--- blueFlowerFieldBoost.svg
+|   |       +--- blueFlowerFieldWinds.svg
+|   |       +--- blueJellyBean.svg
+|   |       +--- bombCombo.svg
+|   |       +--- brownJellyBean.svg
+|   |       +--- bubbleBloat.svg
+|   |       +--- bubbleBombsPassive.svg
+|   |       +--- cactusFieldBoost.svg
+|   |       +--- cactusFieldWinds.svg
+|   |       +--- cloudBoost.svg
+|   |       +--- cloverFieldBoost.svg
+|   |       +--- cloverFieldWinds.svg
+|   |       +--- coconut.svg
+|   |       +--- coconutFieldBoost.svg
+|   |       +--- coconutFieldWinds.svg
+|   |       +--- coconutShield.svg
+|   |       +--- coconutSurge.svg
+|   |       +--- coinScatterPassive.svg
+|   |       +--- comfortingNectar.svg
+|   |       +--- conversionBoost.svg
+|   |       +--- corruption.svg
+|   |       +--- dandelionFieldBoost.svg
+|   |       +--- dandelionFieldWinds.svg
+|   |       +--- darkHeat.svg
+|   |       +--- diamondDrainPassive.svg
+|   |       +--- enzymesBuff.svg
+|   |       +--- festiveCheer.svg
+|   |       +--- flameFuel.svg
+|   |       +--- flameHeat.svg
+|   |       +--- focus.svg
+|   |       +--- focusPulserPassive.svg
+|   |       +--- glitchedDriveBuff.svg
+|   |       +--- glueBuff.svg
+|   |       +--- greenJellyBean.svg
+|   |       +--- guidingStarAura.svg
+|   |       +--- guidingStarPassive.svg
+|   |       +--- gumdrops.svg
+|   |       +--- gummyBall.svg
+|   |       +--- gummyBallCombo.svg
+|   |       +--- gummyMorph.svg
+|   |       +--- gummyMorphPassive.svg
+|   |       +--- gummyStarAura.svg
+|   |       +--- gummyStarPassive.svg
+|   |       +--- haste.svg
+|   |       +--- haste_.svg
+|   |       +--- hastePulserPassive.svg
+|   |       +--- honey.svg
+|   |       +--- honeyMark.svg
+|   |       +--- ignitePassive.svg
+|   |       +--- inspire.svg
+|   |       +--- inventoryButton.svg
+|   |       +--- invigoratingNectar.svg
+|   |       +--- melody.svg
+|   |       +--- microConverter.svg
+|   |       +--- motivatingNectar.svg
+|   |       +--- mountainTopFieldBoost.svg
+|   |       +--- mountainTopFieldWinds.svg
+|   |       +--- mushroomFieldBoost.svg
+|   |       +--- mushroomFieldWinds.svg
+|   |       +--- oilBuff.svg
+|   |       +--- pepperPatchBoost.svg
+|   |       +--- pepperPatchWinds.svg
+|   |       +--- petalStormPassive.svg
+|   |       +--- pineapplePatchBoost.svg
+|   |       +--- pineapplePatchWinds.svg
+|   |       +--- pineTreeForestBoost.svg
+|   |       +--- pineTreeForestWinds.svg
+|   |       +--- pinkJellyBean.svg
+|   |       +--- polarPower.svg
+|   |       +--- pollenMark.svg
+|   |       +--- popStarAura.svg
+|   |       +--- popStarPassive.svg
+|   |       +--- preciseMark.svg
+|   |       +--- precision.svg
+|   |       +--- pumpkinPatchBoost.svg
+|   |       +--- pumpkinPatchWinds.svg
+|   |       +--- purplePotionBuff.svg
+|   |       +--- questButton.svg
+|   |       +--- rage.svg
+|   |       +--- redBombSync.svg
+|   |       +--- redBoost.svg
+|   |       +--- redDriveBuff.svg
+|   |       +--- redExtractBuff.svg
+|   |       +--- redJellyBean.svg
+|   |       +--- refreshingNectar.svg
+|   |       +--- rightBlenderButton.svg
+|   |       +--- roboChallengeBuff.svg
+|   |       +--- roseFieldBoost.svg
+|   |       +--- roseFieldWinds.svg
+|   |       +--- satisfyingNectar.svg
+|   |       +--- scienceEnhancement.svg
+|   |       +--- scorchingStarAura.svg
+|   |       +--- scorchingStarPassive.svg
+|   |       +--- settingsButton.svg
+|   |       +--- spiderFieldBoost.svg
+|   |       +--- spiderFieldWinds.svg
+|   |       +--- starSawPassive.svg
+|   |       +--- starShowerPassive.svg
+|   |       +--- stinger.svg
+|   |       +--- stingerBuff.svg
+|   |       +--- strawberryFieldBoost.svg
+|   |       +--- strawberryFieldWinds.svg
+|   |       +--- stumpFieldBoost.svg
+|   |       +--- stumpFieldWinds.svg
+|   |       +--- sunflowerFieldBoost.svg
+|   |       +--- sunflowerFieldWinds.svg
+|   |       +--- superSmoothieBuff.svg
+|   |       +--- tabbyLove.svg
+|   |       +--- ticket.svg
+|   |       +--- tidalSurge.svg
+|   |       +--- tideBlessing.svg
+|   |       +--- tidePower.svg
+|   |       +--- tropicalDrinkBuff.svg
+|   |       +--- whiteBoost.svg
+|   |       +--- whiteDriveBuff.svg
+|   |       +--- whiteJellyBean.svg
+|   |       \--- yellowJellyBean.svg
+|   +--- bee.svg
+|   +--- icons/
+|   |   +--- abilityUI/
+|   |   |   +--- antChallenge.svg
+|   |   |   +--- antChallenge.svg.txt
+|   |   |   +--- bambooFieldBoost.svg
+|   |   |   +--- bambooFieldBoost.svg.txt
+|   |   |   +--- bambooFieldWinds.svg
+|   |   |   +--- bearMorph.svg
+|   |   |   +--- bearMorph_.svg
+|   |   |   +--- blueDriveBuff.svg
+|   |   |   +--- blueDriveBuff.svg.txt
+|   |   |   +--- blueFlowerFieldBoost.svg
+|   |   |   +--- blueFlowerFieldBoost.svg.txt
+|   |   |   +--- blueFlowerFieldWinds.svg
+|   |   |   +--- bubbleBombsPassive.svg
+|   |   |   +--- bubbleBombsPassive.svg.txt
+|   |   |   +--- cactusFieldBoost.svg
+|   |   |   +--- cactusFieldBoost.svg.txt
+|   |   |   +--- cactusFieldWinds.svg
+|   |   |   +--- cloverFieldBoost.svg
+|   |   |   +--- cloverFieldBoost.svg.txt
+|   |   |   +--- cloverFieldWinds.svg
+|   |   |   +--- coconutFieldBoost.svg
+|   |   |   +--- coconutFieldBoost.svg.txt
+|   |   |   +--- coconutFieldWinds.svg
+|   |   |   +--- coconutHastePassive.svg
+|   |   |   +--- coconutHastePassive.svg.txt
+|   |   |   +--- coinScatterPassive.svg
+|   |   |   +--- coinScatterPassive.svg.txt
+|   |   |   +--- comfortingNectar.svg
+|   |   |   +--- comfortingNectar.svg.txt
+|   |   |   +--- dandelionFieldBoost.svg
+|   |   |   +--- dandelionFieldBoost.svg.txt
+|   |   |   +--- dandelionFieldWinds.svg
+|   |   |   +--- diamondDrainPassive.svg
+|   |   |   +--- diamondDrainPassive.svg.txt
+|   |   |   +--- emergencyCoconutShield.svg
+|   |   |   +--- emergencyCoconutShieldPassive.svg
+|   |   |   +--- emergencyCoconutShieldPassive.svg.txt
+|   |   |   +--- festiveCheer.svg
+|   |   |   +--- focusPulserPassive.svg
+|   |   |   +--- focusPulserPassive.svg.txt
+|   |   |   +--- glitchedDriveBuff.svg
+|   |   |   +--- glitchedDriveBuff.svg.txt
+|   |   |   +--- guidingStarPassive.svg
+|   |   |   +--- guidingStarPassive.svg.txt
+|   |   |   +--- gummyMorphPassive.svg
+|   |   |   +--- gummyMorphPassive.svg.txt
+|   |   |   +--- gummyStarPassive.svg
+|   |   |   +--- gummyStarPassive.svg.txt
+|   |   |   +--- hastePulserPassive.svg
+|   |   |   +--- hastePulserPassive.svg.txt
+|   |   |   +--- ignitePassive.svg
+|   |   |   +--- ignitePassive.svg.txt
+|   |   |   +--- inspireCoconutsPassive.svg
+|   |   |   +--- inspireCoconutsPassive.svg.txt
+|   |   |   +--- invigoratingNectar.svg
+|   |   |   +--- invigoratingNectar.svg.txt
+|   |   |   +--- motivatingNectar.svg
+|   |   |   +--- motivatingNectar.svg.txt
+|   |   |   +--- mountainTopFieldBoost.svg
+|   |   |   +--- mountainTopFieldBoost.svg.txt
+|   |   |   +--- mountainTopFieldWinds.svg
+|   |   |   +--- mushroomFieldBoost.svg
+|   |   |   +--- mushroomFieldBoost.svg.txt
+|   |   |   +--- mushroomFieldWinds.svg
+|   |   |   +--- pepperold.svg
+|   |   |   +--- pepperold.svg.txt
+|   |   |   +--- pepperPatchFieldBoost.svg
+|   |   |   +--- pepperPatchFieldBoost.svg.txt
+|   |   |   +--- pepperPatchWinds.svg
+|   |   |   +--- petalStormPassive.svg
+|   |   |   +--- petalStormPassive.svg.txt
+|   |   |   +--- pineapplePatchBoost.svg
+|   |   |   +--- pineapplePatchBoost.svg.txt
+|   |   |   +--- pineapplePatchWinds.svg
+|   |   |   +--- pineTreeForestBoost.svg
+|   |   |   +--- pineTreeForestBoost.svg.txt
+|   |   |   +--- pineTreeForestWinds.svg
+|   |   |   +--- polarPower.svg
+|   |   |   +--- polarPower.svg.txt
+|   |   |   +--- popStarPassive.svg
+|   |   |   +--- popStarPassive.svg.txt
+|   |   |   +--- pumpkinPatchBoost.svg
+|   |   |   +--- pumpkinPatchBoost.svg.txt
+|   |   |   +--- pumpkinPatchWinds.svg
+|   |   |   +--- redDriveBuff.svg
+|   |   |   +--- redDriveBuff.svg.txt
+|   |   |   +--- refreshingNectar.svg
+|   |   |   +--- refreshingNectar.svg.txt
+|   |   |   +--- roboChallengeBuff.svg
+|   |   |   +--- roboChallengeBuff.svg.txt
+|   |   |   +--- roseFieldBoost.svg
+|   |   |   +--- roseFieldBoost.svg.txt
+|   |   |   +--- roseFieldWinds.svg
+|   |   |   +--- satisfyingNectar.svg
+|   |   |   +--- satisfyingNectar.svg.txt
+|   |   |   +--- scienceEnhancement.svg
+|   |   |   +--- scienceEnhancement.svg.txt
+|   |   |   +--- scorchingStarPassive.svg
+|   |   |   +--- scorchingStarPassive.svg.txt
+|   |   |   +--- spiderFieldBoost.svg
+|   |   |   +--- spiderFieldBoost.svg.txt
+|   |   |   +--- spiderFieldWinds.svg
+|   |   |   +--- starSawPassive.svg
+|   |   |   +--- starSawPassive.svg.txt
+|   |   |   +--- starShowerPassive.svg
+|   |   |   +--- starShowerPassive.svg.txt
+|   |   |   +--- strawberryFieldBoost.svg
+|   |   |   +--- strawberryFieldBoost.svg.txt
+|   |   |   +--- strawberryFieldWinds.svg
+|   |   |   +--- stumpFieldBoost.svg
+|   |   |   +--- stumpFieldBoost.svg.txt
+|   |   |   +--- stumpFieldWinds.svg
+|   |   |   +--- sunflowerFieldBoost.svg
+|   |   |   +--- sunflowerFieldBoost.svg.txt
+|   |   |   +--- sunflowerFieldWinds.svg
+|   |   |   +--- sunflowerFieldWinds.svg.txt
+|   |   |   +--- tabbyLove.svg
+|   |   |   +--- tabbyLove.svg.txt
+|   |   |   +--- whiteDriveBuff.svg
+|   |   |   +--- whiteDriveBuff.svg.txt
+|   |   |   +--- xFlamePassive.svg
+|   |   |   \--- xFlamePassive.svg.txt
+|   |   +--- planters/
+|   |   |   +--- aa copy 2.svg
+|   |   |   +--- aa copy 3.svg
+|   |   |   +--- pesticidePlanter.svg
+|   |   |   +--- pesticidePlanter.svg.txt
+|   |   |   +--- petalPlanter.svg
+|   |   |   +--- petalPlanter.svg.txt
+|   |   |   +--- plentyPlanter.svg
+|   |   |   \--- plentyPlanter.svg.txt
+|   |   \--- shopUI/
+|   |       +--- leftShopButton.svg
+|   |       +--- leftShopButton.svg.txt
+|   |       +--- rightShopButton.svg
+|   |       \--- rightShopButton.svg.txt
+|   +--- mapping.txt
+|   +--- roboMenu.js
+|   +--- roboQuestMenu.js
+|   +--- shrineMenu.js
+|   \--- vite.svg
++--- purplePotion.txt
++--- README.md
++--- recipes.js
++--- redDrive.txt
++--- redExtract.txt
++--- refreshingVial.txt
++--- Rename-SvgBatch.ps1
++--- Rename-SvgBatch-Alt.ps1
++--- Rename-SvgById.ps1
++--- roboPass.txt
++--- royalJelly.txt
++--- satisfyingVial.txt
++--- silverEgg.txt
++--- smoothDice.txt
++--- softWax.txt
++--- spiritPetal.txt
++--- ssa.txt
++--- starEgg.txt
++--- starJelly.txt
++--- starTreat.txt
++--- stash_backup_new_0.txt
++--- stash_backup_new_1.txt
++--- stash_backup_new_2.txt
++--- stash_backup_new_3.txt
++--- stash_backup_new_4.txt
++--- stash_backup_new_5.txt
++--- stash_backup_new0.txt
++--- state/
+|   \--- gameState.js
++--- strawberry.txt
++--- sunflowerSeed.txt
++--- superSmoothie.txt
++--- svgCleaningShim.ps1
++--- svgcleaningSVGtoSVG.ps1
++--- svgcleaningTXTtoSVG.ps1
++--- svgcleaningTXTtoSVGAlt.ps1
++--- svgcleaningTXTtoSVGBatch.ps1
++--- swirledWax.txt
++--- testEngine.js
++--- testscript1.ps1
++--- textures.js
++--- theCleanedSVGs/
+|   +--- antChallenge.txt
+|   +--- babyLove.txt
+|   +--- balloonAura.txt
+|   +--- balloonBlessing.txt
+|   +--- bambooFieldBoost.txt
+|   +--- bambooFieldWinds.txt
+|   +--- bearMorph.txt
+|   +--- bearMorph_.txt
+|   +--- beequipButton.txt
+|   +--- beesButton.txt
+|   +--- blackJellyBean.txt
+|   +--- blueBombSync.txt
+|   +--- blueBoost.txt
+|   +--- blueDriveBuff.txt
+|   +--- blueExtractBuff.txt
+|   +--- blueFlowerFieldBoost.txt
+|   +--- blueFlowerFieldWinds.txt
+|   +--- blueJellyBean.txt
+|   +--- bombCombo.txt
+|   +--- brownJellyBean.txt
+|   +--- bubbleBloat.txt
+|   +--- bubbleBombsPassive.txt
+|   +--- cactusFieldBoost.txt
+|   +--- cactusFieldWinds.txt
+|   +--- cloudBoost.txt
+|   +--- cloverFieldBoost.txt
+|   +--- cloverFieldWinds.txt
+|   +--- coconut.txt
+|   +--- coconutFieldBoost.txt
+|   +--- coconutFieldWinds.txt
+|   +--- coconutShield.txt
+|   +--- coconutSurge.txt
+|   +--- coinScatterPassive.txt
+|   +--- comfortingNectar.txt
+|   +--- conversionBoost.txt
+|   +--- corruption.txt
+|   +--- dandelionFieldBoost.txt
+|   +--- dandelionFieldWinds.txt
+|   +--- darkHeat.txt
+|   +--- diamondDrainPassive.txt
+|   +--- enzymesBuff.txt
+|   +--- festiveCheer.txt
+|   +--- flameFuel.txt
+|   +--- flameHeat.txt
+|   +--- focus.txt
+|   +--- focusPulserPassive.txt
+|   +--- glitchedDriveBuff.txt
+|   +--- glueBuff.txt
+|   +--- greenJellyBean.txt
+|   +--- guidingStarAura.txt
+|   +--- guidingStarPassive.txt
+|   +--- gumdrops.txt
+|   +--- gummyBall.txt
+|   +--- gummyBallCombo.txt
+|   +--- gummyMorph.txt
+|   +--- gummyMorphPassive.txt
+|   +--- gummyStarAura.txt
+|   +--- gummyStarPassive.txt
+|   +--- haste.txt
+|   +--- haste_.txt
+|   +--- hastePulserPassive.txt
+|   +--- honey.txt
+|   +--- honeyMark.txt
+|   +--- ignitePassive.txt
+|   +--- inspire.txt
+|   +--- inventoryButton.txt
+|   +--- invigoratingNectar.txt
+|   +--- melody.txt
+|   +--- microConverter.txt
+|   +--- motivatingNectar.txt
+|   +--- mountainTopFieldBoost.txt
+|   +--- mountainTopFieldWinds.txt
+|   +--- mushroomFieldBoost.txt
+|   +--- mushroomFieldWinds.txt
+|   +--- oilBuff.txt
+|   +--- pepperPatchBoost.txt
+|   +--- pepperPatchWinds.txt
+|   +--- petalStormPassive.txt
+|   +--- pineapplePatchBoost.txt
+|   +--- pineapplePatchWinds.txt
+|   +--- pineTreeForestBoost.txt
+|   +--- pineTreeForestWinds.txt
+|   +--- pinkJellyBean.txt
+|   +--- polarPower.txt
+|   +--- pollenMark.txt
+|   +--- popStarAura.txt
+|   +--- popStarPassive.txt
+|   +--- preciseMark.txt
+|   +--- precision.txt
+|   +--- pumpkinPatchBoost.txt
+|   +--- pumpkinPatchWinds.txt
+|   +--- purplePotionBuff.txt
+|   +--- questButton.txt
+|   +--- rage.txt
+|   +--- redBombSync.txt
+|   +--- redBoost.txt
+|   +--- redDriveBuff.txt
+|   +--- redExtractBuff.txt
+|   +--- redJellyBean.txt
+|   +--- refreshingNectar.txt
+|   +--- roboChallengeBuff.txt
+|   +--- roseFieldBoost.txt
+|   +--- roseFieldWinds.txt
+|   +--- satisfyingNectar.txt
+|   +--- scienceEnhancement.txt
+|   +--- scorchingStarAura.txt
+|   +--- scorchingStarPassive.txt
+|   +--- settingsButton.txt
+|   +--- spiderFieldBoost.txt
+|   +--- spiderFieldWinds.txt
+|   +--- starSawPassive.txt
+|   +--- starShowerPassive.txt
+|   +--- stinger.txt
+|   +--- stingerBuff.txt
+|   +--- strawberryFieldBoost.txt
+|   +--- strawberryFieldWinds.txt
+|   +--- stumpFieldBoost.txt
+|   +--- stumpFieldWinds.txt
+|   +--- sunflowerFieldBoost.txt
+|   +--- sunflowerFieldWinds.txt
+|   +--- superSmoothieBuff.txt
+|   +--- tabbyLove.txt
+|   +--- ticket.txt
+|   +--- tidalSurge.txt
+|   +--- tideBlessing.txt
+|   +--- tidePower.txt
+|   +--- tropicalDrinkBuff.txt
+|   +--- whiteBoost.txt
+|   +--- whiteDriveBuff.txt
+|   +--- whiteJellyBean.txt
+|   \--- yellowJellyBean.txt
++--- thesvgs/
+|   +--- mysvg_1.txt
+|   +--- mysvg_10.txt
+|   +--- mysvg_100.txt
+|   +--- mysvg_101.txt
+|   +--- mysvg_102.txt
+|   +--- mysvg_103.txt
+|   +--- mysvg_104.txt
+|   +--- mysvg_105.txt
+|   +--- mysvg_106.txt
+|   +--- mysvg_107.txt
+|   +--- mysvg_108.txt
+|   +--- mysvg_109.txt
+|   +--- mysvg_11.txt
+|   +--- mysvg_110.txt
+|   +--- mysvg_111.txt
+|   +--- mysvg_112.txt
+|   +--- mysvg_113.txt
+|   +--- mysvg_114.txt
+|   +--- mysvg_115.txt
+|   +--- mysvg_116.txt
+|   +--- mysvg_117.txt
+|   +--- mysvg_118.txt
+|   +--- mysvg_119.txt
+|   +--- mysvg_12.txt
+|   +--- mysvg_120.txt
+|   +--- mysvg_121.txt
+|   +--- mysvg_122.txt
+|   +--- mysvg_123.txt
+|   +--- mysvg_124.txt
+|   +--- mysvg_125.txt
+|   +--- mysvg_126.txt
+|   +--- mysvg_127.txt
+|   +--- mysvg_128.txt
+|   +--- mysvg_129.txt
+|   +--- mysvg_13.txt
+|   +--- mysvg_130.txt
+|   +--- mysvg_131.txt
+|   +--- mysvg_132.txt
+|   +--- mysvg_133.txt
+|   +--- mysvg_134.txt
+|   +--- mysvg_135.txt
+|   +--- mysvg_136.txt
+|   +--- mysvg_137.txt
+|   +--- mysvg_138.txt
+|   +--- mysvg_139.txt
+|   +--- mysvg_14.txt
+|   +--- mysvg_140.txt
+|   +--- mysvg_141.txt
+|   +--- mysvg_142.txt
+|   +--- mysvg_143.txt
+|   +--- mysvg_144.txt
+|   +--- mysvg_145.txt
+|   +--- mysvg_146.txt
+|   +--- mysvg_147.txt
+|   +--- mysvg_148.txt
+|   +--- mysvg_149.txt
+|   +--- mysvg_15.txt
+|   +--- mysvg_150.txt
+|   +--- mysvg_151.txt
+|   +--- mysvg_152.txt
+|   +--- mysvg_153.txt
+|   +--- mysvg_154.txt
+|   +--- mysvg_155.txt
+|   +--- mysvg_156.txt
+|   +--- mysvg_157.txt
+|   +--- mysvg_158.txt
+|   +--- mysvg_159.txt
+|   +--- mysvg_16.txt
+|   +--- mysvg_160.txt
+|   +--- mysvg_161.txt
+|   +--- mysvg_162.txt
+|   +--- mysvg_163.txt
+|   +--- mysvg_164.txt
+|   +--- mysvg_165.txt
+|   +--- mysvg_166.txt
+|   +--- mysvg_167.txt
+|   +--- mysvg_168.txt
+|   +--- mysvg_169.txt
+|   +--- mysvg_17.txt
+|   +--- mysvg_170.txt
+|   +--- mysvg_171.txt
+|   +--- mysvg_172.txt
+|   +--- mysvg_173.txt
+|   +--- mysvg_174.txt
+|   +--- mysvg_175.txt
+|   +--- mysvg_176.txt
+|   +--- mysvg_177.txt
+|   +--- mysvg_178.txt
+|   +--- mysvg_179.txt
+|   +--- mysvg_18.txt
+|   +--- mysvg_180.txt
+|   +--- mysvg_181.txt
+|   +--- mysvg_182.txt
+|   +--- mysvg_183.txt
+|   +--- mysvg_184.txt
+|   +--- mysvg_185.txt
+|   +--- mysvg_186.txt
+|   +--- mysvg_187.txt
+|   +--- mysvg_188.txt
+|   +--- mysvg_189.txt
+|   +--- mysvg_19.txt
+|   +--- mysvg_190.txt
+|   +--- mysvg_191.txt
+|   +--- mysvg_192.txt
+|   +--- mysvg_193.txt
+|   +--- mysvg_194.txt
+|   +--- mysvg_195.txt
+|   +--- mysvg_196.txt
+|   +--- mysvg_197.txt
+|   +--- mysvg_198.txt
+|   +--- mysvg_199.txt
+|   +--- mysvg_2.txt
+|   +--- mysvg_20.txt
+|   +--- mysvg_200.txt
+|   +--- mysvg_201.txt
+|   +--- mysvg_202.txt
+|   +--- mysvg_203.txt
+|   +--- mysvg_204.txt
+|   +--- mysvg_205.txt
+|   +--- mysvg_206.txt
+|   +--- mysvg_207.txt
+|   +--- mysvg_208.txt
+|   +--- mysvg_21.txt
+|   +--- mysvg_22.txt
+|   +--- mysvg_23.txt
+|   +--- mysvg_24.txt
+|   +--- mysvg_25.txt
+|   +--- mysvg_26.txt
+|   +--- mysvg_27.txt
+|   +--- mysvg_28.txt
+|   +--- mysvg_29.txt
+|   +--- mysvg_3.txt
+|   +--- mysvg_30.txt
+|   +--- mysvg_31.txt
+|   +--- mysvg_32.txt
+|   +--- mysvg_33.txt
+|   +--- mysvg_34.txt
+|   +--- mysvg_35.txt
+|   +--- mysvg_36.txt
+|   +--- mysvg_37.txt
+|   +--- mysvg_38.txt
+|   +--- mysvg_39.txt
+|   +--- mysvg_4.txt
+|   +--- mysvg_40.txt
+|   +--- mysvg_41.txt
+|   +--- mysvg_42.txt
+|   +--- mysvg_43.txt
+|   +--- mysvg_44.txt
+|   +--- mysvg_45.txt
+|   +--- mysvg_46.txt
+|   +--- mysvg_47.txt
+|   +--- mysvg_48.txt
+|   +--- mysvg_49.txt
+|   +--- mysvg_5.txt
+|   +--- mysvg_50.txt
+|   +--- mysvg_51.txt
+|   +--- mysvg_52.txt
+|   +--- mysvg_53.txt
+|   +--- mysvg_54.txt
+|   +--- mysvg_55.txt
+|   +--- mysvg_56.txt
+|   +--- mysvg_57.txt
+|   +--- mysvg_58.txt
+|   +--- mysvg_59.txt
+|   +--- mysvg_6.txt
+|   +--- mysvg_60.txt
+|   +--- mysvg_61.txt
+|   +--- mysvg_62.txt
+|   +--- mysvg_63.txt
+|   +--- mysvg_64.txt
+|   +--- mysvg_65.txt
+|   +--- mysvg_66.txt
+|   +--- mysvg_67.txt
+|   +--- mysvg_68.txt
+|   +--- mysvg_69.txt
+|   +--- mysvg_7.txt
+|   +--- mysvg_70.txt
+|   +--- mysvg_71.txt
+|   +--- mysvg_72.txt
+|   +--- mysvg_73.txt
+|   +--- mysvg_74.txt
+|   +--- mysvg_75.txt
+|   +--- mysvg_76.txt
+|   +--- mysvg_77.txt
+|   +--- mysvg_78.txt
+|   +--- mysvg_79.txt
+|   +--- mysvg_8.txt
+|   +--- mysvg_80.txt
+|   +--- mysvg_81.txt
+|   +--- mysvg_82.txt
+|   +--- mysvg_83.txt
+|   +--- mysvg_84.txt
+|   +--- mysvg_85.txt
+|   +--- mysvg_86.txt
+|   +--- mysvg_87.txt
+|   +--- mysvg_88.txt
+|   +--- mysvg_89.txt
+|   +--- mysvg_9.txt
+|   +--- mysvg_90.txt
+|   +--- mysvg_91.txt
+|   +--- mysvg_92.txt
+|   +--- mysvg_93.txt
+|   +--- mysvg_94.txt
+|   +--- mysvg_95.txt
+|   +--- mysvg_96.txt
+|   +--- mysvg_97.txt
+|   +--- mysvg_98.txt
+|   \--- mysvg_99.txt
++--- thumbnail.js
++--- translator.txt
++--- treat.txt
++--- tropicalDrink.txt
++--- turpentine.txt
++--- ui/
+|   +--- components/
+|   |   +--- abilityLayout.js
+|   |   +--- amuletUILayout.js
+|   |   +--- amuletUIWarnLayout.js
+|   |   +--- menuLayout.js
+|   |   \--- shopLayout.js
+|   +--- menu.js
+|   +--- questRenderer.js
+|   +--- style.css
+|   \--- vanillaUIBridge.js
++--- utils/
+|   +--- db.js
+|   +--- input.js
+|   \--- math.js
++--- whirligig.txt
+\--- whiteDrive.txt
