@@ -1,3 +1,5 @@
+// ui/components/amuletUILayout.js
+
 export const injectAmuletUIHTML = (amuletUIWarnLayout) => {
   container.insertAdjacentHTML(
     "beforeend",

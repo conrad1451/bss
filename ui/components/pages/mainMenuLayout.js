@@ -1,3 +1,5 @@
+// ui/components/pages/mainMenuLayout.js
+
 export const injectMainMenuLayout = (container) => {
   container.insertAdjacentHTML(
     "beforeend",

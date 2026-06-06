@@ -1,3 +1,5 @@
+// ui/components/shopLayout.js
+
 export const injectShopHTML = (container) => {
   container.insertAdjacentHTML(
     "beforeend",

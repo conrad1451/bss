@@ -1,3 +1,5 @@
+// ui/components/pages/selectLayout.js
+
 export const injectSelectLayout = (container) => {
   container.insertAdjacentHTML(
     "beforeend",

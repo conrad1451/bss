@@ -1,3 +1,5 @@
+// ui/components/pages/infoLayout.js
+
 export const injectInfoLayout = (container) => {
   container.insertAdjacentHTML(
     "beforeend",

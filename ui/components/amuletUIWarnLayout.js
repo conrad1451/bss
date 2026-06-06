@@ -1,4 +1,5 @@
-// Inside your src/ui/components/menuLayout.js file:
+// ui/components/amuletUIWarnLayout.js
+
 export const injectAmuletUIWarnHTML = (container) => {
   container.insertAdjacentHTML(
     "beforeend",
