@@ -237,6 +237,18 @@ async function BeeSwarmSimulator(saveData) {
     // CHQ: Gemini AI: Handoff compiled mesh geometry to the GPU
     renderer.uploadFlowerMesh(flowerMeshDataStaging);
 
+    // CHQ: Claude AI added for testing
+    console.log(
+      "Flower staging verts (first 24 floats):",
+      flowerMeshDataStaging.verts.slice(0, 24),
+    );
+    console.log(
+      "Flower staging index (first 6):",
+      flowerMeshDataStaging.index.slice(0, 6),
+    );
+    console.log("Total verts:", flowerMeshDataStaging.verts.length);
+    console.log("Total indices:", flowerMeshDataStaging.index.length);
+
     // 🛠️ ---------------- Step F: ENGINE STARTUP & EVENT LISTENERS -----------------
     initGameWorld(gameState); // Populates NPCs and Mobs  //ENGINE STARTUP --
     initInputHandlers(gameState, uiCanvas); // Attach Input listeners

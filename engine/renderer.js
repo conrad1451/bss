@@ -1,5 +1,4 @@
 // engine/renderer.js
-// import * as MATH from "../utils/math.js";
 
 import { MATH } from "../utils/math";
 
@@ -19,7 +18,7 @@ export class Renderer {
     this.width = width;
     this.height = height;
 
-    this.projectionMatrix = new Float32Array(16);
+    this.projectionMatrix = new Float32Array(16); // CHQ: stored this.projectionMatrix as a property of Renderer class.
     this.viewMatrix = new Float32Array(16);
 
     // Explicitly initialize the cache directly on the class instance
@@ -37,6 +36,22 @@ export class Renderer {
         vertexBuffer: null,
         vertCount: 4,
       },
+    };
+
+    // CHQ: Gemini AI added
+    this.meshSchema = {
+      flowers: { attributes: ["vertPos", "vertUV", "vertGoo"], stride: 8 },
+      bees: {
+        attributes: [
+          "vertPos",
+          "vertUV",
+          "instance_pos",
+          "instance_rotation",
+          "instance_uv",
+        ],
+        stride: 5,
+      }, // CHQ: I fixed
+      mobs: { attributes: ["vertPos", "vertColor"], stride: 5 },
     };
 
     // Internal WebGL program storage lane
@@ -79,6 +94,43 @@ export class Renderer {
     gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
   }
 
+  // CHQ: Gemini AI added
+  /**
+   * Automatically binds attributes based on the defined mesh schema
+   */
+  bindMeshAttributes(meshKey, program) {
+    const gl = this.gl;
+    const schema = this.meshSchema[meshKey];
+    if (!schema) return;
+
+    const stride = schema.stride * 4; // Convert float count to bytes
+    let offset = 0;
+
+    schema.attributes.forEach((attrName) => {
+      const location = gl.getAttribLocation(program, attrName);
+
+      if (location !== -1) {
+        gl.enableVertexAttribArray(location);
+
+        // Logic to determine size based on attribute name
+        // vertPos is usually 3, vertUV is 2, vertColor is 3
+        const size =
+          attrName.includes("Pos") || attrName.includes("Color")
+            ? 3
+            : attrName.includes("UV")
+              ? 4
+              : 1; // CHQ: Claude AI added case for vertGoo
+
+        gl.vertexAttribPointer(location, size, gl.FLOAT, false, stride, offset);
+        console.log(
+          `attr: ${attrName}, location: ${location}, size: ${size}, offset: ${offset}, stride: ${stride}`,
+        );
+        // Advance the offset for the next attribute
+        offset += size * 4;
+      }
+    });
+  }
+
   /**
    * Uploads raw CPU flower vertex/index arrays directly to GPU memory channels.
    * @param {Object} stagingData - { verts: number[], index: number[] }
@@ -87,16 +139,19 @@ export class Renderer {
     const gl = this.gl;
 
     if (!stagingData || !stagingData.verts || stagingData.verts.length === 0) {
-      console.warn(
-        "⚠️ Graphics Warning: Attempted to upload empty or invalid flower staging data.",
-      );
+      console.warn("⚠️ Attempted to upload empty flower staging data.");
       return;
     }
 
-    // 1. Store total indices to draw during drawElements execution calls
     this.meshes.flowers.vertCount = stagingData.index.length;
 
-    // 2. Allocate and Bind Vertex Array Buffer (Coordinates, UVs, Normals)
+    // CHQ: Claude AI: Create and bind a VAO
+    this.meshes.flowers.vao = gl.createVertexArray();
+    gl.bindVertexArray(this.meshes.flowers.vao);
+
+    console.log("flower VAO created:", this.meshes.flowers.vao);
+
+    // Vertex buffer
     this.meshes.flowers.vertexBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, this.meshes.flowers.vertexBuffer);
     gl.bufferData(
@@ -105,18 +160,67 @@ export class Renderer {
       gl.STATIC_DRAW,
     );
 
-    // 3. Allocate and Bind Element Array Buffer (Triangle index drawing sequences)
+    // Set up attributes WHILE VAO is bound so they get recorded into it
+    // vertPos: 3 floats, offset 0
+    gl.enableVertexAttribArray(0);
+    gl.vertexAttribPointer(0, 3, gl.FLOAT, false, 32, 0);
+    // vertUV: 4 floats, offset 12
+    gl.enableVertexAttribArray(1);
+    gl.vertexAttribPointer(1, 4, gl.FLOAT, false, 32, 12);
+    // vertGoo: 1 float, offset 28
+    gl.enableVertexAttribArray(2);
+    gl.vertexAttribPointer(2, 1, gl.FLOAT, false, 32, 28);
+
+    // Index buffer — also recorded into VAO
     this.meshes.flowers.indexBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.meshes.flowers.indexBuffer);
     gl.bufferData(
       gl.ELEMENT_ARRAY_BUFFER,
-      new Uint16Array(stagingData.index),
+      new Uint32Array(stagingData.index),
       gl.STATIC_DRAW,
     );
 
+    // Unbind when done
+    gl.bindVertexArray(null);
+
     console.log(
-      `⚡ GPU Upload Complete: ${stagingData.index.length / 3} procedural flower triangles bound to pipelines.`,
+      `⚡ GPU Upload Complete: ${stagingData.index.length / 3} flower triangles.`,
     );
+
+    // if (!stagingData || !stagingData.verts || stagingData.verts.length === 0) {
+    //   console.warn(
+    //     "⚠️ Graphics Warning: Attempted to upload empty or invalid flower staging data.",
+    //   );
+    //   return;
+    // }
+
+    // // 1. Store total indices to draw during drawElements execution calls
+    // this.meshes.flowers.vertCount = stagingData.index.length;
+
+    // // 2. Allocate and Bind Vertex Array Buffer (Coordinates, UVs, Normals)
+    // this.meshes.flowers.vertexBuffer = gl.createBuffer();
+    // gl.bindBuffer(gl.ARRAY_BUFFER, this.meshes.flowers.vertexBuffer);
+    // gl.bufferData(
+    //   gl.ARRAY_BUFFER,
+    //   new Float32Array(stagingData.verts),
+    //   gl.STATIC_DRAW,
+    // );
+
+    // // 3. Allocate and Bind Element Array Buffer (Triangle index drawing sequences)
+    // this.meshes.flowers.indexBuffer = gl.createBuffer();
+    // gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.meshes.flowers.indexBuffer);
+    // gl.bufferData(
+    //   gl.ELEMENT_ARRAY_BUFFER,
+    //   new Uint32Array(stagingData.index), // CHQ: Claude AI: changed Uint16Array to Uint32Array
+    //   gl.STATIC_DRAW,
+    // );
+
+    // console.log(
+    //   `⚡ GPU Upload Complete: ${stagingData.index.length / 3} procedural flower triangles bound to pipelines.`,
+    // );
+
+    // // Unbind when done
+    // gl.bindVertexArray(null);
   }
 
   // Defensive compilation utility encapsulated in the class
@@ -284,317 +388,173 @@ export class Renderer {
     return null;
   }
 
-  drawFlowersNew(state, viewMatrix, projectionMatrix) {
-    const gl = this.gl;
-    const program = this.programs.flower;
-    const cache = this.glCache.flower;
+  // drawFlowersNew(state, viewMatrix, projectionMatrix) {
+  //   const gl = this.gl;
+  //   const program = this.programs.flower;
+  //   const cache = this.glCache.flower;
 
-    // 1. Activate the Program
-    gl.useProgram(program);
+  //   // 1. Activate the Program
+  //   gl.useProgram(program);
 
-    // 2. Pass Matrices (Use the cache!)
-    if (cache.projMatrix)
-      gl.uniformMatrix4fv(cache.projMatrix, false, projectionMatrix);
-    if (cache.viewMatrix)
-      gl.uniformMatrix4fv(cache.viewMatrix, false, viewMatrix);
+  //   // 2. Pass Matrices (Use the cache!)
+  //   if (cache.projMatrix)
+  //     gl.uniformMatrix4fv(cache.projMatrix, false, projectionMatrix);
+  //   if (cache.viewMatrix)
+  //     gl.uniformMatrix4fv(cache.viewMatrix, false, viewMatrix);
 
-    // 3. Bind Texture (Assuming you have a texture atlas for flowers)
-    if (this.textures && this.textures.flowers) {
-      gl.activeTexture(gl.TEXTURE0);
-      gl.bindTexture(gl.TEXTURE_2D, this.textures.flowers);
-      const uSampler = gl.getUniformLocation(program, "uSampler");
-      if (uSampler) gl.uniform1i(uSampler, 0);
-    }
+  //   // 3. Bind Texture (Assuming you have a texture atlas for flowers)
+  //   if (this.textures && this.textures.flowers) {
+  //     gl.activeTexture(gl.TEXTURE0);
+  //     gl.bindTexture(gl.TEXTURE_2D, this.textures.flowers);
+  //     const uSampler = gl.getUniformLocation(program, "uSampler");
+  //     if (uSampler) gl.uniform1i(uSampler, 0);
+  //   }
 
-    // 4. Bind Geometry
-    if (this.meshes.flowers && this.meshes.flowers.vertexBuffer) {
-      gl.bindBuffer(gl.ARRAY_BUFFER, this.meshes.flowers.vertexBuffer);
+  //   // 4. Bind Geometry
+  //   if (this.meshes.flowers && this.meshes.flowers.vertexBuffer) {
+  //     gl.bindBuffer(gl.ARRAY_BUFFER, this.meshes.flowers.vertexBuffer);
 
-      // Ensure stride matches your vertex buffer structure (e.g., 8 floats * 4 bytes = 32)
-      const stride = 8 * 4;
+  //     // Ensure stride matches your vertex buffer structure (e.g., 8 floats * 4 bytes = 32)
+  //     const stride = 8 * 4;
 
-      // Enable attributes (assuming you have location indices stored in cache)
-      if (cache.vertPos !== undefined) {
-        gl.enableVertexAttribArray(cache.vertPos);
-        gl.vertexAttribPointer(cache.vertPos, 3, gl.FLOAT, false, stride, 0);
-      }
-      if (cache.vertUV !== undefined) {
-        gl.enableVertexAttribArray(cache.vertUV);
-        gl.vertexAttribPointer(cache.vertUV, 4, gl.FLOAT, false, stride, 3 * 4);
-      }
+  //     // Enable attributes (assuming you have location indices stored in cache)
+  //     if (cache.vertPos !== undefined) {
+  //       gl.enableVertexAttribArray(cache.vertPos);
+  //       gl.vertexAttribPointer(cache.vertPos, 3, gl.FLOAT, false, stride, 0);
+  //     }
+  //     if (cache.vertUV !== undefined) {
+  //       gl.enableVertexAttribArray(cache.vertUV);
+  //       gl.vertexAttribPointer(cache.vertUV, 4, gl.FLOAT, false, stride, 3 * 4);
+  //     }
 
-      // 5. Draw
-      if (this.meshes.flowers.indexBuffer) {
-        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.meshes.flowers.indexBuffer);
-        gl.drawElements(
-          gl.TRIANGLES,
-          this.meshes.flowers.vertCount,
-          gl.UNSIGNED_SHORT,
-          0,
-        );
-      } else {
-        gl.drawArrays(gl.TRIANGLES, 0, this.meshes.flowers.vertCount);
-      }
-    }
-  }
+  //     // 5. Draw
+  //     if (this.meshes.flowers.indexBuffer) {
+  //       gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.meshes.flowers.indexBuffer);
+  //       gl.drawElements(
+  //         gl.TRIANGLES,
+  //         this.meshes.flowers.vertCount,
+  //         gl.UNSIGNED_SHORT,
+  //         0,
+  //       );
+  //     } else {
+  //       gl.drawArrays(gl.TRIANGLES, 0, this.meshes.flowers.vertCount);
+  //     }
+  //   }
+  // }
 
   drawFlowers(state, viewMatrix, projectionMatrix) {
+    const gl = this.gl;
     const program = this.programs.flower; // Target your flower vertex/fragment shaders
     gl.useProgram(program);
 
-    // // Map safely using flat lookups from glCache
-    const cache = this.glCache.flower || {};
-    // const uView = cache.flower_viewMatrix || cache.uViewMatrix;
-    // const uProj = cache.uProjectionMatrix;
+    // Temporary: verify program is set
+    console.log("useProgram called, program:", program);
 
-    // if (uView) gl.uniformMatrix4fv(uView, false, viewMatrix);
-    // if (uProj) gl.uniformMatrix4fv(uProj, false, projectionMatrix);
+    this.setUniform(program, "projMatrix", projectionMatrix);
+    this.setUniform(program, "viewMatrix", viewMatrix);
+    // this.setUniform(program, "uSampler", 0);
+    // this.setUniform(program, "isNight", 1.0); // CHQ: Claude AI added this, without which resulted in black/invisible output
+    this.setUniform(program, "isNight", 1.0, "float");
+    this.setUniform(program, "uSampler", 0, "int");
 
-    // CHQ: GEmini AI: forces the CPU to talk to the GPU driver,
-    //      find the string "projMatrix" in the shader program,
-    //      and return its index. At 60fps, a bottleneck
-    const uProjMatrix = gl.getUniformLocation(program, "projMatrix");
-    const uViewMatrix = gl.getUniformLocation(program, "viewMatrix");
-
-    const cacheProjMatrix = this.glCache.flower.projMatrix;
-
-    console.log("Location from GPU:", uProjMatrix);
-    console.log("Location from Cache:", cacheProjMatrix);
-
-    // 2. Pass the data to the GPU
-    // Assuming you have your matrices defined as `this.projectionMatrix` and `this.viewMatrix`
-    if (uProjMatrix)
-      gl.uniformMatrix4fv(uProjMatrix, false, this.projectionMatrix);
-    if (uViewMatrix) gl.uniformMatrix4fv(uViewMatrix, false, this.viewMatrix);
-
-    // Bind texture sheet
-    if (this.textures && this.textures.flowers) {
+    if (this.textures?.flowers) {
       gl.activeTexture(gl.TEXTURE0);
       gl.bindTexture(gl.TEXTURE_2D, this.textures.flowers);
-      const uSampler = gl.getUniformLocation(program, "uSampler");
-      if (uSampler) gl.uniform1i(uSampler, 0);
     }
 
-    // Bind Geometry Vertex Buffer Data
-    gl.bindBuffer(gl.ARRAY_BUFFER, this.meshes.flowers.vertexBuffer);
-    // const stride = 5 * 4;
-    const stride = 8 * 4; // Change from 5 * 4 to match 32-byte fields
+    // CHQ: Claude AI: remove the bindBuffer and bindMeshAttributes calls — the VAO handles all of that:
+    // CHQ: while Bees and mobs are individual entities in state.objects
+    //      (and therefore need to loop per instance so their own model
+    //      matrix is uploaded before drawing), flowers are a single
+    //      pre-baked static mesh, so only need to be drawn once
+    // gl.bindBuffer(gl.ARRAY_BUFFER, this.meshes.flowers.vertexBuffer);
+    // this.bindMeshAttributes("flowers", program);
 
-    const locPos = cache.flower_vertPos ?? cache.vertPos;
-    const locUV = cache.flower_vertUV ?? cache.vertUV;
+    // const vertPosLoc = gl.getAttribLocation(program, "vertPos");
+    // const vertUVLoc = gl.getAttribLocation(program, "vertUV");
+    // const vertGooLoc = gl.getAttribLocation(program, "vertGoo");
+    // console.log(
+    //   "attrib locations — vertPos:",
+    //   vertPosLoc,
+    //   "vertUV:",
+    //   vertUVLoc,
+    //   "vertGoo:",
+    //   vertGooLoc,
+    // );
 
-    if (locPos !== undefined && locPos !== -1) {
-      gl.enableVertexAttribArray(locPos);
-      gl.vertexAttribPointer(locPos, 3, gl.FLOAT, false, stride, 0);
-    }
-    if (locUV !== undefined && locUV !== -1) {
-      gl.enableVertexAttribArray(locUV);
-      gl.vertexAttribPointer(locUV, 4, gl.FLOAT, false, stride, 3 * 4);
-    }
+    gl.disable(gl.CULL_FACE);
+    this.drawMesh("flowers");
+    gl.enable(gl.CULL_FACE); // re-enable after if needed
 
-    const programKey = this.getCurrentProgramKey(); // A function you might need to track which program is active
+    // console.log("after drawMesh:", gl.getError());
 
-    // Bind Index array map and execute the GPU draw sequence!
-    if (this.meshes.flowers.indexBuffer) {
-      // 1. Update your uniforms
-      const loc = this.glCache[programKey].projMatrix;
-      this.gl.uniformMatrix4fv(loc, false, this.projectionMatrix);
+    // const gl = this.gl;
+    // const mesh = this.meshes.flowers;
 
-      // 2. DEBUG: Verify the data just before the GPU uses it
-      console.log(
-        "DEBUG: Proj Matrix[0] (should be ~2.4):",
-        this.projectionMatrix[0],
-      );
-      console.log(
-        "DEBUG: Proj Matrix[5] (should be ~1.8):",
-        this.projectionMatrix[5],
-      );
-      gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.meshes.flowers.indexBuffer);
-      gl.drawElements(
-        gl.TRIANGLES,
-        this.meshes.flowers.vertCount,
-        gl.UNSIGNED_SHORT,
-        0,
-      );
-    } else {
-      gl.drawArrays(gl.TRIANGLES, 0, this.meshes.flowers.vertCount);
-    }
+    // // Test 1: does bindBuffer work?
+    // gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, mesh.indexBuffer);
+    // console.log("after bindBuffer index:", gl.getError());
+
+    // // Test 2: does drawElements work?
+    // gl.drawElements(gl.TRIANGLES, mesh.vertCount, gl.UNSIGNED_SHORT, 0);
+    // console.log("after drawElements:", gl.getError());
   }
 
+  // CHQ: Claude AI rewrote to use setUniform and drawMesh
   drawBees(state, viewMatrix, projectionMatrix) {
-    const program = this.programs.bee; // Fixed: Reference the WebGLProgram directly
+    const gl = this.gl;
+    const program = this.programs.bee;
     gl.useProgram(program);
 
-    const cache = this.glCache.bee || {};
-    const uView = cache.bee_viewMatrix || cache.uViewMatrix;
-    const uProj = cache.uProjectionMatrix;
+    this.setUniform(program, "projMatrix", projectionMatrix);
+    this.setUniform(program, "viewMatrix", viewMatrix);
+    this.setUniform(program, "uSampler", 0);
 
-    if (uView) gl.uniformMatrix4fv(uView, false, viewMatrix);
-    if (uProj) gl.uniformMatrix4fv(uProj, false, projectionMatrix);
-
-    // Bind the Bee Texture Atlas
-    if (this.textures && this.textures.bees) {
+    if (this.textures?.bees) {
       gl.activeTexture(gl.TEXTURE0);
       gl.bindTexture(gl.TEXTURE_2D, this.textures.bees);
-      const uSampler = gl.getUniformLocation(program, "uSampler");
-      if (uSampler) gl.uniform1i(uSampler, 0);
     }
 
-    // Bind the base Bee Mesh asset geometry
-    if (this.meshes.bees && this.meshes.bees.vertexBuffer) {
-      gl.bindBuffer(gl.ARRAY_BUFFER, this.meshes.bees.vertexBuffer);
-
-      const stride = 5 * 4;
-      const locPos = cache.vertPos;
-      const locUV = cache.vertUV;
-
-      if (locPos !== undefined && locPos !== -1) {
-        gl.enableVertexAttribArray(locPos);
-        gl.vertexAttribPointer(locPos, 3, gl.FLOAT, false, stride, 0);
-      }
-      if (locUV !== undefined && locUV !== -1) {
-        gl.enableVertexAttribArray(locUV);
-        gl.vertexAttribPointer(locUV, 2, gl.FLOAT, false, stride, 3 * 4);
-      }
-
-      // Loop through and update the model transform uniform per bee
-      state.objects.bees.forEach((bee) => {
-        // const modelMatrix = MATH.matrixTranslate(
-        //   bee.pos[0],
-        //   bee.pos[1],
-        //   bee.pos[2],
-        // );
-
-        // CHQ: Gemini AI replaced call for modelMatrix
-        const modelMatrix = mat4.create();
-        mat4.fromTranslation(modelMatrix, [bee.pos[0], bee.pos[1], bee.pos[2]]);
-        const uModel = cache.uModelMatrix;
-        if (uModel) gl.uniformMatrix4fv(uModel, false, modelMatrix);
-
-        const programKey = this.getCurrentProgramKey(); // A function you might need to track which program is active
-
-        if (this.meshes.bees.indexBuffer) {
-          // 1. Update your uniforms
-          const loc = this.glCache[programKey].projMatrix;
-          this.gl.uniformMatrix4fv(loc, false, this.projectionMatrix);
-
-          // 2. DEBUG: Verify the data just before the GPU uses it
-          console.log(
-            "DEBUG: Proj Matrix[0] (should be ~2.4):",
-            this.projectionMatrix[0],
-          );
-          console.log(
-            "DEBUG: Proj Matrix[5] (should be ~1.8):",
-            this.projectionMatrix[5],
-          );
-          gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.meshes.bees.indexBuffer);
-          gl.drawElements(
-            gl.TRIANGLES,
-            this.meshes.bees.vertCount,
-            gl.UNSIGNED_SHORT,
-            0,
-          );
-        } else {
-          gl.drawArrays(gl.TRIANGLES, 0, this.meshes.bees.vertCount);
-        }
-      });
-    }
+    state.objects.bees.forEach((bee) => {
+      const modelMatrix = mat4.create();
+      mat4.fromTranslation(modelMatrix, bee.pos);
+      this.setUniform(program, "uModelMatrix", modelMatrix);
+      this.drawMesh("bees");
+    });
   }
 
   drawMobs(state, viewMatrix, projectionMatrix) {
-    const program = this.programs.mob; // Target your mob vertex/fragment shaders
+    const gl = this.gl;
+    const program = this.programs.mob;
     gl.useProgram(program);
 
-    const cache = this.glCache.mob || {};
-    const uView = cache.uViewMatrix;
-    const uProj = cache.uProjectionMatrix;
+    this.setUniform(program, "projMatrix", projectionMatrix);
+    this.setUniform(program, "viewMatrix", viewMatrix);
+    this.setUniform(program, "uSampler", 0);
 
-    if (uView) gl.uniformMatrix4fv(uView, false, viewMatrix);
-    if (uProj) gl.uniformMatrix4fv(uProj, false, projectionMatrix);
-
-    // Bind the Mob/Bear Texture Atlas
-    if (this.textures && this.textures.bear) {
+    // if (this.textures?.bear) {
+    if (this.textures?.mob) {
       gl.activeTexture(gl.TEXTURE0);
-      gl.bindTexture(gl.TEXTURE_2D, this.textures.bear);
-      const uSampler = gl.getUniformLocation(program, "uSampler");
-      if (uSampler) gl.uniform1i(uSampler, 0);
+      // gl.bindTexture(gl.TEXTURE_2D, this.textures.bear);
+      gl.bindTexture(gl.TEXTURE_2D, this.textures.mob);
     }
 
-    // Bind the base Mob Mesh geometry asset
-    if (this.meshes.mobs && this.meshes.mobs.vertexBuffer) {
-      gl.bindBuffer(gl.ARRAY_BUFFER, this.meshes.mobs.vertexBuffer);
-
-      const stride = 5 * 4;
-      // const locPos = cache.vertPos;
-      const locPos = cache.mob_vertPos ?? cache.vertPos;
-      const locUV = cache.vertUV;
-
-      if (locPos !== undefined && locPos !== -1) {
-        gl.enableVertexAttribArray(locPos);
-        gl.vertexAttribPointer(locPos, 3, gl.FLOAT, false, stride, 0);
-      }
-      if (locUV !== undefined && locUV !== -1) {
-        gl.enableVertexAttribArray(locUV);
-        gl.vertexAttribPointer(locUV, 2, gl.FLOAT, false, stride, 3 * 4);
+    state.objects.mobs.forEach((mob) => {
+      const modelMatrix = mat4.create();
+      mat4.fromTranslation(modelMatrix, mob.pos);
+      mat4.scale(modelMatrix, modelMatrix, [
+        mob.width || 1,
+        mob.height || 1,
+        mob.depth || 1,
+      ]);
+      if (mob.facingAngle) {
+        mat4.rotateY(modelMatrix, modelMatrix, mob.facingAngle);
       }
 
-      // Loop and draw each active monster in the world state
-      state.objects.mobs.forEach((mob) => {
-        const scaleX = mob.width || 1;
-        const scaleY = mob.height || 1;
-        const scaleZ = mob.depth || 1;
-
-        let modelMatrix = MATH.matrixTranslate(
-          mob.pos[0],
-          mob.pos[1],
-          mob.pos[2],
-        );
-
-        // CHQ: Gemini AI: replacement for scaling
-        mat4.scale(modelMatrix, modelMatrix, [scaleX, scaleY, scaleZ]);
-        // modelMatrix = MATH.matrixScale(modelMatrix, scaleX, scaleY, scaleZ);
-
-        if (mob.facingAngle) {
-          // CHQ: Gemini AI: replacement for rotation in Y direction
-          mat4.rotateY(modelMatrix, modelMatrix, mob.facingAngle);
-          // modelMatrix = MATH.matrixRotateY(modelMatrix, mob.facingAngle);
-        }
-
-        const uModel = cache.uModelMatrix;
-        if (uModel) gl.uniformMatrix4fv(uModel, false, modelMatrix);
-
-        const uTextureOffset = gl.getUniformLocation(program, "uTextureOffset");
-        if (uTextureOffset) {
-          gl.uniform1f(uTextureOffset, mob.frameIndex || 0);
-        }
-        const programKey = this.getCurrentProgramKey(); // A function you might need to track which program is active
-
-        if (this.meshes.mobs.indexBuffer) {
-          // 1. Update your uniforms
-          const loc = this.glCache[programKey].projMatrix;
-          this.gl.uniformMatrix4fv(loc, false, this.projectionMatrix);
-
-          // 2. DEBUG: Verify the data just before the GPU uses it
-          console.log(
-            "DEBUG: Proj Matrix[0] (should be ~2.4):",
-            this.projectionMatrix[0],
-          );
-          console.log(
-            "DEBUG: Proj Matrix[5] (should be ~1.8):",
-            this.projectionMatrix[5],
-          );
-          gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.meshes.mobs.indexBuffer);
-          gl.drawElements(
-            gl.TRIANGLES,
-            this.meshes.mobs.vertCount,
-            gl.UNSIGNED_SHORT,
-            0,
-          );
-        } else {
-          gl.drawArrays(gl.TRIANGLES, 0, this.meshes.mobs.vertCount);
-        }
-      });
-    }
+      this.setUniform(program, "uModelMatrix", modelMatrix);
+      this.setUniform(program, "uTextureOffset", mob.frameIndex || 0);
+      this.drawMesh("mobs");
+    });
   }
 
   initCache(programs) {
@@ -620,12 +580,19 @@ export class Renderer {
    * @param {string} name - The uniform variable name in the shader (e.g., 'uViewMatrix')
    * @param {*} value - The data payload (Matrix, Vector, Array, or primitive float/int)
    */
-  setUniform(program, name, value) {
+  setUniform(program, name, value, type = null) {
     const gl = this.gl;
 
-    // Look up the uniform location directly on the active program
-    const location = gl.getUniformLocation(program, name);
-    if (!location) return; // Silent guard if shader optimizes away an unused uniform
+    // CHQ: Gemini AI added
+    // Check cache first, fall back to GPU lookup only if missing
+    const programKey = Object.keys(this.programs).find(
+      (k) => this.programs[k] === program,
+    );
+    const cached = programKey && this.glCache[programKey]?.[name];
+    const location = cached ?? gl.getUniformLocation(program, name); // CHQ: Nullish coalescing operator to return right side if left is null
+
+    // Silent guard if shader optimizes away an unused uniform
+    if (location === null || location === undefined) return;
 
     // 1. Handle Matrix4x4 arrays (Float32Array or regular array of 16 elements)
     if (
@@ -643,11 +610,46 @@ export class Renderer {
       gl.uniform4fv(location, value);
     }
     // 4. Handle standard scalar numbers (floats/ints/samplers)
+    // else if (typeof value === "number") {
+    //   if (
+    //     Number.isInteger(value) &&
+    //     !Number.isFinite(value - Math.floor(value) + 0.1)
+    //   ) {
+    //     gl.uniform1i(location, value);
+    //   } else {
+    //     gl.uniform1f(location, value);
+    //   }
+    // }
     else if (typeof value === "number") {
-      if (Number.isInteger(value)) {
-        gl.uniform1i(location, value); // Integers and Texture Unit Samplers
+      if (type === "int" || (type === null && Number.isInteger(value))) {
+        gl.uniform1i(location, value);
       } else {
-        gl.uniform1f(location, value); // Standard floating points
+        gl.uniform1f(location, value);
+      }
+    }
+  }
+
+  // CHQ: Claude AI created helper method
+  drawMesh(meshKey) {
+    const gl = this.gl;
+    const mesh = this.meshes[meshKey];
+    if (!mesh || !mesh.vertexBuffer) return;
+
+    if (mesh.vao) {
+      // VAO path — all buffer/attribute state already recorded
+      gl.bindVertexArray(mesh.vao);
+      gl.drawElements(gl.TRIANGLES, mesh.vertCount, gl.UNSIGNED_INT, 0);
+      const err = gl.getError();
+      if (err) console.error(`drawElements error [${meshKey}]:`, err);
+      gl.bindVertexArray(null);
+    } else {
+      // Non-VAO path — manual buffer binding
+      gl.bindBuffer(gl.ARRAY_BUFFER, mesh.vertexBuffer);
+      if (mesh.indexBuffer) {
+        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, mesh.indexBuffer);
+        gl.drawElements(gl.TRIANGLES, mesh.vertCount, gl.UNSIGNED_INT, 0);
+      } else {
+        gl.drawArrays(gl.TRIANGLES, 0, mesh.vertCount);
       }
     }
   }
@@ -665,48 +667,26 @@ export class Renderer {
     console.log("Renderer loop running...");
     const gl = this.gl;
 
-    // 1. Clear color and depth buffers to prevent frame bleeding
+    // 1. Guard to prevent deep crashes if state hasn't fully loaded yet
+    if (!state || !state.player) return; // CHQ: Claude moved to the top of render, under gl definition
+
+    // 2. Clear color and depth buffers to prevent frame bleeding
     gl.viewport(0, 0, this.width, this.height);
     gl.clearColor(0.5, 0.8, 1.0, 1.0); // CHQ: Gemini AI: test: Bright Blue Sky color
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-    // 2. Prevent deep crashes if state hasn't fully loaded yet
-    if (!state || !state.player) return;
-
-    // 3. Enable depth and transparency blends for sprites and particles
+    // 3. GL state (Do this once per frame)
     gl.enable(gl.DEPTH_TEST);
     gl.enable(gl.BLEND);
     gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 
-    // 4. Calculate Camera Matrices safely using scoped variables
-    const playerPos = state.player.pos || [0, 5, 0];
+    // 4. Setup Matrices (Do this once per frame)
+    // const projectionMatrix = this.getProjectionMatrix(); // Helper to get the cached one
+    // const viewMatrix = this.getViewMatrix(state);
 
-    // Camera looks slightly downward in front of the player
-    const targetLookAt = [playerPos[0], playerPos[1] - 4, playerPos[2] - 10];
-    const upVector = [0, 1, 0];
-
-    // TODO: tests:
-    // Generate View and Projection Matrices
-    // const viewMatrix = MATH.matrixLookAt(playerPos, targetLookAt, upVector);
-    // Temporal hardcoded test camera looking directly down at the spawn origin space
-    const testCameraPos = [0, 15, 20];
-    const testTarget = [0, 0, 0];
-
-    // 2. Replace the failing call:
-    // OLD: const viewMatrix = MATH.matrixLookAt(testCameraPos, testTarget, [0, 1, 0]);
-
-    // NEW:
     const viewMatrix = mat4.create();
-    mat4.lookAt(viewMatrix, testCameraPos, testTarget, [0, 1, 0]);
+    mat4.lookAt(viewMatrix, [0, 15, 20], [0, 0, 0], [0, 1, 0]);
 
-    // const projectionMatrix = MATH.matrixPerspective(
-    //   45,
-    //   this.width / this.height,
-    //   0.1,
-    //   1000.0,
-    // );
-
-    // CHQ: Gemini AI: replaced MATH.matrixPerspective call
     const projectionMatrix = mat4.create();
     mat4.perspective(
       projectionMatrix,
@@ -715,26 +695,75 @@ export class Renderer {
       0.1,
       1000.0,
     );
+    this.projectionMatrix = projectionMatrix;
 
-    // CHQ: Gemini AI added: drawing flowers
-    // --- DRAW PHASE: FLOWERS ---
-    if (this.meshes.flowers && this.meshes.flowers.vertexBuffer) {
+    // 5. Draw calls AFTER matrices exist
+    if (this.meshes.flowers?.vertexBuffer) {
       this.drawFlowers(state, viewMatrix, projectionMatrix);
+      const err = gl.getError();
+      if (err !== gl.NO_ERROR)
+        console.error("WebGL error after drawFlowers:", err);
+    } else {
+      console.log(">>> drawFlowers SKIPPED — no mesh");
     }
-    // CHQ: Gemini AI added: drawing bees
-    // --- DRAW PHASE: BEES ---
-    if (state.objects && state.objects.bees && state.objects.bees.length > 0) {
+
+    if (state.objects?.bees?.length > 0) {
       this.drawBees(state, viewMatrix, projectionMatrix);
     }
 
-    // CHQ: Gemini AI added: drawing mobs
-    // --- DRAW PHASE: MOBS ---
-    if (state.objects && state.objects.mobs && state.objects.mobs.length > 0) {
+    if (state.objects?.mobs?.length > 0) {
       this.drawMobs(state, viewMatrix, projectionMatrix);
     }
 
-    // CHQ: Gemini AI wired textRenderer inside render method
-    // At the bottom of your master render(state, dt) method inside renderer.js:
+    // // 4. Calculate Camera Matrices safely using scoped variables
+    // const playerPos = state.player.pos || [0, 5, 0];
+
+    // // Camera looks slightly downward in front of the player
+    // const targetLookAt = [playerPos[0], playerPos[1] - 4, playerPos[2] - 10];
+    // const upVector = [0, 1, 0];
+
+    // // TODO: tests:
+    // // Generate View and Projection Matrices
+    // // Temporal hardcoded test camera looking directly down at the spawn origin space
+    // const testCameraPos = [0, 15, 20];
+    // const testTarget = [0, 0, 0];
+
+    // // const viewMatrix = mat4.create();
+    // // mat4.lookAt(viewMatrix, playerPos, targetLookAt, upVector);
+    // // mat4.lookAt(viewMatrix, testCameraPos, testTarget, [0, 1, 0]);
+    // mat4.lookAt(viewMatrix, [0, 15, 20], [0, 0, 0], [0, 1, 0]);
+
+    // const projectionMatrix = mat4.create();
+
+    // CHQ: Only update on resize (call mat4.perspective inside
+    //      a window.addEventListener('resize', ...) callback)
+    //      to prevent garbage collector from overwork and save
+    //      CPU cycles
+    // mat4.perspective(
+    //   projectionMatrix,
+    //   (45 * Math.PI) / 180,
+    //   this.width / this.height,
+    //   0.1,
+    //   1000.0,
+    // );
+    // this.projectionMatrix = projectionMatrix;
+    // console.log("Proj Matrix[0] after calc:", this.projectionMatrix[0]); // Should NOT be 0
+
+    // const location = this.glCache.projectionMatrix; // Use your stored Location handle
+
+    // this.gl.uniformMatrix4fv(location, false, this.projectionMatrix);
+
+    // // 1. Is flower mesh actually uploaded?
+    // console.log("flower vertCount:", this.meshes.flowers?.vertCount);
+    // console.log("flower vertexBuffer:", this.meshes.flowers?.vertexBuffer);
+    // console.log("flower indexBuffer:", this.meshes.flowers?.indexBuffer);
+
+    // // 2. Is state populated?
+    // console.log("player pos:", state?.player?.pos);
+    // console.log("mobs count:", state?.objects?.mobs?.length);
+    // console.log("bees count:", state?.objects?.bees?.length);
+
+    // CHQ: Text always last — renders on top of world geometry
     if (this.textRenderer) {
       // Pass delta time, your game's tracking uniform phase timer, and the view matrix!
       this.textRenderer.render(dt, this.sinTime || 0, viewMatrix);
