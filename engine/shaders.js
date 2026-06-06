@@ -220,7 +220,7 @@ export const SHADERS = {
     void main(){
         // Sample texture and mix with green base color
         vec3 c = mix(vec3(0.0, 0.6, 0.0), texture(tex, pixUV.xy).rgb * min(pixUV.w, 1.0), pixUV.z);
-        
+       
         // Darken color if green channel is too low
         c = c.g <= 0.1 ? vec3(0.0, 0.35, 0.0) : c;
         

@@ -76,6 +76,8 @@ export class Renderer {
 
     // --- 🛠️ NEW: Prime screen-space static mesh layout geometry ---
     this.initUIQuadBuffer();
+
+    this.testDraw();
   }
 
   // --- 🛠️ NEW: Initialize dynamic quad vertices for UI texture rendering ---
@@ -452,10 +454,9 @@ export class Renderer {
 
     this.setUniform(program, "projMatrix", projectionMatrix);
     this.setUniform(program, "viewMatrix", viewMatrix);
-    // this.setUniform(program, "uSampler", 0);
-    // this.setUniform(program, "isNight", 1.0); // CHQ: Claude AI added this, without which resulted in black/invisible output
-    this.setUniform(program, "isNight", 1.0, "float");
-    this.setUniform(program, "uSampler", 0, "int");
+
+    this.setUniform(program, "isNight", 1.0, "float"); // CHQ: Claude AI added this, without which resulted in black/invisible output
+    this.setUniform(program, "tex", 0, "int"); // CHQ: Claude AI: replace "uSampler" with "tex"
 
     if (this.textures?.flowers) {
       gl.activeTexture(gl.TEXTURE0);
@@ -482,22 +483,43 @@ export class Renderer {
     //   vertGooLoc,
     // );
 
-    gl.disable(gl.CULL_FACE);
+    // gl.disable(gl.DEPTH_TEST); // CHQ: Claude AI: individual draw methods shouldn't be toggling global GL state.
+    // gl.disable(gl.CULL_FACE);
+    // console.log("cull face disabled");
+
+    const testPos = [24.5, 13, -40, 1.0]; // first flower vertex from your logs
+    const mvp = mat4.create();
+    mat4.multiply(mvp, projectionMatrix, viewMatrix);
+
+    const clipX =
+      mvp[0] * testPos[0] +
+      mvp[4] * testPos[1] +
+      mvp[8] * testPos[2] +
+      mvp[12] * testPos[3];
+    const clipY =
+      mvp[1] * testPos[0] +
+      mvp[5] * testPos[1] +
+      mvp[9] * testPos[2] +
+      mvp[13] * testPos[3];
+    const clipZ =
+      mvp[2] * testPos[0] +
+      mvp[6] * testPos[1] +
+      mvp[10] * testPos[2] +
+      mvp[14] * testPos[3];
+    const clipW =
+      mvp[3] * testPos[0] +
+      mvp[7] * testPos[1] +
+      mvp[11] * testPos[2] +
+      mvp[15] * testPos[3];
+
+    console.log("clip coords:", clipX, clipY, clipZ, clipW);
+    console.log("NDC:", clipX / clipW, clipY / clipW, clipZ / clipW);
+
     this.drawMesh("flowers");
-    gl.enable(gl.CULL_FACE); // re-enable after if needed
+    // gl.enable(gl.CULL_FACE); // re-enable after if needed
 
-    // console.log("after drawMesh:", gl.getError());
-
-    // const gl = this.gl;
-    // const mesh = this.meshes.flowers;
-
-    // // Test 1: does bindBuffer work?
-    // gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, mesh.indexBuffer);
-    // console.log("after bindBuffer index:", gl.getError());
-
-    // // Test 2: does drawElements work?
-    // gl.drawElements(gl.TRIANGLES, mesh.vertCount, gl.UNSIGNED_SHORT, 0);
-    // console.log("after drawElements:", gl.getError());
+    console.log("flower texture:", this.textures?.flowers);
+    console.log("flower vertCount:", this.meshes.flowers.vertCount);
   }
 
   // CHQ: Claude AI rewrote to use setUniform and drawMesh
@@ -508,7 +530,7 @@ export class Renderer {
 
     this.setUniform(program, "projMatrix", projectionMatrix);
     this.setUniform(program, "viewMatrix", viewMatrix);
-    this.setUniform(program, "uSampler", 0);
+    this.setUniform(program, "tex", 0); // CHQ: Claude AI: replace "uSampler" with "tex"
 
     if (this.textures?.bees) {
       gl.activeTexture(gl.TEXTURE0);
@@ -530,13 +552,13 @@ export class Renderer {
 
     this.setUniform(program, "projMatrix", projectionMatrix);
     this.setUniform(program, "viewMatrix", viewMatrix);
-    this.setUniform(program, "uSampler", 0);
+    this.setUniform(program, "tex", 0); // CHQ: Claude AI: replace "uSampler" with "tex"
 
-    // if (this.textures?.bear) {
-    if (this.textures?.mob) {
+    if (this.textures?.bear) {
+      // if (this.textures?.mob) {
       gl.activeTexture(gl.TEXTURE0);
-      // gl.bindTexture(gl.TEXTURE_2D, this.textures.bear);
-      gl.bindTexture(gl.TEXTURE_2D, this.textures.mob);
+      gl.bindTexture(gl.TEXTURE_2D, this.textures.bear);
+      // gl.bindTexture(gl.TEXTURE_2D, this.textures.mob);
     }
 
     state.objects.mobs.forEach((mob) => {
@@ -565,12 +587,61 @@ export class Renderer {
       this.glCache[key] = {
         projMatrix: this.gl.getUniformLocation(prog, "projMatrix"),
         viewMatrix: this.gl.getUniformLocation(prog, "viewMatrix"),
-        uSampler: this.gl.getUniformLocation(prog, "uSampler"),
+        tex: this.gl.getUniformLocation(prog, "tex"), // CHQ: Claude AI: replace "uSampler" with "tex"
       };
 
       // ADD THIS TO VERIFY THE CACHE IS ACTUALLY FILLING
       console.log(`Cache entry for [${key}]:`, this.glCache[key]);
     }
+  }
+
+  // CHQ: Claude AI: temp function for testing
+  testDraw() {
+    const gl = this.gl;
+
+    // Simple triangle covering most of the screen
+    const verts = new Float32Array([0.0, 0.5, -0.5, -0.5, 0.5, -0.5]);
+
+    const vsh = gl.createShader(gl.VERTEX_SHADER);
+    gl.shaderSource(
+      vsh,
+      `#version 300 es
+    in vec2 pos;
+    void main() { gl_Position = vec4(pos, 0.0, 1.0); }
+  `,
+    );
+    gl.compileShader(vsh);
+
+    const fsh = gl.createShader(gl.FRAGMENT_SHADER);
+    gl.shaderSource(
+      fsh,
+      `#version 300 es
+    precision highp float;
+    out vec4 col;
+    void main() { col = vec4(1.0, 0.0, 0.0, 1.0); }
+  `,
+    );
+    gl.compileShader(fsh);
+
+    const prog = gl.createProgram();
+    gl.attachShader(prog, vsh);
+    gl.attachShader(prog, fsh);
+    gl.linkProgram(prog);
+    gl.useProgram(prog);
+
+    const buf = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+    gl.bufferData(gl.ARRAY_BUFFER, verts, gl.STATIC_DRAW);
+
+    const loc = gl.getAttribLocation(prog, "pos");
+    gl.enableVertexAttribArray(loc);
+    gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+
+    gl.clearColor(0.0, 0.0, 1.0, 1.0);
+    gl.clear(gl.COLOR_BUFFER_BIT);
+    gl.drawArrays(gl.TRIANGLES, 0, 3);
+
+    // console.log("testDraw error:", gl.getError());
   }
 
   // CHQ: Gemini AI added function
@@ -638,6 +709,7 @@ export class Renderer {
     if (mesh.vao) {
       // VAO path — all buffer/attribute state already recorded
       gl.bindVertexArray(mesh.vao);
+      console.log("about to drawElements, vertCount:", mesh.vertCount);
       gl.drawElements(gl.TRIANGLES, mesh.vertCount, gl.UNSIGNED_INT, 0);
       const err = gl.getError();
       if (err) console.error(`drawElements error [${meshKey}]:`, err);
@@ -673,6 +745,7 @@ export class Renderer {
     // 2. Clear color and depth buffers to prevent frame bleeding
     gl.viewport(0, 0, this.width, this.height);
     gl.clearColor(0.5, 0.8, 1.0, 1.0); // CHQ: Gemini AI: test: Bright Blue Sky color
+    // gl.clearColor(1.0, 0.0, 0.0, 1.0); // bright red
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
     // 3. GL state (Do this once per frame)
@@ -685,12 +758,16 @@ export class Renderer {
     // const viewMatrix = this.getViewMatrix(state);
 
     const viewMatrix = mat4.create();
-    mat4.lookAt(viewMatrix, [0, 15, 20], [0, 0, 0], [0, 1, 0]);
+    // mat4.lookAt(viewMatrix, [0, 15, 20], [0, 0, 0], [0, 1, 0]);
+    // mat4.lookAt(viewMatrix, [25, 25, -20], [25, 13, -40], [0, 1, 0]);
+    // mat4.lookAt(viewMatrix, [15, 20, 35], [15, 0, 16], [0, 1, 0]);
+    mat4.lookAt(viewMatrix, [15, 50, 50], [15, 10, 16], [0, 1, 0]);
 
     const projectionMatrix = mat4.create();
     mat4.perspective(
       projectionMatrix,
-      (45 * Math.PI) / 180,
+      // (45 * Math.PI) / 180,
+      (90 * Math.PI) / 180, // 90 degrees instead of 45
       this.width / this.height,
       0.1,
       1000.0,

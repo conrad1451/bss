@@ -147,7 +147,10 @@ async function BeeSwarmSimulator(saveData) {
   // Load textures and pass to renderer
   const ctx = uiCanvas.getContext("2d");
 
-  const textures = loadTextures(gl, ctx); // Pass the 2D context as the second parameter!
+  // CHQ: Claude AI: added missing await key for async function to catch promise
+  const textures = await loadTextures(gl);
+  // const textures = await loadTextures(gl, ctx);
+  console.log("loaded texture keys:", Object.keys(textures));
   renderer.textures = textures;
 
   // --- C. WEBGL PROGRAM AUDIT & PATCHES ---
@@ -197,17 +200,17 @@ async function BeeSwarmSimulator(saveData) {
   });
 
   try {
-    // This is your line 202 where it crashes
-    renderer.initCache(renderer.programs);
+    // CHQ: Claude AI: Remove the duplicate initCache call from index.js — it should only be called once in the constructor.
+    // renderer.initCache(renderer.programs);
 
     // --- D. GL STATE SETTINGS ---
     gl.viewport(0, 0, width, height);
-    gl.enable(gl.BLEND);
-    gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
-    gl.enable(gl.DEPTH_TEST);
+    // gl.enable(gl.BLEND);  // CHQ: Claude AI: redundant since render handles it every frame anyway.
+    // gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA); // CHQ: Claude AI: redundant since render handles it every frame anyway.
+    // gl.enable(gl.DEPTH_TEST); // CHQ: Claude AI: redundant since render handles it every frame anyway.
     gl.depthFunc(gl.LEQUAL);
-    gl.enable(gl.CULL_FACE);
-    gl.cullFace(gl.BACK);
+    // gl.enable(gl.CULL_FACE);  // CHQ: Claude AI: redundant since render handles it every frame anyway.
+    // gl.cullFace(gl.BACK);   // CHQ: Claude AI: redundant since render handles it every frame anyway.
 
     // --- E. WORLD & INPUT ---
     // initInputHandlers(gameState, uiCanvas); // Attach Input listeners
@@ -233,6 +236,10 @@ async function BeeSwarmSimulator(saveData) {
         // gameState.meshes.flowers, // Parameter 4: Pass your instanced flower mesh reference channel
       );
     });
+
+    console.log("verts sample:", flowerMeshDataStaging.verts.slice(0, 8));
+    // Also check the field config
+    console.log("field configs:", FIELD_CONFIGS);
 
     // CHQ: Gemini AI: Handoff compiled mesh geometry to the GPU
     renderer.uploadFlowerMesh(flowerMeshDataStaging);

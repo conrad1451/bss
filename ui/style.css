@@ -57,16 +57,20 @@ button:hover {
   outline: 2px solid rgb(0, 0, 0, 0.4);
 }
 
-#gl-canvas,
-#tex-canvas {
-  display: none;
+#gl-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0;
 }
 
 #ui-canvas {
-  position: fixed;
-  left: 0;
+  position: absolute;
   top: 0;
-  z-index: -3;
+  left: 0;
+  z-index: 1;
+  background: transparent; /* critical */
+  pointer-events: none; /* so clicks pass through to the game */
 }
 
 div::-webkit-scrollbar {
