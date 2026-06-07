@@ -396,29 +396,35 @@ export class Renderer {
 
   drawFlowers(state, viewMatrix, projectionMatrix) {
     const gl = this.gl;
-    const program = this.programs.flower; // Target your flower vertex/fragment shaders
-    gl.useProgram(program);
+    const flowerProgram = this.programs.flower; // Target your flower vertex/fragment shaders
 
-    // Temporary: verify program is set
-    // console.log("useProgram called, program:", program);
+    if (!gl.getProgramParameter(flowerProgram, gl.LINK_STATUS)) return;
 
-    this.setUniform(program, "projMatrix", projectionMatrix);
-    this.setUniform(program, "viewMatrix", viewMatrix);
+    gl.useProgram(flowerProgram);
 
-    this.setUniform(program, "isNight", 1.0, "float"); // CHQ: Claude AI added this, without which resulted in black/invisible output
-    // this.setUniform(program, "tex", 0, "int"); // CHQ: Claude AI: replace "uSampler" with "tex"
-    const texLoc = gl.getUniformLocation(program, "tex");
-    console.log("flower tex location:", texLoc);
-    console.log("flowers texture object:", this.textures?.flowers);
-    gl.activeTexture(gl.TEXTURE0);
-    gl.bindTexture(gl.TEXTURE_2D, this.textures.flowers);
-    if (texLoc !== null) gl.uniform1i(texLoc, 0);
+    // Temporary: verify flowerProgram is set
+    // console.log("useProgram called, flowerProgram:", flowerProgram);
 
-    console.log("flower tex location:", gl.getUniformLocation(program, "tex"));
+    this.setUniform(flowerProgram, "projMatrix", projectionMatrix);
+    this.setUniform(flowerProgram, "viewMatrix", viewMatrix);
 
+    this.setUniform(flowerProgram, "isNight", 1.0, "float"); // CHQ: Claude AI added this, without which resulted in black/invisible output
+
+    const texLoc = gl.getUniformLocation(flowerProgram, "tex");
+
+    // CHQ: Claude AI: remove logs
+    // console.log("flower tex location:", texLoc);
+    // console.log("flowers texture object:", this.textures?.flowers);
+    // console.log("flower tex location:", gl.getUniformLocation(flowerProgram, "tex"));
+
+    // 2. CRITICAL: Bind the flower texture
+    // Ensure you have loaded the texture into this.textures.flowers
     if (this.textures?.flowers) {
       gl.activeTexture(gl.TEXTURE0);
       gl.bindTexture(gl.TEXTURE_2D, this.textures.flowers);
+      this.setUniform(flowerProgram, "tex", 0, "int"); // CHQ: Claude AI: replace "uSampler" with "tex"
+
+      if (texLoc !== null) gl.uniform1i(texLoc, 0);
     }
 
     // CHQ: Claude AI: remove the bindBuffer and bindMeshAttributes calls — the VAO handles all of that:
@@ -427,11 +433,11 @@ export class Renderer {
     //      matrix is uploaded before drawing), flowers are a single
     //      pre-baked static mesh, so only need to be drawn once
     // gl.bindBuffer(gl.ARRAY_BUFFER, this.meshes.flowers.vertexBuffer);
-    // this.bindMeshAttributes("flowers", program);
+    // this.bindMeshAttributes("flowers", flowerProgram);
 
-    // const vertPosLoc = gl.getAttribLocation(program, "vertPos");
-    // const vertUVLoc = gl.getAttribLocation(program, "vertUV");
-    // const vertGooLoc = gl.getAttribLocation(program, "vertGoo");
+    // const vertPosLoc = gl.getAttribLocation(flowerProgram, "vertPos");
+    // const vertUVLoc = gl.getAttribLocation(flowerProgram, "vertUV");
+    // const vertGooLoc = gl.getAttribLocation(flowerProgram, "vertGoo");
     // console.log(
     //   "attrib locations — vertPos:",
     //   vertPosLoc,
@@ -483,12 +489,15 @@ export class Renderer {
   // CHQ: Claude AI rewrote to use setUniform and drawMesh
   drawBees(state, viewMatrix, projectionMatrix) {
     const gl = this.gl;
-    const program = this.programs.bee;
-    gl.useProgram(program);
+    const beeProgram = this.programs.bee;
 
-    this.setUniform(program, "projMatrix", projectionMatrix);
-    this.setUniform(program, "viewMatrix", viewMatrix);
-    this.setUniform(program, "tex", 0); // CHQ: Claude AI: replace "uSampler" with "tex"
+    if (!gl.getProgramParameter(beeProgram, gl.LINK_STATUS)) return;
+
+    gl.useProgram(beeProgram);
+
+    this.setUniform(beeProgram, "projMatrix", projectionMatrix);
+    this.setUniform(beeProgram, "viewMatrix", viewMatrix);
+    this.setUniform(beeProgram, "tex", 0); // CHQ: Claude AI: replace "uSampler" with "tex"
 
     if (this.textures?.bees) {
       gl.activeTexture(gl.TEXTURE0);
@@ -498,19 +507,22 @@ export class Renderer {
     state.objects.bees.forEach((bee) => {
       const modelMatrix = mat4.create();
       mat4.fromTranslation(modelMatrix, bee.pos);
-      this.setUniform(program, "uModelMatrix", modelMatrix);
+      this.setUniform(beeProgram, "uModelMatrix", modelMatrix);
       this.drawMesh("bees");
     });
   }
 
   drawMobs(state, viewMatrix, projectionMatrix) {
     const gl = this.gl;
-    const program = this.programs.mob;
-    gl.useProgram(program);
+    const mobProgram = this.programs.mob;
 
-    this.setUniform(program, "projMatrix", projectionMatrix);
-    this.setUniform(program, "viewMatrix", viewMatrix);
-    this.setUniform(program, "tex", 0); // CHQ: Claude AI: replace "uSampler" with "tex"
+    if (!gl.getProgramParameter(mobProgram, gl.LINK_STATUS)) return;
+
+    gl.useProgram(mobProgram);
+
+    this.setUniform(mobProgram, "projMatrix", projectionMatrix);
+    this.setUniform(mobProgram, "viewMatrix", viewMatrix);
+    this.setUniform(mobProgram, "tex", 0); // CHQ: Claude AI: replace "uSampler" with "tex"
 
     if (this.textures?.bear) {
       // if (this.textures?.mob) {
@@ -531,8 +543,8 @@ export class Renderer {
         mat4.rotateY(modelMatrix, modelMatrix, mob.facingAngle);
       }
 
-      this.setUniform(program, "uModelMatrix", modelMatrix);
-      this.setUniform(program, "uTextureOffset", mob.frameIndex || 0);
+      this.setUniform(mobProgram, "uModelMatrix", modelMatrix);
+      this.setUniform(mobProgram, "uTextureOffset", mob.frameIndex || 0);
       this.drawMesh("mobs");
     });
   }
