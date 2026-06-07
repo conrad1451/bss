@@ -734,7 +734,19 @@ export class Renderer {
     // mat4.lookAt(viewMatrix, [0, 15, 20], [0, 0, 0], [0, 1, 0]);
     // mat4.lookAt(viewMatrix, [25, 25, -20], [25, 13, -40], [0, 1, 0]);
     // mat4.lookAt(viewMatrix, [15, 20, 35], [15, 0, 16], [0, 1, 0]);
-    mat4.lookAt(viewMatrix, [15, 50, 50], [15, 10, 16], [0, 1, 0]);
+    // mat4.lookAt(viewMatrix, [15, 50, 50], [15, 10, 16], [0, 1, 0]);
+
+    // mat4.lookAt(viewMatrix, [15, 20, 60], [15, 0, 16], [0, 1, 0]); // CHQ: Claude AI: adjust camera to see flowers
+    // mat4.lookAt(viewMatrix, [15, 10, 30], [15, 0, 16], [0, 1, 0]);
+    // mat4.lookAt(viewMatrix, [15, 8, 40], [15, 0, 16], [0, 1, 0]);
+
+    state.cameraAngle = (state.cameraAngle || 0) + ((2 * Math.PI) / 180) * dt;
+
+    const radius = 40;
+    const cx = 15 + Math.sin(state.cameraAngle) * radius;
+    const cz = 16 + Math.cos(state.cameraAngle) * radius;
+
+    mat4.lookAt(viewMatrix, [cx, 8, cz], [15, 0, 16], [0, 1, 0]);
 
     const projectionMatrix = mat4.create();
     mat4.perspective(

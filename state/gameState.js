@@ -57,6 +57,8 @@ export function createInitialState(saveData = {}) {
     TIME: 0,
     frameCount: 0,
 
+    cameraAngle: 0,
+
     // 🛠️ Pure physics configuration data for engine/physics.js
     world: {
       gravity: -9.81,
