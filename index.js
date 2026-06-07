@@ -48,7 +48,14 @@ canvas.width = width;
 canvas.height = height;
 
 const gl = canvas.getContext("webgl2") || canvas.getContext("webgl");
-
+console.log(
+  "WebGL version:",
+  gl instanceof WebGL2RenderingContext ? "WebGL2" : "WebGL1",
+);
+if (!(gl instanceof WebGL2RenderingContext)) {
+  // Enable UNSIGNED_INT indices for WebGL1
+  gl.getExtension("OES_element_index_uint");
+}
 if (!gl) {
   console.error("WebGL failed to initialize!");
 }
@@ -242,6 +249,8 @@ async function BeeSwarmSimulator(saveData) {
     console.log("field configs:", FIELD_CONFIGS);
 
     // CHQ: Gemini AI: Handoff compiled mesh geometry to the GPU
+    console.log("gl is WebGL2:", gl instanceof WebGL2RenderingContext);
+    console.log("renderer.gl === gl:", renderer.gl === gl);
     renderer.uploadFlowerMesh(flowerMeshDataStaging);
 
     // CHQ: Claude AI added for testing

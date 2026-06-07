@@ -680,8 +680,15 @@ export class Renderer {
     if (!mesh || !mesh.vertexBuffer) return;
 
     if (mesh.vao) {
+      // console.log("VAO valid:", gl.isVertexArray(mesh.vao));
       // VAO path — all buffer/attribute state already recorded
       gl.bindVertexArray(mesh.vao);
+      // console.log(
+      //   "vertCount:",
+      //   mesh.vertCount,
+      //   "indexBuffer:",
+      //   !!mesh.indexBuffer,
+      // );
       // console.log("about to drawElements, vertCount:", mesh.vertCount);
       gl.drawElements(gl.TRIANGLES, mesh.vertCount, gl.UNSIGNED_INT, 0);
       const err = gl.getError();
