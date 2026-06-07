@@ -394,60 +394,6 @@ export class Renderer {
     return null;
   }
 
-  // drawFlowersNew(state, viewMatrix, projectionMatrix) {
-  //   const gl = this.gl;
-  //   const program = this.programs.flower;
-  //   const cache = this.glCache.flower;
-
-  //   // 1. Activate the Program
-  //   gl.useProgram(program);
-
-  //   // 2. Pass Matrices (Use the cache!)
-  //   if (cache.projMatrix)
-  //     gl.uniformMatrix4fv(cache.projMatrix, false, projectionMatrix);
-  //   if (cache.viewMatrix)
-  //     gl.uniformMatrix4fv(cache.viewMatrix, false, viewMatrix);
-
-  //   // 3. Bind Texture (Assuming you have a texture atlas for flowers)
-  //   if (this.textures && this.textures.flowers) {
-  //     gl.activeTexture(gl.TEXTURE0);
-  //     gl.bindTexture(gl.TEXTURE_2D, this.textures.flowers);
-  //     const uSampler = gl.getUniformLocation(program, "uSampler");
-  //     if (uSampler) gl.uniform1i(uSampler, 0);
-  //   }
-
-  //   // 4. Bind Geometry
-  //   if (this.meshes.flowers && this.meshes.flowers.vertexBuffer) {
-  //     gl.bindBuffer(gl.ARRAY_BUFFER, this.meshes.flowers.vertexBuffer);
-
-  //     // Ensure stride matches your vertex buffer structure (e.g., 8 floats * 4 bytes = 32)
-  //     const stride = 8 * 4;
-
-  //     // Enable attributes (assuming you have location indices stored in cache)
-  //     if (cache.vertPos !== undefined) {
-  //       gl.enableVertexAttribArray(cache.vertPos);
-  //       gl.vertexAttribPointer(cache.vertPos, 3, gl.FLOAT, false, stride, 0);
-  //     }
-  //     if (cache.vertUV !== undefined) {
-  //       gl.enableVertexAttribArray(cache.vertUV);
-  //       gl.vertexAttribPointer(cache.vertUV, 4, gl.FLOAT, false, stride, 3 * 4);
-  //     }
-
-  //     // 5. Draw
-  //     if (this.meshes.flowers.indexBuffer) {
-  //       gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.meshes.flowers.indexBuffer);
-  //       gl.drawElements(
-  //         gl.TRIANGLES,
-  //         this.meshes.flowers.vertCount,
-  //         gl.UNSIGNED_SHORT,
-  //         0,
-  //       );
-  //     } else {
-  //       gl.drawArrays(gl.TRIANGLES, 0, this.meshes.flowers.vertCount);
-  //     }
-  //   }
-  // }
-
   drawFlowers(state, viewMatrix, projectionMatrix) {
     const gl = this.gl;
     const program = this.programs.flower; // Target your flower vertex/fragment shaders
