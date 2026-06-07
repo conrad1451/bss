@@ -17,6 +17,7 @@ export class Renderer {
     this.gl = gl;
     this.width = width;
     this.height = height;
+    this.textures = {}; // CHQ: Claude AI: add this
 
     // this.projectionMatrix = new Float32Array(16); // CHQ: stored this.projectionMatrix as a property of Renderer class.
     // this.viewMatrix = new Float32Array(16);
@@ -426,6 +427,8 @@ export class Renderer {
 
       if (texLoc !== null) gl.uniform1i(texLoc, 0);
     }
+
+    console.log("Texture bound:", !!this.textures.flowers);
 
     // CHQ: Claude AI: remove the bindBuffer and bindMeshAttributes calls — the VAO handles all of that:
     // CHQ: while Bees and mobs are individual entities in state.objects
