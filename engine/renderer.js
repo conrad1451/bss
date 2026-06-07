@@ -8,7 +8,7 @@ import { MATH } from "../utils/math";
 
 import { mat4, vec3 } from "gl-matrix";
 
-console.log("Is mat4 available?", !!mat4); // Should be true
+// console.log("Is mat4 available?", !!mat4); // Should be true
 
 // console.log("Is glMatrix available?", !!window.glMatrix);
 // console.log("Is mat4 available?", !!window.glMatrix?.mat4);
@@ -18,8 +18,12 @@ export class Renderer {
     this.width = width;
     this.height = height;
 
-    this.projectionMatrix = new Float32Array(16); // CHQ: stored this.projectionMatrix as a property of Renderer class.
-    this.viewMatrix = new Float32Array(16);
+    // this.projectionMatrix = new Float32Array(16); // CHQ: stored this.projectionMatrix as a property of Renderer class.
+    // this.viewMatrix = new Float32Array(16);
+
+    // 1. Pre-allocate matrices to stop GC churn
+    this.viewMatrix = mat4.create();
+    this.projectionMatrix = mat4.create();
 
     // Explicitly initialize the cache directly on the class instance
     this.glCache = {};
@@ -77,7 +81,7 @@ export class Renderer {
     // --- 🛠️ NEW: Prime screen-space static mesh layout geometry ---
     this.initUIQuadBuffer();
 
-    this.testDraw();
+    // this.testDraw();
   }
 
   // --- 🛠️ NEW: Initialize dynamic quad vertices for UI texture rendering ---
@@ -124,9 +128,9 @@ export class Renderer {
               : 1; // CHQ: Claude AI added case for vertGoo
 
         gl.vertexAttribPointer(location, size, gl.FLOAT, false, stride, offset);
-        console.log(
-          `attr: ${attrName}, location: ${location}, size: ${size}, offset: ${offset}, stride: ${stride}`,
-        );
+        // console.log(
+        //   `attr: ${attrName}, location: ${location}, size: ${size}, offset: ${offset}, stride: ${stride}`,
+        // );
         // Advance the offset for the next attribute
         offset += size * 4;
       }
@@ -151,7 +155,7 @@ export class Renderer {
     this.meshes.flowers.vao = gl.createVertexArray();
     gl.bindVertexArray(this.meshes.flowers.vao);
 
-    console.log("flower VAO created:", this.meshes.flowers.vao);
+    // console.log("flower VAO created:", this.meshes.flowers.vao);
 
     // Vertex buffer
     this.meshes.flowers.vertexBuffer = gl.createBuffer();
@@ -185,9 +189,9 @@ export class Renderer {
     // Unbind when done
     gl.bindVertexArray(null);
 
-    console.log(
-      `⚡ GPU Upload Complete: ${stagingData.index.length / 3} flower triangles.`,
-    );
+    // console.log(
+    //   `⚡ GPU Upload Complete: ${stagingData.index.length / 3} flower triangles.`,
+    // );
 
     // if (!stagingData || !stagingData.verts || stagingData.verts.length === 0) {
     //   console.warn(
@@ -293,7 +297,7 @@ export class Renderer {
     );
 
     // 2. Automated Status Audit Loop
-    console.log("--- WebGL Program Linking Status Audit ---");
+    // console.log("--- WebGL Program Linking Status Audit ---");
     Object.keys(this.programs).forEach((key) => {
       const prog = this.programs[key];
       if (!prog) {
@@ -304,9 +308,9 @@ export class Renderer {
       } else {
         const isProgram = gl.isProgram(prog);
         const linkStatus = gl.getProgramParameter(prog, gl.LINK_STATUS);
-        console.log(
-          `Program [${key}] -> Valid WebGL Object: ${isProgram}, Link Successful: ${linkStatus}`,
-        );
+        // console.log(
+        //   `Program [${key}] -> Valid WebGL Object: ${isProgram}, Link Successful: ${linkStatus}`,
+        // );
 
         if (!linkStatus) {
           console.error(
@@ -316,7 +320,7 @@ export class Renderer {
         }
       }
     });
-    console.log("------------------------------------------");
+    // console.log("------------------------------------------");
   }
 
   prepareShaderSource(source) {
@@ -450,13 +454,21 @@ export class Renderer {
     gl.useProgram(program);
 
     // Temporary: verify program is set
-    console.log("useProgram called, program:", program);
+    // console.log("useProgram called, program:", program);
 
     this.setUniform(program, "projMatrix", projectionMatrix);
     this.setUniform(program, "viewMatrix", viewMatrix);
 
     this.setUniform(program, "isNight", 1.0, "float"); // CHQ: Claude AI added this, without which resulted in black/invisible output
-    this.setUniform(program, "tex", 0, "int"); // CHQ: Claude AI: replace "uSampler" with "tex"
+    // this.setUniform(program, "tex", 0, "int"); // CHQ: Claude AI: replace "uSampler" with "tex"
+    const texLoc = gl.getUniformLocation(program, "tex");
+    console.log("flower tex location:", texLoc);
+    console.log("flowers texture object:", this.textures?.flowers);
+    gl.activeTexture(gl.TEXTURE0);
+    gl.bindTexture(gl.TEXTURE_2D, this.textures.flowers);
+    if (texLoc !== null) gl.uniform1i(texLoc, 0);
+
+    console.log("flower tex location:", gl.getUniformLocation(program, "tex"));
 
     if (this.textures?.flowers) {
       gl.activeTexture(gl.TEXTURE0);
@@ -487,39 +499,39 @@ export class Renderer {
     // gl.disable(gl.CULL_FACE);
     // console.log("cull face disabled");
 
-    const testPos = [24.5, 13, -40, 1.0]; // first flower vertex from your logs
-    const mvp = mat4.create();
-    mat4.multiply(mvp, projectionMatrix, viewMatrix);
+    // const testPos = [24.5, 13, -40, 1.0]; // first flower vertex from your logs
+    // const mvp = mat4.create();
+    // mat4.multiply(mvp, projectionMatrix, viewMatrix);
 
-    const clipX =
-      mvp[0] * testPos[0] +
-      mvp[4] * testPos[1] +
-      mvp[8] * testPos[2] +
-      mvp[12] * testPos[3];
-    const clipY =
-      mvp[1] * testPos[0] +
-      mvp[5] * testPos[1] +
-      mvp[9] * testPos[2] +
-      mvp[13] * testPos[3];
-    const clipZ =
-      mvp[2] * testPos[0] +
-      mvp[6] * testPos[1] +
-      mvp[10] * testPos[2] +
-      mvp[14] * testPos[3];
-    const clipW =
-      mvp[3] * testPos[0] +
-      mvp[7] * testPos[1] +
-      mvp[11] * testPos[2] +
-      mvp[15] * testPos[3];
+    // const clipX =
+    //   mvp[0] * testPos[0] +
+    //   mvp[4] * testPos[1] +
+    //   mvp[8] * testPos[2] +
+    //   mvp[12] * testPos[3];
+    // const clipY =
+    //   mvp[1] * testPos[0] +
+    //   mvp[5] * testPos[1] +
+    //   mvp[9] * testPos[2] +
+    //   mvp[13] * testPos[3];
+    // const clipZ =
+    //   mvp[2] * testPos[0] +
+    //   mvp[6] * testPos[1] +
+    //   mvp[10] * testPos[2] +
+    //   mvp[14] * testPos[3];
+    // const clipW =
+    //   mvp[3] * testPos[0] +
+    //   mvp[7] * testPos[1] +
+    //   mvp[11] * testPos[2] +
+    //   mvp[15] * testPos[3];
 
-    console.log("clip coords:", clipX, clipY, clipZ, clipW);
-    console.log("NDC:", clipX / clipW, clipY / clipW, clipZ / clipW);
+    // console.log("clip coords:", clipX, clipY, clipZ, clipW);
+    // console.log("NDC:", clipX / clipW, clipY / clipW, clipZ / clipW);
 
     this.drawMesh("flowers");
     // gl.enable(gl.CULL_FACE); // re-enable after if needed
 
-    console.log("flower texture:", this.textures?.flowers);
-    console.log("flower vertCount:", this.meshes.flowers.vertCount);
+    // console.log("flower texture:", this.textures?.flowers);
+    // console.log("flower vertCount:", this.meshes.flowers.vertCount);
   }
 
   // CHQ: Claude AI rewrote to use setUniform and drawMesh
@@ -580,7 +592,7 @@ export class Renderer {
   }
 
   initCache(programs) {
-    console.log("Programs received by initCache:", Object.keys(programs));
+    // console.log("Programs received by initCache:", Object.keys(programs));
 
     for (const key in programs) {
       const prog = programs[key];
@@ -591,7 +603,7 @@ export class Renderer {
       };
 
       // ADD THIS TO VERIFY THE CACHE IS ACTUALLY FILLING
-      console.log(`Cache entry for [${key}]:`, this.glCache[key]);
+      // console.log(`Cache entry for [${key}]:`, this.glCache[key]);
     }
   }
 
@@ -709,7 +721,7 @@ export class Renderer {
     if (mesh.vao) {
       // VAO path — all buffer/attribute state already recorded
       gl.bindVertexArray(mesh.vao);
-      console.log("about to drawElements, vertCount:", mesh.vertCount);
+      // console.log("about to drawElements, vertCount:", mesh.vertCount);
       gl.drawElements(gl.TRIANGLES, mesh.vertCount, gl.UNSIGNED_INT, 0);
       const err = gl.getError();
       if (err) console.error(`drawElements error [${meshKey}]:`, err);
@@ -736,7 +748,7 @@ export class Renderer {
    * @param {number} dt - Delta time in seconds
    */
   render(state, dt) {
-    console.log("Renderer loop running...");
+    // console.log("Renderer loop running...");
     const gl = this.gl;
 
     // 1. Guard to prevent deep crashes if state hasn't fully loaded yet
