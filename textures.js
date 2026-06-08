@@ -7744,6 +7744,19 @@ function drawPetalTexture(ctx) {
   ctx.bezierCurveTo(-80, -100, 80, -100, 20, -20);
 }
 
+function drawCenter(ctx) {
+  ctx.beginPath();
+  // ctx.arc(0, 0, 25, 0, 6);
+  ctx.arc(0, 0, 25, 0, Math.PI * 2);
+
+  ctx.strokeStyle = "rgb(157, 242, 100)";
+  ctx.lineWidth = 5;
+  ctx.fillStyle = "rgb(226, 255, 138)";
+
+  ctx.fill();
+  ctx.stroke();
+}
+
 window.textures_flowers = function (tex_ctx) {
   // window.textures_flowers = function (tex_ctx) {
   let _COLORS = {
@@ -7775,14 +7788,9 @@ window.textures_flowers = function (tex_ctx) {
   tex_ctx.fillStyle = _COLORS.red;
   tex_ctx.fill();
   tex_ctx.stroke();
-  tex_ctx.beginPath();
-  tex_ctx.arc(0, 0, 25, 0, 6);
-  tex_ctx.closePath();
-  tex_ctx.strokeStyle = "rgb(157, 242, 100)";
-  tex_ctx.lineWidth = 5;
-  tex_ctx.fillStyle = "rgb(226, 255, 138)";
-  tex_ctx.fill();
-  tex_ctx.stroke();
+
+  drawCenter(tex_ctx);
+
   tex_ctx.setTransform(1, 0, 0, 1, 0, 0);
 
   tex_ctx.translate(128 * 3, 128);
@@ -7802,14 +7810,9 @@ window.textures_flowers = function (tex_ctx) {
   tex_ctx.fillStyle = _COLORS.blue;
   tex_ctx.fill();
   tex_ctx.stroke();
-  tex_ctx.beginPath();
-  tex_ctx.arc(0, 0, 25, 0, 6);
-  tex_ctx.closePath();
-  tex_ctx.strokeStyle = "rgb(157, 242, 100)";
-  tex_ctx.lineWidth = 5;
-  tex_ctx.fillStyle = "rgb(226, 255, 138)";
-  tex_ctx.fill();
-  tex_ctx.stroke();
+
+  drawCenter(tex_ctx);
+
   tex_ctx.setTransform(1, 0, 0, 1, 0, 0);
 
   tex_ctx.translate(128 * 5, 128);
@@ -7829,14 +7832,9 @@ window.textures_flowers = function (tex_ctx) {
   tex_ctx.fillStyle = _COLORS.white;
   tex_ctx.fill();
   tex_ctx.stroke();
-  tex_ctx.beginPath();
-  tex_ctx.arc(0, 0, 25, 0, 6);
-  tex_ctx.closePath();
-  tex_ctx.strokeStyle = "rgb(157, 242, 100)";
-  tex_ctx.lineWidth = 5;
-  tex_ctx.fillStyle = "rgb(226, 255, 138)";
-  tex_ctx.fill();
-  tex_ctx.stroke();
+
+  drawCenter(tex_ctx);
+
   tex_ctx.setTransform(1, 0, 0, 1, 0, 0);
 
   tex_ctx.translate(128 * 7 - 51, 108);
@@ -7857,14 +7855,9 @@ window.textures_flowers = function (tex_ctx) {
   tex_ctx.fillStyle = _COLORS.red;
   tex_ctx.fill();
   tex_ctx.stroke();
-  tex_ctx.beginPath();
-  tex_ctx.arc(0, 0, 25, 0, 6);
-  tex_ctx.closePath();
-  tex_ctx.strokeStyle = "rgb(157, 242, 100)";
-  tex_ctx.lineWidth = 5;
-  tex_ctx.fillStyle = "rgb(226, 255, 138)";
-  tex_ctx.fill();
-  tex_ctx.stroke();
+
+  drawCenter(tex_ctx);
+
   tex_ctx.setTransform(1, 0, 0, 1, 0, 0);
   tex_ctx.translate(128 * 7 + 40, 147);
   tex_ctx.rotate(-0.6);
@@ -7884,14 +7877,9 @@ window.textures_flowers = function (tex_ctx) {
   tex_ctx.fillStyle = _COLORS.red;
   tex_ctx.fill();
   tex_ctx.stroke();
-  tex_ctx.beginPath();
-  tex_ctx.arc(0, 0, 25, 0, 6);
-  tex_ctx.closePath();
-  tex_ctx.strokeStyle = "rgb(157, 242, 100)";
-  tex_ctx.lineWidth = 5;
-  tex_ctx.fillStyle = "rgb(226, 255, 138)";
-  tex_ctx.fill();
-  tex_ctx.stroke();
+
+  drawCenter(tex_ctx);
+
   tex_ctx.setTransform(1, 0, 0, 1, 0, 0);
 
   tex_ctx.translate(128 - 51, 87 + 256);
@@ -7912,14 +7900,9 @@ window.textures_flowers = function (tex_ctx) {
   tex_ctx.fillStyle = _COLORS.blue;
   tex_ctx.fill();
   tex_ctx.stroke();
-  tex_ctx.beginPath();
-  tex_ctx.arc(0, 0, 25, 0, 6);
-  tex_ctx.closePath();
-  tex_ctx.strokeStyle = "rgb(157, 242, 100)";
-  tex_ctx.lineWidth = 5;
-  tex_ctx.fillStyle = "rgb(226, 255, 138)";
-  tex_ctx.fill();
-  tex_ctx.stroke();
+
+  drawCenter(tex_ctx);
+
   tex_ctx.setTransform(1, 0, 0, 1, 0, 0);
   tex_ctx.translate(40 + 128, 128 * 2 + 129);
   tex_ctx.rotate(-0.6);
@@ -7939,14 +7922,9 @@ window.textures_flowers = function (tex_ctx) {
   tex_ctx.fillStyle = _COLORS.blue;
   tex_ctx.fill();
   tex_ctx.stroke();
-  tex_ctx.beginPath();
-  tex_ctx.arc(0, 0, 25, 0, 6);
-  tex_ctx.closePath();
-  tex_ctx.strokeStyle = "rgb(157, 242, 100)";
-  tex_ctx.lineWidth = 5;
-  tex_ctx.fillStyle = "rgb(226, 255, 138)";
-  tex_ctx.fill();
-  tex_ctx.stroke();
+
+  drawCenter(tex_ctx);
+
   tex_ctx.setTransform(1, 0, 0, 1, 0, 0);
 
   tex_ctx.translate(128 * 3 - 51, 87 + 256);
@@ -7967,14 +7945,9 @@ window.textures_flowers = function (tex_ctx) {
   tex_ctx.fillStyle = _COLORS.white;
   tex_ctx.fill();
   tex_ctx.stroke();
-  tex_ctx.beginPath();
-  tex_ctx.arc(0, 0, 25, 0, 6);
-  tex_ctx.closePath();
-  tex_ctx.strokeStyle = "rgb(157, 242, 100)";
-  tex_ctx.lineWidth = 5;
-  tex_ctx.fillStyle = "rgb(226, 255, 138)";
-  tex_ctx.fill();
-  tex_ctx.stroke();
+
+  drawCenter(tex_ctx);
+
   tex_ctx.setTransform(1, 0, 0, 1, 0, 0);
   tex_ctx.translate(40 + 128 * 3, 128 * 2 + 129);
   tex_ctx.rotate(-0.6);
@@ -7994,14 +7967,9 @@ window.textures_flowers = function (tex_ctx) {
   tex_ctx.fillStyle = _COLORS.white;
   tex_ctx.fill();
   tex_ctx.stroke();
-  tex_ctx.beginPath();
-  tex_ctx.arc(0, 0, 25, 0, 6);
-  tex_ctx.closePath();
-  tex_ctx.strokeStyle = "rgb(157, 242, 100)";
-  tex_ctx.lineWidth = 5;
-  tex_ctx.fillStyle = "rgb(226, 255, 138)";
-  tex_ctx.fill();
-  tex_ctx.stroke();
+
+  drawCenter(tex_ctx);
+
   tex_ctx.setTransform(1, 0, 0, 1, 0, 0);
 
   tex_ctx.translate(128 * 5 - 55, 87 + 263);
@@ -8021,14 +7989,9 @@ window.textures_flowers = function (tex_ctx) {
   tex_ctx.fillStyle = _COLORS.red;
   tex_ctx.fill();
   tex_ctx.stroke();
-  tex_ctx.beginPath();
-  tex_ctx.arc(0, 0, 25, 0, 6);
-  tex_ctx.closePath();
-  tex_ctx.strokeStyle = "rgb(157, 242, 100)";
-  tex_ctx.lineWidth = 5;
-  tex_ctx.fillStyle = "rgb(226, 255, 138)";
-  tex_ctx.fill();
-  tex_ctx.stroke();
+
+  drawCenter(tex_ctx);
+
   tex_ctx.setTransform(1, 0, 0, 1, 0, 0);
   tex_ctx.translate(-6 + 128 * 5, 128 * 2 + 179);
   tex_ctx.rotate(-1.5);
@@ -8048,14 +8011,9 @@ window.textures_flowers = function (tex_ctx) {
   tex_ctx.fillStyle = _COLORS.red;
   tex_ctx.fill();
   tex_ctx.stroke();
-  tex_ctx.beginPath();
-  tex_ctx.arc(0, 0, 25, 0, 6);
-  tex_ctx.closePath();
-  tex_ctx.strokeStyle = "rgb(157, 242, 100)";
-  tex_ctx.lineWidth = 5;
-  tex_ctx.fillStyle = "rgb(226, 255, 138)";
-  tex_ctx.fill();
-  tex_ctx.stroke();
+
+  drawCenter(tex_ctx);
+
   tex_ctx.setTransform(1, 0, 0, 1, 0, 0);
   tex_ctx.translate(58 + 128 * 5, 128 * 2 + 101);
   tex_ctx.rotate(-1.5);
@@ -8075,14 +8033,9 @@ window.textures_flowers = function (tex_ctx) {
   tex_ctx.fillStyle = _COLORS.red;
   tex_ctx.fill();
   tex_ctx.stroke();
-  tex_ctx.beginPath();
-  tex_ctx.arc(0, 0, 25, 0, 6);
-  tex_ctx.closePath();
-  tex_ctx.strokeStyle = "rgb(157, 242, 100)";
-  tex_ctx.lineWidth = 5;
-  tex_ctx.fillStyle = "rgb(226, 255, 138)";
-  tex_ctx.fill();
-  tex_ctx.stroke();
+
+  drawCenter(tex_ctx);
+
   tex_ctx.setTransform(1, 0, 0, 1, 0, 0);
 
   tex_ctx.translate(128 * 7 - 45, 87 + 261);
@@ -8102,14 +8055,9 @@ window.textures_flowers = function (tex_ctx) {
   tex_ctx.fillStyle = _COLORS.blue;
   tex_ctx.fill();
   tex_ctx.stroke();
-  tex_ctx.beginPath();
-  tex_ctx.arc(0, 0, 25, 0, 6);
-  tex_ctx.closePath();
-  tex_ctx.strokeStyle = "rgb(157, 242, 100)";
-  tex_ctx.lineWidth = 5;
-  tex_ctx.fillStyle = "rgb(226, 255, 138)";
-  tex_ctx.fill();
-  tex_ctx.stroke();
+
+  drawCenter(tex_ctx);
+
   tex_ctx.setTransform(1, 0, 0, 1, 0, 0);
   tex_ctx.translate(12 + 128 * 7, 128 * 2 + 177);
   tex_ctx.rotate(-1.5);
@@ -8129,14 +8077,9 @@ window.textures_flowers = function (tex_ctx) {
   tex_ctx.fillStyle = _COLORS.blue;
   tex_ctx.fill();
   tex_ctx.stroke();
-  tex_ctx.beginPath();
-  tex_ctx.arc(0, 0, 25, 0, 6);
-  tex_ctx.closePath();
-  tex_ctx.strokeStyle = "rgb(157, 242, 100)";
-  tex_ctx.lineWidth = 5;
-  tex_ctx.fillStyle = "rgb(226, 255, 138)";
-  tex_ctx.fill();
-  tex_ctx.stroke();
+
+  drawCenter(tex_ctx);
+
   tex_ctx.setTransform(1, 0, 0, 1, 0, 0);
   tex_ctx.translate(66 + 128 * 7, 128 * 2 + 91);
   tex_ctx.rotate(0.1);
@@ -8156,14 +8099,9 @@ window.textures_flowers = function (tex_ctx) {
   tex_ctx.fillStyle = _COLORS.blue;
   tex_ctx.fill();
   tex_ctx.stroke();
-  tex_ctx.beginPath();
-  tex_ctx.arc(0, 0, 25, 0, 6);
-  tex_ctx.closePath();
-  tex_ctx.strokeStyle = "rgb(157, 242, 100)";
-  tex_ctx.lineWidth = 5;
-  tex_ctx.fillStyle = "rgb(226, 255, 138)";
-  tex_ctx.fill();
-  tex_ctx.stroke();
+
+  drawCenter(tex_ctx);
+
   tex_ctx.setTransform(1, 0, 0, 1, 0, 0);
 
   tex_ctx.translate(128 - 63, 128 * 3 + 235);
@@ -8183,14 +8121,9 @@ window.textures_flowers = function (tex_ctx) {
   tex_ctx.fillStyle = _COLORS.white;
   tex_ctx.fill();
   tex_ctx.stroke();
-  tex_ctx.beginPath();
-  tex_ctx.arc(0, 0, 25, 0, 6);
-  tex_ctx.closePath();
-  tex_ctx.strokeStyle = "rgb(157, 242, 100)";
-  tex_ctx.lineWidth = 5;
-  tex_ctx.fillStyle = "rgb(226, 255, 138)";
-  tex_ctx.fill();
-  tex_ctx.stroke();
+
+  drawCenter(tex_ctx);
+
   tex_ctx.setTransform(1, 0, 0, 1, 0, 0);
   tex_ctx.translate(2 + 121, 128 * 4 + 189);
   tex_ctx.rotate(-1.6);
@@ -8210,14 +8143,9 @@ window.textures_flowers = function (tex_ctx) {
   tex_ctx.fillStyle = _COLORS.white;
   tex_ctx.fill();
   tex_ctx.stroke();
-  tex_ctx.beginPath();
-  tex_ctx.arc(0, 0, 25, 0, 6);
-  tex_ctx.closePath();
-  tex_ctx.strokeStyle = "rgb(157, 242, 100)";
-  tex_ctx.lineWidth = 5;
-  tex_ctx.fillStyle = "rgb(226, 255, 138)";
-  tex_ctx.fill();
-  tex_ctx.stroke();
+
+  drawCenter(tex_ctx);
+
   tex_ctx.setTransform(1, 0, 0, 1, 0, 0);
   tex_ctx.translate(17 + 166, 128 * 4 + 111);
   tex_ctx.rotate(-1.5);
@@ -8237,14 +8165,9 @@ window.textures_flowers = function (tex_ctx) {
   tex_ctx.fillStyle = _COLORS.white;
   tex_ctx.fill();
   tex_ctx.stroke();
-  tex_ctx.beginPath();
-  tex_ctx.arc(0, 0, 25, 0, 6);
-  tex_ctx.closePath();
-  tex_ctx.strokeStyle = "rgb(157, 242, 100)";
-  tex_ctx.lineWidth = 5;
-  tex_ctx.fillStyle = "rgb(226, 255, 138)";
-  tex_ctx.fill();
-  tex_ctx.stroke();
+
+  drawCenter(tex_ctx);
+
   tex_ctx.setTransform(1, 0, 0, 1, 0, 0);
 
   tex_ctx.translate(128 + 256, 128 + 256 * 2);
@@ -8272,14 +8195,9 @@ window.textures_flowers = function (tex_ctx) {
   tex_ctx.fill();
   tex_ctx.stroke();
   tex_ctx.scale(0.9, 0.9);
-  tex_ctx.beginPath();
-  tex_ctx.arc(0, 0, 25, 0, 6);
-  tex_ctx.closePath();
-  tex_ctx.strokeStyle = "rgb(157, 242, 100)";
-  tex_ctx.lineWidth = 5;
-  tex_ctx.fillStyle = "rgb(226, 255, 138)";
-  tex_ctx.fill();
-  tex_ctx.stroke();
+
+  drawCenter(tex_ctx);
+
   tex_ctx.setTransform(1, 0, 0, 1, 0, 0);
 
   tex_ctx.translate(128 + 256 * 2, 128 + 256 * 2);
@@ -8307,14 +8225,9 @@ window.textures_flowers = function (tex_ctx) {
   tex_ctx.fill();
   tex_ctx.stroke();
   tex_ctx.scale(0.9, 0.9);
-  tex_ctx.beginPath();
-  tex_ctx.arc(0, 0, 25, 0, 6);
-  tex_ctx.closePath();
-  tex_ctx.strokeStyle = "rgb(157, 242, 100)";
-  tex_ctx.lineWidth = 5;
-  tex_ctx.fillStyle = "rgb(226, 255, 138)";
-  tex_ctx.fill();
-  tex_ctx.stroke();
+
+  drawCenter(tex_ctx);
+
   tex_ctx.setTransform(1, 0, 0, 1, 0, 0);
 
   tex_ctx.translate(128 + 256 * 3, 128 + 256 * 2);
@@ -8342,14 +8255,9 @@ window.textures_flowers = function (tex_ctx) {
   tex_ctx.fill();
   tex_ctx.stroke();
   tex_ctx.scale(0.9, 0.9);
-  tex_ctx.beginPath();
-  tex_ctx.arc(0, 0, 25, 0, 6);
-  tex_ctx.closePath();
-  tex_ctx.strokeStyle = "rgb(157, 242, 100)";
-  tex_ctx.lineWidth = 5;
-  tex_ctx.fillStyle = "rgb(226, 255, 138)";
-  tex_ctx.fill();
-  tex_ctx.stroke();
+
+  drawCenter(tex_ctx);
+
   tex_ctx.setTransform(1, 0, 0, 1, 0, 0);
 
   tex_ctx.translate(128, 128 + 256 * 3);
