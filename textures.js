@@ -7739,7 +7739,13 @@ window.textures_bees = function (tex_ctx) {
   tex_ctx.setTransform(1, 0, 0, 1, 0, 0);
 };
 
+function drawPetalTexture(ctx) {
+  ctx.moveTo(-20, -20);
+  ctx.bezierCurveTo(-80, -100, 80, -100, 20, -20);
+}
+
 window.textures_flowers = function (tex_ctx) {
+  // window.textures_flowers = function (tex_ctx) {
   let _COLORS = {
     blue: "rgb(20,84,196)",
     red: "rgb(255, 35, 0)",
@@ -7754,19 +7760,16 @@ window.textures_flowers = function (tex_ctx) {
 
   tex_ctx.translate(128, 128);
   tex_ctx.scale(0.7, 0.7);
+
   tex_ctx.beginPath();
-  tex_ctx.moveTo(-20, -20);
-  tex_ctx.bezierCurveTo(-80, -100, 80, -100, 20, -20);
-  tex_ctx.rotate(Math.PI * 0.5);
-  tex_ctx.moveTo(-20, -20);
-  tex_ctx.bezierCurveTo(-80, -100, 80, -100, 20, -20);
-  tex_ctx.rotate(Math.PI * 0.5);
-  tex_ctx.moveTo(-20, -20);
-  tex_ctx.bezierCurveTo(-80, -100, 80, -100, 20, -20);
-  tex_ctx.rotate(Math.PI * 0.5);
-  tex_ctx.moveTo(-20, -20);
-  tex_ctx.bezierCurveTo(-80, -100, 80, -100, 20, -20);
+  for (let i = 0; i < 4; i++) {
+    drawPetalTexture(tex_ctx);
+    if (i < 3) {
+      tex_ctx.rotate(Math.PI * 0.5);
+    }
+  }
   tex_ctx.closePath();
+
   tex_ctx.strokeStyle = "rgb(0,0,0,0.3)";
   tex_ctx.lineWidth = 5;
   tex_ctx.fillStyle = _COLORS.red;
@@ -7784,19 +7787,16 @@ window.textures_flowers = function (tex_ctx) {
 
   tex_ctx.translate(128 * 3, 128);
   tex_ctx.scale(0.7, 0.7);
+
   tex_ctx.beginPath();
-  tex_ctx.moveTo(-20, -20);
-  tex_ctx.bezierCurveTo(-80, -100, 80, -100, 20, -20);
-  tex_ctx.rotate(Math.PI * 0.5);
-  tex_ctx.moveTo(-20, -20);
-  tex_ctx.bezierCurveTo(-80, -100, 80, -100, 20, -20);
-  tex_ctx.rotate(Math.PI * 0.5);
-  tex_ctx.moveTo(-20, -20);
-  tex_ctx.bezierCurveTo(-80, -100, 80, -100, 20, -20);
-  tex_ctx.rotate(Math.PI * 0.5);
-  tex_ctx.moveTo(-20, -20);
-  tex_ctx.bezierCurveTo(-80, -100, 80, -100, 20, -20);
+  for (let i = 0; i < 4; i++) {
+    drawPetalTexture(tex_ctx);
+    if (i < 3) {
+      tex_ctx.rotate(Math.PI * 0.5);
+    }
+  }
   tex_ctx.closePath();
+
   tex_ctx.strokeStyle = "rgb(0,0,0,0.3)";
   tex_ctx.lineWidth = 5;
   tex_ctx.fillStyle = _COLORS.blue;
@@ -7814,19 +7814,16 @@ window.textures_flowers = function (tex_ctx) {
 
   tex_ctx.translate(128 * 5, 128);
   tex_ctx.scale(0.7, 0.7);
+
   tex_ctx.beginPath();
-  tex_ctx.moveTo(-20, -20);
-  tex_ctx.bezierCurveTo(-80, -100, 80, -100, 20, -20);
-  tex_ctx.rotate(Math.PI * 0.5);
-  tex_ctx.moveTo(-20, -20);
-  tex_ctx.bezierCurveTo(-80, -100, 80, -100, 20, -20);
-  tex_ctx.rotate(Math.PI * 0.5);
-  tex_ctx.moveTo(-20, -20);
-  tex_ctx.bezierCurveTo(-80, -100, 80, -100, 20, -20);
-  tex_ctx.rotate(Math.PI * 0.5);
-  tex_ctx.moveTo(-20, -20);
-  tex_ctx.bezierCurveTo(-80, -100, 80, -100, 20, -20);
+  for (let i = 0; i < 4; i++) {
+    drawPetalTexture(tex_ctx);
+    if (i < 3) {
+      tex_ctx.rotate(Math.PI * 0.5);
+    }
+  }
   tex_ctx.closePath();
+
   tex_ctx.strokeStyle = "rgb(0,0,0,0.3)";
   tex_ctx.lineWidth = 5;
   tex_ctx.fillStyle = _COLORS.white;
@@ -7845,19 +7842,16 @@ window.textures_flowers = function (tex_ctx) {
   tex_ctx.translate(128 * 7 - 51, 108);
   tex_ctx.rotate(1);
   tex_ctx.scale(0.6, 0.6);
+
   tex_ctx.beginPath();
-  tex_ctx.moveTo(-20, -20);
-  tex_ctx.bezierCurveTo(-80, -100, 80, -100, 20, -20);
-  tex_ctx.rotate(Math.PI * 0.5);
-  tex_ctx.moveTo(-20, -20);
-  tex_ctx.bezierCurveTo(-80, -100, 80, -100, 20, -20);
-  tex_ctx.rotate(Math.PI * 0.5);
-  tex_ctx.moveTo(-20, -20);
-  tex_ctx.bezierCurveTo(-80, -100, 80, -100, 20, -20);
-  tex_ctx.rotate(Math.PI * 0.5);
-  tex_ctx.moveTo(-20, -20);
-  tex_ctx.bezierCurveTo(-80, -100, 80, -100, 20, -20);
+  for (let i = 0; i < 4; i++) {
+    drawPetalTexture(tex_ctx);
+    if (i < 3) {
+      tex_ctx.rotate(Math.PI * 0.5);
+    }
+  }
   tex_ctx.closePath();
+
   tex_ctx.strokeStyle = "rgb(0,0,0,0.3)";
   tex_ctx.lineWidth = 5;
   tex_ctx.fillStyle = _COLORS.red;
@@ -7875,19 +7869,16 @@ window.textures_flowers = function (tex_ctx) {
   tex_ctx.translate(128 * 7 + 40, 147);
   tex_ctx.rotate(-0.6);
   tex_ctx.scale(0.6, 0.6);
+
   tex_ctx.beginPath();
-  tex_ctx.moveTo(-20, -20);
-  tex_ctx.bezierCurveTo(-80, -100, 80, -100, 20, -20);
-  tex_ctx.rotate(Math.PI * 0.5);
-  tex_ctx.moveTo(-20, -20);
-  tex_ctx.bezierCurveTo(-80, -100, 80, -100, 20, -20);
-  tex_ctx.rotate(Math.PI * 0.5);
-  tex_ctx.moveTo(-20, -20);
-  tex_ctx.bezierCurveTo(-80, -100, 80, -100, 20, -20);
-  tex_ctx.rotate(Math.PI * 0.5);
-  tex_ctx.moveTo(-20, -20);
-  tex_ctx.bezierCurveTo(-80, -100, 80, -100, 20, -20);
+  for (let i = 0; i < 4; i++) {
+    drawPetalTexture(tex_ctx);
+    if (i < 3) {
+      tex_ctx.rotate(Math.PI * 0.5);
+    }
+  }
   tex_ctx.closePath();
+
   tex_ctx.strokeStyle = "rgb(0,0,0,0.3)";
   tex_ctx.lineWidth = 5;
   tex_ctx.fillStyle = _COLORS.red;
@@ -7906,19 +7897,16 @@ window.textures_flowers = function (tex_ctx) {
   tex_ctx.translate(128 - 51, 87 + 256);
   tex_ctx.rotate(1);
   tex_ctx.scale(0.6, 0.6);
+
   tex_ctx.beginPath();
-  tex_ctx.moveTo(-20, -20);
-  tex_ctx.bezierCurveTo(-80, -100, 80, -100, 20, -20);
-  tex_ctx.rotate(Math.PI * 0.5);
-  tex_ctx.moveTo(-20, -20);
-  tex_ctx.bezierCurveTo(-80, -100, 80, -100, 20, -20);
-  tex_ctx.rotate(Math.PI * 0.5);
-  tex_ctx.moveTo(-20, -20);
-  tex_ctx.bezierCurveTo(-80, -100, 80, -100, 20, -20);
-  tex_ctx.rotate(Math.PI * 0.5);
-  tex_ctx.moveTo(-20, -20);
-  tex_ctx.bezierCurveTo(-80, -100, 80, -100, 20, -20);
+  for (let i = 0; i < 4; i++) {
+    drawPetalTexture(tex_ctx);
+    if (i < 3) {
+      tex_ctx.rotate(Math.PI * 0.5);
+    }
+  }
   tex_ctx.closePath();
+
   tex_ctx.strokeStyle = "rgb(0,0,0,0.3)";
   tex_ctx.lineWidth = 5;
   tex_ctx.fillStyle = _COLORS.blue;
@@ -7936,19 +7924,16 @@ window.textures_flowers = function (tex_ctx) {
   tex_ctx.translate(40 + 128, 128 * 2 + 129);
   tex_ctx.rotate(-0.6);
   tex_ctx.scale(0.6, 0.6);
+
   tex_ctx.beginPath();
-  tex_ctx.moveTo(-20, -20);
-  tex_ctx.bezierCurveTo(-80, -100, 80, -100, 20, -20);
-  tex_ctx.rotate(Math.PI * 0.5);
-  tex_ctx.moveTo(-20, -20);
-  tex_ctx.bezierCurveTo(-80, -100, 80, -100, 20, -20);
-  tex_ctx.rotate(Math.PI * 0.5);
-  tex_ctx.moveTo(-20, -20);
-  tex_ctx.bezierCurveTo(-80, -100, 80, -100, 20, -20);
-  tex_ctx.rotate(Math.PI * 0.5);
-  tex_ctx.moveTo(-20, -20);
-  tex_ctx.bezierCurveTo(-80, -100, 80, -100, 20, -20);
+  for (let i = 0; i < 4; i++) {
+    drawPetalTexture(tex_ctx);
+    if (i < 3) {
+      tex_ctx.rotate(Math.PI * 0.5);
+    }
+  }
   tex_ctx.closePath();
+
   tex_ctx.strokeStyle = "rgb(0,0,0,0.3)";
   tex_ctx.lineWidth = 5;
   tex_ctx.fillStyle = _COLORS.blue;
@@ -7967,19 +7952,16 @@ window.textures_flowers = function (tex_ctx) {
   tex_ctx.translate(128 * 3 - 51, 87 + 256);
   tex_ctx.rotate(1);
   tex_ctx.scale(0.6, 0.6);
+
   tex_ctx.beginPath();
-  tex_ctx.moveTo(-20, -20);
-  tex_ctx.bezierCurveTo(-80, -100, 80, -100, 20, -20);
-  tex_ctx.rotate(Math.PI * 0.5);
-  tex_ctx.moveTo(-20, -20);
-  tex_ctx.bezierCurveTo(-80, -100, 80, -100, 20, -20);
-  tex_ctx.rotate(Math.PI * 0.5);
-  tex_ctx.moveTo(-20, -20);
-  tex_ctx.bezierCurveTo(-80, -100, 80, -100, 20, -20);
-  tex_ctx.rotate(Math.PI * 0.5);
-  tex_ctx.moveTo(-20, -20);
-  tex_ctx.bezierCurveTo(-80, -100, 80, -100, 20, -20);
+  for (let i = 0; i < 4; i++) {
+    drawPetalTexture(tex_ctx);
+    if (i < 3) {
+      tex_ctx.rotate(Math.PI * 0.5);
+    }
+  }
   tex_ctx.closePath();
+
   tex_ctx.strokeStyle = "rgb(0,0,0,0.3)";
   tex_ctx.lineWidth = 5;
   tex_ctx.fillStyle = _COLORS.white;
@@ -7997,19 +7979,16 @@ window.textures_flowers = function (tex_ctx) {
   tex_ctx.translate(40 + 128 * 3, 128 * 2 + 129);
   tex_ctx.rotate(-0.6);
   tex_ctx.scale(0.6, 0.6);
+
   tex_ctx.beginPath();
-  tex_ctx.moveTo(-20, -20);
-  tex_ctx.bezierCurveTo(-80, -100, 80, -100, 20, -20);
-  tex_ctx.rotate(Math.PI * 0.5);
-  tex_ctx.moveTo(-20, -20);
-  tex_ctx.bezierCurveTo(-80, -100, 80, -100, 20, -20);
-  tex_ctx.rotate(Math.PI * 0.5);
-  tex_ctx.moveTo(-20, -20);
-  tex_ctx.bezierCurveTo(-80, -100, 80, -100, 20, -20);
-  tex_ctx.rotate(Math.PI * 0.5);
-  tex_ctx.moveTo(-20, -20);
-  tex_ctx.bezierCurveTo(-80, -100, 80, -100, 20, -20);
+  for (let i = 0; i < 4; i++) {
+    drawPetalTexture(tex_ctx);
+    if (i < 3) {
+      tex_ctx.rotate(Math.PI * 0.5);
+    }
+  }
   tex_ctx.closePath();
+
   tex_ctx.strokeStyle = "rgb(0,0,0,0.3)";
   tex_ctx.lineWidth = 5;
   tex_ctx.fillStyle = _COLORS.white;
@@ -8027,19 +8006,16 @@ window.textures_flowers = function (tex_ctx) {
 
   tex_ctx.translate(128 * 5 - 55, 87 + 263);
   tex_ctx.scale(0.65, 0.65);
+
   tex_ctx.beginPath();
-  tex_ctx.moveTo(-20, -20);
-  tex_ctx.bezierCurveTo(-80, -100, 80, -100, 20, -20);
-  tex_ctx.rotate(Math.PI * 0.5);
-  tex_ctx.moveTo(-20, -20);
-  tex_ctx.bezierCurveTo(-80, -100, 80, -100, 20, -20);
-  tex_ctx.rotate(Math.PI * 0.5);
-  tex_ctx.moveTo(-20, -20);
-  tex_ctx.bezierCurveTo(-80, -100, 80, -100, 20, -20);
-  tex_ctx.rotate(Math.PI * 0.5);
-  tex_ctx.moveTo(-20, -20);
-  tex_ctx.bezierCurveTo(-80, -100, 80, -100, 20, -20);
+  for (let i = 0; i < 4; i++) {
+    drawPetalTexture(tex_ctx);
+    if (i < 3) {
+      tex_ctx.rotate(Math.PI * 0.5);
+    }
+  }
   tex_ctx.closePath();
+
   tex_ctx.strokeStyle = "rgb(0,0,0,0.3)";
   tex_ctx.lineWidth = 5;
   tex_ctx.fillStyle = _COLORS.red;
@@ -8057,19 +8033,16 @@ window.textures_flowers = function (tex_ctx) {
   tex_ctx.translate(-6 + 128 * 5, 128 * 2 + 179);
   tex_ctx.rotate(-1.5);
   tex_ctx.scale(0.65, 0.65);
+
   tex_ctx.beginPath();
-  tex_ctx.moveTo(-20, -20);
-  tex_ctx.bezierCurveTo(-80, -100, 80, -100, 20, -20);
-  tex_ctx.rotate(Math.PI * 0.5);
-  tex_ctx.moveTo(-20, -20);
-  tex_ctx.bezierCurveTo(-80, -100, 80, -100, 20, -20);
-  tex_ctx.rotate(Math.PI * 0.5);
-  tex_ctx.moveTo(-20, -20);
-  tex_ctx.bezierCurveTo(-80, -100, 80, -100, 20, -20);
-  tex_ctx.rotate(Math.PI * 0.5);
-  tex_ctx.moveTo(-20, -20);
-  tex_ctx.bezierCurveTo(-80, -100, 80, -100, 20, -20);
+  for (let i = 0; i < 4; i++) {
+    drawPetalTexture(tex_ctx);
+    if (i < 3) {
+      tex_ctx.rotate(Math.PI * 0.5);
+    }
+  }
   tex_ctx.closePath();
+
   tex_ctx.strokeStyle = "rgb(0,0,0,0.3)";
   tex_ctx.lineWidth = 5;
   tex_ctx.fillStyle = _COLORS.red;
@@ -8087,19 +8060,16 @@ window.textures_flowers = function (tex_ctx) {
   tex_ctx.translate(58 + 128 * 5, 128 * 2 + 101);
   tex_ctx.rotate(-1.5);
   tex_ctx.scale(0.65, 0.65);
+
   tex_ctx.beginPath();
-  tex_ctx.moveTo(-20, -20);
-  tex_ctx.bezierCurveTo(-80, -100, 80, -100, 20, -20);
-  tex_ctx.rotate(Math.PI * 0.5);
-  tex_ctx.moveTo(-20, -20);
-  tex_ctx.bezierCurveTo(-80, -100, 80, -100, 20, -20);
-  tex_ctx.rotate(Math.PI * 0.5);
-  tex_ctx.moveTo(-20, -20);
-  tex_ctx.bezierCurveTo(-80, -100, 80, -100, 20, -20);
-  tex_ctx.rotate(Math.PI * 0.5);
-  tex_ctx.moveTo(-20, -20);
-  tex_ctx.bezierCurveTo(-80, -100, 80, -100, 20, -20);
+  for (let i = 0; i < 4; i++) {
+    drawPetalTexture(tex_ctx);
+    if (i < 3) {
+      tex_ctx.rotate(Math.PI * 0.5);
+    }
+  }
   tex_ctx.closePath();
+
   tex_ctx.strokeStyle = "rgb(0,0,0,0.3)";
   tex_ctx.lineWidth = 5;
   tex_ctx.fillStyle = _COLORS.red;
@@ -8117,19 +8087,16 @@ window.textures_flowers = function (tex_ctx) {
 
   tex_ctx.translate(128 * 7 - 45, 87 + 261);
   tex_ctx.scale(0.65, 0.65);
+
   tex_ctx.beginPath();
-  tex_ctx.moveTo(-20, -20);
-  tex_ctx.bezierCurveTo(-80, -100, 80, -100, 20, -20);
-  tex_ctx.rotate(Math.PI * 0.5);
-  tex_ctx.moveTo(-20, -20);
-  tex_ctx.bezierCurveTo(-80, -100, 80, -100, 20, -20);
-  tex_ctx.rotate(Math.PI * 0.5);
-  tex_ctx.moveTo(-20, -20);
-  tex_ctx.bezierCurveTo(-80, -100, 80, -100, 20, -20);
-  tex_ctx.rotate(Math.PI * 0.5);
-  tex_ctx.moveTo(-20, -20);
-  tex_ctx.bezierCurveTo(-80, -100, 80, -100, 20, -20);
+  for (let i = 0; i < 4; i++) {
+    drawPetalTexture(tex_ctx);
+    if (i < 3) {
+      tex_ctx.rotate(Math.PI * 0.5);
+    }
+  }
   tex_ctx.closePath();
+
   tex_ctx.strokeStyle = "rgb(0,0,0,0.3)";
   tex_ctx.lineWidth = 5;
   tex_ctx.fillStyle = _COLORS.blue;
@@ -8147,19 +8114,16 @@ window.textures_flowers = function (tex_ctx) {
   tex_ctx.translate(12 + 128 * 7, 128 * 2 + 177);
   tex_ctx.rotate(-1.5);
   tex_ctx.scale(0.65, 0.65);
+
   tex_ctx.beginPath();
-  tex_ctx.moveTo(-20, -20);
-  tex_ctx.bezierCurveTo(-80, -100, 80, -100, 20, -20);
-  tex_ctx.rotate(Math.PI * 0.5);
-  tex_ctx.moveTo(-20, -20);
-  tex_ctx.bezierCurveTo(-80, -100, 80, -100, 20, -20);
-  tex_ctx.rotate(Math.PI * 0.5);
-  tex_ctx.moveTo(-20, -20);
-  tex_ctx.bezierCurveTo(-80, -100, 80, -100, 20, -20);
-  tex_ctx.rotate(Math.PI * 0.5);
-  tex_ctx.moveTo(-20, -20);
-  tex_ctx.bezierCurveTo(-80, -100, 80, -100, 20, -20);
+  for (let i = 0; i < 4; i++) {
+    drawPetalTexture(tex_ctx);
+    if (i < 3) {
+      tex_ctx.rotate(Math.PI * 0.5);
+    }
+  }
   tex_ctx.closePath();
+
   tex_ctx.strokeStyle = "rgb(0,0,0,0.3)";
   tex_ctx.lineWidth = 5;
   tex_ctx.fillStyle = _COLORS.blue;
@@ -8177,19 +8141,16 @@ window.textures_flowers = function (tex_ctx) {
   tex_ctx.translate(66 + 128 * 7, 128 * 2 + 91);
   tex_ctx.rotate(0.1);
   tex_ctx.scale(0.65, 0.65);
+
   tex_ctx.beginPath();
-  tex_ctx.moveTo(-20, -20);
-  tex_ctx.bezierCurveTo(-80, -100, 80, -100, 20, -20);
-  tex_ctx.rotate(Math.PI * 0.5);
-  tex_ctx.moveTo(-20, -20);
-  tex_ctx.bezierCurveTo(-80, -100, 80, -100, 20, -20);
-  tex_ctx.rotate(Math.PI * 0.5);
-  tex_ctx.moveTo(-20, -20);
-  tex_ctx.bezierCurveTo(-80, -100, 80, -100, 20, -20);
-  tex_ctx.rotate(Math.PI * 0.5);
-  tex_ctx.moveTo(-20, -20);
-  tex_ctx.bezierCurveTo(-80, -100, 80, -100, 20, -20);
+  for (let i = 0; i < 4; i++) {
+    drawPetalTexture(tex_ctx);
+    if (i < 3) {
+      tex_ctx.rotate(Math.PI * 0.5);
+    }
+  }
   tex_ctx.closePath();
+
   tex_ctx.strokeStyle = "rgb(0,0,0,0.3)";
   tex_ctx.lineWidth = 5;
   tex_ctx.fillStyle = _COLORS.blue;
@@ -8207,19 +8168,16 @@ window.textures_flowers = function (tex_ctx) {
 
   tex_ctx.translate(128 - 63, 128 * 3 + 235);
   tex_ctx.scale(0.65, 0.65);
+
   tex_ctx.beginPath();
-  tex_ctx.moveTo(-20, -20);
-  tex_ctx.bezierCurveTo(-80, -100, 80, -100, 20, -20);
-  tex_ctx.rotate(Math.PI * 0.5);
-  tex_ctx.moveTo(-20, -20);
-  tex_ctx.bezierCurveTo(-80, -100, 80, -100, 20, -20);
-  tex_ctx.rotate(Math.PI * 0.5);
-  tex_ctx.moveTo(-20, -20);
-  tex_ctx.bezierCurveTo(-80, -100, 80, -100, 20, -20);
-  tex_ctx.rotate(Math.PI * 0.5);
-  tex_ctx.moveTo(-20, -20);
-  tex_ctx.bezierCurveTo(-80, -100, 80, -100, 20, -20);
+  for (let i = 0; i < 4; i++) {
+    drawPetalTexture(tex_ctx);
+    if (i < 3) {
+      tex_ctx.rotate(Math.PI * 0.5);
+    }
+  }
   tex_ctx.closePath();
+
   tex_ctx.strokeStyle = "rgb(0,0,0,0.3)";
   tex_ctx.lineWidth = 5;
   tex_ctx.fillStyle = _COLORS.white;
@@ -8237,19 +8195,16 @@ window.textures_flowers = function (tex_ctx) {
   tex_ctx.translate(2 + 121, 128 * 4 + 189);
   tex_ctx.rotate(-1.6);
   tex_ctx.scale(0.65, 0.65);
+
   tex_ctx.beginPath();
-  tex_ctx.moveTo(-20, -20);
-  tex_ctx.bezierCurveTo(-80, -100, 80, -100, 20, -20);
-  tex_ctx.rotate(Math.PI * 0.5);
-  tex_ctx.moveTo(-20, -20);
-  tex_ctx.bezierCurveTo(-80, -100, 80, -100, 20, -20);
-  tex_ctx.rotate(Math.PI * 0.5);
-  tex_ctx.moveTo(-20, -20);
-  tex_ctx.bezierCurveTo(-80, -100, 80, -100, 20, -20);
-  tex_ctx.rotate(Math.PI * 0.5);
-  tex_ctx.moveTo(-20, -20);
-  tex_ctx.bezierCurveTo(-80, -100, 80, -100, 20, -20);
+  for (let i = 0; i < 4; i++) {
+    drawPetalTexture(tex_ctx);
+    if (i < 3) {
+      tex_ctx.rotate(Math.PI * 0.5);
+    }
+  }
   tex_ctx.closePath();
+
   tex_ctx.strokeStyle = "rgb(0,0,0,0.3)";
   tex_ctx.lineWidth = 5;
   tex_ctx.fillStyle = _COLORS.white;
@@ -8267,19 +8222,16 @@ window.textures_flowers = function (tex_ctx) {
   tex_ctx.translate(17 + 166, 128 * 4 + 111);
   tex_ctx.rotate(-1.5);
   tex_ctx.scale(0.65, 0.65);
+
   tex_ctx.beginPath();
-  tex_ctx.moveTo(-20, -20);
-  tex_ctx.bezierCurveTo(-80, -100, 80, -100, 20, -20);
-  tex_ctx.rotate(Math.PI * 0.5);
-  tex_ctx.moveTo(-20, -20);
-  tex_ctx.bezierCurveTo(-80, -100, 80, -100, 20, -20);
-  tex_ctx.rotate(Math.PI * 0.5);
-  tex_ctx.moveTo(-20, -20);
-  tex_ctx.bezierCurveTo(-80, -100, 80, -100, 20, -20);
-  tex_ctx.rotate(Math.PI * 0.5);
-  tex_ctx.moveTo(-20, -20);
-  tex_ctx.bezierCurveTo(-80, -100, 80, -100, 20, -20);
+  for (let i = 0; i < 4; i++) {
+    drawPetalTexture(tex_ctx);
+    if (i < 3) {
+      tex_ctx.rotate(Math.PI * 0.5);
+    }
+  }
   tex_ctx.closePath();
+
   tex_ctx.strokeStyle = "rgb(0,0,0,0.3)";
   tex_ctx.lineWidth = 5;
   tex_ctx.fillStyle = _COLORS.white;
