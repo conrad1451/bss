@@ -108,6 +108,9 @@ export const SHADERS = {
     // 3. Global constants
     uniform float isNight;
     
+    // CHQ: defined via replaceAll in renderer.js
+    //const vec3 LIGHT_DIR = normalize(vec3(0.5, 1.0, 0.3));
+
     void main(){
         // Normalize the interpolated normal vector
         vec3 normal = normalize(pixNormal);
@@ -559,9 +562,11 @@ export const SHADERS = {
     // 1. Inputs from buffers
     in vec3 vertPos;
     in vec3 vertColor;
+    in vec2 vertUV; // CHQ: Claude AI: add vertUV
     
     // 2. Outputs to the fragment shader
     out vec4 pixColor;
+    out vec2 vUv;  // // CHQ: Claude AI: or: varying vec2 vUv; in WebGL1 GLSL
     
     // 3. Global constants
     uniform mat4 viewMatrix;
@@ -569,8 +574,11 @@ export const SHADERS = {
     uniform vec4 instance_info1;
     uniform vec2 instance_info2;
     uniform float isNight;
-    
+
     void main(){
+        // vUv = vertUV.xy;
+        vUv = vertUV; // CHQ: Claude AI: add vertUV
+
         // Apply night effect to color and set alpha from instance info
         pixColor = vec4(vertColor * isNight, instance_info2.y);
         
@@ -591,18 +599,21 @@ export const SHADERS = {
 `,
 
   mobRendererFSH: `#version 300 es
-    precision highp float;
-    
-    // 1. Inputs from the vertex shader
-    in vec4 pixColor;
-    
-    // 2. Output to the framebuffer
-    out vec4 fragColor;
-    
-    void main(){
-        // Output vertex color directly
-        fragColor = pixColor;
-    }
+  precision highp float;
+  
+  in vec4 pixColor;
+  // New: Add UV input if you pass it from VSH, or use default coords
+  in vec2 vUv; 
+  
+  out vec4 fragColor;
+  
+  uniform sampler2D tex; // Required to sample the texture
+  
+  void main(){
+      // Sample the texture and multiply by the instance color
+      vec4 textureColor = texture(tex, vUv);
+      fragColor = textureColor * pixColor;
+  }
 `,
 
   trailRendererVSH: `#version 300 es
