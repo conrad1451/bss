@@ -100,6 +100,10 @@ export function createInitialState(saveData = {}) {
       velocity: [0, 0, 0],
       fieldIn: null,
 
+      // CHQ: Claude AI added yaw and pitch properties
+      yaw: 0,
+      pitch: 0,
+
       stats: data.stats || {
         whitePollen: 0,
         bluePollen: 0,

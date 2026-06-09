@@ -24,7 +24,8 @@ export function updateEngine(gameState, dt) {
   }
 
   // 2. Player State & Camera Updates
-  player.updatePhysics(dt); // 🏃‍♂️ Player moves to their new predicted position first
+  // player.updatePhysics(dt); // 🏃‍♂️ Player moves to their new predicted position first
+  player.updatePhysics(dt, gameState.user);
 
   // // 3. Evaluate Trigger Zones Collision Status
   // triggers.forEach((zone) => {

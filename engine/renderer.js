@@ -747,13 +747,21 @@ export class Renderer {
     // mat4.lookAt(viewMatrix, [15, 10, 30], [15, 0, 16], [0, 1, 0]);
     // mat4.lookAt(viewMatrix, [15, 8, 40], [15, 0, 16], [0, 1, 0]);
 
-    state.cameraAngle = (state.cameraAngle || 0) + ((2 * Math.PI) / 180) * dt;
+    // CHQ: Claude AI added wiring for the camera
+    const pos = state.player.pos;
+    const yaw = state.player.yaw || 0;
 
-    const radius = 40;
-    const cx = 15 + Math.sin(state.cameraAngle) * radius;
-    const cz = 16 + Math.cos(state.cameraAngle) * radius;
+    // Camera sits behind and above the player
+    const camX = pos[0] - Math.sin(yaw) * 15;
+    const camY = pos[1] + 8;
+    const camZ = pos[2] + Math.cos(yaw) * 15;
 
-    mat4.lookAt(viewMatrix, [cx, 8, cz], [15, 0, 16], [0, 1, 0]);
+    mat4.lookAt(
+      viewMatrix,
+      [camX, camY, camZ],
+      [pos[0], pos[1], pos[2]],
+      [0, 1, 0],
+    );
 
     const projectionMatrix = mat4.create();
     mat4.perspective(
@@ -836,29 +844,6 @@ export class Renderer {
     if (this.textRenderer) {
       // Pass delta time, your game's tracking uniform phase timer, and the view matrix!
       this.textRenderer.render(dt, this.sinTime || 0, viewMatrix);
-    }
-  }
-
-  potentialNewrender(state, dt) {
-    // 1. Get the current active program
-    const program = this.gl.getParameter(this.gl.CURRENT_PROGRAM);
-
-    // 2. Safely look up the cache, or default to a safe empty object
-    const key = this.getCurrentProgramKey(); // A function you might need to track which program is active
-    const cache = this.glCache[key] || {};
-
-    // 3. Bind matrices using the cache, but fallback to direct lookup if needed
-    const uProj =
-      cache.projMatrix || this.gl.getUniformLocation(program, "projMatrix");
-
-    if (uProj) {
-      this.gl.uniformMatrix4fv(uProj, false, this.projectionMatrix);
-    } else {
-      // Only warn once if possible to keep console clean
-      if (!this.warnedProj) {
-        console.warn("Uniform 'projMatrix' not found in program!");
-        this.warnedProj = true;
-      }
     }
   }
 } // <--- End of Renderer Class

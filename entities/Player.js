@@ -18,8 +18,57 @@ export class Player {
     this.honey = this.honey || 0;
   }
 
-  updatePhysics(dt) {
-    /* physics logic */
+  // CHQ: Claude AI added implementation for updatePhysics and
+  //      updated signature to include reference to gamestate.user
+  updatePhysics(dt, user) {
+    // updatePhysics(dt) {
+
+    const keys = this.user?.keys || {};
+    const speed = 10;
+
+    // Get yaw from player (set by mouse/arrow keys in input.js)
+    const yaw = this.yaw || 0;
+
+    // Direction vectors based on yaw
+    const forwardX = Math.sin(yaw);
+    const forwardZ = -Math.cos(yaw);
+    const rightX = Math.cos(yaw);
+    const rightZ = Math.sin(yaw);
+
+    let moveX = 0;
+    let moveZ = 0;
+
+    if (keys["w"] || keys["arrowup"]) {
+      moveX += forwardX;
+      moveZ += forwardZ;
+    }
+    if (keys["s"] || keys["arrowdown"]) {
+      moveX -= forwardX;
+      moveZ -= forwardZ;
+    }
+    if (keys["a"] || keys["arrowleft"]) {
+      moveX -= rightX;
+      moveZ -= rightZ;
+    }
+    if (keys["d"] || keys["arrowright"]) {
+      moveX += rightX;
+      moveZ += rightZ;
+    }
+
+    // Normalize diagonal movement
+    const len = Math.sqrt(moveX * moveX + moveZ * moveZ);
+    if (len > 0) {
+      this.pos[0] += (moveX / len) * speed * dt;
+      this.pos[2] += (moveZ / len) * speed * dt;
+    }
+
+    // Basic gravity + ground clamp
+    this.velocity[1] += -9.81 * dt;
+    this.pos[1] += this.velocity[1] * dt;
+    if (this.pos[1] <= 5) {
+      this.pos[1] = 5;
+      this.velocity[1] = 0;
+    }
   }
 
   updateCamera(dt) {
