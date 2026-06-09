@@ -1,3 +1,5 @@
+// code broke the mometn i imrpoted it as a es module file and it was unfished
+
 window.textures_effects = function (tex_ctx) {
   tex_ctx.textBaseline = "middle";
   tex_ctx.clearRect(0, 0, 2048, 2048);
