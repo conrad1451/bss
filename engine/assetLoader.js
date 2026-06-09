@@ -81,6 +81,7 @@ export async function loadTexture(gl, tex_ctx) {
   // CHQ: Gemini AI added:
   await yieldToBrowser();
 
+  console.log("textures_flowers defined:", typeof window.textures_flowers);
   if (typeof window.textures_flowers === "function")
     window.textures_flowers(tex_ctx);
   out.flowers = createGLTexture(gl, tex_ctx, 1024, 1024, gl.CLAMP_TO_EDGE);
