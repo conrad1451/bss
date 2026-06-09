@@ -7756,28 +7756,6 @@ function drawPetalTexture(ctx, { petals, width, height, yOffset = -20 }) {
   ctx.closePath();
 }
 
-function drawPetalTextureV1(ctx) {
-  ctx.beginPath();
-  for (let i = 0; i < 4; i++) {
-    ctx.moveTo(-20, -20);
-    ctx.bezierCurveTo(-80, -100, 80, -100, 20, -20);
-    if (i < 3) {
-      ctx.rotate(Math.PI * 0.5);
-    }
-  }
-  ctx.closePath();
-}
-
-function drawPetalTextureV2(ctx) {
-  ctx.beginPath();
-  for (let i = 0; i < 5; i++) {
-    ctx.moveTo(-20, -10);
-    ctx.bezierCurveTo(-95, -110, 95, -110, 20, -10);
-    ctx.rotate((Math.PI * 2) / 5);
-  }
-  ctx.closePath();
-}
-
 function drawCenter(ctx) {
   ctx.beginPath();
   // ctx.arc(0, 0, 25, 0, 6);
@@ -7800,8 +7778,7 @@ function drawFlowerTextureV1(
   // ctx.scale(0.7, 0.7);
   ctx.rotate(rotation);
   ctx.scale(scale, scale);
-  // drawPetalTextureV1(ctx);
-  drawPetalTexture(tex_ctx, {
+  drawPetalTexture(ctx, {
     petals: 4,
     width: 80,
     height: 100,
@@ -7827,8 +7804,7 @@ function drawFlowerTextureV2(
   ctx.rotate(rotation);
   ctx.scale(scale, scale);
 
-  // drawPetalTextureV2(ctx);
-  drawPetalTexture(tex_ctx, {
+  drawPetalTexture(ctx, {
     petals: 5,
     width: 95,
     height: 110,
@@ -7864,8 +7840,7 @@ function drawFlowerTextureV2_5(
   ctx.rotate(rotation);
   ctx.scale(scale, scale);
 
-  // drawPetalTextureV2(ctx);
-  drawPetalTexture(tex_ctx, {
+  drawPetalTexture(ctx, {
     petals: 5,
     width: 95,
     height: 110,
