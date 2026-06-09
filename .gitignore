@@ -67,6 +67,7 @@ theCleanedSVGs/
 thesvgs/
 
 FindAndNumberSvgFiles.ps1
-project-tree-may312026at248am.txt
-project-tree-may312026at421am.txt
-editsMay31_2026-231am.txt
+console-exports/
+git-diff-edits/
+powershell-scripts/
+project-tree-history/
