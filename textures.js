@@ -3964,7 +3964,7 @@ window.textures_effects = function (tex_ctx) {
   tex_ctx.bezierCurveTo(66, -49, 18, -56, 10, -1);
   tex_ctx.lineTo(10, 64);
   tex_ctx.fill();
-  g = tex_ctx.createLinearGradient(0, 0, 0, 64);
+  let g = tex_ctx.createLinearGradient(0, 0, 0, 64);
   g.addColorStop(0, "rgb(33, 35, 37)");
   g.addColorStop(0.6, "rgb(123, 105, 65)");
   tex_ctx.fillStyle = g;
