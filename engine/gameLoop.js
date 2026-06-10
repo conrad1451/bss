@@ -53,6 +53,7 @@ export function createGameLoop(update, render, state) {
   let isRunning = false;
 
   function tick(currentTime) {
+    console.log("tick fired"); // CHQ: Claude AI (Sonnet): add console print statement for debugging
     if (!isRunning) return;
 
     if (!lastTime) lastTime = currentTime;
@@ -63,8 +64,17 @@ export function createGameLoop(update, render, state) {
     if (dt > 0.07) dt = 0.07;
 
     // Process simulation and draw to screen
-    update(state, dt);
-    render(state, dt);
+
+    try {
+      // CHQ: Claude AI (Sonnet): add to debug gameLoop not starting
+      update(state, dt);
+      render(state, dt);
+    } catch (err) {
+      // CHQ: Claude AI (Sonnet): add to debug gameLoop not starting
+      console.error("❌ TICK CRASH:", err);
+      isRunning = false; // stop the loop so it doesn't spam
+      return;
+    }
 
     animationFrameId = requestAnimationFrame(tick);
   }
