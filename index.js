@@ -158,7 +158,7 @@ async function BeeSwarmSimulator(saveData) {
   const textures = await loadTextures(gl);
   // const textures = await loadTextures(gl, ctx);
   console.log("loaded texture keys:", Object.keys(textures));
-  renderer.textures = textures;
+  renderer.textures = textures; //CHQ: handles renderer.textures.bees = textures.bees; and same for flowers and mobs
 
   // --- C. WEBGL PROGRAM AUDIT & PATCHES ---
   console.log("--- WebGL Program Linking Status Audit ---");
@@ -301,5 +301,8 @@ window.addEventListener("load", () => {
     { passive: false },
   );
 
+  // TODO: why am I calling createInitialState in both BeeSwarmSimulator and main?
+  //       Shouldn't createInitialState be called once and then passed into both
+  //       as arguments to their parameters?
   main();
 });
