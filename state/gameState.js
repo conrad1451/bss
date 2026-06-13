@@ -1,10 +1,35 @@
 // state/gameState.js
 
 // CHQ: Gemini AI refactored file
+// CHQ: Claude AI (Sonnet) provided JSDocs
 
 /**
  * Strips heavy runtime references (like WebGL buffers, arrays of live objects)
  * leaving only raw data fields to cleanly save to IndexedDB or LocalStorage.
+ *
+ * @param {Object} gameState - The full live game state object.
+ * @param {Object} gameState.player - The player instance containing stats, inventory, and position.
+ * @param {string} [gameState.player.id] - Unique player identifier.
+ * @param {string} gameState.player.name - Display name of the player.
+ * @param {number} gameState.player.honey - Current honey count.
+ * @param {number} gameState.player.pollenInBag - Pollen currently held in the bag.
+ * @param {number} gameState.player.capacity - Max pollen bag capacity.
+ * @param {number} gameState.player.criticalChance - Probability of landing a critical hit.
+ * @param {number} gameState.player.criticalPower - Critical hit damage multiplier.
+ * @param {number[]} gameState.player.pos - World-space position as [x, y, z].
+ * @param {Object} gameState.player.inventory - Consumable item counts.
+ * @param {Object} gameState.player.stats - Lifetime stat counters.
+ * @param {Object} gameState.player.currentGear - Equipped gear slots.
+ * @param {Object} gameState.player.fieldBoosts - Per-field pollen multiplier boosts.
+ * @param {Array}  gameState.player.effects - Active status effects array.
+ * @param {Object[]} gameState.activeQuests - Currently active quests with id and progress.
+ * @param {string[]} gameState.completedQuests - IDs of completed quests.
+ * @param {Object} gameState.npcs - NPC state map keyed by NPC name.
+ * @returns {{
+ *   id: string,
+ *   lastSaved: number,
+ *   data: Object
+ * }} A serialisable snapshot safe to write to IndexedDB or LocalStorage.
  */
 export function getSaveSnapshot(gameState) {
   return {
@@ -38,6 +63,16 @@ export function getSaveSnapshot(gameState) {
   };
 }
 
+/**
+ * Computes the effective pollen multiplier for a given pollen type,
+ * combining the player's base per-type rate with any active field boost.
+ *
+ * @param {Object} gameState - The live game state object.
+ * @param {Object} gameState.player - The player instance.
+ * @param {Object} gameState.player.fieldBoosts - Map of pollen-type keys to additive boost values.
+ * @param {string} type - The pollen colour key, e.g. `"red"`, `"blue"`, or `"white"`.
+ * @returns {number} The combined multiplier (base + field boost), defaulting to 1 if unset.
+ */
 export function getPollenMultiplier(gameState, type) {
   const base = gameState.player[`${type}Pollen`] || 1;
   const boost = gameState.player.fieldBoosts[type] || 0;
@@ -45,8 +80,34 @@ export function getPollenMultiplier(gameState, type) {
 }
 
 /**
- * Factory function to instantiate a fresh engine state object.
- * Perfectly populates fields using a saved snapshot data layout if available.
+ * Factory function that builds and returns a fresh, fully-populated engine state object.
+ * When a saved snapshot is supplied, its `data` block is used to rehydrate persistent
+ * fields; all transient runtime arrays and buffers are always reset to empty defaults.
+ *
+ * @param {Object} [saveData={}] - Optional save snapshot previously produced by {@link getSaveSnapshot}.
+ * @param {string} [saveData.id] - Saved player identifier.
+ * @param {Object} [saveData.data] - Raw serialised player data fields.
+ * @param {string} [saveData.data.name] - Player display name.
+ * @param {number} [saveData.data.honey] - Saved honey total.
+ * @param {number} [saveData.data.pollenInBag] - Saved pollen-in-bag count.
+ * @param {number} [saveData.data.capacity] - Saved bag capacity.
+ * @param {number} [saveData.data.criticalChance] - Saved critical hit chance.
+ * @param {number} [saveData.data.criticalPower] - Saved critical hit multiplier.
+ * @param {number} [saveData.data.superCritChance] - Saved super-critical hit chance.
+ * @param {number} [saveData.data.superCritPower] - Saved super-critical hit multiplier.
+ * @param {number} [saveData.data.redPollen] - Saved red pollen rate.
+ * @param {number} [saveData.data.bluePollen] - Saved blue pollen rate.
+ * @param {number} [saveData.data.whitePollen] - Saved white pollen rate.
+ * @param {number} [saveData.data.pollenFromBees] - Saved bee pollen multiplier.
+ * @param {number} [saveData.data.tabbyLoveStacks] - Saved tabby love stack count.
+ * @param {number[]} [saveData.data.pos] - Saved world-space spawn position [x, y, z].
+ * @param {Object} [saveData.data.stats] - Saved lifetime stat counters.
+ * @param {Object} [saveData.data.inventory] - Saved consumable item counts.
+ * @param {Object} [saveData.data.currentGear] - Saved equipped gear slots.
+ * @param {Object} [saveData.data.fieldBoosts] - Saved per-field pollen boost map.
+ * @param {Array}  [saveData.data.effects] - Saved active effects array.
+ * @param {Object[]} [saveData.data.activeQuests] - Saved in-progress quest list.
+ * @returns {Object} A fully-initialised game state object ready for use by the engine.
  */
 export function createInitialState(saveData = {}) {
   const data = (saveData && saveData.data) || {};
