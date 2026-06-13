@@ -5,14 +5,28 @@
 // CHQ: Gemini AI generated file
 import { updatePhysicsEntity, resolveObstacleCollisions } from "./physics.js";
 
+/**
+ * Main per-frame engine update. Advances physics, player state, AI entities,
+ * trigger zones, token collection, and NPC logic for a single tick.
+ *
+ * Call this once per animation frame, passing the authoritative game state and
+ * the elapsed time since the previous frame.
+ *
+ * @param {Object} gameState - The live game state object produced by {@link createInitialState}.
+ * @param {Object} gameState.player - The player instance with physics and UI update methods.
+ * @param {Object} gameState.objects - Container for all live entity arrays
+ *   (bees, mobs, tokens, npcs, etc.).
+ * @param {Object} gameState.world - Physics world configuration (gravity, airResistance, bounds).
+ * @param {Object[]} gameState.triggers - Array of trigger/machine zone descriptors.
+ * @param {Object[]} [gameState.obstacles] - Optional array of static obstacle volumes for collision resolution.
+ * @param {number} dt - Delta time in seconds since the last frame.
+ * @returns {void}
+ */
 export function updateEngine(gameState, dt) {
   // 1. Initialize or increment the frame count safely
   gameState.frameCount = (gameState.frameCount || 0) + 1;
 
   const { player, objects, world, triggers } = gameState;
-
-  // // 1. Physics Simulation [cite: 1667]
-  // world.step(dt);
 
   // 2. Run your real custom physics functions instead of world.step()
   // This applies gravity from world configurations and shifts velocity vectors
@@ -137,29 +151,19 @@ export function updateEngine(gameState, dt) {
   // checkTriggers(gameState);
 }
 
-// CHQ: below is a duplicate of the triggers.forEach loop
-// function checkTriggers(gameState) {
-//   const { player, triggers } = gameState;
-
-//   // CHQ: Gemini AI:  Reset the trigger so it doesn't stay active when you walk away
-//   player.currentMachineTrigger = null;
-//   // triggers[ {colliding: boolean}   ]
-//   // CHQ: Gemini AI: Logic to check if player is standing in a machine zone
-//   for (let i in triggers) {
-//     const t = triggers[i];
-//     t.colliding =
-//       player.body.position.x > t.minX &&
-//       player.body.position.x < t.maxX &&
-//       player.body.position.z > t.minZ &&
-//       player.body.position.z < t.maxZ;
-
-//     // CHQ: Gemini AI added
-//     if (t.colliding) {
-//       player.currentMachineTrigger = t;
-//     }
-//   }
-// }
-
+/**
+ * Scans all live tokens and collects any that are within pickup range of the player.
+ * Collected tokens are removed from the tokens array and their loot is applied
+ * immediately via {@link applyLoot}.
+ *
+ * @param {Object} gameState - The live game state object.
+ * @param {Object} gameState.player - The player instance; must have a valid `pos` array.
+ * @param {number} gameState.player.pos[0] - Player X world position.
+ * @param {number} gameState.player.pos[2] - Player Z world position.
+ * @param {Object} gameState.objects - Entity container.
+ * @param {Object[]} gameState.objects.tokens - Array of live token instances, each with a `pos` array.
+ * @returns {void}
+ */
 function checkTokenCollection(gameState) {
   const { player, objects } = gameState;
   if (!player || !player.pos) return;
@@ -185,6 +189,19 @@ function checkTokenCollection(gameState) {
   }
 }
 
+/**
+ * Applies the reward from a collected token directly to the appropriate
+ * game state counters. Honey tokens call the player's `addHoney` method;
+ * ticket tokens increment the global ticket counter.
+ *
+ * @param {Object} token - The token that was collected.
+ * @param {string} token.type - Token reward type; currently `"honey"` or `"ticket"`.
+ * @param {number} token.amount - Quantity of the resource to award.
+ * @param {Object} gameState - The live game state object.
+ * @param {Object} gameState.player - The player instance; must expose `addHoney(amount)`.
+ * @param {number} [gameState.tickets] - Running ticket total (created if absent).
+ * @returns {void}
+ */
 function applyLoot(token, gameState) {
   // if (token.type === "honey") gameState.honey += token.amount;
   // if (token.type === "ticket") gameState.tickets += token.amount;
