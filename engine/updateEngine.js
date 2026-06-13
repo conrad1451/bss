@@ -38,30 +38,9 @@ export function updateEngine(gameState, dt) {
   }
 
   // 2. Player State & Camera Updates
-  // player.updatePhysics(dt); // 🏃‍♂️ Player moves to their new predicted position first
   player.updatePhysics(dt, gameState.user);
 
-  // // 3. Evaluate Trigger Zones Collision Status
-  // triggers.forEach((zone) => {
-  //   // Simple 2D distance check between player and zone center coordinates
-  //   const dx = player.pos[0] - zone.x;
-  //   const dz = player.pos[2] - zone.z;
-  //   const distance = Math.sqrt(dx * dx + dz * dz);
-
-  //   if (distance < zone.radius) {
-  //     if (!zone.colliding) {
-  //       zone.colliding = true;
-  //       if (typeof zone.onEnter === "function") zone.onEnter(gameState);
-  //     }
-  //   } else {
-  //     zone.colliding = false; // Player stepped away
-  //   }
-  // });
-
-  // 3. Camera & Systems Alignment
-
-  // 3. Consolidated Trigger & Machine Zone Evaluation
-  // Reset the active prompt target on every tick
+  // 3. Entity AI: Bees
   player.currentMachineTrigger = null;
 
   triggers.forEach((zone) => {
@@ -74,10 +53,7 @@ export function updateEngine(gameState, dt) {
       const distance = Math.sqrt(dx * dx + dz * dz);
       isInside = distance < zone.radius;
     } else if (zone.minX !== undefined) {
-      // const pX = player.body.position.x;
-      // const pZ = player.body.position.z;
-
-      const pX = player.pos[0]; // Clean layout match with player.pos array
+      const pX = player.pos[0];
       const pZ = player.pos[2];
       isInside =
         pX > zone.minX && pX < zone.maxX && pZ > zone.minZ && pZ < zone.maxZ;
@@ -89,21 +65,19 @@ export function updateEngine(gameState, dt) {
         zone.colliding = true;
         if (typeof zone.onEnter === "function") zone.onEnter(gameState);
       }
-      // If it's an interactive machine/shop, expose it to the player UI matrix
       if (zone.isMachine) {
         player.currentMachineTrigger = zone;
       }
     } else {
-      zone.colliding = false; // Player walked away cleanly
+      zone.colliding = false;
     }
   });
 
-  // 4. Token Proximity Sweep (Fixed: Hooked up collection loop!)
+  // 4. Token Proximity Sweep
   checkTokenCollection(gameState);
 
-  player.updateCamera(dt); //  Snap the camera to follow the newly verified position
-  player.updateFields(dt); //  Process pollen collection based on where they stand
-  // player.updateUI(dt); // Updates honey/pollen counters
+  player.updateCamera(dt);
+  player.updateFields(dt);
   player.updateUI(dt, gameState);
 
   // 3. Entity AI: Bees
@@ -111,25 +85,15 @@ export function updateEngine(gameState, dt) {
     bee.update(dt, gameState);
   }
 
-  // // 4. Entity AI: Mobs
-  // for (let i = objects.mobs.length - 1; i >= 0; i--) {
-  //   if (objects.mobs[i].update(dt, gameState)) {
-  //     objects.mobs[i].die(i);
-  //   }
-  // }
-
   // 4. Entity AI: Mobs
-  // Inside your main loop processing in updateEngine.js
-  // Loop BACKWARDS to safely splice elements when they change to a dead state
   for (let i = gameState.objects.mobs.length - 1; i >= 0; i--) {
     const mob = gameState.objects.mobs[i];
 
-    // Update instance and check if state marks them as dead
     const isDead = mob.update(dt, gameState);
 
     if (isDead || mob.isDead) {
       mob.die(i, gameState);
-      gameState.objects.mobs.splice(i, 1); // Clean, safe removal at terminal lifecycle step
+      gameState.objects.mobs.splice(i, 1);
     }
   }
 
@@ -141,14 +105,9 @@ export function updateEngine(gameState, dt) {
   }
 
   // 9. NPC Interactions
-  // We don't usually "die" or splice NPCs, so a simple for...of is fine
   for (let npc of objects.npcs) {
     npc.update(dt, gameState);
   }
-
-  // CHQ: below is a duplicate of the triggers.forEach loop
-  // // 7. Proximity & Trigger Logic
-  // checkTriggers(gameState);
 }
 
 /**
@@ -167,10 +126,8 @@ export function updateEngine(gameState, dt) {
 function checkTokenCollection(gameState) {
   const { player, objects } = gameState;
   if (!player || !player.pos) return;
-  // const pX = player.body.position.x;
-  // const pZ = player.body.position.z;
 
-  const pX = player.pos[0]; // Clean layout match with player.pos array
+  const pX = player.pos[0];
   const pZ = player.pos[2];
 
   for (let i = objects.tokens.length - 1; i >= 0; i--) {
@@ -203,12 +160,7 @@ function checkTokenCollection(gameState) {
  * @returns {void}
  */
 function applyLoot(token, gameState) {
-  // if (token.type === "honey") gameState.honey += token.amount;
-  // if (token.type === "ticket") gameState.tickets += token.amount;
-
-  // Directly fires your clean event mutators when walking over free items
   if (token.type === "honey") gameState.player.addHoney(token.amount);
   if (token.type === "ticket")
     gameState.tickets = (gameState.tickets || 0) + token.amount;
-  // ... etc
 }
