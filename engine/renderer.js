@@ -13,6 +13,17 @@ import { mat4, vec3 } from "gl-matrix";
 // console.log("Is glMatrix available?", !!window.glMatrix);
 // console.log("Is mat4 available?", !!window.glMatrix?.mat4);
 export class Renderer {
+  /**
+   * Constructs the Renderer, allocates all GPU-side registries, compiles every
+   * shader program, primes the uniform cache, and initialises the screen-space
+   * UI quad buffer.
+   *
+   * @param {WebGL2RenderingContext} gl - The active WebGL2 rendering context.
+   * @param {number} width - Viewport width in pixels.
+   * @param {number} height - Viewport height in pixels.
+   * @param {Object} shadersDictionary - Map of shader-name keys to GLSL source strings,
+   *   as exported from `shaders.js` (e.g. `{ staticVSH, staticFSH, beeVSH, … }`).
+   */
   constructor(gl, width, height, shadersDictionary) {
     this.gl = gl;
     this.width = width;
@@ -30,20 +41,6 @@ export class Renderer {
     this.glCache = {};
 
     // Core GPU buffer registries managed by the graphics subsystem
-    this.meshes = {
-      flowers: {
-        vertexBuffer: null,
-        indexBuffer: null,
-        vertCount: 0,
-      },
-      // --- 🛠️ NEW: Static Quad buffer node for screen-space UI elements ---
-      uiQuad: {
-        vertexBuffer: null,
-        vertCount: 4,
-      },
-    };
-
-    // CHQ: Gemini AI added
     this.meshSchema = {
       flowers: { attributes: ["vertPos", "vertUV", "vertGoo"], stride: 8 },
       bees: {
@@ -55,8 +52,9 @@ export class Renderer {
           "instance_uv",
         ],
         stride: 5,
-      }, // CHQ: I fixed
-      mobs: { attributes: ["vertPos", "vertColor"], stride: 5 },
+      },
+      // CHQ: Claude AI (Sonnet) fixed missing vertUV attribute and stride
+      mobs: { attributes: ["vertPos", "vertColor", "vertUV"], stride: 8 },
     };
 
     // Internal WebGL program storage lane
@@ -86,6 +84,15 @@ export class Renderer {
   }
 
   // --- 🛠️ NEW: Initialize dynamic quad vertices for UI texture rendering ---
+  /**
+   * Allocates a static GPU vertex buffer for a full-screen quad in normalised
+   * device coordinates, used for screen-space UI texture rendering.
+   * The buffer stores four vertices, each with an XY position and UV coordinate
+   * packed as `[x, y, u, v]`.
+   *
+   * @returns {void}
+   */
+
   initUIQuadBuffer() {
     const gl = this.gl;
 
@@ -96,15 +103,27 @@ export class Renderer {
       1.0, 1.0,
     ]);
 
-    this.meshes.uiQuad.vertexBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, this.meshes.uiQuad.vertexBuffer);
+    this.meshSchema.uiQuad.vertexBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, this.meshSchema.uiQuad.vertexBuffer);
     gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
   }
 
   // CHQ: Gemini AI added
+
   /**
-   * Automatically binds attributes based on the defined mesh schema
+   * Reads the mesh schema for the given key and automatically enables and
+   * configures all vertex attribute pointers for the bound array buffer.
+   * Attribute sizes are inferred from the attribute name convention:
+   * - Names containing `"Pos"` or `"Color"` → 3 floats
+   * - Names containing `"UV"` → 4 floats
+   * - All others → 1 float
+   *
+   * @param {string} meshKey - Key into `this.meshSchema`, e.g. `"flowers"`, `"bees"`, `"mobs"`.
+   * @param {WebGLProgram} program - The currently active shader program whose attribute
+   *   locations will be resolved.
+   * @returns {void}
    */
+
   bindMeshAttributes(meshKey, program) {
     const gl = this.gl;
     const schema = this.meshSchema[meshKey];
@@ -139,8 +158,18 @@ export class Renderer {
   }
 
   /**
-   * Uploads raw CPU flower vertex/index arrays directly to GPU memory channels.
-   * @param {Object} stagingData - { verts: number[], index: number[] }
+   * Uploads raw CPU-side flower vertex and index arrays to the GPU, creating a
+   * VAO that records all buffer bindings and attribute pointer state for fast
+   * subsequent draw calls.
+   *
+   * Vertex layout (stride = 32 bytes / 8 floats per vertex):
+   * - `vertPos`  — 3 floats at offset  0 (attribute location 0)
+   * - `vertUV`   — 4 floats at offset 12 (attribute location 1)
+   * - `vertGoo`  — 1 float  at offset 28 (attribute location 2)
+   *
+   * @param {{ verts: number[], index: number[] }} stagingData - CPU mesh data.
+   *   `verts` is the flat interleaved float array; `index` is the triangle index list.
+   * @returns {void}
    */
   uploadFlowerMesh(stagingData) {
     const gl = this.gl;
@@ -150,17 +179,17 @@ export class Renderer {
       return;
     }
 
-    this.meshes.flowers.vertCount = stagingData.index.length;
+    this.meshSchema.flowers.vertCount = stagingData.index.length;
 
     // CHQ: Claude AI: Create and bind a VAO
-    this.meshes.flowers.vao = gl.createVertexArray();
-    gl.bindVertexArray(this.meshes.flowers.vao);
+    this.meshSchema.flowers.vao = gl.createVertexArray();
+    gl.bindVertexArray(this.meshSchema.flowers.vao);
 
-    // console.log("flower VAO created:", this.meshes.flowers.vao);
+    // console.log("flower VAO created:", this.meshSchema.flowers.vao);
 
     // Vertex buffer
-    this.meshes.flowers.vertexBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, this.meshes.flowers.vertexBuffer);
+    this.meshSchema.flowers.vertexBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, this.meshSchema.flowers.vertexBuffer);
     gl.bufferData(
       gl.ARRAY_BUFFER,
       new Float32Array(stagingData.verts),
@@ -179,8 +208,8 @@ export class Renderer {
     gl.vertexAttribPointer(2, 1, gl.FLOAT, false, 32, 28);
 
     // Index buffer — also recorded into VAO
-    this.meshes.flowers.indexBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.meshes.flowers.indexBuffer);
+    this.meshSchema.flowers.indexBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.meshSchema.flowers.indexBuffer);
     gl.bufferData(
       gl.ELEMENT_ARRAY_BUFFER,
       new Uint32Array(stagingData.index),
@@ -202,11 +231,11 @@ export class Renderer {
     // }
 
     // // 1. Store total indices to draw during drawElements execution calls
-    // this.meshes.flowers.vertCount = stagingData.index.length;
+    // this.meshSchema.flowers.vertCount = stagingData.index.length;
 
     // // 2. Allocate and Bind Vertex Array Buffer (Coordinates, UVs, Normals)
-    // this.meshes.flowers.vertexBuffer = gl.createBuffer();
-    // gl.bindBuffer(gl.ARRAY_BUFFER, this.meshes.flowers.vertexBuffer);
+    // this.meshSchema.flowers.vertexBuffer = gl.createBuffer();
+    // gl.bindBuffer(gl.ARRAY_BUFFER, this.meshSchema.flowers.vertexBuffer);
     // gl.bufferData(
     //   gl.ARRAY_BUFFER,
     //   new Float32Array(stagingData.verts),
@@ -214,8 +243,8 @@ export class Renderer {
     // );
 
     // // 3. Allocate and Bind Element Array Buffer (Triangle index drawing sequences)
-    // this.meshes.flowers.indexBuffer = gl.createBuffer();
-    // gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.meshes.flowers.indexBuffer);
+    // this.meshSchema.flowers.indexBuffer = gl.createBuffer();
+    // gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.meshSchema.flowers.indexBuffer);
     // gl.bufferData(
     //   gl.ELEMENT_ARRAY_BUFFER,
     //   new Uint32Array(stagingData.index), // CHQ: Claude AI: changed Uint16Array to Uint32Array
@@ -230,7 +259,119 @@ export class Renderer {
     // gl.bindVertexArray(null);
   }
 
+  uploadBeeMesh(stagingData) {
+    const gl = this.gl;
+
+    if (!stagingData || !stagingData.verts || stagingData.verts.length === 0) {
+      console.warn("⚠️ Attempted to upload empty flower staging data.");
+      return;
+    }
+
+    this.meshSchema.bees.vertCount =
+      // this.meshSchema.flowers.vertCount = stagingData.index.length;
+
+      // CHQ: Claude AI: Create and bind a VAO
+      // this.meshSchema.flowers.vao = gl.createVertexArray();
+      // gl.bindVertexArray(this.meshSchema.flowers.vao);
+
+      this.meshSchema.bees.vao = gl.createVertexArray();
+    gl.bindVertexArray(this.meshSchema.bees.vao);
+
+    // console.log("flower VAO created:", this.meshSchema.flowers.vao);
+    // console.log("bee VAO created:", this.meshSchema.bees.vao);
+
+    // Vertex buffer
+    // this.meshSchema.flowers.vertexBuffer = gl.createBuffer();
+    // gl.bindBuffer(gl.ARRAY_BUFFER, this.meshSchema.flowers.vertexBuffer);
+    // gl.bufferData(
+    //   gl.ARRAY_BUFFER,
+    //   new Float32Array(stagingData.verts),
+    //   gl.STATIC_DRAW,
+    // );
+    this.meshSchema.bees.vertexBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, this.meshSchema.bees.vertexBuffer);
+    gl.bufferData(
+      gl.ARRAY_BUFFER,
+      new Float32Array(stagingData.verts),
+      gl.STATIC_DRAW,
+    );
+
+    // Set up attributes WHILE VAO is bound so they get recorded into it
+    // vertPos: 3 floats, offset 0
+    gl.enableVertexAttribArray(0);
+    gl.vertexAttribPointer(0, 3, gl.FLOAT, false, 32, 0);
+    // vertUV: 4 floats, offset 12
+    gl.enableVertexAttribArray(1);
+    gl.vertexAttribPointer(1, 4, gl.FLOAT, false, 32, 12);
+    // vertGoo: 1 float, offset 28
+    gl.enableVertexAttribArray(2);
+    gl.vertexAttribPointer(2, 1, gl.FLOAT, false, 32, 28);
+
+    // Index buffer — also recorded into VAO
+    this.meshSchema.bees.indexBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.meshSchema.bees.indexBuffer);
+    gl.bufferData(
+      gl.ELEMENT_ARRAY_BUFFER,
+      new Uint32Array(stagingData.index),
+      gl.STATIC_DRAW,
+    );
+
+    // Unbind when done
+    gl.bindVertexArray(null);
+  }
+
+  uploadMobMesh(stagingData) {
+    const gl = this.gl;
+    if (!stagingData?.verts?.length) return;
+
+    this.meshSchema.mobs.vertCount = stagingData.index.length;
+
+    // CHQ: Me - create and bind a VAO
+    this.meshSchema.mobs.vao = gl.createVertexArray();
+    gl.bindVertexArray(this.meshSchema.mobs.vao);
+
+    // CHQ: Vertex buffer
+    this.meshSchema.mobs.vertexBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, this.meshSchema.mobs.vertexBuffer);
+    gl.bufferData(
+      gl.ARRAY_BUFFER,
+      new Float32Array(stagingData.verts),
+      gl.STATIC_DRAW,
+    );
+
+    // vertPos: 3 floats @ offset 0,  stride 32
+    gl.enableVertexAttribArray(0);
+    gl.vertexAttribPointer(0, 3, gl.FLOAT, false, 32, 0);
+    // vertColor: 3 floats @ offset 12
+    gl.enableVertexAttribArray(1);
+    gl.vertexAttribPointer(1, 3, gl.FLOAT, false, 32, 12);
+    // vertUV: 2 floats @ offset 24
+    gl.enableVertexAttribArray(2);
+    gl.vertexAttribPointer(2, 2, gl.FLOAT, false, 32, 24);
+
+    this.meshSchema.mobs.indexBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.meshSchema.mobs.indexBuffer);
+    gl.bufferData(
+      gl.ELEMENT_ARRAY_BUFFER,
+      new Uint32Array(stagingData.index),
+      gl.STATIC_DRAW,
+    );
+
+    gl.bindVertexArray(null);
+  }
+
   // Defensive compilation utility encapsulated in the class
+
+  /**
+   * Safely compiles and links a named shader program, returning a fallback program
+   * if either source string is missing or empty.
+   *
+   * @param {string} programName - Human-readable label used in error messages.
+   * @param {string} vshString - GLSL source for the vertex shader.
+   * @param {string} fshString - GLSL source for the fragment shader.
+   * @returns {WebGLProgram|null} The linked program, or the static fallback program
+   *   if compilation cannot proceed.
+   */
   safeCreateProgram(programName, vshString, fshString) {
     if (!vshString || !fshString) {
       console.error(
@@ -242,6 +383,18 @@ export class Renderer {
     return this.createProgram(vshString, fshString);
   }
 
+  /**
+   * Iterates over every entry in the shader dictionary and compiles a linked
+   * WebGL program for each render pass. Any program that fails to link is
+   * replaced with the static fallback program and a warning is logged.
+   *
+   * Programs compiled: `static`, `dynamic`, `bee`, `flower`, `token`,
+   * `particle`, `text`, `mob`, `explosion`, `trail`.
+   *
+   * @param {Object} SHADERS - Map of shader-name keys to GLSL source strings,
+   *   as exported from `shaders.js`.
+   * @returns {void}
+   */
   compileAllShaders(SHADERS) {
     const gl = this.gl;
 
@@ -324,6 +477,25 @@ export class Renderer {
     // console.log("------------------------------------------");
   }
 
+  /**
+   * Substitutes compile-time screen-dimension constants into a GLSL source string
+   * before it is handed to the WebGL shader compiler. Supported tokens:
+   *
+   * | Token                        | Replaced with                              |
+   * |------------------------------|--------------------------------------------|
+   * | `INV_HALF_WIDTH`             | `1 / (width * 0.5)`                        |
+   * | `INV_HALF_HEIGHT`            | `1 / (height * 0.5)`                       |
+   * | `HALF_WIDTH`                 | `width * 0.5`                              |
+   * | `HALF_HEIGHT`                | `height * 0.5`                             |
+   * | `INV_ASPECT`                 | `height / width`                           |
+   * | `ASPECT`                     | `width / height`                           |
+   * | `SCREEN_CHANGE`              | `(width + height) * 0.5`                   |
+   * | `INV_AVG_HALF_WIDTH_HEIGHT`  | `2 / ((width + height) * 0.5)`             |
+   * | `LIGHT_DIR`                  | `vec3(0.5, 0.8, 0.2)` (hardcoded)         |
+   *
+   * @param {string} source - Raw GLSL source string containing placeholder tokens.
+   * @returns {string} The GLSL source with all tokens replaced by their numeric values.
+   */
   prepareShaderSource(source) {
     const width = this.width;
     const height = this.height;
@@ -349,6 +521,15 @@ export class Renderer {
   }
 
   // Your existing internal methods...
+  /**
+   * Compiles a vertex shader and a fragment shader from GLSL source strings,
+   * links them into a WebGL program, and returns the result.
+   * Compilation and link errors are logged to the console.
+   *
+   * @param {string} vshSource - GLSL source for the vertex shader (pre-token-substitution).
+   * @param {string} fshSource - GLSL source for the fragment shader (pre-token-substitution).
+   * @returns {WebGLProgram} The compiled and linked WebGL program object.
+   */
   createProgram(vshSource, fshSource) {
     const gl = this.gl;
 
@@ -379,6 +560,16 @@ export class Renderer {
     return program;
   }
 
+  /**
+   * Identifies the key in `this.programs` that corresponds to the WebGL program
+   * currently bound on the GPU.
+   *
+   * > **Performance note:** This method calls `gl.getParameter(CURRENT_PROGRAM)`,
+   * > which is a synchronous GPU stall. Avoid calling it inside the render loop.
+   *
+   * @returns {string|null} The program key (e.g. `"flower"`, `"bee"`) or `null` if
+   *   the active program is not registered in `this.programs`.
+   */
   getCurrentProgramKey() {
     // CHQ: GEmini AI: In a high-performance engine, avoid
     //      calling gl.getParameter inside the render loop.
@@ -395,6 +586,16 @@ export class Renderer {
     return null;
   }
 
+  /**
+   * Issues a single draw call for the entire pre-baked static flower mesh.
+   * Binds the flower shader program, uploads view/projection uniforms, binds the
+   * flower texture atlas, and draws via the mesh's VAO.
+   *
+   * @param {Object} state - The live game state object (used for future per-frame uniforms).
+   * @param {Float32Array|number[]} viewMatrix - Column-major 4×4 view matrix.
+   * @param {Float32Array|number[]} projectionMatrix - Column-major 4×4 projection matrix.
+   * @returns {void}
+   */
   drawFlowers(state, viewMatrix, projectionMatrix) {
     const gl = this.gl;
     const flowerProgram = this.programs.flower; // Target your flower vertex/fragment shaders
@@ -428,14 +629,16 @@ export class Renderer {
       if (texLoc !== null) gl.uniform1i(texLoc, 0);
     }
 
-    console.log("Texture bound:", !!this.textures.flowers);
+    if (this.gl.frameCount < 150000) {
+      console.log("Texture bound:", !!this.textures.flowers);
+    }
 
     // CHQ: Claude AI: remove the bindBuffer and bindMeshAttributes calls — the VAO handles all of that:
     // CHQ: while Bees and mobs are individual entities in state.objects
     //      (and therefore need to loop per instance so their own model
     //      matrix is uploaded before drawing), flowers are a single
     //      pre-baked static mesh, so only need to be drawn once
-    // gl.bindBuffer(gl.ARRAY_BUFFER, this.meshes.flowers.vertexBuffer);
+    // gl.bindBuffer(gl.ARRAY_BUFFER, this.meshSchema.flowers.vertexBuffer);
     // this.bindMeshAttributes("flowers", flowerProgram);
 
     // const vertPosLoc = gl.getAttribLocation(flowerProgram, "vertPos");
@@ -486,10 +689,21 @@ export class Renderer {
     // gl.enable(gl.CULL_FACE); // re-enable after if needed
 
     // console.log("flower texture:", this.textures?.flowers);
-    // console.log("flower vertCount:", this.meshes.flowers.vertCount);
+    // console.log("flower vertCount:", this.meshSchema.flowers.vertCount);
   }
 
   // CHQ: Claude AI rewrote to use setUniform and drawMesh
+
+  /**
+   * Iterates over all bee instances in the game state and issues one draw call
+   * per bee, uploading an individual model matrix (translation only) for each.
+   *
+   * @param {Object} state - The live game state object.
+   * @param {Object[]} state.objects.bees - Array of bee instances, each with a `pos` [x, y, z] array.
+   * @param {Float32Array|number[]} viewMatrix - Column-major 4×4 view matrix.
+   * @param {Float32Array|number[]} projectionMatrix - Column-major 4×4 projection matrix.
+   * @returns {void}
+   */
   drawBees(state, viewMatrix, projectionMatrix) {
     const gl = this.gl;
     const beeProgram = this.programs.bee;
@@ -515,6 +729,23 @@ export class Renderer {
     });
   }
 
+  /**
+   * Iterates over all mob instances in the game state and issues one draw call
+   * per mob, uploading a model matrix that encodes translation, non-uniform scale,
+   * and Y-axis rotation derived from each mob's properties.
+   *
+   * @param {Object} state - The live game state object.
+   * @param {Object[]} state.objects.mobs - Array of mob instances with the following optional fields:
+   * @param {number[]} state.objects.mobs[].pos - World-space position [x, y, z].
+   * @param {number} [state.objects.mobs[].width=1] - X scale.
+   * @param {number} [state.objects.mobs[].height=1] - Y scale.
+   * @param {number} [state.objects.mobs[].depth=1] - Z scale.
+   * @param {number} [state.objects.mobs[].facingAngle] - Y-axis rotation in radians.
+   * @param {number} [state.objects.mobs[].frameIndex=0] - Texture frame/row offset.
+   * @param {Float32Array|number[]} viewMatrix - Column-major 4×4 view matrix.
+   * @param {Float32Array|number[]} projectionMatrix - Column-major 4×4 projection matrix.
+   * @returns {void}
+   */
   drawMobs(state, viewMatrix, projectionMatrix) {
     const gl = this.gl;
     const mobProgram = this.programs.mob;
@@ -552,6 +783,41 @@ export class Renderer {
     });
   }
 
+  // FIXME: switch bears to player
+  drawPlayer(state, viewMatrix, projectionMatrix) {
+    // Reuse mob program + mesh — player is just a mob with player's pos
+    const gl = this.gl;
+    const prog = this.programs.mob;
+    if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) return;
+    if (!this.meshSchema.mobs?.vertexBuffer) return;
+
+    gl.useProgram(prog);
+    this.setUniform(prog, "projMatrix", projectionMatrix);
+    this.setUniform(prog, "viewMatrix", viewMatrix);
+
+    if (this.textures?.bear) {
+      gl.activeTexture(gl.TEXTURE0);
+      gl.bindTexture(gl.TEXTURE_2D, this.textures.bear);
+      this.setUniform(prog, "tex", 0, "int");
+    }
+
+    const modelMatrix = mat4.create();
+    mat4.fromTranslation(modelMatrix, state.player.pos);
+    mat4.rotateY(modelMatrix, modelMatrix, state.player.yaw || 0);
+    this.setUniform(prog, "uModelMatrix", modelMatrix);
+    this.drawMesh("mobs");
+  }
+
+  /**
+   * Pre-fetches and caches the WebGL uniform locations for `projMatrix`,
+   * `viewMatrix`, and `tex` for every registered shader program. The cache
+   * is consulted by {@link setUniform} to avoid repeated `getUniformLocation`
+   * calls during the render loop.
+   *
+   * @param {Object.<string, WebGLProgram>} programs - Map of program key → WebGL program,
+   *   typically `this.programs`.
+   * @returns {void}
+   */
   initCache(programs) {
     // console.log("Programs received by initCache:", Object.keys(programs));
 
@@ -569,6 +835,14 @@ export class Renderer {
   }
 
   // CHQ: Claude AI: temp function for testing
+  /**
+   * Quick sanity-check draw that renders a red triangle on a blue background
+   * using a minimal inline shader pair. Useful for verifying that the WebGL
+   * context and canvas are wired up correctly before the main render pipeline
+   * is ready.
+   *
+   * @returns {void}
+   */
   testDraw() {
     const gl = this.gl;
 
@@ -619,10 +893,25 @@ export class Renderer {
 
   // CHQ: Gemini AI added function
   /**
-   * Safe utility to bind values to shader uniforms based on type parsing.
-   * @param {WebGLProgram} program - The target shader program object
-   * @param {string} name - The uniform variable name in the shader (e.g., 'uViewMatrix')
-   * @param {*} value - The data payload (Matrix, Vector, Array, or primitive float/int)
+   * Type-dispatching helper that uploads a value to a named GLSL uniform,
+   * resolving the uniform location from the cache when available.
+   *
+   * Dispatch rules (in priority order):
+   * 1. `Float32Array` or 16-element array → `uniformMatrix4fv`
+   * 2. 3-element array → `uniform3fv`
+   * 3. 4-element array → `uniform4fv`
+   * 4. `number` with `type === "int"` or integer value → `uniform1i`
+   * 5. `number` (float) → `uniform1f`
+   *
+   * Silently returns if the uniform location is `null` (i.e. optimised away
+   * by the GLSL compiler).
+   *
+   * @param {WebGLProgram} program - The target shader program that owns the uniform.
+   * @param {string} name - The uniform variable name as it appears in the GLSL source.
+   * @param {Float32Array|number[]|number} value - The value to upload.
+   * @param {"int"|"float"|null} [type=null] - Optional explicit type hint. Pass `"int"`
+   *   to force `uniform1i` for a numeric value that would otherwise be treated as a float.
+   * @returns {void}
    */
   setUniform(program, name, value, type = null) {
     const gl = this.gl;
@@ -674,9 +963,21 @@ export class Renderer {
   }
 
   // CHQ: Claude AI created helper method
+
+  /**
+   * Issues the appropriate WebGL draw call for the mesh registered under the
+   * given key. If the mesh has a VAO, it is bound for the draw and then
+   * unbound; otherwise the vertex and optional index buffers are bound manually.
+   *
+   * - Meshes with an index buffer use `drawElements(TRIANGLES, …, UNSIGNED_INT, 0)`.
+   * - Meshes without an index buffer use `drawArrays(TRIANGLES, 0, vertCount)`.
+   *
+   * @param {string} meshKey - Key into `this.meshSchema`, e.g. `"flowers"`, `"bees"`, `"mobs"`.
+   * @returns {void}
+   */
   drawMesh(meshKey) {
     const gl = this.gl;
-    const mesh = this.meshes[meshKey];
+    const mesh = this.meshSchema[meshKey];
     if (!mesh || !mesh.vertexBuffer) return;
 
     if (mesh.vao) {
@@ -710,10 +1011,20 @@ export class Renderer {
   // Add this method at the very bottom of the Renderer class:
 
   /**
-   * Main rendering entry point called on every frame tick.
-   * Clears buffers and delegates entity states down to specialized GPU drawing passes.
-   * @param {Object} state - The master gameState object
-   * @param {number} dt - Delta time in seconds
+   * Main rendering entry point called once per animation frame. Clears the colour
+   * and depth buffers, constructs per-frame view and projection matrices from the
+   * current player position and yaw, then dispatches to each specialised draw pass.
+   *
+   * Draw order:
+   * 1. Flower mesh (static world geometry)
+   * 2. Bees (per-instance)
+   * 3. Mobs (per-instance)
+   * 4. Text / decals (always last, renders on top)
+   *
+   * @param {Object} state - The authoritative game state object produced by
+   *   {@link createInitialState}. Must contain a `player` with `pos` and `yaw` fields.
+   * @param {number} dt - Delta time in seconds since the previous frame.
+   * @returns {void}
    */
   render(state, dt) {
     // console.log("Renderer loop running...");
@@ -775,7 +1086,7 @@ export class Renderer {
     this.projectionMatrix = projectionMatrix;
 
     // 5. Draw calls AFTER matrices exist
-    if (this.meshes.flowers?.vertexBuffer) {
+    if (this.meshSchema.flowers?.vertexBuffer) {
       this.drawFlowers(state, viewMatrix, projectionMatrix);
       const err = gl.getError();
       if (err !== gl.NO_ERROR)
@@ -788,6 +1099,14 @@ export class Renderer {
       this.drawBees(state, viewMatrix, projectionMatrix);
     }
 
+    if (this.gl.frameCount < 50000) {
+      console.log(
+        "mobs:",
+        state.objects.mobs.length,
+        "mesh:",
+        !!this.meshSchema.mobs?.vertexBuffer,
+      );
+    }
     if (state.objects?.mobs?.length > 0) {
       this.drawMobs(state, viewMatrix, projectionMatrix);
     }
@@ -831,9 +1150,9 @@ export class Renderer {
     // this.gl.uniformMatrix4fv(location, false, this.projectionMatrix);
 
     // // 1. Is flower mesh actually uploaded?
-    // console.log("flower vertCount:", this.meshes.flowers?.vertCount);
-    // console.log("flower vertexBuffer:", this.meshes.flowers?.vertexBuffer);
-    // console.log("flower indexBuffer:", this.meshes.flowers?.indexBuffer);
+    // console.log("flower vertCount:", this.meshSchema.flowers?.vertCount);
+    // console.log("flower vertexBuffer:", this.meshSchema.flowers?.vertexBuffer);
+    // console.log("flower indexBuffer:", this.meshSchema.flowers?.indexBuffer);
 
     // // 2. Is state populated?
     // console.log("player pos:", state?.player?.pos);
