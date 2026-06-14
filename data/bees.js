@@ -1,6 +1,8 @@
-// bees.js
-import { MATH } from "./utils/math.js";
-import { ParticleRenderer } from "./engine/particles.js";
+// data/bees.js
+// import { MATH } from "./utils/math.js";
+import { MATH } from "../utils/math.js";
+// import { ParticleRenderer } from "./engine/particles.js";
+import { ParticleRenderer } from "../engine/particles.js"; // ✅
 
 // import {objects, player } from
 

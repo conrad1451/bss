@@ -1,7 +1,10 @@
 // entities/bees.js
 import { MATH } from "../utils/math.js";
-import { vec3, vec2 } from "../utils/gl-matrix.js";
-import { beeInfo } from "./data/bees.js";
+// import { vec3, vec2 } from "../utils/gl-matrix.js";
+import { vec3, vec2 } from "gl-matrix";
+
+// import { beeInfo } from "./data/bees.js";
+import { beeInfo } from "../data/bees.js"; // ✅
 export class Bee {
   constructor(pos, type, lvl, gifted, x, y, mutation, gameState) {
     this.meshScale = type === "baby" || type === "tadpole" ? 0.65 : 1; // [cite: 141, 1441]
