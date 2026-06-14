@@ -53,7 +53,7 @@ export function createGameLoop(update, render, state) {
   let isRunning = false;
 
   function tick(currentTime) {
-    console.log("tick fired"); // CHQ: Claude AI (Sonnet): add console print statement for debugging
+    // console.log("tick fired"); // CHQ: Claude AI (Sonnet): add console print statement for debugging
     if (!isRunning) return;
 
     if (!lastTime) lastTime = currentTime;
