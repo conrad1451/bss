@@ -48,17 +48,25 @@ canvas.width = width;
 canvas.height = height;
 
 const gl = canvas.getContext("webgl2") || canvas.getContext("webgl");
+
+if (!gl) {
+  console.error(
+    "WebGL failed to initialize! Both webgl2 and webgl contexts returned null.",
+  );
+} else {
+  console.log(
+    "WebGL version:",
+    gl instanceof WebGL2RenderingContext ? "WebGL2" : "WebGL1",
+  );
+  if (!(gl instanceof WebGL2RenderingContext)) {
+    gl.getExtension("OES_element_index_uint");
+  }
+}
+
 console.log(
   "WebGL version:",
   gl instanceof WebGL2RenderingContext ? "WebGL2" : "WebGL1",
 );
-if (!(gl instanceof WebGL2RenderingContext)) {
-  // Enable UNSIGNED_INT indices for WebGL1
-  gl.getExtension("OES_element_index_uint");
-}
-if (!gl) {
-  console.error("WebGL failed to initialize!");
-}
 
 function initGameWorld(gameState) {
   // 1. Initialize Mobs
