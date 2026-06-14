@@ -1664,3 +1664,32 @@ export class TempBee extends Bee {
     return this.life <= 0 || isDead; // [cite: 296]
   }
 }
+
+export function spawnBeeAtCamera(gameState, type = "common") {
+  // if (!gameState.camera?.pos) return;
+
+  // CHQ: Gemini AI added
+  const playerPos = gameState.player.pos;
+
+  // Calculate a position 5 units forward on the Z axis relative to the player
+  const spawnPos = [playerPos[0], playerPos[1], playerPos[2] - 5];
+
+  // Instantiate and push a test basic bee into the tracking loop
+  const newBee = new Bee(spawnPos, "basic", 1, false, 0, 0, null, gameState);
+  gameState.objects.bees.push(newBee);
+
+  // // hiveX/hiveY (0, 0) and mutation null — computeLevel is currently a stub
+  // // so these don't get used yet, but the constructor expects them
+  // const bee = new Bee(
+  //   gameState.camera.pos,
+  //   type,
+  //   1,
+  //   false,
+  //   0,
+  //   0,
+  //   null,
+  //   gameState,
+  // );
+
+  // gameState.objects.bees.push(bee);
+}
