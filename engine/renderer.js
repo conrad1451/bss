@@ -41,6 +41,11 @@ export class Renderer {
     this.glCache = {};
 
     // Core GPU buffer registries managed by the graphics subsystem
+    // live registry of actual GPU resources — the VAO, vertex buffer,
+    // index buffer, instance buffer, and vertex/instance counts that
+    // uploadFlowerMesh, uploadBeeMesh, etc. create and populate.
+    // This is what drawMesh/drawBees/drawFlowers need to actually
+    // issue draw calls.
     this.meshes = {
       flowers: {
         vertexBuffer: null,
@@ -54,7 +59,11 @@ export class Renderer {
       },
     };
 
-    // CHQ: Gemini AI added
+    // CHQ: static config/blueprint:
+    //      for each mesh type. Describes the attribute names and stride
+    //      that a buffer should have. Metadata defined once in the
+    //      constructor, never holds any GPU objects. Consumed by
+    //      bindMeshAttributes()
     this.meshSchema = {
       flowers: { attributes: ["vertPos", "vertUV", "vertGoo"], stride: 8 },
       bees: {
