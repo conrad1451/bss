@@ -113,7 +113,13 @@ export function updateEngine(gameState, dt) {
   // Inside updateEngine(gameState, dt)
   if (gameState.frameCount === 1) {
     // Spawns immediately on frame 1
+
     spawnBeeAtCamera(gameState);
+
+    console.log(
+      "gameState.objects.bees.length is: ",
+      gameState.objects.bees.length,
+    );
   }
   // if (gameState.user.clickedKeys["n"]) {
   //   let printThis = true;
@@ -124,6 +130,10 @@ export function updateEngine(gameState, dt) {
   //   printThis = false; // CHQ: has not made a difference anyways
 
   //   spawnBeeAtCamera(gameState);
+  //   console.log(
+  //     "gameState.objects.bees.length is: ",
+  //     gameState.objects.bees.length,
+  //   );
   // }
 }
 

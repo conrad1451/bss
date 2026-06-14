@@ -52,6 +52,16 @@ export class Renderer {
         indexBuffer: null,
         vertCount: 0,
       },
+      bees: {
+        vertexBuffer: null,
+        indexBuffer: null,
+        vertCount: 0,
+      },
+      mobs: {
+        vertexBuffer: null,
+        indexBuffer: null,
+        vertCount: 0,
+      },
       // --- 🛠️ NEW: Static Quad buffer node for screen-space UI elements ---
       uiQuad: {
         vertexBuffer: null,
@@ -202,17 +212,17 @@ export class Renderer {
       return;
     }
 
-    this.mesh.flowers.vertCount = stagingData.index.length;
+    this.meshes.flowers.vertCount = stagingData.index.length;
 
     // CHQ: Claude AI: Create and bind a VAO
-    this.mesh.flowers.vao = gl.createVertexArray();
-    gl.bindVertexArray(this.mesh.flowers.vao);
+    this.meshes.flowers.vao = gl.createVertexArray();
+    gl.bindVertexArray(this.meshes.flowers.vao);
 
-    // console.log("flower VAO created:", this.mesh.flowers.vao);
+    // console.log("flower VAO created:", this.meshes.flowers.vao);
 
     // Vertex buffer
-    this.mesh.flowers.vertexBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, this.mesh.flowers.vertexBuffer);
+    this.meshes.flowers.vertexBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, this.meshes.flowers.vertexBuffer);
     gl.bufferData(
       gl.ARRAY_BUFFER,
       new Float32Array(stagingData.verts),
@@ -231,8 +241,8 @@ export class Renderer {
     gl.vertexAttribPointer(2, 1, gl.FLOAT, false, 32, 28);
 
     // Index buffer — also recorded into VAO
-    this.mesh.flowers.indexBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.mesh.flowers.indexBuffer);
+    this.meshes.flowers.indexBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.meshes.flowers.indexBuffer);
     gl.bufferData(
       gl.ELEMENT_ARRAY_BUFFER,
       new Uint32Array(stagingData.index),
@@ -254,11 +264,11 @@ export class Renderer {
     // }
 
     // // 1. Store total indices to draw during drawElements execution calls
-    // this.mesh.flowers.vertCount = stagingData.index.length;
+    // this.meshes.flowers.vertCount = stagingData.index.length;
 
     // // 2. Allocate and Bind Vertex Array Buffer (Coordinates, UVs, Normals)
-    // this.mesh.flowers.vertexBuffer = gl.createBuffer();
-    // gl.bindBuffer(gl.ARRAY_BUFFER, this.mesh.flowers.vertexBuffer);
+    // this.meshes.flowers.vertexBuffer = gl.createBuffer();
+    // gl.bindBuffer(gl.ARRAY_BUFFER, this.meshes.flowers.vertexBuffer);
     // gl.bufferData(
     //   gl.ARRAY_BUFFER,
     //   new Float32Array(stagingData.verts),
@@ -266,8 +276,8 @@ export class Renderer {
     // );
 
     // // 3. Allocate and Bind Element Array Buffer (Triangle index drawing sequences)
-    // this.mesh.flowers.indexBuffer = gl.createBuffer();
-    // gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.mesh.flowers.indexBuffer);
+    // this.meshes.flowers.indexBuffer = gl.createBuffer();
+    // gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.meshes.flowers.indexBuffer);
     // gl.bufferData(
     //   gl.ELEMENT_ARRAY_BUFFER,
     //   new Uint32Array(stagingData.index), // CHQ: Claude AI: changed Uint16Array to Uint32Array
@@ -364,21 +374,21 @@ export class Renderer {
     mesh.instanceData = []; // refilled every frame in drawBees
 
     // this.meshSchema.bees.vertCount =
-    // this.mesh.flowers.vertCount = stagingData.index.length;
+    // this.meshes.flowers.vertCount = stagingData.index.length;
 
     // CHQ: Claude AI: Create and bind a VAO
-    // this.mesh.flowers.vao = gl.createVertexArray();
-    // gl.bindVertexArray(this.mesh.flowers.vao);
+    // this.meshes.flowers.vao = gl.createVertexArray();
+    // gl.bindVertexArray(this.meshes.flowers.vao);
 
     //   this.meshSchema.bees.vao = gl.createVertexArray();
     // gl.bindVertexArray(this.meshSchema.bees.vao);
 
-    // console.log("flower VAO created:", this.mesh.flowers.vao);
+    // console.log("flower VAO created:", this.meshes.flowers.vao);
     // console.log("bee VAO created:", this.meshSchema.bees.vao);
 
     // Vertex buffer
-    // this.mesh.flowers.vertexBuffer = gl.createBuffer();
-    // gl.bindBuffer(gl.ARRAY_BUFFER, this.mesh.flowers.vertexBuffer);
+    // this.meshes.flowers.vertexBuffer = gl.createBuffer();
+    // gl.bindBuffer(gl.ARRAY_BUFFER, this.meshes.flowers.vertexBuffer);
     // gl.bufferData(
     //   gl.ARRAY_BUFFER,
     //   new Float32Array(stagingData.verts),
@@ -734,7 +744,7 @@ export class Renderer {
     //      (and therefore need to loop per instance so their own model
     //      matrix is uploaded before drawing), flowers are a single
     //      pre-baked static mesh, so only need to be drawn once
-    // gl.bindBuffer(gl.ARRAY_BUFFER, this.mesh.flowers.vertexBuffer);
+    // gl.bindBuffer(gl.ARRAY_BUFFER, this.meshes.flowers.vertexBuffer);
     // this.bindMeshAttributes("flowers", flowerProgram);
 
     // const vertPosLoc = gl.getAttribLocation(flowerProgram, "vertPos");
@@ -785,7 +795,7 @@ export class Renderer {
     // gl.enable(gl.CULL_FACE); // re-enable after if needed
 
     // console.log("flower texture:", this.textures?.flowers);
-    // console.log("flower vertCount:", this.mesh.flowers.vertCount);
+    // console.log("flower vertCount:", this.meshes.flowers.vertCount);
   }
 
   // CHQ: Claude AI rewrote to use setUniform and drawMesh
@@ -806,23 +816,69 @@ export class Renderer {
 
     if (!gl.getProgramParameter(beeProgram, gl.LINK_STATUS)) return;
 
-    gl.useProgram(beeProgram);
+    // console.log(
+    //   "bee link status:",
+    //   gl.getProgramParameter(beeProgram, gl.LINK_STATUS),
+    // );
+    // const mesh = this.meshSchema.bess;
+    const mesh = this.meshes.bees;
+    if (!mesh || !mesh.vertexBuffer || !mesh.instanceBuffer) return;
 
+    // 1. Clear last frame's instance data
+    mesh.instanceData = [];
+
+    // 2. Each bee contributes 11 floats: instance_pos(4) + instance_rotation(4) + instance_uv(3)
+    state.objects.bees.forEach((bee) => {
+      mesh.instanceData.push(
+        bee.pos[0],
+        bee.pos[1],
+        bee.pos[2],
+        bee.meshScale ?? 1, // instance_pos
+        bee.moveDir?.[0] ?? 1, // was 0
+        bee.moveDir?.[1] ?? 0, // was 1
+        bee.moveDir?.[2] ?? 0, // was 0
+        0, // instance_rotation
+        0,
+        0,
+        0, // instance_uv
+      );
+    });
+
+    const instanceCount = mesh.instanceData.length / 11;
+    if (instanceCount === 0) return;
+
+    // 3. Upload this frame's instance data
+    gl.bindBuffer(gl.ARRAY_BUFFER, mesh.instanceBuffer);
+    gl.bufferData(
+      gl.ARRAY_BUFFER,
+      new Float32Array(mesh.instanceData),
+      gl.DYNAMIC_DRAW,
+    );
+
+    // 4. Program + uniforms
+    gl.useProgram(beeProgram);
     this.setUniform(beeProgram, "projMatrix", projectionMatrix);
     this.setUniform(beeProgram, "viewMatrix", viewMatrix);
-    this.setUniform(beeProgram, "tex", 0); // CHQ: Claude AI: replace "uSampler" with "tex"
+    this.setUniform(beeProgram, "isNight", 1.0, "float"); // see note below
+    this.setUniform(beeProgram, "tex", 0, "int");
 
     if (this.textures?.bees) {
       gl.activeTexture(gl.TEXTURE0);
       gl.bindTexture(gl.TEXTURE_2D, this.textures.bees);
     }
 
-    state.objects.bees.forEach((bee) => {
-      const modelMatrix = mat4.create();
-      mat4.fromTranslation(modelMatrix, bee.pos);
-      this.setUniform(beeProgram, "uModelMatrix", modelMatrix);
-      this.drawMesh("bees");
-    });
+    // 5. One instanced draw call for all bees
+    gl.bindVertexArray(mesh.vao);
+    gl.drawElementsInstanced(
+      gl.TRIANGLES,
+      mesh.vertCount,
+      gl.UNSIGNED_INT,
+      0,
+      instanceCount,
+    );
+    const err = gl.getError();
+    if (err) console.error("drawElementsInstanced error [bees]:", err);
+    gl.bindVertexArray(null);
   }
 
   /**
@@ -1088,6 +1144,7 @@ export class Renderer {
       //   !!mesh.indexBuffer,
       // );
       // console.log("about to drawElements, vertCount:", mesh.vertCount);
+      // console.log("bee draw — vertCount:", mesh.vertCount, "modelMatrix:");
       gl.drawElements(gl.TRIANGLES, mesh.vertCount, gl.UNSIGNED_INT, 0);
       const err = gl.getError();
       if (err) console.error(`drawElements error [${meshKey}]:`, err);
@@ -1187,7 +1244,7 @@ export class Renderer {
     this.projectionMatrix = projectionMatrix;
 
     // 5. Draw calls AFTER matrices exist
-    if (this.mesh.flowers?.vertexBuffer) {
+    if (this.meshes.flowers?.vertexBuffer) {
       this.drawFlowers(state, viewMatrix, projectionMatrix);
       const err = gl.getError();
       if (err !== gl.NO_ERROR)
@@ -1252,9 +1309,9 @@ export class Renderer {
     // this.gl.uniformMatrix4fv(location, false, this.projectionMatrix);
 
     // // 1. Is flower mesh actually uploaded?
-    // console.log("flower vertCount:", this.mesh.flowers?.vertCount);
-    // console.log("flower vertexBuffer:", this.mesh.flowers?.vertexBuffer);
-    // console.log("flower indexBuffer:", this.mesh.flowers?.indexBuffer);
+    // console.log("flower vertCount:", this.meshes.flowers?.vertCount);
+    // console.log("flower vertexBuffer:", this.meshes.flowers?.vertexBuffer);
+    // console.log("flower indexBuffer:", this.meshes.flowers?.indexBuffer);
 
     // // 2. Is state populated?
     // console.log("player pos:", state?.player?.pos);
