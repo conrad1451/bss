@@ -42,7 +42,17 @@ export class Renderer {
 
     // Core GPU buffer registries managed by the graphics subsystem
     this.meshSchema = {
-      flowers: { attributes: ["vertPos", "vertUV", "vertGoo"], stride: 8 },
+      uiQuad: {
+        vertexBuffer: null,
+        vertCount: 4,
+      },
+      flowers: {
+        vertexBuffer: null,
+        indexBuffer: null,
+        vertCount: 0,
+        attributes: ["vertPos", "vertUV", "vertGoo"],
+        stride: 8,
+      },
       bees: {
         attributes: [
           "vertPos",
