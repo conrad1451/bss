@@ -1077,6 +1077,10 @@ export class Renderer {
     const camY = pos[1] + 8;
     const camZ = pos[2] + Math.cos(yaw) * 15;
 
+    // CHQ: Claude AI exposed camera pos so other systems (spawning, debug) can use it
+    state.camera = state.camera || {};
+    state.camera.pos = [camX, camY, camZ];
+
     mat4.lookAt(
       viewMatrix,
       [camX, camY, camZ],

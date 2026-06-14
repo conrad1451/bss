@@ -4,6 +4,7 @@
 
 // CHQ: Gemini AI generated file
 import { updatePhysicsEntity, resolveObstacleCollisions } from "./physics.js";
+import { spawnBeeAtCamera } from "../entities/bees.js";
 
 /**
  * Main per-frame engine update. Advances physics, player state, AI entities,
@@ -108,6 +109,22 @@ export function updateEngine(gameState, dt) {
   for (let npc of objects.npcs) {
     npc.update(dt, gameState);
   }
+
+  // Inside updateEngine(gameState, dt)
+  if (gameState.frameCount === 1) {
+    // Spawns immediately on frame 1
+    spawnBeeAtCamera(gameState);
+  }
+  // if (gameState.user.clickedKeys["n"]) {
+  //   let printThis = true;
+
+  //   if (printThis) {
+  //     console.log("Pressed key n");
+  //   }
+  //   printThis = false; // CHQ: has not made a difference anyways
+
+  //   spawnBeeAtCamera(gameState);
+  // }
 }
 
 /**
