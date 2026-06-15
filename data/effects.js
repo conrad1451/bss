@@ -4934,7 +4934,7 @@ export const effects = {
 
             player.hive[y][x].bond += bond;
 
-            textRenderer.add(
+            gameState.textRenderer.add(
               bond + "",
               [beePee[0], beePee[1] + 1, beePee[2]],
               COLORS.bondArr,

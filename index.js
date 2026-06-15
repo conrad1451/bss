@@ -268,6 +268,8 @@ async function BeeSwarmSimulator(saveData) {
     renderer.programs,
   );
 
+  gameState.textRenderer = textRenderer;
+
   // ASSET LOADING
   // Load textures and pass to renderer
   const ctx = uiCanvas.getContext("2d");

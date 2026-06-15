@@ -513,7 +513,7 @@ export const items = {
 
       items.microConverter.amount--;
 
-      textRenderer.add(
+      gameState.textRenderer.add(
         (player.pollen * player.honeyPerPollen) | 0,
         [
           player.body.position.x,
@@ -544,7 +544,7 @@ export const items = {
 
       let am = Math.min(player.convertTotal * 0.25, player.pollen);
 
-      textRenderer.add(
+      gameState.textRenderer.add(
         (am * player.honeyPerPollen) | 0,
         [
           player.body.position.x,
@@ -1713,7 +1713,7 @@ export const items = {
 
         player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bond += addedBond;
 
-        textRenderer.add(
+        gameState.textRenderer.add(
           addedBond + "",
           [
             player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.pos[0],
@@ -1802,7 +1802,7 @@ export const items = {
 
         player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bond += addedBond;
 
-        textRenderer.add(
+        gameState.textRenderer.add(
           addedBond + "",
           [
             player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.pos[0],
@@ -1875,7 +1875,7 @@ export const items = {
 
         player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bond += addedBond;
 
-        textRenderer.add(
+        gameState.textRenderer.add(
           addedBond + "",
           [
             player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.pos[0],
@@ -1949,7 +1949,7 @@ export const items = {
 
         player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bond += addedBond;
 
-        textRenderer.add(
+        gameState.textRenderer.add(
           addedBond + "",
           [
             player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.pos[0],
@@ -2025,7 +2025,7 @@ export const items = {
         player.hive[player.hiveIndex[1]][player.hiveIndex[0]].gifted = true;
         player.addMessage("⭐ The treat made the bee gifted! ⭐", COLORS.honey);
 
-        textRenderer.add(
+        gameState.textRenderer.add(
           addedBond + "",
           [
             player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.pos[0],
@@ -2208,7 +2208,7 @@ export const items = {
           [50, 225, 90],
         );
 
-        textRenderer.add(
+        gameState.textRenderer.add(
           addedBond + "",
           [
             player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.pos[0],
@@ -2308,7 +2308,7 @@ export const items = {
             COLORS.bondArr,
           );
 
-        textRenderer.add(
+        gameState.textRenderer.add(
           bondToAdd + "",
           [
             player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.pos[0],
@@ -2432,7 +2432,7 @@ export const items = {
             COLORS.bondArr,
           );
 
-        textRenderer.add(
+        gameState.textRenderer.add(
           bondToAdd + "",
           [
             player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.pos[0],
@@ -2550,7 +2550,7 @@ export const items = {
             COLORS.bondArr,
           );
 
-        textRenderer.add(
+        gameState.textRenderer.add(
           bondToAdd + "",
           [
             player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.pos[0],
@@ -2668,7 +2668,7 @@ export const items = {
             COLORS.bondArr,
           );
 
-        textRenderer.add(
+        gameState.textRenderer.add(
           bondToAdd + "",
           [
             player.hive[player.hiveIndex[1]][player.hiveIndex[0]].bee.pos[0],

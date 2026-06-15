@@ -16,6 +16,11 @@ export class Bee {
     this.pollen = 0; // [cite: 141]
     this.state = "moveToPlayer"; // [cite: 141]
 
+    this.moveDir = [0, 0, 1]; // CHQ: Claude AI (Sonnet) added this
+    this.moveTo = [...pos]; // CHQ: Claude AI (Sonnet) added this, since cases read it before writing it
+    this.moveOffset = [0, 0, 0]; // CHQ: Claude AI (Sonnet) added this, used in moveToPlayer
+    this.flowerCollecting = []; // CHQ: Claude AI (Sonnet) added this, used in moveToFlower/collectPollen
+
     this.computeLevel(lvl || 1, mutation, gameState); // [cite: 141, 1442]
   }
 
@@ -157,12 +162,74 @@ export class Bee {
     this.energy = MATH.random(0.35, 1) * this.maxEnergy;
   }
 
-  update(dt, gameState, textRenderer) {
-    // Movement and State Machine logic (attack, collect, sleep) [cite: 148, 149, 151, 163, 179, 189, 204]
-    // ...
+  updateBroken(dt, gameState) {
+    // Movement and State Machine logic (attack, collect, sleep)
+
+    // Logic using gameState.player.body.position
+    this.moveTo = [
+      gameState.player.body.position.x,
+      gameState.player.body.position.y,
+      gameState.player.body.position.z,
+    ];
+
+    // CHQ: Claude AI (Haiku) added logic for circular motion
+    // 🐝 NEW: Circular flight
+    if (this.circleRadius && this.circleSpeed) {
+      this.circleAngle += this.circleSpeed * dt;
+
+      if (this.circleAxisY) {
+        // Circle on the XZ plane (horizontal)
+        this.pos[0] =
+          this.circleCenter[0] + Math.cos(this.circleAngle) * this.circleRadius;
+        this.pos[2] =
+          this.circleCenter[2] + Math.sin(this.circleAngle) * this.circleRadius;
+      } else {
+        // Circle on the XY plane (vertical)
+        this.pos[0] =
+          this.circleCenter[0] + Math.cos(this.circleAngle) * this.circleRadius;
+        this.pos[1] =
+          this.circleCenter[1] + Math.sin(this.circleAngle) * this.circleRadius;
+      }
+
+      // Update movement direction to face tangent of circle
+      this.moveDir[0] = -Math.sin(this.circleAngle);
+      this.moveDir[1] = 0;
+      this.moveDir[2] = Math.cos(this.circleAngle);
+    }
   }
 
-  testUpdate() {
+  // CHQ: Claude AI (Sonnet) created function
+  update(dt, gameState, textRenderer) {
+    // Circle flight mode: skip the state machine entirely
+    if (this.circleRadius && this.circleSpeed) {
+      this.circleAngle = (this.circleAngle || 0) + this.circleSpeed * dt;
+
+      if (this.circleAxisY !== false) {
+        // Horizontal circle on XZ plane
+        this.pos[0] =
+          this.circleCenter[0] + Math.cos(this.circleAngle) * this.circleRadius;
+        this.pos[2] =
+          this.circleCenter[2] + Math.sin(this.circleAngle) * this.circleRadius;
+      } else {
+        // Vertical circle on XY plane
+        this.pos[0] =
+          this.circleCenter[0] + Math.cos(this.circleAngle) * this.circleRadius;
+        this.pos[1] =
+          this.circleCenter[1] + Math.sin(this.circleAngle) * this.circleRadius;
+      }
+
+      this.moveDir[0] = -Math.sin(this.circleAngle);
+      this.moveDir[1] = 0;
+      this.moveDir[2] = Math.cos(this.circleAngle);
+      return false; // not dead
+    }
+
+    // Normal state machine
+    // return this.testUpdate(dt, textRenderer, gameState);
+    return this.testUpdate(dt, gameState);
+  }
+  testUpdate(dt, textRenderer) {
+    // testUpdate(dt, textRenderer, gameState) {
     if (this.fetchBall && this.fetchBall.turn) this.state = "moveToFetch";
 
     for (let i in this.trails) {
@@ -284,7 +351,7 @@ export class Bee {
           if (Math.random() < (this.attackMob.blocking ? 0.85 : 0)) {
             this.energy--;
 
-            textRenderer.add(
+            gameState.textRenderer.add(
               "BLOCK",
               [
                 this.attackMob.pos[0],
@@ -333,7 +400,7 @@ export class Bee {
             } else {
               this.energy--;
 
-              textRenderer.add(
+              gameState.textRenderer.add(
                 "MISS",
                 [
                   this.attackMob.pos[0],
@@ -904,7 +971,7 @@ export class Bee {
                 : 1),
           );
 
-          textRenderer.add(
+          gameState.textRenderer.add(
             Math.ceil(
               this.pollen *
                 player.honeyAtHive *
@@ -1047,7 +1114,7 @@ export class Bee {
                 : 1),
           );
 
-          textRenderer.add(
+          gameState.textRenderer.add(
             Math.ceil(
               this.pollen *
                 player.honeyAtHive *
@@ -1145,7 +1212,7 @@ export class Bee {
 
         if (this.zzzTimer <= 0) {
           this.zzzTimer = 5;
-          textRenderer.add(
+          gameState.textRenderer.add(
             "zzz",
             [
               this.pos[0] + MATH.random(-1, 1),
@@ -1608,7 +1675,7 @@ export class Bee {
     }
 
     if (player.hive[this.hiveY][this.hiveX].radioactive > 0) {
-      textRenderer.addDecalRaw(
+      gameState.textRenderer.addDecalRaw(
         ...this.pos,
         0,
         0,
@@ -1624,7 +1691,7 @@ export class Bee {
 
     if (this.type === "buoyant") {
       if (this.gifted)
-        textRenderer.addDecalRaw(
+        gameState.textRenderer.addDecalRaw(
           ...this.pos,
           0,
           0,
@@ -1636,7 +1703,7 @@ export class Bee {
           1.35,
           0,
         );
-      textRenderer.addDecalRaw(
+      gameState.textRenderer.addDecalRaw(
         ...this.pos,
         0,
         0,
@@ -1658,11 +1725,57 @@ export class TempBee extends Bee {
     this.life = lifespan; // [cite: 242, 243]
   }
 
-  update(dt, gameState, textRenderer) {
-    const isDead = super.update(dt, gameState, textRenderer);
-    this.life -= dt; // [cite: 244]
-    return this.life <= 0 || isDead; // [cite: 296]
+  update(dt, gameState) {
+    const isDead = super.update(dt, gameState);
+    // update(dt, gameState, textRenderer) {
+    //   const isDead = super.update(dt, gameState, textRenderer);
+    this.life -= dt;
+
+    // return this.life <= 0 || isDead; // [cite: 296]
+    return this.life <= 0 || !!isDead;
   }
+}
+
+// CHQ: Claude AI (Haiku) generated function
+/**
+ * Calculates a world position in front of the camera along its viewing direction.
+ *
+ * @param {Object} gameState - The live game state object.
+ * @param {number} distance - How far ahead of the camera to place the bee (default: 20 units).
+ * @returns {Array} [x, y, z] world position where the bee should spawn.
+ */
+export function getPositionAheadOfCamera(gameState, distance = 20) {
+  const camera = gameState.camera;
+  const player = gameState.player;
+
+  if (!camera || !camera.pos || !player || !player.pos) {
+    return player.pos; // Fallback to player position
+  }
+
+  const camPos = camera.pos; // [camX, camY, camZ]
+  const lookTarget = player.pos; // [playerX, playerY, playerZ]
+
+  // Calculate forward direction (from camera toward look target)
+  const forwardX = lookTarget[0] - camPos[0];
+  const forwardY = lookTarget[1] - camPos[1];
+  const forwardZ = lookTarget[2] - camPos[2];
+
+  // Normalize the direction
+  const length = Math.sqrt(
+    forwardX * forwardX + forwardY * forwardY + forwardZ * forwardZ,
+  );
+  if (length === 0) return player.pos; // Safety check
+
+  const dirX = forwardX / length;
+  const dirY = forwardY / length;
+  const dirZ = forwardZ / length;
+
+  // Position ahead of the camera along the forward direction
+  const spawnX = camPos[0] + dirX * distance;
+  const spawnY = camPos[1] + dirY * distance;
+  const spawnZ = camPos[2] + dirZ * distance;
+
+  return [spawnX, spawnY, spawnZ];
 }
 
 export function spawnBeeAtCamera(gameState, type = "common") {
@@ -1672,11 +1785,38 @@ export function spawnBeeAtCamera(gameState, type = "common") {
   const playerPos = gameState.player.pos;
 
   // Calculate a position 5 units forward on the Z axis relative to the player
-  const spawnPos = [playerPos[0], playerPos[1], playerPos[2] - 5];
+  // const spawnPos = [playerPos[0], playerPos[1], playerPos[2] - 5];
+
+  const spawnPos = getPositionAheadOfCamera(gameState, 20); // 20 units ahead
 
   // Instantiate and push a test basic bee into the tracking loop
-  const newBee = new Bee(spawnPos, "basic", 1, false, 0, 0, null, gameState);
-  gameState.objects.bees.push(newBee);
+  const origBee = new Bee(spawnPos, "basic", 1, false, 0, 0, null, gameState);
+
+  // // CHQ: Claude AI (haiku) generated
+  // const newBee = {
+  //   pos: spawnPos,
+  //   vel: [0, 0, 0],
+  //   type: 0,
+  //   meshScale: 1,
+  //   moveDir: [0, 0, 1],
+
+  //   // 🐝 NEW: Circular flight properties
+  //   circleCenter: spawnPos, // Center of the circle
+  //   circleRadius: 5, // Radius of the circle (units)
+  //   circleSpeed: 2, // Angular speed (radians per second)
+  //   circleAngle: 0, // Current angle around the circle
+  //   circleAxisY: true, // Rotate around Y axis (vertical)
+  // };
+
+  // gameState.objects.bees.push(newBee);
+
+  // CHQ: Claude AI (Sonnet): Circle flight properties set directly on the real Bee instance
+  origBee.circleCenter = [...spawnPos];
+  origBee.circleRadius = 5;
+  origBee.circleSpeed = 2;
+  origBee.circleAngle = 0;
+  origBee.circleAxisY = true;
+  gameState.objects.bees.push(origBee);
 
   // // hiveX/hiveY (0, 0) and mutation null — computeLevel is currently a stub
   // // so these don't get used yet, but the constructor expects them
