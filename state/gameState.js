@@ -118,7 +118,12 @@ export function createInitialState(saveData = {}) {
     TIME: 0,
     frameCount: 0,
 
-    cameraAngle: 0,
+    // cameraAngle: 0,
+
+    camera: {
+      angle: 0,
+      pos: null,
+    },
 
     // 🛠️ Pure physics configuration data for engine/physics.js
     world: {
@@ -207,6 +212,8 @@ export function createInitialState(saveData = {}) {
     flowers: {},
     fieldInfo: {},
 
+    textRenderer: null,
+
     // Transient environment arrays (Cleared/populated during frame execution)
     objects: {
       tokens: [],
@@ -239,7 +246,8 @@ export function createInitialState(saveData = {}) {
     // CHQ: Gemini: Core Mesh Allocation Trackers (Pre-empts frontend structural binding panics)
     meshes: {
       flowers: { vertCount: 0, vertexBuffer: null, indexBuffer: null },
-      bees: null,
+      // bees: null,
+      bees: { vertCount: 0, vertexBuffer: null, indexBuffer: null },
       fields: null,
       world: null,
     },
