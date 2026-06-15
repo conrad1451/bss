@@ -7,6 +7,7 @@ import { MATH } from "../utils/math";
 // const mat4 = window.glMatrix.mat4;
 
 import { mat4, vec3 } from "gl-matrix";
+import { beeInfo } from "../data/bees";
 
 // console.log("Is mat4 available?", !!mat4); // Should be true
 
@@ -372,58 +373,6 @@ export class Renderer {
     gl.bindVertexArray(null);
 
     mesh.instanceData = []; // refilled every frame in drawBees
-
-    // this.meshSchema.bees.vertCount =
-    // this.meshes.flowers.vertCount = stagingData.index.length;
-
-    // CHQ: Claude AI: Create and bind a VAO
-    // this.meshes.flowers.vao = gl.createVertexArray();
-    // gl.bindVertexArray(this.meshes.flowers.vao);
-
-    //   this.meshSchema.bees.vao = gl.createVertexArray();
-    // gl.bindVertexArray(this.meshSchema.bees.vao);
-
-    // console.log("flower VAO created:", this.meshes.flowers.vao);
-    // console.log("bee VAO created:", this.meshSchema.bees.vao);
-
-    // Vertex buffer
-    // this.meshes.flowers.vertexBuffer = gl.createBuffer();
-    // gl.bindBuffer(gl.ARRAY_BUFFER, this.meshes.flowers.vertexBuffer);
-    // gl.bufferData(
-    //   gl.ARRAY_BUFFER,
-    //   new Float32Array(stagingData.verts),
-    //   gl.STATIC_DRAW,
-    // );
-    // this.meshSchema.bees.vertexBuffer = gl.createBuffer();
-    // gl.bindBuffer(gl.ARRAY_BUFFER, this.meshSchema.bees.vertexBuffer);
-    // gl.bufferData(
-    //   gl.ARRAY_BUFFER,
-    //   new Float32Array(stagingData.verts),
-    //   gl.STATIC_DRAW,
-    // );
-
-    // Set up attributes WHILE VAO is bound so they get recorded into it
-    // // vertPos: 3 floats, offset 0
-    // gl.enableVertexAttribArray(0);
-    // gl.vertexAttribPointer(0, 3, gl.FLOAT, false, 32, 0);
-    // // vertUV: 4 floats, offset 12
-    // gl.enableVertexAttribArray(1);
-    // gl.vertexAttribPointer(1, 4, gl.FLOAT, false, 32, 12);
-    // // vertGoo: 1 float, offset 28
-    // gl.enableVertexAttribArray(2);
-    // gl.vertexAttribPointer(2, 1, gl.FLOAT, false, 32, 28);
-
-    // // Index buffer — also recorded into VAO
-    // this.meshSchema.bees.indexBuffer = gl.createBuffer();
-    // gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.meshSchema.bees.indexBuffer);
-    // gl.bufferData(
-    //   gl.ELEMENT_ARRAY_BUFFER,
-    //   new Uint32Array(stagingData.index),
-    //   gl.STATIC_DRAW,
-    // );
-
-    // Unbind when done
-    // gl.bindVertexArray(null);
   }
 
   uploadMobMesh(stagingData) {
@@ -833,14 +782,14 @@ export class Renderer {
         bee.pos[0],
         bee.pos[1],
         bee.pos[2],
-        bee.meshScale ?? 1, // instance_pos
-        bee.moveDir?.[0] ?? 1, // was 0
-        bee.moveDir?.[1] ?? 0, // was 1
-        bee.moveDir?.[2] ?? 0, // was 0
-        0, // instance_rotation
+        bee.meshScale ?? 1,
+        bee.moveDir?.[0] ?? 1,
+        bee.moveDir?.[1] ?? 0,
+        bee.moveDir?.[2] ?? 0,
         0,
-        0,
-        0, // instance_uv
+        beeInfo[bee.type]?.u ?? 0,
+        beeInfo[bee.type]?.v ?? 0,
+        0, // meshPartId/layer — 0 to match vertUV.w = 0 on our simple quad, avoids culling
       );
     });
 

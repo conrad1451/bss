@@ -34,6 +34,8 @@ import { injectShopHTML } from "./ui/components/shopLayout.js";
 import { injectAbilityUI } from "./ui/components/abilityLayout.js"; // CHQ: Gemini AI added this
 import { injectAmuletUIWarnHTML } from "./ui/components/amuletUIWarnLayout.js";
 
+import { buildBeeMesh } from "./objects/bee.js";
+
 import "./ui/style.css"; // CHQ: Claude AI: Vite automatically extracts and injects this
 
 // CHQ: Gemini AI: moved canvas from the top of BeeSwarmSimulator to the top of index.js
@@ -375,16 +377,7 @@ async function BeeSwarmSimulator(saveData) {
 
     renderer.uploadMobMesh(buildBoxMesh());
 
-    // CHQ: Claude AI (Sonnet) generated staging data
-    const beeMeshDataStaging = {
-      verts: [
-        // x,    y,   z,    u,   v,   layer, w(unused-for-culling)
-        -0.5, 0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.5, 0.0, 0.0, 1.0, 1.0, 1.0, 0.0,
-        0.5, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, -0.5, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0,
-      ],
-      index: [0, 1, 2, 0, 2, 3],
-    };
-
+    const beeMeshDataStaging = buildBeeMesh();
     renderer.uploadBeeMesh(beeMeshDataStaging);
 
     // CHQ: Claude AI added for testing
