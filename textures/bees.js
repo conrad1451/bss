@@ -1,7 +1,7 @@
 import {
   reset,
-  ellipse,
-  bezier,
+  fillEllipse,
+  fillBezier,
   drawSpriteBackground,
   drawEyes,
   drawMouthArc,

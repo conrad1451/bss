@@ -43,6 +43,7 @@ export function drawNormalBee(tex_ctx) {
 // CHQ: Gemini AI created function
 export function drawGreenBee(tex_ctx) {
   tex_ctx.save();
+  tex_ctx.translate(SIZE, 0);
 
   tex_ctx.fillStyle = "rgb(0,200,60)";
   tex_ctx.fillRect(0, 0, SIZE, SIZE); // Standardize coordinates to start at (0,0)
@@ -72,6 +73,7 @@ export function drawGreenBee(tex_ctx) {
 // darkBee, aka blackWasp
 export function drawDarkBee(tex_ctx) {
   tex_ctx.save();
+  tex_ctx.translate(SIZE * 2, 0);
 
   tex_ctx.fillStyle = "rgb(10,10,10)";
   tex_ctx.fillRect(0, 0, SIZE, SIZE);
@@ -109,6 +111,9 @@ export function drawDarkBee(tex_ctx) {
 }
 
 export function drawRedAnt(tex_ctx) {
+  tex_ctx.save();
+  tex_ctx.translate(SIZE * 3, 0);
+
   tex_ctx.fillStyle = "rgb(190,0,0)";
   tex_ctx.fillRect(0, 0, SIZE, SIZE);
   tex_ctx.strokeStyle = tex_ctx.fillStyle = "rgb(235, 66, 9)";
@@ -151,6 +156,9 @@ export function drawRedAnt(tex_ctx) {
 }
 
 export function drawBlueButterfly(tex_ctx) {
+  tex_ctx.save();
+  tex_ctx.translate(SIZE * 4, 0);
+
   tex_ctx.fillStyle = "rgb(70, 183, 240)";
   tex_ctx.fillRect(0, 0, SIZE, SIZE);
   tex_ctx.strokeStyle = "rgb(15, 136, 212)";
@@ -172,6 +180,9 @@ export function drawBlueButterfly(tex_ctx) {
 }
 
 export function drawLightMoth(tex_ctx) {
+  tex_ctx.save();
+  tex_ctx.translate(SIZE * 5, 0);
+
   tex_ctx.fillStyle = "rgb(220,220,220)";
   tex_ctx.fillRect(0, 0, SIZE, SIZE);
   tex_ctx.strokeStyle = "rgb(0,0,0)";
@@ -192,6 +203,9 @@ export function drawLightMoth(tex_ctx) {
 }
 
 export function drawGogglesInsect(tex_ctx) {
+  tex_ctx.save();
+  tex_ctx.translate(SIZE * 6, 0);
+
   tex_ctx.fillStyle = "rgb(220,220,220)";
   tex_ctx.fillRect(0, 0, SIZE, SIZE);
   tex_ctx.strokeStyle = tex_ctx.fillStyle = "rgb(0,0,0)";
@@ -231,6 +245,9 @@ export function drawGogglesInsect(tex_ctx) {
 }
 
 export function drawBeetle(tex_ctx) {
+  tex_ctx.save();
+  tex_ctx.translate(SIZE * 7, 0);
+
   tex_ctx.fillStyle = "rgb(176, 128, 74)";
   tex_ctx.fillRect(0, 0, SIZE, SIZE);
   tex_ctx.strokeStyle = "rgb(125, 78, 24)";
@@ -271,6 +288,9 @@ export function drawBeetle(tex_ctx) {
 }
 
 export function drawGhostlyMask(tex_ctx) {
+  tex_ctx.save();
+  tex_ctx.translate(SIZE * 8, 0);
+
   tex_ctx.fillStyle = "rgb(0,0,0)";
   tex_ctx.fillRect(0, 0, SIZE, SIZE);
   tex_ctx.strokeStyle = "rgb(205,205,205)";
@@ -308,6 +328,9 @@ export function drawGhostlyMask(tex_ctx) {
 }
 
 export function drawRedDemon(tex_ctx) {
+  tex_ctx.save();
+  tex_ctx.translate(SIZE * 9, 0);
+
   tex_ctx.fillStyle = "rgb(200,0,0)";
   tex_ctx.fillRect(0, 0, SIZE, SIZE);
   tex_ctx.strokeStyle = tex_ctx.fillStyle = "rgb(80,0,0)";
@@ -342,6 +365,9 @@ export function drawRedDemon(tex_ctx) {
 }
 
 export function drawGreyWeevil(tex_ctx) {
+  tex_ctx.save();
+  tex_ctx.translate(1280, 0);
+
   tex_ctx.fillStyle = "rgb(220,220,220)";
   tex_ctx.fillRect(0, 0, SIZE, SIZE);
   tex_ctx.fillStyle = "rgb(120,120,120)";
@@ -365,7 +391,8 @@ export function drawGreyWeevil(tex_ctx) {
 }
 
 export function drawAquaShieldBug(tex_ctx) {
-  ctx.translate(SIZE * 11, 0);
+  tex_ctx.save();
+  tex_ctx.translate(SIZE * 11, 0);
 
   tex_ctx.fillStyle = "rgb(27, 219, 145)";
   tex_ctx.fillRect(0, 0, SIZE, SIZE);
@@ -406,7 +433,8 @@ export function drawAquaShieldBug(tex_ctx) {
 }
 
 export function drawAbstractBlueOrganism(tex_ctx) {
-  ctx.translate(SIZE * 12, 0);
+  tex_ctx.save();
+  tex_ctx.translate(SIZE * 12, 0);
 
   tex_ctx.fillStyle = "rgb(23, 118, 235)";
   tex_ctx.fillRect(0, 0, SIZE, SIZE);
@@ -415,21 +443,21 @@ export function drawAbstractBlueOrganism(tex_ctx) {
   tex_ctx.scale(0.3, 0.3);
   tex_ctx.translate(-92, -62);
   tex_ctx.fillStyle = "rgb(12, 168, 240)";
-  ellipse(tex_ctx, 186, 172, 18, 18);
-  ellipse(tex_ctx, 413, 135, 18, 18);
+  fillEllipse(tex_ctx, 186, 172, 18, 18);
+  fillEllipse(tex_ctx, 413, 135, 18, 18);
   tex_ctx.fillStyle = "rgb(23, 197, 255)";
-  ellipse(tex_ctx, 315, 261, 33, 33);
-  bezier(159, 238, 181, 223, 187, 216, 233, 227, false, true);
-  bezier(178, 212, 225, 223, 187, 216, 233, 227, false, true);
+  fillEllipse(tex_ctx, 315, 261, 33, 33);
+  fillBezier(tex_ctx, 159, 238, 181, 223, 187, 216, 233, 227, false, true);
+  fillBezier(tex_ctx, 178, 212, 225, 223, 187, 216, 233, 227, false, true);
   tex_ctx.translate(0, 25);
-  bezier(406, 211, 496, 190, 382, 104, 431, 198, true, true);
+  fillBezier(tex_ctx, 406, 211, 496, 190, 382, 104, 431, 198, true, true);
   tex_ctx.lineWidth = 20;
-  bezier(273, 325, 276, 416, 422, 355, 369, 299, true, true);
-  bezier(250, 311, 289, 343, 378, 301, 373, 295, false, true);
+  fillBezier(tex_ctx, 273, 325, 276, 416, 422, 355, 369, 299, true, true);
+  fillBezier(tex_ctx, 250, 311, 289, 343, 378, 301, 373, 295, false, true);
   tex_ctx.beginPath();
   tex_ctx.fill();
   tex_ctx.fillStyle = "rgb(23, 118, 235)";
-  ellipse(tex_ctx, 416, 182, 9.5, 15.5);
+  fillEllipse(tex_ctx, 416, 182, 9.5, 15.5);
   tex_ctx.translate(92, 38);
   tex_ctx.scale(1 / 0.3, 1 / 0.3);
 
@@ -437,7 +465,8 @@ export function drawAbstractBlueOrganism(tex_ctx) {
 }
 
 export function drawNeonPinkGreenMystery(tex_ctx) {
-  ctx.translate(SIZE * 13, 0);
+  tex_ctx.save();
+  tex_ctx.translate(SIZE * 13, 0);
 
   tex_ctx.fillStyle = "rgb(255,50,255)";
   tex_ctx.fillRect(0, 0, SIZE, SIZE);
@@ -458,7 +487,8 @@ export function drawNeonPinkGreenMystery(tex_ctx) {
 }
 
 export function drawDualToneRedBug(tex_ctx) {
-  ctx.translate(SIZE * 14, 0);
+  tex_ctx.save();
+  tex_ctx.translate(SIZE * 14, 0);
 
   tex_ctx.fillStyle = "rgb(219, 72, 92)";
   tex_ctx.fillRect(0, 0, SIZE, SIZE);
@@ -496,7 +526,7 @@ export function drawDualToneRedBug(tex_ctx) {
 
 export function drawPinkRedAlienHead(tex_ctx) {
   tex_ctx.save();
-  ctx.translate(SIZE * 15, 0);
+  tex_ctx.translate(SIZE * 15, 0);
 
   tex_ctx.fillStyle = "rgb(255, 149, 125)";
   tex_ctx.fillRect(0, 0, SIZE, SIZE);
@@ -564,8 +594,7 @@ export function drawRedCrestCrest(tex_ctx) {
 
 export function drawBlueGeometric(tex_ctx) {
   tex_ctx.save();
-
-  ctx.translate(SIZE, 256);
+  tex_ctx.translate(SIZE, 256);
 
   tex_ctx.fillStyle = "rgb(0,0,255)";
   tex_ctx.fillRect(0, 0, SIZE, SIZE);
@@ -606,7 +635,8 @@ export function drawBlueGeometric(tex_ctx) {
 }
 
 export function drawYellowBlackGrate(tex_ctx) {
-  ctx.translate(SIZE * 2, 256);
+  tex_ctx.save();
+  tex_ctx.translate(SIZE * 2, 256);
 
   tex_ctx.fillStyle = "rgb(0,0,0)";
   tex_ctx.fillRect(0, 0, SIZE, SIZE);
@@ -641,7 +671,8 @@ export function drawYellowBlackGrate(tex_ctx) {
 }
 
 export function drawDarkBlueSadFace(tex_ctx) {
-  ctx.translate(SIZE * 3, 256);
+  tex_ctx.save();
+  tex_ctx.translate(SIZE * 3, 256);
 
   tex_ctx.fillStyle = "rgb(17, 32, 43)";
   tex_ctx.fillRect(0, 0, SIZE, SIZE);
@@ -652,7 +683,7 @@ export function drawDarkBlueSadFace(tex_ctx) {
   fillEllipse(tex_ctx, -26, -29, 6, 8, 9.2, 7, 15);
   fillEllipse(tex_ctx, 26, -29, 7, 9, -9.2, 7, 15);
   tex_ctx.fill();
-  ellipse(tex_ctx, 0, -2, 5, 5, -9.2);
+  fillEllipse(tex_ctx, 0, -2, 5, 5, -9.2);
   tex_ctx.beginPath();
   tex_ctx.moveTo(-26, 23);
   tex_ctx.bezierCurveTo(-10, 38, 24, 31, 29, 21);
@@ -666,7 +697,8 @@ export function drawDarkBlueSadFace(tex_ctx) {
 }
 
 export function drawAngryOrangeMouth(tex_ctx) {
-  ctx.translate(SIZE * 4, 256);
+  tex_ctx.save();
+  tex_ctx.translate(SIZE * 4, 256);
 
   tex_ctx.fillStyle = "rgb(17, 32, 43)";
   tex_ctx.fillRect(0, 0, SIZE, SIZE);
@@ -691,7 +723,8 @@ export function drawAngryOrangeMouth(tex_ctx) {
 }
 
 export function drawTripleCryEyes(tex_ctx) {
-  ctx.translate(SIZE * 5, 256);
+  tex_ctx.save();
+  tex_ctx.translate(SIZE * 5, 256);
 
   tex_ctx.fillStyle = "rgb(59, 94, 157)";
   tex_ctx.fillRect(0, 0, SIZE, SIZE);
@@ -729,7 +762,8 @@ export function drawTripleCryEyes(tex_ctx) {
 }
 
 export function drawWhiteOrangeFace(tex_ctx) {
-  ctx.translate(SIZE * 6, 256);
+  tex_ctx.save();
+  tex_ctx.translate(SIZE * 6, 256);
 
   tex_ctx.fillStyle = "rgb(241,241,241)";
   tex_ctx.fillRect(0, 0, SIZE, SIZE);
@@ -753,7 +787,8 @@ export function drawWhiteOrangeFace(tex_ctx) {
 }
 
 export function drawGreyOwlLook(tex_ctx) {
-  ctx.translate(SIZE * 7, 256);
+  tex_ctx.save();
+  tex_ctx.translate(SIZE * 7, 256);
 
   tex_ctx.fillStyle = "rgb(160,160,160)";
   tex_ctx.fillRect(0, 0, SIZE, SIZE);
@@ -783,7 +818,8 @@ export function drawGreyOwlLook(tex_ctx) {
 }
 
 export function drawSoftBlueWhite(tex_ctx) {
-  ctx.translate(SIZE * 8, 256);
+  tex_ctx.save();
+  tex_ctx.translate(SIZE * 8, 256);
 
   tex_ctx.fillStyle = "rgb(242, 255, 255)";
   tex_ctx.fillRect(0, 0, SIZE, SIZE);
@@ -816,7 +852,8 @@ export function drawSoftBlueWhite(tex_ctx) {
 }
 
 export function drawCopyOf8WithBlueUnderbelly(tex_ctx) {
-  ctx.translate(SIZE * 9, 256);
+  tex_ctx.save();
+  tex_ctx.translate(SIZE * 9, 256);
 
   tex_ctx.fillStyle = "rgb(242, 255, 255)";
   tex_ctx.fillRect(0, 0, SIZE, SIZE);
@@ -847,7 +884,8 @@ export function drawCopyOf8WithBlueUnderbelly(tex_ctx) {
 }
 
 export function drawShadowBlueBeetleMouth(tex_ctx) {
-  ctx.translate(SIZE * 9, 256);
+  tex_ctx.save();
+  tex_ctx.translate(SIZE * 9, 256);
 
   tex_ctx.fillStyle = "rgb(17, 32, 43)";
   tex_ctx.fillRect(0, 0, SIZE, SIZE);
@@ -895,7 +933,8 @@ export function drawShadowBlueBeetleMouth(tex_ctx) {
 }
 
 export function drawJaggedOrangeJaws(tex_ctx) {
-  ctx.translate(SIZE * 10, 256);
+  tex_ctx.save();
+  tex_ctx.translate(SIZE * 10, 256);
 
   tex_ctx.fillStyle = "rgb(17, 32, 43)";
   tex_ctx.fillRect(0, 0, SIZE, SIZE);
@@ -939,7 +978,8 @@ export function drawJaggedOrangeJaws(tex_ctx) {
 }
 
 export function drawGreenMaskInsect(tex_ctx) {
-  ctx.translate(SIZE * 11, 256);
+  tex_ctx.save();
+  tex_ctx.translate(SIZE * 11, 256);
 
   tex_ctx.fillStyle = "rgb(50, 190, 71)";
   tex_ctx.fillRect(0, 0, SIZE, SIZE);
@@ -975,7 +1015,8 @@ export function drawGreenMaskInsect(tex_ctx) {
 }
 
 export function drawGoldenAlienHead(tex_ctx) {
-  ctx.translate(SIZE * 12, 256);
+  tex_ctx.save();
+  tex_ctx.translate(SIZE * 12, 256);
 
   tex_ctx.fillStyle = "rgb(240, 211, 24)";
   tex_ctx.fillRect(0, 0, SIZE, SIZE);
@@ -1005,7 +1046,8 @@ export function drawGoldenAlienHead(tex_ctx) {
 }
 
 export function drawYellowCatBeetle(tex_ctx) {
-  ctx.translate(SIZE * 13, 256);
+  tex_ctx.save();
+  tex_ctx.translate(SIZE * 13, 256);
 
   tex_ctx.fillStyle = "rgb(252, 186, 3)";
   tex_ctx.fillRect(0, 0, SIZE, SIZE);
@@ -1056,7 +1098,8 @@ export function drawYellowCatBeetle(tex_ctx) {
 }
 
 export function drawStarbustSpark(tex_ctx) {
-  ctx.translate(SIZE * 14, 256);
+  tex_ctx.save();
+  tex_ctx.translate(SIZE * 14, 256);
 
   tex_ctx.fillStyle = "rgb(117, 184, 235)";
   tex_ctx.fillRect(0, 0, SIZE, SIZE);
@@ -1089,7 +1132,8 @@ export function drawStarbustSpark(tex_ctx) {
 }
 
 export function drawDeepRedBeholderHead(tex_ctx) {
-  ctx.translate(SIZE * 15, 256);
+  tex_ctx.save();
+  tex_ctx.translate(SIZE * 15, 256);
 
   tex_ctx.fillStyle = "rgb(27, 42, 53)";
   tex_ctx.fillRect(0, 0, SIZE, SIZE);
@@ -1124,7 +1168,8 @@ export function drawDeepRedBeholderHead(tex_ctx) {
 }
 
 export function drawFurryCatAntennae(tex_ctx) {
-  ctx.translate(0, SIZE * 4);
+  tex_ctx.save();
+  tex_ctx.translate(0, SIZE * 4);
 
   tex_ctx.fillStyle = "rgb(150, 106, 85)";
   tex_ctx.fillRect(0, 0, SIZE, SIZE);
@@ -1150,7 +1195,7 @@ export function drawFurryCatAntennae(tex_ctx) {
     }
   }
   tex_ctx.fillRect(30.6, 1.6, 25, 12);
-  ellipse(tex_ctx, 1, 2, 4, 4);
+  fillEllipse(tex_ctx, 1, 2, 4, 4);
   drawMouthArc(tex_ctx, 21, 19, 13);
   //   tex_ctx.translate(-HALF_SIZE, -HALF_SIZE);// CHQ: Claude AI (Sonnet): restore handles setting state back to how it was before
 
@@ -1158,7 +1203,8 @@ export function drawFurryCatAntennae(tex_ctx) {
 }
 
 export function drawGoldCrownCrown(tex_ctx) {
-  ctx.translate(SIZE, SIZE * 4);
+  tex_ctx.save();
+  tex_ctx.translate(SIZE, SIZE * 4);
 
   tex_ctx.fillStyle = "rgb(229, 178, 56)";
   tex_ctx.fillRect(0, 0, SIZE, SIZE);
@@ -1177,21 +1223,22 @@ export function drawGoldCrownCrown(tex_ctx) {
   tex_ctx.moveTo(0, 32);
   tex_ctx.bezierCurveTo(0, 40, 26, 40, 26, 32);
   tex_ctx.stroke();
-  ellipse(tex_ctx, 0, 3, 8, 5);
-  ellipse(tex_ctx, 24, 10, 3, 3);
-  ellipse(tex_ctx, 32, 21, 3, 3);
-  ellipse(tex_ctx, 16, 21, 3, 3);
-  ellipse(tex_ctx, 0, 3, 8, 5);
-  ellipse(tex_ctx, -24, 10, 3, 3);
-  ellipse(tex_ctx, -32, 21, 3, 3);
-  ellipse(tex_ctx, -16, 21, 3, 3);
+  fillEllipse(tex_ctx, 0, 3, 8, 5);
+  fillEllipse(tex_ctx, 24, 10, 3, 3);
+  fillEllipse(tex_ctx, 32, 21, 3, 3);
+  fillEllipse(tex_ctx, 16, 21, 3, 3);
+  fillEllipse(tex_ctx, 0, 3, 8, 5);
+  fillEllipse(tex_ctx, -24, 10, 3, 3);
+  fillEllipse(tex_ctx, -32, 21, 3, 3);
+  fillEllipse(tex_ctx, -16, 21, 3, 3);
   //   tex_ctx.translate(-HALF_SIZE, -HALF_SIZE);// CHQ: Claude AI (Sonnet): restore handles setting state back to how it was before
 
   tex_ctx.restore(); // CHQ: Claude AI (Sonnet): guaranteed to fully undo, regardless of what happened above
 }
 
 export function drawWideAquaVisor(tex_ctx) {
-  ctx.translate(SIZE * 2, SIZE * 4);
+  tex_ctx.save();
+  tex_ctx.translate(SIZE * 2, SIZE * 4);
 
   tex_ctx.fillStyle = "rgb(27, 42, 53)";
   tex_ctx.fillRect(0, 0, SIZE, SIZE);
@@ -1205,8 +1252,8 @@ export function drawWideAquaVisor(tex_ctx) {
   tex_ctx.bezierCurveTo(44, 20, -44, 20, -64, -8);
   tex_ctx.fill();
   tex_ctx.fillStyle = "rgb(27, 42, 53)";
-  ellipse(tex_ctx, -27, -13, 12, 7, 0.3);
-  ellipse(tex_ctx, 27, -13, 12, 7, -0.3);
+  fillEllipse(tex_ctx, -27, -13, 12, 7, 0.3);
+  fillEllipse(tex_ctx, 27, -13, 12, 7, -0.3);
   tex_ctx.translate(-HALF_SIZE, -HALF_SIZE);
   tex_ctx.fillStyle = "rgb(27, 42, 53)";
   tex_ctx.fillRect(0, SIZE, SIZE, SIZE);
@@ -1215,7 +1262,8 @@ export function drawWideAquaVisor(tex_ctx) {
 }
 
 export function drawRedStripeGreyShard(tex_ctx) {
-  ctx.translate(SIZE * 3, SIZE * 4);
+  tex_ctx.save();
+  tex_ctx.translate(SIZE * 3, SIZE * 4);
 
   tex_ctx.fillStyle = "rgb(159, 159, 159)";
   tex_ctx.fillRect(0, 0, SIZE, SIZE);
@@ -1223,8 +1271,8 @@ export function drawRedStripeGreyShard(tex_ctx) {
   tex_ctx.lineWidth = 3;
   tex_ctx.fillStyle = "rgb(255,255,255)";
   tex_ctx.strokeStyle = "rgb(255,0,0)";
-  ellipse(tex_ctx, -24, -23, 5, 5);
-  ellipse(tex_ctx, 24, -23, 5, 5);
+  fillEllipse(tex_ctx, -24, -23, 5, 5);
+  fillEllipse(tex_ctx, 24, -23, 5, 5);
   tex_ctx.beginPath();
   tex_ctx.translate(-41, 0);
   for (let row = 0; row < 2; row++) {
@@ -1246,7 +1294,8 @@ export function drawRedStripeGreyShard(tex_ctx) {
 }
 
 export function drawGoldSpectacleFrame(tex_ctx) {
-  ctx.translate(SIZE * 4, SIZE * 4);
+  tex_ctx.save();
+  tex_ctx.translate(SIZE * 4, SIZE * 4);
 
   tex_ctx.fillStyle = "rgb(27, 42, 53)";
   tex_ctx.fillRect(0, 0, SIZE, SIZE);
@@ -1254,21 +1303,24 @@ export function drawGoldSpectacleFrame(tex_ctx) {
   tex_ctx.fillStyle = "rgb(229, 207, 56)";
   tex_ctx.fillRect(-10, -20, 20, 10);
   tex_ctx.fillRect(-64, -40, 35, 50);
-  ellipse(tex_ctx, -29, -15, 25, 25);
+  fillEllipse(tex_ctx, -29, -15, 25, 25);
   tex_ctx.fillRect(29, -40, 35, 50);
-  ellipse(tex_ctx, 29, -15, 25, 25);
+  fillEllipse(tex_ctx, 29, -15, 25, 25);
   tex_ctx.fillStyle = "rgb(27, 42, 53)";
-  ellipse(tex_ctx, -27, -15, 8, 12);
-  ellipse(tex_ctx, 27, -15, 8, 12);
+  fillEllipse(tex_ctx, -27, -15, 8, 12);
+  fillEllipse(tex_ctx, 27, -15, 8, 12);
   tex_ctx.fillStyle = "rgb(229, 207, 56)";
-  ellipse(tex_ctx, 21, -16, 4, 6);
-  ellipse(tex_ctx, -32, -16, 4, 6);
+  fillEllipse(tex_ctx, 21, -16, 4, 6);
+  fillEllipse(tex_ctx, -32, -16, 4, 6);
   //   tex_ctx.translate(-HALF_SIZE, -HALF_SIZE);// CHQ: Claude AI (Sonnet): restore handles setting state back to how it was before
 
   tex_ctx.restore(); // CHQ: Claude AI (Sonnet): guaranteed to fully undo, regardless of what happened above
 }
 
 export function drawGreyFurredMoth(tex_ctx) {
+  tex_ctx.save();
+  tex_ctx.translate(SIZE * 5, SIZE * 4);
+
   tex_ctx.fillStyle = "rgb(27, 42, 53)";
   tex_ctx.fillRect(0, 0, SIZE, SIZE);
   tex_ctx.translate(HALF_SIZE, HALF_SIZE - 8);
@@ -1308,13 +1360,16 @@ export function drawGreyFurredMoth(tex_ctx) {
 }
 
 export function drawGeometricWhiteRibbons(tex_ctx) {
+  tex_ctx.save();
+  tex_ctx.translate(SIZE * 6, SIZE * 4);
+
   tex_ctx.fillStyle = "rgb(27, 42, 53)";
   tex_ctx.fillRect(0, 0, SIZE, SIZE);
   tex_ctx.translate(HALF_SIZE, HALF_SIZE - 15);
   tex_ctx.lineWidth = 6;
   tex_ctx.fillStyle = tex_ctx.strokeStyle = "rgb(241, 241, 241)";
-  ellipse(tex_ctx, -20, -13, 5, 10);
-  ellipse(tex_ctx, 20, -13, 5, 10);
+  fillEllipse(tex_ctx, -20, -13, 5, 10);
+  fillEllipse(tex_ctx, 20, -13, 5, 10);
   tex_ctx.beginPath();
   tex_ctx.moveTo(-20, -5);
   tex_ctx.bezierCurveTo(-25, -7, -29, -7, -34, -3);
@@ -1340,14 +1395,17 @@ export function drawGeometricWhiteRibbons(tex_ctx) {
 }
 
 export function drawBlueSpectacleOrbs(tex_ctx) {
+  tex_ctx.save();
+  tex_ctx.translate(SIZE * 7, SIZE * 4);
+
   tex_ctx.fillStyle = "rgb(241, 241, 241)";
   tex_ctx.fillRect(0, 0, SIZE, SIZE);
   tex_ctx.translate(HALF_SIZE, HALF_SIZE - 5);
   tex_ctx.lineWidth = 3.5;
   tex_ctx.fillStyle = "rgb(59, 142, 209)";
   tex_ctx.strokeStyle = "rgb(241, 241, 241)";
-  ellipse(tex_ctx, -22, -20, 9, 12);
-  ellipse(tex_ctx, 22, -20, 9, 12);
+  fillEllipse(tex_ctx, -22, -20, 9, 12);
+  fillEllipse(tex_ctx, 22, -20, 9, 12);
   tex_ctx.beginPath();
   tex_ctx.moveTo(-32, -20);
   tex_ctx.lineTo(0, -18);
@@ -1359,31 +1417,35 @@ export function drawBlueSpectacleOrbs(tex_ctx) {
   tex_ctx.lineTo(32, 5);
   tex_ctx.fill();
   for (let i = 0.18; i < Math.PI; i += Math.PI / 8) {
-    ellipse(tex_ctx, Math.cos(i) * 40, Math.sin(i) * 30 + 15, 6, 6);
+    fillEllipse(tex_ctx, Math.cos(i) * 40, Math.sin(i) * 30 + 15, 6, 6);
   }
   //   tex_ctx.translate(-HALF_SIZE, -HALF_SIZE + 4);// CHQ: Claude AI (Sonnet): restore handles setting state back to how it was before
   tex_ctx.restore(); // CHQ: Claude AI (Sonnet): guaranteed to fully undo, regardless of what happened above
 }
 
 export function drawPinkCheeksAlien(tex_ctx) {
+  tex_ctx.save();
+  tex_ctx.translate(SIZE * 8, SIZE * 4);
+
   tex_ctx.fillStyle = "rgb(27, 42, 53)";
   tex_ctx.fillRect(0, 0, SIZE, SIZE);
   tex_ctx.translate(HALF_SIZE, HALF_SIZE - 5);
   tex_ctx.lineWidth = 4;
   tex_ctx.fillStyle = "rgb(245, 139, 222)";
-  ellipse(tex_ctx, -30, 6, 8, 6);
-  ellipse(tex_ctx, 30, 6, 8, 6);
+  fillEllipse(tex_ctx, -30, 6, 8, 6);
+  fillEllipse(tex_ctx, 30, 6, 8, 6);
   tex_ctx.fillStyle = tex_ctx.strokeStyle = "rgb(230,230,230)";
-  ellipse(tex_ctx, -20, -11, 5, 5);
-  ellipse(tex_ctx, 20, -11, 5, 5);
-  ellipse(tex_ctx, 0, 4, 3, 3);
+  fillEllipse(tex_ctx, -20, -11, 5, 5);
+  fillEllipse(tex_ctx, 20, -11, 5, 5);
+  fillEllipse(tex_ctx, 0, 4, 3, 3);
   drawMouthArc(tex_ctx, 19, 9, 5);
   //   tex_ctx.translate(-HALF_SIZE, -HALF_SIZE + 4);// CHQ: Claude AI (Sonnet): restore handles setting state back to how it was before
   tex_ctx.restore(); // CHQ: Claude AI (Sonnet): guaranteed to fully undo, regardless of what happened above
 }
 
 export function drawAquaShield(tex_ctx) {
-  ctx.translate(SIZE * 9, SIZE * 4);
+  tex_ctx.save();
+  tex_ctx.translate(SIZE * 9, SIZE * 4);
   tex_ctx.fillStyle = "#0E141E";
   tex_ctx.fillRect(0, 0, SIZE, SIZE);
   tex_ctx.translate(HALF_SIZE, HALF_SIZE + 7);
