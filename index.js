@@ -393,9 +393,22 @@ async function BeeSwarmSimulator(saveData) {
     console.log("Total indices:", flowerMeshDataStaging.index.length);
 
     // 🛠️ ---------------- Step F: ENGINE STARTUP & EVENT LISTENERS -----------------
+
+    console.log("✅ Meshes uploaded"); // CHQ: Claude AI (Sonnet): add this for debugging missing bears
+
     initGameWorld(gameState); // Populates NPCs and Mobs  //ENGINE STARTUP --
+
+    console.log(
+      "✅ Game world initialized, mobs:",
+      gameState.objects.mobs.length,
+    ); // CHQ: Claude AI (Sonnet): add this for debugging missing bears
+
     initInputHandlers(gameState, uiCanvas); // Attach Input listeners
+
+    console.log("✅ Input handlers ready"); // CHQ: Claude AI (Sonnet): add this for debugging missing bears
+
     setupUserInterfaceListeners(gameState);
+    console.log("✅ UI listeners ready"); // CHQ: Claude AI (Sonnet): add this for debugging missing bears
 
     // --- 7. GAME LOOP ---
     // const engine = createEngine(gameState, renderer, updateEngine);
@@ -408,10 +421,12 @@ async function BeeSwarmSimulator(saveData) {
       gameState,
     );
 
-    // Start it immediately for vanilla execution
-    engineLoop.start();
+    console.log("✅ About to start engine loop");
+    engineLoop.start(); // Start it immediately for vanilla execution
+    console.log("✅ Engine loop started");
   } catch (err) {
     console.error("❌ FATAL ENGINE CRASH:", err);
+    console.error("Stack:", err.stack); // CHQ: Claude AI (Sonnet): print stack errors to console
   }
 }
 
