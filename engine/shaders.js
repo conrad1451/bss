@@ -562,59 +562,64 @@ export const SHADERS = {
     // 1. Inputs from buffers
     in vec3 vertPos;
     in vec3 vertColor;
-    in vec2 vertUV; // CHQ: Claude AI: add vertUV
+    in vec2 vertUV;
     
-    // 2. Outputs to the fragment shader
+    // 2. Outputs to fragment stage
     out vec4 pixColor;
-    out vec2 vUv;  // // CHQ: Claude AI: or: varying vec2 vUv; in WebGL1 GLSL
+    out vec2 vUv;
     
     // 3. Global constants
     uniform mat4 viewMatrix;
-    uniform mat4 projMatrix; // Make sure this is declared here!
-    uniform vec4 instance_info1;
-    uniform vec2 instance_info2;
-    uniform float isNight;
-
+    uniform mat4 projMatrix;
+    
+    // Debug instance uniforms sent per mob mesh item
+    uniform vec4 instance_info1; // [x, y, z, facingAngle]
+    uniform vec4 instance_info2; // [scaleX, scaleY, scaleZ, frameIndex]
+    
     void main(){
-        // vUv = vertUV.xy;
-        vUv = vertUV; // CHQ: Claude AI: add vertUV
-
-        // Apply night effect to color and set alpha from instance info
-        pixColor = vec4(vertColor * isNight, instance_info2.y);
+        // Extract transformations
+        float angle = instance_info1.w;
+        vec3 scale = instance_info2.xyz;
+        vec3 translation = instance_info1.xyz;
         
-        // Pre-calculate sin and cos of instance rotation
-        float s = sin(instance_info1.w);
-        float c = cos(instance_info1.w);
+        // Apply Scale transformation
+        vec3 scaledPos = vertPos * scale;
         
-        // Apply Y-axis rotation, scale, and instance position offset
-        gl_Position = projMatrix * viewMatrix * vec4(
-            vec3(
-                vertPos.x * c - vertPos.z * s,
-                vertPos.y,
-                vertPos.x * s + vertPos.z * c
-            ) * instance_info2.x + instance_info1.xyz,
-            1.0
+        // Apply Y-Axis local angle rotations
+        float s = sin(angle);
+        float c = cos(angle);
+        vec3 rotatedPos = vec3(
+            scaledPos.x * c - scaledPos.z * s,
+            scaledPos.y,
+            scaledPos.x * s + scaledPos.z * c
         );
+        
+        // Translate coordinates into World Space
+        vec3 finalWorldPos = rotatedPos + translation;
+        
+        pixColor = vec4(vertColor, 1.0);
+        vUv = vertUV;
+        
+        gl_Position = projMatrix * viewMatrix * vec4(finalWorldPos, 1.0);
     }
-`,
+  `,
 
   mobRendererFSH: `#version 300 es
-  precision highp float;
-  
-  in vec4 pixColor;
-  // New: Add UV input if you pass it from VSH, or use default coords
-  in vec2 vUv; 
-  
-  out vec4 fragColor;
-  
-  uniform sampler2D tex; // Required to sample the texture
-  
-  void main(){
-      // Sample the texture and multiply by the instance color
-      vec4 textureColor = texture(tex, vUv);
-      fragColor = textureColor * pixColor;
-  }
-`,
+    precision highp float;
+    
+    in vec4 pixColor;
+    in vec2 vUv; 
+    
+    out vec4 fragColor;
+    
+    void main(){
+        // TEXTURE SAMPLING REMOVED / COMMENTED OUT PERMANENTLY
+        // vec4 textureColor = texture(tex, vUv);
+        
+        // FORCE BRIGHT RED UNLIT SILHOUETTE OUTPUT FOR POSITION DEBUGGING
+        fragColor = vec4(1.0, 0.0, 0.0, 1.0);
+    }
+  `,
 
   trailRendererVSH: `#version 300 es
     precision highp float;

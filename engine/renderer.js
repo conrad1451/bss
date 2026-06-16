@@ -848,38 +848,55 @@ export class Renderer {
    * @returns {void}
    */
   drawMobs(state, viewMatrix, projectionMatrix) {
+    // CHQ: Claude AI (Sonnet) removed unneeded textures
     const gl = this.gl;
     const mobProgram = this.programs.mob;
 
     if (!gl.getProgramParameter(mobProgram, gl.LINK_STATUS)) return;
+    if (!this.meshes.mobs?.vertexBuffer) return;
 
     gl.useProgram(mobProgram);
-
     this.setUniform(mobProgram, "projMatrix", projectionMatrix);
     this.setUniform(mobProgram, "viewMatrix", viewMatrix);
-    this.setUniform(mobProgram, "tex", 0); // CHQ: Claude AI: replace "uSampler" with "tex"
+    this.setUniform(mobProgram, "isNight", 1.0, "float");
 
-    if (this.textures?.bear) {
-      // if (this.textures?.mob) {
-      gl.activeTexture(gl.TEXTURE0);
-      gl.bindTexture(gl.TEXTURE_2D, this.textures.bear);
-      // gl.bindTexture(gl.TEXTURE_2D, this.textures.mob);
-    }
+    // console.log(
+    //   "drawMobs called, mob count:",
+    //   state.objects.mobs.length,
+    //   "mesh vertCount:",
+    //   this.meshes.mobs.vertCount,
+    // );
 
+    // CHQ: Gemini AI modified position
     state.objects.mobs.forEach((mob) => {
-      const modelMatrix = mat4.create();
-      mat4.fromTranslation(modelMatrix, mob.pos);
-      mat4.scale(modelMatrix, modelMatrix, [
-        mob.width || 1,
-        mob.height || 1,
-        mob.depth || 1,
-      ]);
-      if (mob.facingAngle) {
-        mat4.rotateY(modelMatrix, modelMatrix, mob.facingAngle);
-      }
+      // Use live simulation coordinates
+      const posX = mob.pos[0];
+      const posY = mob.pos[1];
+      const posZ = mob.pos[2];
+      const headingAngle = mob.facingAngle ?? 0.0;
 
-      this.setUniform(mobProgram, "uModelMatrix", modelMatrix);
-      this.setUniform(mobProgram, "uTextureOffset", mob.frameIndex || 0);
+      // instance_info1: [X, Y, Z, Y-Axis Rotation]
+      this.setUniform(mobProgram, "instance_info1", [
+        posX,
+        posY,
+        posZ,
+        headingAngle,
+      ]);
+
+      // CRITICAL FIX FOR VERTICAL BLOCK: Pass X, Y, and Z scales individually
+      // instance_info2: [ScaleX, ScaleY, ScaleZ, FrameIndex]
+      const scaleX = mob.width ?? 1.0;
+      const scaleY = mob.height ?? 1.0;
+      const scaleZ = mob.depth ?? 1.0;
+      const frameIndex = mob.frameIndex ?? 0.0;
+
+      this.setUniform(mobProgram, "instance_info2", [
+        scaleX,
+        scaleY,
+        scaleZ,
+        frameIndex,
+      ]);
+
       this.drawMesh("mobs");
     });
   }
@@ -1266,7 +1283,13 @@ export class Renderer {
     // console.log("player pos:", state?.player?.pos);
     // console.log("mobs count:", state?.objects?.mobs?.length);
     // console.log("bees count:", state?.objects?.bees?.length);
-
+    // Quick sanity check — add temporarily to renderer.js render()
+    // console.log(
+    //   "mobs to draw:",
+    //   state.objects.mobs.map(
+    //     (m) => `${m.type}@[${m.pos.map((v) => v.toFixed(1))}]`,
+    //   ),
+    // );
     // CHQ: Text always last — renders on top of world geometry
     if (this.textRenderer) {
       // Pass delta time, your game's tracking uniform phase timer, and the view matrix!
