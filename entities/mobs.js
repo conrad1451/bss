@@ -2,6 +2,7 @@
 import { MATH } from "../utils/math.js";
 import { Token } from "./tokens.js";
 
+import { getPositionAheadOfCamera } from "./entityHelpers.js";
 // CHQ: Gemini AI generated
 
 export class Mob {
@@ -193,4 +194,36 @@ export function handleMobDeath(mob, gameState) {
 
   // Existing death logic (e.g., play animation, remove from world, drop loot)
   mob.isDead = true;
+}
+
+export function spawnMobAtCamera(gameState, type = "ladybug") {
+  // if (!gameState.camera?.pos) return;
+
+  // CHQ: Gemini AI added
+  const playerPos = gameState.player.pos;
+
+  // Calculate a position 5 units forward on the Z axis relative to the player
+  // const spawnPos = [playerPos[0], playerPos[1], playerPos[2] - 5];
+  // const spawnPos = [playerPos[0] + 8, playerPos[1], playerPos[2]]; // 8 units to the right
+  const spawnPos = getPositionAheadOfCamera(gameState, 20); // 20 units ahead
+
+  const origMob = new Mob(
+    gameState.globalId++,
+    type,
+    spawnPos,
+    100,
+    1,
+    gameState,
+  );
+
+  // origMob.width = 2;
+  // origMob.height = 2;
+  // origMob.depth = 2;
+  // origMob.circleCenter = [...spawnPos];
+  // origMob.circleRadius = 5;
+  // origMob.circleSpeed = 2;
+  // origMob.circleAngle = 0;
+  // origMob.circleAxisY = true;
+  gameState.objects.mobs.push(origMob);
+  return origMob;
 }

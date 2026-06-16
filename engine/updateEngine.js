@@ -5,6 +5,7 @@
 // CHQ: Gemini AI generated file
 import { updatePhysicsEntity, resolveObstacleCollisions } from "./physics.js";
 import { spawnBeeAtCamera } from "../entities/bees.js";
+import { spawnMobAtCamera } from "../entities/mobs.js";
 
 /**
  * Main per-frame engine update. Advances physics, player state, AI entities,
@@ -121,6 +122,15 @@ export function updateEngine(gameState, dt) {
       gameState.objects.bees.length,
     );
   }
+
+  // inside updateEngine(), after the trigger loop:
+  if (gameState.user.clickedKeys["m"]) {
+    spawnMobAtCamera(gameState);
+    console.log("spawned ladybug, total mobs:", gameState.objects.mobs.length);
+  }
+
+  gameState.user.clickedKeys = {}; // CHQ: so that a pressed key is registered only for the duration of the frame in which it is pressed
+
   // if (gameState.user.clickedKeys["n"]) {
   //   let printThis = true;
 
