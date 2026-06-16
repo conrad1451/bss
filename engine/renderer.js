@@ -856,6 +856,7 @@ export class Renderer {
     if (!this.meshes.mobs?.vertexBuffer) return;
 
     gl.useProgram(mobProgram);
+
     this.setUniform(mobProgram, "projMatrix", projectionMatrix);
     this.setUniform(mobProgram, "viewMatrix", viewMatrix);
     this.setUniform(mobProgram, "isNight", 1.0, "float");
@@ -863,19 +864,18 @@ export class Renderer {
     // console.log(
     //   "drawMobs called, mob count:",
     //   state.objects.mobs.length,
-    //   "mesh vertCount:",
-    //   this.meshes.mobs.vertCount,
+    //  "mesh vertCount:",
+    //  this.meshes.mobs.vertCount,
     // );
 
     // CHQ: Gemini AI modified position
     state.objects.mobs.forEach((mob) => {
-      // Use live simulation coordinates
       const posX = mob.pos[0];
       const posY = mob.pos[1];
       const posZ = mob.pos[2];
       const headingAngle = mob.facingAngle ?? 0.0;
 
-      // instance_info1: [X, Y, Z, Y-Axis Rotation]
+      // 1. Matrix/Translation Uniform
       this.setUniform(mobProgram, "instance_info1", [
         posX,
         posY,

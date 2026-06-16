@@ -564,7 +564,7 @@ export const SHADERS = {
     in vec3 vertColor;
     in vec2 vertUV;
     
-    // 2. Outputs to fragment stage
+    // 2. Outputs to the fragment shader
     out vec4 pixColor;
     out vec2 vUv;
     
@@ -572,20 +572,23 @@ export const SHADERS = {
     uniform mat4 viewMatrix;
     uniform mat4 projMatrix;
     
-    // Debug instance uniforms sent per mob mesh item
     uniform vec4 instance_info1; // [x, y, z, facingAngle]
-    uniform vec4 instance_info2; // [scaleX, scaleY, scaleZ, frameIndex]
-    
+    uniform vec3 instance_info2; // [scaleX, scaleY, scaleZ]
+    uniform float isNight;
+
     void main(){
-        // Extract transformations
-        float angle = instance_info1.w;
-        vec3 scale = instance_info2.xyz;
-        vec3 translation = instance_info1.xyz;
+        vUv = vertUV;
+
+        // Keep vertex color intact
+        pixColor = vec4(vertColor * isNight, 1.0);
         
-        // Apply Scale transformation
+        float angle = instance_info1.w;
+        vec3 scale = instance_info2;
+        
+        // Dynamic box scale
         vec3 scaledPos = vertPos * scale;
         
-        // Apply Y-Axis local angle rotations
+        // Rotate on local Y-axis
         float s = sin(angle);
         float c = cos(angle);
         vec3 rotatedPos = vec3(
@@ -594,11 +597,8 @@ export const SHADERS = {
             scaledPos.x * s + scaledPos.z * c
         );
         
-        // Translate coordinates into World Space
-        vec3 finalWorldPos = rotatedPos + translation;
-        
-        pixColor = vec4(vertColor, 1.0);
-        vUv = vertUV;
+        // Shift to target world coordinates
+        vec3 finalWorldPos = rotatedPos + instance_info1.xyz;
         
         gl_Position = projMatrix * viewMatrix * vec4(finalWorldPos, 1.0);
     }
@@ -612,15 +612,17 @@ export const SHADERS = {
     
     out vec4 fragColor;
     
+    // Debug dynamic replacement colors
+    uniform vec3 debugColor;
+    uniform float useCustomColor; // 1.0 = Use custom injected color, 0.0 = Use buffer colors
+
     void main(){
-        // TEXTURE SAMPLING REMOVED / COMMENTED OUT PERMANENTLY
-        // vec4 textureColor = texture(tex, vUv);
+        // Check structural float flag to prevent GLSL type compiler link errors
+        vec3 finalColor = (useCustomColor > 0.5) ? debugColor : pixColor.rgb;
         
-        // FORCE BRIGHT RED UNLIT SILHOUETTE OUTPUT FOR POSITION DEBUGGING
-        fragColor = vec4(1.0, 0.0, 0.0, 1.0);
+        fragColor = vec4(finalColor, 1.0);
     }
   `,
-
   trailRendererVSH: `#version 300 es
     precision highp float;
     
