@@ -888,14 +888,27 @@ export class Renderer {
       const scaleX = mob.width ?? 1.0;
       const scaleY = mob.height ?? 1.0;
       const scaleZ = mob.depth ?? 1.0;
-      const frameIndex = mob.frameIndex ?? 0.0;
+      this.setUniform(
+        mobProgram,
+        "instance_info2",
+        [scaleX, scaleY, scaleZ],
+        "vec3",
+      );
 
-      this.setUniform(mobProgram, "instance_info2", [
-        scaleX,
-        scaleY,
-        scaleZ,
-        frameIndex,
-      ]);
+      // 3. Fallback Uniform Dynamic Tinting
+      let mobColor = [1.0, 1.0, 1.0];
+      let useCustom = 0.0; // Default to original vertex behavior if preferred
+
+      if (mob.type === "ladybug") {
+        mobColor = [0.85, 0.1, 0.15]; // Red
+        useCustom = 1.0;
+      } else if (mob.type === "beetle" || mob.type === "blue_beetle") {
+        mobColor = [0.1, 0.3, 0.75]; // Blue
+        useCustom = 1.0;
+      }
+
+      this.setUniform(mobProgram, "debugColor", mobColor, "vec3");
+      this.setUniform(mobProgram, "useCustomColor", useCustom, "float");
 
       this.drawMesh("mobs");
     });
