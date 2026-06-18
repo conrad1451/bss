@@ -1,5 +1,7 @@
 // state/gameState.js
 
+import { TRIGGER_ZONES } from "../data/triggers.js";
+import { DEV_TRIGGER_ZONES } from "../data/devTriggers.js";
 // CHQ: Gemini AI refactored file
 // CHQ: Claude AI (Sonnet) provided JSDocs
 
@@ -112,6 +114,10 @@ export function getPollenMultiplier(gameState, type) {
 export function createInitialState(saveData = {}) {
   const data = (saveData && saveData.data) || {};
 
+  const triggers = testRealm
+    ? [...TRIGGER_ZONES, ...DEV_TRIGGER_ZONES]
+    : TRIGGER_ZONES;
+
   return {
     globalId: 0,
     paused: false,
@@ -133,10 +139,13 @@ export function createInitialState(saveData = {}) {
     },
 
     // 🛠️ Simple trigger data fields (The logic shifts to the engine update loop)
-    triggers: [
-      { name: "SunflowerFieldZone", colliding: false, x: 0, z: 0, radius: 15 },
-      { name: "BlackBearTalkZone", colliding: false, x: 50, z: -20, radius: 5 },
-    ],
+    // triggers: [
+    //   { name: "SunflowerFieldZone", colliding: false, x: 0, z: 0, radius: 15 },
+    //   { name: "BlackBearTalkZone", colliding: false, x: 50, z: -20, radius: 5 },
+    // ],
+
+    // CHQ: Claude AI (Sonnet): shallow clone so colliding state is per-instance
+    triggers: triggers.map((t) => ({ ...t })),
 
     flags: {
       UPDATE_FLOWER_MESH: false,

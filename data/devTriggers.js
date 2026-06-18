@@ -1,0 +1,98 @@
+// data/devTriggers.js
+// Dev-only trigger zones, only active when testRealm is true.
+// Spatial data only — func stubs to be ported later.
+
+// CHQ: Claude AI (Sonnet) generated file
+
+export const DEV_TRIGGER_ZONES = [
+  {
+    name: "become_attack_hive",
+    isMachine: true,
+    colliding: false,
+    minX: 22,
+    maxX: 24,
+    minZ: 1,
+    maxZ: 3,
+  },
+  {
+    name: "become_red_hive",
+    isMachine: true,
+    colliding: false,
+    minX: 22,
+    maxX: 24,
+    minZ: 3,
+    maxZ: 5,
+  },
+  {
+    name: "become_blue_hive",
+    isMachine: true,
+    colliding: false,
+    minX: 22,
+    maxX: 24,
+    minZ: 5,
+    maxZ: 7,
+  },
+  {
+    name: "become_white_hive",
+    isMachine: true,
+    colliding: false,
+    minX: 22,
+    maxX: 24,
+    minZ: 7,
+    maxZ: 9,
+  },
+  {
+    name: "become_mid_hive",
+    isMachine: true,
+    colliding: false,
+    minX: 22,
+    maxX: 24,
+    minZ: 9,
+    maxZ: 11,
+  },
+  {
+    name: "level_and_gift_bees",
+    isMachine: true,
+    colliding: false,
+    minX: 18,
+    maxX: 20,
+    minZ: 9,
+    maxZ: 11,
+  },
+  {
+    name: "cog_amulet",
+    isMachine: true,
+    colliding: false,
+    minX: 16,
+    maxX: 18,
+    minZ: 9,
+    maxZ: 11,
+  },
+  {
+    name: "king_amulet",
+    isMachine: true,
+    colliding: false,
+    minX: 14,
+    maxX: 16,
+    minZ: 9,
+    maxZ: 11,
+  },
+  {
+    name: "ant_amulet",
+    isMachine: true,
+    colliding: false,
+    minX: 12,
+    maxX: 14,
+    minZ: 9,
+    maxZ: 11,
+  },
+  {
+    name: "snail_amulet",
+    isMachine: true,
+    colliding: false,
+    minX: 10,
+    maxX: 12,
+    minZ: 9,
+    maxZ: 11,
+  },
+];
