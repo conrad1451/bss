@@ -18,6 +18,9 @@ import { updateQuestUI } from "./ui/questRenderer.js";
 import { initInputHandlers } from "./utils/input.js";
 
 import { mobDefinitions } from "./data/mobData.js"; // Optional: keep data separate
+
+import { FieldManager } from "./engine/FieldManager.js";
+import { EnvManager } from "./engine/EnvManager.js";
 import { FIELD_CONFIGS } from "./data/fieldData.js";
 
 import { Player } from "./entities/Player.js";
@@ -150,7 +153,13 @@ async function BeeSwarmSimulator(saveData) {
   uiCanvas.width = width;
   uiCanvas.height = height;
 
+  const fieldManager = new FieldManager(FIELD_CONFIGS);
+  const envManager = new EnvManager();
+
   const gameState = createInitialState(saveData);
+
+  gameState.fieldManager = fieldManager;
+  gameState.envManager = envManager;
 
   gameState.player = new Player(gameState.player);
 
