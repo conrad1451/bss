@@ -4,6 +4,9 @@
 
 // CHQ: Gemini AI generated file
 import { updatePhysicsEntity, resolveObstacleCollisions } from "./physics.js";
+// import { FieldManager } from "./FieldManager.js"; // CHQ: not needed, the ctors are used in index.js
+// import { EnvManager } from "./EnvManager.js"; //CHQ: not needed, the ctors are used in index.js
+
 import { spawnBeeAtCamera } from "../entities/bees.js";
 import { spawnMobAtCamera } from "../entities/mobs.js";
 
@@ -79,8 +82,12 @@ export function updateEngine(gameState, dt) {
   checkTokenCollection(gameState);
 
   player.updateCamera(dt);
-  player.updateFields(dt);
+  // player.updateFields(dt);
   player.updateUI(dt, gameState);
+
+  // 2. Delegate subsystem simulation loops cleanly
+  gameState.fieldManager.update(dt, gameState);
+  gameState.envManager.update(dt, gameState);
 
   // 3. Entity AI: Bees
   for (let bee of objects.bees) {

@@ -88,6 +88,8 @@ export class EnvManager {
   }
 
   updateLootTokens(dt, gameState) {
+    if (!gameState?.objects?.tokens) return; // CHQ: Claude AI (Haiku): add null safety
+
     this.timers.tokenDespawnCheck += dt;
 
     // Safely process loot token decay arrays outside the main Player boundaries
@@ -100,7 +102,7 @@ export class EnvManager {
 
       gameState.objects.tokens = gameState.objects.tokens.filter((token) => {
         // Automatically scales down or slices away old tokens
-        token.life -= 0.5;
+        token.life -= dt;
         return token.life > 0;
       });
     }
