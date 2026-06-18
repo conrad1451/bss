@@ -1,7 +1,35 @@
 // entities/Mesh.js
 import { MATH } from "../utils/math.js";
 
+// CHQ: Claude AI (Haiku) applied JSDocs
+//      (except for setMeshFromFunction, which was applied by Gemini AI)
+
+/**
+ * Represents a 3D mesh for rendering with WebGL.
+ * Manages vertex data, index buffers, and transformation matrices.
+ * Supports both static and dynamic mesh types with different vertex attribute layouts.
+ */
 export class Mesh {
+  /**
+   * Creates a new Mesh instance.
+   * @constructor
+   * @param {boolean} [isStatic=true] - Whether the mesh is static (STATIC_DRAW) or dynamic (DYNAMIC_DRAW)
+   * @param {number[]} [verts=[]] - Array of vertex data (positions, colors, UVs/normals)
+   * @param {number[]} [index=[]] - Array of triangle indices
+   *
+   * @property {boolean} isStatic - Determines buffer update strategy and vertex layout
+   * @property {Object} mesh - Container for mesh data and WebGL buffers
+   * @property {Object} mesh.data - Raw vertex and index data
+   * @property {Float32Array} mesh.data.verts - Vertex attribute data
+   * @property {Uint16Array} mesh.data.index - Triangle indices
+   * @property {Object} mesh.buffers - WebGL buffer objects
+   * @property {WebGLBuffer} mesh.buffers.verts - Vertex attribute buffer
+   * @property {WebGLBuffer} mesh.buffers.index - Element index buffer
+   * @property {number} mesh.indexAmount - Number of indices in the mesh
+   * @property {number} meshGlobalID - Unique identifier for this mesh instance
+   * @property {number[]} matrix - 4x4 transformation matrix (column-major order)
+   * @property {number[]} ogMatrix - Original/initial transformation matrix
+   */
   constructor(isStatic = true, verts, index) {
     this.isStatic = isStatic;
     this.setMesh(verts || [], index || []);
@@ -10,6 +38,13 @@ export class Mesh {
     this.ogMatrix = this.matrix.slice();
   }
 
+  /**
+   * Sets or updates the mesh geometry data and creates WebGL buffers.
+   * Converts input arrays to typed arrays and allocates GPU buffers.
+   *
+   * @param {number[]} verts - Array of vertex attributes (3 floats for position, 4 for color, 3 for UV/normal)
+   * @param {number[]} index - Array of triangle indices (3 per triangle)
+   */
   setMesh(verts, index) {
     this.mesh = {
       data: {
@@ -25,6 +60,18 @@ export class Mesh {
     };
   }
 
+  /**
+   * Dynamically constructs and updates the mesh geometry from a
+   * user-defined generator function. Handles lifecycle cleanup of
+   * static physics bodies associated with this mesh, provides
+   * localized procedural drawing methods (like `addBox`,
+   * `addCylinder`, etc.) to the callback function, processes
+   * CPU-side geometry generation (vertex positions, color shading,
+   * normals/UVs), and rebuilds the underling WebGL mesh buffers.
+   *
+   * @param {function} func - A procedural generator callback function. It receives localized drawing primitives as arguments or references scoped variables to construct the geometry.
+   * @returns {void}
+   */
   setMeshFromFunction(func) {
     let verts = [],
       index = [],
@@ -2310,6 +2357,14 @@ export class Mesh {
     this.setMesh(verts, index);
   }
 
+  /**
+   * Uploads mesh data to GPU memory.
+   * Binds vertex and index buffers and transfers data to the GPU.
+   * Uses STATIC_DRAW hint for both static and dynamic meshes.
+   *
+   * @note Both branches currently use STATIC_DRAW; dynamic meshes should use DYNAMIC_DRAW
+   * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/bufferData}
+   */
   setBuffers() {
     if (this.isStatic) {
       gl.bindBuffer(gl.ARRAY_BUFFER, this.mesh.buffers.verts);
@@ -2334,6 +2389,29 @@ export class Mesh {
     }
   }
 
+  /**
+   * Renders the mesh using WebGL.
+   * Binds buffers, configures vertex attributes, and draws the mesh.
+   *
+   * Static meshes use: position (3), color (4), and UV (3) attributes.
+   * Dynamic meshes use: position (3), color (3), and normal (3) attributes.
+   *
+   * Vertex layout (static):
+   * - Bytes 0-11: Position (3 floats)
+   * - Bytes 12-27: Color (4 floats)
+   * - Bytes 28-39: UV (3 floats)
+   * - Stride: 40 bytes per vertex
+   *
+   * Vertex layout (dynamic):
+   * - Bytes 0-11: Position (3 floats)
+   * - Bytes 12-23: Color (3 floats)
+   * - Bytes 24-35: Normal (3 floats)
+   * - Stride: 36 bytes per vertex
+   *
+   * @requires glCache.static_vertPos, glCache.static_vertColor, glCache.static_vertUV - for static meshes
+   * @requires glCache.dynamic_vertPos, glCache.dynamic_vertColor, glCache.dynamic_vertNormal - for dynamic meshes
+   * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/vertexAttribPointer}
+   */
   render() {
     if (this.isStatic) {
       gl.bindBuffer(gl.ARRAY_BUFFER, this.mesh.buffers.verts);
