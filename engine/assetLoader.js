@@ -3,6 +3,7 @@
 import { MATH } from "../utils/math.js"; // Added .js extension and verified pathing
 
 // CHQ: Gemini AI generated file
+// CHQ: Claude AI (Haiku) generated JSDocs
 
 // //  CHQ: Gemini AI generated function
 // function drawRandomText(ctx, text) {
@@ -13,8 +14,18 @@ import { MATH } from "../utils/math.js"; // Added .js extension and verified pat
 //   ctx.setTransform(1, 0, 0, 1, 0, 0);
 // }
 
-//  CHQ: Gemini AI generated function
-// Helper to draw random text noise
+/**
+ * Draws randomly transformed text on a canvas context.
+ * Used for creating visual noise and hidden easter eggs in textures.
+ *
+ * @param {CanvasRenderingContext2D} ctx - The 2D canvas rendering context
+ * @param {string} text - The text string to draw (supports unicode characters)
+ * @returns {void}
+ *
+ * @example
+ * // Draw Thai text with random position, scale, and rotation
+ * drawRandomText(canvasContext, "คาร์ลสันไม่เคยตาย");
+ */
 function drawRandomText(ctx, text) {
   // Simple check in case a custom math helper isn't globally available yet
   const randX = Math.random() * 488 + 12;
@@ -27,7 +38,19 @@ function drawRandomText(ctx, text) {
   ctx.setTransform(1, 0, 0, 1, 0, 0);
 }
 
-//  CHQ: Gemini AI generated function
+/**
+ * Generates procedural noise and hidden easter egg text on a canvas.
+ * Creates "dirt" patches with semi-transparent black rectangles and overlays
+ * hidden Thai text messages at random positions and scales.
+ *
+ * @param {CanvasRenderingContext2D} tex_ctx - The 2D canvas rendering context to draw noise onto
+ * @returns {void}
+ *
+ * @remarks
+ * This function includes easter eggs:
+ * - "Carlson never dies" (คาร์ลสันไม่เคยตาย in Thai)
+ * - "Dat is a very cool person" (ดาท เป็นเจ๋งคนมาก in Thai)
+ */
 export function generateDefaultNoise(tex_ctx) {
   for (let i = 0; i < 10; i++) {
     // Draw random "dirt" patches
@@ -50,9 +73,61 @@ export function generateDefaultNoise(tex_ctx) {
   }
 }
 
-// CHQ: Gemini AI added: A tiny helper to yield execution back to the browser event loop
+/**
+ * Yields control back to the browser event loop without blocking.
+ * Allows the browser to process user input, animations, and other tasks
+ * while long-running texture generation operations are in progress.
+ *
+ * @returns {Promise<void>} A promise that resolves after yielding to the event loop
+ * @private
+ */
 const yieldToBrowser = () => new Promise((resolve) => setTimeout(resolve, 0));
 
+// For the function, the JSDoc (including function signature line) takes
+// Tokens: 379 (368 without function signature line)
+// Characters: 1684 (1636 without function signature line)
+// 4.42295082 characters per token
+
+// For the actual code:
+// Tokens: 185
+// Characters: 811
+// 4.38378378 characters per token
+
+// Source: https://platform.openai.com/tokenizer
+
+/**
+ * Loads and generates all texture atlases for the 3D world and UI.
+ * Generates procedural textures including default noise, effects, flora, fonts,
+ * entities, and UI decals using external window-scoped texture generator functions.
+ *
+ * @async
+ * @param {WebGLRenderingContext} gl - The WebGL rendering context
+ * @param {CanvasRenderingContext2D} tex_ctx - The offscreen 2D canvas context for texture generation
+ * @returns {Promise<Object>} An object containing named WebGLTexture references
+ * @returns {WebGLTexture} returns.default - Base world/surface texture with noise
+ * @returns {WebGLTexture} returns.effects - Special effects atlas texture
+ * @returns {WebGLTexture} returns.flowers - Flora and flower sprites texture
+ * @returns {WebGLTexture} returns.text - Font atlas with alphanumeric characters
+ * @returns {WebGLTexture} returns.bees - Bee sprite atlas texture
+ * @returns {WebGLTexture} returns.decals - UI decals and environmental detail textures
+ * @returns {WebGLTexture} returns.bear - NPC/character textures
+ *
+ * @remarks
+ * This function expects the following window-scoped texture generator functions to exist:
+ * - window.textures_effects()
+ * - window.textures_flowers()
+ * - window.textures_bees()
+ * - window.textures_decals()
+ * - window.textures_bear()
+ *
+ * Each generator is called with the canvas context before texture creation.
+ * Uses yieldToBrowser() to prevent blocking the event loop during large texture operations.
+ *
+ * @example
+ * const gl = canvas.getContext('webgl');
+ * const textures = await loadTexture(gl, canvasContext);
+ * gl.bindTexture(gl.TEXTURE_2D, textures.default);
+ */
 export async function loadTexture(gl, tex_ctx) {
   const out = {};
 
@@ -133,8 +208,45 @@ export async function loadTexture(gl, tex_ctx) {
   return out;
 }
 
-// CHQ: Gemini AI: Updated to fully encapsulate texture generation on an isolated offscreen canvas buffer
+// For the function, the JSDoc (including function signature line) takes
+// Tokens: 305 (297 without function signature line)
+// Characters: 1349 (1308 without function signature line)
+// 4.42295082 characters per token
 
+// For the actual code:
+// Tokens: 185
+// Characters: 811
+// 4.38378378 characters per token
+
+// Source: https://platform.openai.com/tokenizer
+
+/**
+ * Entry point for texture asset loading. Creates an isolated offscreen canvas
+ * and delegates texture generation to loadTexture().
+ *
+ * @async
+ * @param {WebGLRenderingContext} gl - The WebGL rendering context
+ * @returns {Promise<Object>} An object containing all named WebGLTexture references
+ * @returns {WebGLTexture} returns.default - Base world/surface texture with noise
+ * @returns {WebGLTexture} returns.effects - Special effects atlas texture
+ * @returns {WebGLTexture} returns.flowers - Flora and flower sprites texture
+ * @returns {WebGLTexture} returns.text - Font atlas with alphanumeric characters
+ * @returns {WebGLTexture} returns.bees - Bee sprite atlas texture
+ * @returns {WebGLTexture} returns.decals - UI decals and environmental detail textures
+ * @returns {WebGLTexture} returns.bear - NPC/character textures
+ *
+ * @remarks
+ * Creates a private offscreen canvas (2048x2048) to prevent texture generation
+ * operations from interfering with the main DOM or active UI elements.
+ * All drawing operations are performed on this isolated canvas before being
+ * uploaded to WebGL textures.
+ *
+ * @example
+ * const gl = canvas.getContext('webgl');
+ * const textures = await loadTextures(gl);
+ * gl.activeTexture(gl.TEXTURE0);
+ * gl.bindTexture(gl.TEXTURE_2D, textures.default);
+ */
 export async function loadTextures(gl) {
   // export function loadTextures(gl) {
   // export function loadTextures(gl, tex_ctx) {
