@@ -1,5 +1,5 @@
 // entities/Triangulate.js
-import { MATH } from "../utils/math.js";
+import { MATH } from "../../utils/math.js";
 
 export class Triangulate {
   constructor(bee, tokenPos, gameState) {
