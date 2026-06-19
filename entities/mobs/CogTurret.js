@@ -3,7 +3,6 @@ import { MATH } from "../utils/math.js";
 import { Mob } from "./mobs.js";
 import { Token } from "./tokens.js";
 
-
 // CHQ: Claude AI (Sonnet): Converted from legacy CogTurret to extend the refactored Mob base class.
 // Key differences from a normal Mob:
 //  - Stationary: never calls moveTowards/AI aggro logic, so update() does NOT call super.update()
@@ -75,7 +74,10 @@ export class CogTurret extends Mob {
           -MATH.HALF_PI,
         ];
         constraintAxis = 0; // moves along X
-        constraintRange = [fieldInfo.x - 0.5, fieldInfo.x + fieldInfo.width - 0.5];
+        constraintRange = [
+          fieldInfo.x - 0.5,
+          fieldInfo.x + fieldInfo.width - 0.5,
+        ];
         break;
 
       case 1: // south edge
@@ -86,7 +88,10 @@ export class CogTurret extends Mob {
           MATH.HALF_PI,
         ];
         constraintAxis = 0;
-        constraintRange = [fieldInfo.x - 0.5, fieldInfo.x + fieldInfo.width - 0.5];
+        constraintRange = [
+          fieldInfo.x - 0.5,
+          fieldInfo.x + fieldInfo.width - 0.5,
+        ];
         break;
 
       case 2: // west edge
@@ -97,7 +102,10 @@ export class CogTurret extends Mob {
           Math.PI,
         ];
         constraintAxis = 2; // moves along Z
-        constraintRange = [fieldInfo.z - 0.5, fieldInfo.z + fieldInfo.length - 0.5];
+        constraintRange = [
+          fieldInfo.z - 0.5,
+          fieldInfo.z + fieldInfo.length - 0.5,
+        ];
         break;
 
       case 3: // east edge
@@ -130,7 +138,13 @@ export class CogTurret extends Mob {
     const crit = Math.random() < player.criticalChance;
     const superCrit = crit && Math.random() < player.superCritChance;
 
-    let d = am * (crit ? (superCrit ? player.superCritPower * player.criticalPower : player.criticalPower) : 1);
+    let d =
+      am *
+      (crit
+        ? superCrit
+          ? player.superCritPower * player.criticalPower
+          : player.criticalPower
+        : 1);
 
     if (this.mindHacked > 0) d *= 1.25;
 
@@ -145,7 +159,7 @@ export class CogTurret extends Mob {
       crit ? (superCrit ? 2 : 1) : 0,
       "",
       1, // CHQ: original indexed a lookup table by digit-count; simplified to a flat scale.
-         // Restore the [0,1.25,1.275,1.3,1.65,1.75] table here if exact original sizing matters.
+      // Restore the [0,1.25,1.275,1.3,1.65,1.75] table here if exact original sizing matters.
     );
   }
 
@@ -164,7 +178,8 @@ export class CogTurret extends Mob {
 
     if (this.health <= 0 || this.isDead) {
       if (gameState.player.stats) {
-        gameState.player.stats.mechsquito = (gameState.player.stats.mechsquito || 0) + 1;
+        gameState.player.stats.mechsquito =
+          (gameState.player.stats.mechsquito || 0) + 1;
       }
       return true;
     }
@@ -181,7 +196,8 @@ export class CogTurret extends Mob {
       this.flameTimer = 1;
       for (const flame of gameState.objects.flames || []) {
         if (
-          Math.abs(this.pos[0] - flame.pos[0]) + Math.abs(this.pos[2] - flame.pos[2]) <
+          Math.abs(this.pos[0] - flame.pos[0]) +
+            Math.abs(this.pos[2] - flame.pos[2]) <
           this.bodySize
         ) {
           this.damage(flame.dark ? 25 : 15, gameState);
@@ -204,7 +220,10 @@ export class CogTurret extends Mob {
           const v = [0, 0, 0];
           const trackedCoord = this.constraintAxis ? "x" : "z";
           v[2 - this.constraintAxis] =
-            Math.sign(player.body.position[trackedCoord] - this.pos[2 - this.constraintAxis]) * 8;
+            Math.sign(
+              player.body.position[trackedCoord] -
+                this.pos[2 - this.constraintAxis],
+            ) * 8;
 
           this.cogs.push({
             pos: [this.pos[0], this.pos[1] - 0.75, this.pos[2], 0],
@@ -223,7 +242,8 @@ export class CogTurret extends Mob {
           this.constraintRange[1],
         );
 
-        this.pos[this.constraintAxis] += (desiredPos - this.pos[this.constraintAxis]) * dt * 5;
+        this.pos[this.constraintAxis] +=
+          (desiredPos - this.pos[this.constraintAxis]) * dt * 5;
       }
 
       this.damageTimer -= dt;
@@ -252,7 +272,12 @@ export class CogTurret extends Mob {
       s.fx = Math.round(s.pos[0] - fieldInfo.x);
       s.fz = Math.round(s.pos[2] - fieldInfo.z);
 
-      if (s.fx < 0 || s.fx >= fieldInfo.width || s.fz < 0 || s.fz >= fieldInfo.length) {
+      if (
+        s.fx < 0 ||
+        s.fx >= fieldInfo.width ||
+        s.fz < 0 ||
+        s.fz >= fieldInfo.length
+      ) {
         s.pos[1] -= dt * 10;
       }
 
@@ -276,7 +301,7 @@ export class CogTurret extends Mob {
       if (
         Math.abs(player.body.position.x - s.pos[0]) +
           Math.abs(player.body.position.z - s.pos[2]) +
-          Math.abs(s.pos[1] - player.body.position.y) 
+          Math.abs(s.pos[1] - player.body.position.y) <
           1.5 &&
         s.timer <= 0
       ) {
