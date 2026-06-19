@@ -91,6 +91,86 @@ export class TextRenderer {
       " ": [0.7, 0.875],
     };
 
+    this.decalInstanceData = [];
+
+    this.decalUV = {
+      0: [0, 0],
+      1: [0.1, 0],
+      2: [0.2, 0],
+      3: [0.3, 0],
+      4: [0.4, 0],
+      5: [0.5, 0],
+      6: [0.59, 0],
+      7: [0.7, 0],
+      8: [0.79, 0],
+      9: [0.89, 0],
+      "+": [0.002, 0.13],
+      "-": [0.002, 0.13],
+      "⇆": [0.1, 0.14],
+      ",": [0.2075, 0.14],
+      "/": [0.3, 0.13],
+      ".": [0.2075, 0.14],
+      "-": [0.4, 0.13],
+      ":": [0.5, 0.13],
+      "(": [0.6, 0.13],
+      ")": [0.68, 0.13],
+      "%": [0.79, 0.12],
+      ".": [0.885, 0.13],
+      a: [0, 0.25],
+      b: [0.1, 0.25],
+      c: [0.2, 0.25],
+      d: [0.3, 0.25],
+      e: [0.4, 0.25],
+      f: [0.5, 0.25],
+      g: [0.6, 0.26],
+      h: [0.69, 0.25],
+      i: [0.81, 0.25],
+      j: [0.9, 0.25],
+      k: [0.025, 0.375],
+      l: [0.11, 0.375],
+      m: [0.2, 0.375],
+      n: [0.31, 0.375],
+      o: [0.4, 0.375],
+      p: [0.5, 0.375],
+      q: [0.6, 0.375],
+      r: [0.7, 0.375],
+      s: [0.8, 0.375],
+      t: [0.9, 0.375],
+      u: [0.02, 0.5],
+      v: [0.108, 0.5],
+      w: [0.2, 0.5],
+      x: [0.305, 0.5],
+      y: [0.4, 0.5],
+      z: [0.5, 0.5],
+      A: [0, 0.625],
+      B: [0.1, 0.625],
+      C: [0.2, 0.625],
+      D: [0.3, 0.625],
+      E: [0.4, 0.625],
+      F: [0.5, 0.625],
+      G: [0.6, 0.625],
+      H: [0.7, 0.625],
+      I: [0.8, 0.625],
+      J: [0.9, 0.625],
+      K: [0.01, 0.75],
+      L: [0.1, 0.75],
+      M: [0.2, 0.75],
+      N: [0.3, 0.75],
+      O: [0.4, 0.75],
+      P: [0.5, 0.75],
+      Q: [0.6, 0.75],
+      R: [0.7, 0.75],
+      S: [0.8, 0.75],
+      T: [0.9, 0.75],
+      U: [0.02, 0.875],
+      V: [0.1, 0.875],
+      W: [0.2, 0.875],
+      X: [0.3, 0.875],
+      Y: [0.4, 0.875],
+      Z: [0.5, 0.875],
+      " ": [0.7, 0.875],
+    };
+
     // Initialize WebGL Buffers
     this.instanceBuffer = gl.createBuffer();
     this.vertBuffer = gl.createBuffer();
@@ -275,6 +355,39 @@ export class TextRenderer {
     }
   }
 
+  // CHQ: Claude AI (Sonnet): NEW
+  addDecalRaw(
+    x,
+    y,
+    z,
+    offsetX,
+    offsetY,
+    uvX,
+    uvY,
+    r,
+    g,
+    b,
+    scaleX,
+    scaleY,
+    rotation,
+  ) {
+    this.decalInstanceData.push(
+      x,
+      y,
+      z,
+      offsetX,
+      offsetY,
+      uvX,
+      uvY,
+      r,
+      g,
+      b,
+      scaleX,
+      scaleY,
+      rotation,
+    );
+  }
+
   /**
    * Adds 2D context text if using a secondary UI overlay
    * Refactored from Original source: 1417
@@ -448,5 +561,113 @@ export class TextRenderer {
       gl.vertexAttribDivisor(locInstInfo, 0);
 
     this.instanceData = [];
+  }
+
+  // CHQ: Claude AI (Sonnet) made
+  /**
+   * Draws all decal quads queued this frame via addDecalRaw (health bars, glow
+   * rings, light rays, etc.). Uses the same `text` shader program as character
+   * rendering but binds the dedicated decal_vertBuffer/decal_indexBuffer quad
+   * instead of the glyph quad, since decals are single flat icons, not glyphs.
+   *
+   * Called independently of the character-text path in render() so decals still
+   * draw on frames where no floating/label text exists.
+   *
+   * @param {Float32Array|number[]} viewMatrix - Column-major 4x4 view matrix.
+   * @returns {void}
+   */
+  renderDecals(viewMatrix) {
+    const gl = this.gl;
+    const cache = this.glCache;
+
+    if (this.decalInstanceData.length === 0) return;
+
+    gl.useProgram(this.programs.text);
+
+    const uViewMatLoc = cache.text?.text_viewMatrix || cache.text?.uViewMatrix;
+    if (uViewMatLoc) {
+      gl.uniformMatrix4fv(uViewMatLoc, false, viewMatrix);
+    }
+
+    const textTarget = cache.text || {};
+    const locPos = textTarget.text_vertPos ?? textTarget.vertPos;
+    const locUV = textTarget.text_vertUV ?? textTarget.vertUV;
+    const locInstOrigin =
+      textTarget.text_instanceOrigin ?? textTarget.instanceOrigin;
+    const locInstOffset =
+      textTarget.text_instanceOffset ?? textTarget.instanceOffset;
+    const locInstUV = textTarget.text_instanceUV ?? textTarget.instanceUV;
+    const locInstColor =
+      textTarget.text_instanceColor ?? textTarget.instanceColor;
+    const locInstInfo = textTarget.text_instanceInfo ?? textTarget.instanceInfo;
+
+    // 1. Bind the DECAL quad geometry (not the glyph quad)
+    gl.bindBuffer(gl.ARRAY_BUFFER, this.decal_vertBuffer);
+    if (locPos !== undefined && locPos !== -1) {
+      gl.enableVertexAttribArray(locPos);
+      gl.vertexAttribPointer(locPos, 2, gl.FLOAT, false, 16, 0);
+    }
+    if (locUV !== undefined && locUV !== -1) {
+      gl.enableVertexAttribArray(locUV);
+      gl.vertexAttribPointer(locUV, 2, gl.FLOAT, false, 16, 8);
+    }
+
+    // 2. Upload this frame's decal instances (same 13-float stride as text)
+    gl.bindBuffer(gl.ARRAY_BUFFER, this.instanceBuffer);
+    gl.bufferData(
+      gl.ARRAY_BUFFER,
+      new Float32Array(this.decalInstanceData),
+      gl.DYNAMIC_DRAW,
+    );
+
+    if (locInstOrigin !== undefined && locInstOrigin !== -1) {
+      gl.enableVertexAttribArray(locInstOrigin);
+      gl.vertexAttribPointer(locInstOrigin, 3, gl.FLOAT, false, 52, 0);
+      gl.vertexAttribDivisor(locInstOrigin, 1);
+    }
+    if (locInstOffset !== undefined && locInstOffset !== -1) {
+      gl.enableVertexAttribArray(locInstOffset);
+      gl.vertexAttribPointer(locInstOffset, 2, gl.FLOAT, false, 52, 12);
+      gl.vertexAttribDivisor(locInstOffset, 1);
+    }
+    if (locInstUV !== undefined && locInstUV !== -1) {
+      gl.enableVertexAttribArray(locInstUV);
+      gl.vertexAttribPointer(locInstUV, 2, gl.FLOAT, false, 52, 20);
+      gl.vertexAttribDivisor(locInstUV, 1);
+    }
+    if (locInstColor !== undefined && locInstColor !== -1) {
+      gl.enableVertexAttribArray(locInstColor);
+      gl.vertexAttribPointer(locInstColor, 3, gl.FLOAT, false, 52, 28);
+      gl.vertexAttribDivisor(locInstColor, 1);
+    }
+    if (locInstInfo !== undefined && locInstInfo !== -1) {
+      gl.enableVertexAttribArray(locInstInfo);
+      gl.vertexAttribPointer(locInstInfo, 3, gl.FLOAT, false, 52, 40);
+      gl.vertexAttribDivisor(locInstInfo, 1);
+    }
+
+    // 3. Fire Draw Call using the decal index buffer
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.decal_indexBuffer);
+    gl.drawElementsInstanced(
+      gl.TRIANGLES,
+      this.decal_indexAmount,
+      gl.UNSIGNED_SHORT,
+      0,
+      this.decalInstanceData.length / 13,
+    );
+
+    // 4. Clean up divisors
+    if (locInstOrigin !== -1 && locInstOrigin !== undefined)
+      gl.vertexAttribDivisor(locInstOrigin, 0);
+    if (locInstOffset !== -1 && locInstOffset !== undefined)
+      gl.vertexAttribDivisor(locInstOffset, 0);
+    if (locInstUV !== -1 && locInstUV !== undefined)
+      gl.vertexAttribDivisor(locInstUV, 0);
+    if (locInstColor !== -1 && locInstColor !== undefined)
+      gl.vertexAttribDivisor(locInstColor, 0);
+    if (locInstInfo !== -1 && locInstInfo !== undefined)
+      gl.vertexAttribDivisor(locInstInfo, 0);
+
+    this.decalInstanceData = [];
   }
 }

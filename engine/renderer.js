@@ -914,7 +914,110 @@ export class Renderer {
     });
   }
 
-  // FIXME: switch bears to player
+  /**
+   * Draws all active CogTurret instances and their fired cog projectiles.
+   * Expects this.meshes.cogTurret and this.meshes.cog to be uploaded separately
+   * (same pattern as uploadMobMesh).
+   */
+  drawTurrets(state, viewMatrix, projectionMatrix) {
+    const gl = this.gl;
+    const mobProgram = this.programs.mob;
+    if (!gl.getProgramParameter(mobProgram, gl.LINK_STATUS)) return;
+
+    const turrets = (state.objects.mobs || []).filter(
+      (m) => m.type === "cogTurret",
+    );
+    if (turrets.length === 0) return;
+
+    gl.useProgram(mobProgram);
+    this.setUniform(mobProgram, "projMatrix", projectionMatrix);
+    this.setUniform(mobProgram, "viewMatrix", viewMatrix);
+
+    turrets.forEach((turret) => {
+      // Turret body
+      const modelMatrix = mat4.create();
+      mat4.fromTranslation(modelMatrix, turret.pos);
+      mat4.rotateY(modelMatrix, modelMatrix, turret.facing || 0);
+      this.setUniform(mobProgram, "uModelMatrix", modelMatrix);
+      this.drawMesh("cogTurret");
+
+      // Fired cogs
+      turret.cogs.forEach((s) => {
+        const cogMatrix = mat4.create();
+        mat4.fromTranslation(cogMatrix, [s.pos[0], s.pos[1], s.pos[2]]);
+        mat4.rotateY(cogMatrix, cogMatrix, s.pos[3] || 0);
+        this.setUniform(mobProgram, "uModelMatrix", cogMatrix);
+        this.drawMesh("cog");
+      });
+    });
+  }
+
+  drawTurretUI(state) {
+    const textRenderer = state.textRenderer;
+    if (!textRenderer) return;
+
+    const turrets = state.objects.mobs.filter((m) => m.type === "cogTurret");
+    if (turrets.length === 0) return;
+
+    turrets.forEach((turret) => {
+      const barPos = [turret.pos[0], turret.pos[1] + 1, turret.pos[2]];
+      const healthPct =
+        turret.maxHealth > 0 ? turret.health / turret.maxHealth : 0;
+
+      textRenderer.addDecalRaw(
+        barPos[0],
+        barPos[1],
+        barPos[2],
+        0,
+        0,
+        ...textRenderer.decalUV.rect,
+        0.6,
+        0,
+        0,
+        2.5,
+        0.4,
+        0,
+      );
+
+      const trackWidth = 2.5;
+      const fillScaleX = trackWidth * healthPct;
+      const fillOffsetX = -(trackWidth / 2) * (1 - healthPct);
+      textRenderer.addDecalRaw(
+        barPos[0],
+        barPos[1],
+        barPos[2],
+        fillOffsetX,
+        0,
+        ...textRenderer.decalUV.rect,
+        0.2,
+        0.85,
+        0.2,
+        fillScaleX,
+        0.4,
+        0,
+      );
+
+      textRenderer.addSingle(
+        `Cogturret (Level ${turret.level})`,
+        [barPos[0], barPos[1] + 0.4, barPos[2]],
+        [255, 255, 255],
+        100,
+        false,
+        false,
+      );
+
+      textRenderer.addSingle(
+        `HP: ${Math.max(0, turret.health | 0).toLocaleString()}`,
+        barPos,
+        [255, 255, 255],
+        -1,
+        false,
+        false,
+      );
+    });
+  }
+
+  // draw without using textures
   drawPlayer(state, viewMatrix, projectionMatrix) {
     // Reuse mob program + mesh — player is just a mob with player's pos
     const gl = this.gl;
@@ -1248,6 +1351,10 @@ export class Renderer {
     if (state.objects?.mobs?.length > 0) {
       this.drawMobs(state, viewMatrix, projectionMatrix);
     }
+    if (state.objects?.mobs?.some((m) => m.type === "cogTurret")) {
+      this.drawTurrets(state, viewMatrix, projectionMatrix);
+      this.drawTurretUI(state);
+    }
 
     // // 4. Calculate Camera Matrices safely using scoped variables
     // const playerPos = state.player.pos || [0, 5, 0];
@@ -1304,9 +1411,11 @@ export class Renderer {
     //   ),
     // );
     // CHQ: Text always last — renders on top of world geometry
-    if (this.textRenderer) {
-      // Pass delta time, your game's tracking uniform phase timer, and the view matrix!
-      this.textRenderer.render(dt, this.sinTime || 0, viewMatrix);
+
+    const textRenderer = state.textRenderer;
+    if (textRenderer) {
+      textRenderer.render(dt, this.sinTime || 0, viewMatrix);
+      textRenderer.renderDecals(viewMatrix);
     }
   }
 } // <--- End of Renderer Class
