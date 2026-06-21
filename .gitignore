@@ -73,3 +73,11 @@ powershell-scripts/
 project-tree-history/
 
 oldfiles/
+
+monitor.sh
+run-graphify-buggy.sh
+
+graphify-out*/
+graphify-graphs*/
+graphify-out/
+graphify-outputs/
