@@ -1,5 +1,15 @@
-class FireflyPatch {
-  constructor() {
+// entities/fireflyPatch.js
+
+import { MATH } from "../utils/math.js";
+import { vec3 } from "gl-matrix";
+import { Token } from "./tokens.js";
+import { Explosion } from "./explosions.js"; // adjust path to wherever Explosion lives
+
+// CHQ: Claude AI (Sonnet) ported this file to the gameState-passing pattern
+//      used by Mob (entities/mobs.js), Bee (entities/bees.js), Balloon, and others
+
+export class FireflyPatch {
+  constructor(gameState) {
     window.setTimeout(
       () => {
         this.flyBack = true;
@@ -10,6 +20,9 @@ class FireflyPatch {
 
     this.fireflies = [];
     this.cycle = 3;
+    this.isDead = false;
+
+    const fieldInfo = gameState.fieldInfo;
 
     this.field = [
       "SpiderField",
@@ -19,15 +32,16 @@ class FireflyPatch {
       "BambooField",
       "PineapplePatch",
     ][(Math.random() * 6) | 0];
+
     this.x = MATH.random(0.4, 0.6) * fieldInfo[this.field].width;
     this.z = MATH.random(0.4, 0.6) * fieldInfo[this.field].length;
 
-    let x = fieldInfo[this.field].x + this.x,
-      z = fieldInfo[this.field].z + this.z,
-      r = MATH.random(3, 5);
+    const x = fieldInfo[this.field].x + this.x;
+    const z = fieldInfo[this.field].z + this.z;
+    const r = MATH.random(3, 5);
 
     for (let i = 0; i < 8; i++) {
-      let t = Math.random() * MATH.TWO_PI;
+      const t = Math.random() * MATH.TWO_PI;
 
       this.fireflies.push({
         pos: [-60, 20, -30],
@@ -42,27 +56,47 @@ class FireflyPatch {
     }
   }
 
-  die(index) {
-    objects.mobs.splice(index, 1);
+  /**
+   * Cleanup on death. Loot is already dropped inside update(); updateEngine owns
+   * the splice so nothing extra is needed here beyond flagging isDead.
+   *
+   * @param {number} index - Index of this patch in gameState.objects.mobs (unused — kept for interface parity).
+   * @param {Object} gameState - The live game state object.
+   */
+  die(index, gameState) {
+    this.isDead = true;
   }
 
-  update() {
+  /**
+   * Per-frame update. Advances every firefly through its state machine, queues
+   * render data via gameState.objects.tempBees, and drops tokens/explosions when
+   * all eight fireflies reach "waitAir" simultaneously.
+   *
+   * @param {number} dt - Delta time in seconds since the last frame.
+   * @param {Object} gameState - The live game state object.
+   * @returns {boolean} True when the patch should be removed from the mobs array.
+   */
+  update(dt, gameState) {
+    if (this.isDead || this.splice) return true;
+
+    const fieldInfo = gameState.fieldInfo;
+    const player = gameState.player;
+
+    // Counts down from fireflies.length; reaches 0 only when all are in "waitAir"
     let isAllWaitingAir = this.fireflies.length;
 
-    for (let i in this.fireflies) {
-      let f = this.fireflies[i];
+    for (let i = 0; i < this.fireflies.length; i++) {
+      const f = this.fireflies[i];
 
       if (this.flyBack) {
         vec3.sub(f.vel, [-60, 20, -30], f.pos);
         vec3.normalize(f.vel, f.vel);
-
         vec3.scaleAndAdd(f.pos, f.pos, f.vel, dt * 4);
       } else {
         switch (f.state) {
           case "moveToFlower":
             vec3.sub(f.vel, f.toPos, f.pos);
             vec3.normalize(f.vel, f.vel);
-
             vec3.scaleAndAdd(f.pos, f.pos, f.vel, dt * 4);
 
             if (
@@ -83,14 +117,13 @@ class FireflyPatch {
                 f.pos,
               );
             }
-
             break;
 
           case "waitSquish":
             if (
-              Math.abs(player.body.position.x - f.pos[0]) +
-                Math.abs(player.body.position.y - f.pos[1]) +
-                Math.abs(player.body.position.z - f.pos[2]) <
+              Math.abs(player.pos[0] - f.pos[0]) +
+                Math.abs(player.pos[1] - f.pos[1]) +
+                Math.abs(player.pos[2] - f.pos[2]) <
               4
             ) {
               f.state = "flyUp";
@@ -102,12 +135,13 @@ class FireflyPatch {
                 tt = Math.random() < 0.5 ? "pineapple" : "sunflowerSeed";
 
               if (
-                fieldInfo[this.field].generalColorComp.r > 0.5 &&
+                fieldInfo[this.field].generalColorComp?.r > 0.5 &&
                 Math.random() < 0.4
               )
                 tt = "strawberry";
+
               if (
-                fieldInfo[this.field].generalColorComp.b > 0.5 &&
+                fieldInfo[this.field].generalColorComp?.b > 0.5 &&
                 Math.random() < 0.4
               )
                 tt = "blueberry";
@@ -115,24 +149,21 @@ class FireflyPatch {
               if (Math.random() < 0.06)
                 tt = Math.random() < 0.5 ? "gumdrops" : "royalJelly";
 
-              objects.tokens.push(
-                new LootToken(
-                  30,
-                  [f.pos[0], fieldInfo[this.field].y + 1, f.pos[2]],
+              // LootToken(30, pos, type, amount, isBoss, source) → Token(type, amount, pos, isBoss)
+              gameState.objects.tokens.push(
+                new Token(
                   tt,
                   1,
+                  [f.pos[0], fieldInfo[this.field].y + 1, f.pos[2]],
                   false,
-                  "Fireflies",
                 ),
               );
             }
-
             break;
 
           case "flyUp":
             vec3.sub(f.vel, f.toPos, f.pos);
             vec3.normalize(f.vel, f.vel);
-
             vec3.scaleAndAdd(f.pos, f.pos, f.vel, dt * 4);
 
             if (
@@ -153,79 +184,86 @@ class FireflyPatch {
                 f.pos,
               );
             }
-
             break;
 
           case "waitAir":
             isAllWaitingAir--;
-
             break;
         }
       }
 
-      meshes.bees.instanceData.push(
-        f.pos[0],
-        f.pos[1],
-        f.pos[2],
-        1,
-        f.vel[0],
-        f.vel[1],
-        f.vel[2],
-        BEE_FLY,
-        0.875,
-        0.625,
-        0,
-      );
-      textRenderer.addDecalRaw(
-        ...f.pos,
-        0,
-        0,
-        ...textRenderer.decalUV.glow,
-        1,
-        1,
-        0.2,
-        2.5,
-        2.5,
-        0,
-      );
-      textRenderer.addDecalRaw(
-        ...f.pos,
-        0,
-        0,
-        ...textRenderer.decalUV.lightrays,
-        1,
-        1,
-        0.2,
-        3,
-        3,
-        TIME + i * 0.5,
-      );
-      meshes.explosions.instanceData.push(...f.pos, 1, 1, 0.2, 0.2, 0.95, 1);
+      // --- Rendering ---
+
+      // Queue this firefly for instanced bee rendering.
+      // drawBees() in renderer.js iterates both objects.bees and objects.tempBees;
+      // tempBees is cleared at the top of drawBees each frame.
+      // _uvOverride bypasses the beeInfo UV lookup to use the firefly sprite row.
+      gameState.objects.tempBees.push({
+        pos: [...f.pos],
+        meshScale: 1,
+        moveDir: [...f.vel],
+        type: "basic", // CHQ: Claude AI (Sonnet): drives beeInfo UV lookup in drawBees
+        _uvOverride: [0.875, 0.625], // CHQ: Claude AI (Sonnet): firefly uses a non-standard UV
+      });
+
+      // Decals go directly through textRenderer — this path is already gameState-clean.
+      if (gameState.textRenderer?.addDecalRaw) {
+        gameState.textRenderer.addDecalRaw(
+          ...f.pos,
+          0,
+          0,
+          ...gameState.textRenderer.decalUV.glow,
+          1,
+          1,
+          0.2,
+          2.5,
+          2.5,
+          0,
+        );
+        gameState.textRenderer.addDecalRaw(
+          ...f.pos,
+          0,
+          0,
+          ...gameState.textRenderer.decalUV.lightrays,
+          1,
+          1,
+          0.2,
+          3,
+          3,
+          gameState.TIME + i * 0.5,
+        );
+      }
+
+      gameState.objects.tempExplosions.push({
+        pos: [...f.pos],
+        col: [1, 1, 0.2], // warm yellow firefly glow — matches the 1, 1, 0.2 in the original
+        size: 0.2, // small per-firefly point glow, not the 6-unit burst on completion
+        alpha: 0.95,
+        life: 1, // full lifespan; this is a per-frame push so it resets every tick
+      });
     }
 
+    // All eight fireflies are hovering in air — drop the big reward and reassign targets
     if (!isAllWaitingAir) {
       let tt = "starTreat";
-      //let tt='moonCharm'
 
       if (Math.random() < 0.07)
         tt = Math.random() < 0.1 ? "starJelly" : "glitter";
 
-      objects.tokens.push(
-        new LootToken(
-          30,
+      gameState.objects.tokens.push(
+        new Token(
+          tt,
+          1,
           [
             fieldInfo[this.field].x + this.x,
             fieldInfo[this.field].y + 1,
             fieldInfo[this.field].z + this.z,
           ],
-          tt,
-          1,
           false,
-          "Fireflies",
         ),
       );
 
-      objects.explosions.push(
+      gameState.objects.explosions.push(
         new Explosion({
           col: [0, 1, 1],
           pos: [
@@ -243,7 +281,7 @@ class FireflyPatch {
       this.cycle--;
 
       if (this.cycle <= 0) {
-        let _f = [
+        const _f = [
           "SpiderField",
           "StrawberryField",
           "RoseField",
@@ -253,7 +291,6 @@ class FireflyPatch {
         ];
 
         _f.splice(_f.indexOf(this.field), 1);
-
         this.field = _f[(Math.random() * 5) | 0];
         this.cycle = 3;
       }
@@ -261,13 +298,13 @@ class FireflyPatch {
       this.x = MATH.random(0.4, 0.6) * fieldInfo[this.field].width;
       this.z = MATH.random(0.4, 0.6) * fieldInfo[this.field].length;
 
-      let x = fieldInfo[this.field].x + this.x,
-        z = fieldInfo[this.field].z + this.z,
-        r = MATH.random(3, 5);
+      const x = fieldInfo[this.field].x + this.x;
+      const z = fieldInfo[this.field].z + this.z;
+      const r = MATH.random(3, 5);
 
-      for (let i in this.fireflies) {
-        let f = this.fireflies[i],
-          t = Math.random() * MATH.TWO_PI;
+      for (let i = 0; i < this.fireflies.length; i++) {
+        const f = this.fireflies[i];
+        const t = Math.random() * MATH.TWO_PI;
 
         f.toPos = [
           (Math.sin(t) * r + x) | 0,
@@ -278,6 +315,6 @@ class FireflyPatch {
       }
     }
 
-    return this.splice;
+    return !!this.splice;
   }
 }

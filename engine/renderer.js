@@ -68,6 +68,9 @@ export class Renderer {
         vertexBuffer: null,
         vertCount: 4,
       },
+      // fields: null, // CHQ: me
+      cylinder_explosions: null, // CHQ: me
+      explosions: null, // CHQ: me
     };
 
     // CHQ: static config/blueprint:
@@ -775,6 +778,7 @@ export class Renderer {
 
     // 1. Clear last frame's instance data
     mesh.instanceData = [];
+    state.objects.tempBees = [];
 
     // 2. Each bee contributes 11 floats: instance_pos(4) + instance_rotation(4) + instance_uv(3)
     state.objects.bees.forEach((bee) => {
@@ -790,6 +794,27 @@ export class Renderer {
         beeInfo[bee.type]?.u ?? 0,
         beeInfo[bee.type]?.v ?? 0,
         0, // meshPartId/layer — 0 to match vertUV.w = 0 on our simple quad, avoids culling
+      );
+    });
+
+    // CHQ: Claude AI (Sonnet): After the state.objects.bees.forEach loop, before the draw call:
+    state.objects.tempBees.forEach((bee) => {
+      const [u, v] = bee._uvOverride ?? [
+        beeInfo[bee.type]?.u ?? 0,
+        beeInfo[bee.type]?.v ?? 0,
+      ];
+      mesh.instanceData.push(
+        bee.pos[0],
+        bee.pos[1],
+        bee.pos[2],
+        bee.meshScale ?? 1,
+        bee.moveDir?.[0] ?? 1,
+        bee.moveDir?.[1] ?? 0,
+        bee.moveDir?.[2] ?? 0,
+        0,
+        u,
+        v,
+        0,
       );
     });
 
