@@ -234,6 +234,7 @@ export function createInitialState(saveData = {}) {
       marks: [],
       balloons: [],
       mobs: [],
+      bears: [], // CHQ: I added so i can see bears on the screen
       targets: [],
     },
     showTheQuests: false,
@@ -259,6 +260,10 @@ export function createInitialState(saveData = {}) {
       bees: { vertCount: 0, vertexBuffer: null, indexBuffer: null },
       fields: null,
       world: null,
+      explosions: 0,
+      cylinder_explosions: 0,
     },
+
+    statsTick: false, // CHQ: me
   };
 }
