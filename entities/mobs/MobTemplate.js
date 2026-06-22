@@ -129,6 +129,11 @@ export class Mob {
     // ... add more logic for other mob types, etc.
     return [{ type: "honey", amount: 10 }];
   }
+
+  // CHQ: Claude AI (Haiku) added method
+  takeDamage(amount, gameState) {
+    this.hp -= amount;
+  }
 }
 
 // CHQ: Gemini AI created function
@@ -185,4 +190,50 @@ export function spawnMobAtCamera(gameState, type = "ladybug") {
   // origMob.circleAxisY = true;
   gameState.objects.mobs.push(origMob);
   return origMob;
+}
+
+// New intermediate class for bosses with special mechanics
+export class BossMob extends Mob {
+  constructor(id, type, pos, hp, lvl, gameState) {
+    super(id, type, pos, hp, lvl, gameState);
+    this.respawnTimer = 0;
+    this.respawnDuration = 0;
+    this.isBossDefeated = false;
+  }
+
+  update(dt, gameState) {
+    // Handle respawn countdown
+    if (this.respawnTimer > 0) {
+      this.respawnTimer -= dt;
+      this.render(gameState);
+      return this.respawnTimer <= 0;
+    }
+
+    // Base mob update
+    return super.update(dt, gameState);
+  }
+
+  die(index, gameState) {
+    this.isBossDefeated = true;
+    this.respawnTimer = this.respawnDuration;
+    // Don't call super.die() — handle boss-specific death logic
+    this.onBossDeath(gameState);
+  }
+
+  onBossDeath(gameState) {
+    // Override in boss subclasses
+  }
+
+  takeDamage(amount, gameState, critType = 0) {
+    let damage = amount;
+    if (this.mindHacked) {
+      damage *= 1.25;
+    }
+    this.hp -= damage;
+    // Damage number rendering handled by subclass
+  }
+
+  render(gameState) {
+    // Override in subclasses
+  }
 }
