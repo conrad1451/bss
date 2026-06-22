@@ -236,6 +236,7 @@ export function createInitialState(saveData = {}) {
       mobs: [],
       bears: [], // CHQ: I added so i can see bears on the screen
       targets: [],
+      fuzzBombs: [],
     },
     showTheQuests: false,
 
