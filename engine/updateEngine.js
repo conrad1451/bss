@@ -9,6 +9,7 @@ import { updatePhysicsEntity, resolveObstacleCollisions } from "./physics.js";
 
 import { spawnBeeAtCamera } from "../entities/bees.js";
 import { spawnMobAtCamera } from "../entities/mobs.js";
+import { Balloon } from "../entities/balloons.js"; // CHQ: Claude AI (Sonnet) added
 
 /**
  * Main per-frame engine update. Advances physics, player state, AI entities,
@@ -103,6 +104,17 @@ export function updateEngine(gameState, dt) {
     if (isDead || mob.isDead) {
       mob.die(i, gameState);
       gameState.objects.mobs.splice(i, 1);
+    }
+  }
+
+  // CHQ: Claude AI (Sonnet): Balloons
+  if (objects.balloons) {
+    for (let i = objects.balloons.length - 1; i >= 0; i--) {
+      const balloon = objects.balloons[i];
+      const reachedHive = balloon.update(dt, gameState);
+      if (reachedHive) {
+        balloon.die(i, gameState);
+      }
     }
   }
 

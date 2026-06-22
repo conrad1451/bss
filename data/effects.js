@@ -1,3 +1,5 @@
+import { Balloon } from "../entities/miscEntities.js/Balloon";
+
 export const effects = {
   scienceEnhancement: {
     u: 0,

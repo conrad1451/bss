@@ -1,8 +1,30 @@
-let globalBalloonID = 0;
+// entities/balloons.js
+import { vec3, vec2 } from "gl-matrix";
 
-class Balloon {
-  constructor(field, x, z, golden, beeLevel = 0) {
-    this.id = globalBalloonID++;
+// CHQ: Claude AI (Sonnet) ported this file to the gameState-passing pattern
+//      used by Mob (entities/mobs.js) and Bee (entities/bees.js).
+import { COLORS } from "../../data/colors";
+
+// let PLAYER_PHYSICS_GROUP=2,STATIC_PHYSICS_GROUP=4,DYNAMIC_PHYSICS_GROUP=8,BEE_COLLECT=0,BEE_FLY=0,then=0,dt,frameCount=0,TIME=0,player,NIGHT_DARKNESS=0.6,NPCs,STATS_TICK=false,leavesTimer=45,testRealm=DATA.name===window.atob('YnVveWFudCBiZWUgcmFjY29vbg==')
+
+export class Balloon {
+  /**
+   * @param {string} field - Field id this balloon belongs to.
+   * @param {number} x - Local field-space X coordinate.
+   * @param {number} z - Local field-space Z coordinate.
+   * @param {boolean} golden - Whether this is a golden (rare) balloon.
+   * @param {number} [beeLevel=0] - Aggregate bee level bonus affecting capacity/life.
+   * @param {Object} gameState - The live game state object produced by {@link createInitialState}.
+   */
+  constructor(field, x, z, golden, beeLevel = 0, gameState) {
+    const { player, fieldInfo } = gameState;
+    const TIME = gameState.TIME;
+
+    // CHQ: Claude AI (Sonnet) — id now allocated from gameState.globalId
+    //      (matches how spawnMobAtCamera does `gameState.globalId++`)
+    //      instead of a module-level globalBalloonID counter.
+    this.id = gameState.globalId++;
+
     this.golden = golden;
     this.col = this.golden
       ? [0.875 * 0.85, 0.7 * 0.85, 0.1 * 0.85, 0.8]
@@ -59,7 +81,19 @@ class Balloon {
     }
   }
 
-  die(index, deflated = false) {
+  /**
+   * Pops/retires the balloon: returns its carried pollen to the hive balloon
+   * pool (unless it was popped/deflated) and removes it from the live array.
+   *
+   * @param {number} index - Index of this balloon inside gameState.objects.balloons.
+   * @param {Object} gameState - The live game state object.
+   * @param {boolean} [deflated=false] - True if the balloon was deflated/popped
+   *   rather than reaching the hive normally (skips the pollen payout).
+   * @returns {void}
+   */
+  die(index, gameState, deflated = false) {
+    const { player, objects } = gameState;
+
     if (deflated === false) {
       player.hiveBalloon.pollen += this.pollen;
       player.hiveBalloon.maxPollen += this.pollen;
@@ -68,7 +102,24 @@ class Balloon {
     objects.balloons.splice(index, 1);
   }
 
-  update() {
+  /**
+   * Per-frame balloon update. Handles both the "float" state (drifting over
+   * the field, claiming nearby flowers, accumulating pollen) and the
+   * "moveToHive" state (flying straight to the player's hive once full or
+   * out of life). Pushes render instance data for the balloon body, glow,
+   * and floating label text every frame it's alive.
+   *
+   * @param {number} dt - Delta time in seconds since the last frame.
+   * @param {Object} gameState - The live game state object.
+   * @returns {boolean|undefined} `true` once the balloon has arrived at the
+   *   hive while in "moveToHive" state (signals the caller to collect it via
+   *   {@link die}); otherwise `undefined`.
+   */
+  update(dt, gameState) {
+    const { player, objects, meshes, textRenderer, fieldInfo, flowers } =
+      gameState;
+    const TIME = gameState.TIME;
+
     if (this.state === "float") {
       this.life -= dt;
 
@@ -193,7 +244,7 @@ class Balloon {
       textRenderer.addDecalRaw(
         ...this.pos,
         0,
-        0,
+        0.4,
         ...textRenderer.decalUV["rect"],
         0,
         0.4,
@@ -229,7 +280,7 @@ class Balloon {
       );
 
       if (
-        STATS_TICK &&
+        gameState.statsTick &&
         vec3.sqrDist(this.pos, [
           player.body.position.x,
           player.body.position.y + 4,
