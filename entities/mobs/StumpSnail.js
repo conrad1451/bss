@@ -1,5 +1,5 @@
 // entities/mobs/StumpSnail.js
-import { BossMob } from "./mobs.js";
+import { BossMob } from "./MobTemplate";
 
 // CHQ: Claude AI (Haiku): Converted from standalone StumpSnail to an extension of BossMob.
 
