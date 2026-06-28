@@ -939,6 +939,48 @@ export class Renderer {
     });
   }
 
+  // drawBears(state, viewMatrix, projectionMatrix) {
+  //   const gl = this.gl;
+  //   const bearProgram = this.programs.bear;
+
+  //   if (!gl.getProgramParameter(bearProgram, gl.LINK_STATUS)) return;
+  //   if (!this.meshes.bears) {
+  //     console.warn("drawBears: no bear mesh uploaded yet");
+  //     return;
+  //   }
+  //   console.log("bear mesh vertCount:", this.meshes.bears.vertCount);
+  //   gl.useProgram(bearProgram);
+
+  //   this.setUniform(bearProgram, "projMatrix", projectionMatrix);
+  //   this.setUniform(bearProgram, "viewMatrix", viewMatrix);
+  //   this.setUniform(bearProgram, "tex", 0); // CHQ: Claude AI: replace "uSampler" with "tex"
+
+  //   // if (this.textures?.bear) {
+  //   if (this.textures?.bear) {
+  //     gl.activeTexture(gl.TEXTURE0);
+  //     // gl.bindTexture(gl.TEXTURE_2D, this.textures.bear);
+  //     gl.bindTexture(gl.TEXTURE_2D, this.textures.bear);
+  //   }
+
+  //   // ✅ ADD: verify uModelMatrix exists in the shader
+  //   const modelMatrixLoc = gl.getUniformLocation(bearProgram, "uModelMatrix");
+  //   console.log("uModelMatrix location:", modelMatrixLoc); // null = not in shader
+
+  //   state.objects.bears((bear) => {
+  //     this.setUniform(bearProgram, "instance_info1", [
+  //       bear.pos[0],
+  //       bear.pos[1],
+  //       bear.pos[2],
+  //       bear.facingAngle ?? 0.0, // Y-rotation
+  //     ]);
+  //     this.setUniform(bearProgram, "instance_info2", [
+  //       bear.scale ?? 2.0, // uniform scale
+  //       1.0, // alpha
+  //     ]);
+  //     this.drawMesh("bears");
+  //   });
+  // }
+
   /**
    * Draws all active CogTurret instances and their fired cog projectiles.
    * Expects this.meshes.cogTurret and this.meshes.cog to be uploaded separately
