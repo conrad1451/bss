@@ -1046,25 +1046,25 @@ export class Renderer {
   drawPlayer(state, viewMatrix, projectionMatrix) {
     // Reuse mob program + mesh — player is just a mob with player's pos
     const gl = this.gl;
-    const prog = this.programs.mob;
-    if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) return;
-    // if (!this.meshSchema.mobs?.vertexBuffer) return;
-    if (!this.meshes.mobs?.vertexBuffer) return;
+    const playerProgram = this.programs.mob;
+    if (!gl.getProgramParameter(playerProgram, gl.LINK_STATUS)) return;
 
-    gl.useProgram(prog);
-    this.setUniform(prog, "projMatrix", projectionMatrix);
-    this.setUniform(prog, "viewMatrix", viewMatrix);
+    // if (!this.meshes.player?.vertexBuffer) return;
 
-    if (this.textures?.bear) {
+    gl.useProgram(playerProgram);
+    this.setUniform(playerProgram, "projMatrix", projectionMatrix);
+    this.setUniform(playerProgram, "viewMatrix", viewMatrix);
+
+    if (this.textures?.player) {
       gl.activeTexture(gl.TEXTURE0);
-      gl.bindTexture(gl.TEXTURE_2D, this.textures.bear);
-      this.setUniform(prog, "tex", 0, "int");
+      gl.bindTexture(gl.TEXTURE_2D, this.textures.player);
+      this.setUniform(playerProgram, "tex", 0, "int");
     }
 
     const modelMatrix = mat4.create();
     mat4.fromTranslation(modelMatrix, state.player.pos);
     mat4.rotateY(modelMatrix, modelMatrix, state.player.yaw || 0);
-    this.setUniform(prog, "uModelMatrix", modelMatrix);
+    this.setUniform(playerProgram, "uModelMatrix", modelMatrix);
     this.drawMesh("mobs");
   }
 
