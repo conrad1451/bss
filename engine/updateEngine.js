@@ -30,7 +30,7 @@ import { Balloon } from "../entities/balloons.js"; // CHQ: Claude AI (Sonnet) ad
  */
 export function updateEngine(gameState, dt) {
   // 1. Initialize or increment the frame count safely
-  gameState.frameCount = (gameState.frameCount || 0) + 1;
+  gameState.frameCount = (gameState.frameCount || 0) + 1; // CHQ: goes at top or bottom of role
 
   const { player, objects, world, triggers } = gameState;
 
