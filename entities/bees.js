@@ -535,6 +535,64 @@ export class Bee {
     this._pushInstanceData(instanceData, TIME * 5);
   }
 
+  _stateMoveToPlayer(
+    dt,
+    gameState,
+    { player, objects, fieldInfo, instanceData, TIME },
+  ) {
+    if (player.fieldIn && player.pollen < player.capacity) {
+      if (fieldInfo[player.fieldIn].planter) {
+        let chance =
+            MATH.lerp(0.35, 0.02, objects.bees.length / 50) *
+            (this.type === "shy" ? (this.gifted ? 2.5 : 2) : 1),
+          p = fieldInfo[player.fieldIn].planter;
+
+        if (p.type === "redClay") {
+          if (beeInfo[this.type].color === "red") chance *= 1.25;
+          else if (beeInfo[this.type].color === "blue") chance = 0;
+        }
+        if (p.type === "blueClay") {
+          if (beeInfo[this.type].color === "blue") chance *= 1.25;
+          else if (beeInfo[this.type].color === "red") chance = 0;
+        }
+        if (p.type === "pesticide" && this.mutation) chance *= 1.3;
+        if (p.type === "petal" && beeInfo[this.type].color === "white")
+          chance *= 1.5;
+        if (p.type === "plenty" && this.gifted) chance *= 1.5;
+
+        if (Math.random() < chance) {
+          this.state = "moveToPlanter";
+          let t = Math.random() * MATH.TWO_PI;
+          this.collectRot = [Math.sin(t), -4, Math.cos(t)];
+          return;
+        }
+      }
+
+      this.state = "moveToFlower";
+      return;
+    }
+
+    this.moveTo = [
+      player.pos[0] + this.moveOffset[0],
+      player.pos[1],
+      player.pos[2] + this.moveOffset[2],
+    ];
+    this._stepTowards(this.moveTo, dt, player);
+
+    if (vec3.sqrDist(this.moveTo, this.pos) < 0.8)
+      this.moveOffset = [MATH.random(-5, 5), 0, MATH.random(-5, 5)];
+
+    this._pushInstanceData(instanceData, BEE_FLY);
+
+    if (player.converting && player.pollen) {
+      this.state = "moveToHiveToConvert";
+      return;
+    }
+    if (player.convertingBalloon && player.hiveBalloon.pollen) {
+      this.state = "moveToHiveToConvertBalloon";
+    }
+  }
+
   // Extracted from the middle of _stateAttack to reduce nesting
   _resolveAttackHit(player, objects) {
     if (Math.random() < (this.attackMob.blocking ? 0.85 : 0)) {
