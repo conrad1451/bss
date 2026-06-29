@@ -166,6 +166,21 @@ async function BeeSwarmSimulator(saveData) {
 
   gameState.player = new Player(gameState.player);
 
+  // CHQ: Claude AI (Sonnet): Quick shim on player at init time:
+  gameState.player.body = {
+    position: {
+      get x() {
+        return gameState.player.pos[0];
+      },
+      get y() {
+        return gameState.player.pos[1];
+      },
+      get z() {
+        return gameState.player.pos[2];
+      },
+    },
+  };
+
   const renderer = new Renderer(gl, canvas.width, canvas.height, SHADERS);
   const textRenderer = new TextRenderer(
     gl,
