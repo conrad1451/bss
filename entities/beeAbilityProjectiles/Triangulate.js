@@ -5,6 +5,8 @@
 import { MATH } from "../../utils/math.js";
 import { Mesh } from "../Mesh.js";
 
+import { ReverseExplosion } from "../miscEntities/ReverseExplosion.js";
+
 export class Triangulate {
   constructor(bee, tokenPos, gameState) {
     this.gameState = gameState;
