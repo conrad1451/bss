@@ -25,7 +25,10 @@ import { FIELD_CONFIGS } from "./data/fieldData.js";
 
 import { Player } from "./entities/Player.js";
 import { NPC } from "./entities/npcs.js";
-import { Mob, MondoChick } from "./entities/mobs.js";
+
+import { Mob } from "./entities/mobs/MobTemplate.js";
+import { MondoChick } from "./entities/mobs/MondoChick.js";
+// import { Mob, MondoChick } from "./entities/mobs.js";
 import { createGameLoop } from "./engine/gameLoop.js";
 
 // import { injectMenuHTML } from "./ui/components/menuLayout.js";
