@@ -1,4 +1,4 @@
-import { Balloon } from "../entities/miscEntities.js/Balloon";
+import { Balloon } from "../entities/miscEntities/Balloon";
 
 export const effects = {
   scienceEnhancement: {
