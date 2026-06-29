@@ -733,6 +733,47 @@ export class Bee {
 
     this._pushInstanceData(instanceData, BEE_FLY);
   }
+
+  // CHQ: implement _stateCollectPlanter, refactored by ChatGPT
+  _stateCollectPlanter(
+    dt,
+    gameState,
+    { player, objects, fieldInfo, instanceData },
+  ) {
+    const field = fieldInfo[player.fieldIn];
+
+    if (
+      !player.fieldIn ||
+      player.pollenInBag >= player.capacity ||
+      !field.planter
+    ) {
+      this.state = "moveToPlayer";
+      return;
+    }
+
+    this.collectTimer -= dt;
+
+    if (this.collectTimer <= 0) {
+      this.energy--;
+      field.planter.beeSipped(this);
+
+      this._tryFireToken(
+        this.gatheringTokens,
+        [Math.round(this.pos[0]), field.y + 1, Math.round(this.pos[2])],
+        {
+          field: player.fieldIn,
+          x: field.x | 0,
+          z: field.z | 0,
+          bee: this,
+        },
+        gameState,
+      );
+
+      this.state = "moveToFlower";
+    }
+
+    this._pushInstanceData(instanceData, BEE_COLLECT, this.collectRot);
+  }
 }
 
 export class TempBee extends Bee {
