@@ -545,8 +545,8 @@ export class Bee {
         const p = fieldInfo[player.fieldIn].planter;
 
         let chance =
-            MATH.lerp(0.35, 0.02, objects.bees.length / 50) *
-            (this.type === "shy" ? (this.gifted ? 2.5 : 2) : 1);
+          MATH.lerp(0.35, 0.02, objects.bees.length / 50) *
+          (this.type === "shy" ? (this.gifted ? 2.5 : 2) : 1);
 
         if (p.type === "redClay") {
           if (beeInfo[this.type].color === "red") chance *= 1.25;
@@ -580,7 +580,7 @@ export class Bee {
     ];
     this._stepTowards(this.moveTo, dt, player);
 
-    if (vec3.sqrDist(this.moveTo, this.pos) < 0.8){
+    if (vec3.sqrDist(this.moveTo, this.pos) < 0.8) {
       this.moveOffset = [MATH.random(-5, 5), 0, MATH.random(-5, 5)];
     }
 
