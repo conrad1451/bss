@@ -538,14 +538,15 @@ export class Bee {
   _stateMoveToPlayer(
     dt,
     gameState,
-    { player, objects, fieldInfo, instanceData, TIME },
+    { player, objects, fieldInfo, instanceData },
   ) {
     if (player.fieldIn && player.pollen < player.capacity) {
       if (fieldInfo[player.fieldIn].planter) {
+        const p = fieldInfo[player.fieldIn].planter;
+
         let chance =
             MATH.lerp(0.35, 0.02, objects.bees.length / 50) *
-            (this.type === "shy" ? (this.gifted ? 2.5 : 2) : 1),
-          p = fieldInfo[player.fieldIn].planter;
+            (this.type === "shy" ? (this.gifted ? 2.5 : 2) : 1);
 
         if (p.type === "redClay") {
           if (beeInfo[this.type].color === "red") chance *= 1.25;
@@ -562,7 +563,7 @@ export class Bee {
 
         if (Math.random() < chance) {
           this.state = "moveToPlanter";
-          let t = Math.random() * MATH.TWO_PI;
+          const t = Math.random() * MATH.TWO_PI;
           this.collectRot = [Math.sin(t), -4, Math.cos(t)];
           return;
         }
@@ -579,16 +580,15 @@ export class Bee {
     ];
     this._stepTowards(this.moveTo, dt, player);
 
-    if (vec3.sqrDist(this.moveTo, this.pos) < 0.8)
+    if (vec3.sqrDist(this.moveTo, this.pos) < 0.8){
       this.moveOffset = [MATH.random(-5, 5), 0, MATH.random(-5, 5)];
+    }
 
     this._pushInstanceData(instanceData, BEE_FLY);
 
     if (player.converting && player.pollen) {
       this.state = "moveToHiveToConvert";
-      return;
-    }
-    if (player.convertingBalloon && player.hiveBalloon.pollen) {
+    } else if (player.convertingBalloon && player.hiveBalloon.pollen) {
       this.state = "moveToHiveToConvertBalloon";
     }
   }
