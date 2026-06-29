@@ -1,5 +1,6 @@
 // entities/miscEntities/ReverseExplosion.js
 
+// CHQ: Claude AI (Sonnet) refactored
 export class ReverseExplosion {
   constructor(params, gameState) {
     this.gameState = gameState;
