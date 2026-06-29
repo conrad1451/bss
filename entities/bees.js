@@ -163,42 +163,6 @@ export class Bee {
     this.energy = MATH.random(0.35, 1) * this.maxEnergy;
   }
 
-  updateBroken(dt, gameState) {
-    // Movement and State Machine logic (attack, collect, sleep)
-
-    // Logic using gameState.player.body.position
-    this.moveTo = [
-      gameState.player.body.position.x,
-      gameState.player.body.position.y,
-      gameState.player.body.position.z,
-    ];
-
-    // CHQ: Claude AI (Haiku) added logic for circular motion
-    // 🐝 NEW: Circular flight
-    if (this.circleRadius && this.circleSpeed) {
-      this.circleAngle += this.circleSpeed * dt;
-
-      if (this.circleAxisY) {
-        // Circle on the XZ plane (horizontal)
-        this.pos[0] =
-          this.circleCenter[0] + Math.cos(this.circleAngle) * this.circleRadius;
-        this.pos[2] =
-          this.circleCenter[2] + Math.sin(this.circleAngle) * this.circleRadius;
-      } else {
-        // Circle on the XY plane (vertical)
-        this.pos[0] =
-          this.circleCenter[0] + Math.cos(this.circleAngle) * this.circleRadius;
-        this.pos[1] =
-          this.circleCenter[1] + Math.sin(this.circleAngle) * this.circleRadius;
-      }
-
-      // Update movement direction to face tangent of circle
-      this.moveDir[0] = -Math.sin(this.circleAngle);
-      this.moveDir[1] = 0;
-      this.moveDir[2] = Math.cos(this.circleAngle);
-    }
-  }
-
   // CHQ: Claude AI (Sonnet) created function
   update(dt, gameState, textRenderer) {
     // Circle flight mode: skip the state machine entirely
