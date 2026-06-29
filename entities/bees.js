@@ -1,32 +1,33 @@
 // entities/bees.js
 import { MATH } from "../utils/math.js";
-// import { vec3, vec2 } from "../utils/gl-matrix.js";
 import { vec3, vec2 } from "gl-matrix";
 
 import { beeInfo } from "../data/bees.js";
 
 import { getPositionAheadOfCamera } from "./entityHelpers.js";
+
+// CHQ: Claude AI (Sonnet) refactored file
 export class Bee {
   constructor(pos, type, lvl, gifted, x, y, mutation, gameState) {
-    this.meshScale = type === "baby" || type === "tadpole" ? 0.65 : 1; // [cite: 141, 1441]
-    this.gifted = gifted; // [cite: 141]
-    this.type = type; // [cite: 141]
-    this.pos = [...pos]; // [cite: 141]
-    this.hiveX = x; // [cite: 141]
-    this.hiveY = y; // [cite: 141]
-    this.pollen = 0; // [cite: 141]
-    this.state = "moveToPlayer"; // [cite: 141]
+    this.meshScale = type === "baby" || type === "tadpole" ? 0.65 : 1;
+    this.gifted = gifted;
+    this.type = type;
+    this.pos = [...pos];
+    this.hiveX = x;
+    this.hiveY = y;
+    this.pollen = 0;
+    this.state = "moveToPlayer";
 
-    this.moveDir = [0, 0, 1]; // CHQ: Claude AI (Sonnet) added this
-    this.moveTo = [...pos]; // CHQ: Claude AI (Sonnet) added this, since cases read it before writing it
-    this.moveOffset = [0, 0, 0]; // CHQ: Claude AI (Sonnet) added this, used in moveToPlayer
-    this.flowerCollecting = []; // CHQ: Claude AI (Sonnet) added this, used in moveToFlower/collectPollen
+    this.moveDir = [0, 0, 1];
+    this.moveTo = [...pos];
+    this.moveOffset = [0, 0, 0];
+    this.flowerCollecting = [];
 
-    this.computeLevel(lvl || 1, mutation, gameState); // [cite: 141, 1442]
+    this.computeLevel(lvl || 1, mutation, gameState);
   }
 
   computeLevel(newLevel, mutation, gameState) {
-    // Logic for ability rates, attack, and energy [cite: 1443, 1444, 1447]
+    // Logic for ability rates, attack, and energy
     // ...
   }
 
@@ -163,40 +164,167 @@ export class Bee {
     this.energy = MATH.random(0.35, 1) * this.maxEnergy;
   }
 
-  // CHQ: Claude AI (Sonnet) created function
-  update(dt, gameState, textRenderer) {
-    // Circle flight mode: skip the state machine entirely
-    if (this.circleRadius && this.circleSpeed) {
-      this.circleAngle = (this.circleAngle || 0) + this.circleSpeed * dt;
+  // ---------------------------------------------------------------------------
+  // Private helpers
+  // ---------------------------------------------------------------------------
 
-      if (this.circleAxisY !== false) {
-        // Horizontal circle on XZ plane
-        this.pos[0] =
-          this.circleCenter[0] + Math.cos(this.circleAngle) * this.circleRadius;
-        this.pos[2] =
-          this.circleCenter[2] + Math.sin(this.circleAngle) * this.circleRadius;
-      } else {
-        // Vertical circle on XY plane
-        this.pos[0] =
-          this.circleCenter[0] + Math.cos(this.circleAngle) * this.circleRadius;
-        this.pos[1] =
-          this.circleCenter[1] + Math.sin(this.circleAngle) * this.circleRadius;
+  /**
+   * Moves this bee toward `target` at the bee's standard speed, scaled by
+   * player multipliers and the spicy-heat modifier when applicable.
+   * Updates `this.moveDir` in place and advances `this.pos`.
+   *
+   * @param {number[]} target   - World-space [x, y, z] destination.
+   * @param {number}   dt       - Delta time in seconds.
+   * @param {Object}   player   - Live player object from gameState.
+   * @param {number}   [speedMult=1] - Extra speed scalar (e.g. 1.5 for target-practice dash).
+   */
+  _stepTowards(target, dt, player, speedMult = 1) {
+    vec3.sub(this.moveDir, target, this.pos);
+    vec3.normalize(this.moveDir, this.moveDir);
+    const spicyMult = this.type === "spicy" ? player.flameHeatStackApplied : 1;
+    vec3.scaleAndAdd(
+      this.pos,
+      this.pos,
+      this.moveDir,
+      dt * this.speed * player.beeSpeed * spicyMult * speedMult,
+    );
+  }
+
+  /**
+   * Appends one entry to the instanced-bee draw buffer for this frame.
+   * All 11 floats are written in the layout the bee shader expects:
+   *   pos(3) + meshScale(1) + moveDir(3) + animState(1) + uvU(1) + giftedOffset(1) + meshPartId(1)
+   *
+   * @param {number[]} instanceData - The flat array to push into (gameState.meshes.bees.instanceData).
+   * @param {number}   animState    - Animation-state float (BEE_FLY, BEE_COLLECT, TIME*5, etc.).
+   * @param {number[]} [dir]        - Direction override; defaults to this.moveDir.
+   */
+  _pushInstanceData(instanceData, animState, dir = this.moveDir) {
+    instanceData.push(
+      this.pos[0],
+      this.pos[1],
+      this.pos[2],
+      this.meshScale,
+      dir[0],
+      dir[1],
+      dir[2],
+      animState,
+      beeInfo[this.type].u,
+      this.GIFTED_BEE_TEXTURE_OFFSET,
+      beeInfo[this.type].meshPartId,
+    );
+  }
+
+  /**
+   * Picks a random ability token from `tokenList` whose cooldown has elapsed
+   * and fires it by pushing a new Token into `objects.tokens`.
+   * Returns the chosen token type string, or null if none fired.
+   *
+   * @param {Object[]} tokenList     - this.gatheringTokens or this.attackTokens.
+   * @param {number[]} spawnPos      - World-space [x, y, z] where the token appears.
+   * @param {Object}   tokenContext  - { field, x, z, bee } passed to the Token constructor.
+   * @param {Object}   gameState
+   * @param {boolean}  [attackMode=false] - Uses rate*0.35 for attack tokens.
+   */
+  _tryFireToken(
+    tokenList,
+    spawnPos,
+    tokenContext,
+    gameState,
+    attackMode = false,
+  ) {
+    const { player, objects } = gameState;
+    const colorKey = beeInfo[this.type].color + "BeeAbilityRate";
+    const openTokens = [];
+
+    for (let i in tokenList) {
+      const g = tokenList[i];
+      const elapsed =
+        (gameState.TIME - g.timer) * player[colorKey] * this.abilityRate;
+      const rate = attackMode ? g.rate * 0.35 : g.rate;
+      if (
+        elapsed >= g.cooldown &&
+        Math.random() <= rate &&
+        (!g.requireGifted || this.gifted)
+      ) {
+        openTokens.push(i);
       }
-
-      this.moveDir[0] = -Math.sin(this.circleAngle);
-      this.moveDir[1] = 0;
-      this.moveDir[2] = Math.cos(this.circleAngle);
-      return false; // not dead
     }
 
-    // Normal state machine
-    // return this.testUpdate(dt, textRenderer, gameState);
-    return this.testUpdate(dt, gameState);
-  }
-  testUpdate(dt, textRenderer) {
-    // testUpdate(dt, textRenderer, gameState) {
-    if (this.fetchBall && this.fetchBall.turn) this.state = "moveToFetch";
+    if (!openTokens.length) return null;
 
+    const chosen = openTokens[(Math.random() * openTokens.length) | 0];
+    tokenList[chosen].timer = gameState.TIME;
+    const tokenType = tokenList[chosen].type;
+
+    objects.tokens.push(
+      new Token(
+        effects[tokenType].tokenLife,
+        spawnPos,
+        tokenType,
+        tokenContext,
+      ),
+    );
+
+    return tokenType;
+  }
+
+  // ---------------------------------------------------------------------------
+  // Public update
+  // ---------------------------------------------------------------------------
+
+  /**
+   * Advances circular orbit flight for one tick. Updates `this.pos` and
+   * `this.moveDir` to the tangent direction. Returns `true` if circle flight
+   * is active so `update` can early-out; `false` if the bee has no orbit set.
+   *
+   * @param {number} dt - Delta time in seconds.
+   * @returns {boolean}
+   */
+  _updateCircleFlight(dt) {
+    this.circleAngle = (this.circleAngle || 0) + this.circleSpeed * dt;
+    const cos = Math.cos(this.circleAngle);
+    const sin = Math.sin(this.circleAngle);
+
+    if (this.circleAxisY !== false) {
+      // Horizontal orbit on XZ plane
+      this.pos[0] = this.circleCenter[0] + cos * this.circleRadius;
+      this.pos[2] = this.circleCenter[2] + sin * this.circleRadius;
+    } else {
+      // Vertical orbit on XY plane
+      this.pos[0] = this.circleCenter[0] + cos * this.circleRadius;
+      this.pos[1] = this.circleCenter[1] + sin * this.circleRadius;
+    }
+
+    // Tangent direction (perpendicular to radius)
+    this.moveDir[0] = -sin;
+    this.moveDir[1] = 0;
+    this.moveDir[2] = cos;
+
+    return true;
+  }
+
+  /**
+   * Circle-flight early-out then delegates to the main state machine.
+   */
+  update(dt, gameState) {
+    if (this.circleRadius && this.circleSpeed) {
+      return this._updateCircleFlight(dt);
+    } else {
+      return this._stateMachineUpdate(dt, gameState);
+    }
+  }
+
+  /**
+   * Main per-frame state machine. All globals replaced with gameState references.
+   */
+  _stateMachineUpdate(dt, gameState) {
+    const { player, objects, fieldInfo, flowers } = gameState;
+    const instanceData = gameState.meshes.bees.instanceData;
+    const textRenderer = gameState.textRenderer;
+    const TIME = gameState.TIME;
+
+    // --- Pre-switch: trail update ---
     for (let i in this.trails) {
       this.trails[i].addPos([
         this.pos[0],
@@ -205,6 +333,7 @@ export class Bee {
       ]);
     }
 
+    // --- Pre-switch: sleep / energy check ---
     if (
       (this.energy <= 0 &&
         this.state !== "sleep" &&
@@ -218,6 +347,7 @@ export class Bee {
       this.state = "moveToSleep";
     }
 
+    // --- Pre-switch: aggro check ---
     if (
       player.attacked.length > 0 &&
       this.state !== "sleep" &&
@@ -236,8 +366,11 @@ export class Bee {
       this.attackOffset = [Math.cos(_a) * 2, Math.sin(_a) * 2];
     }
 
+    if (this.fetchBall && this.fetchBall.turn) this.state = "moveToFetch";
+
+    // --- State machine ---
     switch (this.state) {
-      case "moveToAttack":
+      case "moveToAttack": {
         if (
           !player.attacked.length ||
           !this.attackMob ||
@@ -254,20 +387,10 @@ export class Bee {
           this.attackMob.pos[1] + (this.type === "precise" ? 1.25 : 0.25),
           this.attackMob.pos[2] + this.attackOffset[1],
         ];
-        vec3.sub(this.moveDir, this.moveTo, this.pos);
-        vec3.normalize(this.moveDir, this.moveDir);
-        vec3.scaleAndAdd(
-          this.pos,
-          this.pos,
-          this.moveDir,
-          dt *
-            this.speed *
-            player.beeSpeed *
-            (this.type === "spicy" ? player.flameHeatStackApplied : 1),
-        );
+        this._stepTowards(this.moveTo, dt, player);
+
         if (vec3.sqrDist(this.moveTo, this.pos) < 0.8) {
           this.state = "attack";
-
           let _a = Math.random() * MATH.TWO_PI,
             r = this.type === "precise" ? 5 : 2;
           this.attackOffset = [Math.cos(_a) * r, Math.sin(_a) * r];
@@ -275,23 +398,11 @@ export class Bee {
             (1.25 + Math.random() * 0.5) * (this.type === "precise" ? 1.6 : 1);
         }
 
-        meshes.bees.instanceData.push(
-          this.pos[0],
-          this.pos[1],
-          this.pos[2],
-          this.meshScale,
-          this.moveDir[0],
-          this.moveDir[1],
-          this.moveDir[2],
-          BEE_FLY,
-          beeInfo[this.type].u,
-          this.GIFTED_BEE_TEXTURE_OFFSET,
-          beeInfo[this.type].meshPartId,
-        );
-
+        this._pushInstanceData(instanceData, BEE_FLY);
         break;
+      }
 
-      case "attack":
+      case "attack": {
         if (
           !player.attacked.length ||
           !this.attackMob ||
@@ -307,16 +418,13 @@ export class Bee {
 
         if (this.attackTimer <= 0) {
           this.energy--;
-
           this.state = "moveToAttack";
-
           this.attackMob =
             player.attacked[(Math.random() * player.attacked.length) | 0];
 
           if (Math.random() < (this.attackMob.blocking ? 0.85 : 0)) {
             this.energy--;
-
-            gameState.textRenderer.add(
+            textRenderer.add(
               "BLOCK",
               [
                 this.attackMob.pos[0],
@@ -330,9 +438,8 @@ export class Bee {
               false,
             );
           } else {
-            if (
-              Math.random() <
-              (this.type === "precise"
+            const hitChance =
+              this.type === "precise"
                 ? Math.max(
                     Math.pow(
                       2,
@@ -340,9 +447,10 @@ export class Bee {
                     ),
                     0.05,
                   )
-                : Math.pow(2, this.level - this.attackMob.level))
-            ) {
-              let h =
+                : Math.pow(2, this.level - this.attackMob.level);
+
+            if (Math.random() < hitChance) {
+              const h =
                 (this.attack + player[beeInfo[this.type].color + "BeeAttack"]) *
                 player.beeAttack *
                 (this.type === "precise" ? (this.gifted ? 2 : 1.5) : 1) *
@@ -364,8 +472,7 @@ export class Bee {
               }
             } else {
               this.energy--;
-
-              gameState.textRenderer.add(
+              textRenderer.add(
                 "MISS",
                 [
                   this.attackMob.pos[0],
@@ -381,68 +488,29 @@ export class Bee {
             }
           }
 
-          let token,
-            openTokens = [];
-
-          for (let i in this.attackTokens) {
-            let g = this.attackTokens[i];
-
-            if (
-              (TIME - g.timer) *
-                player[beeInfo[this.type].color + "BeeAbilityRate"] *
-                this.abilityRate >=
-                g.cooldown &&
-              Math.random() < g.rate * 0.35 &&
-              ((g.requireGifted && this.gifted) || !g.requireGifted)
-            ) {
-              openTokens.push(i);
-            }
-          }
-
-          if (openTokens.length) {
-            token = openTokens[(Math.random() * openTokens.length) | 0];
-            this.attackTokens[token].timer = TIME;
-
-            token = this.attackTokens[token].type;
-
-            objects.tokens.push(
-              new Token(
-                effects[token].tokenLife,
-                [
-                  Math.round(this.pos[0]),
-                  player.body.position.y + 0.5,
-                  Math.round(this.pos[2]),
-                ],
-                token,
-                {
-                  field: player.fieldIn,
-                  x: this.flowerCollecting[0],
-                  z: this.flowerCollecting[1],
-                  bee: this,
-                },
-                true,
-              ),
-            );
-          }
+          this._tryFireToken(
+            this.attackTokens,
+            [
+              Math.round(this.pos[0]),
+              player.pos[1] + 0.5,
+              Math.round(this.pos[2]),
+            ],
+            {
+              field: player.fieldIn,
+              x: this.flowerCollecting[0],
+              z: this.flowerCollecting[1],
+              bee: this,
+            },
+            gameState,
+            true,
+          );
         }
 
-        meshes.bees.instanceData.push(
-          this.pos[0],
-          this.pos[1],
-          this.pos[2],
-          this.meshScale,
-          this.moveDir[0],
-          this.moveDir[1],
-          this.moveDir[2],
-          TIME * 5,
-          beeInfo[this.type].u,
-          this.GIFTED_BEE_TEXTURE_OFFSET,
-          beeInfo[this.type].meshPartId,
-        );
-
+        this._pushInstanceData(instanceData, TIME * 5);
         break;
+      }
 
-      case "moveToPlayer":
+      case "moveToPlayer": {
         if (player.fieldIn && player.pollen < player.capacity) {
           if (fieldInfo[player.fieldIn].planter) {
             let chance =
@@ -451,38 +519,22 @@ export class Bee {
               p = fieldInfo[player.fieldIn].planter;
 
             if (p.type === "redClay") {
-              if (beeInfo[this.type] === "red") {
-                chance *= 1.25;
-              } else if (beeInfo[this.type] === "blue") {
-                chance = 0;
-              }
+              if (beeInfo[this.type].color === "red") chance *= 1.25;
+              else if (beeInfo[this.type].color === "blue") chance = 0;
             }
-
             if (p.type === "blueClay") {
-              if (beeInfo[this.type] === "blue") {
-                chance *= 1.25;
-              } else if (beeInfo[this.type] === "red") {
-                chance = 0;
-              }
+              if (beeInfo[this.type].color === "blue") chance *= 1.25;
+              else if (beeInfo[this.type].color === "red") chance = 0;
             }
-
-            if (p.type === "pesticide" && this.mutation) {
-              chance *= 1.3;
-            }
-
-            if (p.type === "petal" && beeInfo[this.type] === "white") {
+            if (p.type === "pesticide" && this.mutation) chance *= 1.3;
+            if (p.type === "petal" && beeInfo[this.type].color === "white")
               chance *= 1.5;
-            }
-
-            if (p.type === "plenty" && this.gifted) {
-              chance *= 1.5;
-            }
+            if (p.type === "plenty" && this.gifted) chance *= 1.5;
 
             if (Math.random() < chance) {
               this.state = "moveToPlanter";
               let t = Math.random() * MATH.TWO_PI;
               this.collectRot = [Math.sin(t), -4, Math.cos(t)];
-
               return;
             }
           }
@@ -492,51 +544,28 @@ export class Bee {
         }
 
         this.moveTo = [
-          player.body.position.x + this.moveOffset[0],
-          player.body.position.y,
-          player.body.position.z + this.moveOffset[2],
+          player.pos[0] + this.moveOffset[0],
+          player.pos[1],
+          player.pos[2] + this.moveOffset[2],
         ];
-        vec3.sub(this.moveDir, this.moveTo, this.pos);
-        vec3.normalize(this.moveDir, this.moveDir);
-        vec3.scaleAndAdd(
-          this.pos,
-          this.pos,
-          this.moveDir,
-          dt *
-            this.speed *
-            player.beeSpeed *
-            (this.type === "spicy" ? player.flameHeatStackApplied : 1),
-        );
+        this._stepTowards(this.moveTo, dt, player);
 
         if (vec3.sqrDist(this.moveTo, this.pos) < 0.8)
           this.moveOffset = [MATH.random(-5, 5), 0, MATH.random(-5, 5)];
 
-        meshes.bees.instanceData.push(
-          this.pos[0],
-          this.pos[1],
-          this.pos[2],
-          this.meshScale,
-          this.moveDir[0],
-          this.moveDir[1],
-          this.moveDir[2],
-          BEE_FLY,
-          beeInfo[this.type].u,
-          this.GIFTED_BEE_TEXTURE_OFFSET,
-          beeInfo[this.type].meshPartId,
-        );
+        this._pushInstanceData(instanceData, BEE_FLY);
 
         if (player.converting && player.pollen) {
           this.state = "moveToHiveToConvert";
           return;
         }
-
         if (player.convertingBalloon && player.hiveBalloon.pollen) {
           this.state = "moveToHiveToConvertBalloon";
         }
-
         break;
+      }
 
-      case "moveToPlanter":
+      case "moveToPlanter": {
         if (
           !player.fieldIn ||
           player.pollenInBag >= player.capacity ||
@@ -546,24 +575,13 @@ export class Bee {
           break;
         }
 
-        let p = fieldInfo[player.fieldIn].planter;
-
+        const p = fieldInfo[player.fieldIn].planter;
         this.moveTo = [
           p.pos[0],
           p.pos[1] + p.height + p.displaySize + 0.2,
           p.pos[2],
         ];
-        vec3.sub(this.moveDir, this.moveTo, this.pos);
-        vec3.normalize(this.moveDir, this.moveDir);
-        vec3.scaleAndAdd(
-          this.pos,
-          this.pos,
-          this.moveDir,
-          dt *
-            this.speed *
-            player.beeSpeed *
-            (this.type === "spicy" ? player.flameHeatStackApplied : 1),
-        );
+        this._stepTowards(this.moveTo, dt, player);
 
         if (vec3.sqrDist(this.moveTo, this.pos) < 0.075) {
           this.state = "collectPlanter";
@@ -574,23 +592,11 @@ export class Bee {
           return;
         }
 
-        meshes.bees.instanceData.push(
-          this.pos[0],
-          this.pos[1],
-          this.pos[2],
-          this.meshScale,
-          this.moveDir[0],
-          this.moveDir[1],
-          this.moveDir[2],
-          BEE_FLY,
-          beeInfo[this.type].u,
-          this.GIFTED_BEE_TEXTURE_OFFSET,
-          beeInfo[this.type].meshPartId,
-        );
-
+        this._pushInstanceData(instanceData, BEE_FLY);
         break;
+      }
 
-      case "collectPlanter":
+      case "collectPlanter": {
         if (
           !player.fieldIn ||
           player.pollenInBag >= player.capacity ||
@@ -604,78 +610,38 @@ export class Bee {
 
         if (this.collectTimer <= 0) {
           this.energy--;
-
           fieldInfo[player.fieldIn].planter.beeSipped(this);
 
-          let token,
-            openTokens = [];
-
-          for (let i in this.gatheringTokens) {
-            let g = this.gatheringTokens[i];
-
-            if (
-              (TIME - g.timer) *
-                player[beeInfo[this.type].color + "BeeAbilityRate"] *
-                this.abilityRate >=
-                g.cooldown &&
-              Math.random() <= g.rate &&
-              ((g.requireGifted && this.gifted) || !g.requireGifted)
-            ) {
-              openTokens.push(i);
-            }
-          }
-
-          if (openTokens.length) {
-            token = openTokens[(Math.random() * openTokens.length) | 0];
-            this.gatheringTokens[token].timer = TIME;
-
-            token = this.gatheringTokens[token].type;
-
-            objects.tokens.push(
-              new Token(
-                effects[token].tokenLife,
-                [
-                  Math.round(this.pos[0]),
-                  fieldInfo[player.fieldIn].y + 1,
-                  Math.round(this.pos[2]),
-                ],
-                token,
-                {
-                  field: player.fieldIn,
-                  x: fieldInfo[player.fieldIn].x | 0,
-                  z: fieldInfo[player.fieldIn].z | 0,
-                  bee: this,
-                },
-              ),
-            );
-          }
+          this._tryFireToken(
+            this.gatheringTokens,
+            [
+              Math.round(this.pos[0]),
+              fieldInfo[player.fieldIn].y + 1,
+              Math.round(this.pos[2]),
+            ],
+            {
+              field: player.fieldIn,
+              x: fieldInfo[player.fieldIn].x | 0,
+              z: fieldInfo[player.fieldIn].z | 0,
+              bee: this,
+            },
+            gameState,
+          );
 
           this.state = "moveToFlower";
         }
 
-        meshes.bees.instanceData.push(
-          this.pos[0],
-          this.pos[1],
-          this.pos[2],
-          this.meshScale,
-          this.collectRot[0],
-          this.collectRot[1],
-          this.collectRot[2],
-          BEE_COLLECT,
-          beeInfo[this.type].u,
-          this.GIFTED_BEE_TEXTURE_OFFSET,
-          beeInfo[this.type].meshPartId,
-        );
-
+        this._pushInstanceData(instanceData, BEE_COLLECT, this.collectRot);
         break;
+      }
 
-      case "moveToFlower":
+      case "moveToFlower": {
         if (!player.fieldIn || player.pollenInBag >= player.capacity) {
           this.state = "moveToPlayer";
           break;
         }
 
-        let f = fieldInfo[player.fieldIn];
+        const f = fieldInfo[player.fieldIn];
 
         while (
           this.flowerCollecting[0] === undefined ||
@@ -689,8 +655,7 @@ export class Bee {
             player.flowerIn.x + Math.round(MATH.random(-7, 7));
           this.flowerCollecting[1] =
             player.flowerIn.z + Math.round(MATH.random(-7, 7));
-
-          let t = Math.random() * MATH.TWO_PI;
+          const t = Math.random() * MATH.TWO_PI;
           this.collectRot = [Math.sin(t), -4, Math.cos(t)];
         }
 
@@ -704,17 +669,7 @@ export class Bee {
             0.25,
           f.z + this.flowerCollecting[1],
         ];
-        vec3.sub(this.moveDir, this.moveTo, this.pos);
-        vec3.normalize(this.moveDir, this.moveDir);
-        vec3.scaleAndAdd(
-          this.pos,
-          this.pos,
-          this.moveDir,
-          dt *
-            this.speed *
-            player.beeSpeed *
-            (this.type === "spicy" ? player.flameHeatStackApplied : 1),
-        );
+        this._stepTowards(this.moveTo, dt, player);
 
         if (vec3.sqrDist(this.moveTo, this.pos) < 0.075) {
           this.state = "collectPollen";
@@ -724,23 +679,11 @@ export class Bee {
           return;
         }
 
-        meshes.bees.instanceData.push(
-          this.pos[0],
-          this.pos[1],
-          this.pos[2],
-          this.meshScale,
-          this.moveDir[0],
-          this.moveDir[1],
-          this.moveDir[2],
-          BEE_FLY,
-          beeInfo[this.type].u,
-          this.GIFTED_BEE_TEXTURE_OFFSET,
-          beeInfo[this.type].meshPartId,
-        );
-
+        this._pushInstanceData(instanceData, BEE_FLY);
         break;
+      }
 
-      case "collectPollen":
+      case "collectPollen": {
         if (!player.fieldIn || player.pollenInBag >= player.capacity) {
           this.state = "moveToPlayer";
           return;
@@ -750,6 +693,7 @@ export class Bee {
 
         if (this.collectTimer <= 0) {
           this.energy--;
+          const tabbyMult = this.type === "tabby" ? player.tabbyLoveStacks : 1;
           collectPollen({
             x: this.flowerCollecting[0],
             z: this.flowerCollecting[1],
@@ -759,21 +703,13 @@ export class Bee {
             multiplier: {
               r:
                 beeInfo[this.type].color === "red"
-                  ? player.pollenFromBees *
-                    1.2 *
-                    (this.type === "tabby" ? player.tabbyLoveStacks : 1)
-                  : player.pollenFromBees *
-                    (this.type === "tabby" ? player.tabbyLoveStacks : 1),
+                  ? player.pollenFromBees * 1.2 * tabbyMult
+                  : player.pollenFromBees * tabbyMult,
               b:
                 beeInfo[this.type].color === "blue"
-                  ? player.pollenFromBees *
-                    1.2 *
-                    (this.type === "tabby" ? player.tabbyLoveStacks : 1)
-                  : player.pollenFromBees *
-                    (this.type === "tabby" ? player.tabbyLoveStacks : 1),
-              w:
-                player.pollenFromBees *
-                (this.type === "tabby" ? player.tabbyLoveStacks : 1),
+                  ? player.pollenFromBees * 1.2 * tabbyMult
+                  : player.pollenFromBees * tabbyMult,
+              w: player.pollenFromBees * tabbyMult,
             },
           });
 
@@ -781,93 +717,45 @@ export class Bee {
             beeInfo[this.type].gatheringPassive(this);
           }
 
-          let token,
-            openTokens = [];
-
-          for (let i in this.gatheringTokens) {
-            let g = this.gatheringTokens[i];
-
-            if (
-              (TIME - g.timer) *
-                player[beeInfo[this.type].color + "BeeAbilityRate"] *
-                this.abilityRate >=
-                g.cooldown &&
-              Math.random() <= g.rate &&
-              ((g.requireGifted && this.gifted) || !g.requireGifted)
-            ) {
-              openTokens.push(i);
-            }
-          }
-
-          if (openTokens.length) {
-            token = openTokens[(Math.random() * openTokens.length) | 0];
-            this.gatheringTokens[token].timer = TIME;
-
-            token = this.gatheringTokens[token].type;
-
-            objects.tokens.push(
-              new Token(
-                effects[token].tokenLife,
-                [
-                  Math.round(this.pos[0]),
-                  fieldInfo[player.fieldIn].y + 1,
-                  Math.round(this.pos[2]),
-                ],
-                token,
-                {
-                  field: player.fieldIn,
-                  x: this.flowerCollecting[0],
-                  z: this.flowerCollecting[1],
-                  bee: this,
-                },
-              ),
-            );
-          }
+          this._tryFireToken(
+            this.gatheringTokens,
+            [
+              Math.round(this.pos[0]),
+              fieldInfo[player.fieldIn].y + 1,
+              Math.round(this.pos[2]),
+            ],
+            {
+              field: player.fieldIn,
+              x: this.flowerCollecting[0],
+              z: this.flowerCollecting[1],
+              bee: this,
+            },
+            gameState,
+          );
 
           this.flowerCollecting = [];
           this.state = "moveToPlayer";
         }
 
-        meshes.bees.instanceData.push(
-          this.pos[0],
-          this.pos[1],
-          this.pos[2],
-          this.meshScale,
-          this.collectRot[0],
-          this.collectRot[1],
-          this.collectRot[2],
-          BEE_COLLECT,
-          beeInfo[this.type].u,
-          this.GIFTED_BEE_TEXTURE_OFFSET,
-          beeInfo[this.type].meshPartId,
-        );
-
+        this._pushInstanceData(instanceData, BEE_COLLECT, this.collectRot);
         break;
+      }
 
-      case "moveToHiveToConvert":
+      case "moveToHiveToConvert": {
         if (!player.converting || !player.pollen) {
           this.state = "moveToPlayer";
           return;
         }
 
         this.moveTo = this.hivePos.slice();
-        vec3.sub(this.moveDir, this.moveTo, this.pos);
-        vec3.normalize(this.moveDir, this.moveDir);
-        vec3.scaleAndAdd(
-          this.pos,
-          this.pos,
-          this.moveDir,
-          dt *
-            this.speed *
-            player.beeSpeed *
-            (this.type === "spicy" ? player.flameHeatStackApplied : 1),
-        );
+        this._stepTowards(this.moveTo, dt, player);
+
         if (vec3.sqrDist(this.moveTo, this.pos) < 0.8) {
           this.pos = this.hivePos.slice();
           this.state = "convertHoney";
           this.convertTimer = this.convertSpeed;
 
-          let amountToTake = Math.min(
+          const amountToTake = Math.min(
             Math.round(
               this.convertAmount *
                 player.convertRate *
@@ -878,31 +766,16 @@ export class Bee {
             player.pollen,
           );
 
-          if (amountToTake === player.pollen) {
-            this.lastBeeToConvert = true;
-          }
-
+          if (amountToTake === player.pollen) this.lastBeeToConvert = true;
           player.pollen -= amountToTake;
           this.pollen = amountToTake;
         }
 
-        meshes.bees.instanceData.push(
-          this.pos[0],
-          this.pos[1],
-          this.pos[2],
-          this.meshScale,
-          this.moveDir[0],
-          this.moveDir[1],
-          this.moveDir[2],
-          BEE_FLY,
-          beeInfo[this.type].u,
-          this.GIFTED_BEE_TEXTURE_OFFSET,
-          beeInfo[this.type].meshPartId,
-        );
-
+        this._pushInstanceData(instanceData, BEE_FLY);
         break;
+      }
 
-      case "convertHoney":
+      case "convertHoney": {
         if (!player.converting) {
           player.pollen += this.pollen;
           this.pollen = 0;
@@ -911,44 +784,28 @@ export class Bee {
         }
 
         this.convertTimer -= dt;
+        this._pushInstanceData(instanceData, TIME * 5, [0, 1, 0]);
 
-        meshes.bees.instanceData.push(
-          this.pos[0],
-          this.pos[1],
-          this.pos[2],
-          this.meshScale,
-          0,
-          1,
-          0,
-          TIME * 5,
-          beeInfo[this.type].u,
-          this.GIFTED_BEE_TEXTURE_OFFSET,
-          beeInfo[this.type].meshPartId,
-        );
         if (this.convertTimer <= 0) {
           this.state = "moveToHiveToConvert";
-          player.honey += Math.ceil(
+          const diamondMult =
+            this.type === "diamond"
+              ? (1.4 + this.level * 0.03) * (this.gifted ? 2 : 1)
+              : 1;
+          const honeyGained = Math.ceil(
             this.pollen *
               player.honeyAtHive *
               player.honeyPerPollen *
-              (this.type === "diamond"
-                ? (1.4 + this.level * 0.03) * (this.gifted ? 2 : 1)
-                : 1),
+              diamondMult,
           );
 
-          gameState.textRenderer.add(
-            Math.ceil(
-              this.pollen *
-                player.honeyAtHive *
-                player.honeyPerPollen *
-                (this.type === "diamond"
-                  ? (1.4 + this.level * 0.03) * (this.gifted ? 2 : 1)
-                  : 1),
-            ),
+          player.honey += honeyGained;
+          textRenderer.add(
+            honeyGained,
             [
-              player.body.position.x,
-              player.body.position.y + Math.random() * 2 + 0.5,
-              player.body.position.z,
+              player.pos[0],
+              player.pos[1] + Math.random() * 2 + 0.5,
+              player.pos[2],
             ],
             COLORS.honey,
             0,
@@ -985,31 +842,23 @@ export class Bee {
         }
 
         break;
+      }
 
-      case "moveToHiveToConvertBalloon":
+      case "moveToHiveToConvertBalloon": {
         if (!player.convertingBalloon || !player.hiveBalloon.pollen) {
           this.state = "moveToPlayer";
           return;
         }
 
         this.moveTo = this.hivePos.slice();
-        vec3.sub(this.moveDir, this.moveTo, this.pos);
-        vec3.normalize(this.moveDir, this.moveDir);
-        vec3.scaleAndAdd(
-          this.pos,
-          this.pos,
-          this.moveDir,
-          dt *
-            this.speed *
-            player.beeSpeed *
-            (this.type === "spicy" ? player.flameHeatStackApplied : 1),
-        );
+        this._stepTowards(this.moveTo, dt, player);
+
         if (vec3.sqrDist(this.moveTo, this.pos) < 0.8) {
           this.pos = this.hivePos.slice();
           this.state = "convertBalloon";
           this.convertTimer = this.convertSpeed;
 
-          let amountToTake = Math.min(
+          const amountToTake = Math.min(
             Math.round(
               this.convertAmount *
                 player.convertRate *
@@ -1021,31 +870,17 @@ export class Bee {
             player.hiveBalloon.pollen,
           );
 
-          if (amountToTake === player.hiveBalloon.pollen) {
+          if (amountToTake === player.hiveBalloon.pollen)
             this.lastBeeToConvert = true;
-          }
-
           player.hiveBalloon.pollen -= amountToTake;
           this.pollen = amountToTake;
         }
 
-        meshes.bees.instanceData.push(
-          this.pos[0],
-          this.pos[1],
-          this.pos[2],
-          this.meshScale,
-          this.moveDir[0],
-          this.moveDir[1],
-          this.moveDir[2],
-          BEE_FLY,
-          beeInfo[this.type].u,
-          this.GIFTED_BEE_TEXTURE_OFFSET,
-          beeInfo[this.type].meshPartId,
-        );
-
+        this._pushInstanceData(instanceData, BEE_FLY);
         break;
+      }
 
-      case "convertBalloon":
+      case "convertBalloon": {
         if (!player.convertingBalloon) {
           player.hiveBalloon.pollen += this.pollen;
           this.pollen = 0;
@@ -1054,44 +889,28 @@ export class Bee {
         }
 
         this.convertTimer -= dt;
+        this._pushInstanceData(instanceData, TIME * 5, [0, 1, 0]);
 
-        meshes.bees.instanceData.push(
-          this.pos[0],
-          this.pos[1],
-          this.pos[2],
-          this.meshScale,
-          0,
-          1,
-          0,
-          TIME * 5,
-          beeInfo[this.type].u,
-          this.GIFTED_BEE_TEXTURE_OFFSET,
-          beeInfo[this.type].meshPartId,
-        );
         if (this.convertTimer <= 0) {
           this.state = "moveToHiveToConvertBalloon";
-          player.honey += Math.ceil(
+          const diamondMult =
+            this.type === "diamond"
+              ? (1.4 + this.level * 0.03) * (this.gifted ? 2 : 1)
+              : 1;
+          const honeyGained = Math.ceil(
             this.pollen *
               player.honeyAtHive *
               player.honeyPerPollen *
-              (this.type === "diamond"
-                ? (1.4 + this.level * 0.03) * (this.gifted ? 2 : 1)
-                : 1),
+              diamondMult,
           );
 
-          gameState.textRenderer.add(
-            Math.ceil(
-              this.pollen *
-                player.honeyAtHive *
-                player.honeyPerPollen *
-                (this.type === "diamond"
-                  ? (1.4 + this.level * 0.03) * (this.gifted ? 2 : 1)
-                  : 1),
-            ),
+          player.honey += honeyGained;
+          textRenderer.add(
+            honeyGained,
             [
-              player.body.position.x,
-              player.body.position.y + Math.random() * 2 + 0.5,
-              player.body.position.z,
+              player.pos[0],
+              player.pos[1] + Math.random() * 2 + 0.5,
+              player.pos[2],
             ],
             COLORS.honey,
             0,
@@ -1128,20 +947,12 @@ export class Bee {
         }
 
         break;
+      }
 
-      case "moveToSleep":
+      case "moveToSleep": {
         this.moveTo = this.hivePos.slice();
-        vec3.sub(this.moveDir, this.moveTo, this.pos);
-        vec3.normalize(this.moveDir, this.moveDir);
-        vec3.scaleAndAdd(
-          this.pos,
-          this.pos,
-          this.moveDir,
-          dt *
-            this.speed *
-            player.beeSpeed *
-            (this.type === "spicy" ? player.flameHeatStackApplied : 1),
-        );
+        this._stepTowards(this.moveTo, dt, player);
+
         if (vec3.sqrDist(this.moveTo, this.pos) < 1) {
           this.pos = this.hivePos.slice();
           this.sleepTimer = 20;
@@ -1150,23 +961,11 @@ export class Bee {
           this.sleepRotate = Math.random() * MATH.TWO_PI;
         }
 
-        meshes.bees.instanceData.push(
-          this.pos[0],
-          this.pos[1],
-          this.pos[2],
-          this.meshScale,
-          this.moveDir[0],
-          this.moveDir[1],
-          this.moveDir[2],
-          BEE_FLY,
-          beeInfo[this.type].u,
-          this.GIFTED_BEE_TEXTURE_OFFSET,
-          beeInfo[this.type].meshPartId,
-        );
-
+        this._pushInstanceData(instanceData, BEE_FLY);
         break;
+      }
 
-      case "sleep":
+      case "sleep": {
         this.sleepTimer -= dt;
         this.zzzTimer -= dt;
 
@@ -1177,7 +976,7 @@ export class Bee {
 
         if (this.zzzTimer <= 0) {
           this.zzzTimer = 5;
-          gameState.textRenderer.add(
+          textRenderer.add(
             "zzz",
             [
               this.pos[0] + MATH.random(-1, 1),
@@ -1191,36 +990,18 @@ export class Bee {
           );
         }
 
-        meshes.bees.instanceData.push(
-          this.pos[0],
-          this.pos[1],
-          this.pos[2],
-          this.meshScale,
-          0,
-          1,
-          0,
-          this.sleepRotate,
-          beeInfo[this.type].u,
-          this.GIFTED_BEE_TEXTURE_OFFSET,
-          beeInfo[this.type].meshPartId,
-        );
-
+        this._pushInstanceData(instanceData, this.sleepRotate, [0, 1, 0]);
         break;
+      }
 
-      case "moveToTargetPractice":
+      case "moveToTargetPractice": {
         if (!player.fieldIn) {
           this.state = "moveToPlayer";
           return;
         }
 
-        vec3.sub(this.moveDir, this.moveTo, this.pos);
-        vec3.normalize(this.moveDir, this.moveDir);
-        vec3.scaleAndAdd(
-          this.pos,
-          this.pos,
-          this.moveDir,
-          dt * this.speed * player.beeSpeed * 1.5,
-        );
+        this._stepTowards(this.moveTo, dt, player, 1.5);
+
         if (vec3.sqrDist(this.moveTo, this.pos) < 0.7) {
           this.pos = this.moveTo.slice();
           this.targetPracticeTimer = 4;
@@ -1238,43 +1019,31 @@ export class Bee {
           this.targets = [];
 
           for (let i = 0; i < 3; i++) {
-            let _x =
-                (fieldInfo[player.fieldIn].width * 0.5 +
-                  Math.random() *
-                    this.targetPractice_q[0] *
-                    fieldInfo[player.fieldIn].width *
-                    0.5) |
-                0,
-              _z =
-                (fieldInfo[player.fieldIn].length * 0.5 +
-                  Math.random() *
-                    this.targetPractice_q[1] *
-                    fieldInfo[player.fieldIn].length *
-                    0.5) |
-                0;
+            const _x =
+              (fieldInfo[player.fieldIn].width * 0.5 +
+                Math.random() *
+                  this.targetPractice_q[0] *
+                  fieldInfo[player.fieldIn].width *
+                  0.5) |
+              0;
+            const _z =
+              (fieldInfo[player.fieldIn].length * 0.5 +
+                Math.random() *
+                  this.targetPractice_q[1] *
+                  fieldInfo[player.fieldIn].length *
+                  0.5) |
+              0;
 
             this.targets.push(new Target(player.fieldIn, _x, _z, i + 1, this));
             objects.targets.push(this.targets[this.targets.length - 1]);
           }
         }
 
-        meshes.bees.instanceData.push(
-          this.pos[0],
-          this.pos[1],
-          this.pos[2],
-          this.meshScale,
-          this.moveDir[0],
-          this.moveDir[1],
-          this.moveDir[2],
-          BEE_FLY,
-          beeInfo[this.type].u,
-          this.GIFTED_BEE_TEXTURE_OFFSET,
-          beeInfo[this.type].meshPartId,
-        );
-
+        this._pushInstanceData(instanceData, BEE_FLY);
         break;
+      }
 
-      case "shootTargetPractice":
+      case "shootTargetPractice": {
         this.targetPracticeTimer -= dt;
         this.targetExplosionTimer -= dt;
 
@@ -1291,12 +1060,11 @@ export class Bee {
           this.shotParticleProjectile = true;
 
           for (let i in this.targets) {
-            let vx = this.targets[i].pos[0] - this.pos[0],
-              vy = this.targets[i].pos[1] - this.pos[1],
-              vz = this.targets[i].pos[2] - this.pos[2],
-              d = Math.sqrt(vx * vx + vy * vy + vz * vz),
-              s = d / 0.5,
-              m = s / d;
+            const vx = this.targets[i].pos[0] - this.pos[0];
+            const vy = this.targets[i].pos[1] - this.pos[1];
+            const vz = this.targets[i].pos[2] - this.pos[2];
+            const d = Math.sqrt(vx * vx + vy * vy + vz * vz);
+            const m = d / 0.5 / d;
 
             ParticleRenderer.add({
               x: this.pos[0],
@@ -1318,7 +1086,7 @@ export class Bee {
         if (this.targetPracticeTimer <= 0) {
           this.shotParticleProjectile = false;
 
-          let t = [
+          const t = [
             this.targets[0].activated,
             this.targets[1].activated,
             this.targets[2].activated,
@@ -1334,78 +1102,50 @@ export class Bee {
               }
             }
 
+            const t2 = this.targets[2];
             objects.tokens.push(
               new Token(
                 effects.precision.tokenLife,
-                [
-                  this.targets[2].pos[0],
-                  this.targets[2].pos[1] + 0.5,
-                  this.targets[2].pos[2],
-                ],
+                [t2.pos[0], t2.pos[1] + 0.5, t2.pos[2]],
                 "precision",
-                {
-                  field: this.targets[2].field,
-                  x: this.targets[2].x,
-                  z: this.targets[2].z,
-                  bee: this,
-                },
+                { field: t2.field, x: t2.x, z: t2.z, bee: this },
               ),
             );
             objects.tokens.push(
               new Token(
                 effects.focus.tokenLife,
-                [
-                  this.targets[2].pos[0] + 1,
-                  this.targets[2].pos[1] + 0.5,
-                  this.targets[2].pos[2],
-                ],
+                [t2.pos[0] + 1, t2.pos[1] + 0.5, t2.pos[2]],
                 "focus",
-                {
-                  field: this.targets[2].field,
-                  x: this.targets[2].x + 1,
-                  z: this.targets[2].z,
-                  bee: this,
-                },
+                { field: t2.field, x: t2.x + 1, z: t2.z, bee: this },
               ),
             );
             objects.tokens.push(
               new Token(
                 effects.redBoost.tokenLife,
-                [
-                  this.targets[2].pos[0] - 1,
-                  this.targets[2].pos[1] + 0.5,
-                  this.targets[2].pos[2],
-                ],
+                [t2.pos[0] - 1, t2.pos[1] + 0.5, t2.pos[2]],
                 "redBoost",
-                {
-                  field: this.targets[2].field,
-                  x: this.targets[2].x - 1,
-                  z: this.targets[2].z,
-                  bee: this,
-                },
+                { field: t2.field, x: t2.x - 1, z: t2.z, bee: this },
               ),
             );
           }
 
-          if (t[2] && this.gifted) {
-            if (!t[0] || !t[1]) {
-              objects.marks.push(
-                new Mark(
-                  this.targets[2].field,
-                  this.targets[2].x,
-                  this.targets[2].z,
-                  "preciseMark",
-                  this.level,
-                ),
-              );
-            }
+          if (t[2] && this.gifted && (!t[0] || !t[1])) {
+            objects.marks.push(
+              new Mark(
+                this.targets[2].field,
+                this.targets[2].x,
+                this.targets[2].z,
+                "preciseMark",
+                this.level,
+              ),
+            );
           }
 
           for (let i in this.targets) {
-            let _t = this.targets[i];
+            const _t = this.targets[i];
 
             if (_t.activated) {
-              if (i !== 2)
+              if (i !== 2) {
                 objects.tokens.push(
                   new Token(
                     effects.focus.tokenLife,
@@ -1414,6 +1154,7 @@ export class Bee {
                     { field: _t.field, x: _t.x, z: _t.z, bee: this },
                   ),
                 );
+              }
 
               collectPollen({
                 x: _t.x,
@@ -1477,7 +1218,7 @@ export class Bee {
                   0.5,
                 yOffset: 2 + Math.random() * 0.4,
                 stackHeight: 0.5 + Math.random() * 0.5,
-                instantConversion: (player.flameHeatStack - 1) * 0.5, // CHQ: let's bee generate honey directly into the player's inventory while still contributing the full raw amount to the quest stats
+                instantConversion: (player.flameHeatStack - 1) * 0.5,
                 multiplier: player.flameHeatStack * 3,
                 field: _t.field,
               });
@@ -1515,34 +1256,19 @@ export class Bee {
           );
         }
 
-        meshes.bees.instanceData.push(
-          this.pos[0],
-          this.pos[1],
-          this.pos[2],
-          this.meshScale,
-          this.targetLookDir[0],
-          this.targetLookDir[1],
-          this.targetLookDir[2],
-          BEE_FLY,
-          beeInfo[this.type].u,
-          this.GIFTED_BEE_TEXTURE_OFFSET,
-          beeInfo[this.type].meshPartId,
-        );
-
+        this._pushInstanceData(instanceData, BEE_FLY, this.targetLookDir);
         break;
+      }
 
-      case "moveToTriangulate":
+      case "moveToTriangulate": {
         this.triangulateTimer -= dt;
 
-        let d = [
-            player.body.position.x - this.triangulateTokenPos[0],
-            player.body.position.z - this.triangulateTokenPos[2],
-          ],
-          rd = [-d[1], d[0]],
-          tb = [
-            this.pos[0] - player.body.position.x,
-            this.pos[2] - player.body.position.z,
-          ];
+        const d = [
+          player.pos[0] - this.triangulateTokenPos[0],
+          player.pos[2] - this.triangulateTokenPos[2],
+        ];
+        const rd = [-d[1], d[0]];
+        const tb = [this.pos[0] - player.pos[0], this.pos[2] - player.pos[2]];
 
         if (rd[0] * tb[0] + rd[1] * tb[1] > 0) {
           this.moveDir = [rd[0], 0, rd[1]];
@@ -1558,27 +1284,13 @@ export class Bee {
           dt * this.speed * player.beeSpeed,
         );
 
-        if (this.triangulateTimer <= 0) {
-          this.state = "moveToPlayer";
-        }
+        if (this.triangulateTimer <= 0) this.state = "moveToPlayer";
 
-        meshes.bees.instanceData.push(
-          this.pos[0],
-          this.pos[1],
-          this.pos[2],
-          this.meshScale,
-          this.moveDir[0],
-          this.moveDir[1],
-          this.moveDir[2],
-          BEE_FLY,
-          beeInfo[this.type].u,
-          this.GIFTED_BEE_TEXTURE_OFFSET,
-          beeInfo[this.type].meshPartId,
-        );
-
+        this._pushInstanceData(instanceData, BEE_FLY);
         break;
+      }
 
-      case "moveToFetch":
+      case "moveToFetch": {
         if (!this.fetchBall || !this.fetchBall.turn) {
           this.state = "moveToPlayer";
           return;
@@ -1596,13 +1308,11 @@ export class Bee {
             Math.abs(this.moveDir[2]) <
           1.2
         ) {
-          let dir = [
-            player.body.position.x - this.pos[0],
-            player.body.position.z - this.pos[2],
+          const dir = [
+            player.pos[0] - this.pos[0],
+            player.pos[2] - this.pos[2],
           ];
-
           vec2.normalize(dir, dir);
-
           this.fetchBall.kick(
             dir[0] + MATH.random(-0.2, 0.2),
             dir[1] + MATH.random(-0.2, 0.2),
@@ -1617,30 +1327,19 @@ export class Bee {
           dt * this.speed * player.beeSpeed,
         );
 
-        meshes.bees.instanceData.push(
-          this.pos[0],
-          this.pos[1],
-          this.pos[2],
-          this.meshScale,
-          this.moveDir[0],
-          this.moveDir[1],
-          this.moveDir[2],
-          BEE_FLY,
-          beeInfo[this.type].u,
-          this.GIFTED_BEE_TEXTURE_OFFSET,
-          beeInfo[this.type].meshPartId,
-        );
-
+        this._pushInstanceData(instanceData, BEE_FLY);
         break;
+      }
     }
 
+    // --- Post-switch: particles and decals ---
     if (beeInfo[this.type].particles && TIME - this.emitParticle > 0.2) {
       beeInfo[this.type].particles(this);
       this.emitParticle = TIME;
     }
 
     if (player.hive[this.hiveY][this.hiveX].radioactive > 0) {
-      gameState.textRenderer.addDecalRaw(
+      textRenderer.addDecalRaw(
         ...this.pos,
         0,
         0,
@@ -1655,8 +1354,8 @@ export class Bee {
     }
 
     if (this.type === "buoyant") {
-      if (this.gifted)
-        gameState.textRenderer.addDecalRaw(
+      if (this.gifted) {
+        textRenderer.addDecalRaw(
           ...this.pos,
           0,
           0,
@@ -1668,7 +1367,8 @@ export class Bee {
           1.35,
           0,
         );
-      gameState.textRenderer.addDecalRaw(
+      }
+      textRenderer.addDecalRaw(
         ...this.pos,
         0,
         0,
@@ -1687,72 +1387,24 @@ export class Bee {
 export class TempBee extends Bee {
   constructor(pos, type, lvl, lifespan, gifted, gameState) {
     super(pos, type, lvl, gifted, 0, 0, null, gameState);
-    this.life = lifespan; // [cite: 242, 243]
+    this.life = lifespan;
   }
 
   update(dt, gameState) {
     const isDead = super.update(dt, gameState);
-    // update(dt, gameState, textRenderer) {
-    //   const isDead = super.update(dt, gameState, textRenderer);
     this.life -= dt;
-
-    // return this.life <= 0 || isDead; // [cite: 296]
     return this.life <= 0 || !!isDead;
   }
 }
 
 export function spawnBeeAtCamera(gameState, type = "common") {
-  // if (!gameState.camera?.pos) return;
+  const spawnPos = getPositionAheadOfCamera(gameState, 20);
 
-  // CHQ: Gemini AI added
-  const playerPos = gameState.player.pos;
-
-  // Calculate a position 5 units forward on the Z axis relative to the player
-  // const spawnPos = [playerPos[0], playerPos[1], playerPos[2] - 5];
-
-  const spawnPos = getPositionAheadOfCamera(gameState, 20); // 20 units ahead
-
-  // Instantiate and push a test basic bee into the tracking loop
   const origBee = new Bee(spawnPos, "basic", 1, false, 0, 0, null, gameState);
-
-  // // CHQ: Claude AI (haiku) generated
-  // const newBee = {
-  //   pos: spawnPos,
-  //   vel: [0, 0, 0],
-  //   type: 0,
-  //   meshScale: 1,
-  //   moveDir: [0, 0, 1],
-
-  //   // 🐝 NEW: Circular flight properties
-  //   circleCenter: spawnPos, // Center of the circle
-  //   circleRadius: 5, // Radius of the circle (units)
-  //   circleSpeed: 2, // Angular speed (radians per second)
-  //   circleAngle: 0, // Current angle around the circle
-  //   circleAxisY: true, // Rotate around Y axis (vertical)
-  // };
-
-  // gameState.objects.bees.push(newBee);
-
-  // CHQ: Claude AI (Sonnet): Circle flight properties set directly on the real Bee instance
   origBee.circleCenter = [...spawnPos];
   origBee.circleRadius = 5;
   origBee.circleSpeed = 2;
   origBee.circleAngle = 0;
   origBee.circleAxisY = true;
   gameState.objects.bees.push(origBee);
-
-  // // hiveX/hiveY (0, 0) and mutation null — computeLevel is currently a stub
-  // // so these don't get used yet, but the constructor expects them
-  // const bee = new Bee(
-  //   gameState.camera.pos,
-  //   type,
-  //   1,
-  //   false,
-  //   0,
-  //   0,
-  //   null,
-  //   gameState,
-  // );
-
-  // gameState.objects.bees.push(bee);
 }
