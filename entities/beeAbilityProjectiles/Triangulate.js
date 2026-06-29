@@ -1,6 +1,7 @@
-// entities/Triangulate.js
-import { MATH } from "../../utils/math.js";
+// entities/beeAbilityProjectiles/Triangulate.js
 
+import { MATH } from "../../utils/math.js";
+import { Mesh } from "../Mesh.js";
 export class Triangulate {
   constructor(bee, tokenPos, gameState) {
     this.gameState = gameState; // Store references to player, objects, etc.
