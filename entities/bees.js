@@ -597,7 +597,22 @@ export class Bee {
   _resolveAttackHit(player, objects) {
     if (Math.random() < (this.attackMob.blocking ? 0.85 : 0)) {
       this.energy--;
-      // show BLOCK text...
+      // CHQ: show BLOCK text
+
+      textRenderer.add(
+        "BLOCK",
+        [
+          this.attackMob.pos[0],
+          this.attackMob.pos[1] + Math.random() * 2.75 + 1.5,
+          this.attackMob.pos[2],
+        ],
+        [255, 255, 255],
+        0,
+        "",
+        1.75,
+        false,
+      );
+
       return;
     }
     const hitChance =
@@ -618,10 +633,35 @@ export class Bee {
         (this.type === "precise" ? (this.gifted ? 2 : 1.5) : 1) *
         (this.type === "buoyant" ? player.buoyantBeeAttack : 1);
       this.attackMob.damage(h);
-      // spawn explosion for precise...
+      // CHQ: spawn explosion for precise
+      if (this.type === "precise") {
+        objects.explosions.push(
+          new Explosion({
+            col: [1, 0, 0],
+            pos: this.pos,
+            life: 0.75,
+            size: 1.75,
+            speed: 0.3,
+            aftershock: 0,
+          }),
+        );
+      }
     } else {
       this.energy--;
-      // show MISS text...
+      // CHQ: show MISS text
+      textRenderer.add(
+        "MISS",
+        [
+          this.attackMob.pos[0],
+          this.attackMob.pos[1] + Math.random() * 2.75 + 1.5,
+          this.attackMob.pos[2],
+        ],
+        [255, 255, 255],
+        0,
+        "",
+        1.75,
+        false,
+      );
     }
   }
 
