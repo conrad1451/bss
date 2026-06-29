@@ -7,9 +7,12 @@ import { updatePhysicsEntity, resolveObstacleCollisions } from "./physics.js";
 // import { FieldManager } from "./FieldManager.js"; // CHQ: not needed, the ctors are used in index.js
 // import { EnvManager } from "./EnvManager.js"; //CHQ: not needed, the ctors are used in index.js
 
+// import { spawnBeeAtCamera } from "../entities/bees.js";
+// import { spawnMobAtCamera } from "../entities/mobs.js";
+// import { Balloon } from "../entities/balloons.js"; // CHQ: Claude AI (Sonnet) added
 import { spawnBeeAtCamera } from "../entities/bees.js";
-import { spawnMobAtCamera } from "../entities/mobs.js";
-import { Balloon } from "../entities/balloons.js"; // CHQ: Claude AI (Sonnet) added
+import { spawnMobAtCamera } from "../entities/mobs/MobTemplate.js";
+import { Balloon } from "../entities/miscEntities/Balloon.js"; // CHQ: Claude AI (Sonnet) added
 
 /**
  * Main per-frame engine update. Advances physics, player state, AI entities,

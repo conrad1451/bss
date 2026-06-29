@@ -432,3 +432,31 @@ export class Balloon {
     }
   }
 }
+
+// CHQ: Claude AI (Sonnet) added — spawn helper mirroring spawnBeeAtCamera/
+//      spawnMobAtCamera so callers don't have to know about gameState.globalId
+//      or push to gameState.objects.balloons themselves.
+/**
+ * Creates a new Balloon for the given field/coordinates and registers it in
+ * gameState.objects.balloons.
+ *
+ * @param {Object} gameState - The live game state object.
+ * @param {string} field - Field id this balloon belongs to.
+ * @param {number} x - Local field-space X coordinate.
+ * @param {number} z - Local field-space Z coordinate.
+ * @param {boolean} [golden=false] - Whether this is a golden (rare) balloon.
+ * @param {number} [beeLevel=0] - Aggregate bee level bonus affecting capacity/life.
+ * @returns {Balloon} The newly created balloon instance.
+ */
+export function spawnBalloon(
+  gameState,
+  field,
+  x,
+  z,
+  golden = false,
+  beeLevel = 0,
+) {
+  const balloon = new Balloon(field, x, z, golden, beeLevel, gameState);
+  gameState.objects.balloons.push(balloon);
+  return balloon;
+}
