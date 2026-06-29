@@ -1,8 +1,8 @@
-// entities/mobs.js
-import { MATH } from "../utils/math.js";
-import { Token } from "./tokens.js";
+// entities/mobs/MobTemplate.js
+import { MATH } from "../../utils/math.js";
+import { Token } from "../tokens.js";
 
-import { getPositionAheadOfCamera } from "./entityHelpers.js";
+import { getPositionAheadOfCamera } from "../entityHelpers.js";
 // CHQ: Gemini AI generated
 
 export class Mob {
