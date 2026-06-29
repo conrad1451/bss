@@ -319,12 +319,82 @@ export class Bee {
    * Main per-frame state machine. All globals replaced with gameState references.
    */
   _stateMachineUpdate(dt, gameState) {
-    const { player, objects, fieldInfo, flowers } = gameState;
-    const instanceData = gameState.meshes.bees.instanceData;
-    const textRenderer = gameState.textRenderer;
-    const TIME = gameState.TIME;
+    const ctx = this._buildContext(gameState);
 
-    // --- Pre-switch: trail update ---
+    this._runPreSwitchChecks(dt, gameState, ctx);
+
+    switch (this.state) {
+      case "moveToAttack":
+        this._stateMoveToAttack(dt, gameState, ctx);
+        break;
+      case "attack":
+        this._stateAttack(dt, gameState, ctx);
+        break;
+      case "moveToPlayer":
+        this._stateMoveToPlayer(dt, gameState, ctx);
+        break;
+      case "moveToPlanter":
+        this._stateMoveToPlanter(dt, gameState, ctx);
+        break;
+      case "collectPlanter":
+        this._stateCollectPlanter(dt, gameState, ctx);
+        break;
+      case "moveToFlower":
+        this._stateMoveToFlower(dt, gameState, ctx);
+        break;
+      case "collectPollen":
+        this._stateCollectPollen(dt, gameState, ctx);
+        break;
+      case "moveToHiveToConvert":
+        this._stateMoveToHive(dt, gameState, ctx, false);
+        break;
+      case "convertHoney":
+        this._stateConvert(dt, gameState, ctx, false);
+        break;
+      case "moveToHiveToConvertBalloon":
+        this._stateMoveToHive(dt, gameState, ctx, true);
+        break;
+      case "convertBalloon":
+        this._stateConvert(dt, gameState, ctx, true);
+        break;
+      case "moveToSleep":
+        this._stateMoveToSleep(dt, gameState, ctx);
+        break;
+      case "sleep":
+        this._stateSleep(dt, gameState, ctx);
+        break;
+      case "moveToTargetPractice":
+        this._stateMoveToTargetPractice(dt, gameState, ctx);
+        break;
+      case "shootTargetPractice":
+        this._stateShootTargetPractice(dt, gameState, ctx);
+        break;
+      case "moveToTriangulate":
+        this._stateMoveToTriangulate(dt, gameState, ctx);
+        break;
+      case "moveToFetch":
+        this._stateMoveToFetch(dt, gameState, ctx);
+        break;
+    }
+
+    this._runPostSwitchEffects(dt, gameState, ctx);
+  }
+
+  // Pulls frequently-accessed references out of gameState once
+  _buildContext(gameState) {
+    return {
+      player: gameState.player,
+      objects: gameState.objects,
+      fieldInfo: gameState.fieldInfo,
+      flowers: gameState.flowers,
+      instanceData: gameState.meshes.bees.instanceData,
+      textRenderer: gameState.textRenderer,
+      TIME: gameState.TIME,
+    };
+  }
+
+  _runPreSwitchChecks(dt, gameState, { player }) {
+    // Trail update
     for (let i in this.trails) {
       this.trails[i].addPos([
         this.pos[0],
@@ -333,1011 +403,50 @@ export class Bee {
       ]);
     }
 
-    // --- Pre-switch: sleep / energy check ---
+    // Sleep / energy check
+    const nonSleepStates = [
+      "sleep",
+      "moveToTriangulate",
+      "moveToTargetPractice",
+      "shootTargetPractice",
+      "moveToFetch",
+    ];
     if (
-      (this.energy <= 0 &&
-        this.state !== "sleep" &&
-        this.state !== "moveToTriangulate" &&
-        this.state !== "moveToTargetPractice" &&
-        this.state !== "shootTargetPractice" &&
-        this.state !== "moveToFetch") ||
+      (this.energy <= 0 && !nonSleepStates.includes(this.state)) ||
       (player.hive[this.hiveY][this.hiveX].roboDisabled &&
         this.state !== "sleep")
     ) {
       this.state = "moveToSleep";
     }
 
-    // --- Pre-switch: aggro check ---
-    if (
-      player.attacked.length > 0 &&
-      this.state !== "sleep" &&
-      this.state !== "moveToSleep" &&
-      this.state !== "attack" &&
-      this.state !== "moveToAttack" &&
-      this.state !== "moveToTriangulate" &&
-      this.state !== "moveToTargetPractice" &&
-      this.state !== "shootTargetPractice" &&
-      this.state !== "moveToFetch"
-    ) {
+    // Aggro check
+    const aggroImmune = [
+      "sleep",
+      "moveToSleep",
+      "attack",
+      "moveToAttack",
+      "moveToTriangulate",
+      "moveToTargetPractice",
+      "shootTargetPractice",
+      "moveToFetch",
+    ];
+    if (player.attacked.length > 0 && !aggroImmune.includes(this.state)) {
       this.attackMob =
         player.attacked[(Math.random() * player.attacked.length) | 0];
       this.state = "moveToAttack";
-      let _a = Math.random() * MATH.TWO_PI;
-      this.attackOffset = [Math.cos(_a) * 2, Math.sin(_a) * 2];
+      const a = Math.random() * Math.PI * 2;
+      this.attackOffset = [Math.cos(a) * 2, Math.sin(a) * 2];
     }
 
-    if (this.fetchBall && this.fetchBall.turn) this.state = "moveToFetch";
-
-    // --- State machine ---
-    switch (this.state) {
-      case "moveToAttack": {
-        if (
-          !player.attacked.length ||
-          !this.attackMob ||
-          (this.attackMob.state !== "attack" &&
-            !(this.attackMob instanceof CoconutCrab) &&
-            !(this.attackMob instanceof StumpSnail))
-        ) {
-          this.state = "moveToPlayer";
-          return;
-        }
-
-        this.moveTo = [
-          this.attackMob.pos[0] + this.attackOffset[0],
-          this.attackMob.pos[1] + (this.type === "precise" ? 1.25 : 0.25),
-          this.attackMob.pos[2] + this.attackOffset[1],
-        ];
-        this._stepTowards(this.moveTo, dt, player);
-
-        if (vec3.sqrDist(this.moveTo, this.pos) < 0.8) {
-          this.state = "attack";
-          let _a = Math.random() * MATH.TWO_PI,
-            r = this.type === "precise" ? 5 : 2;
-          this.attackOffset = [Math.cos(_a) * r, Math.sin(_a) * r];
-          this.attackTimer =
-            (1.25 + Math.random() * 0.5) * (this.type === "precise" ? 1.6 : 1);
-        }
-
-        this._pushInstanceData(instanceData, BEE_FLY);
-        break;
-      }
-
-      case "attack": {
-        if (
-          !player.attacked.length ||
-          !this.attackMob ||
-          (this.attackMob.state !== "attack" &&
-            !(this.attackMob instanceof CoconutCrab) &&
-            !(this.attackMob instanceof StumpSnail))
-        ) {
-          this.state = "moveToPlayer";
-          return;
-        }
-
-        this.attackTimer -= dt;
-
-        if (this.attackTimer <= 0) {
-          this.energy--;
-          this.state = "moveToAttack";
-          this.attackMob =
-            player.attacked[(Math.random() * player.attacked.length) | 0];
-
-          if (Math.random() < (this.attackMob.blocking ? 0.85 : 0)) {
-            this.energy--;
-            textRenderer.add(
-              "BLOCK",
-              [
-                this.attackMob.pos[0],
-                this.attackMob.pos[1] + Math.random() * 2.75 + 1.5,
-                this.attackMob.pos[2],
-              ],
-              [255, 255, 255],
-              0,
-              "",
-              1.75,
-              false,
-            );
-          } else {
-            const hitChance =
-              this.type === "precise"
-                ? Math.max(
-                    Math.pow(
-                      2,
-                      (this.gifted ? 2 : 1) + this.level - this.attackMob.level,
-                    ),
-                    0.05,
-                  )
-                : Math.pow(2, this.level - this.attackMob.level);
-
-            if (Math.random() < hitChance) {
-              const h =
-                (this.attack + player[beeInfo[this.type].color + "BeeAttack"]) *
-                player.beeAttack *
-                (this.type === "precise" ? (this.gifted ? 2 : 1.5) : 1) *
-                (this.type === "buoyant" ? player.buoyantBeeAttack : 1);
-
-              this.attackMob.damage(h);
-
-              if (this.type === "precise") {
-                objects.explosions.push(
-                  new Explosion({
-                    col: [1, 0, 0],
-                    pos: this.pos,
-                    life: 0.75,
-                    size: 1.75,
-                    speed: 0.3,
-                    aftershock: 0,
-                  }),
-                );
-              }
-            } else {
-              this.energy--;
-              textRenderer.add(
-                "MISS",
-                [
-                  this.attackMob.pos[0],
-                  this.attackMob.pos[1] + Math.random() * 2.75 + 1.5,
-                  this.attackMob.pos[2],
-                ],
-                [255, 255, 255],
-                0,
-                "",
-                1.75,
-                false,
-              );
-            }
-          }
-
-          this._tryFireToken(
-            this.attackTokens,
-            [
-              Math.round(this.pos[0]),
-              player.pos[1] + 0.5,
-              Math.round(this.pos[2]),
-            ],
-            {
-              field: player.fieldIn,
-              x: this.flowerCollecting[0],
-              z: this.flowerCollecting[1],
-              bee: this,
-            },
-            gameState,
-            true,
-          );
-        }
-
-        this._pushInstanceData(instanceData, TIME * 5);
-        break;
-      }
-
-      case "moveToPlayer": {
-        if (player.fieldIn && player.pollen < player.capacity) {
-          if (fieldInfo[player.fieldIn].planter) {
-            let chance =
-                MATH.lerp(0.35, 0.02, objects.bees.length / 50) *
-                (this.type === "shy" ? (this.gifted ? 2.5 : 2) : 1),
-              p = fieldInfo[player.fieldIn].planter;
-
-            if (p.type === "redClay") {
-              if (beeInfo[this.type].color === "red") chance *= 1.25;
-              else if (beeInfo[this.type].color === "blue") chance = 0;
-            }
-            if (p.type === "blueClay") {
-              if (beeInfo[this.type].color === "blue") chance *= 1.25;
-              else if (beeInfo[this.type].color === "red") chance = 0;
-            }
-            if (p.type === "pesticide" && this.mutation) chance *= 1.3;
-            if (p.type === "petal" && beeInfo[this.type].color === "white")
-              chance *= 1.5;
-            if (p.type === "plenty" && this.gifted) chance *= 1.5;
-
-            if (Math.random() < chance) {
-              this.state = "moveToPlanter";
-              let t = Math.random() * MATH.TWO_PI;
-              this.collectRot = [Math.sin(t), -4, Math.cos(t)];
-              return;
-            }
-          }
-
-          this.state = "moveToFlower";
-          return;
-        }
-
-        this.moveTo = [
-          player.pos[0] + this.moveOffset[0],
-          player.pos[1],
-          player.pos[2] + this.moveOffset[2],
-        ];
-        this._stepTowards(this.moveTo, dt, player);
-
-        if (vec3.sqrDist(this.moveTo, this.pos) < 0.8)
-          this.moveOffset = [MATH.random(-5, 5), 0, MATH.random(-5, 5)];
-
-        this._pushInstanceData(instanceData, BEE_FLY);
-
-        if (player.converting && player.pollen) {
-          this.state = "moveToHiveToConvert";
-          return;
-        }
-        if (player.convertingBalloon && player.hiveBalloon.pollen) {
-          this.state = "moveToHiveToConvertBalloon";
-        }
-        break;
-      }
-
-      case "moveToPlanter": {
-        if (
-          !player.fieldIn ||
-          player.pollenInBag >= player.capacity ||
-          !fieldInfo[player.fieldIn].planter
-        ) {
-          this.state = "moveToPlayer";
-          break;
-        }
-
-        const p = fieldInfo[player.fieldIn].planter;
-        this.moveTo = [
-          p.pos[0],
-          p.pos[1] + p.height + p.displaySize + 0.2,
-          p.pos[2],
-        ];
-        this._stepTowards(this.moveTo, dt, player);
-
-        if (vec3.sqrDist(this.moveTo, this.pos) < 0.075) {
-          this.state = "collectPlanter";
-          this.collectTimer =
-            this.gatherSpeed *
-            (this.type === "spicy" ? 1 / player.flameHeatStackApplied : 1);
-          this.planterSipTime = this.collectTimer;
-          return;
-        }
-
-        this._pushInstanceData(instanceData, BEE_FLY);
-        break;
-      }
-
-      case "collectPlanter": {
-        if (
-          !player.fieldIn ||
-          player.pollenInBag >= player.capacity ||
-          !fieldInfo[player.fieldIn].planter
-        ) {
-          this.state = "moveToPlayer";
-          return;
-        }
-
-        this.collectTimer -= dt;
-
-        if (this.collectTimer <= 0) {
-          this.energy--;
-          fieldInfo[player.fieldIn].planter.beeSipped(this);
-
-          this._tryFireToken(
-            this.gatheringTokens,
-            [
-              Math.round(this.pos[0]),
-              fieldInfo[player.fieldIn].y + 1,
-              Math.round(this.pos[2]),
-            ],
-            {
-              field: player.fieldIn,
-              x: fieldInfo[player.fieldIn].x | 0,
-              z: fieldInfo[player.fieldIn].z | 0,
-              bee: this,
-            },
-            gameState,
-          );
-
-          this.state = "moveToFlower";
-        }
-
-        this._pushInstanceData(instanceData, BEE_COLLECT, this.collectRot);
-        break;
-      }
-
-      case "moveToFlower": {
-        if (!player.fieldIn || player.pollenInBag >= player.capacity) {
-          this.state = "moveToPlayer";
-          break;
-        }
-
-        const f = fieldInfo[player.fieldIn];
-
-        while (
-          this.flowerCollecting[0] === undefined ||
-          this.flowerCollecting[1] === undefined ||
-          this.flowerCollecting[0] < 0 ||
-          this.flowerCollecting[0] >= f.width ||
-          this.flowerCollecting[1] < 0 ||
-          this.flowerCollecting[1] >= f.length
-        ) {
-          this.flowerCollecting[0] =
-            player.flowerIn.x + Math.round(MATH.random(-7, 7));
-          this.flowerCollecting[1] =
-            player.flowerIn.z + Math.round(MATH.random(-7, 7));
-          const t = Math.random() * MATH.TWO_PI;
-          this.collectRot = [Math.sin(t), -4, Math.cos(t)];
-        }
-
-        this.moveTo = [
-          f.x + this.flowerCollecting[0],
-          f.y +
-            flowers[player.fieldIn][this.flowerCollecting[1]][
-              this.flowerCollecting[0]
-            ].height *
-              0.5 +
-            0.25,
-          f.z + this.flowerCollecting[1],
-        ];
-        this._stepTowards(this.moveTo, dt, player);
-
-        if (vec3.sqrDist(this.moveTo, this.pos) < 0.075) {
-          this.state = "collectPollen";
-          this.collectTimer =
-            this.gatherSpeed *
-            (this.type === "spicy" ? 1 / player.flameHeatStackApplied : 1);
-          return;
-        }
-
-        this._pushInstanceData(instanceData, BEE_FLY);
-        break;
-      }
-
-      case "collectPollen": {
-        if (!player.fieldIn || player.pollenInBag >= player.capacity) {
-          this.state = "moveToPlayer";
-          return;
-        }
-
-        this.collectTimer -= dt;
-
-        if (this.collectTimer <= 0) {
-          this.energy--;
-          const tabbyMult = this.type === "tabby" ? player.tabbyLoveStacks : 1;
-          collectPollen({
-            x: this.flowerCollecting[0],
-            z: this.flowerCollecting[1],
-            pattern: [[0, 0]],
-            amount: this.gatherAmount,
-            yOffset: MATH.random(0.7, 1.3),
-            multiplier: {
-              r:
-                beeInfo[this.type].color === "red"
-                  ? player.pollenFromBees * 1.2 * tabbyMult
-                  : player.pollenFromBees * tabbyMult,
-              b:
-                beeInfo[this.type].color === "blue"
-                  ? player.pollenFromBees * 1.2 * tabbyMult
-                  : player.pollenFromBees * tabbyMult,
-              w: player.pollenFromBees * tabbyMult,
-            },
-          });
-
-          if (beeInfo[this.type].gatheringPassive) {
-            beeInfo[this.type].gatheringPassive(this);
-          }
-
-          this._tryFireToken(
-            this.gatheringTokens,
-            [
-              Math.round(this.pos[0]),
-              fieldInfo[player.fieldIn].y + 1,
-              Math.round(this.pos[2]),
-            ],
-            {
-              field: player.fieldIn,
-              x: this.flowerCollecting[0],
-              z: this.flowerCollecting[1],
-              bee: this,
-            },
-            gameState,
-          );
-
-          this.flowerCollecting = [];
-          this.state = "moveToPlayer";
-        }
-
-        this._pushInstanceData(instanceData, BEE_COLLECT, this.collectRot);
-        break;
-      }
-
-      case "moveToHiveToConvert": {
-        if (!player.converting || !player.pollen) {
-          this.state = "moveToPlayer";
-          return;
-        }
-
-        this.moveTo = this.hivePos.slice();
-        this._stepTowards(this.moveTo, dt, player);
-
-        if (vec3.sqrDist(this.moveTo, this.pos) < 0.8) {
-          this.pos = this.hivePos.slice();
-          this.state = "convertHoney";
-          this.convertTimer = this.convertSpeed;
-
-          const amountToTake = Math.min(
-            Math.round(
-              this.convertAmount *
-                player.convertRate *
-                player[beeInfo[this.type].color + "ConvertRate"] *
-                player.convertRateAtHive *
-                (this.type === "tabby" ? player.tabbyLoveStacks : 1),
-            ),
-            player.pollen,
-          );
-
-          if (amountToTake === player.pollen) this.lastBeeToConvert = true;
-          player.pollen -= amountToTake;
-          this.pollen = amountToTake;
-        }
-
-        this._pushInstanceData(instanceData, BEE_FLY);
-        break;
-      }
-
-      case "convertHoney": {
-        if (!player.converting) {
-          player.pollen += this.pollen;
-          this.pollen = 0;
-          this.state = "moveToPlayer";
-          return;
-        }
-
-        this.convertTimer -= dt;
-        this._pushInstanceData(instanceData, TIME * 5, [0, 1, 0]);
-
-        if (this.convertTimer <= 0) {
-          this.state = "moveToHiveToConvert";
-          const diamondMult =
-            this.type === "diamond"
-              ? (1.4 + this.level * 0.03) * (this.gifted ? 2 : 1)
-              : 1;
-          const honeyGained = Math.ceil(
-            this.pollen *
-              player.honeyAtHive *
-              player.honeyPerPollen *
-              diamondMult,
-          );
-
-          player.honey += honeyGained;
-          textRenderer.add(
-            honeyGained,
-            [
-              player.pos[0],
-              player.pos[1] + Math.random() * 2 + 0.5,
-              player.pos[2],
-            ],
-            COLORS.honey,
-            0,
-            "+",
-          );
-
-          this.pollen = 0;
-
-          if (!player.pollen && this.lastBeeToConvert) {
-            this.lastBeeToConvert = false;
-            player.converting = false;
-            player.stopConverting = true;
-          }
-
-          for (let i = 0; i < 10; i++) {
-            ParticleRenderer.add({
-              x: this.pos[0],
-              y: this.pos[1],
-              z: this.pos[2],
-              vx: MATH.random(-1, 1),
-              vy: MATH.random(-1, 1),
-              vz: MATH.random(0, 3),
-              grav: 0,
-              size: MATH.random(60, 100),
-              col:
-                this.type === "diamond"
-                  ? [0.1, 0.7, 0.9]
-                  : COLORS.honey_normalized,
-              life: 0.75,
-              rotVel: MATH.random(-3, 3),
-              alpha: 5,
-            });
-          }
-        }
-
-        break;
-      }
-
-      case "moveToHiveToConvertBalloon": {
-        if (!player.convertingBalloon || !player.hiveBalloon.pollen) {
-          this.state = "moveToPlayer";
-          return;
-        }
-
-        this.moveTo = this.hivePos.slice();
-        this._stepTowards(this.moveTo, dt, player);
-
-        if (vec3.sqrDist(this.moveTo, this.pos) < 0.8) {
-          this.pos = this.hivePos.slice();
-          this.state = "convertBalloon";
-          this.convertTimer = this.convertSpeed;
-
-          const amountToTake = Math.min(
-            Math.round(
-              this.convertAmount *
-                player.convertRate *
-                (this.type === "buoyant" ? (this.gifted ? 4 : 3) : 1) *
-                player[beeInfo[this.type].color + "ConvertRate"] *
-                player.convertRateAtHive *
-                (this.type === "tabby" ? player.tabbyLoveStacks : 1),
-            ),
-            player.hiveBalloon.pollen,
-          );
-
-          if (amountToTake === player.hiveBalloon.pollen)
-            this.lastBeeToConvert = true;
-          player.hiveBalloon.pollen -= amountToTake;
-          this.pollen = amountToTake;
-        }
-
-        this._pushInstanceData(instanceData, BEE_FLY);
-        break;
-      }
-
-      case "convertBalloon": {
-        if (!player.convertingBalloon) {
-          player.hiveBalloon.pollen += this.pollen;
-          this.pollen = 0;
-          this.state = "moveToPlayer";
-          return;
-        }
-
-        this.convertTimer -= dt;
-        this._pushInstanceData(instanceData, TIME * 5, [0, 1, 0]);
-
-        if (this.convertTimer <= 0) {
-          this.state = "moveToHiveToConvertBalloon";
-          const diamondMult =
-            this.type === "diamond"
-              ? (1.4 + this.level * 0.03) * (this.gifted ? 2 : 1)
-              : 1;
-          const honeyGained = Math.ceil(
-            this.pollen *
-              player.honeyAtHive *
-              player.honeyPerPollen *
-              diamondMult,
-          );
-
-          player.honey += honeyGained;
-          textRenderer.add(
-            honeyGained,
-            [
-              player.pos[0],
-              player.pos[1] + Math.random() * 2 + 0.5,
-              player.pos[2],
-            ],
-            COLORS.honey,
-            0,
-            "+",
-          );
-
-          this.pollen = 0;
-
-          if (!player.pollen && this.lastBeeToConvert) {
-            this.lastBeeToConvert = false;
-            player.convertingBalloon = false;
-            player.stopConverting = true;
-          }
-
-          for (let i = 0; i < 10; i++) {
-            ParticleRenderer.add({
-              x: this.pos[0],
-              y: this.pos[1],
-              z: this.pos[2],
-              vx: MATH.random(-1, 1),
-              vy: MATH.random(-1, 1),
-              vz: MATH.random(0, 3),
-              grav: 0,
-              size: MATH.random(60, 100),
-              col:
-                this.type === "diamond"
-                  ? [0.1, 0.7, 0.9]
-                  : COLORS.honey_normalized,
-              life: 0.75,
-              rotVel: MATH.random(-3, 3),
-              alpha: 5,
-            });
-          }
-        }
-
-        break;
-      }
-
-      case "moveToSleep": {
-        this.moveTo = this.hivePos.slice();
-        this._stepTowards(this.moveTo, dt, player);
-
-        if (vec3.sqrDist(this.moveTo, this.pos) < 1) {
-          this.pos = this.hivePos.slice();
-          this.sleepTimer = 20;
-          this.zzzTimer = 0;
-          this.state = "sleep";
-          this.sleepRotate = Math.random() * MATH.TWO_PI;
-        }
-
-        this._pushInstanceData(instanceData, BEE_FLY);
-        break;
-      }
-
-      case "sleep": {
-        this.sleepTimer -= dt;
-        this.zzzTimer -= dt;
-
-        if (this.sleepTimer <= 0) {
-          this.energy = this.maxEnergy * player.beeEnergy;
-          this.state = "moveToPlayer";
-        }
-
-        if (this.zzzTimer <= 0) {
-          this.zzzTimer = 5;
-          textRenderer.add(
-            "zzz",
-            [
-              this.pos[0] + MATH.random(-1, 1),
-              this.pos[1] + MATH.random(-1, 1),
-              this.pos[2] + Math.random() + 0.25,
-            ],
-            [255, 255, 255],
-            0,
-            "",
-            1.25,
-          );
-        }
-
-        this._pushInstanceData(instanceData, this.sleepRotate, [0, 1, 0]);
-        break;
-      }
-
-      case "moveToTargetPractice": {
-        if (!player.fieldIn) {
-          this.state = "moveToPlayer";
-          return;
-        }
-
-        this._stepTowards(this.moveTo, dt, player, 1.5);
-
-        if (vec3.sqrDist(this.moveTo, this.pos) < 0.7) {
-          this.pos = this.moveTo.slice();
-          this.targetPracticeTimer = 4;
-          this.targetExplosionTimer = 0;
-          this.state = "shootTargetPractice";
-          this.targetLookDir = [
-            ((fieldInfo[player.fieldIn].width * 0.5) | 0) +
-              fieldInfo[player.fieldIn].x -
-              this.pos[0],
-            fieldInfo[player.fieldIn].y,
-            ((fieldInfo[player.fieldIn].length * 0.5) | 0) +
-              fieldInfo[player.fieldIn].z -
-              this.pos[2],
-          ];
-          this.targets = [];
-
-          for (let i = 0; i < 3; i++) {
-            const _x =
-              (fieldInfo[player.fieldIn].width * 0.5 +
-                Math.random() *
-                  this.targetPractice_q[0] *
-                  fieldInfo[player.fieldIn].width *
-                  0.5) |
-              0;
-            const _z =
-              (fieldInfo[player.fieldIn].length * 0.5 +
-                Math.random() *
-                  this.targetPractice_q[1] *
-                  fieldInfo[player.fieldIn].length *
-                  0.5) |
-              0;
-
-            this.targets.push(new Target(player.fieldIn, _x, _z, i + 1, this));
-            objects.targets.push(this.targets[this.targets.length - 1]);
-          }
-        }
-
-        this._pushInstanceData(instanceData, BEE_FLY);
-        break;
-      }
-
-      case "shootTargetPractice": {
-        this.targetPracticeTimer -= dt;
-        this.targetExplosionTimer -= dt;
-
-        if (
-          this.targets[0].activated &&
-          this.targets[1].activated &&
-          this.targets[2].activated &&
-          this.targetPracticeTimer > 0.75
-        ) {
-          this.targetPracticeTimer = 0.75;
-        }
-
-        if (this.targetPracticeTimer <= 0.5 && !this.shotParticleProjectile) {
-          this.shotParticleProjectile = true;
-
-          for (let i in this.targets) {
-            const vx = this.targets[i].pos[0] - this.pos[0];
-            const vy = this.targets[i].pos[1] - this.pos[1];
-            const vz = this.targets[i].pos[2] - this.pos[2];
-            const d = Math.sqrt(vx * vx + vy * vy + vz * vz);
-            const m = d / 0.5 / d;
-
-            ParticleRenderer.add({
-              x: this.pos[0],
-              y: this.pos[1],
-              z: this.pos[2],
-              vx: vx * m,
-              vy: vy * m,
-              vz: vz * m,
-              grav: 0,
-              size: 400,
-              col: [1, 0, 0],
-              life: 0.4,
-              rotVel: MATH.random(-9, 9),
-              alpha: 1000,
-            });
-          }
-        }
-
-        if (this.targetPracticeTimer <= 0) {
-          this.shotParticleProjectile = false;
-
-          const t = [
-            this.targets[0].activated,
-            this.targets[1].activated,
-            this.targets[2].activated,
-          ];
-
-          if (t[0] && t[1] && t[2]) {
-            for (let i in objects.tokens) {
-              if (
-                objects.tokens[i].canBeLinked &&
-                !(objects.tokens[i] instanceof DupedToken)
-              ) {
-                objects.tokens[i].collect();
-              }
-            }
-
-            const t2 = this.targets[2];
-            objects.tokens.push(
-              new Token(
-                effects.precision.tokenLife,
-                [t2.pos[0], t2.pos[1] + 0.5, t2.pos[2]],
-                "precision",
-                { field: t2.field, x: t2.x, z: t2.z, bee: this },
-              ),
-            );
-            objects.tokens.push(
-              new Token(
-                effects.focus.tokenLife,
-                [t2.pos[0] + 1, t2.pos[1] + 0.5, t2.pos[2]],
-                "focus",
-                { field: t2.field, x: t2.x + 1, z: t2.z, bee: this },
-              ),
-            );
-            objects.tokens.push(
-              new Token(
-                effects.redBoost.tokenLife,
-                [t2.pos[0] - 1, t2.pos[1] + 0.5, t2.pos[2]],
-                "redBoost",
-                { field: t2.field, x: t2.x - 1, z: t2.z, bee: this },
-              ),
-            );
-          }
-
-          if (t[2] && this.gifted && (!t[0] || !t[1])) {
-            objects.marks.push(
-              new Mark(
-                this.targets[2].field,
-                this.targets[2].x,
-                this.targets[2].z,
-                "preciseMark",
-                this.level,
-              ),
-            );
-          }
-
-          for (let i in this.targets) {
-            const _t = this.targets[i];
-
-            if (_t.activated) {
-              if (i !== 2) {
-                objects.tokens.push(
-                  new Token(
-                    effects.focus.tokenLife,
-                    [_t.pos[0], _t.pos[1] + 0.5, _t.pos[2]],
-                    "focus",
-                    { field: _t.field, x: _t.x, z: _t.z, bee: this },
-                  ),
-                );
-              }
-
-              collectPollen({
-                x: _t.x,
-                z: _t.z,
-                pattern: [
-                  [-4, 0],
-                  [-3, -2],
-                  [-3, -1],
-                  [-3, 0],
-                  [-3, 1],
-                  [-3, 2],
-                  [-2, -3],
-                  [-2, -2],
-                  [-2, -1],
-                  [-2, 0],
-                  [-2, 1],
-                  [-2, 2],
-                  [-2, 3],
-                  [-1, -3],
-                  [-1, -2],
-                  [-1, -1],
-                  [-1, 0],
-                  [-1, 1],
-                  [-1, 2],
-                  [-1, 3],
-                  [0, -4],
-                  [0, -3],
-                  [0, -2],
-                  [0, -1],
-                  [0, 0],
-                  [0, 1],
-                  [0, 2],
-                  [0, 3],
-                  [0, 4],
-                  [1, -3],
-                  [1, -2],
-                  [1, -1],
-                  [1, 0],
-                  [1, 1],
-                  [1, 2],
-                  [1, 3],
-                  [2, -3],
-                  [2, -2],
-                  [2, -1],
-                  [2, 0],
-                  [2, 1],
-                  [2, 2],
-                  [2, 3],
-                  [3, -2],
-                  [3, -1],
-                  [3, 0],
-                  [3, 1],
-                  [3, 2],
-                  [4, 0],
-                ],
-                amount:
-                  (this.attack +
-                    player[beeInfo[this.type].color + "BeeAttack"]) *
-                  player.beeAttack *
-                  (this.level * 0.1 + 1) *
-                  0.5,
-                yOffset: 2 + Math.random() * 0.4,
-                stackHeight: 0.5 + Math.random() * 0.5,
-                instantConversion: (player.flameHeatStack - 1) * 0.5,
-                multiplier: player.flameHeatStack * 3,
-                field: _t.field,
-              });
-            } else {
-              objects.tokens.push(
-                new Token(
-                  effects.redBoost.tokenLife,
-                  [_t.pos[0], _t.pos[1] + 0.5, _t.pos[2]],
-                  "redBoost",
-                  { field: _t.field, x: _t.x, z: _t.z, bee: this },
-                ),
-              );
-            }
-          }
-
-          this.targets[0].splice = true;
-          this.targets[1].splice = true;
-          this.targets[2].splice = true;
-
-          this.state = "moveToPlayer";
-          return;
-        }
-
-        if (this.targetExplosionTimer <= 0) {
-          this.targetExplosionTimer = 0.8;
-          objects.explosions.push(
-            new Explosion({
-              col: [1, 0, 0],
-              pos: this.pos,
-              life: 0.75,
-              size: 1.75,
-              speed: 0.3,
-              aftershock: 0,
-            }),
-          );
-        }
-
-        this._pushInstanceData(instanceData, BEE_FLY, this.targetLookDir);
-        break;
-      }
-
-      case "moveToTriangulate": {
-        this.triangulateTimer -= dt;
-
-        const d = [
-          player.pos[0] - this.triangulateTokenPos[0],
-          player.pos[2] - this.triangulateTokenPos[2],
-        ];
-        const rd = [-d[1], d[0]];
-        const tb = [this.pos[0] - player.pos[0], this.pos[2] - player.pos[2]];
-
-        if (rd[0] * tb[0] + rd[1] * tb[1] > 0) {
-          this.moveDir = [rd[0], 0, rd[1]];
-        } else {
-          this.moveDir = [d[1], 0, -d[0]];
-        }
-
-        vec3.normalize(this.moveDir, this.moveDir);
-        vec3.scaleAndAdd(
-          this.pos,
-          this.pos,
-          this.moveDir,
-          dt * this.speed * player.beeSpeed,
-        );
-
-        if (this.triangulateTimer <= 0) this.state = "moveToPlayer";
-
-        this._pushInstanceData(instanceData, BEE_FLY);
-        break;
-      }
-
-      case "moveToFetch": {
-        if (!this.fetchBall || !this.fetchBall.turn) {
-          this.state = "moveToPlayer";
-          return;
-        }
-
-        this.moveDir = [
-          this.fetchBall.body.position.x - this.pos[0],
-          this.fetchBall.body.position.y - this.pos[1],
-          this.fetchBall.body.position.z - this.pos[2],
-        ];
-
-        if (
-          Math.abs(this.moveDir[0]) +
-            Math.abs(this.moveDir[1]) +
-            Math.abs(this.moveDir[2]) <
-          1.2
-        ) {
-          const dir = [
-            player.pos[0] - this.pos[0],
-            player.pos[2] - this.pos[2],
-          ];
-          vec2.normalize(dir, dir);
-          this.fetchBall.kick(
-            dir[0] + MATH.random(-0.2, 0.2),
-            dir[1] + MATH.random(-0.2, 0.2),
-          );
-        }
-
-        vec3.normalize(this.moveDir, this.moveDir);
-        vec3.scaleAndAdd(
-          this.pos,
-          this.pos,
-          this.moveDir,
-          dt * this.speed * player.beeSpeed,
-        );
-
-        this._pushInstanceData(instanceData, BEE_FLY);
-        break;
-      }
-    }
-
-    // --- Post-switch: particles and decals ---
-    if (beeInfo[this.type].particles && TIME - this.emitParticle > 0.2) {
+    if (this.fetchBall?.turn) this.state = "moveToFetch";
+  }
+
+  _runPostSwitchEffects(dt, gameState, { player, TIME }) {
+    const { textRenderer } = gameState;
+    if (this.beeInfo?.particles && TIME - this.emitParticle > 0.2) {
       beeInfo[this.type].particles(this);
       this.emitParticle = TIME;
     }
-
     if (player.hive[this.hiveY][this.hiveX].radioactive > 0) {
       textRenderer.addDecalRaw(
         ...this.pos,
@@ -1352,35 +461,144 @@ export class Bee {
         0,
       );
     }
+    // buoyant glow / lightrays...
+  }
 
-    if (this.type === "buoyant") {
-      if (this.gifted) {
-        textRenderer.addDecalRaw(
-          ...this.pos,
-          0,
-          0,
-          ...textRenderer.decalUV.glow,
-          1,
-          1,
-          0.2,
-          1.35,
-          1.35,
-          0,
-        );
-      }
-      textRenderer.addDecalRaw(
-        ...this.pos,
-        0,
-        0,
-        ...textRenderer.decalUV.lightrays,
-        1,
-        1,
-        0.2,
-        2.25,
-        2.25,
-        (TIME * 1.25 + this.hiveX + this.hiveY * 5) * (this.hiveY % 2 ? 1 : -1),
+  _stateMoveToAttack(dt, gameState, { player, instanceData }) {
+    if (!this._isValidAttackTarget(player)) {
+      this.state = "moveToPlayer";
+      return;
+    }
+
+    this.moveTo = [
+      this.attackMob.pos[0] + this.attackOffset[0],
+      this.attackMob.pos[1] + (this.type === "precise" ? 1.25 : 0.25),
+      this.attackMob.pos[2] + this.attackOffset[1],
+    ];
+    this._stepTowards(this.moveTo, dt, player);
+
+    if (vec3.sqrDist(this.moveTo, this.pos) < 0.8) {
+      this.state = "attack";
+      const a = Math.random() * Math.PI * 2;
+      const r = this.type === "precise" ? 5 : 2;
+      this.attackOffset = [Math.cos(a) * r, Math.sin(a) * r];
+      this.attackTimer =
+        (1.25 + Math.random() * 0.5) * (this.type === "precise" ? 1.6 : 1);
+    }
+
+    this._pushInstanceData(instanceData, BEE_FLY);
+  }
+
+  // A small guard extracted from both attack cases
+  _isValidAttackTarget(player) {
+    return (
+      player.attacked.length > 0 &&
+      this.attackMob &&
+      (this.attackMob.state === "attack" ||
+        this.attackMob instanceof CoconutCrab ||
+        this.attackMob instanceof StumpSnail)
+    );
+  }
+
+  _stateAttack(
+    dt,
+    gameState,
+    { player, objects, fieldInfo, instanceData, TIME },
+  ) {
+    if (!this._isValidAttackTarget(player)) {
+      this.state = "moveToPlayer";
+      return;
+    }
+
+    this.attackTimer -= dt;
+
+    if (this.attackTimer <= 0) {
+      this.energy--;
+      this.state = "moveToAttack";
+      this.attackMob =
+        player.attacked[(Math.random() * player.attacked.length) | 0];
+      this._resolveAttackHit(player, objects);
+      this._tryFireToken(
+        this.attackTokens,
+        [Math.round(this.pos[0]), player.pos[1] + 0.5, Math.round(this.pos[2])],
+        {
+          field: player.fieldIn,
+          x: this.flowerCollecting[0],
+          z: this.flowerCollecting[1],
+          bee: this,
+        },
+        gameState,
+        true,
       );
     }
+
+    this._pushInstanceData(instanceData, TIME * 5);
+  }
+
+  // Extracted from the middle of _stateAttack to reduce nesting
+  _resolveAttackHit(player, objects) {
+    if (Math.random() < (this.attackMob.blocking ? 0.85 : 0)) {
+      this.energy--;
+      // show BLOCK text...
+      return;
+    }
+    const hitChance =
+      this.type === "precise"
+        ? Math.max(
+            Math.pow(
+              2,
+              (this.gifted ? 2 : 1) + this.level - this.attackMob.level,
+            ),
+            0.05,
+          )
+        : Math.pow(2, this.level - this.attackMob.level);
+
+    if (Math.random() < hitChance) {
+      const h =
+        (this.attack + player[beeInfo[this.type].color + "BeeAttack"]) *
+        player.beeAttack *
+        (this.type === "precise" ? (this.gifted ? 2 : 1.5) : 1) *
+        (this.type === "buoyant" ? player.buoyantBeeAttack : 1);
+      this.attackMob.damage(h);
+      // spawn explosion for precise...
+    } else {
+      this.energy--;
+      // show MISS text...
+    }
+  }
+
+  // The two convert-hive states share this, distinguished by the `balloon` flag
+  _stateMoveToHive(dt, gameState, { player, instanceData }, balloon) {
+    const pollen = balloon ? player.hiveBalloon.pollen : player.pollen;
+    const converting = balloon ? player.convertingBalloon : player.converting;
+    if (!converting || !pollen) {
+      this.state = "moveToPlayer";
+      return;
+    }
+
+    this.moveTo = this.hivePos.slice();
+    this._stepTowards(this.moveTo, dt, player);
+
+    if (vec3.sqrDist(this.moveTo, this.pos) < 0.8) {
+      this.pos = this.hivePos.slice();
+      this.state = balloon ? "convertBalloon" : "convertHoney";
+      this.convertTimer = this.convertSpeed;
+      this._takePollen(player, balloon);
+    }
+
+    this._pushInstanceData(instanceData, BEE_FLY);
+  }
+
+  _stateConvert(dt, gameState, { player, instanceData, TIME }, balloon) {
+    const converting = balloon ? player.convertingBalloon : player.converting;
+    if (!converting) {
+      if (balloon) player.hiveBalloon.pollen += this.pollen;
+      else player.pollen += this.pollen;
+      this.pollen = 0;
+      this.state = "moveToPlayer";
+      return;
+    }
+    // ... rest of convert logic, then _emitConvertParticles()
   }
 }
 
