@@ -774,6 +774,60 @@ export class Bee {
 
     this._pushInstanceData(instanceData, BEE_COLLECT, this.collectRot);
   }
+
+  // CHQ: implement _stateMoveToFlower, refactored by ChatGPT
+  // CHQ: ChatGPT destructured flowers
+  _stateMoveToFlower(
+    dt,
+    gameState,
+    { player, fieldInfo, flowers, instanceData },
+  ) {
+    if (!player.fieldIn || player.pollenInBag >= player.capacity) {
+      this.state = "moveToPlayer";
+      return;
+    }
+
+    const field = fieldInfo[player.fieldIn];
+
+    while (
+      this.flowerCollecting[0] === undefined ||
+      this.flowerCollecting[1] === undefined ||
+      this.flowerCollecting[0] < 0 ||
+      this.flowerCollecting[0] >= field.width ||
+      this.flowerCollecting[1] < 0 ||
+      this.flowerCollecting[1] >= field.length
+    ) {
+      this.flowerCollecting[0] =
+        player.flowerIn.x + Math.round(MATH.random(-7, 7));
+      this.flowerCollecting[1] =
+        player.flowerIn.z + Math.round(MATH.random(-7, 7));
+      const t = Math.random() * MATH.TWO_PI;
+      this.collectRot = [Math.sin(t), -4, Math.cos(t)];
+    }
+
+    // CHQ: ChatGPT cached flower tile
+    const flower =
+      flowers[player.fieldIn][this.flowerCollecting[1]][
+        this.flowerCollecting[0]
+      ];
+
+    this.moveTo = [
+      field.x + this.flowerCollecting[0],
+      field.y + flower.height * 0.5 + 0.25,
+      field.z + this.flowerCollecting[1],
+    ];
+    this._stepTowards(this.moveTo, dt, player);
+
+    if (vec3.sqrDist(this.moveTo, this.pos) < 0.075) {
+      this.state = "collectPollen";
+      this.collectTimer =
+        this.gatherSpeed *
+        (this.type === "spicy" ? 1 / player.flameHeatStackApplied : 1);
+      return;
+    }
+
+    this._pushInstanceData(instanceData, BEE_FLY);
+  }
 }
 
 export class TempBee extends Bee {
