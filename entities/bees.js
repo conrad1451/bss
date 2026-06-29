@@ -698,6 +698,41 @@ export class Bee {
     }
     // ... rest of convert logic, then _emitConvertParticles()
   }
+  _stateMoveToPlanter(
+    dt,
+    gameState,
+    { player, objects, fieldInfo, instanceData },
+  ) {
+    if (
+      !player.fieldIn ||
+      player.pollenInBag >= player.capacity ||
+      !fieldInfo[player.fieldIn].planter
+    ) {
+      this.state = "moveToPlayer";
+      return;
+    }
+
+    const p = fieldInfo[player.fieldIn].planter;
+
+    this.moveTo = [
+      p.pos[0],
+      p.pos[1] + p.height + p.displaySize + 0.2,
+      p.pos[2],
+    ];
+
+    this._stepTowards(this.moveTo, dt, player);
+
+    if (vec3.sqrDist(this.moveTo, this.pos) < 0.075) {
+      this.state = "collectPlanter";
+      this.collectTimer =
+        this.gatherSpeed *
+        (this.type === "spicy" ? 1 / player.flameHeatStackApplied : 1);
+      this.planterSipTime = this.collectTimer;
+      return;
+    }
+
+    this._pushInstanceData(instanceData, BEE_FLY);
+  }
 }
 
 export class TempBee extends Bee {
