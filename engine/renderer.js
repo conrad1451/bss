@@ -2,12 +2,19 @@
 
 import { MATH } from "../utils/math";
 
+import { drawFlowers } from "./drawEntities/drawFlowers";
+import { drawBees } from "./drawEntities/drawBees";
+import { drawMobs } from "./drawEntities/drawMobs";
+import { setUniform } from "./engineParts/setUniform";
+import { drawTurrets } from "./drawEntities/drawTurrets";
+// import { drawPlayer } from "./drawEntities/drawPlayer";
+
 // 1. Ensure glMatrix is available (it's globally attached to window)
 // const { mat4 } = window.glMatrix;
 // const mat4 = window.glMatrix.mat4;
 
 import { mat4, vec3 } from "gl-matrix";
-import { beeInfo } from "../data/bees";
+// import { beeInfo } from "../data/bees";
 
 // console.log("Is mat4 available?", !!mat4); // Should be true
 
@@ -644,300 +651,7 @@ export class Renderer {
     return null;
   }
 
-  /**
-   * Issues a single draw call for the entire pre-baked static flower mesh.
-   * Binds the flower shader program, uploads view/projection uniforms, binds the
-   * flower texture atlas, and draws via the mesh's VAO.
-   *
-   * @param {Object} state - The live game state object (used for future per-frame uniforms).
-   * @param {Float32Array|number[]} viewMatrix - Column-major 4×4 view matrix.
-   * @param {Float32Array|number[]} projectionMatrix - Column-major 4×4 projection matrix.
-   * @returns {void}
-   */
-  drawFlowers(state, viewMatrix, projectionMatrix) {
-    const gl = this.gl;
-    const flowerProgram = this.programs.flower; // Target your flower vertex/fragment shaders
-
-    if (!gl.getProgramParameter(flowerProgram, gl.LINK_STATUS)) return;
-
-    gl.useProgram(flowerProgram);
-
-    // Temporary: verify flowerProgram is set
-    // console.log("useProgram called, flowerProgram:", flowerProgram);
-
-    this.setUniform(flowerProgram, "projMatrix", projectionMatrix);
-    this.setUniform(flowerProgram, "viewMatrix", viewMatrix);
-
-    this.setUniform(flowerProgram, "isNight", 1.0, "float"); // CHQ: Claude AI added this, without which resulted in black/invisible output
-
-    const texLoc = gl.getUniformLocation(flowerProgram, "tex");
-
-    // CHQ: Claude AI: remove logs
-    // console.log("flower tex location:", texLoc);
-    // console.log("flowers texture object:", this.textures?.flowers);
-    // console.log("flower tex location:", gl.getUniformLocation(flowerProgram, "tex"));
-
-    // 2. CRITICAL: Bind the flower texture
-    // Ensure you have loaded the texture into this.textures.flowers
-    if (this.textures?.flowers) {
-      gl.activeTexture(gl.TEXTURE0);
-      gl.bindTexture(gl.TEXTURE_2D, this.textures.flowers);
-      this.setUniform(flowerProgram, "tex", 0, "int"); // CHQ: Claude AI: replace "uSampler" with "tex"
-
-      if (texLoc !== null) gl.uniform1i(texLoc, 0);
-    }
-
-    if (this.gl.frameCount < 150000) {
-      console.log("Texture bound:", !!this.textures.flowers);
-    }
-
-    // CHQ: Claude AI: remove the bindBuffer and bindMeshAttributes calls — the VAO handles all of that:
-    // CHQ: while Bees and mobs are individual entities in state.objects
-    //      (and therefore need to loop per instance so their own model
-    //      matrix is uploaded before drawing), flowers are a single
-    //      pre-baked static mesh, so only need to be drawn once
-    // gl.bindBuffer(gl.ARRAY_BUFFER, this.meshes.flowers.vertexBuffer);
-    // this.bindMeshAttributes("flowers", flowerProgram);
-
-    // const vertPosLoc = gl.getAttribLocation(flowerProgram, "vertPos");
-    // const vertUVLoc = gl.getAttribLocation(flowerProgram, "vertUV");
-    // const vertGooLoc = gl.getAttribLocation(flowerProgram, "vertGoo");
-    // console.log(
-    //   "attrib locations — vertPos:",
-    //   vertPosLoc,
-    //   "vertUV:",
-    //   vertUVLoc,
-    //   "vertGoo:",
-    //   vertGooLoc,
-    // );
-
-    // gl.disable(gl.DEPTH_TEST); // CHQ: Claude AI: individual draw methods shouldn't be toggling global GL state.
-    // gl.disable(gl.CULL_FACE);
-    // console.log("cull face disabled");
-
-    // const testPos = [24.5, 13, -40, 1.0]; // first flower vertex from your logs
-    // const mvp = mat4.create();
-    // mat4.multiply(mvp, projectionMatrix, viewMatrix);
-
-    // const clipX =
-    //   mvp[0] * testPos[0] +
-    //   mvp[4] * testPos[1] +
-    //   mvp[8] * testPos[2] +
-    //   mvp[12] * testPos[3];
-    // const clipY =
-    //   mvp[1] * testPos[0] +
-    //   mvp[5] * testPos[1] +
-    //   mvp[9] * testPos[2] +
-    //   mvp[13] * testPos[3];
-    // const clipZ =
-    //   mvp[2] * testPos[0] +
-    //   mvp[6] * testPos[1] +
-    //   mvp[10] * testPos[2] +
-    //   mvp[14] * testPos[3];
-    // const clipW =
-    //   mvp[3] * testPos[0] +
-    //   mvp[7] * testPos[1] +
-    //   mvp[11] * testPos[2] +
-    //   mvp[15] * testPos[3];
-
-    // console.log("clip coords:", clipX, clipY, clipZ, clipW);
-    // console.log("NDC:", clipX / clipW, clipY / clipW, clipZ / clipW);
-
-    this.drawMesh("flowers");
-    // gl.enable(gl.CULL_FACE); // re-enable after if needed
-
-    // console.log("flower texture:", this.textures?.flowers);
-    // console.log("flower vertCount:", this.meshes.flowers.vertCount);
-  }
-
   // CHQ: Claude AI rewrote to use setUniform and drawMesh
-
-  /**
-   * Iterates over all bee instances in the game state and issues one draw call
-   * per bee, uploading an individual model matrix (translation only) for each.
-   *
-   * @param {Object} state - The live game state object.
-   * @param {Object[]} state.objects.bees - Array of bee instances, each with a `pos` [x, y, z] array.
-   * @param {Float32Array|number[]} viewMatrix - Column-major 4×4 view matrix.
-   * @param {Float32Array|number[]} projectionMatrix - Column-major 4×4 projection matrix.
-   * @returns {void}
-   */
-  drawBees(state, viewMatrix, projectionMatrix) {
-    const gl = this.gl;
-    const beeProgram = this.programs.bee;
-
-    if (!gl.getProgramParameter(beeProgram, gl.LINK_STATUS)) return;
-
-    // console.log(
-    //   "bee link status:",
-    //   gl.getProgramParameter(beeProgram, gl.LINK_STATUS),
-    // );
-    // const mesh = this.meshSchema.bess;
-    const mesh = this.meshes.bees;
-    if (!mesh || !mesh.vertexBuffer || !mesh.instanceBuffer) return;
-
-    // 1. Clear last frame's instance data
-    mesh.instanceData = [];
-    state.objects.tempBees = [];
-
-    // 2. Each bee contributes 11 floats: instance_pos(4) + instance_rotation(4) + instance_uv(3)
-    state.objects.bees.forEach((bee) => {
-      mesh.instanceData.push(
-        bee.pos[0],
-        bee.pos[1],
-        bee.pos[2],
-        bee.meshScale ?? 1,
-        bee.moveDir?.[0] ?? 1,
-        bee.moveDir?.[1] ?? 0,
-        bee.moveDir?.[2] ?? 0,
-        0,
-        beeInfo[bee.type]?.u ?? 0,
-        beeInfo[bee.type]?.v ?? 0,
-        0, // meshPartId/layer — 0 to match vertUV.w = 0 on our simple quad, avoids culling
-      );
-    });
-
-    // CHQ: Claude AI (Sonnet): After the state.objects.bees.forEach loop, before the draw call:
-    state.objects.tempBees.forEach((bee) => {
-      const [u, v] = bee._uvOverride ?? [
-        beeInfo[bee.type]?.u ?? 0,
-        beeInfo[bee.type]?.v ?? 0,
-      ];
-      mesh.instanceData.push(
-        bee.pos[0],
-        bee.pos[1],
-        bee.pos[2],
-        bee.meshScale ?? 1,
-        bee.moveDir?.[0] ?? 1,
-        bee.moveDir?.[1] ?? 0,
-        bee.moveDir?.[2] ?? 0,
-        0,
-        u,
-        v,
-        0,
-      );
-    });
-
-    const instanceCount = mesh.instanceData.length / 11;
-    if (instanceCount === 0) return;
-
-    // 3. Upload this frame's instance data
-    gl.bindBuffer(gl.ARRAY_BUFFER, mesh.instanceBuffer);
-    gl.bufferData(
-      gl.ARRAY_BUFFER,
-      new Float32Array(mesh.instanceData),
-      gl.DYNAMIC_DRAW,
-    );
-
-    // 4. Program + uniforms
-    gl.useProgram(beeProgram);
-    this.setUniform(beeProgram, "projMatrix", projectionMatrix);
-    this.setUniform(beeProgram, "viewMatrix", viewMatrix);
-    this.setUniform(beeProgram, "isNight", 1.0, "float"); // see note below
-    this.setUniform(beeProgram, "tex", 0, "int");
-
-    if (this.textures?.bees) {
-      gl.activeTexture(gl.TEXTURE0);
-      gl.bindTexture(gl.TEXTURE_2D, this.textures.bees);
-    }
-
-    // 5. One instanced draw call for all bees
-    gl.bindVertexArray(mesh.vao);
-    gl.drawElementsInstanced(
-      gl.TRIANGLES,
-      mesh.vertCount,
-      gl.UNSIGNED_INT,
-      0,
-      instanceCount,
-    );
-    const err = gl.getError();
-    if (err) console.error("drawElementsInstanced error [bees]:", err);
-    gl.bindVertexArray(null);
-  }
-
-  /**
-   * Iterates over all mob instances in the game state and issues one draw call
-   * per mob, uploading a model matrix that encodes translation, non-uniform scale,
-   * and Y-axis rotation derived from each mob's properties.
-   *
-   * @param {Object} state - The live game state object.
-   * @param {Object[]} state.objects.mobs - Array of mob instances with the following optional fields:
-   * @param {number[]} state.objects.mobs[].pos - World-space position [x, y, z].
-   * @param {number} [state.objects.mobs[].width=1] - X scale.
-   * @param {number} [state.objects.mobs[].height=1] - Y scale.
-   * @param {number} [state.objects.mobs[].depth=1] - Z scale.
-   * @param {number} [state.objects.mobs[].facingAngle] - Y-axis rotation in radians.
-   * @param {number} [state.objects.mobs[].frameIndex=0] - Texture frame/row offset.
-   * @param {Float32Array|number[]} viewMatrix - Column-major 4×4 view matrix.
-   * @param {Float32Array|number[]} projectionMatrix - Column-major 4×4 projection matrix.
-   * @returns {void}
-   */
-  drawMobs(state, viewMatrix, projectionMatrix) {
-    // CHQ: Claude AI (Sonnet) removed unneeded textures
-    const gl = this.gl;
-    const mobProgram = this.programs.mob;
-
-    if (!gl.getProgramParameter(mobProgram, gl.LINK_STATUS)) return;
-    if (!this.meshes.mobs?.vertexBuffer) return;
-
-    gl.useProgram(mobProgram);
-
-    this.setUniform(mobProgram, "projMatrix", projectionMatrix);
-    this.setUniform(mobProgram, "viewMatrix", viewMatrix);
-    this.setUniform(mobProgram, "isNight", 1.0, "float");
-
-    // console.log(
-    //   "drawMobs called, mob count:",
-    //   state.objects.mobs.length,
-    //  "mesh vertCount:",
-    //  this.meshes.mobs.vertCount,
-    // );
-
-    // CHQ: Gemini AI modified position
-    state.objects.mobs.forEach((mob) => {
-      const posX = mob.pos[0];
-      const posY = mob.pos[1];
-      const posZ = mob.pos[2];
-      const headingAngle = mob.facingAngle ?? 0.0;
-
-      // 1. Matrix/Translation Uniform
-      this.setUniform(mobProgram, "instance_info1", [
-        posX,
-        posY,
-        posZ,
-        headingAngle,
-      ]);
-
-      // CRITICAL FIX FOR VERTICAL BLOCK: Pass X, Y, and Z scales individually
-      // instance_info2: [ScaleX, ScaleY, ScaleZ, FrameIndex]
-      const scaleX = mob.width ?? 1.0;
-      const scaleY = mob.height ?? 1.0;
-      const scaleZ = mob.depth ?? 1.0;
-      this.setUniform(
-        mobProgram,
-        "instance_info2",
-        [scaleX, scaleY, scaleZ],
-        "vec3",
-      );
-
-      // 3. Fallback Uniform Dynamic Tinting
-      let mobColor = [1.0, 1.0, 1.0];
-      let useCustom = 0.0; // Default to original vertex behavior if preferred
-
-      if (mob.type === "ladybug") {
-        mobColor = [0.85, 0.1, 0.15]; // Red
-        useCustom = 1.0;
-      } else if (mob.type === "beetle" || mob.type === "blue_beetle") {
-        mobColor = [0.1, 0.3, 0.75]; // Blue
-        useCustom = 1.0;
-      }
-
-      this.setUniform(mobProgram, "debugColor", mobColor, "vec3");
-      this.setUniform(mobProgram, "useCustomColor", useCustom, "float");
-
-      this.drawMesh("mobs");
-    });
-  }
 
   // drawBears(state, viewMatrix, projectionMatrix) {
   //   const gl = this.gl;
@@ -980,44 +694,6 @@ export class Renderer {
   //     this.drawMesh("bears");
   //   });
   // }
-
-  /**
-   * Draws all active CogTurret instances and their fired cog projectiles.
-   * Expects this.meshes.cogTurret and this.meshes.cog to be uploaded separately
-   * (same pattern as uploadMobMesh).
-   */
-  drawTurrets(state, viewMatrix, projectionMatrix) {
-    const gl = this.gl;
-    const mobProgram = this.programs.mob;
-    if (!gl.getProgramParameter(mobProgram, gl.LINK_STATUS)) return;
-
-    const turrets = (state.objects.mobs || []).filter(
-      (m) => m.type === "cogTurret",
-    );
-    if (turrets.length === 0) return;
-
-    gl.useProgram(mobProgram);
-    this.setUniform(mobProgram, "projMatrix", projectionMatrix);
-    this.setUniform(mobProgram, "viewMatrix", viewMatrix);
-
-    turrets.forEach((turret) => {
-      // Turret body
-      const modelMatrix = mat4.create();
-      mat4.fromTranslation(modelMatrix, turret.pos);
-      mat4.rotateY(modelMatrix, modelMatrix, turret.facing || 0);
-      this.setUniform(mobProgram, "uModelMatrix", modelMatrix);
-      this.drawMesh("cogTurret");
-
-      // Fired cogs
-      turret.cogs.forEach((s) => {
-        const cogMatrix = mat4.create();
-        mat4.fromTranslation(cogMatrix, [s.pos[0], s.pos[1], s.pos[2]]);
-        mat4.rotateY(cogMatrix, cogMatrix, s.pos[3] || 0);
-        this.setUniform(mobProgram, "uModelMatrix", cogMatrix);
-        this.drawMesh("cog");
-      });
-    });
-  }
 
   drawTurretUI(state) {
     const textRenderer = state.textRenderer;
@@ -1085,30 +761,30 @@ export class Renderer {
   }
 
   // draw without using textures
-  drawPlayer(state, viewMatrix, projectionMatrix) {
-    // Reuse mob program + mesh — player is just a mob with player's pos
-    const gl = this.gl;
-    const playerProgram = this.programs.mob;
-    if (!gl.getProgramParameter(playerProgram, gl.LINK_STATUS)) return;
+  // drawPlayer(state, viewMatrix, projectionMatrix) {
+  //   // Reuse mob program + mesh — player is just a mob with player's pos
+  //   const gl = this.gl;
+  //   const playerProgram = this.programs.mob;
+  //   if (!gl.getProgramParameter(playerProgram, gl.LINK_STATUS)) return;
 
-    // if (!this.meshes.player?.vertexBuffer) return;
+  //   // if (!this.meshes.player?.vertexBuffer) return;
 
-    gl.useProgram(playerProgram);
-    this.setUniform(playerProgram, "projMatrix", projectionMatrix);
-    this.setUniform(playerProgram, "viewMatrix", viewMatrix);
+  //   gl.useProgram(playerProgram);
+  //   this.setUniform(playerProgram, "projMatrix", projectionMatrix);
+  //   this.setUniform(playerProgram, "viewMatrix", viewMatrix);
 
-    if (this.textures?.player) {
-      gl.activeTexture(gl.TEXTURE0);
-      gl.bindTexture(gl.TEXTURE_2D, this.textures.player);
-      this.setUniform(playerProgram, "tex", 0, "int");
-    }
+  //   if (this.textures?.player) {
+  //     gl.activeTexture(gl.TEXTURE0);
+  //     gl.bindTexture(gl.TEXTURE_2D, this.textures.player);
+  //     this.setUniform(playerProgram, "tex", 0, "int");
+  //   }
 
-    const modelMatrix = mat4.create();
-    mat4.fromTranslation(modelMatrix, state.player.pos);
-    mat4.rotateY(modelMatrix, modelMatrix, state.player.yaw || 0);
-    this.setUniform(playerProgram, "uModelMatrix", modelMatrix);
-    this.drawMesh("mobs");
-  }
+  //   const modelMatrix = mat4.create();
+  //   mat4.fromTranslation(modelMatrix, state.player.pos);
+  //   mat4.rotateY(modelMatrix, modelMatrix, state.player.yaw || 0);
+  //   this.setUniform(playerProgram, "uModelMatrix", modelMatrix);
+  //   this.drawMesh("mobs");
+  // }
 
   /**
    * Pre-fetches and caches the WebGL uniform locations for `projMatrix`,
@@ -1394,7 +1070,18 @@ export class Renderer {
 
     // 5. Draw calls AFTER matrices exist
     if (this.meshes.flowers?.vertexBuffer) {
-      this.drawFlowers(state, viewMatrix, projectionMatrix);
+      // this.drawFlowers(state, viewMatrix, projectionMatrix);
+      drawFlowers(
+        this.gl,
+        this.glCache,
+        this.programs,
+        this.textures,
+        this.meshes,
+        state,
+        viewMatrix,
+        projectionMatrix,
+      );
+
       const err = gl.getError();
       if (err !== gl.NO_ERROR)
         console.error("WebGL error after drawFlowers:", err);
@@ -1403,7 +1090,17 @@ export class Renderer {
     }
 
     if (state.objects?.bees?.length > 0) {
-      this.drawBees(state, viewMatrix, projectionMatrix);
+      // this.drawBees(state, viewMatrix, projectionMatrix);
+      drawBees(
+        gl,
+        this.glCache,
+        this.programs,
+        this.textures,
+        this.meshes,
+        state,
+        viewMatrix,
+        projectionMatrix,
+      );
     }
 
     if (this.gl.frameCount < 50000) {
@@ -1416,10 +1113,40 @@ export class Renderer {
       );
     }
     if (state.objects?.mobs?.length > 0) {
-      this.drawMobs(state, viewMatrix, projectionMatrix);
+      drawTurrets(
+        gl,
+        this.glCache,
+        this.programs,
+        this.textures,
+        this.meshes,
+        state,
+        viewMatrix,
+        projectionMatrix,
+      );
+
+      // this.drawMobs(state, viewMatrix, projectionMatrix);
+      drawMobs(
+        this.gl,
+        this.glCache,
+        this.programs,
+        this.meshes,
+        state,
+        viewMatrix,
+        projectionMatrix,
+      );
     }
     if (state.objects?.mobs?.some((m) => m.type === "cogTurret")) {
-      this.drawTurrets(state, viewMatrix, projectionMatrix);
+      // this.drawTurrets(state, viewMatrix, projectionMatrix);
+      drawTurrets(
+        this.gl,
+        this.glCache,
+        this.programs,
+        textures,
+        meshes,
+        state,
+        viewMatrix,
+        projectionMatrix,
+      );
       this.drawTurretUI(state);
     }
 
