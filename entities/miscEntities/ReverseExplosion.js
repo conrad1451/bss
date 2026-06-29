@@ -1,5 +1,8 @@
-class ReverseExplosion {
-  constructor(params) {
+// entities/miscEntities/ReverseExplosion.js
+
+export class ReverseExplosion {
+  constructor(params, gameState) {
+    this.gameState = gameState;
     this.transformHeight = params.transformHeight;
     this.primitive = params.primitive || "cylinder_explosions";
     this.lifespan = 1 / params.life;
@@ -10,13 +13,12 @@ class ReverseExplosion {
   }
 
   die(index) {
-    objects.explosions.splice(index, 1);
+    this.gameState.objects.explosions.splice(index, 1);
   }
 
-  update() {
+  update(dt, meshes) {
     this.params.life -= dt;
-    let s = this.params.life * this.lifespan * this.size;
-
+    const s = this.params.life * this.lifespan * this.size;
     meshes[this.primitive].instanceData.push(
       this.params.pos[0],
       this.params.pos[1],
@@ -28,7 +30,6 @@ class ReverseExplosion {
       this.backface ? -s : s,
       this.transformHeight ? this.params.height : this.params.height / s,
     );
-
     return this.params.life <= 0;
   }
 }
