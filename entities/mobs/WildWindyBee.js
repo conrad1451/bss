@@ -2,6 +2,7 @@
 import { BossMob, handleMobDeath } from "./MobTemplate.js";
 import { MATH } from "../utils/math.js";
 
+import { beeInfo } from "../../data/bees.js";
 export class WildWindyBee extends BossMob {
   constructor(field, pos, gameState) {
     const startPos = [...pos];

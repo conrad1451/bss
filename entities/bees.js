@@ -3,8 +3,7 @@ import { MATH } from "../utils/math.js";
 // import { vec3, vec2 } from "../utils/gl-matrix.js";
 import { vec3, vec2 } from "gl-matrix";
 
-// import { beeInfo } from "./data/bees.js";
-import { beeInfo } from "../data/bees.js"; // ✅
+import { beeInfo } from "../data/bees.js";
 
 import { getPositionAheadOfCamera } from "./entityHelpers.js";
 export class Bee {

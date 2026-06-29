@@ -1,5 +1,6 @@
 // entities/Mesh.js
 import { MATH } from "../utils/math.js";
+import { beeInfo } from "../data/bees.js";
 
 // CHQ: Claude AI (Haiku) applied JSDocs
 //      (except for setMeshFromFunction, which was applied by Gemini AI)

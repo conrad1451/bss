@@ -1,3 +1,4 @@
+import { beeInfo } from "../../data/bees";
 class Wave {
   constructor(pos, vel) {
     let size = player.tidalSurge ? 3.4 : player.tidePower * 0.85 + 0.45;

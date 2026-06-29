@@ -1,3 +1,5 @@
+import { beeInfo } from "../../data/bees";
+
 class Pulse {
   constructor(color) {
     this.color = color;

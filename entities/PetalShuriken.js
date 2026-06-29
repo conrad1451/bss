@@ -1,3 +1,5 @@
+import { beeInfo } from "../data/bees";
+
 class PetalShuriken {
   constructor(pos, vel) {
     this.pos = [...pos, 0];

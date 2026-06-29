@@ -1,3 +1,4 @@
+import { beeInfo } from "../data/bees";
 class Target {
   constructor(field, x, z, type, bee) {
     this.bee = bee;

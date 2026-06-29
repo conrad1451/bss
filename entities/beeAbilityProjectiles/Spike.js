@@ -1,3 +1,5 @@
+import { beeInfo } from "../../data/bees";
+
 class Spike {
   constructor(bee) {
     this.bee = bee;

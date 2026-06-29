@@ -1,6 +1,7 @@
 // entities/RogueViciousBee.js
 import { BossMob, handleMobDeath } from "./MobTemplate.js";
 import { MATH } from "../utils/math.js";
+import { beeInfo } from "../../data/bees.js";
 
 export class RogueViciousBee extends BossMob {
   constructor(field, level, gameState) {

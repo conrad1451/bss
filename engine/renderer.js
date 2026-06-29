@@ -14,7 +14,6 @@ import { drawTurrets } from "./drawEntities/drawTurrets";
 // const mat4 = window.glMatrix.mat4;
 
 import { mat4, vec3 } from "gl-matrix";
-// import { beeInfo } from "../data/bees";
 
 // console.log("Is mat4 available?", !!mat4); // Should be true
 

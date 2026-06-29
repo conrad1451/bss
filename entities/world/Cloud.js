@@ -1,3 +1,5 @@
+import { beeInfo } from "../../data/bees";
+
 class Cloud {
   constructor(field, x, z, life, windyBee) {
     this.windyBee = windyBee;
