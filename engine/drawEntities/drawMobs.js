@@ -106,6 +106,9 @@ export function drawMobs(
     } else if (mob.type === "fireAnt") {
       mobColor = [0.9, 0.35, 0.05]; // Orange
       useCustom = 1.0;
+    } else if (mob.type === "fireTrail") {
+      mobColor = [0.95, 0.25, 0.0]; // Bright orange-red
+      useCustom = 1.0;
     }
 
     setUniform(
