@@ -829,6 +829,80 @@ export class Bee {
 
     this._pushInstanceData(instanceData, BEE_FLY);
   }
+
+  // CHQ: implemented by Claude AI (Haiku)
+  _stateCollectPollen(
+    dt,
+    gameState,
+    { player, fieldInfo, flowers, instanceData },
+  ) {
+    if (!player.fieldIn || player.pollenInBag >= player.capacity) {
+      this.state = "moveToPlayer";
+      return;
+    }
+
+    this.collectTimer -= dt;
+
+    if (this.collectTimer <= 0) {
+      this.energy--;
+      const tabbyMult = this.type === "tabby" ? player.tabbyLoveStacks : 1;
+      const colorMult =
+        beeInfo[this.type].color === "red" ||
+        beeInfo[this.type].color === "blue"
+          ? 1.2
+          : 1;
+
+      const field = fieldInfo[player.fieldIn];
+      if (!field) {
+        this.state = "moveToPlayer";
+        return;
+      }
+
+      collectPollen({
+        x: this.flowerCollecting[0],
+        z: this.flowerCollecting[1],
+        pattern: [[0, 0]],
+        amount: this.gatherAmount,
+        yOffset: MATH.random(POLLEN_Y_MIN, POLLEN_Y_MAX),
+        multiplier: {
+          r:
+            player.pollenFromBees *
+            (beeInfo[this.type].color === "red" ? colorMult : 1) *
+            tabbyMult,
+          b:
+            player.pollenFromBees *
+            (beeInfo[this.type].color === "blue" ? colorMult : 1) *
+            tabbyMult,
+          w: player.pollenFromBees * tabbyMult,
+        },
+      });
+
+      if (beeInfo[this.type].gatheringPassive) {
+        beeInfo[this.type].gatheringPassive(this);
+      }
+
+      this._tryFireToken(
+        this.gatheringTokens,
+        [
+          Math.round(this.pos[0]),
+          field.y + POLLEN_SPAWN_HEIGHT_OFFSET,
+          Math.round(this.pos[2]),
+        ],
+        {
+          field: player.fieldIn,
+          x: this.flowerCollecting[0],
+          z: this.flowerCollecting[1],
+          bee: this,
+        },
+        gameState,
+      );
+
+      this.flowerCollecting = [];
+      this.state = "moveToPlayer";
+    }
+
+    this._pushInstanceData(instanceData, BEE_COLLECT, this.collectRot);
+  }
 }
 
 export class TempBee extends Bee {
