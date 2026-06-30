@@ -661,4 +661,34 @@ export const SHADERS = {
         fragColor = pixColor;
     }
 `,
+
+  playerVSH: `#version 300 es
+  precision highp float;
+
+  in vec3 vertPos;
+  in vec3 vertColor;
+
+  out vec4 pixColor;
+
+  uniform mat4 viewMatrix;
+  uniform mat4 projMatrix;
+  uniform mat4 uModelMatrix;
+  uniform float isNight;
+
+  void main(){
+    pixColor = vec4(vertColor * isNight, 1.0);
+    gl_Position = projMatrix * viewMatrix * uModelMatrix * vec4(vertPos, 1.0);
+  }
+`,
+
+  playerFSH: `#version 300 es
+  precision highp float;
+
+  in vec4 pixColor;
+  out vec4 fragColor;
+
+  void main(){
+    fragColor = pixColor;
+  }
+`,
 };

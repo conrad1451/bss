@@ -1,46 +1,32 @@
-// engine/drawEntities/drawPlayer.js
-
+import { mat4 } from "gl-matrix";
 import { drawMesh } from "../engineParts/drawMesh";
 import { setUniform } from "../engineParts/setUniform";
 
-// draw without using textures
 export function drawPlayer(
   theGl,
+  glCache,
   thePrograms,
   meshes,
   state,
   viewMatrix,
   projectionMatrix,
 ) {
-  // Reuse mob program + mesh — player is just a mob with player's pos
-  //   const gl = this.gl;
-  //   const prog = this.programs.mob;
   const gl = theGl;
-  const prog = thePrograms.mob;
+  const prog = thePrograms.player;
+
   if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) return;
-  // if (!this.meshSchema.mobs?.vertexBuffer) return;
-  if (!meshes.mobs?.vertexBuffer) return;
+  if (!meshes.player?.vertexBuffer) return;
 
   gl.useProgram(prog);
-  //   this.setUniform(prog, "projMatrix", projectionMatrix);
-  //   this.setUniform(prog, "viewMatrix", viewMatrix);
-  setUniform(prog, "projMatrix", projectionMatrix);
-  setUniform(prog, "viewMatrix", viewMatrix);
 
-  // draw without using textures
-  //   if (this.textures?.bear) {
-  //     gl.activeTexture(gl.TEXTURE0);
-  //     gl.bindTexture(gl.TEXTURE_2D, this.textures.bear);
-  //     // this.setUniform(prog, "tex", 0, "int");
-  //     setUniform(prog, "tex", 0, "int");
-  //   }
+  setUniform(gl, glCache, thePrograms, prog, "projMatrix", projectionMatrix);
+  setUniform(gl, glCache, thePrograms, prog, "viewMatrix", viewMatrix);
+  setUniform(gl, glCache, thePrograms, prog, "isNight", state.isNight ?? 1.0);
 
   const modelMatrix = mat4.create();
   mat4.fromTranslation(modelMatrix, state.player.pos);
   mat4.rotateY(modelMatrix, modelMatrix, state.player.yaw || 0);
-  //   this.setUniform(prog, "uModelMatrix", modelMatrix);
-  setUniform(prog, "uModelMatrix", modelMatrix);
+  setUniform(gl, glCache, thePrograms, prog, "uModelMatrix", modelMatrix);
 
-  //   this.drawMesh("mobs");
-  drawMesh("mobs");
+  drawMesh(gl, meshes, "player");
 }

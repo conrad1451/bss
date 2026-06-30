@@ -69,6 +69,11 @@ export class Renderer {
         indexBuffer: null,
         vertCount: 0,
       },
+      player: {
+        vertexBuffer: null,
+        indexBuffer: null,
+        vertCount: 0,
+      },
       // --- 🛠️ NEW: Static Quad buffer node for screen-space UI elements ---
       uiQuad: {
         vertexBuffer: null,
@@ -110,6 +115,7 @@ export class Renderer {
       particle: null,
       text: null,
       mob: null,
+      player: null,
       explosion: null,
       trail: null,
     };
@@ -423,7 +429,48 @@ export class Renderer {
 
     gl.bindVertexArray(null);
   }
+  uploadPlayerMesh(stagingData) {
+    const gl = this.gl;
+    if (!stagingData?.verts?.length) return;
 
+    const playerProgram = this.programs.player;
+    const mesh = this.meshes.player;
+
+    mesh.vertCount = stagingData.index.length;
+
+    mesh.vao = gl.createVertexArray();
+    gl.bindVertexArray(mesh.vao);
+
+    mesh.vertexBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, mesh.vertexBuffer);
+    gl.bufferData(
+      gl.ARRAY_BUFFER,
+      new Float32Array(stagingData.verts),
+      gl.STATIC_DRAW,
+    );
+
+    const vertPosLoc = gl.getAttribLocation(playerProgram, "vertPos");
+    const vertColorLoc = gl.getAttribLocation(playerProgram, "vertColor");
+
+    if (vertPosLoc !== -1) {
+      gl.enableVertexAttribArray(vertPosLoc);
+      gl.vertexAttribPointer(vertPosLoc, 3, gl.FLOAT, false, 32, 0);
+    }
+    if (vertColorLoc !== -1) {
+      gl.enableVertexAttribArray(vertColorLoc);
+      gl.vertexAttribPointer(vertColorLoc, 3, gl.FLOAT, false, 32, 12);
+    }
+
+    mesh.indexBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, mesh.indexBuffer);
+    gl.bufferData(
+      gl.ELEMENT_ARRAY_BUFFER,
+      new Uint32Array(stagingData.index),
+      gl.STATIC_DRAW,
+    );
+
+    gl.bindVertexArray(null);
+  }
   // Defensive compilation utility encapsulated in the class
 
   /**
@@ -502,6 +549,11 @@ export class Renderer {
       "mob",
       SHADERS.mobRendererVSH,
       SHADERS.mobRendererFSH,
+    );
+    this.programs.player = this.safeCreateProgram(
+      "player",
+      SHADERS.playerVSH,
+      SHADERS.playerFSH,
     );
     this.programs.explosion = this.safeCreateProgram(
       "explosion",

@@ -303,6 +303,9 @@ async function BeeSwarmSimulator(saveData) {
     const beeMeshDataStaging = buildBeeMesh();
     renderer.uploadBeeMesh(beeMeshDataStaging);
 
+    const playerMeshData = buildBoxMesh(); // reuse for now
+    renderer.uploadPlayerMesh(playerMeshData);
+
     // CHQ: Claude AI added for testing
     console.log(
       "Flower staging verts (first 24 floats):",
