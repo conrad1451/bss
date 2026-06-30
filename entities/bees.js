@@ -698,6 +698,7 @@ export class Bee {
     }
     // ... rest of convert logic, then _emitConvertParticles()
   }
+  // CHQ: implement _stateMoveToPlanter, refactored by ChatGPT
   _stateMoveToPlanter(
     dt,
     gameState,
