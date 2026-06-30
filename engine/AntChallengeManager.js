@@ -211,7 +211,12 @@ export class AntChallengeManager {
       this._advanceRound(objects, ctx.mobClasses.Ant);
     }
 
-    this._renderHud(textRenderer, MATH, COLORS);
+    this._renderHud(
+      textRenderer,
+      MATH,
+      COLORS,
+      gameState.stats.pollenFromAntField,
+    );
   }
 
   // ---- private helpers ---------------------------------------------
@@ -254,11 +259,10 @@ export class AntChallengeManager {
    * time remaining, round, score). Replaces the inline textRenderer.addSingle
    * calls at the bottom of updateAntChallenge.js.
    */
-  _renderHud(textRenderer, MATH, COLORS) {
+  _renderHud(textRenderer, MATH, COLORS, pollenFromAntField) {
     if (this.spawnDelay <= 0) {
       const remaining =
-        this.pollenReq - (this.gameStatsPollen - this.pollenBeforeReq) ||
-        this.pollenReq;
+        this.pollenReq - (pollenFromAntField - this.pollenBeforeReq);
       textRenderer.addSingle(
         MATH.addCommas(String(remaining)),
         [-21, 8, -61],
@@ -268,6 +272,9 @@ export class AntChallengeManager {
         false,
       );
     } else {
+      // CHQ: matches original quirk — pollenBeforeReq is only refreshed
+      // here, while spawnDelay is still counting down, not every frame.
+      this.pollenBeforeReq = pollenFromAntField;
       textRenderer.addSingle(
         this.spawnDelay.toFixed(1) + "s",
         [-21, 8, -61],
