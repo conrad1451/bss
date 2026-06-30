@@ -95,6 +95,27 @@ const AMULET_TIER_THRESHOLDS = [
   ["bronze", 5],
 ];
 
+// Same weighted pool used in all four spawn sites in the original
+// startRoboChallenge.js: 5x Mechsquito, 4x Cogmower, 3x CogTurret.
+const MOB_POOL = [
+  "Mechsquito",
+  "Mechsquito",
+  "Mechsquito",
+  "Mechsquito",
+  "Mechsquito",
+  "Cogmower",
+  "Cogmower",
+  "Cogmower",
+  "Cogmower",
+  "CogTurret",
+  "CogTurret",
+  "CogTurret",
+];
+
+// Fields excluded from random field selection in the original code
+// (StumpField/AntField/CoconutField aren't valid robo challenge targets).
+const EXCLUDED_FIELDS = ["StumpField", "AntField", "CoconutField"];
+
 export class RoboChallengeManager {
   constructor() {
     this.isActive = false;
@@ -203,23 +224,97 @@ export class RoboChallengeManager {
   _clearRoboMobs() {
     /* removes Mechsquito/Cogmower/CogTurret instances */
   }
-  _spawnRandomMob(fieldId, round) {
-    /* the 4x-duplicated mob pool selection */
+  // _spawnRandomMob(fieldId, round) {
+  //   /* the 4x-duplicated mob pool selection */
+  // }
+
+  /**
+   * Spawns one mob of a randomly chosen class into objects.mobs.
+   *
+   * @param {string} fieldId - Target field for the mob.
+   * @param {Object} ctx - { MATH, objects, mobClasses: { Mechsquito, Cogmower, CogTurret } }
+   * @param {Object} [options]
+   * @param {boolean} [options.gateFlagByRound] - If true, the CogTurret/flag
+   *   param is gated behind `round > 5` (matches the quest-mob spawn path
+   *   in the original, which is stricter than the interval/field-mob paths).
+   */
+  _spawnRandomMob(fieldId, ctx, options = {}) {
+    const { MATH, objects, mobClasses } = ctx;
+    const className = this._pickMobClass();
+    const MobClass = mobClasses[className];
+
+    const level = (this.round * MATH.random(0.5, 0.6) + 1) | 0;
+
+    let flagOrTier;
+    if (className === "CogTurret") {
+      flagOrTier = MATH.random(0, 4) | 0;
+    } else if (options.gateFlagByRound) {
+      flagOrTier = this.round > 5 ? Math.random() < 0.8 : 0;
+    } else {
+      flagOrTier = Math.random() < 0.8;
+    }
+
+    objects.mobs.push(new MobClass(fieldId, level, flagOrTier));
   }
-  _spawnQuestMobs() {
-    /* loops out.roboChallenge.quest, calls _spawnRandomMob */
+  _spawnQuestMobs(ctx) {
+    const { MATH, fieldInfo } = ctx;
+
+    for (const q of this.quest) {
+      const isFromQuest = q[0].indexOf("From") > -1;
+      const count = isFromQuest ? MATH.random(0, 3) | 0 : MATH.random(1, 4) | 0;
+
+      for (let i = 0; i < count; i++) {
+        const fieldId = isFromQuest
+          ? q[0].replace("pollenFrom", "")
+          : this._pickRandomField(fieldInfo);
+
+        this._spawnRandomMob(fieldId, ctx, { gateFlagByRound: isFromQuest });
+      }
+    }
   }
-  _startMobSpawnInterval() {
-    /* single owner of setInterval */
+
+  /* single owner of setInterval */
+  _startMobSpawnInterval(ctx) {
+    const { fieldInfo } = ctx;
+    this._mobSpawnIntervalID = window.setInterval(() => {
+      if (Math.random() < 0.5) return;
+
+      let fieldId = ctx.currentFieldIn; // mirrors out.fieldIn
+      if (!fieldId) {
+        if (Math.random() < 0.8) return;
+        fieldId = this._pickRandomField(fieldInfo);
+      }
+
+      this._spawnRandomMob(fieldId, ctx);
+    }, 20000);
   }
+
+  /* single owner of clearInterval */
   _stopMobSpawnInterval() {
-    /* single owner of clearInterval */
+    if (this._mobSpawnIntervalID !== undefined) {
+      window.clearInterval(this._mobSpawnIntervalID);
+      this._mobSpawnIntervalID = undefined;
+    }
   }
-  _rollEndRewards() {
-    /* the honey/drive/loot array building */
+
+  /**
+   * Picks a random mob class name from the weighted pool.
+   * Replaces the four duplicated `m[(Math.random()*m.length)|0]` blocks.
+   */
+  _pickMobClass() {
+    return MOB_POOL[(Math.random() * MOB_POOL.length) | 0];
   }
-  _grantRewards(player, items, rewards) {
-    /* applies + addMessage per item */
+
+  /**
+   * Picks a random valid field id, excluding fields the robo challenge
+   * never spawns into. Used by the quest-mob and interval-mob spawn paths
+   * when no specific field is targeted.
+   */
+  _pickRandomField(fieldInfo) {
+    const candidates = Object.keys(fieldInfo).filter(
+      (id) => !EXCLUDED_FIELDS.includes(id),
+    );
+    return candidates[(Math.random() * candidates.length) | 0];
   }
 
   /**
