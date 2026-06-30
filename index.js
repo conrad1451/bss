@@ -23,6 +23,8 @@ import { FieldManager } from "./engine/FieldManager.js";
 import { EnvManager } from "./engine/EnvManager.js";
 import { FIELD_CONFIGS } from "./data/fieldData.js";
 
+import { RoboChallengeManager } from "./engine/RoboChallengeManager.js";
+
 import { Player } from "./entities/Player.js";
 import { NPC } from "./entities/npcs.js";
 
@@ -158,11 +160,13 @@ async function BeeSwarmSimulator(saveData) {
 
   const fieldManager = new FieldManager(FIELD_CONFIGS);
   const envManager = new EnvManager();
+  const roboChallengeManager = new RoboChallengeManager();
 
   const gameState = createInitialState(saveData);
 
   gameState.fieldManager = fieldManager;
   gameState.envManager = envManager;
+  gameState.roboChallengeManager = roboChallengeManager;
 
   gameState.player = new Player(gameState.player);
 
