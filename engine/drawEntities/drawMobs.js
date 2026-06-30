@@ -5,16 +5,22 @@ import { setUniform } from "../engineParts/setUniform";
 
 /**
  * Iterates over all mob instances in the game state and issues one draw call
- * per mob, uploading a model matrix that encodes translation, non-uniform scale,
+ * per mob, uploading a model matrix that encodes translation, uniform scale,
  * and Y-axis rotation derived from each mob's properties.
+ *
+ * CHQ: Claude AI (Sonnet) — switched this from a one-off facingAngle/width/
+ * height/depth contract to the pos[3]-as-rotation + meshScale convention
+ * already used everywhere else in the codebase (Mob, BugMob, Ant). Also
+ * fixed drawMesh's hardcoded "cog" key, which doesn't exist in
+ * renderer.meshes (only "flowers"/"bees"/"mobs"/"uiQuad" are initialized) —
+ * every mob now correctly draws from the "mobs" mesh.
  *
  * @param {Object} state - The live game state object.
  * @param {Object[]} state.objects.mobs - Array of mob instances with the following optional fields:
- * @param {number[]} state.objects.mobs[].pos - World-space position [x, y, z].
- * @param {number} [state.objects.mobs[].width=1] - X scale.
- * @param {number} [state.objects.mobs[].height=1] - Y scale.
- * @param {number} [state.objects.mobs[].depth=1] - Z scale.
- * @param {number} [state.objects.mobs[].facingAngle] - Y-axis rotation in radians.
+ * @param {number[]} state.objects.mobs[].pos - World-space position [x, y, z, rotationY].
+ *   pos[3], if present, is the Y-axis facing angle in radians (set by Mob/BugMob/Ant's
+ *   movement logic via Math.atan2(...) + MATH.HALF_PI).
+ * @param {number} [state.objects.mobs[].meshScale=1] - Uniform scale applied on all axes.
  * @param {number} [state.objects.mobs[].frameIndex=0] - Texture frame/row offset.
  * @param {Float32Array|number[]} viewMatrix - Column-major 4×4 view matrix.
  * @param {Float32Array|number[]} projectionMatrix - Column-major 4×4 projection matrix.
@@ -29,21 +35,14 @@ export function drawMobs(
   viewMatrix,
   projectionMatrix,
 ) {
-  // CHQ: Claude AI (Sonnet) removed unneeded textures
-  //   const gl = this.gl;
-  //   const mobProgram = this.programs.mob;
   const gl = theGl;
   const mobProgram = thePrograms.mob;
 
   if (!gl.getProgramParameter(mobProgram, gl.LINK_STATUS)) return;
-  //   if (!this.meshes.mobs?.vertexBuffer) return;
   if (!meshes.mobs?.vertexBuffer) return;
 
   gl.useProgram(mobProgram);
 
-  //   this.setUniform(mobProgram, "projMatrix", projectionMatrix);
-  //   this.setUniform(mobProgram, "viewMatrix", viewMatrix);
-  //   this.setUniform(mobProgram, "isNight", 1.0, "float");
   setUniform(
     gl,
     glCache,
@@ -55,27 +54,14 @@ export function drawMobs(
   setUniform(gl, glCache, thePrograms, mobProgram, "viewMatrix", viewMatrix);
   setUniform(gl, glCache, thePrograms, mobProgram, "isNight", 1.0, "float");
 
-  // console.log(
-  //   "drawMobs called, mob count:",
-  //   state.objects.mobs.length,
-  //  "mesh vertCount:",
-  //  this.meshes.mobs.vertCount,
-  // );
-
-  // CHQ: Gemini AI modified position
   state.objects.mobs.forEach((mob) => {
     const posX = mob.pos[0];
     const posY = mob.pos[1];
     const posZ = mob.pos[2];
-    const headingAngle = mob.facingAngle ?? 0.0;
+    // CHQ: read rotation from pos[3], matching Mob/BugMob/Ant's convention,
+    // instead of the unused mob.facingAngle field this used to read.
+    const headingAngle = mob.pos[3] ?? 0.0;
 
-    // 1. Matrix/Translation Uniform
-    // this.setUniform(mobProgram, "instance_info1", [
-    //   posX,
-    //   posY,
-    //   posZ,
-    //   headingAngle,
-    // ]);
     setUniform(gl, glCache, thePrograms, mobProgram, "instance_info1", [
       posX,
       posY,
@@ -83,24 +69,16 @@ export function drawMobs(
       headingAngle,
     ]);
 
-    // CRITICAL FIX FOR VERTICAL BLOCK: Pass X, Y, and Z scales individually
-    // instance_info2: [ScaleX, ScaleY, ScaleZ, FrameIndex]
-    const scaleX = mob.width ?? 1.0;
-    const scaleY = mob.height ?? 1.0;
-    const scaleZ = mob.depth ?? 1.0;
-    // this.setUniform(
-    //   mobProgram,
-    //   "instance_info2",
-    //   [scaleX, scaleY, scaleZ],
-    //   "vec3",
-    // );
+    // CHQ: meshScale is a single uniform scalar (see Mob/BugMob/Ant), unlike
+    // the old width/height/depth fields nothing in the codebase actually sets.
+    const scale = mob.meshScale ?? 1.0;
     setUniform(
       gl,
       glCache,
       thePrograms,
       mobProgram,
       "instance_info2",
-      [scaleX, scaleY, scaleZ],
+      [scale, scale, scale],
       "vec3",
     );
 
@@ -114,10 +92,11 @@ export function drawMobs(
     } else if (mob.type === "beetle" || mob.type === "blue_beetle") {
       mobColor = [0.1, 0.3, 0.75]; // Blue
       useCustom = 1.0;
+    } else if (mob.type === "fireAnt") {
+      mobColor = [0.9, 0.35, 0.05]; // Orange
+      useCustom = 1.0;
     }
 
-    // this.setUniform(mobProgram, "debugColor", mobColor, "vec3");
-    // this.setUniform(mobProgram, "useCustomColor", useCustom, "float");
     setUniform(
       gl,
       glCache,
@@ -137,7 +116,7 @@ export function drawMobs(
       "float",
     );
 
-    //   this.drawMesh("mobs");
-    drawMesh(gl, meshes, "cog");
+    // CHQ: Claude AI (Sonnet) fixed (was mistakenly hardcoded to "cog")
+    drawMesh(gl, meshes, "mobs");
   });
 }
