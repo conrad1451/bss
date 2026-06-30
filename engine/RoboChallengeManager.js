@@ -116,6 +116,27 @@ const MOB_POOL = [
 // (StumpField/AntField/CoconutField aren't valid robo challenge targets).
 const EXCLUDED_FIELDS = ["StumpField", "AntField", "CoconutField"];
 
+// Loot table for the random bonus rewards rolled on challenge end.
+// Each entry is [itemKey, () => amount]. Mirrors the array passed to
+// MATH.selectFromArray in the original endRoboChallenge.js.
+function buildBonusLootTable(MATH) {
+  return [
+    ["starJelly", () => 1],
+    ["softWax", () => MATH.random(1, 4) | 0],
+    ["hardWax", () => 1],
+    ["fieldDice", () => MATH.random(1, 4) | 0],
+    ["smoothDice", () => MATH.random(1, 2) | 0],
+    ["loadedDice", () => 1],
+    ["oil", () => MATH.random(1, 4) | 0],
+    ["glue", () => MATH.random(1, 4) | 0],
+    ["neonberry", () => MATH.random(1, 4) | 0],
+    ["whirligig", () => MATH.random(1, 7) | 0],
+    ["honeysuckle", () => MATH.random(1, 15) | 0],
+    ["microConverter", () => MATH.random(1, 4) | 0],
+    ["jellyBeans", () => MATH.random(1, 6) | 0],
+  ];
+}
+
 export class RoboChallengeManager {
   constructor() {
     this.isActive = false;
@@ -294,6 +315,65 @@ export class RoboChallengeManager {
     if (this._mobSpawnIntervalID !== undefined) {
       window.clearInterval(this._mobSpawnIntervalID);
       this._mobSpawnIntervalID = undefined;
+    }
+  }
+
+  /**
+   * Builds the full reward list for the end of a robo challenge run:
+   * honey scaled to round^5, a guaranteed random drive, a handful of
+   * bonus items, and round-gated rare drops. Replaces the inline `arr`
+   * construction at the top of the original endRoboChallenge.js.
+   *
+   * @returns {[string, number][]} list of [itemKey, amount] pairs
+   *   ("honey" is included as a pseudo-item key, handled specially by
+   *   _grantRewards).
+   */
+  _rollEndRewards(MATH) {
+    const round = this.round;
+    const rewards = [];
+
+    // Honey scales steeply with round (round^5 * 25 + base 10000)
+    rewards.push(["honey", round ** 5 * 25 + 10000]);
+
+    // Guaranteed drive drop; glitchedDrive only unlocks at round 10+
+    const drivePool = ["redDrive", "blueDrive", "whiteDrive"];
+    if (round >= 10) drivePool.push("glitchedDrive");
+    const drive = drivePool[(Math.random() * drivePool.length) | 0];
+    rewards.push([drive, 1]);
+
+    // Bonus loot, count scales with round (capped at 3)
+    const lootTable = buildBonusLootTable(MATH);
+    const bonusCount = Math.min(round / 6, 3) | 0;
+    const selected = MATH.selectFromArray(lootTable, bonusCount);
+    for (const [itemKey, rollAmount] of selected) {
+      rewards.push([itemKey, rollAmount()]);
+    }
+
+    // Round-gated rare drops
+    if (round > 11 && Math.random() < 0.25) rewards.push(["purplePotion", 1]);
+    if (round > 14) rewards.push(["atomicTreat", 1]);
+    if (round > 17 && Math.random() < 0.2) rewards.push(["superSmoothie", 1]);
+
+    return rewards;
+  }
+
+  /**
+   * Applies rolled rewards to player/items and emits a message per item,
+   * matching the original loop's honey-vs-item branching and addMessage calls.
+   */
+  _grantRewards(player, items, rewards, MATH) {
+    for (const [itemKey, amount] of rewards) {
+      if (itemKey === "honey") {
+        player.honey += amount;
+      } else {
+        items[itemKey].amount += amount;
+      }
+
+      EventManager.emit("ROBO_REWARD_GRANTED", {
+        itemKey,
+        amount,
+        message: `+${MATH.addCommas(String(amount))} ${MATH.doGrammar(itemKey)} (from Robo Challenge)`,
+      });
     }
   }
 
