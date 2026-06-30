@@ -58,7 +58,8 @@ export function drawTurrets(
       modelMatrix,
     );
     // this.drawMesh("cogTurret");
-    drawMesh(gl, meshes, "cogTurret");
+    // drawMesh(gl, meshes, "cogTurret");
+    drawMesh(gl, meshes, "mobs");
 
     // Fired cogs
     turret.cogs.forEach((s) => {
@@ -75,7 +76,8 @@ export function drawTurrets(
         "uModelMatrix",
         cogMatrix,
       );
-      drawMesh(gl, meshes, "cog");
+      // drawMesh(gl, meshes, "cog");
+      drawMesh(gl, meshes, "mobs");
     });
   });
 }
