@@ -903,6 +903,421 @@ export class Bee {
 
     this._pushInstanceData(instanceData, BEE_COLLECT, this.collectRot);
   }
+
+  // CHQ: Claude AI (Sonnet) Provided the implementation
+  _stateMoveToSleep(dt, gameState, { player, instanceData }) {
+    this.moveTo = this.hivePos.slice();
+    this._stepTowards(this.moveTo, dt, player);
+
+    if (vec3.sqrDist(this.moveTo, this.pos) < 1) {
+      this.pos = this.hivePos.slice();
+      this.sleepTimer = 20;
+      this.zzzTimer = 0;
+      this.state = "sleep";
+      this.sleepRotate = Math.random() * MATH.TWO_PI;
+    }
+
+    this._pushInstanceData(instanceData, BEE_FLY);
+  }
+
+  // CHQ: Claude AI (Sonnet) Provided the implementation
+  _stateSleep(dt, gameState, { player, instanceData, textRenderer }) {
+    this.sleepTimer -= dt;
+    this.zzzTimer -= dt;
+
+    if (this.sleepTimer <= 0) {
+      this.energy = this.maxEnergy * player.beeEnergy;
+      this.state = "moveToPlayer";
+    }
+
+    if (this.zzzTimer <= 0) {
+      this.zzzTimer = 5;
+      textRenderer.add(
+        "zzz",
+        [
+          this.pos[0] + MATH.random(-1, 1),
+          this.pos[1] + MATH.random(-1, 1),
+          this.pos[2] + Math.random() + 0.25,
+        ],
+        [255, 255, 255],
+        0,
+        "",
+        1.25,
+      );
+    }
+
+    this._pushInstanceData(instanceData, this.sleepRotate, [0, 1, 0]);
+  }
+
+  // CHQ: Claude AI (Sonnet) Provided the implementation
+  _stateMoveToTargetPractice(
+    dt,
+    gameState,
+    { player, objects, fieldInfo, instanceData },
+  ) {
+    if (!player.fieldIn) {
+      this.state = "moveToPlayer";
+      return;
+    }
+
+    this._stepTowards(this.moveTo, dt, player, 1.5);
+
+    if (vec3.sqrDist(this.moveTo, this.pos) < 0.7) {
+      this.pos = this.moveTo.slice();
+      this.targetPracticeTimer = 4;
+      this.targetExplosionTimer = 0;
+      this.state = "shootTargetPractice";
+      this.targetLookDir = [
+        ((fieldInfo[player.fieldIn].width * 0.5) | 0) +
+          fieldInfo[player.fieldIn].x -
+          this.pos[0],
+        fieldInfo[player.fieldIn].y,
+        ((fieldInfo[player.fieldIn].length * 0.5) | 0) +
+          fieldInfo[player.fieldIn].z -
+          this.pos[2],
+      ];
+      this.targets = [];
+
+      for (let i = 0; i < 3; i++) {
+        const _x =
+          (fieldInfo[player.fieldIn].width * 0.5 +
+            Math.random() *
+              this.targetPractice_q[0] *
+              fieldInfo[player.fieldIn].width *
+              0.5) |
+          0;
+        const _z =
+          (fieldInfo[player.fieldIn].length * 0.5 +
+            Math.random() *
+              this.targetPractice_q[1] *
+              fieldInfo[player.fieldIn].length *
+              0.5) |
+          0;
+
+        this.targets.push(new Target(player.fieldIn, _x, _z, i + 1, this));
+        objects.targets.push(this.targets[this.targets.length - 1]);
+      }
+    }
+
+    this._pushInstanceData(instanceData, BEE_FLY);
+  }
+
+  // CHQ: Claude AI (Sonnet) Provided the implementation
+  _stateShootTargetPractice(dt, gameState, { player, objects, instanceData }) {
+    this.targetPracticeTimer -= dt;
+    this.targetExplosionTimer -= dt;
+
+    if (
+      this.targets[0].activated &&
+      this.targets[1].activated &&
+      this.targets[2].activated &&
+      this.targetPracticeTimer > 0.75
+    ) {
+      this.targetPracticeTimer = 0.75;
+    }
+
+    if (this.targetPracticeTimer <= 0.5 && !this.shotParticleProjectile) {
+      this._fireTargetPracticeParticles();
+    }
+
+    if (this.targetPracticeTimer <= 0) {
+      this.shotParticleProjectile = false;
+      this._resolveTargetPracticeRound(gameState, objects, player);
+      this.state = "moveToPlayer";
+      return;
+    }
+
+    if (this.targetExplosionTimer <= 0) {
+      this.targetExplosionTimer = 0.8;
+      objects.explosions.push(
+        new Explosion({
+          col: [1, 0, 0],
+          pos: this.pos,
+          life: 0.75,
+          size: 1.75,
+          speed: 0.3,
+          aftershock: 0,
+        }),
+      );
+    }
+
+    this._pushInstanceData(instanceData, BEE_FLY, this.targetLookDir);
+  }
+
+  // CHQ: Claude AI (Sonnet): Extracted helper — the particle-firing block from the middle of shootTargetPractice
+  _fireTargetPracticeParticles() {
+    this.shotParticleProjectile = true;
+
+    for (let i in this.targets) {
+      const vx = this.targets[i].pos[0] - this.pos[0];
+      const vy = this.targets[i].pos[1] - this.pos[1];
+      const vz = this.targets[i].pos[2] - this.pos[2];
+      const d = Math.sqrt(vx * vx + vy * vy + vz * vz);
+      const m = d / 0.5 / d;
+
+      ParticleRenderer.add({
+        x: this.pos[0],
+        y: this.pos[1],
+        z: this.pos[2],
+        vx: vx * m,
+        vy: vy * m,
+        vz: vz * m,
+        grav: 0,
+        size: 400,
+        col: [1, 0, 0],
+        life: 0.4,
+        rotVel: MATH.random(-9, 9),
+        alpha: 1000,
+      });
+    }
+  }
+
+  // CHQ: Claude AI (Sonnet): Extracted helper — the big token/loot resolution block at the end of shootTargetPractice
+  _resolveTargetPracticeRound(gameState, objects, player) {
+    const t = [
+      this.targets[0].activated,
+      this.targets[1].activated,
+      this.targets[2].activated,
+    ];
+
+    if (t[0] && t[1] && t[2]) {
+      for (let i in objects.tokens) {
+        if (
+          objects.tokens[i].canBeLinked &&
+          !(objects.tokens[i] instanceof DupedToken)
+        ) {
+          objects.tokens[i].collect();
+        }
+      }
+
+      const t2 = this.targets[2];
+      objects.tokens.push(
+        new Token(
+          effects.precision.tokenLife,
+          [t2.pos[0], t2.pos[1] + 0.5, t2.pos[2]],
+          "precision",
+          {
+            field: t2.field,
+            x: t2.x,
+            z: t2.z,
+            bee: this,
+          },
+        ),
+      );
+      objects.tokens.push(
+        new Token(
+          effects.focus.tokenLife,
+          [t2.pos[0] + 1, t2.pos[1] + 0.5, t2.pos[2]],
+          "focus",
+          {
+            field: t2.field,
+            x: t2.x + 1,
+            z: t2.z,
+            bee: this,
+          },
+        ),
+      );
+      objects.tokens.push(
+        new Token(
+          effects.redBoost.tokenLife,
+          [t2.pos[0] - 1, t2.pos[1] + 0.5, t2.pos[2]],
+          "redBoost",
+          {
+            field: t2.field,
+            x: t2.x - 1,
+            z: t2.z,
+            bee: this,
+          },
+        ),
+      );
+    }
+
+    if (t[2] && this.gifted && (!t[0] || !t[1])) {
+      objects.marks.push(
+        new Mark(
+          this.targets[2].field,
+          this.targets[2].x,
+          this.targets[2].z,
+          "preciseMark",
+          this.level,
+        ),
+      );
+    }
+
+    for (let i in this.targets) {
+      const _t = this.targets[i];
+
+      if (_t.activated) {
+        if (i !== 2) {
+          objects.tokens.push(
+            new Token(
+              effects.focus.tokenLife,
+              [_t.pos[0], _t.pos[1] + 0.5, _t.pos[2]],
+              "focus",
+              {
+                field: _t.field,
+                x: _t.x,
+                z: _t.z,
+                bee: this,
+              },
+            ),
+          );
+        }
+
+        collectPollen({
+          x: _t.x,
+          z: _t.z,
+          pattern: [
+            [-4, 0],
+            [-3, -2],
+            [-3, -1],
+            [-3, 0],
+            [-3, 1],
+            [-3, 2],
+            [-2, -3],
+            [-2, -2],
+            [-2, -1],
+            [-2, 0],
+            [-2, 1],
+            [-2, 2],
+            [-2, 3],
+            [-1, -3],
+            [-1, -2],
+            [-1, -1],
+            [-1, 0],
+            [-1, 1],
+            [-1, 2],
+            [-1, 3],
+            [0, -4],
+            [0, -3],
+            [0, -2],
+            [0, -1],
+            [0, 0],
+            [0, 1],
+            [0, 2],
+            [0, 3],
+            [0, 4],
+            [1, -3],
+            [1, -2],
+            [1, -1],
+            [1, 0],
+            [1, 1],
+            [1, 2],
+            [1, 3],
+            [2, -3],
+            [2, -2],
+            [2, -1],
+            [2, 0],
+            [2, 1],
+            [2, 2],
+            [2, 3],
+            [3, -2],
+            [3, -1],
+            [3, 0],
+            [3, 1],
+            [3, 2],
+            [4, 0],
+          ],
+          amount:
+            (this.attack + player[beeInfo[this.type].color + "BeeAttack"]) *
+            player.beeAttack *
+            (this.level * 0.1 + 1) *
+            0.5,
+          yOffset: 2 + Math.random() * 0.4,
+          stackHeight: 0.5 + Math.random() * 0.5,
+          instantConversion: (player.flameHeatStack - 1) * 0.5,
+          multiplier: player.flameHeatStack * 3,
+          field: _t.field,
+        });
+      } else {
+        objects.tokens.push(
+          new Token(
+            effects.redBoost.tokenLife,
+            [_t.pos[0], _t.pos[1] + 0.5, _t.pos[2]],
+            "redBoost",
+            {
+              field: _t.field,
+              x: _t.x,
+              z: _t.z,
+              bee: this,
+            },
+          ),
+        );
+      }
+    }
+
+    this.targets[0].splice = true;
+    this.targets[1].splice = true;
+    this.targets[2].splice = true;
+  }
+
+  // CHQ: Claude AI (Sonnet) Provided the implementation
+  _stateMoveToTriangulate(dt, gameState, { player, instanceData }) {
+    this.triangulateTimer -= dt;
+
+    const d = [
+      player.pos[0] - this.triangulateTokenPos[0],
+      player.pos[2] - this.triangulateTokenPos[2],
+    ];
+    const rd = [-d[1], d[0]];
+    const tb = [this.pos[0] - player.pos[0], this.pos[2] - player.pos[2]];
+
+    if (rd[0] * tb[0] + rd[1] * tb[1] > 0) {
+      this.moveDir = [rd[0], 0, rd[1]];
+    } else {
+      this.moveDir = [d[1], 0, -d[0]];
+    }
+
+    vec3.normalize(this.moveDir, this.moveDir);
+    vec3.scaleAndAdd(
+      this.pos,
+      this.pos,
+      this.moveDir,
+      dt * this.speed * player.beeSpeed,
+    );
+
+    if (this.triangulateTimer <= 0) this.state = "moveToPlayer";
+
+    this._pushInstanceData(instanceData, BEE_FLY);
+  }
+
+  // CHQ: Claude AI (Sonnet) Provided the implementation
+  _stateMoveToFetch(dt, gameState, { player, instanceData }) {
+    if (!this.fetchBall || !this.fetchBall.turn) {
+      this.state = "moveToPlayer";
+      return;
+    }
+
+    this.moveDir = [
+      this.fetchBall.body.position.x - this.pos[0],
+      this.fetchBall.body.position.y - this.pos[1],
+      this.fetchBall.body.position.z - this.pos[2],
+    ];
+
+    if (
+      Math.abs(this.moveDir[0]) +
+        Math.abs(this.moveDir[1]) +
+        Math.abs(this.moveDir[2]) <
+      1.2
+    ) {
+      const dir = [player.pos[0] - this.pos[0], player.pos[2] - this.pos[2]];
+      vec2.normalize(dir, dir);
+      this.fetchBall.kick(
+        dir[0] + MATH.random(-0.2, 0.2),
+        dir[1] + MATH.random(-0.2, 0.2),
+      );
+    }
+
+    vec3.normalize(this.moveDir, this.moveDir);
+    vec3.scaleAndAdd(
+      this.pos,
+      this.pos,
+      this.moveDir,
+      dt * this.speed * player.beeSpeed,
+    );
+
+    this._pushInstanceData(instanceData, BEE_FLY);
+  }
 }
 
 export class TempBee extends Bee {
