@@ -8,11 +8,11 @@ import { setUniform } from "../engineParts/setUniform";
  * per mob, uploading a model matrix that encodes translation, uniform scale,
  * and Y-axis rotation derived from each mob's properties.
  *
- * CHQ: Claude AI (Sonnet) — switched this from a one-off facingAngle/width/
- * height/depth contract to the pos[3]-as-rotation + meshScale convention
+ * CHQ: Claude AI (Sonnet): switched this from a one-off facingAngle, width,
+ * height, depth contract to the pos[3]-as-rotation + meshScale convention
  * already used everywhere else in the codebase (Mob, BugMob, Ant). Also
  * fixed drawMesh's hardcoded "cog" key, which doesn't exist in
- * renderer.meshes (only "flowers"/"bees"/"mobs"/"uiQuad" are initialized) —
+ * renderer.meshes (only "flowers", "bees", "mobs" and "uiQuad" are initialized) -
  * every mob now correctly draws from the "mobs" mesh.
  *
  * @param {Object} state - The live game state object.
@@ -55,11 +55,21 @@ export function drawMobs(
   setUniform(gl, glCache, thePrograms, mobProgram, "isNight", 1.0, "float");
 
   state.objects.mobs.forEach((mob) => {
-    const posX = mob.pos[0];
-    const posY = mob.pos[1];
-    const posZ = mob.pos[2];
-    // CHQ: read rotation from pos[3], matching Mob/BugMob/Ant's convention,
-    // instead of the unused mob.facingAngle field this used to read.
+    // CHQ: Claude AI (Sonnet): restore the spawning-rise animation.
+    // Ant interpolates spawnPos toward pos while state === "spawning"
+    // (see Ant.update); draw from spawnPos during that window so the
+    // mob visually rises into place instead of popping in at full pos.
+    const drawPos =
+      mob.state === "spawning" && mob.spawnPos ? mob.spawnPos : mob.pos;
+
+    const posX = drawPos[0];
+    const posY = drawPos[1];
+    const posZ = drawPos[2];
+    // CHQ: Claude AI (Sonnet): read rotation from pos[3], matching Mob,
+    // BugMob, Ant's convention, instead of the unused mob.facingAngle
+    // field this used to read. Rotation always comes from pos[3]
+    // (not drawPos[3] - spawnPos has no rotation component), defaulting
+    // to whatever heading was last set.
     const headingAngle = mob.pos[3] ?? 0.0;
 
     setUniform(gl, glCache, thePrograms, mobProgram, "instance_info1", [
@@ -69,8 +79,9 @@ export function drawMobs(
       headingAngle,
     ]);
 
-    // CHQ: meshScale is a single uniform scalar (see Mob/BugMob/Ant), unlike
-    // the old width/height/depth fields nothing in the codebase actually sets.
+    // CHQ: Claude AI (Sonnet): meshScale is a single uniform scalar (see Mob,
+    // BugMob and Ant), unlike the old width, height and depth fields that
+    // nothing in the codebase actually sets.
     const scale = mob.meshScale ?? 1.0;
     setUniform(
       gl,
