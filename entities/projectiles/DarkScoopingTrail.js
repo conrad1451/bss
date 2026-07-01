@@ -1,20 +1,20 @@
-// entities/miscEntities/DarkScoopingTrail.js
+// entities/projectiles/DarkScoopingTrail.js
 import { vec3 } from "gl-matrix";
 
 import { MATH } from "../../utils/math.js";
 import { TrailRenderer } from "../../engine/trailRenderer.js";
+import { Projectile, PROJECTILE_SOURCE } from "./ProjectileTemplate.js";
 
-// CHQ: Claude AI (Sonnet) refactored by threaded gameState through instead of
-// relying on module-level globals (player, dt and objects), replaced the implicit
-// "undefined waitTimer coerces to falsy" state trick with an explicit state
-// machine (moving -> fading -> dead), and fixed die() splicing from
-// objects.mobs (a leftover bug, since this is a visual trail effect, not a mob).
+// CHQ: Claude AI (Sonnet): now extends Projectile. The base class's
+// tickLife() isn't used here since this entity has its own two-phase
+// (moving -> fading) life logic instead of a single countdown, but it still
+// gets pos/lifespan/source/isDead bookkeeping and array removal for free.
 
 const LIFESPAN = 0.3;
 const FADE_DURATION = 0.5;
 const FADE_RECOIL_SCALE = -0.01;
 
-export class DarkScoopingTrail {
+export class DarkScoopingTrail extends Projectile {
   /**
    * Spawns a dark scooping trail effect centered on the player's current
    * body position, arcing along a bezier curve from one side of the player
@@ -25,12 +25,14 @@ export class DarkScoopingTrail {
    */
   constructor(gameState) {
     const { player } = gameState;
-
-    this.bodyPos = [
+    const bodyPos = [
       player.body.position.x,
       player.body.position.y,
       player.body.position.z,
     ];
+
+    super(bodyPos, LIFESPAN, PROJECTILE_SOURCE.PLAYER);
+    this.bodyPos = bodyPos;
 
     const d = player.bodyDir.slice();
     const r = [-d[2], 0, d[0]];
@@ -40,11 +42,8 @@ export class DarkScoopingTrail {
     this.control2 = vec3.scale([], this.startPos, 2);
     this.control1 = vec3.scale([], this.endPos, 5.25);
 
-    this.lifespan = LIFESPAN;
-    this.life = this.lifespan;
-
-    // "moving" is for tracing the bezier curve and "fading" is for
-    // trail drifting to a stop on its recoil velocity before being removed.
+    // "moving" — tracing the bezier curve; "fading" — trail drifting to a
+    // stop on its recoil velocity before being removed.
     this.state = "moving";
     this.waitTimer = 0;
 
@@ -101,13 +100,14 @@ export class DarkScoopingTrail {
   }
 
   /**
-   * Removes this trail effect from the live effects list.
+   * Flags the trail mesh for cleanup, then defers to the base class to
+   * splice this projectile out of gameState.objects.projectiles.
    *
-   * @param {number} index - Index of this trail in gameState.objects.trails.
+   * @param {number} index - Index of this trail in gameState.objects.projectiles.
    * @param {Object} gameState - The live game state object.
    */
   die(index, gameState) {
     this.trail.splice = true;
-    gameState.objects.trails.splice(index, 1);
+    super.die(index, gameState);
   }
 }
