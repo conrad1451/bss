@@ -50,7 +50,7 @@ export class Wave extends Projectile {
     const angle = Math.atan2(vel[2], vel[0]) + Math.PI * 0.5;
     const lifespan = LIFESPAN_BASE + size * LIFESPAN_SIZE_FACTOR;
 
-    super([...pos, angle], lifespan, PROJECTILE_SOURCE.PLAYER);
+    super([...pos, angle], lifespan, PROJECTILE_SOURCE.PLAYER, "wave");
 
     vec3.scale(vel, vel, size + 5);
     this.vel = vel;

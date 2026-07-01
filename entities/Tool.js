@@ -1209,7 +1209,7 @@ const TOOL_ABILITIES = {
     const fieldInfo = gameState.fieldManager.fieldInfo;
 
     // TODO: import DarkScoopingTrail from its converted entity path
-    objects.mobs.push(new DarkScoopingTrail());
+    objects.mobs.push(new DarkScoopingTrail(gameState));
 
     if (player.fieldIn && !player.attacked.length) {
       const x = Math.round(

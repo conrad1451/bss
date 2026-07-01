@@ -24,7 +24,7 @@ export class PetalShuriken extends Projectile {
    * @param {number[]} vel - Initial velocity vector [x, y, z]; scaled by 10 internally.
    */
   constructor(pos, vel) {
-    super([...pos, 0], LIFESPAN, PROJECTILE_SOURCE.PLAYER); // pos[3] doubles as spin angle
+    super([...pos, 0], LIFESPAN, PROJECTILE_SOURCE.PLAYER, "petalShuriken"); // pos[3] doubles as spin angle
     this.vel = vec3.scale(vec3.create(), vel, 10);
     this.hitBees = new Set();
   }
