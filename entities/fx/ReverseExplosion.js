@@ -1,5 +1,5 @@
 // entities/ReverseExplosion.js
-import { MATH } from "../utils/math.js";
+import { MATH } from "../../utils/math.js";
 
 export class ReverseExplosion {
   constructor(params) {

@@ -1,9 +1,9 @@
-// entities/miscEntities/Flame.js
+// entities/mobs/Flame.js
 
 // CHQ: Claude AI (Sonnet) refactored
 
 import { MATH } from "../../utils/math.js";
-import { ReverseExplosion } from "./ReverseExplosion.js";
+import { ReverseExplosion } from "../miscEntities/ReverseExplosion.js";
 
 export class Flame {
   constructor(field, x, z, isStatic, gameState) {
@@ -44,6 +44,8 @@ export class Flame {
     this.getRidOfOilTrailTimer = 2;
     this.oilT = 0;
     this.oilPos = [player.pos[0], player.pos[1] + 0.3, player.pos[2]];
+
+    // FIXME: create TrailRenderer and import it here
     this.oilTrail = new TrailRenderer.Trail({
       length: 10,
       size: 0.75,

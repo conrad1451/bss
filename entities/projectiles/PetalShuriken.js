@@ -1,4 +1,4 @@
-import { beeInfo } from "../data/bees";
+import { beeInfo } from "../../data/bees";
 
 class PetalShuriken {
   constructor(pos, vel) {
