@@ -193,6 +193,7 @@ export function createInitialState(saveData = {}) {
         pollenFromSunflowerField: 0,
         pollenFromDandelionField: 0,
         pollenFromBambooField: 0,
+        pollenFromAntField: 0,
       },
 
       inventory: {
@@ -237,6 +238,8 @@ export function createInitialState(saveData = {}) {
       bears: [], // CHQ: I added so i can see bears on the screen
       targets: [],
       fuzzBombs: [],
+      projectiles: [],
+      trails: [],
     },
     showTheQuests: false,
 
