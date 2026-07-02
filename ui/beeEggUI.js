@@ -1,6 +1,6 @@
 // ui/beeEggUI.js
 //
-// Refactor of the inline event-bee-egg SVG generation.
+// CHQ: Claude AI (Sonnet): Refactor of the inline event-bee-egg SVG generation.
 // Splits the "art" (bee icon, drawn once as a reusable <symbol>) from the
 // "data" (per-bee text card), and moves both out of a raw innerHTML += loop
 // into named, testable functions.
@@ -119,7 +119,7 @@ export function createBeeEggItem(beeTypes, gameState) {
       player.beePopup = {
         type: beeTypes,
         message: "You hatched a...",
-        time: TIME, // NOTE: same as original - assumes TIME is in outer scope.
+        time: TIME,
         gifted: false,
       };
 
