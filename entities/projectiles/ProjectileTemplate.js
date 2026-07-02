@@ -18,11 +18,12 @@ export class Projectile {
    * @param {number} lifespan - Total lifetime in seconds.
    * @param {string} source - One of PROJECTILE_SOURCE.*; who fired this.
    */
-  constructor(pos, lifespan, source) {
+  constructor(pos, lifespan, source, type = null) {
     this.pos = [...pos];
     this.lifespan = lifespan;
     this.life = lifespan;
     this.source = source;
+    this.type = type; // CHQ: Claude AI (Sonnet) added type param to ctor
     this.isDead = false;
   }
 
