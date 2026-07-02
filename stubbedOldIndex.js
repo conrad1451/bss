@@ -89,57 +89,9 @@ let items = {
   // CHQ: This is a stub
 };
 
-for (let i in beeInfo) {
-  if (beeInfo[i].rarity === "event") {
-    let id = i + "BeeEgg";
-
-    // CHQ: Label for eggs in inventory
-    pages[0].innerHTML +=
-      "<svg id='" +
-      id +
-      "' style='width:200px;height:70px;cursor:pointer;border-radius:5px'><rect width='200' height='70' fill='rgb(255,255,255)'></rect><rect width='70' height='70' fill='rgb(225,225,225)'></rect><text x='132' y='18' style='font-family:trebuchet ms;font-size:16.5px;' fill='rgb(0,0,0)' text-anchor='middle'>" +
-      MATH.doGrammar(i) +
-      " Bee Egg</text><text x='132' y='39' style='font-family:trebuchet ms;font-size:12px;' fill='rgb(0,0,0)' text-anchor='middle'>A permanent egg that</text><text x='130' y='53' style='font-family:trebuchet ms;font-size:12px;' fill='rgb(0,0,0)' text-anchor='middle'>always hatches into</text><text x='132' y='66' style='font-family:trebuchet ms;font-size:12px;' fill='rgb(0,0,0)' text-anchor='middle'>a " +
-      MATH.doGrammar(i) +
-      " Bee!</text><text id='" +
-      id +
-      "_amount' x='67' y='67' style='font-family:calibri;font-size:14px;' fill='rgb(0,0,0)' text-anchor='end'></text><path fill='rgb(255,255,0)' stroke='rgb(0,0,0)' stroke-width='1.5' d='M35 15C 20 17 10 55 35 55M35 15C 50 17 60 55 35 55'></path><path fill='rgb(0,0,0)' d='M20 30 C 20 40 50 40 50 30L50 40C50 50 20 50 20 40'></path><path fill='rgb(0,0,0,0.3)' d='M47 25C 57 56 35 60 23 50C 32 48 41 50 50 35'></path></svg>";
-
-    items[i + "BeeEgg"] = {
-      canUseOnSlot: (slot) => {
-        return true;
-      },
-      amount: 0,
-      u: (128 * 4) / 2048,
-      v: (128 * 5) / 2048,
-      value: Infinity,
-      use: function () {
-        for (let j in objects.bees) {
-          if (objects.bees[j].type === i) {
-            player.addMessage(
-              "You can only have 1 " + MATH.doGrammar(i) + " Bee!",
-              COLORS.redArr,
-            );
-            return;
-          }
-        }
-
-        player.hive[player.hiveIndex[1]][player.hiveIndex[0]].type = i;
-        player.hive[player.hiveIndex[1]][player.hiveIndex[0]].gifted = false;
-
-        player.beePopup = {
-          type: i,
-          message: "You hatched a...",
-          time: TIME,
-          gifted: false,
-        };
-
-        player.updateHive();
-      },
-    };
-  }
-}
-
+// CHQ: code here moved to implementation moved to ui/beeEggUI.js
+// for (let i in beeInfo) {...}
+     
 for (let i in items) {
   items[i].maxCooldown = items[i].cooldown || 0;
   items[i].cooldown = -Infinity;
