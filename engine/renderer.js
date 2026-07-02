@@ -7,6 +7,7 @@ import { drawBees } from "./drawEntities/drawBees";
 import { drawMobs } from "./drawEntities/drawMobs";
 import { setUniform } from "./engineParts/setUniform";
 import { drawTurrets } from "./drawEntities/drawTurrets";
+import { drawProjectiles } from "./drawEntities/drawProjectiles";
 // import { drawPlayer } from "./drawEntities/drawPlayer";
 
 // 1. Ensure glMatrix is available (it's globally attached to window)
@@ -1189,19 +1190,16 @@ export class Renderer {
       );
       this.drawTurretUI(state);
     }
-    if (state.objects?.mobs?.some((m) => m.type === "cogTurret")) {
-      // this.drawTurrets(state, viewMatrix, projectionMatrix);
-      drawTurrets(
+    if (state.objects?.projectiles?.length > 0) {
+      drawProjectiles(
         this.gl,
         this.glCache,
         this.programs,
-        textures,
-        meshes,
+        this.meshes,
         state,
         viewMatrix,
         projectionMatrix,
       );
-      this.drawTurretUI(state);
     }
 
     // // 4. Calculate Camera Matrices safely using scoped variables
