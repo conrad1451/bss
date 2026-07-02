@@ -1164,17 +1164,6 @@ export class Renderer {
       );
     }
     if (state.objects?.mobs?.length > 0) {
-      drawTurrets(
-        gl,
-        this.glCache,
-        this.programs,
-        this.textures,
-        this.meshes,
-        state,
-        viewMatrix,
-        projectionMatrix,
-      );
-
       // this.drawMobs(state, viewMatrix, projectionMatrix);
       drawMobs(
         this.gl,
@@ -1185,6 +1174,20 @@ export class Renderer {
         viewMatrix,
         projectionMatrix,
       );
+    }
+    if (state.objects?.mobs?.some((m) => m.type === "cogTurret")) {
+      // this.drawTurrets(state, viewMatrix, projectionMatrix);
+      drawTurrets(
+        this.gl,
+        this.glCache,
+        this.programs,
+        this.textures,
+        this.meshes,
+        state,
+        viewMatrix,
+        projectionMatrix,
+      );
+      this.drawTurretUI(state);
     }
     if (state.objects?.mobs?.some((m) => m.type === "cogTurret")) {
       // this.drawTurrets(state, viewMatrix, projectionMatrix);
