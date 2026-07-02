@@ -99,6 +99,9 @@ export function updateEngine(gameState, dt) {
   }
 
   // 4. Entity AI: Mobs
+  // Mob.die(index, gameState does NOT splice internally and
+  // so requires the mob loop in updateEngine to do the splice
+  // itself after calling die()
   for (let i = gameState.objects.mobs.length - 1; i >= 0; i--) {
     const mob = gameState.objects.mobs[i];
 
@@ -117,6 +120,22 @@ export function updateEngine(gameState, dt) {
       const reachedHive = balloon.update(dt, gameState);
       if (reachedHive) {
         balloon.die(i, gameState);
+      }
+    }
+  }
+
+  // CHQ: Me: player/bee projectiles
+
+  // NOTE: unlike the mobs loop above, projectile.die() already splices
+  // itself out of objects.projectiles - no need to splice again here.
+  if (objects.projectiles) {
+    for (let i = objects.projectiles.length - 1; i >= 0; i--) {
+      const projectile = objects.projectiles[i];
+      const isDead = projectile.update(dt, gameState);
+
+      if (isDead || projectile.isDead) {
+        projectile.die(i, gameState);
+        // no manual splice — Projectile.die() already does it
       }
     }
   }
