@@ -10,6 +10,9 @@ import { drawTurrets } from "./drawEntities/drawTurrets";
 import { drawProjectiles } from "./drawEntities/drawProjectiles";
 // import { drawPlayer } from "./drawEntities/drawPlayer";
 
+// near the top, with the other drawEntities imports:
+import { ParticleRenderer } from "./particles.js";
+
 // 1. Ensure glMatrix is available (it's globally attached to window)
 // const { mat4 } = window.glMatrix;
 // const mat4 = window.glMatrix.mat4;
@@ -122,7 +125,9 @@ export class Renderer {
     };
 
     // Compile everything right on instantiation
+    // in the constructor, right after this.compileAllShaders(shadersDictionary);
     this.compileAllShaders(shadersDictionary);
+    ParticleRenderer.init(this.gl, this.programs.particle); // CHQ: Claude AI: wire up particle GPU buffer now that the program exists
 
     // Run your cache initialization
     this.initCache(this.programs);
@@ -1257,6 +1262,9 @@ export class Renderer {
     //   ),
     // );
     // CHQ: Text always last — renders on top of world geometry
+
+    // CHQ: Claude AI: right before: const textRenderer = state.textRenderer;
+    ParticleRenderer.render(viewMatrix, this.projectionMatrix);
 
     const textRenderer = state.textRenderer;
     if (textRenderer) {

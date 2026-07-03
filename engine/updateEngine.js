@@ -14,6 +14,8 @@ import { spawnBeeAtCamera } from "../entities/bees.js";
 import { spawnMobAtCamera } from "../entities/mobs/MobTemplate.js";
 import { Balloon } from "../entities/miscEntities/Balloon.js"; // CHQ: Claude AI (Sonnet) added
 
+import { ParticleRenderer } from "./particles.js";
+
 /**
  * Main per-frame engine update. Advances physics, player state, AI entities,
  * trigger zones, token collection, and NPC logic for a single tick.
@@ -92,6 +94,7 @@ export function updateEngine(gameState, dt) {
   // 2. Delegate subsystem simulation loops cleanly
   gameState.fieldManager.update(dt, gameState);
   gameState.envManager.update(dt, gameState);
+  ParticleRenderer.update(dt); // CHQ: Claude AI: advance/expire GPU-rendered particles (embers, bubble pops, etc.)
 
   // 3. Entity AI: Bees
   for (let bee of objects.bees) {
