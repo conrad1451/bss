@@ -4,9 +4,6 @@ export const effects = {
   scienceEnhancement: {
     u: 0,
     v: 0,
-    svg: document.getElementById("scienceEnhancement"),
-    cooldown: document.getElementById("scienceEnhancement_cooldown"),
-    amount: document.getElementById("scienceEnhancement_amount"),
     maxCooldown: Infinity,
     maxAmount: 1000,
     tokenLife: 16,
@@ -23,9 +20,6 @@ export const effects = {
   polarPower: {
     u: 0,
     v: 0,
-    svg: document.getElementById("polarPower"),
-    cooldown: document.getElementById("polarPower_cooldown"),
-    amount: document.getElementById("polarPower_amount"),
     maxCooldown: Infinity,
     maxAmount: Infinity,
     tokenLife: 16,
@@ -42,9 +36,6 @@ export const effects = {
   dandelionFieldBoost: {
     u: 0,
     v: 0,
-    svg: document.getElementById("dandelionFieldBoost"),
-    cooldown: document.getElementById("dandelionFieldBoost_cooldown"),
-    amount: document.getElementById("dandelionFieldBoost_amount"),
     maxCooldown: 15 * 60,
     maxAmount: 4,
     tokenLife: 4,
@@ -69,9 +60,6 @@ export const effects = {
   sunflowerFieldBoost: {
     u: 0,
     v: 0,
-    svg: document.getElementById("sunflowerFieldBoost"),
-    cooldown: document.getElementById("sunflowerFieldBoost_cooldown"),
-    amount: document.getElementById("sunflowerFieldBoost_amount"),
     maxCooldown: 15 * 60,
     maxAmount: 4,
     tokenLife: 4,
@@ -96,9 +84,6 @@ export const effects = {
   blueFlowerFieldBoost: {
     u: 0,
     v: 0,
-    svg: document.getElementById("blueFlowerFieldBoost"),
-    cooldown: document.getElementById("blueFlowerFieldBoost_cooldown"),
-    amount: document.getElementById("blueFlowerFieldBoost_amount"),
     maxCooldown: 15 * 60,
     maxAmount: 4,
     tokenLife: 4,
@@ -123,9 +108,6 @@ export const effects = {
   mushroomFieldBoost: {
     u: 0,
     v: 0,
-    svg: document.getElementById("mushroomFieldBoost"),
-    cooldown: document.getElementById("mushroomFieldBoost_cooldown"),
-    amount: document.getElementById("mushroomFieldBoost_amount"),
     maxCooldown: 15 * 60,
     maxAmount: 4,
     tokenLife: 4,
@@ -150,9 +132,6 @@ export const effects = {
   cloverFieldBoost: {
     u: 0,
     v: 0,
-    svg: document.getElementById("cloverFieldBoost"),
-    cooldown: document.getElementById("cloverFieldBoost_cooldown"),
-    amount: document.getElementById("cloverFieldBoost_amount"),
     maxCooldown: 15 * 60,
     maxAmount: 4,
     tokenLife: 4,
@@ -177,9 +156,6 @@ export const effects = {
   strawberryFieldBoost: {
     u: 0,
     v: 0,
-    svg: document.getElementById("strawberryFieldBoost"),
-    cooldown: document.getElementById("strawberryFieldBoost_cooldown"),
-    amount: document.getElementById("strawberryFieldBoost_amount"),
     maxCooldown: 15 * 60,
     maxAmount: 4,
     tokenLife: 4,
@@ -204,9 +180,6 @@ export const effects = {
   spiderFieldBoost: {
     u: 0,
     v: 0,
-    svg: document.getElementById("spiderFieldBoost"),
-    cooldown: document.getElementById("spiderFieldBoost_cooldown"),
-    amount: document.getElementById("spiderFieldBoost_amount"),
     maxCooldown: 15 * 60,
     maxAmount: 4,
     tokenLife: 4,
@@ -231,9 +204,6 @@ export const effects = {
   bambooFieldBoost: {
     u: 0,
     v: 0,
-    svg: document.getElementById("bambooFieldBoost"),
-    cooldown: document.getElementById("bambooFieldBoost_cooldown"),
-    amount: document.getElementById("bambooFieldBoost_amount"),
     maxCooldown: 15 * 60,
     maxAmount: 4,
     tokenLife: 4,
@@ -258,9 +228,6 @@ export const effects = {
   pineapplePatchBoost: {
     u: 0,
     v: 0,
-    svg: document.getElementById("pineapplePatchBoost"),
-    cooldown: document.getElementById("pineapplePatchBoost_cooldown"),
-    amount: document.getElementById("pineapplePatchBoost_amount"),
     maxCooldown: 15 * 60,
     maxAmount: 4,
     tokenLife: 4,
@@ -285,9 +252,6 @@ export const effects = {
   stumpFieldBoost: {
     u: 0,
     v: 0,
-    svg: document.getElementById("stumpFieldBoost"),
-    cooldown: document.getElementById("stumpFieldBoost_cooldown"),
-    amount: document.getElementById("stumpFieldBoost_amount"),
     maxCooldown: 15 * 60,
     maxAmount: 4,
     tokenLife: 4,
@@ -310,9 +274,6 @@ export const effects = {
   cactusFieldBoost: {
     u: 0,
     v: 0,
-    svg: document.getElementById("cactusFieldBoost"),
-    cooldown: document.getElementById("cactusFieldBoost_cooldown"),
-    amount: document.getElementById("cactusFieldBoost_amount"),
     maxCooldown: 15 * 60,
     maxAmount: 4,
     tokenLife: 4,
@@ -337,9 +298,6 @@ export const effects = {
   pumpkinPatchBoost: {
     u: 0,
     v: 0,
-    svg: document.getElementById("pumpkinPatchBoost"),
-    cooldown: document.getElementById("pumpkinPatchBoost_cooldown"),
-    amount: document.getElementById("pumpkinPatchBoost_amount"),
     maxCooldown: 15 * 60,
     maxAmount: 4,
     tokenLife: 4,
@@ -364,9 +322,6 @@ export const effects = {
   pineTreeForestBoost: {
     u: 0,
     v: 0,
-    svg: document.getElementById("pineTreeForestBoost"),
-    cooldown: document.getElementById("pineTreeForestBoost_cooldown"),
-    amount: document.getElementById("pineTreeForestBoost_amount"),
     maxCooldown: 15 * 60,
     maxAmount: 4,
     tokenLife: 4,
@@ -391,9 +346,6 @@ export const effects = {
   roseFieldBoost: {
     u: 0,
     v: 0,
-    svg: document.getElementById("roseFieldBoost"),
-    cooldown: document.getElementById("roseFieldBoost_cooldown"),
-    amount: document.getElementById("roseFieldBoost_amount"),
     maxCooldown: 15 * 60,
     maxAmount: 4,
     tokenLife: 4,
@@ -416,9 +368,6 @@ export const effects = {
   mountainTopFieldBoost: {
     u: 0,
     v: 0,
-    svg: document.getElementById("mountainTopFieldBoost"),
-    cooldown: document.getElementById("mountainTopFieldBoost_cooldown"),
-    amount: document.getElementById("mountainTopFieldBoost_amount"),
     maxCooldown: 15 * 60,
     maxAmount: 4,
     tokenLife: 4,
@@ -443,9 +392,6 @@ export const effects = {
   coconutFieldBoost: {
     u: 0,
     v: 0,
-    svg: document.getElementById("coconutFieldBoost"),
-    cooldown: document.getElementById("coconutFieldBoost_cooldown"),
-    amount: document.getElementById("coconutFieldBoost_amount"),
     maxCooldown: 15 * 60,
     maxAmount: 4,
     tokenLife: 4,
@@ -470,9 +416,6 @@ export const effects = {
   pepperPatchBoost: {
     u: 0,
     v: 0,
-    svg: document.getElementById("pepperPatchBoost"),
-    cooldown: document.getElementById("pepperPatchBoost_cooldown"),
-    amount: document.getElementById("pepperPatchBoost_amount"),
     maxCooldown: 15 * 60,
     maxAmount: 4,
     tokenLife: 4,
@@ -497,9 +440,6 @@ export const effects = {
   dandelionFieldWinds: {
     u: (128 * 6) / 2048,
     v: (128 * 6) / 2048,
-    svg: document.getElementById("dandelionFieldWinds"),
-    cooldown: document.getElementById("dandelionFieldWinds_cooldown"),
-    amount: document.getElementById("dandelionFieldWinds_amount"),
     maxCooldown: 30 * 60,
     maxAmount: 15,
     tokenLife: 4,
@@ -539,9 +479,6 @@ export const effects = {
   sunflowerFieldWinds: {
     u: (128 * 6) / 2048,
     v: (128 * 6) / 2048,
-    svg: document.getElementById("sunflowerFieldWinds"),
-    cooldown: document.getElementById("sunflowerFieldWinds_cooldown"),
-    amount: document.getElementById("sunflowerFieldWinds_amount"),
     maxCooldown: 30 * 60,
     maxAmount: 15,
     tokenLife: 4,
@@ -581,9 +518,6 @@ export const effects = {
   blueFlowerFieldWinds: {
     u: (128 * 6) / 2048,
     v: (128 * 6) / 2048,
-    svg: document.getElementById("blueFlowerFieldWinds"),
-    cooldown: document.getElementById("blueFlowerFieldWinds_cooldown"),
-    amount: document.getElementById("blueFlowerFieldWinds_amount"),
     maxCooldown: 30 * 60,
     maxAmount: 15,
     tokenLife: 4,
@@ -623,9 +557,6 @@ export const effects = {
   mushroomFieldWinds: {
     u: (128 * 6) / 2048,
     v: (128 * 6) / 2048,
-    svg: document.getElementById("mushroomFieldWinds"),
-    cooldown: document.getElementById("mushroomFieldWinds_cooldown"),
-    amount: document.getElementById("mushroomFieldWinds_amount"),
     maxCooldown: 30 * 60,
     maxAmount: 15,
     tokenLife: 4,
@@ -665,9 +596,6 @@ export const effects = {
   cloverFieldWinds: {
     u: (128 * 6) / 2048,
     v: (128 * 6) / 2048,
-    svg: document.getElementById("cloverFieldWinds"),
-    cooldown: document.getElementById("cloverFieldWinds_cooldown"),
-    amount: document.getElementById("cloverFieldWinds_amount"),
     maxCooldown: 30 * 60,
     maxAmount: 15,
     tokenLife: 4,
@@ -707,9 +635,6 @@ export const effects = {
   strawberryFieldWinds: {
     u: (128 * 6) / 2048,
     v: (128 * 6) / 2048,
-    svg: document.getElementById("strawberryFieldWinds"),
-    cooldown: document.getElementById("strawberryFieldWinds_cooldown"),
-    amount: document.getElementById("strawberryFieldWinds_amount"),
     maxCooldown: 30 * 60,
     maxAmount: 15,
     tokenLife: 4,
@@ -749,9 +674,6 @@ export const effects = {
   spiderFieldWinds: {
     u: (128 * 6) / 2048,
     v: (128 * 6) / 2048,
-    svg: document.getElementById("spiderFieldWinds"),
-    cooldown: document.getElementById("spiderFieldWinds_cooldown"),
-    amount: document.getElementById("spiderFieldWinds_amount"),
     maxCooldown: 30 * 60,
     maxAmount: 15,
     tokenLife: 4,
@@ -791,9 +713,6 @@ export const effects = {
   bambooFieldWinds: {
     u: (128 * 6) / 2048,
     v: (128 * 6) / 2048,
-    svg: document.getElementById("bambooFieldWinds"),
-    cooldown: document.getElementById("bambooFieldWinds_cooldown"),
-    amount: document.getElementById("bambooFieldWinds_amount"),
     maxCooldown: 30 * 60,
     maxAmount: 15,
     tokenLife: 4,
@@ -833,9 +752,6 @@ export const effects = {
   pineapplePatchWinds: {
     u: (128 * 6) / 2048,
     v: (128 * 6) / 2048,
-    svg: document.getElementById("pineapplePatchWinds"),
-    cooldown: document.getElementById("pineapplePatchWinds_cooldown"),
-    amount: document.getElementById("pineapplePatchWinds_amount"),
     maxCooldown: 30 * 60,
     maxAmount: 15,
     tokenLife: 4,
@@ -875,9 +791,6 @@ export const effects = {
   stumpFieldWinds: {
     u: (128 * 6) / 2048,
     v: (128 * 6) / 2048,
-    svg: document.getElementById("stumpFieldWinds"),
-    cooldown: document.getElementById("stumpFieldWinds_cooldown"),
-    amount: document.getElementById("stumpFieldWinds_amount"),
     maxCooldown: 30 * 60,
     maxAmount: 15,
     tokenLife: 4,
@@ -917,9 +830,6 @@ export const effects = {
   cactusFieldWinds: {
     u: (128 * 6) / 2048,
     v: (128 * 6) / 2048,
-    svg: document.getElementById("cactusFieldWinds"),
-    cooldown: document.getElementById("cactusFieldWinds_cooldown"),
-    amount: document.getElementById("cactusFieldWinds_amount"),
     maxCooldown: 30 * 60,
     maxAmount: 15,
     tokenLife: 4,
@@ -959,9 +869,6 @@ export const effects = {
   pumpkinPatchWinds: {
     u: (128 * 6) / 2048,
     v: (128 * 6) / 2048,
-    svg: document.getElementById("pumpkinPatchWinds"),
-    cooldown: document.getElementById("pumpkinPatchWinds_cooldown"),
-    amount: document.getElementById("pumpkinPatchWinds_amount"),
     maxCooldown: 30 * 60,
     maxAmount: 15,
     tokenLife: 4,
@@ -1001,9 +908,6 @@ export const effects = {
   pineTreeForestWinds: {
     u: (128 * 6) / 2048,
     v: (128 * 6) / 2048,
-    svg: document.getElementById("pineTreeForestWinds"),
-    cooldown: document.getElementById("pineTreeForestWinds_cooldown"),
-    amount: document.getElementById("pineTreeForestWinds_amount"),
     maxCooldown: 30 * 60,
     maxAmount: 15,
     tokenLife: 4,
@@ -1043,9 +947,6 @@ export const effects = {
   roseFieldWinds: {
     u: (128 * 6) / 2048,
     v: (128 * 6) / 2048,
-    svg: document.getElementById("roseFieldWinds"),
-    cooldown: document.getElementById("roseFieldWinds_cooldown"),
-    amount: document.getElementById("roseFieldWinds_amount"),
     maxCooldown: 30 * 60,
     maxAmount: 15,
     tokenLife: 4,
@@ -1085,9 +986,6 @@ export const effects = {
   mountainTopFieldWinds: {
     u: (128 * 6) / 2048,
     v: (128 * 6) / 2048,
-    svg: document.getElementById("mountainTopFieldWinds"),
-    cooldown: document.getElementById("mountainTopFieldWinds_cooldown"),
-    amount: document.getElementById("mountainTopFieldWinds_amount"),
     maxCooldown: 30 * 60,
     maxAmount: 15,
     tokenLife: 4,
@@ -1127,9 +1025,6 @@ export const effects = {
   coconutFieldWinds: {
     u: (128 * 6) / 2048,
     v: (128 * 6) / 2048,
-    svg: document.getElementById("coconutFieldWinds"),
-    cooldown: document.getElementById("coconutFieldWinds_cooldown"),
-    amount: document.getElementById("coconutFieldWinds_amount"),
     maxCooldown: 30 * 60,
     maxAmount: 15,
     tokenLife: 4,
@@ -1169,9 +1064,6 @@ export const effects = {
   pepperPatchWinds: {
     u: (128 * 6) / 2048,
     v: (128 * 6) / 2048,
-    svg: document.getElementById("pepperPatchWinds"),
-    cooldown: document.getElementById("pepperPatchWinds_cooldown"),
-    amount: document.getElementById("pepperPatchWinds_amount"),
     maxCooldown: 30 * 60,
     maxAmount: 15,
     tokenLife: 4,
@@ -1215,9 +1107,6 @@ export const effects = {
     statsToAddTo: ["hasteTokens"],
     u: 0,
     v: 0,
-    svg: document.getElementById("haste"),
-    cooldown: document.getElementById("haste_cooldown"),
-    amount: document.getElementById("haste_amount"),
     maxCooldown: 25,
     maxAmount: 10,
     tokenLife: 4,
@@ -1242,9 +1131,6 @@ export const effects = {
   },
 
   haste_: {
-    svg: document.getElementById("haste_"),
-    cooldown: document.getElementById("haste__cooldown"),
-    amount: document.getElementById("haste__amount"),
     maxCooldown: 60,
     maxAmount: 1,
 
@@ -1264,9 +1150,6 @@ export const effects = {
     statsToAddTo: ["focusTokens", "battleTokens"],
     u: 128 / 2048,
     v: 0,
-    svg: document.getElementById("focus"),
-    cooldown: document.getElementById("focus_cooldown"),
-    amount: document.getElementById("focus_amount"),
     maxCooldown: 20,
     maxAmount: 10,
     tokenLife: 4,
@@ -1287,9 +1170,6 @@ export const effects = {
     statsToAddTo: ["melodyTokens", "battleTokens"],
     u: 256 / 2048,
     v: 0,
-    svg: document.getElementById("melody"),
-    cooldown: document.getElementById("melody_cooldown"),
-    amount: document.getElementById("melody_amount"),
     maxCooldown: 30,
     maxAmount: 1,
     tokenLife: 8,
@@ -1338,9 +1218,6 @@ export const effects = {
   bombCombo: {
     u: (128 * 4) / 2048,
     v: 0,
-    svg: document.getElementById("bombCombo"),
-    cooldown: document.getElementById("bombCombo_cooldown"),
-    amount: document.getElementById("bombCombo_amount"),
     maxCooldown: 5,
     maxAmount: 10,
     tokenLife: 4,
@@ -1774,9 +1651,6 @@ export const effects = {
     ],
     u: (128 * 2) / 2048,
     v: 128 / 2048,
-    svg: document.getElementById("blueBoost"),
-    cooldown: document.getElementById("blueBoost_cooldown"),
-    amount: document.getElementById("blueBoost_amount"),
     maxCooldown: 25,
     maxAmount: 10,
     tokenLife: 4,
@@ -1802,9 +1676,6 @@ export const effects = {
     ],
     u: (128 * 3) / 2048,
     v: 128 / 2048,
-    svg: document.getElementById("redBoost"),
-    cooldown: document.getElementById("redBoost_cooldown"),
-    amount: document.getElementById("redBoost_amount"),
     maxCooldown: 25,
     maxAmount: 10,
     tokenLife: 4,
@@ -1825,9 +1696,6 @@ export const effects = {
     statsToAddTo: ["boostTokens", "markOrBoostTokens"],
     u: (128 * 4) / 2048,
     v: 128 / 2048,
-    svg: document.getElementById("whiteBoost"),
-    cooldown: document.getElementById("whiteBoost_cooldown"),
-    amount: document.getElementById("whiteBoost_amount"),
     maxCooldown: 25,
     maxAmount: 10,
     tokenLife: 4,
@@ -1847,9 +1715,6 @@ export const effects = {
     trialRate: 0.4,
     u: (128 * 1) / 2048,
     v: (256 * 4) / 2048,
-    svg: document.getElementById("babyLove"),
-    cooldown: document.getElementById("babyLove_cooldown"),
-    amount: document.getElementById("babyLove_amount"),
     maxCooldown: 30,
     maxAmount: 1,
     tokenLife: 8,
@@ -1872,9 +1737,6 @@ export const effects = {
     statsToAddTo: ["inspireTokens"],
     u: (128 * 2) / 2048,
     v: (256 * 4) / 2048,
-    svg: document.getElementById("inspire"),
-    cooldown: document.getElementById("inspire_cooldown"),
-    amount: document.getElementById("inspire_amount"),
     maxCooldown: 5,
     maxAmount: 50,
     tokenLife: 4,
@@ -1897,9 +1759,6 @@ export const effects = {
     statsToAddTo: ["rageTokens", "battleTokens", "redAbilityTokens"],
     u: (128 * 6) / 2048,
     v: (256 * 2) / 2048,
-    svg: document.getElementById("rage"),
-    cooldown: document.getElementById("rage_cooldown"),
-    amount: document.getElementById("rage_amount"),
     maxCooldown: 30,
     maxAmount: 3,
     tokenLife: 24,
@@ -1918,9 +1777,6 @@ export const effects = {
   flameHeat: {
     u: (128 * 5) / 2048,
     v: 128 / 2048,
-    svg: document.getElementById("flameHeat"),
-    cooldown: document.getElementById("flameHeat_cooldown"),
-    amount: document.getElementById("flameHeat_amount"),
     maxCooldown: 20,
     tokenLife: 4,
     amountFromCooldown: true,
@@ -1946,9 +1802,6 @@ export const effects = {
   darkHeat: {
     u: (128 * 5) / 2048,
     v: 128 / 2048,
-    svg: document.getElementById("darkHeat"),
-    cooldown: document.getElementById("darkHeat_cooldown"),
-    amount: document.getElementById("darkHeat_amount"),
     maxCooldown: 0,
     tokenLife: 4,
     maxAmount: 100,
@@ -2035,9 +1888,6 @@ export const effects = {
   pollenMark: {
     u: 0,
     v: 0,
-    svg: document.getElementById("pollenMark"),
-    cooldown: document.getElementById("pollenMark_cooldown"),
-    amount: document.getElementById("pollenMark_amount"),
     maxCooldown: 0,
     tokenLife: 4,
     maxAmount: 3,
@@ -2057,9 +1907,6 @@ export const effects = {
   honeyMark: {
     u: 0,
     v: 0,
-    svg: document.getElementById("honeyMark"),
-    cooldown: document.getElementById("honeyMark_cooldown"),
-    amount: document.getElementById("honeyMark_amount"),
     maxCooldown: 0,
     tokenLife: 4,
     maxAmount: 3,
@@ -2080,9 +1927,6 @@ export const effects = {
   preciseMark: {
     u: 0,
     v: 0,
-    svg: document.getElementById("preciseMark"),
-    cooldown: document.getElementById("preciseMark_cooldown"),
-    amount: document.getElementById("preciseMark_amount"),
     maxCooldown: 0,
     tokenLife: 4,
     maxAmount: 3,
@@ -2226,9 +2070,6 @@ export const effects = {
     trialRate: 0.3,
     u: 128 / 2048,
     v: 256 / 2048,
-    svg: document.getElementById("flameFuel"),
-    cooldown: document.getElementById("flameFuel_cooldown"),
-    amount: document.getElementById("flameFuel_amount"),
     maxCooldown: 15,
     maxAmount: 1,
     tokenLife: 4,
@@ -2352,9 +2193,6 @@ export const effects = {
   precision: {
     u: (128 * 5) / 2048,
     v: (256 * 2) / 2048,
-    svg: document.getElementById("precision"),
-    cooldown: document.getElementById("precision_cooldown"),
-    amount: document.getElementById("precision_amount"),
     maxCooldown: 60,
     tokenLife: 4,
     maxAmount: 10,
@@ -2497,9 +2335,6 @@ export const effects = {
   balloonAura: {
     u: 0,
     v: 0,
-    svg: document.getElementById("balloonAura"),
-    cooldown: document.getElementById("balloonAura_cooldown"),
-    amount: document.getElementById("balloonAura_amount"),
     maxCooldown: 0,
     tokenLife: 4,
     maxAmount: 10,
@@ -2526,9 +2361,6 @@ export const effects = {
   balloonBlessing: {
     u: 0,
     v: 0,
-    svg: document.getElementById("balloonBlessing"),
-    cooldown: document.getElementById("balloonBlessing_cooldown"),
-    amount: document.getElementById("balloonBlessing_amount"),
     maxCooldown: 60 * 60,
     tokenLife: 4,
     maxAmount: 10000,
@@ -2697,9 +2529,6 @@ export const effects = {
   glueBuff: {
     u: 0,
     v: 0,
-    svg: document.getElementById("glueBuff"),
-    cooldown: document.getElementById("glueBuff_cooldown"),
-    amount: document.getElementById("glueBuff_amount"),
     maxCooldown: 10 * 60,
     maxAmount: 1,
     tokenLife: 4,
@@ -2717,9 +2546,6 @@ export const effects = {
   oilBuff: {
     u: 0,
     v: 0,
-    svg: document.getElementById("oilBuff"),
-    cooldown: document.getElementById("oilBuff_cooldown"),
-    amount: document.getElementById("oilBuff_amount"),
     maxCooldown: 10 * 60,
     maxAmount: 1,
     tokenLife: 4,
@@ -2737,9 +2563,6 @@ export const effects = {
   enzymesBuff: {
     u: 0,
     v: 0,
-    svg: document.getElementById("enzymesBuff"),
-    cooldown: document.getElementById("enzymesBuff_cooldown"),
-    amount: document.getElementById("enzymesBuff_amount"),
     maxCooldown: 10 * 60,
     maxAmount: 1,
     tokenLife: 4,
@@ -2768,9 +2591,6 @@ export const effects = {
   redExtractBuff: {
     u: 0,
     v: 0,
-    svg: document.getElementById("redExtractBuff"),
-    cooldown: document.getElementById("redExtractBuff_cooldown"),
-    amount: document.getElementById("redExtractBuff_amount"),
     maxCooldown: 10 * 60,
     maxAmount: 1,
     tokenLife: 4,
@@ -2787,9 +2607,6 @@ export const effects = {
   blueExtractBuff: {
     u: 0,
     v: 0,
-    svg: document.getElementById("blueExtractBuff"),
-    cooldown: document.getElementById("blueExtractBuff_cooldown"),
-    amount: document.getElementById("blueExtractBuff_amount"),
     maxCooldown: 10 * 60,
     maxAmount: 1,
     tokenLife: 4,
@@ -2806,9 +2623,6 @@ export const effects = {
   tropicalDrinkBuff: {
     u: 0,
     v: 0,
-    svg: document.getElementById("tropicalDrinkBuff"),
-    cooldown: document.getElementById("tropicalDrinkBuff_cooldown"),
-    amount: document.getElementById("tropicalDrinkBuff_amount"),
     maxCooldown: 10 * 60,
     maxAmount: 1,
     tokenLife: 4,
@@ -2826,9 +2640,6 @@ export const effects = {
   purplePotionBuff: {
     u: 0,
     v: 0,
-    svg: document.getElementById("purplePotionBuff"),
-    cooldown: document.getElementById("purplePotionBuff_cooldown"),
-    amount: document.getElementById("purplePotionBuff_amount"),
     maxCooldown: 10 * 60,
     maxAmount: 1,
     tokenLife: 4,
@@ -2849,9 +2660,6 @@ export const effects = {
   superSmoothieBuff: {
     u: 0,
     v: 0,
-    svg: document.getElementById("superSmoothieBuff"),
-    cooldown: document.getElementById("superSmoothieBuff_cooldown"),
-    amount: document.getElementById("superSmoothieBuff_amount"),
     maxCooldown: 20 * 60,
     maxAmount: 1,
     tokenLife: 4,
@@ -2891,9 +2699,6 @@ export const effects = {
   stingerBuff: {
     u: 0,
     v: 0,
-    svg: document.getElementById("stingerBuff"),
-    cooldown: document.getElementById("stingerBuff_cooldown"),
-    amount: document.getElementById("stingerBuff_amount"),
     maxCooldown: 45,
     maxAmount: 1,
     tokenLife: 4,
@@ -2908,9 +2713,6 @@ export const effects = {
   },
 
   popStarAura: {
-    svg: document.getElementById("popStarAura"),
-    cooldown: document.getElementById("popStarAura_cooldown"),
-    amount: document.getElementById("popStarAura_amount"),
     maxCooldown: 45,
     maxAmount: 1,
 
@@ -2933,9 +2735,6 @@ export const effects = {
   },
 
   scorchingStarAura: {
-    svg: document.getElementById("scorchingStarAura"),
-    cooldown: document.getElementById("scorchingStarAura_cooldown"),
-    amount: document.getElementById("scorchingStarAura_amount"),
     maxCooldown: 45,
     maxAmount: 1,
 
@@ -2963,9 +2762,6 @@ export const effects = {
   },
 
   gummyStarAura: {
-    svg: document.getElementById("gummyStarAura"),
-    cooldown: document.getElementById("gummyStarAura_cooldown"),
-    amount: document.getElementById("gummyStarAura_amount"),
     maxCooldown: 45,
     maxAmount: 1,
 
@@ -2995,9 +2791,6 @@ export const effects = {
   bubbleBloat: {
     u: (128 * 5) / 2048,
     v: 128 / 2048,
-    svg: document.getElementById("bubbleBloat"),
-    cooldown: document.getElementById("bubbleBloat_cooldown"),
-    amount: document.getElementById("bubbleBloat_amount"),
     maxCooldown: 60 * 60,
     tokenLife: 4,
     amountFromCooldown: true,
@@ -3021,9 +2814,6 @@ export const effects = {
   gummyBall: {
     u: (128 * 5) / 2048,
     v: 128 / 2048,
-    svg: document.getElementById("gummyBall"),
-    cooldown: document.getElementById("gummyBall_cooldown"),
-    amount: document.getElementById("gummyBall_amount"),
     maxCooldown: 180,
     tokenLife: 4,
     amountFromCooldown: true,
@@ -3052,9 +2842,6 @@ export const effects = {
   gummyBallCombo: {
     u: 0,
     v: 0,
-    svg: document.getElementById("gummyBallCombo"),
-    cooldown: document.getElementById("gummyBallCombo_cooldown"),
-    amount: document.getElementById("gummyBallCombo_amount"),
     maxCooldown: 10,
     maxAmount: 1000,
     tokenLife: 4,
@@ -3076,9 +2863,6 @@ export const effects = {
   guidingStarAura: {
     u: 0,
     v: 0,
-    svg: document.getElementById("guidingStarAura"),
-    cooldown: document.getElementById("guidingStarAura_cooldown"),
-    amount: document.getElementById("guidingStarAura_amount"),
     maxCooldown: 0,
     tokenLife: 4,
     maxAmount: 1,
@@ -3097,9 +2881,6 @@ export const effects = {
 
   popStarPassive: {
     isPassive: true,
-    svg: document.getElementById("popStarPassive"),
-    cooldown: document.getElementById("popStarPassive_cooldown"),
-    amount: document.getElementById("popStarPassive_amount"),
     maxCooldown: 60,
     triggerVal: 30,
     triggerType: "blueBombTokens",
@@ -3118,9 +2899,6 @@ export const effects = {
 
   scorchingStarPassive: {
     isPassive: true,
-    svg: document.getElementById("scorchingStarPassive"),
-    cooldown: document.getElementById("scorchingStarPassive_cooldown"),
-    amount: document.getElementById("scorchingStarPassive_amount"),
     maxCooldown: 60,
     triggerVal: 15,
     triggerType: "redBoostTokens",
@@ -3139,9 +2917,6 @@ export const effects = {
 
   gummyStarPassive: {
     isPassive: true,
-    svg: document.getElementById("gummyStarPassive"),
-    cooldown: document.getElementById("gummyStarPassive_cooldown"),
-    amount: document.getElementById("gummyStarPassive_amount"),
     maxCooldown: 60,
     triggerVal: 25,
     triggerType: "gummyStar",
@@ -3160,9 +2935,6 @@ export const effects = {
 
   guidingStarPassive: {
     isPassive: true,
-    svg: document.getElementById("guidingStarPassive"),
-    cooldown: document.getElementById("guidingStarPassive_cooldown"),
-    amount: document.getElementById("guidingStarPassive_amount"),
     maxCooldown: 60 * 5,
     triggerVal: 250,
     triggerType: "boostTokens",
@@ -3201,9 +2973,6 @@ export const effects = {
 
   starShowerPassive: {
     isPassive: true,
-    svg: document.getElementById("starShowerPassive"),
-    cooldown: document.getElementById("starShowerPassive_cooldown"),
-    amount: document.getElementById("starShowerPassive_amount"),
     maxCooldown: 25,
     triggerVal: 35,
     triggerType: "markOrBoostTokens",
@@ -3224,9 +2993,6 @@ export const effects = {
 
   starSawPassive: {
     isPassive: true,
-    svg: document.getElementById("starSawPassive"),
-    cooldown: document.getElementById("starSawPassive_cooldown"),
-    amount: document.getElementById("starSawPassive_amount"),
     maxCooldown: 40,
     triggerVal: 2,
     triggerType: "stingerUsed",
@@ -3248,9 +3014,6 @@ export const effects = {
 
   petalStormPassive: {
     isPassive: true,
-    svg: document.getElementById("petalStormPassive"),
-    cooldown: document.getElementById("petalStormPassive_cooldown"),
-    amount: document.getElementById("petalStormPassive_amount"),
     maxCooldown: 30,
     triggerVal: 30,
     triggerType: "boostTokens",
@@ -3286,9 +3049,6 @@ export const effects = {
   tidePower: {
     u: 0,
     v: 0,
-    svg: document.getElementById("tidePower"),
-    cooldown: document.getElementById("tidePower_cooldown"),
-    amount: document.getElementById("tidePower_amount"),
     maxCooldown: 20,
     maxAmount: 500,
 
@@ -3317,9 +3077,6 @@ export const effects = {
   tidalSurge: {
     u: (128 * 5) / 2048,
     v: 128 / 2048,
-    svg: document.getElementById("tidalSurge"),
-    cooldown: document.getElementById("tidalSurge_cooldown"),
-    amount: document.getElementById("tidalSurge_amount"),
     maxCooldown: 10,
     tokenLife: 4,
     amountFromCooldown: true,
@@ -3338,9 +3095,6 @@ export const effects = {
   tideBlessing: {
     u: (128 * 5) / 2048,
     v: 128 / 2048,
-    svg: document.getElementById("tideBlessing"),
-    cooldown: document.getElementById("tideBlessing_cooldown"),
-    amount: document.getElementById("tideBlessing_amount"),
     maxCooldown: 4 * 60 * 60,
     tokenLife: 4,
     amountFromCooldown: true,
@@ -3373,9 +3127,6 @@ export const effects = {
   coconutShield: {
     u: (128 * 6) / 2048,
     v: (256 * 2) / 2048,
-    svg: document.getElementById("coconutShield"),
-    cooldown: document.getElementById("coconutShield_cooldown"),
-    amount: document.getElementById("coconutShield_amount"),
     maxCooldown: 10,
     maxAmount: 1,
 
@@ -3392,9 +3143,6 @@ export const effects = {
   coconutSurge: {
     u: (128 * 6) / 2048,
     v: (256 * 2) / 2048,
-    svg: document.getElementById("coconutSurge"),
-    cooldown: document.getElementById("coconutSurge_cooldown"),
-    amount: document.getElementById("coconutSurge_amount"),
     maxCooldown: 2,
     maxAmount: 1,
 
@@ -3411,9 +3159,6 @@ export const effects = {
   conversionBoost: {
     u: (128 * 6) / 2048,
     v: (256 * 2) / 2048,
-    svg: document.getElementById("conversionBoost"),
-    cooldown: document.getElementById("conversionBoost_cooldown"),
-    amount: document.getElementById("conversionBoost_amount"),
     maxCooldown: 30 * 60,
     maxAmount: 1,
 
@@ -3429,9 +3174,6 @@ export const effects = {
   gummyMorph: {
     u: (128 * 6) / 2048,
     v: (256 * 2) / 2048,
-    svg: document.getElementById("gummyMorph"),
-    cooldown: document.getElementById("gummyMorph_cooldown"),
-    amount: document.getElementById("gummyMorph_amount"),
     maxCooldown: 10,
     maxAmount: 1,
 
@@ -3451,9 +3193,6 @@ export const effects = {
 
   focusPulserPassive: {
     isPassive: true,
-    svg: document.getElementById("focusPulserPassive"),
-    cooldown: document.getElementById("focusPulserPassive_cooldown"),
-    amount: document.getElementById("focusPulserPassive_amount"),
     maxCooldown: 20,
     triggerVal: 25,
     triggerType: "focusTokens",
@@ -3472,9 +3211,6 @@ export const effects = {
 
   hastePulserPassive: {
     isPassive: true,
-    svg: document.getElementById("hastePulserPassive"),
-    cooldown: document.getElementById("hastePulserPassive_cooldown"),
-    amount: document.getElementById("hastePulserPassive_amount"),
     maxCooldown: 20,
     triggerVal: 25,
     triggerType: "hasteTokens",
@@ -3493,9 +3229,6 @@ export const effects = {
 
   inspireCoconutsPassive: {
     isPassive: true,
-    svg: document.getElementById("inspireCoconutsPassive"),
-    cooldown: document.getElementById("inspireCoconutsPassive_cooldown"),
-    amount: document.getElementById("inspireCoconutsPassive_amount"),
     maxCooldown: 0.5,
     triggerVal: 5,
     triggerType: "inspireTokens",
@@ -3524,9 +3257,6 @@ export const effects = {
 
   emergencyCoconutShieldPassive: {
     isPassive: true,
-    svg: document.getElementById("emergencyCoconutShieldPassive"),
-    cooldown: document.getElementById("emergencyCoconutShieldPassive_cooldown"),
-    amount: document.getElementById("emergencyCoconutShieldPassive_amount"),
     maxCooldown: 60,
     triggerVal: 1,
     triggerType: "coconutShield",
@@ -3557,9 +3287,6 @@ export const effects = {
 
   coconutHastePassive: {
     isPassive: true,
-    svg: document.getElementById("coconutHastePassive"),
-    cooldown: document.getElementById("coconutHastePassive_cooldown"),
-    amount: document.getElementById("coconutHastePassive_amount"),
     maxCooldown: 1,
     triggerVal: 1,
     triggerType: "fallingCoconuts",
@@ -3579,9 +3306,6 @@ export const effects = {
 
   xFlamePassive: {
     isPassive: true,
-    svg: document.getElementById("xFlamePassive"),
-    cooldown: document.getElementById("xFlamePassive_cooldown"),
-    amount: document.getElementById("xFlamePassive_amount"),
     maxCooldown: 25,
     triggerVal: 20,
     triggerType: "battleTokens",
@@ -3651,9 +3375,6 @@ export const effects = {
 
   ignitePassive: {
     isPassive: true,
-    svg: document.getElementById("ignitePassive"),
-    cooldown: document.getElementById("ignitePassive_cooldown"),
-    amount: document.getElementById("ignitePassive_amount"),
     maxCooldown: 0.5,
     triggerVal: 10,
     triggerType: "redAbilityTokens",
@@ -3723,9 +3444,6 @@ export const effects = {
 
   bubbleBombsPassive: {
     isPassive: true,
-    svg: document.getElementById("bubbleBombsPassive"),
-    cooldown: document.getElementById("bubbleBombsPassive_cooldown"),
-    amount: document.getElementById("bubbleBombsPassive_amount"),
     maxCooldown: 0.5,
     triggerVal: 10,
     triggerType: "bombTokens",
@@ -3754,9 +3472,6 @@ export const effects = {
 
   coinScatterPassive: {
     isPassive: true,
-    svg: document.getElementById("coinScatterPassive"),
-    cooldown: document.getElementById("coinScatterPassive_cooldown"),
-    amount: document.getElementById("coinScatterPassive_amount"),
     maxCooldown: 45,
     triggerVal: 20,
     triggerType: "markTokens",
@@ -3804,9 +3519,6 @@ export const effects = {
 
   diamondDrainPassive: {
     isPassive: true,
-    svg: document.getElementById("diamondDrainPassive"),
-    cooldown: document.getElementById("diamondDrainPassive_cooldown"),
-    amount: document.getElementById("diamondDrainPassive_amount"),
     maxCooldown: 35,
     triggerVal: 35,
     triggerType: "blueAbilityTokens",
@@ -3863,9 +3575,6 @@ export const effects = {
 
   gummyMorphPassive: {
     isPassive: true,
-    svg: document.getElementById("gummyMorphPassive"),
-    cooldown: document.getElementById("gummyMorphPassive_cooldown"),
-    amount: document.getElementById("gummyMorphPassive_amount"),
     maxCooldown: 25,
     triggerVal: 30,
     triggerType: "gummyMorph",
@@ -3938,9 +3647,6 @@ export const effects = {
     statsToAddTo: ["redAbilityTokens", "redBombTokens"],
     u: (128 * 3) / 2048,
     v: (128 * 6) / 2048,
-    svg: document.getElementById("redBombSync"),
-    cooldown: document.getElementById("redBombSync_cooldown"),
-    amount: document.getElementById("redBombSync_amount"),
     maxCooldown: 25,
     maxAmount: 1,
     tokenLife: 24,
@@ -3961,9 +3667,6 @@ export const effects = {
     statsToAddTo: ["blueAbilityTokens", "blueBombTokens"],
     u: (128 * 4) / 2048,
     v: (128 * 6) / 2048,
-    svg: document.getElementById("blueBombSync"),
-    cooldown: document.getElementById("blueBombSync_cooldown"),
-    amount: document.getElementById("blueBombSync_amount"),
     maxCooldown: 25,
     maxAmount: 1,
     tokenLife: 24,
@@ -4057,9 +3760,6 @@ export const effects = {
   cloudBoost: {
     u: (128 * 5) / 2048,
     v: 128 / 2048,
-    svg: document.getElementById("cloudBoost"),
-    cooldown: document.getElementById("cloudBoost_cooldown"),
-    amount: document.getElementById("cloudBoost_amount"),
     maxCooldown: 7.5,
     tokenLife: 4,
     amountFromCooldown: true,
@@ -4105,9 +3805,6 @@ export const effects = {
     statsToAddTo: [],
     u: (128 * 5) / 2048,
     v: (128 * 7) / 2048,
-    svg: document.getElementById("tabbyLove"),
-    cooldown: document.getElementById("tabbyLove_cooldown"),
-    amount: document.getElementById("tabbyLove_amount"),
     maxCooldown: Infinity,
     maxAmount: 250,
     tokenLife: 16,
@@ -4151,9 +3848,6 @@ export const effects = {
     u: (128 * 5) / 2048,
     v: 128 / 2048,
     hideAmount: true,
-    svg: document.getElementById("comfortingNectar"),
-    cooldown: document.getElementById("comfortingNectar_cooldown"),
-    amount: document.getElementById("comfortingNectar_amount"),
     maxCooldown: 60 * 60 * 6,
     tokenLife: 4,
     amountFromCooldown: true,
@@ -4184,9 +3878,6 @@ export const effects = {
     u: (128 * 5) / 2048,
     v: 128 / 2048,
     hideAmount: true,
-    svg: document.getElementById("invigoratingNectar"),
-    cooldown: document.getElementById("invigoratingNectar_cooldown"),
-    amount: document.getElementById("invigoratingNectar_amount"),
     maxCooldown: 60 * 60 * 6,
     tokenLife: 4,
     amountFromCooldown: true,
@@ -4217,9 +3908,6 @@ export const effects = {
     u: (128 * 5) / 2048,
     v: 128 / 2048,
     hideAmount: true,
-    svg: document.getElementById("motivatingNectar"),
-    cooldown: document.getElementById("motivatingNectar_cooldown"),
-    amount: document.getElementById("motivatingNectar_amount"),
     maxCooldown: 60 * 60 * 6,
     tokenLife: 4,
     amountFromCooldown: true,
@@ -4252,9 +3940,6 @@ export const effects = {
     u: (128 * 5) / 2048,
     v: 128 / 2048,
     hideAmount: true,
-    svg: document.getElementById("refreshingNectar"),
-    cooldown: document.getElementById("refreshingNectar_cooldown"),
-    amount: document.getElementById("refreshingNectar_amount"),
     maxCooldown: 60 * 60 * 6,
     tokenLife: 4,
     amountFromCooldown: true,
@@ -4285,9 +3970,6 @@ export const effects = {
     u: (128 * 5) / 2048,
     v: 128 / 2048,
     hideAmount: true,
-    svg: document.getElementById("satisfyingNectar"),
-    cooldown: document.getElementById("satisfyingNectar_cooldown"),
-    amount: document.getElementById("satisfyingNectar_amount"),
     maxCooldown: 60 * 60 * 6,
     tokenLife: 4,
     amountFromCooldown: true,
@@ -4317,9 +3999,6 @@ export const effects = {
   corruption: {
     u: 0,
     v: 0,
-    svg: document.getElementById("corruption"),
-    cooldown: document.getElementById("corruption_cooldown"),
-    amount: document.getElementById("corruption_amount"),
     maxCooldown: 0,
     tokenLife: 4,
     maxAmount: 100,
@@ -4511,9 +4190,6 @@ export const effects = {
   redJellyBean: {
     u: (128 * 4) / 2048,
     v: (128 * 11) / 2048,
-    svg: document.getElementById("redJellyBean"),
-    cooldown: document.getElementById("redJellyBean_cooldown"),
-    amount: document.getElementById("redJellyBean_amount"),
     maxCooldown: 60,
     maxAmount: 3,
     tokenLife: 16,
@@ -4532,9 +4208,6 @@ export const effects = {
   whiteJellyBean: {
     u: (128 * 5) / 2048,
     v: (128 * 11) / 2048,
-    svg: document.getElementById("whiteJellyBean"),
-    cooldown: document.getElementById("whiteJellyBean_cooldown"),
-    amount: document.getElementById("whiteJellyBean_amount"),
     maxCooldown: 60,
     maxAmount: 3,
     tokenLife: 16,
@@ -4555,9 +4228,6 @@ export const effects = {
   blueJellyBean: {
     u: (128 * 6) / 2048,
     v: (128 * 11) / 2048,
-    svg: document.getElementById("blueJellyBean"),
-    cooldown: document.getElementById("blueJellyBean_cooldown"),
-    amount: document.getElementById("blueJellyBean_amount"),
     maxCooldown: 60,
     maxAmount: 3,
     tokenLife: 16,
@@ -4578,9 +4248,6 @@ export const effects = {
   pinkJellyBean: {
     u: (128 * 7) / 2048,
     v: (128 * 11) / 2048,
-    svg: document.getElementById("pinkJellyBean"),
-    cooldown: document.getElementById("pinkJellyBean_cooldown"),
-    amount: document.getElementById("pinkJellyBean_amount"),
     maxCooldown: 60,
     maxAmount: 3,
     tokenLife: 16,
@@ -4601,9 +4268,6 @@ export const effects = {
   brownJellyBean: {
     u: (128 * 0) / 2048,
     v: (128 * 12) / 2048,
-    svg: document.getElementById("brownJellyBean"),
-    cooldown: document.getElementById("brownJellyBean_cooldown"),
-    amount: document.getElementById("brownJellyBean_amount"),
     maxCooldown: 60,
     maxAmount: 3,
     tokenLife: 16,
@@ -4624,9 +4288,6 @@ export const effects = {
   greenJellyBean: {
     u: (128 * 1) / 2048,
     v: (128 * 12) / 2048,
-    svg: document.getElementById("greenJellyBean"),
-    cooldown: document.getElementById("greenJellyBean_cooldown"),
-    amount: document.getElementById("greenJellyBean_amount"),
     maxCooldown: 60,
     maxAmount: 3,
     tokenLife: 16,
@@ -4643,9 +4304,6 @@ export const effects = {
   blackJellyBean: {
     u: (128 * 2) / 2048,
     v: (128 * 12) / 2048,
-    svg: document.getElementById("blackJellyBean"),
-    cooldown: document.getElementById("blackJellyBean_cooldown"),
-    amount: document.getElementById("blackJellyBean_amount"),
     maxCooldown: 60,
     maxAmount: 3,
     tokenLife: 16,
@@ -4668,9 +4326,6 @@ export const effects = {
   yellowJellyBean: {
     u: (128 * 3) / 2048,
     v: (128 * 12) / 2048,
-    svg: document.getElementById("yellowJellyBean"),
-    cooldown: document.getElementById("yellowJellyBean_cooldown"),
-    amount: document.getElementById("yellowJellyBean_amount"),
     maxCooldown: 60,
     maxAmount: 3,
     tokenLife: 16,
@@ -4700,9 +4355,6 @@ export const effects = {
   roboChallengeBuff: {
     u: 0,
     v: 0,
-    svg: document.getElementById("roboChallengeBuff"),
-    cooldown: document.getElementById("roboChallengeBuff_cooldown"),
-    amount: document.getElementById("roboChallengeBuff_amount"),
     maxCooldown: 1.5 * 60,
     tokenLife: 4,
     maxAmount: 1,
@@ -4714,9 +4366,6 @@ export const effects = {
   redDriveBuff: {
     u: 0,
     v: 0,
-    svg: document.getElementById("redDriveBuff"),
-    cooldown: document.getElementById("redDriveBuff_cooldown"),
-    amount: document.getElementById("redDriveBuff_amount"),
     maxCooldown: 1.5 * 60,
     tokenLife: 4,
     maxAmount: 1,
@@ -4735,9 +4384,6 @@ export const effects = {
   blueDriveBuff: {
     u: 0,
     v: 0,
-    svg: document.getElementById("blueDriveBuff"),
-    cooldown: document.getElementById("blueDriveBuff_cooldown"),
-    amount: document.getElementById("blueDriveBuff_amount"),
     maxCooldown: 1.5 * 60,
     tokenLife: 4,
     maxAmount: 1,
@@ -4756,9 +4402,6 @@ export const effects = {
   whiteDriveBuff: {
     u: 0,
     v: 0,
-    svg: document.getElementById("whiteDriveBuff"),
-    cooldown: document.getElementById("whiteDriveBuff_cooldown"),
-    amount: document.getElementById("whiteDriveBuff_amount"),
     maxCooldown: 1.5 * 60,
     tokenLife: 4,
     maxAmount: 1,
@@ -4777,9 +4420,6 @@ export const effects = {
   glitchedDriveBuff: {
     u: 0,
     v: 0,
-    svg: document.getElementById("glitchedDriveBuff"),
-    cooldown: document.getElementById("glitchedDriveBuff_cooldown"),
-    amount: document.getElementById("glitchedDriveBuff_amount"),
     maxCooldown: 1.5 * 60,
     tokenLife: 4,
     maxAmount: 1,
@@ -4802,9 +4442,6 @@ export const effects = {
   antChallenge: {
     u: 0,
     v: 0,
-    svg: document.getElementById("antChallenge"),
-    cooldown: document.getElementById("antChallenge_cooldown"),
-    amount: document.getElementById("antChallenge_amount"),
     maxCooldown: 5 * 60,
     tokenLife: 4,
     maxAmount: 1,
@@ -4823,9 +4460,6 @@ export const effects = {
   bearMorph: {
     u: 0,
     v: 0,
-    svg: document.getElementById("bearMorph"),
-    cooldown: document.getElementById("bearMorph_cooldown"),
-    amount: document.getElementById("bearMorph_amount"),
     maxCooldown: 30,
     maxAmount: 1,
 
@@ -4845,9 +4479,6 @@ export const effects = {
   bearMorph_: {
     u: 0,
     v: 0,
-    svg: document.getElementById("bearMorph_"),
-    cooldown: document.getElementById("bearMorph__cooldown"),
-    amount: document.getElementById("bearMorph__amount"),
     maxCooldown: 30,
     maxAmount: 1,
 
@@ -4953,9 +4584,6 @@ export const effects = {
   festiveCheer: {
     u: (128 * 6) / 2048,
     v: (128 * 13) / 2048,
-    svg: document.getElementById("festiveCheer"),
-    cooldown: document.getElementById("festiveCheer_cooldown"),
-    amount: document.getElementById("festiveCheer_amount"),
     maxCooldown: 10,
     maxAmount: 1,
 
