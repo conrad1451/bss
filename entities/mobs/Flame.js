@@ -3,7 +3,22 @@
 // CHQ: Claude AI (Sonnet) refactored
 
 import { MATH } from "../../utils/math.js";
+import { ParticleRenderer } from "../../engine/particles.js"; // CHQ: Claude AI (Sonnet) added, previously called via a bare `gameState.ParticleRenderer`, but ParticleRenderer isn't (and was never) attached to gameState anywhere in the project. Importing it directly matches the convention already used in bees.js and Bubble.js.
 import { ReverseExplosion } from "../miscEntities/ReverseExplosion.js";
+
+// TODO: collectPollen has no home yet in this codebase - not exported from
+// any file currently in the project. Bubble.js has the same open call.
+// Until it's ported/written somewhere, the collectPollen() call below will
+// throw a ReferenceError when it fires (i.e. once a Flame actually sits in
+// a field the player is in).
+//
+// TODO: gameState.COLORS doesn't exist yet either (not set in gameState.js
+// or index.js). Reads below use optional chaining so they degrade to
+// `undefined` instead of throwing, matching the fallback style already used
+// for COLORS in BugMob.js (`gameState.COLORS?.whiteArr || [255,255,255]`)
+// but there's no established fallback color for "honey" yet, so none is
+// guessed here. Passing `undefined` through to textRenderer.add() should be
+// treated as a marker that this still needs real wiring, not a silent success.
 
 export class Flame {
   constructor(field, x, z, isStatic, gameState) {
@@ -39,7 +54,7 @@ export class Flame {
 
   // CHQ: Claude AI (Sonnet) refactored - extracted oil trail init shared by constructor and turnDark
   _initOilTrail(gameState) {
-    const { player, textRenderer, ParticleRenderer } = gameState;
+    const { player } = gameState;
 
     this.getRidOfOilTrailTimer = 2;
     this.oilT = 0;
@@ -65,7 +80,7 @@ export class Flame {
       gameState.textRenderer.add(
         honeyGained,
         [player.pos[0], player.pos[1] + Math.random() * 2 + 0.5, player.pos[2]],
-        COLORS.honey,
+        gameState.COLORS?.honey, // CHQ: Claude AI (Sonnet): was bare `COLORS.honey`; see TODO at top of file
         0,
         "+",
       );
@@ -116,7 +131,7 @@ export class Flame {
             player.pos[1] + Math.random() * 2 + 0.5,
             player.pos[2],
           ],
-          COLORS.honey,
+          this.gameState.COLORS?.honey, // CHQ: Claude AI (Sonnet): was bare `COLORS.honey`; see TODO at top of file
           0,
           "+",
         );
@@ -141,7 +156,8 @@ export class Flame {
 
   // CHQ: Claude AI (Sonnet) refactored - dt and index are now explicit parameters
   //      instead of implicit globals. All globals (player, TIME, objects, fieldInfo,
-  //      textRenderer, ParticleRenderer, collectPollen) are read from this.gameState.
+  //      textRenderer, collectPollen) are read from this.gameState, except
+  //      ParticleRenderer which is now a real module import (see top of file).
   update(dt, index) {
     const { player, objects, fieldInfo } = this.gameState;
 
@@ -165,6 +181,7 @@ export class Flame {
       this.collectTimer = this.gameState.TIME;
 
       if (!this.isStatic && player.fieldIn === this.field) {
+        // eslint-disable-next-line no-undef -- collectPollen: see TODO at top of file
         collectPollen({
           x: this.x,
           z: this.z,
@@ -211,7 +228,7 @@ export class Flame {
     if (this.gameState.TIME - this.particleTimer > 0.5) {
       this.particleTimer = this.gameState.TIME;
 
-      gameState.ParticleRenderer.add({
+      ParticleRenderer.add({
         x: this.pos[0],
         y: this.pos[1],
         z: this.pos[2],
