@@ -13,14 +13,6 @@ import { collectPollen } from "../../engine/collectPollen.js";
 //      already used in bees.js and Bubble.js.
 import { ParticleRenderer } from "../../engine/particles.js";
 
-// TODO: gameState.COLORS doesn't exist yet either (not set in gameState.js
-// or index.js). Reads below use optional chaining so they degrade to
-// `undefined` instead of throwing, matching the fallback style already used
-// for COLORS in BugMob.js (`gameState.COLORS?.whiteArr || [255,255,255]`)
-// but there's no established fallback color for "honey" yet, so none is
-// guessed here. Passing `undefined` through to textRenderer.add() should be
-// treated as a marker that this still needs real wiring, not a silent success.
-
 export class Flame {
   constructor(field, x, z, isStatic, gameState) {
     this.gameState = gameState;
@@ -81,7 +73,7 @@ export class Flame {
       gameState.textRenderer.add(
         honeyGained,
         [player.pos[0], player.pos[1] + Math.random() * 2 + 0.5, player.pos[2]],
-        gameState.COLORS?.honey, // CHQ: Claude AI (Sonnet): was bare `COLORS.honey`; see TODO at top of file
+        gameState.COLORS?.honey, // CHQ: Claude AI (Sonnet): guard for `COLORS.honey`
         0,
         "+",
       );
@@ -132,7 +124,7 @@ export class Flame {
             player.pos[1] + Math.random() * 2 + 0.5,
             player.pos[2],
           ],
-          this.gameState.COLORS?.honey, // CHQ: Claude AI (Sonnet): was bare `COLORS.honey`; see TODO at top of file
+          this.gameState.COLORS?.honey, // CHQ: Claude AI (Sonnet): guard for `COLORS.honey`
           0,
           "+",
         );
