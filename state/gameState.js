@@ -268,6 +268,18 @@ export function createInitialState(saveData = {}) {
       cylinder_explosions: 0,
     },
 
+    COLORS: {
+      blue: "rgb(20,84,186)",
+      red: "rgb(255,0,0)",
+      white: "rgb(255,255,255)",
+      blueArr: [20, 84, 186],
+      redArr: [255, 0, 0],
+      whiteArr: [255, 255, 255],
+      honey: [255, 226, 8],
+      honey_normalized: [1, 226 / 255, 8 / 255],
+      bondArr: [240, 72, 218],
+    },
+
     statsTick: false, // CHQ: me
   };
 }
