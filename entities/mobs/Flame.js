@@ -3,15 +3,16 @@
 // CHQ: Claude AI (Sonnet) refactored
 
 import { MATH } from "../../utils/math.js";
-import { ParticleRenderer } from "../../engine/particles.js"; // CHQ: Claude AI (Sonnet) added, previously called via a bare `gameState.ParticleRenderer`, but ParticleRenderer isn't (and was never) attached to gameState anywhere in the project. Importing it directly matches the convention already used in bees.js and Bubble.js.
 import { ReverseExplosion } from "../miscEntities/ReverseExplosion.js";
+import { collectPollen } from "../../engine/collectPollen.js";
 
-// TODO: collectPollen has no home yet in this codebase - not exported from
-// any file currently in the project. Bubble.js has the same open call.
-// Until it's ported/written somewhere, the collectPollen() call below will
-// throw a ReferenceError when it fires (i.e. once a Flame actually sits in
-// a field the player is in).
-//
+// CHQ: Claude AI (Sonnet) added - previously called via a bare
+//      `gameState.ParticleRenderer`, but ParticleRenderer isn't
+//      (and was never) attached to gameState anywhere in the
+//      project. Importing it directly matches the convention
+//      already used in bees.js and Bubble.js.
+import { ParticleRenderer } from "../../engine/particles.js";
+
 // TODO: gameState.COLORS doesn't exist yet either (not set in gameState.js
 // or index.js). Reads below use optional chaining so they degrade to
 // `undefined` instead of throwing, matching the fallback style already used
@@ -181,43 +182,45 @@ export class Flame {
       this.collectTimer = this.gameState.TIME;
 
       if (!this.isStatic && player.fieldIn === this.field) {
-        // eslint-disable-next-line no-undef -- collectPollen: see TODO at top of file
-        collectPollen({
-          x: this.x,
-          z: this.z,
-          pattern: this.dark
-            ? [
-                [0, 0],
-                [1, 1],
-                [1, -1],
-                [-1, 1],
-                [-1, -1],
-                [1, 0],
-                [-1, 0],
-                [0, 1],
-                [0, -1],
-                [2, 0],
-                [-2, 0],
-                [0, -2],
-                [0, 2],
-              ]
-            : [
-                [0, 0],
-                [1, 1],
-                [1, -1],
-                [-1, 1],
-                [-1, -1],
-                [1, 0],
-                [-1, 0],
-                [0, 1],
-                [0, -1],
-              ],
-          amount: { r: 10, w: 4, b: 1 },
-          stackHeight: 0.7,
-          multiplier: player.flamePollen * player.flameBonus,
-          instantConversion: player.instantFlameConversion,
-          field: this.field,
-        });
+        collectPollen(
+          {
+            x: this.x,
+            z: this.z,
+            pattern: this.dark
+              ? [
+                  [0, 0],
+                  [1, 1],
+                  [1, -1],
+                  [-1, 1],
+                  [-1, -1],
+                  [1, 0],
+                  [-1, 0],
+                  [0, 1],
+                  [0, -1],
+                  [2, 0],
+                  [-2, 0],
+                  [0, -2],
+                  [0, 2],
+                ]
+              : [
+                  [0, 0],
+                  [1, 1],
+                  [1, -1],
+                  [-1, 1],
+                  [-1, -1],
+                  [1, 0],
+                  [-1, 0],
+                  [0, 1],
+                  [0, -1],
+                ],
+            amount: { r: 10, w: 4, b: 1 },
+            stackHeight: 0.7,
+            multiplier: player.flamePollen * player.flameBonus,
+            instantConversion: player.instantFlameConversion,
+            field: this.field,
+          },
+          this.gameState,
+        );
       }
     }
 

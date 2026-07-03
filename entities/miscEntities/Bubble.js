@@ -10,12 +10,8 @@ import { vec3 } from "gl-matrix";
 import { MATH } from "../../utils/math.js";
 import { ParticleRenderer } from "../../engine/particles.js";
 import { Explosion } from "./Explosion.js";
+import { collectPollen } from "../../engine/collectPollen.js";
 
-// TODO: collectPollen has no home yet in this codebase (not exported from
-// any file currently in the project). Flame.js has the same open call.
-// This is a real gap, not a naming mismatch - until it's ported/written
-// somewhere, pop() below will throw a ReferenceError when it fires.
-//
 // TODO: LootToken is a separate, richer token type than the Token class in
 // entities/tokens.js (different constructor signature: (life, pos, type,
 // amount, isBoss, label) vs Token's (type, amount, pos, isBossDrop)).
@@ -118,51 +114,53 @@ export class Bubble {
 
     const g = this.golden ? 1.5 * player.bubblePollen : player.bubblePollen;
 
-    // eslint-disable-next-line no-undef -- collectPollen: see TODO at top of file
-    const p = collectPollen({
-      x: this.x,
-      z: this.z,
-      pattern: [
-        [0, 0],
-        [-1, -1],
-        [-1, 0],
-        [-1, 1],
-        [1, -1],
-        [1, 0],
-        [1, 1],
-        [0, 1],
-        [0, -1],
-        [-2, 0],
-        [2, 0],
-        [0, 2],
-        [0, -2],
-        [2, 1],
-        [2, -1],
-        [-2, 1],
-        [-2, -1],
-        [1, 2],
-        [-1, 2],
-        [1, -2],
-        [-1, -2],
-        [3, 0],
-        [-3, 0],
-        [0, -3],
-        [0, 3],
-        [3, 1],
-        [3, -1],
-        [1, 3],
-        [-1, 3],
-        [-1, -3],
-        [1, -3],
-        [-3, 1],
-        [-3, -1],
-      ],
-      amount: { r: 2, w: 6, b: 10 },
-      stackHeight: 0.45 + Math.random() * 0.5,
-      replenish: 1,
-      field: this.field,
-      multiplier: g * player.bubbleBonus,
-    });
+    const p = collectPollen(
+      {
+        x: this.x,
+        z: this.z,
+        pattern: [
+          [0, 0],
+          [-1, -1],
+          [-1, 0],
+          [-1, 1],
+          [1, -1],
+          [1, 0],
+          [1, 1],
+          [0, 1],
+          [0, -1],
+          [-2, 0],
+          [2, 0],
+          [0, 2],
+          [0, -2],
+          [2, 1],
+          [2, -1],
+          [-2, 1],
+          [-2, -1],
+          [1, 2],
+          [-1, 2],
+          [1, -2],
+          [-1, -2],
+          [3, 0],
+          [-3, 0],
+          [0, -3],
+          [0, 3],
+          [3, 1],
+          [3, -1],
+          [1, 3],
+          [-1, 3],
+          [-1, -3],
+          [1, -3],
+          [-3, 1],
+          [-3, -1],
+        ],
+        amount: { r: 2, w: 6, b: 10 },
+        stackHeight: 0.45 + Math.random() * 0.5,
+        replenish: 1, // TODO: no-op under the new pooled collectPollen - see TODO block in engine/collectPollen.js
+        field: this.field,
+        multiplier: g * player.bubbleBonus,
+      },
+      this.gameState,
+    );
 
     if (this.golden && p && Math.random() < 0.25) {
       objects.tokens.push(
