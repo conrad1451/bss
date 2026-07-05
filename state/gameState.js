@@ -281,5 +281,8 @@ export function createInitialState(saveData = {}) {
     },
 
     statsTick: false, // CHQ: me
+
+    items: {},
+    pages: [],
   };
 }

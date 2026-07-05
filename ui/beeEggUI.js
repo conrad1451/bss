@@ -4,8 +4,17 @@
 // Splits the "art" (bee icon, drawn once as a reusable <symbol>) from the
 // "data" (per-bee text card), and moves both out of a raw innerHTML += loop
 // into named, testable functions.
+//
+// v2: every function now takes `gameState` as its single context param
+// (matching the convention used everywhere else in this codebase such as
+// updateEngine.js, FieldManager.js, EnvManager.js) instead of a hand-picked
+// { objects, player, COLORS } bag. `items`, `pages`, and `COLORS` are read
+// off gameState rather than passed in separately; `beeInfo` stays a plain
+// import since it's static data, not runtime state (same pattern as
+// mobDefinitions in index.js).
 
 import { MATH } from "../utils/math.js";
+import { beeInfo } from "../data/bees.js";
 
 // ---------------------------------------------------------------------------
 // 1. The bee icon, defined once as an SVG <symbol>.
@@ -29,7 +38,7 @@ const BEE_EGG_ICON_SPRITE = `
 
 /**
  * Injects the shared icon sprite into the document exactly once.
- * Safe to call multiple times - subsequent calls are no-ops.
+ * Safe to call multiple times since subsequent calls are no-ops.
  */
 export function ensureBeeEggIconSprite() {
   if (document.getElementById("icon-bee-egg")) return; // already injected
@@ -37,21 +46,21 @@ export function ensureBeeEggIconSprite() {
   wrapper.innerHTML = BEE_EGG_ICON_SPRITE;
   document.body.appendChild(wrapper.firstElementChild);
 }
-
 // ---------------------------------------------------------------------------
 // 2. Per-bee card template - pure function, easy to read/test in isolation.
+//    No gameState needed here; it only depends on the bee type itself.
 // ---------------------------------------------------------------------------
 
 /**
  * Builds the markup for a single event-bee-egg inventory card.
  *
- * @param {string} beeTypes - Raw bee type key (e.g. "panda").
+ * @param {string} beeType - Raw bee type key (e.g. "panda").
  * @returns {{ id: string, html: string }} The DOM id used for click binding
  *   (and for the "<id>_amount" label elsewhere), plus the card's HTML.
  */
-export function renderBeeEggCard(beeTypes) {
-  const id = `${beeTypes}BeeEgg`;
-  const name = MATH.doGrammar(beeTypes);
+export function renderBeeEggCard(beeType) {
+  const id = `${beeType}BeeEgg`;
+  const name = MATH.doGrammar(beeType);
 
   const html = `
     <svg id="${id}" style="width:200px;height:70px;cursor:pointer;border-radius:5px">
@@ -78,21 +87,20 @@ export function renderBeeEggCard(beeTypes) {
 }
 
 // ---------------------------------------------------------------------------
-// 3. Item registration - same "use" hatch logic as the original, just
-//    factored out of the loop body so it's readable on its own.
+// 3. Item registration: same "use" hatch logic as the original, now reading
+//    objects/player straight off gameState instead of a destructured ctx.
 // ---------------------------------------------------------------------------
 
 /**
- * Builds the `items[beeTypes + "BeeEgg"]` entry: inventory metadata plus the
+ * Builds the `items[beeType + "BeeEgg"]` entry: inventory metadata plus the
  * hatch-on-use behavior (block if the player already owns that bee, else
  * assign it into the currently selected hive slot and show the hatch popup).
  *
- * @param {string} beeTypes
- * @param {Object} gameState
+ * @param {string} beeType
+ * @param {Object} gameState - The live game state object.
  * @returns {Object} item definition
  */
-export function createBeeEggItem(beeTypes, gameState) {
-  const { objects, player, COLORS, TIME } = gameState;
+export function createBeeEggItem(beeType, gameState) {
   return {
     canUseOnSlot: () => true,
     amount: 0,
@@ -100,26 +108,28 @@ export function createBeeEggItem(beeTypes, gameState) {
     v: (128 * 5) / 2048,
     value: Infinity,
     use() {
+      const { objects, player, COLORS } = gameState;
+
       const alreadyOwned = Object.values(objects.bees).some(
-        (bee) => bee.type === beeTypes,
+        (bee) => bee.type === beeType,
       );
 
       if (alreadyOwned) {
         player.addMessage(
-          `You can only have 1 ${MATH.doGrammar(beeTypes)} Bee!`,
+          `You can only have 1 ${MATH.doGrammar(beeType)} Bee!`,
           COLORS.redArr,
         );
         return;
       }
 
       const slot = player.hive[player.hiveIndex[1]][player.hiveIndex[0]];
-      slot.type = beeTypes;
+      slot.type = beeType;
       slot.gifted = false;
 
       player.beePopup = {
-        type: beeTypes,
+        type: beeType,
         message: "You hatched a...",
-        time: TIME,
+        time: gameState.TIME,
         gifted: false,
       };
 
@@ -129,33 +139,31 @@ export function createBeeEggItem(beeTypes, gameState) {
 }
 
 // ---------------------------------------------------------------------------
-// 4. Orchestration - replaces the original `for (let i in beeInfo) { ... }`
+// 4. Orchestration: replaces the original `for (let i in beeInfo) { ... }`
 //    loop. Injects the icon sprite once, then builds + registers a card
-//    for every event-rarity bee.
+//    for every event-rarity bee. `items` and `pages` are read off
+//    gameState so callers only ever have to pass one thing through.
 // ---------------------------------------------------------------------------
 
 /**
- * Populates `pages[0]` with one card per event-rarity bee and registers
- * the corresponding item in `items`.
+ * Populates the eggs inventory page with one card per event-rarity bee and
+ * registers the corresponding item in gameState.items.
  *
- * @param {Object} beeInfo - Bee data table keyed by bee type.
- * @param {HTMLElement[]} pages - Inventory page elements (pages[0] = eggs page).
- * @param {Object} items - Global items registry to populate.
- * @param {Object} ctx - { objects, player, COLORS } passed through to createBeeEggItem.
+ * @param {Object} gameState - The live game state object.
  */
-export function initEventBeeEggs(beeInfo, pages, items, ctx) {
+export function initEventBeeEggs(gameState) {
   ensureBeeEggIconSprite();
 
   const cardsHTML = [];
 
-  for (const beeTypes in beeInfo) {
-    if (beeInfo[beeTypes].rarity !== "event") continue;
+  for (const beeType in beeInfo) {
+    if (beeInfo[beeType].rarity !== "event") continue;
 
-    const { id, html } = renderBeeEggCard(beeTypes);
+    const { id, html } = renderBeeEggCard(beeType);
     cardsHTML.push(html);
 
-    items[id] = createBeeEggItem(beeTypes, ctx);
+    gameState.items[id] = createBeeEggItem(beeType, gameState);
   }
 
-  pages[0].innerHTML += cardsHTML.join("");
+  gameState.pages[0].innerHTML += cardsHTML.join("");
 }
