@@ -957,6 +957,12 @@ export class Renderer {
       (k) => this.programs[k] === program,
     );
     const cached = programKey && this.glCache[programKey]?.[name];
+
+    // In WebGL and OpenGL, gl.getUniformLocation(program, name) returns the
+    // memory location of a specific uniform variable within a compiled and
+    // linked shader program. This location is required to pass data
+    // (like matrices, vectors, or textures) from your JavaScript code to
+    // your GLSL shaders using functions like gl.uniform*().
     const location = cached ?? gl.getUniformLocation(program, name); // CHQ: Nullish coalescing operator to return right side if left is null
 
     // Silent guard if shader optimizes away an unused uniform
