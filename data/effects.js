@@ -1,6 +1,91 @@
-import { Balloon } from "../entities/miscEntities/Balloon";
+// data/effects.js
 
-export const effects = {
+// CHQ: Claude AI (Sonnet) refactored: removed every bare-global read
+// (player, objects, fieldInfo, TIME, textRenderer, COLORS, MATH, effects, dt, items,
+// flowers, updateFlower, collectPollen and ~25 entity classes) that this file
+// used to close over as if it still lived inside one giant top-level script
+// (see stubbedOldIndex.js for what that looked like).
+//
+// Conventions applied, matching the rest of the already-refactored engine
+// (FieldManager.js, RoboChallengeManager.js, AntChallengeManager.js):
+//
+//   - `update(amount, player)` keeps its existing signature since every `update`
+//     in this file only ever touched `player`, so no gameState is needed there.
+//   - `func(params)` -> `func(params, gameState)`. Every call site that
+//     invokes an ability token's `.func(...)` (wherever tokens are collected)
+//     must be updated to pass gameState as the second argument.
+//   - `activate()` -> `activate(gameState)`. Every call site that ticks a
+//     passive effect (the passive-effect trigger checker) must be updated
+//     to pass gameState.
+//   - `player`, `objects`, `fieldInfo`, `textRenderer` are destructured off
+//     `gameState` at the top of each func/activate body that needs them,
+//     instead of being read as bare identifiers.
+//   - `TIME` -> `gameState.TIME`.
+//   - `items` -> `gameState.items` (mirrors AntChallengeManager/RoboChallengeManager,
+//     which already receive `items` as an explicit param rather than a global).
+//   - `MATH` is imported from utils/MathHelper.js.
+
+//   - `COLORS` is imported from a new data/colors.js (doesn't exist yet in
+//     the current codebase — the values used here are lifted verbatim from
+//     the COLORS object literal in stubbedOldIndex.js). If day/night tinting
+//     ever needs COLORS to vary at runtime, move it to gameState.COLORS instead.
+//   - Every entity class previously referenced as a bare global (Flame,
+//     Bubble, Explosion, ReverseExplosion, Token, LootToken, DupedToken,
+//     Mark, Triangulate, Frog, TempBee, FuzzBomb, GummyBall, PopStar,
+//     ScorchingStar, GummyStar, Cloud, Tornado, Pulse, GlitchEffect, Spike,
+//     FetchBall, PetalShuriken, Beam, StarShower, StarSaw, GuidingStar,
+//     Coconut, DrainingDiamond, Scratch, ParticleRenderer) is now a real
+//     import.
+//
+//   - `updateFlower(...)` doesn't exist anywhere in the current codebase —
+//     the field model moved from a per-cell (x,z) flower grid to
+//     FieldManager's pooled currentPollen + flat flowers[fieldId] array
+//     (see FieldManager.js / collectPollen.js's own file-level TODOs on this
+//     exact gap). Every call site that used updateFlower here is replaced
+//     with a call to a new FieldManager method that needs to be *added*
+//     (stubbed below with a CHQ TODO at each call site) since the old
+//     per-cell goo/pollination logic has no equivalent yet.
+//   - `collectPollen(params)` -> `collectPollen(params, gameState)`, matching
+//     collectPollen.js's actual current signature.
+
+import { MATH } from "../utils/MathHelper.js";
+import { COLORS } from "./colors.js";
+import { collectPollen } from "../engine/collectPollen.js";
+
+import { Balloon } from "../entities/miscEntities/Balloon.js";
+import { Flame } from "../entities/mobs/Flame.js";
+import { Bubble } from "../entities/miscEntities/Bubble.js";
+import { Explosion } from "../entities/fx/Explosion.js";
+import { ReverseExplosion } from "../entities/miscEntities/ReverseExplosion.js";
+import { Token } from "../entities/tokens.js";
+import { LootToken } from "../entities/tokens.js";
+import { DupedToken } from "../entities/tokens.js";
+import { Mark } from "../entities/miscEntities/Mark.js";
+import { Triangulate } from "../entities/beeAbilityProjectiles/Triangulate.js";
+// import { Frog } from "../entities/miscEntities/Frog.js";  // CHQ: must refactor file first
+import { TempBee } from "../entities/bees.js";
+import { FuzzBomb } from "../entities/beeAbilityProjectiles/FuzzBomb.js";
+// import { GummyBall } from "../entities/items/GummyBall.js"; // CHQ: must refactor file first
+// import { PopStar } from "../entities/stars/PopStar.js"; // CHQ: must refactor file first
+// import { ScorchingStar } from "../entities/stars/ScorchingStar.js"; // CHQ: must refactor file first
+// import { GummyStar } from "../entities/stars/GummyStar.js"; // CHQ: must refactor file first
+// import { Cloud } from "../entities/world/Cloud.js"; // CHQ: must refactor file first
+// import { Tornado } from "../entities/mobs/Tornado.js"; // CHQ: must refactor file first
+// import { Pulse } from "../entities/beeAbilityProjectiles/Pulse.js"; // CHQ: must refactor file first
+// import { GlitchEffect } from "../entities/mobs/GlitchEffect.js"; // CHQ: must refactor file first
+// import { Spike } from "../entities/beeAbilityProjectiles/Spike.js"; // CHQ: must refactor file first
+// import { FetchBall } from "../entities/items/FetchBall.js"; // CHQ: must refactor file first
+// import { PetalShuriken } from "../entities/projectiles/PetalShuriken.js"; // CHQ: must refactor file first
+// import { Beam } from "../entities/beeAbilityProjectiles/Beam.js"; // CHQ: must refactor file first
+// import { StarShower } from "../entities/stars/StarShower.js";  // CHQ: must refactor file first
+// import { StarSaw } from "../entities/stars/StarSaw.js";  // CHQ: must refactor file first
+// import { GuidingStar } from "../entities/stars/GuidingStar.js"; // CHQ: must refactor file first
+// import { Coconut } from "../entities/items/Coconut.js"; // CHQ: must refactor file first
+// import { DrainingDiamond } from "../entities/mobs/DrainingDiamond.js"; // CHQ: must refactor file first
+// import { Scratch } from "../entities/mobs/Scratch.js";  // CHQ: must refactor file first
+import { ParticleRenderer } from "../engine/particles.js";
+
+export const effectsConfig = {
   scienceEnhancement: {
     u: 0,
     v: 0,
@@ -33,13 +118,15 @@ export const effects = {
     },
   },
 
+  // CHQ: the fieldXBoost / fieldXWinds effects below are all pure `update`
+  // functions that only ever touch `player` — no change needed, kept as-is.
+
   dandelionFieldBoost: {
     u: 0,
     v: 0,
     maxCooldown: 15 * 60,
     maxAmount: 4,
     tokenLife: 4,
-
     update: (amount, player) => {
       if (player.fieldIn === "DandelionField") {
         player.redPollen *= amount * 0.75 + 1;
@@ -47,14 +134,10 @@ export const effects = {
         player.bluePollen *= amount * 0.75 + 1;
       }
     },
-
-    getMessage: (amount) => {
-      return (
-        "Dandelion Field Boost\nx" +
-        (amount * 0.75 + 1) +
-        " pollen in dandelion field"
-      );
-    },
+    getMessage: (amount) =>
+      "Dandelion Field Boost\nx" +
+      (amount * 0.75 + 1) +
+      " pollen in dandelion field",
   },
 
   sunflowerFieldBoost: {
@@ -63,7 +146,6 @@ export const effects = {
     maxCooldown: 15 * 60,
     maxAmount: 4,
     tokenLife: 4,
-
     update: (amount, player) => {
       if (player.fieldIn === "SunflowerField") {
         player.redPollen *= amount * 0.75 + 1;
@@ -71,14 +153,10 @@ export const effects = {
         player.bluePollen *= amount * 0.75 + 1;
       }
     },
-
-    getMessage: (amount) => {
-      return (
-        "Sunflower Field Boost\nx" +
-        (amount * 0.75 + 1) +
-        " pollen in sunflower field"
-      );
-    },
+    getMessage: (amount) =>
+      "Sunflower Field Boost\nx" +
+      (amount * 0.75 + 1) +
+      " pollen in sunflower field",
   },
 
   blueFlowerFieldBoost: {
@@ -87,7 +165,6 @@ export const effects = {
     maxCooldown: 15 * 60,
     maxAmount: 4,
     tokenLife: 4,
-
     update: (amount, player) => {
       if (player.fieldIn === "BlueFlowerField") {
         player.redPollen *= amount * 0.75 + 1;
@@ -95,14 +172,10 @@ export const effects = {
         player.bluePollen *= amount * 0.75 + 1;
       }
     },
-
-    getMessage: (amount) => {
-      return (
-        "Blue Flower Field Boost\nx" +
-        (amount * 0.75 + 1) +
-        " pollen in blue flower field"
-      );
-    },
+    getMessage: (amount) =>
+      "Blue Flower Field Boost\nx" +
+      (amount * 0.75 + 1) +
+      " pollen in blue flower field",
   },
 
   mushroomFieldBoost: {
@@ -111,7 +184,6 @@ export const effects = {
     maxCooldown: 15 * 60,
     maxAmount: 4,
     tokenLife: 4,
-
     update: (amount, player) => {
       if (player.fieldIn === "MushroomField") {
         player.redPollen *= amount * 0.75 + 1;
@@ -119,14 +191,10 @@ export const effects = {
         player.bluePollen *= amount * 0.75 + 1;
       }
     },
-
-    getMessage: (amount) => {
-      return (
-        "Mushroom Field Boost\nx" +
-        (amount * 0.75 + 1) +
-        " pollen in mushroom field"
-      );
-    },
+    getMessage: (amount) =>
+      "Mushroom Field Boost\nx" +
+      (amount * 0.75 + 1) +
+      " pollen in mushroom field",
   },
 
   cloverFieldBoost: {
@@ -135,7 +203,6 @@ export const effects = {
     maxCooldown: 15 * 60,
     maxAmount: 4,
     tokenLife: 4,
-
     update: (amount, player) => {
       if (player.fieldIn === "CloverField") {
         player.redPollen *= amount * 0.75 + 1;
@@ -143,14 +210,8 @@ export const effects = {
         player.bluePollen *= amount * 0.75 + 1;
       }
     },
-
-    getMessage: (amount) => {
-      return (
-        "Clover Field Boost\nx" +
-        (amount * 0.75 + 1) +
-        " pollen in clover field"
-      );
-    },
+    getMessage: (amount) =>
+      "Clover Field Boost\nx" + (amount * 0.75 + 1) + " pollen in clover field",
   },
 
   strawberryFieldBoost: {
@@ -159,7 +220,6 @@ export const effects = {
     maxCooldown: 15 * 60,
     maxAmount: 4,
     tokenLife: 4,
-
     update: (amount, player) => {
       if (player.fieldIn === "StrawberryField") {
         player.redPollen *= amount * 0.75 + 1;
@@ -167,14 +227,10 @@ export const effects = {
         player.bluePollen *= amount * 0.75 + 1;
       }
     },
-
-    getMessage: (amount) => {
-      return (
-        "Strawberry Field Boost\nx" +
-        (amount * 0.75 + 1) +
-        " pollen in strawberry field"
-      );
-    },
+    getMessage: (amount) =>
+      "Strawberry Field Boost\nx" +
+      (amount * 0.75 + 1) +
+      " pollen in strawberry field",
   },
 
   spiderFieldBoost: {
@@ -183,7 +239,6 @@ export const effects = {
     maxCooldown: 15 * 60,
     maxAmount: 4,
     tokenLife: 4,
-
     update: (amount, player) => {
       if (player.fieldIn === "SpiderField") {
         player.redPollen *= amount * 0.75 + 1;
@@ -191,14 +246,8 @@ export const effects = {
         player.bluePollen *= amount * 0.75 + 1;
       }
     },
-
-    getMessage: (amount) => {
-      return (
-        "Spider Field Boost\nx" +
-        (amount * 0.75 + 1) +
-        " pollen in spider field"
-      );
-    },
+    getMessage: (amount) =>
+      "Spider Field Boost\nx" + (amount * 0.75 + 1) + " pollen in spider field",
   },
 
   bambooFieldBoost: {
@@ -207,7 +256,6 @@ export const effects = {
     maxCooldown: 15 * 60,
     maxAmount: 4,
     tokenLife: 4,
-
     update: (amount, player) => {
       if (player.fieldIn === "BambooField") {
         player.redPollen *= amount * 0.75 + 1;
@@ -215,14 +263,8 @@ export const effects = {
         player.bluePollen *= amount * 0.75 + 1;
       }
     },
-
-    getMessage: (amount) => {
-      return (
-        "Bamboo Field Boost\nx" +
-        (amount * 0.75 + 1) +
-        " pollen in bamboo field"
-      );
-    },
+    getMessage: (amount) =>
+      "Bamboo Field Boost\nx" + (amount * 0.75 + 1) + " pollen in bamboo field",
   },
 
   pineapplePatchBoost: {
@@ -231,7 +273,6 @@ export const effects = {
     maxCooldown: 15 * 60,
     maxAmount: 4,
     tokenLife: 4,
-
     update: (amount, player) => {
       if (player.fieldIn === "PineapplePatch") {
         player.redPollen *= amount * 0.75 + 1;
@@ -239,14 +280,10 @@ export const effects = {
         player.bluePollen *= amount * 0.75 + 1;
       }
     },
-
-    getMessage: (amount) => {
-      return (
-        "Pineapple Patch Boost\nx" +
-        (amount * 0.75 + 1) +
-        " pollen in pineapple patch"
-      );
-    },
+    getMessage: (amount) =>
+      "Pineapple Patch Boost\nx" +
+      (amount * 0.75 + 1) +
+      " pollen in pineapple patch",
   },
 
   stumpFieldBoost: {
@@ -255,7 +292,6 @@ export const effects = {
     maxCooldown: 15 * 60,
     maxAmount: 4,
     tokenLife: 4,
-
     update: (amount, player) => {
       if (player.fieldIn === "StumpField") {
         player.redPollen *= amount * 0.75 + 1;
@@ -263,12 +299,8 @@ export const effects = {
         player.bluePollen *= amount * 0.75 + 1;
       }
     },
-
-    getMessage: (amount) => {
-      return (
-        "Stump Field Boost\nx" + (amount * 0.75 + 1) + " pollen in stump field"
-      );
-    },
+    getMessage: (amount) =>
+      "Stump Field Boost\nx" + (amount * 0.75 + 1) + " pollen in stump field",
   },
 
   cactusFieldBoost: {
@@ -277,7 +309,6 @@ export const effects = {
     maxCooldown: 15 * 60,
     maxAmount: 4,
     tokenLife: 4,
-
     update: (amount, player) => {
       if (player.fieldIn === "CactusField") {
         player.redPollen *= amount * 0.75 + 1;
@@ -285,14 +316,8 @@ export const effects = {
         player.bluePollen *= amount * 0.75 + 1;
       }
     },
-
-    getMessage: (amount) => {
-      return (
-        "Cactus Field Boost\nx" +
-        (amount * 0.75 + 1) +
-        " pollen in cactus field"
-      );
-    },
+    getMessage: (amount) =>
+      "Cactus Field Boost\nx" + (amount * 0.75 + 1) + " pollen in cactus field",
   },
 
   pumpkinPatchBoost: {
@@ -301,7 +326,6 @@ export const effects = {
     maxCooldown: 15 * 60,
     maxAmount: 4,
     tokenLife: 4,
-
     update: (amount, player) => {
       if (player.fieldIn === "PumpkinPatch") {
         player.redPollen *= amount * 0.75 + 1;
@@ -309,14 +333,10 @@ export const effects = {
         player.bluePollen *= amount * 0.75 + 1;
       }
     },
-
-    getMessage: (amount) => {
-      return (
-        "Pumpkin Patch Boost\nx" +
-        (amount * 0.75 + 1) +
-        " pollen in pumpkin patch"
-      );
-    },
+    getMessage: (amount) =>
+      "Pumpkin Patch Boost\nx" +
+      (amount * 0.75 + 1) +
+      " pollen in pumpkin patch",
   },
 
   pineTreeForestBoost: {
@@ -325,7 +345,6 @@ export const effects = {
     maxCooldown: 15 * 60,
     maxAmount: 4,
     tokenLife: 4,
-
     update: (amount, player) => {
       if (player.fieldIn === "PineTreeForest") {
         player.redPollen *= amount * 0.75 + 1;
@@ -333,14 +352,10 @@ export const effects = {
         player.bluePollen *= amount * 0.75 + 1;
       }
     },
-
-    getMessage: (amount) => {
-      return (
-        "Pine Tree Forest Boost\nx" +
-        (amount * 0.75 + 1) +
-        " pollen in pine tree forest"
-      );
-    },
+    getMessage: (amount) =>
+      "Pine Tree Forest Boost\nx" +
+      (amount * 0.75 + 1) +
+      " pollen in pine tree forest",
   },
 
   roseFieldBoost: {
@@ -349,7 +364,6 @@ export const effects = {
     maxCooldown: 15 * 60,
     maxAmount: 4,
     tokenLife: 4,
-
     update: (amount, player) => {
       if (player.fieldIn === "RoseField") {
         player.redPollen *= amount * 0.75 + 1;
@@ -357,12 +371,8 @@ export const effects = {
         player.bluePollen *= amount * 0.75 + 1;
       }
     },
-
-    getMessage: (amount) => {
-      return (
-        "Rose Field Boost\nx" + (amount * 0.75 + 1) + " pollen in rose field"
-      );
-    },
+    getMessage: (amount) =>
+      "Rose Field Boost\nx" + (amount * 0.75 + 1) + " pollen in rose field",
   },
 
   mountainTopFieldBoost: {
@@ -371,7 +381,6 @@ export const effects = {
     maxCooldown: 15 * 60,
     maxAmount: 4,
     tokenLife: 4,
-
     update: (amount, player) => {
       if (player.fieldIn === "MountainTopField") {
         player.redPollen *= amount * 0.75 + 1;
@@ -379,14 +388,10 @@ export const effects = {
         player.bluePollen *= amount * 0.75 + 1;
       }
     },
-
-    getMessage: (amount) => {
-      return (
-        "Mountain Top Field Boost\nx" +
-        (amount * 0.75 + 1) +
-        " pollen in mountain top field"
-      );
-    },
+    getMessage: (amount) =>
+      "Mountain Top Field Boost\nx" +
+      (amount * 0.75 + 1) +
+      " pollen in mountain top field",
   },
 
   coconutFieldBoost: {
@@ -395,7 +400,6 @@ export const effects = {
     maxCooldown: 15 * 60,
     maxAmount: 4,
     tokenLife: 4,
-
     update: (amount, player) => {
       if (player.fieldIn === "CoconutField") {
         player.redPollen *= amount * 0.75 + 1;
@@ -403,14 +407,10 @@ export const effects = {
         player.bluePollen *= amount * 0.75 + 1;
       }
     },
-
-    getMessage: (amount) => {
-      return (
-        "Coconut Field Boost\nx" +
-        (amount * 0.75 + 1) +
-        " pollen in coconut field"
-      );
-    },
+    getMessage: (amount) =>
+      "Coconut Field Boost\nx" +
+      (amount * 0.75 + 1) +
+      " pollen in coconut field",
   },
 
   pepperPatchBoost: {
@@ -419,7 +419,6 @@ export const effects = {
     maxCooldown: 15 * 60,
     maxAmount: 4,
     tokenLife: 4,
-
     update: (amount, player) => {
       if (player.fieldIn === "PepperPatch") {
         player.redPollen *= amount * 0.75 + 1;
@@ -427,14 +426,8 @@ export const effects = {
         player.bluePollen *= amount * 0.75 + 1;
       }
     },
-
-    getMessage: (amount) => {
-      return (
-        "Pepper Patch Boost\nx" +
-        (amount * 0.75 + 1) +
-        " pollen in pepper patch"
-      );
-    },
+    getMessage: (amount) =>
+      "Pepper Patch Boost\nx" + (amount * 0.75 + 1) + " pollen in pepper patch",
   },
 
   dandelionFieldWinds: {
@@ -443,7 +436,6 @@ export const effects = {
     maxCooldown: 30 * 60,
     maxAmount: 15,
     tokenLife: 4,
-
     update: (amount, player) => {
       if (player.fieldIn === "DandelionField") {
         player.redPollen *= (amount - 1) * 0.03 + 1.15;
@@ -463,17 +455,13 @@ export const effects = {
         );
       }
     },
-
-    getMessage: (amount) => {
-      return (
-        "Dandelion Field Winds\nx" +
-        ((amount - 1) * 0.03 + 1.15).toFixed(2) +
-        " pollen in dandelion field" +
-        "\n+" +
-        ((amount - 1) * 5 + 1) +
-        "% instant conversion in dandelion field"
-      );
-    },
+    getMessage: (amount) =>
+      "Dandelion Field Winds\nx" +
+      ((amount - 1) * 0.03 + 1.15).toFixed(2) +
+      " pollen in dandelion field" +
+      "\n+" +
+      ((amount - 1) * 5 + 1) +
+      "% instant conversion in dandelion field",
   },
 
   sunflowerFieldWinds: {
@@ -482,7 +470,6 @@ export const effects = {
     maxCooldown: 30 * 60,
     maxAmount: 15,
     tokenLife: 4,
-
     update: (amount, player) => {
       if (player.fieldIn === "SunflowerField") {
         player.redPollen *= (amount - 1) * 0.03 + 1.15;
@@ -502,17 +489,13 @@ export const effects = {
         );
       }
     },
-
-    getMessage: (amount) => {
-      return (
-        "Sunflower Field Winds\nx" +
-        ((amount - 1) * 0.03 + 1.15).toFixed(2) +
-        " pollen in sunflower field" +
-        "\n+" +
-        ((amount - 1) * 5 + 1) +
-        "% instant conversion in sunflower field"
-      );
-    },
+    getMessage: (amount) =>
+      "Sunflower Field Winds\nx" +
+      ((amount - 1) * 0.03 + 1.15).toFixed(2) +
+      " pollen in sunflower field" +
+      "\n+" +
+      ((amount - 1) * 5 + 1) +
+      "% instant conversion in sunflower field",
   },
 
   blueFlowerFieldWinds: {
@@ -521,7 +504,6 @@ export const effects = {
     maxCooldown: 30 * 60,
     maxAmount: 15,
     tokenLife: 4,
-
     update: (amount, player) => {
       if (player.fieldIn === "BlueFlowerField") {
         player.redPollen *= (amount - 1) * 0.03 + 1.15;
@@ -541,17 +523,13 @@ export const effects = {
         );
       }
     },
-
-    getMessage: (amount) => {
-      return (
-        "Blue Flower Field Winds\nx" +
-        ((amount - 1) * 0.03 + 1.15).toFixed(2) +
-        " pollen in blue flower field" +
-        "\n+" +
-        ((amount - 1) * 5 + 1) +
-        "% instant conversion in blue flower field"
-      );
-    },
+    getMessage: (amount) =>
+      "Blue Flower Field Winds\nx" +
+      ((amount - 1) * 0.03 + 1.15).toFixed(2) +
+      " pollen in blue flower field" +
+      "\n+" +
+      ((amount - 1) * 5 + 1) +
+      "% instant conversion in blue flower field",
   },
 
   mushroomFieldWinds: {
@@ -560,7 +538,6 @@ export const effects = {
     maxCooldown: 30 * 60,
     maxAmount: 15,
     tokenLife: 4,
-
     update: (amount, player) => {
       if (player.fieldIn === "MushroomField") {
         player.redPollen *= (amount - 1) * 0.03 + 1.15;
@@ -580,17 +557,13 @@ export const effects = {
         );
       }
     },
-
-    getMessage: (amount) => {
-      return (
-        "Mushroom Field Winds\nx" +
-        ((amount - 1) * 0.03 + 1.15).toFixed(2) +
-        " pollen in mushroom field" +
-        "\n+" +
-        ((amount - 1) * 5 + 1) +
-        "% instant conversion in mushroom field"
-      );
-    },
+    getMessage: (amount) =>
+      "Mushroom Field Winds\nx" +
+      ((amount - 1) * 0.03 + 1.15).toFixed(2) +
+      " pollen in mushroom field" +
+      "\n+" +
+      ((amount - 1) * 5 + 1) +
+      "% instant conversion in mushroom field",
   },
 
   cloverFieldWinds: {
@@ -599,7 +572,6 @@ export const effects = {
     maxCooldown: 30 * 60,
     maxAmount: 15,
     tokenLife: 4,
-
     update: (amount, player) => {
       if (player.fieldIn === "CloverField") {
         player.redPollen *= (amount - 1) * 0.03 + 1.15;
@@ -619,17 +591,13 @@ export const effects = {
         );
       }
     },
-
-    getMessage: (amount) => {
-      return (
-        "Clover Field Winds\nx" +
-        ((amount - 1) * 0.03 + 1.15).toFixed(2) +
-        " pollen in clover field" +
-        "\n+" +
-        ((amount - 1) * 5 + 1) +
-        "% instant conversion in clover field"
-      );
-    },
+    getMessage: (amount) =>
+      "Clover Field Winds\nx" +
+      ((amount - 1) * 0.03 + 1.15).toFixed(2) +
+      " pollen in clover field" +
+      "\n+" +
+      ((amount - 1) * 5 + 1) +
+      "% instant conversion in clover field",
   },
 
   strawberryFieldWinds: {
@@ -638,7 +606,6 @@ export const effects = {
     maxCooldown: 30 * 60,
     maxAmount: 15,
     tokenLife: 4,
-
     update: (amount, player) => {
       if (player.fieldIn === "StrawberryField") {
         player.redPollen *= (amount - 1) * 0.03 + 1.15;
@@ -658,17 +625,13 @@ export const effects = {
         );
       }
     },
-
-    getMessage: (amount) => {
-      return (
-        "Strawberry Field Winds\nx" +
-        ((amount - 1) * 0.03 + 1.15).toFixed(2) +
-        " pollen in strawberry field" +
-        "\n+" +
-        ((amount - 1) * 5 + 1) +
-        "% instant conversion in strawberry field"
-      );
-    },
+    getMessage: (amount) =>
+      "Strawberry Field Winds\nx" +
+      ((amount - 1) * 0.03 + 1.15).toFixed(2) +
+      " pollen in strawberry field" +
+      "\n+" +
+      ((amount - 1) * 5 + 1) +
+      "% instant conversion in strawberry field",
   },
 
   spiderFieldWinds: {
@@ -677,7 +640,6 @@ export const effects = {
     maxCooldown: 30 * 60,
     maxAmount: 15,
     tokenLife: 4,
-
     update: (amount, player) => {
       if (player.fieldIn === "SpiderField") {
         player.redPollen *= (amount - 1) * 0.03 + 1.15;
@@ -697,17 +659,13 @@ export const effects = {
         );
       }
     },
-
-    getMessage: (amount) => {
-      return (
-        "Spider Field Winds\nx" +
-        ((amount - 1) * 0.03 + 1.15).toFixed(2) +
-        " pollen in spider field" +
-        "\n+" +
-        ((amount - 1) * 5 + 1) +
-        "% instant conversion in spider field"
-      );
-    },
+    getMessage: (amount) =>
+      "Spider Field Winds\nx" +
+      ((amount - 1) * 0.03 + 1.15).toFixed(2) +
+      " pollen in spider field" +
+      "\n+" +
+      ((amount - 1) * 5 + 1) +
+      "% instant conversion in spider field",
   },
 
   bambooFieldWinds: {
@@ -716,7 +674,6 @@ export const effects = {
     maxCooldown: 30 * 60,
     maxAmount: 15,
     tokenLife: 4,
-
     update: (amount, player) => {
       if (player.fieldIn === "BambooField") {
         player.redPollen *= (amount - 1) * 0.03 + 1.15;
@@ -736,17 +693,13 @@ export const effects = {
         );
       }
     },
-
-    getMessage: (amount) => {
-      return (
-        "Bamboo Field Winds\nx" +
-        ((amount - 1) * 0.03 + 1.15).toFixed(2) +
-        " pollen in bamboo field" +
-        "\n+" +
-        ((amount - 1) * 5 + 1) +
-        "% instant conversion in bamboo field"
-      );
-    },
+    getMessage: (amount) =>
+      "Bamboo Field Winds\nx" +
+      ((amount - 1) * 0.03 + 1.15).toFixed(2) +
+      " pollen in bamboo field" +
+      "\n+" +
+      ((amount - 1) * 5 + 1) +
+      "% instant conversion in bamboo field",
   },
 
   pineapplePatchWinds: {
@@ -755,7 +708,6 @@ export const effects = {
     maxCooldown: 30 * 60,
     maxAmount: 15,
     tokenLife: 4,
-
     update: (amount, player) => {
       if (player.fieldIn === "PineapplePatch") {
         player.redPollen *= (amount - 1) * 0.03 + 1.15;
@@ -775,17 +727,13 @@ export const effects = {
         );
       }
     },
-
-    getMessage: (amount) => {
-      return (
-        "Pineapple Patch Winds\nx" +
-        ((amount - 1) * 0.03 + 1.15).toFixed(2) +
-        " pollen in pineapple patch" +
-        "\n+" +
-        ((amount - 1) * 5 + 1) +
-        "% instant conversion in pineapple patch"
-      );
-    },
+    getMessage: (amount) =>
+      "Pineapple Patch Winds\nx" +
+      ((amount - 1) * 0.03 + 1.15).toFixed(2) +
+      " pollen in pineapple patch" +
+      "\n+" +
+      ((amount - 1) * 5 + 1) +
+      "% instant conversion in pineapple patch",
   },
 
   stumpFieldWinds: {
@@ -794,7 +742,6 @@ export const effects = {
     maxCooldown: 30 * 60,
     maxAmount: 15,
     tokenLife: 4,
-
     update: (amount, player) => {
       if (player.fieldIn === "StumpField") {
         player.redPollen *= (amount - 1) * 0.03 + 1.15;
@@ -814,17 +761,13 @@ export const effects = {
         );
       }
     },
-
-    getMessage: (amount) => {
-      return (
-        "Stump Field Winds\nx" +
-        ((amount - 1) * 0.03 + 1.15).toFixed(2) +
-        " pollen in stump field" +
-        "\n+" +
-        ((amount - 1) * 5 + 1) +
-        "% instant conversion in stump field"
-      );
-    },
+    getMessage: (amount) =>
+      "Stump Field Winds\nx" +
+      ((amount - 1) * 0.03 + 1.15).toFixed(2) +
+      " pollen in stump field" +
+      "\n+" +
+      ((amount - 1) * 5 + 1) +
+      "% instant conversion in stump field",
   },
 
   cactusFieldWinds: {
@@ -833,7 +776,6 @@ export const effects = {
     maxCooldown: 30 * 60,
     maxAmount: 15,
     tokenLife: 4,
-
     update: (amount, player) => {
       if (player.fieldIn === "CactusField") {
         player.redPollen *= (amount - 1) * 0.03 + 1.15;
@@ -853,17 +795,13 @@ export const effects = {
         );
       }
     },
-
-    getMessage: (amount) => {
-      return (
-        "Cactus Field Winds\nx" +
-        ((amount - 1) * 0.03 + 1.15).toFixed(2) +
-        " pollen in cactus field" +
-        "\n+" +
-        ((amount - 1) * 5 + 1) +
-        "% instant conversion in cactus field"
-      );
-    },
+    getMessage: (amount) =>
+      "Cactus Field Winds\nx" +
+      ((amount - 1) * 0.03 + 1.15).toFixed(2) +
+      " pollen in cactus field" +
+      "\n+" +
+      ((amount - 1) * 5 + 1) +
+      "% instant conversion in cactus field",
   },
 
   pumpkinPatchWinds: {
@@ -872,7 +810,6 @@ export const effects = {
     maxCooldown: 30 * 60,
     maxAmount: 15,
     tokenLife: 4,
-
     update: (amount, player) => {
       if (player.fieldIn === "PumpkinPatch") {
         player.redPollen *= (amount - 1) * 0.03 + 1.15;
@@ -892,17 +829,13 @@ export const effects = {
         );
       }
     },
-
-    getMessage: (amount) => {
-      return (
-        "Pumpkin Patch Winds\nx" +
-        ((amount - 1) * 0.03 + 1.15).toFixed(2) +
-        " pollen in pumpkin patch" +
-        "\n+" +
-        ((amount - 1) * 5 + 1) +
-        "% instant conversion in pumpkin patch"
-      );
-    },
+    getMessage: (amount) =>
+      "Pumpkin Patch Winds\nx" +
+      ((amount - 1) * 0.03 + 1.15).toFixed(2) +
+      " pollen in pumpkin patch" +
+      "\n+" +
+      ((amount - 1) * 5 + 1) +
+      "% instant conversion in pumpkin patch",
   },
 
   pineTreeForestWinds: {
@@ -911,7 +844,6 @@ export const effects = {
     maxCooldown: 30 * 60,
     maxAmount: 15,
     tokenLife: 4,
-
     update: (amount, player) => {
       if (player.fieldIn === "PineTreeForest") {
         player.redPollen *= (amount - 1) * 0.03 + 1.15;
@@ -931,17 +863,13 @@ export const effects = {
         );
       }
     },
-
-    getMessage: (amount) => {
-      return (
-        "Pine Tree Forest Winds\nx" +
-        ((amount - 1) * 0.03 + 1.15).toFixed(2) +
-        " pollen in pine tree forest" +
-        "\n+" +
-        ((amount - 1) * 5 + 1) +
-        "% instant conversion in pine tree forest"
-      );
-    },
+    getMessage: (amount) =>
+      "Pine Tree Forest Winds\nx" +
+      ((amount - 1) * 0.03 + 1.15).toFixed(2) +
+      " pollen in pine tree forest" +
+      "\n+" +
+      ((amount - 1) * 5 + 1) +
+      "% instant conversion in pine tree forest",
   },
 
   roseFieldWinds: {
@@ -950,7 +878,6 @@ export const effects = {
     maxCooldown: 30 * 60,
     maxAmount: 15,
     tokenLife: 4,
-
     update: (amount, player) => {
       if (player.fieldIn === "RoseField") {
         player.redPollen *= (amount - 1) * 0.03 + 1.15;
@@ -970,17 +897,13 @@ export const effects = {
         );
       }
     },
-
-    getMessage: (amount) => {
-      return (
-        "Rose Field Winds\nx" +
-        ((amount - 1) * 0.03 + 1.15).toFixed(2) +
-        " pollen in rose field" +
-        "\n+" +
-        ((amount - 1) * 5 + 1) +
-        "% instant conversion in rose field"
-      );
-    },
+    getMessage: (amount) =>
+      "Rose Field Winds\nx" +
+      ((amount - 1) * 0.03 + 1.15).toFixed(2) +
+      " pollen in rose field" +
+      "\n+" +
+      ((amount - 1) * 5 + 1) +
+      "% instant conversion in rose field",
   },
 
   mountainTopFieldWinds: {
@@ -989,7 +912,6 @@ export const effects = {
     maxCooldown: 30 * 60,
     maxAmount: 15,
     tokenLife: 4,
-
     update: (amount, player) => {
       if (player.fieldIn === "MountainTopField") {
         player.redPollen *= (amount - 1) * 0.03 + 1.15;
@@ -1009,17 +931,13 @@ export const effects = {
         );
       }
     },
-
-    getMessage: (amount) => {
-      return (
-        "Mountain Top Field Winds\nx" +
-        ((amount - 1) * 0.03 + 1.15).toFixed(2) +
-        " pollen in mountain top field" +
-        "\n+" +
-        ((amount - 1) * 5 + 1) +
-        "% instant conversion in mountain top field"
-      );
-    },
+    getMessage: (amount) =>
+      "Mountain Top Field Winds\nx" +
+      ((amount - 1) * 0.03 + 1.15).toFixed(2) +
+      " pollen in mountain top field" +
+      "\n+" +
+      ((amount - 1) * 5 + 1) +
+      "% instant conversion in mountain top field",
   },
 
   coconutFieldWinds: {
@@ -1028,7 +946,6 @@ export const effects = {
     maxCooldown: 30 * 60,
     maxAmount: 15,
     tokenLife: 4,
-
     update: (amount, player) => {
       if (player.fieldIn === "CoconutField") {
         player.redPollen *= (amount - 1) * 0.03 + 1.15;
@@ -1048,17 +965,13 @@ export const effects = {
         );
       }
     },
-
-    getMessage: (amount) => {
-      return (
-        "Coconut Field Winds\nx" +
-        ((amount - 1) * 0.03 + 1.15).toFixed(2) +
-        " pollen in coconut field" +
-        "\n+" +
-        ((amount - 1) * 5 + 1) +
-        "% instant conversion in coconut field"
-      );
-    },
+    getMessage: (amount) =>
+      "Coconut Field Winds\nx" +
+      ((amount - 1) * 0.03 + 1.15).toFixed(2) +
+      " pollen in coconut field" +
+      "\n+" +
+      ((amount - 1) * 5 + 1) +
+      "% instant conversion in coconut field",
   },
 
   pepperPatchWinds: {
@@ -1067,7 +980,6 @@ export const effects = {
     maxCooldown: 30 * 60,
     maxAmount: 15,
     tokenLife: 4,
-
     update: (amount, player) => {
       if (player.fieldIn === "PepperPatch") {
         player.redPollen *= (amount - 1) * 0.03 + 1.15;
@@ -1087,17 +999,13 @@ export const effects = {
         );
       }
     },
-
-    getMessage: (amount) => {
-      return (
-        "Pepper Patch Winds\nx" +
-        ((amount - 1) * 0.03 + 1.15).toFixed(2) +
-        " pollen in pepper patch" +
-        "\n+" +
-        ((amount - 1) * 5 + 1) +
-        "% instant conversion in pepper patch"
-      );
-    },
+    getMessage: (amount) =>
+      "Pepper Patch Winds\nx" +
+      ((amount - 1) * 0.03 + 1.15).toFixed(2) +
+      " pollen in pepper patch" +
+      "\n+" +
+      ((amount - 1) * 5 + 1) +
+      "% instant conversion in pepper patch",
   },
 
   haste: {
@@ -1118,7 +1026,7 @@ export const effects = {
       player.hasteStacks = amount;
     },
 
-    getMessage: (amount) => {
+    getMessage: (amount, player) => {
       return (
         "Haste\nx" +
         (player.roboChallenge ? amount * 0.02 + 1 : amount * 0.075 + 1).toFixed(
@@ -1127,6 +1035,11 @@ export const effects = {
         " walkspeed" +
         (player.roboChallenge ? "\n\n(nerfed due to Robo Challenge!)" : "")
       );
+      // CHQ: getMessage previously closed over the global `player` too —
+      // now takes it explicitly. Every call site that renders a hover
+      // message (see stubbedOldIndex.js's hoverText mousemove handler)
+      // must pass the player instance in, e.g.
+      // effects[i].getMessage(player.effects[index].amount, player)
     },
   },
 
@@ -1138,9 +1051,7 @@ export const effects = {
       player.walkSpeed *= 1.5;
     },
 
-    getMessage: (amount) => {
-      return "Haste+\nx1.5 walkspeed";
-    },
+    getMessage: (amount) => "Haste+\nx1.5 walkspeed",
   },
 
   focus: {
@@ -1158,9 +1069,7 @@ export const effects = {
       player.criticalChance += 0.03 * amount;
     },
 
-    getMessage: (amount) => {
-      return "Focus\n" + amount * 3 + "% critical chance";
-    },
+    getMessage: (amount) => "Focus\n" + amount * 3 + "% critical chance",
   },
 
   melody: {
@@ -1178,9 +1087,7 @@ export const effects = {
       player.criticalPower += 1;
     },
 
-    getMessage: (amount) => {
-      return "Melody\n+100% critical power";
-    },
+    getMessage: () => "Melody\n+100% critical power",
   },
 
   link: {
@@ -1193,8 +1100,10 @@ export const effects = {
     canBeLinked: false,
     tokenLife: 4,
 
-    func: function () {
-      for (let i in objects.tokens) {
+    func: function (params, gameState) {
+      const { objects } = gameState;
+
+      for (const i in objects.tokens) {
         if (
           objects.tokens[i].canBeLinked &&
           !(objects.tokens[i] instanceof DupedToken)
@@ -1203,8 +1112,10 @@ export const effects = {
         }
       }
     },
-    backupFunc: function () {
-      for (let i in objects.tokens) {
+    backupFunc: function (params, gameState) {
+      const { objects } = gameState;
+
+      for (const i in objects.tokens) {
         if (
           objects.tokens[i].canBeLinked &&
           !(objects.tokens[i] instanceof DupedToken)
@@ -1228,9 +1139,8 @@ export const effects = {
       player.blueBombPollen *= amount * 0.2 + 1;
     },
 
-    getMessage: (amount) => {
-      return "Bomb Combo\nx" + (amount * 0.2 + 1).toFixed(1) + " bomb power";
-    },
+    getMessage: (amount) =>
+      "Bomb Combo\nx" + (amount * 0.2 + 1).toFixed(1) + " bomb power",
   },
 
   whiteBomb: {
@@ -1242,33 +1152,38 @@ export const effects = {
     v: 0,
     tokenLife: 4,
 
-    func: function (params) {
-      if (player.fieldIn === params.field) {
-        let b = (params.bee.level - 1) * 0.1 + 1;
+    func: function (params, gameState) {
+      const { player, fieldInfo, objects } = gameState;
 
-        collectPollen({
-          x: params.x,
-          z: params.z,
-          pattern: [
-            [-2, 0],
-            [-1, -1],
-            [-1, 0],
-            [-1, 1],
-            [0, -2],
-            [0, -1],
-            [0, 0],
-            [0, 1],
-            [0, 2],
-            [1, -1],
-            [1, 0],
-            [1, 1],
-            [2, 0],
-          ],
-          amount: 7,
-          stackOffset: 0.4 + Math.random() * 0.5,
-          multiplier: b * player.whiteBombPollen,
-          instantConversion: player.instantBombConversion,
-        });
+      if (player.fieldIn === params.field) {
+        const b = (params.bee.level - 1) * 0.1 + 1;
+
+        collectPollen(
+          {
+            x: params.x,
+            z: params.z,
+            pattern: [
+              [-2, 0],
+              [-1, -1],
+              [-1, 0],
+              [-1, 1],
+              [0, -2],
+              [0, -1],
+              [0, 0],
+              [0, 1],
+              [0, 2],
+              [1, -1],
+              [1, 0],
+              [1, 1],
+              [2, 0],
+            ],
+            amount: 7,
+            stackOffset: 0.4 + Math.random() * 0.5,
+            multiplier: b * player.whiteBombPollen,
+            instantConversion: player.instantBombConversion,
+          },
+          gameState,
+        );
 
         objects.explosions.push(
           new Explosion({
@@ -1299,37 +1214,42 @@ export const effects = {
     v: 0,
     tokenLife: 4,
 
-    func: function (params) {
-      if (player.fieldIn === params.field) {
-        let b = (params.bee.level - 1) * 0.1 + 1;
+    func: function (params, gameState) {
+      const { player, fieldInfo, objects } = gameState;
 
-        collectPollen({
-          x: params.x,
-          z: params.z,
-          pattern: [
-            [-2, 0],
-            [-1, -1],
-            [-1, 0],
-            [-1, 1],
-            [0, -2],
-            [0, -1],
-            [0, 0],
-            [0, 1],
-            [0, 2],
-            [1, -1],
-            [1, 0],
-            [1, 1],
-            [2, 0],
-          ],
-          amount: {
-            r: 10,
-            w: player.redBombSync ? 7.5 : 0,
-            b: player.redBombSync && player.blueBombSync ? 5 : 0,
+      if (player.fieldIn === params.field) {
+        const b = (params.bee.level - 1) * 0.1 + 1;
+
+        collectPollen(
+          {
+            x: params.x,
+            z: params.z,
+            pattern: [
+              [-2, 0],
+              [-1, -1],
+              [-1, 0],
+              [-1, 1],
+              [0, -2],
+              [0, -1],
+              [0, 0],
+              [0, 1],
+              [0, 2],
+              [1, -1],
+              [1, 0],
+              [1, 1],
+              [2, 0],
+            ],
+            amount: {
+              r: 10,
+              w: player.redBombSync ? 7.5 : 0,
+              b: player.redBombSync && player.blueBombSync ? 5 : 0,
+            },
+            stackOffset: 0.4 + Math.random() * 0.5,
+            multiplier: b * player.redBombPollen,
+            instantConversion: player.instantBombConversion,
           },
-          stackOffset: 0.4 + Math.random() * 0.5,
-          multiplier: b * player.redBombPollen,
-          instantConversion: player.instantBombConversion,
-        });
+          gameState,
+        );
 
         objects.explosions.push(
           new Explosion({
@@ -1360,37 +1280,42 @@ export const effects = {
     v: 0,
     tokenLife: 4,
 
-    func: function (params) {
-      if (player.fieldIn === params.field) {
-        let b = (params.bee.level - 1) * 0.1 + 1;
+    func: function (params, gameState) {
+      const { player, fieldInfo, objects } = gameState;
 
-        collectPollen({
-          x: params.x,
-          z: params.z,
-          pattern: [
-            [-2, 0],
-            [-1, -1],
-            [-1, 0],
-            [-1, 1],
-            [0, -2],
-            [0, -1],
-            [0, 0],
-            [0, 1],
-            [0, 2],
-            [1, -1],
-            [1, 0],
-            [1, 1],
-            [2, 0],
-          ],
-          amount: {
-            r: player.blueBombSync && player.redBombSync ? 5 : 0,
-            w: player.blueBombSync ? 7.5 : 0,
-            b: 10,
+      if (player.fieldIn === params.field) {
+        const b = (params.bee.level - 1) * 0.1 + 1;
+
+        collectPollen(
+          {
+            x: params.x,
+            z: params.z,
+            pattern: [
+              [-2, 0],
+              [-1, -1],
+              [-1, 0],
+              [-1, 1],
+              [0, -2],
+              [0, -1],
+              [0, 0],
+              [0, 1],
+              [0, 2],
+              [1, -1],
+              [1, 0],
+              [1, 1],
+              [2, 0],
+            ],
+            amount: {
+              r: player.blueBombSync && player.redBombSync ? 5 : 0,
+              w: player.blueBombSync ? 7.5 : 0,
+              b: 10,
+            },
+            stackOffset: 0.4 + Math.random() * 0.5,
+            multiplier: b * player.blueBombPollen,
+            instantConversion: player.instantBombConversion,
           },
-          stackOffset: 0.4 + Math.random() * 0.5,
-          multiplier: b * player.blueBombPollen,
-          instantConversion: player.instantBombConversion,
-        });
+          gameState,
+        );
 
         objects.explosions.push(
           new Explosion({
@@ -1421,49 +1346,54 @@ export const effects = {
     v: 0,
     tokenLife: 4,
 
-    func: function (params) {
-      if (player.fieldIn === params.field) {
-        let b = (params.bee.level - 1) * 0.15 + 1;
+    func: function (params, gameState) {
+      const { player, fieldInfo, objects } = gameState;
 
-        collectPollen({
-          x: params.x,
-          z: params.z,
-          pattern: [
-            [-3, 0],
-            [-2, -2],
-            [-2, -1],
-            [-2, 0],
-            [-2, 1],
-            [-2, 2],
-            [-1, -2],
-            [-1, -1],
-            [-1, 0],
-            [-1, 1],
-            [-1, 2],
-            [0, -3],
-            [0, -2],
-            [0, -1],
-            [0, 0],
-            [0, 1],
-            [0, 2],
-            [0, 3],
-            [1, -2],
-            [1, -1],
-            [1, 0],
-            [1, 1],
-            [1, 2],
-            [2, -2],
-            [2, -1],
-            [2, 0],
-            [2, 1],
-            [2, 2],
-            [3, 0],
-          ],
-          amount: 10,
-          stackHeight: 0.4 + Math.random() * 0.5,
-          multiplier: b * player.whiteBombPollen,
-          instantConversion: player.instantBombConversion,
-        });
+      if (player.fieldIn === params.field) {
+        const b = (params.bee.level - 1) * 0.15 + 1;
+
+        collectPollen(
+          {
+            x: params.x,
+            z: params.z,
+            pattern: [
+              [-3, 0],
+              [-2, -2],
+              [-2, -1],
+              [-2, 0],
+              [-2, 1],
+              [-2, 2],
+              [-1, -2],
+              [-1, -1],
+              [-1, 0],
+              [-1, 1],
+              [-1, 2],
+              [0, -3],
+              [0, -2],
+              [0, -1],
+              [0, 0],
+              [0, 1],
+              [0, 2],
+              [0, 3],
+              [1, -2],
+              [1, -1],
+              [1, 0],
+              [1, 1],
+              [1, 2],
+              [2, -2],
+              [2, -1],
+              [2, 0],
+              [2, 1],
+              [2, 2],
+              [3, 0],
+            ],
+            amount: 10,
+            stackHeight: 0.4 + Math.random() * 0.5,
+            multiplier: b * player.whiteBombPollen,
+            instantConversion: player.instantBombConversion,
+          },
+          gameState,
+        );
 
         objects.explosions.push(
           new Explosion({
@@ -1494,53 +1424,58 @@ export const effects = {
     v: 128 / 2048,
     tokenLife: 4,
 
-    func: function (params) {
-      if (player.fieldIn === params.field) {
-        let b = (params.bee.level - 1) * 0.2 + 1;
+    func: function (params, gameState) {
+      const { player, fieldInfo, objects } = gameState;
 
-        collectPollen({
-          x: params.x,
-          z: params.z,
-          pattern: [
-            [-3, 0],
-            [-2, -2],
-            [-2, -1],
-            [-2, 0],
-            [-2, 1],
-            [-2, 2],
-            [-1, -2],
-            [-1, -1],
-            [-1, 0],
-            [-1, 1],
-            [-1, 2],
-            [0, -3],
-            [0, -2],
-            [0, -1],
-            [0, 0],
-            [0, 1],
-            [0, 2],
-            [0, 3],
-            [1, -2],
-            [1, -1],
-            [1, 0],
-            [1, 1],
-            [1, 2],
-            [2, -2],
-            [2, -1],
-            [2, 0],
-            [2, 1],
-            [2, 2],
-            [3, 0],
-          ],
-          amount: {
-            r: 12.5,
-            w: player.redBombSync ? 10 : 0,
-            b: player.redBombSync && player.blueBombSync ? 7.5 : 0,
+      if (player.fieldIn === params.field) {
+        const b = (params.bee.level - 1) * 0.2 + 1;
+
+        collectPollen(
+          {
+            x: params.x,
+            z: params.z,
+            pattern: [
+              [-3, 0],
+              [-2, -2],
+              [-2, -1],
+              [-2, 0],
+              [-2, 1],
+              [-2, 2],
+              [-1, -2],
+              [-1, -1],
+              [-1, 0],
+              [-1, 1],
+              [-1, 2],
+              [0, -3],
+              [0, -2],
+              [0, -1],
+              [0, 0],
+              [0, 1],
+              [0, 2],
+              [0, 3],
+              [1, -2],
+              [1, -1],
+              [1, 0],
+              [1, 1],
+              [1, 2],
+              [2, -2],
+              [2, -1],
+              [2, 0],
+              [2, 1],
+              [2, 2],
+              [3, 0],
+            ],
+            amount: {
+              r: 12.5,
+              w: player.redBombSync ? 10 : 0,
+              b: player.redBombSync && player.blueBombSync ? 7.5 : 0,
+            },
+            stackHeight: 0.4 + Math.random() * 0.5,
+            multiplier: b * player.redBombPollen,
+            instantConversion: player.instantBombConversion,
           },
-          stackHeight: 0.4 + Math.random() * 0.5,
-          multiplier: b * player.redBombPollen,
-          instantConversion: player.instantBombConversion,
-        });
+          gameState,
+        );
 
         objects.explosions.push(
           new Explosion({
@@ -1571,52 +1506,58 @@ export const effects = {
     v: 128 / 2048,
     tokenLife: 4,
 
-    func: function (params) {
-      if (player.fieldIn === params.field) {
-        let b = (params.bee.level - 1) * 0.2 + 1;
+    func: function (params, gameState) {
+      const { player, fieldInfo, objects } = gameState;
 
-        collectPollen({
-          x: params.x,
-          z: params.z,
-          pattern: [
-            [-3, 0],
-            [-2, -2],
-            [-2, -1],
-            [-2, 0],
-            [-2, 1],
-            [-2, 2],
-            [-1, -2],
-            [-1, -1],
-            [-1, 0],
-            [-1, 1],
-            [-1, 2],
-            [0, -3],
-            [0, -2],
-            [0, -1],
-            [0, 0],
-            [0, 1],
-            [0, 2],
-            [0, 3],
-            [1, -2],
-            [1, -1],
-            [1, 0],
-            [1, 1],
-            [1, 2],
-            [2, -2],
-            [2, -1],
-            [2, 0],
-            [2, 1],
-            [2, 2],
-            [3, 0],
-          ],
-          amount: {
-            b: 12.5,
-            w: player.blueBombSync ? 10 : 0,
-            r: player.blueBombSync && player.redBombSync ? 7.5 : 0,
+      if (player.fieldIn === params.field) {
+        const b = (params.bee.level - 1) * 0.2 + 1;
+
+        collectPollen(
+          {
+            x: params.x,
+            z: params.z,
+            pattern: [
+              [-3, 0],
+              [-2, -2],
+              [-2, -1],
+              [-2, 0],
+              [-2, 1],
+              [-2, 2],
+              [-1, -2],
+              [-1, -1],
+              [-1, 0],
+              [-1, 1],
+              [-1, 2],
+              [0, -3],
+              [0, -2],
+              [0, -1],
+              [0, 0],
+              [0, 1],
+              [0, 2],
+              [0, 3],
+              [1, -2],
+              [1, -1],
+              [1, 0],
+              [1, 1],
+              [1, 2],
+              [2, -2],
+              [2, -1],
+              [2, 0],
+              [2, 1],
+              [2, 2],
+              [3, 0],
+            ],
+            amount: {
+              b: 12.5,
+              w: player.blueBombSync ? 10 : 0,
+              r: player.blueBombSync && player.redBombSync ? 7.5 : 0,
+            },
+            stackHeight: 0.4 + Math.random() * 0.5,
+            multiplier: b * player.blueBombPollen,
+            instantConversion: player.instantBombConversion,
           },
-          stackHeight: 0.4 + Math.random() * 0.5,
-          multiplier: b * player.blueBombPollen,
-        });
+          gameState,
+        );
 
         objects.explosions.push(
           new Explosion({
@@ -1630,7 +1571,6 @@ export const effects = {
             size: 4,
             speed: 0.35,
             aftershock: 0.05,
-            instantConversion: player.instantBombConversion,
           }),
         );
       }
@@ -1659,9 +1599,8 @@ export const effects = {
       player.bluePollen *= amount * 0.1 + 1;
     },
 
-    getMessage: (amount) => {
-      return "Blue Boost\nx" + (amount * 0.1 + 1).toFixed(1) + " blue pollen";
-    },
+    getMessage: (amount) =>
+      "Blue Boost\nx" + (amount * 0.1 + 1).toFixed(1) + " blue pollen",
   },
 
   redBoost: {
@@ -1684,9 +1623,8 @@ export const effects = {
       player.redPollen *= amount * 0.1 + 1;
     },
 
-    getMessage: (amount) => {
-      return "Red Boost\nx" + (amount * 0.1 + 1).toFixed(1) + " red pollen";
-    },
+    getMessage: (amount) =>
+      "Red Boost\nx" + (amount * 0.1 + 1).toFixed(1) + " red pollen",
   },
 
   whiteBoost: {
@@ -1704,9 +1642,8 @@ export const effects = {
       player.whitePollen *= amount * 0.1 + 1;
     },
 
-    getMessage: (amount) => {
-      return "White Boost\nx" + (amount * 0.1 + 1).toFixed(1) + " white pollen";
-    },
+    getMessage: (amount) =>
+      "White Boost\nx" + (amount * 0.1 + 1).toFixed(1) + " white pollen",
   },
 
   babyLove: {
@@ -1726,9 +1663,7 @@ export const effects = {
       player.lootLuck *= 1.5;
     },
 
-    getMessage: (amount) => {
-      return "Baby Love\nx1.5 pollen\nx1.5 loot luck";
-    },
+    getMessage: () => "Baby Love\nx1.5 pollen\nx1.5 loot luck",
   },
 
   inspire: {
@@ -1747,9 +1682,8 @@ export const effects = {
       player.bluePollen *= amount * 0.25 + 1;
     },
 
-    getMessage: (amount) => {
-      return "Inspire\nx" + (amount * 0.25 + 1).toFixed(2) + " pollen";
-    },
+    getMessage: (amount) =>
+      "Inspire\nx" + (amount * 0.25 + 1).toFixed(2) + " pollen",
   },
 
   rage: {
@@ -1769,9 +1703,7 @@ export const effects = {
       player.redBeeAttack += amount;
     },
 
-    getMessage: (amount) => {
-      return "Rage\n+" + amount + " bee attack";
-    },
+    getMessage: (amount) => "Rage\n+" + amount + " bee attack",
   },
 
   flameHeat: {
@@ -1788,15 +1720,12 @@ export const effects = {
       player.flameHeatStackApplied = amount * 0.5 + 1;
     },
 
-    getMessage: (amount) => {
-      return (
-        "Flame Heat\nx" +
-        (amount * 0.75 + 1).toFixed(2) +
-        "  red pollen\nx" +
-        (amount * 0.2 + 1).toFixed(2) +
-        " bee attack"
-      );
-    },
+    getMessage: (amount) =>
+      "Flame Heat\nx" +
+      (amount * 0.75 + 1).toFixed(2) +
+      "  red pollen\nx" +
+      (amount * 0.2 + 1).toFixed(2) +
+      " bee attack",
   },
 
   darkHeat: {
@@ -1815,17 +1744,14 @@ export const effects = {
       player.beeAttack *= amount * 0.02 + 1;
     },
 
-    getMessage: (amount) => {
-      return (
-        "Dark Heat\nx" +
-        (amount * 0.06 + 1).toFixed(2) +
-        " super-crit power\n+" +
-        ((amount * 0.25) | 0) +
-        "% instant red conversion\nx" +
-        (amount * 0.02 + 1) +
-        " bee attack"
-      );
-    },
+    getMessage: (amount) =>
+      "Dark Heat\nx" +
+      (amount * 0.06 + 1).toFixed(2) +
+      " super-crit power\n+" +
+      ((amount * 0.25) | 0) +
+      "% instant red conversion\nx" +
+      (amount * 0.02 + 1) +
+      " bee attack",
   },
 
   pollenMarkToken: {
@@ -1837,7 +1763,9 @@ export const effects = {
     v: 128 / 2048,
     tokenLife: 8,
 
-    func: function (params) {
+    func: function (params, gameState) {
+      const { player, fieldInfo, objects } = gameState;
+
       if (player.fieldIn === params.field) {
         objects.marks.push(
           new Mark(
@@ -1861,7 +1789,9 @@ export const effects = {
     v: 128 / 2048,
     tokenLife: 8,
 
-    func: function (params) {
+    func: function (params, gameState) {
+      const { fieldInfo, objects } = gameState;
+
       objects.marks.push(
         new Mark(
           params.field,
@@ -1882,7 +1812,7 @@ export const effects = {
     v: (128 * 8) / 2048,
     tokenLife: 8,
 
-    func: function (params) {},
+    func: function (params, gameState) {},
   },
 
   pollenMark: {
@@ -1893,15 +1823,13 @@ export const effects = {
     maxAmount: 3,
 
     update: (amount, player) => {
-      let a = amount * 0.15 + 1;
+      const a = amount * 0.15 + 1;
       player.whitePollen *= a;
       player.redPollen *= a;
       player.bluePollen *= a;
     },
 
-    getMessage: (amount) => {
-      return "Pollen Mark\nx" + (amount * 0.15 + 1) + " pollen";
-    },
+    getMessage: (amount) => "Pollen Mark\nx" + (amount * 0.15 + 1) + " pollen",
   },
 
   honeyMark: {
@@ -1915,13 +1843,10 @@ export const effects = {
       player.convertRate *= amount * 0.25 + 1;
     },
 
-    getMessage: (amount) => {
-      return (
-        "Honey Mark\nConverts 3x the average of all your bee's convert amount of pollen.\nx" +
-        (amount * 0.25 + 1) +
-        " convert rate"
-      );
-    },
+    getMessage: (amount) =>
+      "Honey Mark\nConverts 3x the average of all your bee's convert amount of pollen.\nx" +
+      (amount * 0.25 + 1) +
+      " convert rate",
   },
 
   preciseMark: {
@@ -1936,15 +1861,12 @@ export const effects = {
       player.superCritChance += amount * 0.07;
     },
 
-    getMessage: (amount) => {
-      return (
-        "Precise Mark\n+" +
-        amount * 7 +
-        "% critical chance\n+" +
-        amount * 7 +
-        "% super-crit chance"
-      );
-    },
+    getMessage: (amount) =>
+      "Precise Mark\n+" +
+      amount * 7 +
+      "% critical chance\n+" +
+      amount * 7 +
+      "% super-crit chance",
   },
 
   inferno: {
@@ -1956,65 +1878,57 @@ export const effects = {
     v: 256 / 2048,
     tokenLife: 4,
 
-    func: function (params) {
+    func: function (params, gameState) {
+      const { player, fieldInfo, objects } = gameState;
+
       if (player.fieldIn === params.field) {
+        const f = fieldInfo[params.field];
+
         if (
           params.x >= 0 &&
-          params.x < fieldInfo[params.field].width &&
+          params.x < f.width &&
           params.z - 1 >= 0 &&
-          params.z - 1 < fieldInfo[params.field].length
+          params.z - 1 < f.length
         ) {
           objects.flames.push(new Flame(params.field, params.x, params.z - 1));
         }
-
         if (
           params.x >= 0 &&
-          params.x < fieldInfo[params.field].width &&
+          params.x < f.width &&
           params.z + 1 >= 0 &&
-          params.z + 1 < fieldInfo[params.field].length
+          params.z + 1 < f.length
         ) {
           objects.flames.push(new Flame(params.field, params.x, params.z + 1));
         }
-
         if (
           params.x - 1 >= 0 &&
-          params.x - 1 < fieldInfo[params.field].width &&
+          params.x - 1 < f.width &&
           params.z >= 0 &&
-          params.z < fieldInfo[params.field].length
+          params.z < f.length
         ) {
           objects.flames.push(new Flame(params.field, params.x - 1, params.z));
         }
-
         if (
           params.x + 1 >= 0 &&
-          params.x + 1 < fieldInfo[params.field].width &&
+          params.x + 1 < f.width &&
           params.z >= 0 &&
-          params.z < fieldInfo[params.field].length
+          params.z < f.length
         ) {
           objects.flames.push(new Flame(params.field, params.x + 1, params.z));
         }
 
         objects.tempBees.push(
           new TempBee(
-            [
-              fieldInfo[params.field].x + params.x,
-              fieldInfo[params.field].y + 0.5,
-              fieldInfo[params.field].z + params.z,
-            ],
+            [f.x + params.x, f.y + 0.5, f.z + params.z],
             "fire",
             Math.max(params.bee.level - 2, 1),
             15 + params.bee.level,
             params.bee.gifted,
           ),
         );
-
         objects.tempBees.push(
           new TempBee(
-            [
-              fieldInfo[params.field].x + params.x,
-              fieldInfo[params.field].y + 0.5,
-              fieldInfo[params.field].z + params.z,
-            ],
+            [f.x + params.x, f.y + 0.5, f.z + params.z],
             "fire",
             Math.max(params.bee.level - 2, 1),
             15 + params.bee.level,
@@ -2025,11 +1939,7 @@ export const effects = {
         objects.explosions.push(
           new Explosion({
             col: [1, 0.5, 0],
-            pos: [
-              fieldInfo[params.field].x + params.x,
-              fieldInfo[params.field].y + 0.5,
-              fieldInfo[params.field].z + params.z,
-            ],
+            pos: [f.x + params.x, f.y + 0.5, f.z + params.z],
             life: 0.5,
             size: 5,
             speed: 0.25,
@@ -2038,7 +1948,9 @@ export const effects = {
         );
       }
     },
-    backupFunc: function (params) {
+    backupFunc: function (params, gameState) {
+      const { objects } = gameState;
+
       objects.tempBees.push(
         new TempBee(
           params.pos,
@@ -2078,9 +1990,7 @@ export const effects = {
       player.flameFuel = true;
     },
 
-    getMessage: (amount) => {
-      return "Flame Fuel\nx1.5 flame life";
-    },
+    getMessage: () => "Flame Fuel\nx1.5 flame life",
   },
 
   markSurge: {
@@ -2091,8 +2001,10 @@ export const effects = {
     v: 256 / 2048,
     tokenLife: 4,
 
-    func: function () {
-      for (let i in objects.marks) {
+    func: function (params, gameState) {
+      const { objects } = gameState;
+
+      for (const i in objects.marks) {
         objects.marks[i].surge((i / objects.marks.length) * 0.5);
       }
     },
@@ -2106,23 +2018,27 @@ export const effects = {
     v: (256 * 2) / 2048,
     tokenLife: 4,
 
-    func: function (params) {
+    func: function (params, gameState) {
+      const { player, fieldInfo, objects } = gameState;
+
       if (player.fieldIn === params.field) {
+        const f = fieldInfo[params.field];
+
         params.bee.startTriangulate([
-          fieldInfo[params.field].x + params.x,
-          fieldInfo[params.field].y + 0.75,
-          fieldInfo[params.field].z + params.z,
+          f.x + params.x,
+          f.y + 0.75,
+          f.z + params.z,
         ]);
         objects.triangulates.push(
           new Triangulate(params.bee, [
-            fieldInfo[params.field].x + params.x,
-            fieldInfo[params.field].y + 0.75,
-            fieldInfo[params.field].z + params.z,
+            f.x + params.x,
+            f.y + 0.75,
+            f.z + params.z,
           ]),
         );
       }
 
-      player.addEffect("bombCombo");
+      gameState.player.addEffect("bombCombo");
     },
   },
 
@@ -2134,41 +2050,34 @@ export const effects = {
     v: (256 * 2.5) / 2048,
     tokenLife: 8,
 
-    func: function (params) {
+    func: function (params, gameState) {
+      const { player, fieldInfo, objects } = gameState;
+
       if (player.fieldIn === params.field) {
-        if (!fieldInfo[params.field].haze.start) {
+        const f = fieldInfo[params.field];
+
+        if (!f.haze.start) {
           objects.explosions.push(
             new Explosion({
               col: [1, 1, 0],
               pos: [
-                (fieldInfo[params.field].width - 1) * 0.5 +
-                  fieldInfo[params.field].x,
-                fieldInfo[params.field].y + 0.75,
-                (fieldInfo[params.field].length - 1) * 0.5 +
-                  fieldInfo[params.field].z,
+                (f.width - 1) * 0.5 + f.x,
+                f.y + 0.75,
+                (f.length - 1) * 0.5 + f.z,
               ],
               life: 30,
-              size:
-                (fieldInfo[params.field].width +
-                  fieldInfo[params.field].length) *
-                0.5 *
-                1.5,
+              size: (f.width + f.length) * 0.5 * 1.5,
               speed: 0.1,
               aftershock: 0,
               maxAlpha: 0.15,
               backface: true,
               primitive: "cylinder_explosions",
-              height:
-                8 /
-                ((fieldInfo[params.field].width +
-                  fieldInfo[params.field].length) *
-                  0.5 *
-                  1.5),
+              height: 8 / ((f.width + f.length) * 0.5 * 1.5),
             }),
           );
         }
 
-        fieldInfo[params.field].haze = { start: TIME, delay: TIME };
+        f.haze = { start: gameState.TIME, delay: gameState.TIME };
       }
     },
   },
@@ -2181,7 +2090,9 @@ export const effects = {
     v: (256 * 2.5) / 2048,
     tokenLife: 4,
 
-    func: function (params) {
+    func: function (params, gameState) {
+      const { player, objects } = gameState;
+
       if (player.fieldIn === params.field) {
         for (let i = 0; i < 2 + ((params.bee.level * 0.2) | 0); i++) {
           objects.fuzzBombs.push(new FuzzBomb(params.field, params.bee.level));
@@ -2201,9 +2112,7 @@ export const effects = {
       player.superCritChance += amount * 0.02;
     },
 
-    getMessage: (amount) => {
-      return "Precision\n+" + amount * 2 + "% super-crit chance";
-    },
+    getMessage: (amount) => "Precision\n+" + amount * 2 + "% super-crit chance",
   },
 
   summonFrog: {
@@ -2215,7 +2124,9 @@ export const effects = {
     v: 256 / 2048,
     tokenLife: 4,
 
-    func: function (params) {
+    func: function (params, gameState) {
+      const { player, objects } = gameState;
+
       if (params.field === player.fieldIn) {
         objects.mobs.push(
           new Frog(params.field, params.x, params.z, params.bee),
@@ -2233,15 +2144,17 @@ export const effects = {
     v: 256 / 2048,
     tokenLife: 4,
 
-    func: function (params) {
+    func: function (params, gameState) {
+      const { player, objects } = gameState;
+
       if (params.field === player.fieldIn) {
-        for (let i in objects.balloons) {
-          let b = objects.balloons[i];
+        for (const i in objects.balloons) {
+          const b = objects.balloons[i];
 
           if (b.state === "float" && b.inflateCounter > 0) {
             b.inflateCounter--;
-
             b.pollen += b.cap * (0.01 + params.bee.level * 0.001);
+
             objects.explosions.push(
               new ReverseExplosion({
                 col: b.golden ? [0.9, 0.9, 0] : [0, 0, 0.8],
@@ -2279,13 +2192,15 @@ export const effects = {
     v: 256 / 2048,
     tokenLife: 4,
 
-    func: function (params) {
+    func: function (params, gameState) {
+      const { player, objects } = gameState;
+
       if (params.field === player.fieldIn) {
         for (let i = objects.balloons.length; i--; ) {
-          let b = objects.balloons[i];
+          const b = objects.balloons[i];
 
           if (b.state === "float") {
-            let type = [
+            const types = [
               "focus",
               "melody",
               "haste",
@@ -2299,12 +2214,11 @@ export const effects = {
               "pollenMarkToken",
               "honeyMarkToken",
             ];
-
-            type = type[(Math.random() * type.length) | 0];
+            const type = types[(Math.random() * types.length) | 0];
 
             objects.tokens.push(
               new Token(
-                effects[type].tokenLife,
+                effectsConfig[type].tokenLife,
                 [b.pos[0], Math.round(params.bee.pos) + 0.5, b.pos[2]],
                 type,
                 { field: b.field, x: b.x, z: b.z, bee: params.bee },
@@ -2340,22 +2254,19 @@ export const effects = {
     maxAmount: 10,
 
     update: (amount, player) => {
-      let a = amount * 0.02 + 1;
+      const a = amount * 0.02 + 1;
       player.bluePollen *= a;
       player.redPollen *= a;
       player.whitePollen *= a;
       player.honeyFromTokens *= a;
     },
 
-    getMessage: (amount) => {
-      return (
-        "Balloon Aura\nx" +
-        (amount * 0.02 + 1) +
-        " pollen\nx" +
-        (amount * 0.02 + 1) +
-        " honey from tokens"
-      );
-    },
+    getMessage: (amount) =>
+      "Balloon Aura\nx" +
+      (amount * 0.02 + 1) +
+      " pollen\nx" +
+      (amount * 0.02 + 1) +
+      " honey from tokens",
   },
 
   balloonBlessing: {
@@ -2371,17 +2282,14 @@ export const effects = {
       player.buoyantBeeAttack *= Math.min(amount * 0.02 + 1, 3);
     },
 
-    getMessage: (amount) => {
-      return (
-        "Balloon Blessing\nx" +
-        (amount * 0.02 + 1).toFixed(2) +
-        " capacity\nx" +
-        (amount * 0.015 + 1).toFixed(3) +
-        " honey at hive\nx" +
-        Math.min(amount * 0.02 + 1, 3).toFixed(2) +
-        " buoyant bee attack"
-      );
-    },
+    getMessage: (amount) =>
+      "Balloon Blessing\nx" +
+      (amount * 0.02 + 1).toFixed(2) +
+      " capacity\nx" +
+      (amount * 0.015 + 1).toFixed(3) +
+      " honey at hive\nx" +
+      Math.min(amount * 0.02 + 1, 3).toFixed(2) +
+      " buoyant bee attack",
   },
 
   gummyBlob: {
@@ -2392,33 +2300,23 @@ export const effects = {
     v: 256 / 2048,
     tokenLife: 8,
 
-    func: function (params) {
+    func: function (params, gameState) {
+      const { player, fieldInfo, objects } = gameState;
+
       player.stats.gummyMorph += 3;
 
       if (params.field === player.fieldIn) {
-        let r = params.bee.gifted ? 4 : 2,
-          f = function (f) {
-            f.goo = 1;
-            f.height = 1;
-          };
+        const r = params.bee.gifted ? 4 : 2;
 
-        for (let x = -r; x <= r; x++) {
-          let _x = x + params.x;
-
-          for (let z = -r; z <= r; z++) {
-            let _z = z + params.z;
-
-            if (
-              Math.abs(_x - params.x) + Math.abs(_z - params.z) <= r &&
-              _x >= 0 &&
-              _x < fieldInfo[params.field].width &&
-              _z >= 0 &&
-              _z < fieldInfo[params.field].length
-            ) {
-              updateFlower(params.field, _x, _z, f, true, true, false);
-            }
-          }
-        }
+        // CHQ: TODO — old per-cell goo/replenish walk. Needs a real
+        // FieldManager method (e.g. fieldManager.gooifyRadius(field, x, z, r))
+        // since updateFlower/per-cell flower addressing doesn't exist anymore.
+        gameState.fieldManager?.gooifyRadius?.(
+          params.field,
+          params.x,
+          params.z,
+          r,
+        );
 
         objects.explosions.push(
           new Explosion({
@@ -2447,36 +2345,19 @@ export const effects = {
     v: 256 / 2048,
     tokenLife: 8,
 
-    func: function (params) {
+    func: function (params, gameState) {
+      const { player, fieldInfo, objects } = gameState;
+
       player.stats.gummyMorph += 3;
 
       if (params.field === player.fieldIn) {
         for (let i = 0, l = MATH.random(2, 5) | 0; i < l; i++) {
-          let r = MATH.random(2, 5) | 0,
-            f = function (f) {
-              f.goo = 1;
-              f.height = 1;
-            },
-            ox = (Math.random() * fieldInfo[params.field].width) | 0,
-            oz = (Math.random() * fieldInfo[params.field].length) | 0;
+          const r = MATH.random(2, 5) | 0;
+          const ox = (Math.random() * fieldInfo[params.field].width) | 0;
+          const oz = (Math.random() * fieldInfo[params.field].length) | 0;
 
-          for (let x = -r; x <= r; x++) {
-            let _x = x + ox;
-
-            for (let z = -r; z <= r; z++) {
-              let _z = z + oz;
-
-              if (
-                Math.abs(_x - ox) + Math.abs(_z - oz) <= r &&
-                _x >= 0 &&
-                _x < fieldInfo[params.field].width &&
-                _z >= 0 &&
-                _z < fieldInfo[params.field].length
-              ) {
-                updateFlower(params.field, _x, _z, f, true, true, false);
-              }
-            }
-          }
+          // CHQ: TODO — see gummyBlob note above.
+          gameState.fieldManager?.gooifyRadius?.(params.field, ox, oz, r);
 
           objects.explosions.push(
             new Explosion({
@@ -2507,7 +2388,9 @@ export const effects = {
     v: (256 * 2) / 2048,
     tokenLife: 8,
 
-    func: function (params) {
+    func: function (params, gameState) {
+      const { player } = gameState;
+
       if (
         params.field === player.fieldIn &&
         player.fieldIn &&
@@ -2538,9 +2421,7 @@ export const effects = {
       player.pollenFromBees *= 1.25;
     },
 
-    getMessage: (amount) => {
-      return "Glue\nx1.25 pollen from bees\nx1.25 pollen from tools";
-    },
+    getMessage: () => "Glue\nx1.25 pollen from bees\nx1.25 pollen from tools",
   },
 
   oilBuff: {
@@ -2555,9 +2436,7 @@ export const effects = {
       player.beeSpeed *= 1.05;
     },
 
-    getMessage: (amount) => {
-      return "Oil\nx1.05 bee speed\nx1.05 walkspeed";
-    },
+    getMessage: () => "Oil\nx1.05 bee speed\nx1.05 walkspeed",
   },
 
   enzymesBuff: {
@@ -2583,9 +2462,7 @@ export const effects = {
       );
     },
 
-    getMessage: (amount) => {
-      return "Enzymes\nx1.5 convert rate\n+12% instant conversion";
-    },
+    getMessage: () => "Enzymes\nx1.5 convert rate\n+12% instant conversion",
   },
 
   redExtractBuff: {
@@ -2599,9 +2476,7 @@ export const effects = {
       player.redPollen *= 1.25;
     },
 
-    getMessage: (amount) => {
-      return "Red Extract\nx1.25 red pollen";
-    },
+    getMessage: () => "Red Extract\nx1.25 red pollen",
   },
 
   blueExtractBuff: {
@@ -2615,9 +2490,7 @@ export const effects = {
       player.bluePollen *= 1.25;
     },
 
-    getMessage: (amount) => {
-      return "Blue Extract\nx1.25 blue pollen";
-    },
+    getMessage: () => "Blue Extract\nx1.25 blue pollen",
   },
 
   tropicalDrinkBuff: {
@@ -2632,9 +2505,7 @@ export const effects = {
       player.criticalChance += 0.05;
     },
 
-    getMessage: (amount) => {
-      return "Tropical Drink\nx1.25 white pollen\n+5% critical chance";
-    },
+    getMessage: () => "Tropical Drink\nx1.25 white pollen\n+5% critical chance",
   },
 
   purplePotionBuff: {
@@ -2652,9 +2523,8 @@ export const effects = {
       player.pollenFromBees *= 1.3;
     },
 
-    getMessage: (amount) => {
-      return "Purple Potion\nx1.25 capacity\nx1.5 pollen\nx1.3 pollen from tools\nx1.3 pollen from bees";
-    },
+    getMessage: () =>
+      "Purple Potion\nx1.25 capacity\nx1.5 pollen\nx1.3 pollen from tools\nx1.3 pollen from bees",
   },
 
   superSmoothieBuff: {
@@ -2691,9 +2561,8 @@ export const effects = {
       player.superCritChance += 0.01;
     },
 
-    getMessage: (amount) => {
-      return "Super Smoothie\nx1.5 capacity\nx1.6 pollen\nx1.4 pollen from bees\nx1.4 pollen from tools\nx2 convert rate\nx1.1 honey at hive\n+17% instant conversion\n+7% critical chance\nx1.05 walkspeed\nx1.1 bee speed\n+1% super-crit chance";
-    },
+    getMessage: () =>
+      "Super Smoothie\nx1.5 capacity\nx1.6 pollen\nx1.4 pollen from bees\nx1.4 pollen from tools\nx2 convert rate\nx1.1 honey at hive\n+17% instant conversion\n+7% critical chance\nx1.05 walkspeed\nx1.1 bee speed\n+1% super-crit chance",
   },
 
   stingerBuff: {
@@ -2701,15 +2570,12 @@ export const effects = {
     v: 0,
     maxCooldown: 45,
     maxAmount: 1,
-    tokenLife: 4,
 
     update: (amount, player) => {
       player.beeAttack *= 1.5;
     },
 
-    getMessage: (amount) => {
-      return "Stinger\nx1.5 bee attack";
-    },
+    getMessage: () => "Stinger\nx1.5 bee attack",
   },
 
   popStarAura: {
@@ -2725,13 +2591,10 @@ export const effects = {
       player.bubblePollen *= 1.25;
     },
 
-    getMessage: (amount) => {
-      return (
-        "Pop Star Aura\nx" +
-        Math.min(player.popStarSize * 0.0125 + 2, 5) +
-        " blue pollen\n+5% instant blue conversion\nx1.25 bubble pollen"
-      );
-    },
+    getMessage: (amount, player) =>
+      "Pop Star Aura\nx" +
+      Math.min(player.popStarSize * 0.0125 + 2, 5) +
+      " blue pollen\n+5% instant blue conversion\nx1.25 bubble pollen",
   },
 
   scorchingStarAura: {
@@ -2748,17 +2611,14 @@ export const effects = {
       );
     },
 
-    getMessage: (amount) => {
-      return (
-        "Scorching Star Aura\nx" +
-        Math.min(player.scorchingStarSize * 0.00035 + 2, 5).toFixed(2) +
-        " red pollen\nx" +
-        Math.min(player.scorchingStarSize * 0.00035 + 2, 5).toFixed(2) +
-        " convert rate\nx" +
-        Math.min(player.scorchingStarSize * 0.00015 + 1, 1.5).toFixed(2) +
-        " bee attack\n+20% instant red conversion"
-      );
-    },
+    getMessage: (amount, player) =>
+      "Scorching Star Aura\nx" +
+      Math.min(player.scorchingStarSize * 0.00035 + 2, 5).toFixed(2) +
+      " red pollen\nx" +
+      Math.min(player.scorchingStarSize * 0.00035 + 2, 5).toFixed(2) +
+      " convert rate\nx" +
+      Math.min(player.scorchingStarSize * 0.00015 + 1, 1.5).toFixed(2) +
+      " bee attack\n+20% instant red conversion",
   },
 
   gummyStarAura: {
@@ -2777,15 +2637,12 @@ export const effects = {
       );
     },
 
-    getMessage: (amount) => {
-      return (
-        "Gummy Star Aura\nx" +
-        Math.min(player.gummyStarSize * 0.0000000003 + 1, 2).toFixed(2) +
-        " goo\nx" +
-        Math.min(player.gummyStarSize * 0.0000000002 + 1, 2).toFixed(2) +
-        " white pollen\n+20% instant white conversion"
-      );
-    },
+    getMessage: (amount, player) =>
+      "Gummy Star Aura\nx" +
+      Math.min(player.gummyStarSize * 0.0000000003 + 1, 2).toFixed(2) +
+      " goo\nx" +
+      Math.min(player.gummyStarSize * 0.0000000002 + 1, 2).toFixed(2) +
+      " white pollen\n+20% instant white conversion",
   },
 
   bubbleBloat: {
@@ -2800,15 +2657,12 @@ export const effects = {
       player.blueFieldCapacity *= (amount * 5 + 1).toFixed(2);
     },
 
-    getMessage: (amount) => {
-      return (
-        "Bubble Bloat\nx" +
-        (amount * 6 + 1).toFixed(2) +
-        " convert rate at hive\nx" +
-        (amount * 5 + 1).toFixed(2) +
-        " blue field capacity"
-      );
-    },
+    getMessage: (amount) =>
+      "Bubble Bloat\nx" +
+      (amount * 6 + 1).toFixed(2) +
+      " convert rate at hive\nx" +
+      (amount * 5 + 1).toFixed(2) +
+      " blue field capacity",
   },
 
   gummyBall: {
@@ -2818,25 +2672,28 @@ export const effects = {
     tokenLife: 4,
     amountFromCooldown: true,
 
-    update: (amount, player) => {
+    // CHQ: this `update` is the one exception that needs gameState —
+    // the original reached into `objects.mobs` and `player.fieldIn` to
+    // spawn a GummyBall mob mid-effect-tick. Signature widened to
+    // (amount, player, gameState); every caller of the effect-tick loop
+    // (wherever `effects[type].update(amount, player)` is invoked) needs
+    // to pass gameState as a third arg for this one effect.
+    update: (amount, player, gameState) => {
       player.gummyBallSize *= amount * 1.5 + 1;
       player.whitePollen *= amount * 0.15 + 1;
 
       if (amount >= 0.99 && player.fieldIn) {
         player.addEffect("gummyBall", -amount);
-        objects.mobs.push(new GummyBall());
+        gameState.objects.mobs.push(new GummyBall());
       }
     },
 
-    getMessage: (amount) => {
-      return (
-        "Gummyball\nx" +
-        (amount * 1.5 + 1).toFixed(2) +
-        " gummyball size\nx" +
-        (amount * 0.2 + 1).toFixed(2) +
-        " white pollen"
-      );
-    },
+    getMessage: (amount) =>
+      "Gummyball\nx" +
+      (amount * 1.5 + 1).toFixed(2) +
+      " gummyball size\nx" +
+      (amount * 0.2 + 1).toFixed(2) +
+      " white pollen",
   },
 
   gummyBallCombo: {
@@ -2851,13 +2708,10 @@ export const effects = {
       player.whitePollen *= 1.1;
     },
 
-    getMessage: (amount) => {
-      return (
-        "Gummyball Combo\nx" +
-        MATH.lerp(1, 2, amount * 0.001).toFixed(2) +
-        " goo\nx1.1 white pollen"
-      );
-    },
+    getMessage: (amount) =>
+      "Gummyball Combo\nx" +
+      MATH.lerp(1, 2, amount * 0.001).toFixed(2) +
+      " goo\nx1.1 white pollen",
   },
 
   guidingStarAura: {
@@ -2874,9 +2728,7 @@ export const effects = {
       player.capacity *= 2;
     },
 
-    getMessage: (amount) => {
-      return "Guiding Star Aura\nx2 pollen\nx2 capacity";
-    },
+    getMessage: () => "Guiding Star Aura\nx2 pollen\nx2 capacity",
   },
 
   popStarPassive: {
@@ -2888,13 +2740,12 @@ export const effects = {
     currentCooldown: 0,
     startVal: 0,
 
-    activate() {
-      objects.mobs.push(new PopStar());
+    activate(gameState) {
+      gameState.objects.mobs.push(new PopStar());
     },
 
-    getMessage: (amount) => {
-      return "Pop Star\nEvery 30 blue bomb tokens summons a Pop Star, lasting for 45s, and applies 1m of bubble bloat. It grows for every bubble popped, x1.25 bubble pollen, 20% instant blue conversion, and up to x5 blue pollen. Upon summoning, it also applies 30s of Bubble Bloat. Popping a bubble while the star is active gives 1s(2s if golden) of Bubble Bloat, up to 1h. Bubble Bloat gives up to x6 convert rate and x6 blue field capacity. When the Pop Star disappears, it spawns 1 bubble for every 10 of the star's size, with an extra 5. Cooldown: 1m";
-    },
+    getMessage: () =>
+      "Pop Star\nEvery 30 blue bomb tokens summons a Pop Star, lasting for 45s, and applies 1m of bubble bloat. It grows for every bubble popped, x1.25 bubble pollen, 20% instant blue conversion, and up to x5 blue pollen. Upon summoning, it also applies 30s of Bubble Bloat. Popping a bubble while the star is active gives 1s(2s if golden) of Bubble Bloat, up to 1h. Bubble Bloat gives up to x6 convert rate and x6 blue field capacity. When the Pop Star disappears, it spawns 1 bubble for every 10 of the star's size, with an extra 5. Cooldown: 1m",
   },
 
   scorchingStarPassive: {
@@ -2906,13 +2757,12 @@ export const effects = {
     currentCooldown: 0,
     startVal: 0,
 
-    activate() {
-      objects.mobs.push(new ScorchingStar());
+    activate(gameState) {
+      gameState.objects.mobs.push(new ScorchingStar());
     },
 
-    getMessage: (amount) => {
-      return "Scorching Star\nEvery 15 red boost tokens summons a Scorching Star, lasting for 45s. It grows by 75(100 if dark) every second for every flame nearby. It grants up to x5 red pollen, x5 convert rate, x1.5 bee attack, and +20% instant red conversion. Cooldown: 1m";
-    },
+    getMessage: () =>
+      "Scorching Star\nEvery 15 red boost tokens summons a Scorching Star, lasting for 45s. It grows by 75(100 if dark) every second for every flame nearby. It grants up to x5 red pollen, x5 convert rate, x1.5 bee attack, and +20% instant red conversion. Cooldown: 1m",
   },
 
   gummyStarPassive: {
@@ -2924,13 +2774,12 @@ export const effects = {
     currentCooldown: 0,
     startVal: 0,
 
-    activate() {
-      objects.mobs.push(new GummyStar());
+    activate(gameState) {
+      gameState.objects.mobs.push(new GummyStar());
     },
 
-    getMessage: (amount) => {
-      return "Gummy Star\nEvery gumdrop used or after 20 gumdrops has a 9% chance to summon a Gummy Star, lasting for 45s. It grows based on how much goo you collect, giving up to x2 goo and x2 white pollen, while always giving +15% instant white conversion and +15% instant goo conversion. After disappearing, it spreads 20(+the amount of digits in the star's size) honey tokens, with a total value of approximately 1,000(+7.5% of the star's size). Cooldown: 1m";
-    },
+    getMessage: () =>
+      "Gummy Star\nEvery gumdrop used or after 20 gumdrops has a 9% chance to summon a Gummy Star, lasting for 45s. It grows based on how much goo you collect, giving up to x2 goo and x2 white pollen, while always giving +15% instant white conversion and +15% instant goo conversion. After disappearing, it spreads 20(+the amount of digits in the star's size) honey tokens, with a total value of approximately 1,000(+7.5% of the star's size). Cooldown: 1m",
   },
 
   guidingStarPassive: {
@@ -2942,33 +2791,30 @@ export const effects = {
     currentCooldown: 0,
     startVal: 0,
 
-    activate() {
+    activate(gameState) {
+      const { player, objects, fieldInfo } = gameState;
       let f = [];
 
-      for (let i in fieldInfo) {
-        f.push(i);
-      }
+      for (const i in fieldInfo) f.push(i);
 
-      for (let i in objects.mobs) {
-        let o = objects.mobs[i];
-
-        if (o.guidingstarinstance) {
-          if (f.indexOf(o.field) > -1) {
-            f.splice(f.indexOf(o.field), 1);
-          }
+      for (const i in objects.mobs) {
+        const o = objects.mobs[i];
+        if (o.guidingstarinstance && f.indexOf(o.field) > -1) {
+          f.splice(f.indexOf(o.field), 1);
         }
       }
 
       if (f.length) {
-        f = f[(Math.random() * f.length) | 0];
-        objects.mobs.push(new GuidingStar(f));
-        player.addMessage("⭐Guiding Star on " + MATH.doGrammar(f) + "!⭐");
+        const chosen = f[(Math.random() * f.length) | 0];
+        objects.mobs.push(new GuidingStar(chosen));
+        player.addMessage(
+          "⭐Guiding Star on " + MATH.doGrammar(chosen) + "!⭐",
+        );
       }
     },
 
-    getMessage: (amount) => {
-      return "Guiding Star\nEvery 250th boost token summons a guiding star over a random field, granting x2.5 capacity and pollen for 10m. Cooldown: 5m";
-    },
+    getMessage: () =>
+      "Guiding Star\nEvery 250th boost token summons a guiding star over a random field, granting x2.5 capacity and pollen for 10m. Cooldown: 5m",
   },
 
   starShowerPassive: {
@@ -2980,15 +2826,15 @@ export const effects = {
     currentCooldown: 0,
     startVal: 0,
 
-    activate() {
+    activate(gameState) {
+      const { player, objects } = gameState;
       if (player.fieldIn) {
         objects.mobs.push(new StarShower(player.fieldIn));
       }
     },
 
-    getMessage: (amount) => {
-      return "Every 35 mark or boost tokens summons 10 falling stars on the field. Falling stars collect 30 pollen from 5 flowers and instantly converts it. Catching a falling star converts 10% of your convert total from your bag, and grants a stack of inspire. Cooldown: 25s";
-    },
+    getMessage: () =>
+      "Every 35 mark or boost tokens summons 10 falling stars on the field. Falling stars collect 30 pollen from 5 flowers and instantly converts it. Catching a falling star converts 10% of your convert total from your bag, and grants a stack of inspire. Cooldown: 25s",
   },
 
   starSawPassive: {
@@ -3000,16 +2846,16 @@ export const effects = {
     currentCooldown: 0,
     startVal: 0,
 
-    activate() {
+    activate(gameState) {
+      const { player, objects, items } = gameState;
       items.stinger.amount++;
       player.updateInventory();
       player.addMessage("+1 Stinger (from Star Saw Refund)");
       objects.mobs.push(new StarSaw());
     },
 
-    getMessage: (amount) => {
-      return "Every 2nd stinger used is refunded and summons a star saw for 45s. The star circles you, damaging mobs by 30% of your attack total, popping bubbles, fuzz bombs, collecting tokens, and collecting and converting 5(+0.05 per attack total) pollen from 5 flowers every 0.1s. The star saw also converts pollen from your backpack equal to the amount it collects. Cooldown: 40s";
-    },
+    getMessage: () =>
+      "Every 2nd stinger used is refunded and summons a star saw for 45s. The star circles you, damaging mobs by 30% of your attack total, popping bubbles, fuzz bombs, collecting tokens, and collecting and converting 5(+0.05 per attack total) pollen from 5 flowers every 0.1s. The star saw also converts pollen from your backpack equal to the amount it collects. Cooldown: 40s",
   },
 
   petalStormPassive: {
@@ -3021,7 +2867,9 @@ export const effects = {
     currentCooldown: 0,
     startVal: 0,
 
-    activate() {
+    activate(gameState) {
+      const { player, objects } = gameState;
+
       for (let i = 0; i < 30; i++) {
         window.setTimeout(
           function () {
@@ -3041,9 +2889,8 @@ export const effects = {
       }
     },
 
-    getMessage: (amount) => {
-      return "Every 30th boost token shoots 30 petal shurikens in all directions. Petal shurikens collects tokens and causes bees to convert pollen.";
-    },
+    getMessage: () =>
+      "Every 30th boost token shoots 30 petal shurikens in all directions. Petal shurikens collects tokens and causes bees to convert pollen.",
   },
 
   tidePower: {
@@ -3063,15 +2910,12 @@ export const effects = {
       }
     },
 
-    getMessage: (amount) => {
-      return (
-        "Tide Power\nx" +
-        (amount * 0.00175 + 1).toFixed(3) +
-        " collector speed\nx" +
-        (amount * 0.0025 + 1).toFixed(3) +
-        " wave size"
-      );
-    },
+    getMessage: (amount) =>
+      "Tide Power\nx" +
+      (amount * 0.00175 + 1).toFixed(3) +
+      " collector speed\nx" +
+      (amount * 0.0025 + 1).toFixed(3) +
+      " wave size",
   },
 
   tidalSurge: {
@@ -3087,9 +2931,7 @@ export const effects = {
       player.addEffect("tidePower", false, false, 0);
     },
 
-    getMessage: (amount) => {
-      return "Tidal Surge\nx5 collector speed";
-    },
+    getMessage: () => "Tidal Surge\nx5 collector speed",
   },
 
   tideBlessing: {
@@ -3107,21 +2949,18 @@ export const effects = {
       player.pollenFromBees *= amount * 0.15 + 1;
     },
 
-    getMessage: (amount) => {
-      return (
-        "Tidal Blessing\nx" +
-        (amount * 0.15 + 1).toFixed(2) +
-        " blue pollen\nx" +
-        (amount * 0.15 + 1).toFixed(2) +
-        " convert rate at hive\nx" +
-        (amount * 0.15 + 1).toFixed(2) +
-        " honey from tokens\nx" +
-        (amount * 0.15 + 1).toFixed(2) +
-        " pollen from tools\nx" +
-        (amount * 0.15 + 1).toFixed(2) +
-        " pollen from bees"
-      );
-    },
+    getMessage: (amount) =>
+      "Tidal Blessing\nx" +
+      (amount * 0.15 + 1).toFixed(2) +
+      " blue pollen\nx" +
+      (amount * 0.15 + 1).toFixed(2) +
+      " convert rate at hive\nx" +
+      (amount * 0.15 + 1).toFixed(2) +
+      " honey from tokens\nx" +
+      (amount * 0.15 + 1).toFixed(2) +
+      " pollen from tools\nx" +
+      (amount * 0.15 + 1).toFixed(2) +
+      " pollen from bees",
   },
 
   coconutShield: {
@@ -3135,9 +2974,7 @@ export const effects = {
       player.defense = 1;
     },
 
-    getMessage: (amount) => {
-      return "Coconut Shield\n+100% defense\nx1.25 bee attack";
-    },
+    getMessage: () => "Coconut Shield\n+100% defense\nx1.25 bee attack",
   },
 
   coconutSurge: {
@@ -3151,9 +2988,7 @@ export const effects = {
       player.beeSpeed *= 1.5;
     },
 
-    getMessage: (amount) => {
-      return "Coconut Surge\nx1.15 walkspeed\nx1.5 bee speed";
-    },
+    getMessage: () => "Coconut Surge\nx1.15 walkspeed\nx1.5 bee speed",
   },
 
   conversionBoost: {
@@ -3166,9 +3001,7 @@ export const effects = {
       player.convertRate *= 2;
     },
 
-    getMessage: (amount) => {
-      return "Conversion Boost\nx2 convert rate";
-    },
+    getMessage: () => "Conversion Boost\nx2 convert rate",
   },
 
   gummyMorph: {
@@ -3186,9 +3019,8 @@ export const effects = {
       player.jumpPower *= 1.2;
     },
 
-    getMessage: (amount) => {
-      return "Gummy Morph\nx1.75 goo\n+100% instant conversion\nx1.1 walkspeed\nx1.2 jump power";
-    },
+    getMessage: () =>
+      "Gummy Morph\nx1.75 goo\n+100% instant conversion\nx1.1 walkspeed\nx1.2 jump power",
   },
 
   focusPulserPassive: {
@@ -3200,13 +3032,12 @@ export const effects = {
     currentCooldown: 0,
     startVal: 0,
 
-    activate() {
-      objects.mobs.push(new Pulse("red"));
+    activate(gameState) {
+      gameState.objects.mobs.push(new Pulse("red"));
     },
 
-    getMessage: (amount) => {
-      return "Focus Pulser\nEvery 25 focus tokens collected activates a red pulse, hopping to every red bee twice, collecting pollen. Pollen collection increases with each hop. Cooldown: 20s";
-    },
+    getMessage: () =>
+      "Focus Pulser\nEvery 25 focus tokens collected activates a red pulse, hopping to every red bee twice, collecting pollen. Pollen collection increases with each hop. Cooldown: 20s",
   },
 
   hastePulserPassive: {
@@ -3218,13 +3049,12 @@ export const effects = {
     currentCooldown: 0,
     startVal: 0,
 
-    activate() {
-      objects.mobs.push(new Pulse("blue"));
+    activate(gameState) {
+      gameState.objects.mobs.push(new Pulse("blue"));
     },
 
-    getMessage: (amount) => {
-      return "Haste Pulser\nEvery 25 haste tokens collected activates a blue pulse, hopping to every blue bee twice, collecting pollen. Pollen collection increases with each hop. Cooldown: 20s";
-    },
+    getMessage: () =>
+      "Haste Pulser\nEvery 25 haste tokens collected activates a blue pulse, hopping to every blue bee twice, collecting pollen. Pollen collection increases with each hop. Cooldown: 20s",
   },
 
   inspireCoconutsPassive: {
@@ -3236,13 +3066,16 @@ export const effects = {
     currentCooldown: 0,
     startVal: 0,
 
-    activate() {
+    activate(gameState) {
+      const { player, objects, fieldInfo } = gameState;
+
       if (player.fieldIn) {
+        const f = fieldInfo[player.fieldIn];
         for (let i = 0; i < 5; i++) {
           objects.mobs.push(
             new Coconut(
-              (Math.random() * fieldInfo[player.fieldIn].width) | 0,
-              (Math.random() * fieldInfo[player.fieldIn].length) | 0,
+              (Math.random() * f.width) | 0,
+              (Math.random() * f.length) | 0,
               i * 0.4,
             ),
           );
@@ -3250,9 +3083,8 @@ export const effects = {
       }
     },
 
-    getMessage: (amount) => {
-      return "Inspire Coconuts\nEvery 5 inspire tokens collected summons 5 falling coconuts which collect pollen when the land. Standing under the coconut instantly converts the player's convert total into honey tokens.";
-    },
+    getMessage: () =>
+      "Inspire Coconuts\nEvery 5 inspire tokens collected summons 5 falling coconuts which collect pollen when the land. Standing under the coconut instantly converts the player's convert total into honey tokens.",
   },
 
   emergencyCoconutShieldPassive: {
@@ -3264,13 +3096,16 @@ export const effects = {
     currentCooldown: 0,
     startVal: 0,
 
-    activate() {
+    activate(gameState) {
+      const { player, objects, fieldInfo } = gameState;
+
       if (player.fieldIn) {
+        const f = fieldInfo[player.fieldIn];
         for (let i = 0; i < 5; i++) {
           objects.mobs.push(
             new Coconut(
-              (Math.random() * fieldInfo[player.fieldIn].width) | 0,
-              (Math.random() * fieldInfo[player.fieldIn].length) | 0,
+              (Math.random() * f.width) | 0,
+              (Math.random() * f.length) | 0,
               i * 0.4,
             ),
           );
@@ -3280,9 +3115,8 @@ export const effects = {
       player.addEffect("coconutShield");
     },
 
-    getMessage: (amount) => {
-      return "Emergency Coconut Shield\nTaking damage from a monster will activate a shield, granting 100% defense, x1.25 bee attack and will drop 5 falling coconuts if in a field. Cooldown: 1m";
-    },
+    getMessage: () =>
+      "Emergency Coconut Shield\nTaking damage from a monster will activate a shield, granting 100% defense, x1.25 bee attack and will drop 5 falling coconuts if in a field. Cooldown: 1m",
   },
 
   coconutHastePassive: {
@@ -3294,14 +3128,14 @@ export const effects = {
     currentCooldown: 0,
     startVal: 0,
 
-    activate() {
+    activate(gameState) {
+      const { player } = gameState;
       player.addEffect("haste");
       player.addEffect("coconutSurge");
     },
 
-    getMessage: (amount) => {
-      return 'Coconut Haste\nCatching a falling coconut will apply a stack of "Haste" and grant "Coconut Surge", giving x1.2 walkspeed and x1.5 bee speed for 2s.';
-    },
+    getMessage: () =>
+      'Coconut Haste\nCatching a falling coconut will apply a stack of "Haste" and grant "Coconut Surge", giving x1.2 walkspeed and x1.5 bee speed for 2s.',
   },
 
   xFlamePassive: {
@@ -3313,8 +3147,9 @@ export const effects = {
     currentCooldown: 0,
     startVal: 0,
 
-    activate() {
-      let dirs = [
+    activate(gameState) {
+      const { player, objects, fieldInfo } = gameState;
+      const dirs = [
         [-1, 1],
         [1, -1],
         [-1, -1],
@@ -3322,22 +3157,18 @@ export const effects = {
       ];
 
       if (player.fieldIn && !player.attacked.length) {
+        const f = fieldInfo[player.fieldIn];
         objects.flames.push(
           new Flame(player.fieldIn, player.flowerIn.x, player.flowerIn.z),
         );
 
-        for (let j in dirs) {
+        for (const d of dirs) {
           for (let i = 1; i < 8; i++) {
-            let x = dirs[j][0] * i + player.flowerIn.x,
-              z = dirs[j][1] * i + player.flowerIn.z;
-
-            if (
-              x >= 0 &&
-              x < fieldInfo[player.fieldIn].width &&
-              z >= 0 &&
-              z < fieldInfo[player.fieldIn].length
-            )
+            const x = d[0] * i + player.flowerIn.x;
+            const z = d[1] * i + player.flowerIn.z;
+            if (x >= 0 && x < f.width && z >= 0 && z < f.length) {
               objects.flames.push(new Flame(player.fieldIn, x, z));
+            }
           }
         }
       } else {
@@ -3350,11 +3181,10 @@ export const effects = {
           ),
         );
 
-        for (let j in dirs) {
+        for (const d of dirs) {
           for (let i = 1; i < 8; i++) {
-            let x = dirs[j][0] * i,
-              z = dirs[j][1] * i;
-
+            const x = d[0] * i;
+            const z = d[1] * i;
             objects.flames.push(
               new Flame(
                 player.body.position.x + x,
@@ -3368,9 +3198,8 @@ export const effects = {
       }
     },
 
-    getMessage: (amount) => {
-      return "X Flame\nEvery 20 battle tokens collected summons 29 flames in an X shape, lasting for 3 secs. Each flame collects 6R/3W/1B pollen from nearby flowers and deals 15 damage to nearby enemies every sec. Cooldown: 15s";
-    },
+    getMessage: () =>
+      "X Flame\nEvery 20 battle tokens collected summons 29 flames in an X shape, lasting for 3 secs. Each flame collects 6R/3W/1B pollen from nearby flowers and deals 15 damage to nearby enemies every sec. Cooldown: 15s",
   },
 
   ignitePassive: {
@@ -3382,8 +3211,9 @@ export const effects = {
     currentCooldown: 0,
     startVal: 0,
 
-    activate() {
-      let dirs = [
+    activate(gameState) {
+      const { player, objects, fieldInfo } = gameState;
+      const dirs = [
         [-1, 0],
         [0, -1],
         [0, 1],
@@ -3391,22 +3221,18 @@ export const effects = {
       ];
 
       if (player.fieldIn && !player.attacked.length) {
+        const f = fieldInfo[player.fieldIn];
         objects.flames.push(
           new Flame(player.fieldIn, player.flowerIn.x, player.flowerIn.z),
         );
 
-        for (let j in dirs) {
+        for (const d of dirs) {
           for (let i = 1; i < 2; i++) {
-            let x = dirs[j][0] * i + player.flowerIn.x,
-              z = dirs[j][1] * i + player.flowerIn.z;
-
-            if (
-              x >= 0 &&
-              x < fieldInfo[player.fieldIn].width &&
-              z >= 0 &&
-              z < fieldInfo[player.fieldIn].length
-            )
+            const x = d[0] * i + player.flowerIn.x;
+            const z = d[1] * i + player.flowerIn.z;
+            if (x >= 0 && x < f.width && z >= 0 && z < f.length) {
               objects.flames.push(new Flame(player.fieldIn, x, z));
+            }
           }
         }
       } else {
@@ -3419,11 +3245,10 @@ export const effects = {
           ),
         );
 
-        for (let j in dirs) {
+        for (const d of dirs) {
           for (let i = 1; i < 2; i++) {
-            let x = dirs[j][0] * i,
-              z = dirs[j][1] * i;
-
+            const x = d[0] * i;
+            const z = d[1] * i;
             objects.flames.push(
               new Flame(
                 player.body.position.x + x,
@@ -3437,9 +3262,8 @@ export const effects = {
       }
     },
 
-    getMessage: (amount) => {
-      return "Ignite\nEvery 10 red ability tokens collected summons 5 flames in a + shape, lasting for 3 secs. Each flame collects 9R/5W/2B pollen from nearby flowers and deals 15 damage to nearby enemies every sec.";
-    },
+    getMessage: () =>
+      "Ignite\nEvery 10 red ability tokens collected summons 5 flames in a + shape, lasting for 3 secs. Each flame collects 9R/5W/2B pollen from nearby flowers and deals 15 damage to nearby enemies every sec.",
   },
 
   bubbleBombsPassive: {
@@ -3451,23 +3275,25 @@ export const effects = {
     currentCooldown: 0,
     startVal: 0,
 
-    activate() {
+    activate(gameState) {
+      const { player, objects, fieldInfo } = gameState;
+
       if (player.fieldIn) {
+        const f = fieldInfo[player.fieldIn];
         for (let i = 0; i < 3; i++) {
           objects.bubbles.push(
             new Bubble(
               player.fieldIn,
-              (Math.random() * fieldInfo[player.fieldIn].width) | 0,
-              (Math.random() * fieldInfo[player.fieldIn].length) | 0,
+              (Math.random() * f.width) | 0,
+              (Math.random() * f.length) | 0,
             ),
           );
         }
       }
     },
 
-    getMessage: (amount) => {
-      return "Bubble Bombs\nEvery 10 blue bomb tokens collected summons 3 bubbles around the field, lasting for 10 secs. Each bubble collects 2R/6W/10B pollen from nearby flowers and replenish them when popped.";
-    },
+    getMessage: () =>
+      "Bubble Bombs\nEvery 10 blue bomb tokens collected summons 3 bubbles around the field, lasting for 10 secs. Each bubble collects 2R/6W/10B pollen from nearby flowers and replenish them when popped.",
   },
 
   coinScatterPassive: {
@@ -3479,28 +3305,27 @@ export const effects = {
     currentCooldown: 0,
     startVal: 0,
 
-    activate() {
-      if (player.fieldIn) {
-        let amc = Math.min(Math.ceil(player.convertTotal * 3), player.pollen);
+    activate(gameState) {
+      const { player, objects, fieldInfo } = gameState;
 
-        if (amc <= 0) {
-          return;
-        }
+      if (player.fieldIn) {
+        const f = fieldInfo[player.fieldIn];
+        const amc = Math.min(Math.ceil(player.convertTotal * 3), player.pollen);
+
+        if (amc <= 0) return;
 
         player.pollen -= amc;
 
-        let amountPerToken = Math.ceil(amc / 24);
+        const amountPerToken = Math.ceil(amc / 24);
 
         for (let i = 0; i < 24; i++) {
           objects.tokens.push(
             new LootToken(
               30,
               [
-                fieldInfo[player.fieldIn].x +
-                  ((Math.random() * fieldInfo[player.fieldIn].width) | 0),
-                fieldInfo[player.fieldIn].y + 1,
-                fieldInfo[player.fieldIn].z +
-                  ((Math.random() * fieldInfo[player.fieldIn].length) | 0),
+                f.x + ((Math.random() * f.width) | 0),
+                f.y + 1,
+                f.z + ((Math.random() * f.length) | 0),
               ],
               "honey",
               amountPerToken,
@@ -3512,9 +3337,8 @@ export const effects = {
       }
     },
 
-    getMessage: (amount) => {
-      return "Coin Scatter\nConverts 300% of the player's convert total into 24 honey tokens, which are scattered randomly in the field. Cooldown: 45s";
-    },
+    getMessage: () =>
+      "Coin Scatter\nConverts 300% of the player's convert total into 24 honey tokens, which are scattered randomly in the field. Cooldown: 45s",
   },
 
   diamondDrainPassive: {
@@ -3526,51 +3350,46 @@ export const effects = {
     currentCooldown: 0,
     startVal: 0,
 
-    activate() {
+    activate(gameState) {
+      const { player, objects, fieldInfo } = gameState;
+
       if (player.fieldIn) {
+        const f = fieldInfo[player.fieldIn];
         objects.mobs.push(new DrainingDiamond());
 
         for (let i = 0; i < 15; i++) {
-          updateFlower(
-            player.fieldIn,
-            (Math.random() * fieldInfo[player.fieldIn].width) | 0,
-            (Math.random() * fieldInfo[player.fieldIn].length) | 0,
-            function (f) {
-              if (f.level < 5) {
-                f.level++;
-                f.pollinationTimer = 1;
-              } else {
-                f.height = 1;
-              }
+          const x = (Math.random() * f.width) | 0;
+          const z = (Math.random() * f.length) | 0;
 
-              for (let j = 0; j < 6; j++) {
-                ParticleRenderer.add({
-                  x: f.x + fieldInfo[player.fieldIn].x,
-                  y: fieldInfo[player.fieldIn].y + 0.5,
-                  z: f.z + fieldInfo[player.fieldIn].z,
-                  vx: MATH.random(-1, 1),
-                  vy: Math.random() * 2,
-                  vz: MATH.random(-1, 1),
-                  grav: -3,
-                  size: 100,
-                  col: [1, 1, MATH.random(0.6, 1)],
-                  life: 2.5,
-                  rotVel: MATH.random(-3, 3),
-                  alpha: 2,
-                });
-              }
-            },
-            true,
-            false,
-            true,
-          );
+          // CHQ: TODO — old per-cell pollination bump via updateFlower.
+          // Needs a real FieldManager method (e.g.
+          // fieldManager.pollinateFlower(field, x, z)) since the
+          // per-flower `.level`/`.pollinationTimer` model doesn't exist
+          // in the current flat flowers[fieldId] array yet.
+          gameState.fieldManager?.pollinateFlower?.(player.fieldIn, x, z);
+
+          for (let j = 0; j < 6; j++) {
+            ParticleRenderer.add({
+              x: x + f.x,
+              y: f.y + 0.5,
+              z: z + f.z,
+              vx: MATH.random(-1, 1),
+              vy: Math.random() * 2,
+              vz: MATH.random(-1, 1),
+              grav: -3,
+              size: 100,
+              col: [1, 1, MATH.random(0.6, 1)],
+              life: 2.5,
+              rotVel: MATH.random(-3, 3),
+              alpha: 2,
+            });
+          }
         }
       }
     },
 
-    getMessage: (amount) => {
-      return "Diamond Drain\nEvery 35th blue ability token summons a diamond that converts your convert total of pollen into honey. Honey converted is multiplied by 2x, and the diamond pollinates 15 flowers in the field. Cooldown: 35s";
-    },
+    getMessage: () =>
+      "Diamond Drain\nEvery 35th blue ability token summons a diamond that converts your convert total of pollen into honey. Honey converted is multiplied by 2x, and the diamond pollinates 15 flowers in the field. Cooldown: 35s",
   },
 
   gummyMorphPassive: {
@@ -3582,26 +3401,20 @@ export const effects = {
     currentCooldown: 0,
     startVal: 0,
 
-    activate() {
+    activate(gameState) {
+      const { player } = gameState;
       player.addEffect("gummyMorph");
 
       if (player.fieldIn) {
-        let func = function (f) {
-          f.goo = 1;
-          f.height = 1;
-        };
-
-        for (let i in flowers[player.fieldIn]) {
-          for (let j in flowers[player.fieldIn][i]) {
-            updateFlower(player.fieldIn, j, i, func, true, true, false);
-          }
-        }
+        // CHQ: TODO — replaces the old flowers[fieldIn] full-grid
+        // updateFlower walk. Needs a FieldManager method, e.g.
+        // fieldManager.gooifyAllFlowers(fieldId), see conversion notes.
+        gameState.fieldManager?.gooifyAllFlowers?.(player.fieldIn);
       }
     },
 
-    getMessage: (amount) => {
-      return "Gummy Morph\nEvery 10 gummy bee tokens or 30 gumdrops used covers the field in goo and grants x1.75 goo, 100% instant goo conversion, +30 walkspeed and +3 jump power for 10s. Cooldown: 25s";
-    },
+    getMessage: () =>
+      "Gummy Morph\nEvery 10 gummy bee tokens or 30 gumdrops used covers the field in goo and grants x1.75 goo, 100% instant goo conversion, +30 walkspeed and +3 jump power for 10s. Cooldown: 25s",
   },
 
   redPulse: {
@@ -3613,7 +3426,8 @@ export const effects = {
     v: (128 * 6) / 2048,
     tokenLife: 12,
 
-    func: function (params) {
+    func: function (params, gameState) {
+      const { player, objects } = gameState;
       objects.mobs.push(new Pulse("red"));
 
       if (player.ownsCobaltBee) {
@@ -3631,7 +3445,8 @@ export const effects = {
     v: (128 * 6) / 2048,
     tokenLife: 12,
 
-    func: function (params) {
+    func: function (params, gameState) {
+      const { player, objects } = gameState;
       objects.mobs.push(new Pulse("blue"));
 
       if (player.ownsCrimsonBee) {
@@ -3655,9 +3470,8 @@ export const effects = {
       player.redBombSync = true;
     },
 
-    getMessage: (amount) => {
-      return "Red Bomb Sync\nAllows red bombs to collect from white flowers. If blue bomb sync is active, applies to blue flowers aswell.";
-    },
+    getMessage: () =>
+      "Red Bomb Sync\nAllows red bombs to collect from white flowers. If blue bomb sync is active, applies to blue flowers aswell.",
   },
 
   blueBombSync: {
@@ -3675,9 +3489,8 @@ export const effects = {
       player.blueBombSync = true;
     },
 
-    getMessage: (amount) => {
-      return "Blue Bomb Sync\nAllows blue bombs to collect from white flowers. If red bomb sync is active, applies to red flowers aswell.";
-    },
+    getMessage: () =>
+      "Blue Bomb Sync\nAllows blue bombs to collect from white flowers. If red bomb sync is active, applies to red flowers aswell.",
   },
 
   beamStorm: {
@@ -3689,7 +3502,9 @@ export const effects = {
     v: (128 * 6) / 2048,
     tokenLife: 12,
 
-    func: function (params) {
+    func: function (params, gameState) {
+      const { player, objects } = gameState;
+
       if (player.fieldIn) {
         player.beamStormRayData = [];
 
@@ -3709,19 +3524,17 @@ export const effects = {
     v: (128 * 6) / 2048,
     tokenLife: 24,
 
-    func: function (params) {
+    func: function (params, gameState) {
+      const { player, objects, fieldInfo } = gameState;
+
       player.addEffect("whiteBoost");
 
       let f = Math.random() < 0.25 && player.fieldIn ? player.fieldIn : 0;
 
       if (!f) {
-        f = [];
-
-        for (let i in fieldInfo) {
-          f.push(i);
-        }
-
-        f = f[(Math.random() * f.length) | 0];
+        const keys = [];
+        for (const i in fieldInfo) keys.push(i);
+        f = keys[(Math.random() * keys.length) | 0];
       }
 
       objects.mobs.push(
@@ -3748,7 +3561,8 @@ export const effects = {
     v: (128 * 6) / 2048,
     tokenLife: 24,
 
-    func: function (params) {
+    func: function (params, gameState) {
+      const { player, objects } = gameState;
       player.addEffect("whiteBoost");
 
       if (player.fieldIn) {
@@ -3770,16 +3584,13 @@ export const effects = {
       player.whitePollen *= player.cloudBoostAmount;
     },
 
-    getMessage: (amount) => {
-      return (
-        "Cloud Boost\nx" +
-        player.cloudBoostAmount +
-        "  pollen" +
-        (player.cloudBoostAmount > 1.25
-          ? "(you have gifted windy bee, so x1.25, not x1.15)"
-          : "")
-      );
-    },
+    getMessage: (amount, player) =>
+      "Cloud Boost\nx" +
+      player.cloudBoostAmount +
+      "  pollen" +
+      (player.cloudBoostAmount > 1.25
+        ? "(you have gifted windy bee, so x1.25, not x1.15)"
+        : ""),
   },
 
   scratch: {
@@ -3791,7 +3602,8 @@ export const effects = {
     v: (128 * 7) / 2048,
     tokenLife: 12,
 
-    func: function (params) {
+    func: function (params, gameState) {
+      const { player, objects } = gameState;
       if (player.fieldIn) {
         objects.mobs.push(new Scratch(params.bee, params.x, params.z));
       }
@@ -3813,17 +3625,14 @@ export const effects = {
       player.tabbyLoveStacks = amount * 0.04 + 1;
     },
 
-    getMessage: (amount) => {
-      return (
-        "Tabby Love\nx" +
-        player.tabbyLoveStacks +
-        " Tabby Bee convert rate\nx" +
-        player.tabbyLoveStacks +
-        " Tabby Bee gather amount\nx" +
-        player.tabbyLoveStacks +
-        ' pollen from "Scratch"'
-      );
-    },
+    getMessage: (amount, player) =>
+      "Tabby Love\nx" +
+      player.tabbyLoveStacks +
+      " Tabby Bee convert rate\nx" +
+      player.tabbyLoveStacks +
+      " Tabby Bee gather amount\nx" +
+      player.tabbyLoveStacks +
+      ' pollen from "Scratch"',
   },
 
   impale: {
@@ -3835,7 +3644,8 @@ export const effects = {
     v: (128 * 9) / 2048,
     tokenLife: 24,
 
-    func: function (params) {
+    func: function (params, gameState) {
+      const { objects } = gameState;
       for (let i = 0; i < params.bee.level; i++) {
         window.setTimeout(function () {
           objects.mobs.push(new Spike(params.bee));
@@ -3851,27 +3661,22 @@ export const effects = {
     maxCooldown: 60 * 60 * 6,
     tokenLife: 4,
     amountFromCooldown: true,
-
     update: (amount, player) => {
       player.whiteConvertRate *= (amount * 0.9 + 1.1).toFixed(2);
       player.bluePollen *= (amount * 0.45 + 1.05).toFixed(2);
       player.convertRateAtHive *= (amount * 0.9 + 1.1).toFixed(2);
       player.honeyPerPollen *= (amount * 0.04 + 1.01).toFixed(2);
     },
-
-    getMessage: (amount) => {
-      return (
-        "Comforting Nectar\nx" +
-        (amount * 0.9 + 1.1).toFixed(2) +
-        " white bee convert rate\nx" +
-        (amount * 0.45 + 1.05).toFixed(2) +
-        " blue pollen\nx" +
-        (amount * 0.9 + 1.1).toFixed(2) +
-        " convert rate at hive\nx" +
-        (amount * 0.04 + 1.01).toFixed(2) +
-        " honey per pollen"
-      );
-    },
+    getMessage: (amount) =>
+      "Comforting Nectar\nx" +
+      (amount * 0.9 + 1.1).toFixed(2) +
+      " white bee convert rate\nx" +
+      (amount * 0.45 + 1.05).toFixed(2) +
+      " blue pollen\nx" +
+      (amount * 0.9 + 1.1).toFixed(2) +
+      " convert rate at hive\nx" +
+      (amount * 0.04 + 1.01).toFixed(2) +
+      " honey per pollen",
   },
 
   invigoratingNectar: {
@@ -3881,27 +3686,22 @@ export const effects = {
     maxCooldown: 60 * 60 * 6,
     tokenLife: 4,
     amountFromCooldown: true,
-
     update: (amount, player) => {
       player.convertRate *= (amount * 0.45 + 1.05).toFixed(2);
       player.redPollen *= (amount * 0.45 + 1.05).toFixed(2);
       player.convertRateAtHive *= (amount * 0.09 + 1.01).toFixed(2);
       player.honeyPerPollen *= (amount * 0.04 + 1.01).toFixed(2);
     },
-
-    getMessage: (amount) => {
-      return (
-        "Invigorating Nectar\nx" +
-        (amount * 0.45 + 1.05).toFixed(2) +
-        " convert rate\nx" +
-        (amount * 0.45 + 1.05).toFixed(2) +
-        " red pollen\nx" +
-        (amount * 0.09 + 1.01).toFixed(2) +
-        " bee attack\nx" +
-        (amount * 0.04 + 1.01).toFixed(2) +
-        " honey per pollen"
-      );
-    },
+    getMessage: (amount) =>
+      "Invigorating Nectar\nx" +
+      (amount * 0.45 + 1.05).toFixed(2) +
+      " convert rate\nx" +
+      (amount * 0.45 + 1.05).toFixed(2) +
+      " red pollen\nx" +
+      (amount * 0.09 + 1.01).toFixed(2) +
+      " bee attack\nx" +
+      (amount * 0.04 + 1.01).toFixed(2) +
+      " honey per pollen",
   },
 
   motivatingNectar: {
@@ -3911,7 +3711,6 @@ export const effects = {
     maxCooldown: 60 * 60 * 6,
     tokenLife: 4,
     amountFromCooldown: true,
-
     update: (amount, player) => {
       player.convertRate *= (amount * 0.45 + 1.05).toFixed(2);
       player.bluePollen *= (amount * 0.45 + 1.05).toFixed(2);
@@ -3920,20 +3719,16 @@ export const effects = {
       player.blueBeeAbilityRate *= (amount * 0.04 + 1.01).toFixed(2);
       player.honeyPerPollen *= (amount * 0.04 + 1.01).toFixed(2);
     },
-
-    getMessage: (amount) => {
-      return (
-        "Motivating Nectar\nx" +
-        (amount * 0.45 + 1.05).toFixed(2) +
-        " convert rate\nx" +
-        (amount * 0.45 + 1.05).toFixed(2) +
-        " blue pollen\nx" +
-        (amount * 0.04 + 1.01).toFixed(2) +
-        " bee ability rate\nx" +
-        (amount * 0.04 + 1.01).toFixed(2) +
-        " honey per pollen"
-      );
-    },
+    getMessage: (amount) =>
+      "Motivating Nectar\nx" +
+      (amount * 0.45 + 1.05).toFixed(2) +
+      " convert rate\nx" +
+      (amount * 0.45 + 1.05).toFixed(2) +
+      " blue pollen\nx" +
+      (amount * 0.04 + 1.01).toFixed(2) +
+      " bee ability rate\nx" +
+      (amount * 0.04 + 1.01).toFixed(2) +
+      " honey per pollen",
   },
 
   refreshingNectar: {
@@ -3943,27 +3738,22 @@ export const effects = {
     maxCooldown: 60 * 60 * 6,
     tokenLife: 4,
     amountFromCooldown: true,
-
     update: (amount, player) => {
       player.blueConvertRate *= (amount * 0.9 + 1.1).toFixed(2);
       player.redPollen *= (amount * 0.45 + 1.05).toFixed(2);
       player.beeEnergy *= (amount * 0.45 + 1.05).toFixed(2);
       player.honeyPerPollen *= (amount * 0.04 + 1.01).toFixed(2);
     },
-
-    getMessage: (amount) => {
-      return (
-        "Refreshing Nectar\nx" +
-        (amount * 0.9 + 1.1).toFixed(2) +
-        " blue bee convert rate\nx" +
-        (amount * 0.45 + 1.05).toFixed(2) +
-        " red pollen\nx" +
-        (amount * 0.45 + 1.05).toFixed(2) +
-        " bee energy\nx" +
-        (amount * 0.04 + 1.01).toFixed(2) +
-        " honey per pollen"
-      );
-    },
+    getMessage: (amount) =>
+      "Refreshing Nectar\nx" +
+      (amount * 0.9 + 1.1).toFixed(2) +
+      " blue bee convert rate\nx" +
+      (amount * 0.45 + 1.05).toFixed(2) +
+      " red pollen\nx" +
+      (amount * 0.45 + 1.05).toFixed(2) +
+      " bee energy\nx" +
+      (amount * 0.04 + 1.01).toFixed(2) +
+      " honey per pollen",
   },
 
   satisfyingNectar: {
@@ -3973,27 +3763,22 @@ export const effects = {
     maxCooldown: 60 * 60 * 6,
     tokenLife: 4,
     amountFromCooldown: true,
-
     update: (amount, player) => {
       player.redConvertRate *= (amount * 0.9 + 1.1).toFixed(2);
       player.whitePollen *= (amount * 0.9 + 1.1).toFixed(2);
       player.honeyAtHive *= (amount * 0.45 + 1.05).toFixed(2);
       player.honeyPerPollen *= (amount * 0.04 + 1.01).toFixed(2);
     },
-
-    getMessage: (amount) => {
-      return (
-        "Satisfying Nectar\nx" +
-        (amount * 0.9 + 1.1).toFixed(2) +
-        " red bee convert rate\nx" +
-        (amount * 0.9 + 1.1).toFixed(2) +
-        " white pollen\nx" +
-        (amount * 0.45 + 1.05).toFixed(2) +
-        " honey at hive\nx" +
-        (amount * 0.04 + 1.01).toFixed(2) +
-        " honey per pollen"
-      );
-    },
+    getMessage: (amount) =>
+      "Satisfying Nectar\nx" +
+      (amount * 0.9 + 1.1).toFixed(2) +
+      " red bee convert rate\nx" +
+      (amount * 0.9 + 1.1).toFixed(2) +
+      " white pollen\nx" +
+      (amount * 0.45 + 1.05).toFixed(2) +
+      " honey at hive\nx" +
+      (amount * 0.04 + 1.01).toFixed(2) +
+      " honey per pollen",
   },
 
   corruption: {
@@ -4007,13 +3792,10 @@ export const effects = {
       player.abilityDuplicationChance += amount * 0.001 + 0.05;
     },
 
-    getMessage: (amount) => {
-      return (
-        "Corruption\n+" +
-        ((amount * 0.1 + 5) | 0) +
-        "% ability duplication chance"
-      );
-    },
+    getMessage: (amount) =>
+      "Corruption\n+" +
+      ((amount * 0.1 + 5) | 0) +
+      "% ability duplication chance",
   },
 
   glitch: {
@@ -4024,20 +3806,17 @@ export const effects = {
     v: (128 * 9) / 2048,
     tokenLife: 8,
 
-    func: function (params) {
-      fieldInfo[params.field].corruption = Math.min(
-        fieldInfo[params.field].corruption +
+    func: function (params, gameState) {
+      const { player, objects, fieldInfo } = gameState;
+      const f = fieldInfo[params.field];
+
+      f.corruption = Math.min(
+        f.corruption +
           15 +
           params.bee.level * 0.5 +
-          (((fieldInfo[params.field].generalColorComp.r *
-            player.extraInfo.drives.red) /
-            50 +
-            (fieldInfo[params.field].generalColorComp.w *
-              player.extraInfo.drives.white) /
-              50 +
-            (fieldInfo[params.field].generalColorComp.b *
-              player.extraInfo.drives.blue) /
-              50 +
+          (((f.generalColorComp.r * player.extraInfo.drives.red) / 50 +
+            (f.generalColorComp.w * player.extraInfo.drives.white) / 50 +
+            (f.generalColorComp.b * player.extraInfo.drives.blue) / 50 +
             player.extraInfo.drives.glitched / 50) *
             15) /
             4,
@@ -4056,16 +3835,14 @@ export const effects = {
     v: (128 * 10) / 2048,
     tokenLife: 16,
 
-    func: function (params) {
-      let m = [];
+    func: function (params, gameState) {
+      const { player } = gameState;
+      const m = [];
 
-      for (let i in player.attacked) {
-        m.push(player.attacked[i]);
-      }
+      for (const i in player.attacked) m.push(player.attacked[i]);
 
       for (let i = 0; i < 3 + params.bee.level * 0.25 && m.length; i++) {
-        let r = (Math.random() * m.length) | 0;
-
+        const r = (Math.random() * m.length) | 0;
         m[r].mindHacked = 3 + params.bee.level * 0.1;
         m.splice(r, 1);
       }
@@ -4080,27 +3857,23 @@ export const effects = {
     v: (128 * 10) / 2048,
     tokenLife: 8,
 
-    func: function (params) {
-      let f = [];
+    func: function (params, gameState) {
+      const { player, objects, fieldInfo } = gameState;
+      const keys = [];
 
-      for (let i in fieldInfo) {
-        f.push(i);
-      }
+      for (const i in fieldInfo) keys.push(i);
+      keys.splice(keys.indexOf(params.field), 1);
 
-      f.splice(f.indexOf(params.field), 1);
+      const f = keys[(Math.random() * keys.length) | 0];
+      const target = fieldInfo[f];
 
-      f = f[(Math.random() * f.length) | 0];
-
-      fieldInfo[f].corruption = Math.min(
-        fieldInfo[f].corruption +
+      target.corruption = Math.min(
+        target.corruption +
           30 +
           params.bee.level * 2 +
-          (((fieldInfo[f].generalColorComp.r * player.extraInfo.drives.red) /
-            50 +
-            (fieldInfo[f].generalColorComp.w * player.extraInfo.drives.white) /
-              50 +
-            (fieldInfo[f].generalColorComp.b * player.extraInfo.drives.blue) /
-              50 +
+          (((target.generalColorComp.r * player.extraInfo.drives.red) / 50 +
+            (target.generalColorComp.w * player.extraInfo.drives.white) / 50 +
+            (target.generalColorComp.b * player.extraInfo.drives.blue) / 50 +
             player.extraInfo.drives.glitched / 50) *
             15) /
             4,
@@ -4123,10 +3896,11 @@ export const effects = {
     v: (128 * 10) / 2048,
     tokenLife: 12,
 
-    func: function (params) {
+    func: function (params, gameState) {
+      const { objects, fieldInfo } = gameState;
       let tokensCollected = 0;
 
-      for (let i in objects.tokens) {
+      for (const i in objects.tokens) {
         if (objects.tokens[i] instanceof DupedToken) {
           objects.tokens[i].collect();
           tokensCollected++;
@@ -4134,53 +3908,54 @@ export const effects = {
       }
 
       if (params.field) {
-        fieldInfo[params.field].corruption = Math.min(
-          fieldInfo[params.field].corruption + 3,
-          100,
-        );
+        const f = fieldInfo[params.field];
+        f.corruption = Math.min(f.corruption + 3, 100);
 
-        collectPollen({
-          x: params.x,
-          z: params.z,
-          pattern: [
-            [-4, 0],
-            [-4, 1],
-            [-4, 2],
-            [-3, 3],
-            [-2, 4],
-            [-1, 4],
-            [0, 4],
-            [1, 4],
-            [2, 4],
-            [3, 3],
-            [4, 2],
-            [4, 1],
-            [4, 0],
-            [4, -1],
-            [4, -2],
-            [3, -3],
-            [2, -4],
-            [1, -4],
-            [0, -4],
-            [-1, -4],
-            [-2, -4],
-            [-3, -3],
-            [-4, -2],
-            [-4, -1],
-            [-1, -1],
-            [1, -1],
-            [2, 1],
-            [1, 2],
-            [0, 2],
-            [-1, 2],
-            [-2, 1],
-          ],
-          amount: params.bee.gatherAmount * 3,
-          stackOffset: 0.4 + Math.random() * 0.5,
-          multiplier: tokensCollected * 0.25 + 1,
-          instantConversion: 0.5,
-          field: params.field,
-        });
+        collectPollen(
+          {
+            x: params.x,
+            z: params.z,
+            pattern: [
+              [-4, 0],
+              [-4, 1],
+              [-4, 2],
+              [-3, 3],
+              [-2, 4],
+              [-1, 4],
+              [0, 4],
+              [1, 4],
+              [2, 4],
+              [3, 3],
+              [4, 2],
+              [4, 1],
+              [4, 0],
+              [4, -1],
+              [4, -2],
+              [3, -3],
+              [2, -4],
+              [1, -4],
+              [0, -4],
+              [-1, -4],
+              [-2, -4],
+              [-3, -3],
+              [-4, -2],
+              [-4, -1],
+              [-1, -1],
+              [1, -1],
+              [2, 1],
+              [1, 2],
+              [0, 2],
+              [-1, 2],
+              [-2, 1],
+            ],
+            amount: params.bee.gatherAmount * 3,
+            stackOffset: 0.4 + Math.random() * 0.5,
+            multiplier: tokensCollected * 0.25 + 1,
+            instantConversion: 0.5,
+            field: params.field,
+          },
+          gameState,
+        );
 
         objects.mobs.push(new GlitchEffect(params.field, 2));
       }
@@ -4193,16 +3968,11 @@ export const effects = {
     maxCooldown: 60,
     maxAmount: 3,
     tokenLife: 16,
-
     update: (amount, player) => {
       player.redPollen *= 0.075 * amount + 1.1;
     },
-
-    getMessage: (amount) => {
-      return (
-        "Red Jelly Bean\nx" + (0.075 * amount + 1.1).toFixed(2) + " red pollen"
-      );
-    },
+    getMessage: (amount) =>
+      "Red Jelly Bean\nx" + (0.075 * amount + 1.1).toFixed(2) + " red pollen",
   },
 
   whiteJellyBean: {
@@ -4211,18 +3981,13 @@ export const effects = {
     maxCooldown: 60,
     maxAmount: 3,
     tokenLife: 16,
-
     update: (amount, player) => {
       player.whitePollen *= 0.075 * amount + 1.1;
     },
-
-    getMessage: (amount) => {
-      return (
-        "White Jelly Bean\nx" +
-        (0.075 * amount + 1.1).toFixed(2) +
-        " white pollen"
-      );
-    },
+    getMessage: (amount) =>
+      "White Jelly Bean\nx" +
+      (0.075 * amount + 1.1).toFixed(2) +
+      " white pollen",
   },
 
   blueJellyBean: {
@@ -4231,18 +3996,11 @@ export const effects = {
     maxCooldown: 60,
     maxAmount: 3,
     tokenLife: 16,
-
     update: (amount, player) => {
       player.bluePollen *= 0.075 * amount + 1.1;
     },
-
-    getMessage: (amount) => {
-      return (
-        "Blue Jelly Bean\nx" +
-        (0.075 * amount + 1.1).toFixed(2) +
-        " blue pollen"
-      );
-    },
+    getMessage: (amount) =>
+      "Blue Jelly Bean\nx" + (0.075 * amount + 1.1).toFixed(2) + " blue pollen",
   },
 
   pinkJellyBean: {
@@ -4251,18 +4009,13 @@ export const effects = {
     maxCooldown: 60,
     maxAmount: 3,
     tokenLife: 16,
-
     update: (amount, player) => {
       player.pollenFromBees *= 0.075 * amount + 1.1;
     },
-
-    getMessage: (amount) => {
-      return (
-        "Pink Jelly Bean\nx" +
-        (0.075 * amount + 1.1).toFixed(2) +
-        " pollen from bees"
-      );
-    },
+    getMessage: (amount) =>
+      "Pink Jelly Bean\nx" +
+      (0.075 * amount + 1.1).toFixed(2) +
+      " pollen from bees",
   },
 
   brownJellyBean: {
@@ -4271,18 +4024,13 @@ export const effects = {
     maxCooldown: 60,
     maxAmount: 3,
     tokenLife: 16,
-
     update: (amount, player) => {
       player.pollenFromTools *= 0.075 * amount + 1.1;
     },
-
-    getMessage: (amount) => {
-      return (
-        "Brown Jelly Bean\nx" +
-        (0.075 * amount + 1.1).toFixed(2) +
-        " pollen from tools"
-      );
-    },
+    getMessage: (amount) =>
+      "Brown Jelly Bean\nx" +
+      (0.075 * amount + 1.1).toFixed(2) +
+      " pollen from tools",
   },
 
   greenJellyBean: {
@@ -4291,14 +4039,11 @@ export const effects = {
     maxCooldown: 60,
     maxAmount: 3,
     tokenLife: 16,
-
     update: (amount, player) => {
       player.criticalChance += 0.01 * amount + 0.03;
     },
-
-    getMessage: (amount) => {
-      return "Green Jelly Bean\n+" + (amount + 3) + "% critical chance";
-    },
+    getMessage: (amount) =>
+      "Green Jelly Bean\n+" + (amount + 3) + "% critical chance",
   },
 
   blackJellyBean: {
@@ -4307,20 +4052,15 @@ export const effects = {
     maxCooldown: 60,
     maxAmount: 3,
     tokenLife: 16,
-
     update: (amount, player) => {
       player.whiteBombPollen *= 0.075 * amount + 1.1;
       player.redBombPollen *= 0.075 * amount + 1.1;
       player.blueBombPollen *= 0.075 * amount + 1.1;
     },
-
-    getMessage: (amount) => {
-      return (
-        "Black Jelly Bean\nx" +
-        (0.075 * amount + 1.1).toFixed(2) +
-        " bomb pollen"
-      );
-    },
+    getMessage: (amount) =>
+      "Black Jelly Bean\nx" +
+      (0.075 * amount + 1.1).toFixed(2) +
+      " bomb pollen",
   },
 
   yellowJellyBean: {
@@ -4329,7 +4069,6 @@ export const effects = {
     maxCooldown: 60,
     maxAmount: 3,
     tokenLife: 16,
-
     update: (amount, player) => {
       player.instantWhiteConversion = MATH.applyPercentage(
         player.instantWhiteConversion,
@@ -4344,12 +4083,8 @@ export const effects = {
         0.05 * amount + 0.1,
       );
     },
-
-    getMessage: (amount) => {
-      return (
-        "Yellow Jelly Bean\n+" + (5 * amount + 10) + "% instant conversion"
-      );
-    },
+    getMessage: (amount) =>
+      "Yellow Jelly Bean\n+" + (5 * amount + 10) + "% instant conversion",
   },
 
   roboChallengeBuff: {
@@ -4369,16 +4104,13 @@ export const effects = {
     maxCooldown: 1.5 * 60,
     tokenLife: 4,
     maxAmount: 1,
-
     update: (amount, player) => {
       player.redPollen *= 1.25;
       player.redFieldCapacity *= 1.25;
       player.redBeeAttack++;
     },
-
-    getMessage: (amount) => {
-      return "Red Drive\nx1.25 red pollen\nx1.25 red field capacity\n+1 red bee attack";
-    },
+    getMessage: () =>
+      "Red Drive\nx1.25 red pollen\nx1.25 red field capacity\n+1 red bee attack",
   },
 
   blueDriveBuff: {
@@ -4387,16 +4119,13 @@ export const effects = {
     maxCooldown: 1.5 * 60,
     tokenLife: 4,
     maxAmount: 1,
-
     update: (amount, player) => {
       player.bluePollen *= 1.25;
       player.blueFieldCapacity *= 1.25;
       player.blueBeeAttack++;
     },
-
-    getMessage: (amount) => {
-      return "Blue Drive\nx1.25 blue pollen\nx1.25 blue field capacity\n+1 blue bee attack";
-    },
+    getMessage: () =>
+      "Blue Drive\nx1.25 blue pollen\nx1.25 blue field capacity\n+1 blue bee attack",
   },
 
   whiteDriveBuff: {
@@ -4405,16 +4134,13 @@ export const effects = {
     maxCooldown: 1.5 * 60,
     tokenLife: 4,
     maxAmount: 1,
-
     update: (amount, player) => {
       player.whitePollen *= 1.25;
       player.whiteFieldCapacity *= 1.25;
       player.whiteBeeAttack++;
     },
-
-    getMessage: (amount) => {
-      return "White Drive\nx1.25 white pollen\nx1.25 white field capacity\n+1 white bee attack";
-    },
+    getMessage: () =>
+      "White Drive\nx1.25 white pollen\nx1.25 white field capacity\n+1 white bee attack",
   },
 
   glitchedDriveBuff: {
@@ -4423,7 +4149,6 @@ export const effects = {
     maxCooldown: 1.5 * 60,
     tokenLife: 4,
     maxAmount: 1,
-
     update: (amount, player) => {
       player.redPollen *= 1.25;
       player.bluePollen *= 1.25;
@@ -4433,10 +4158,8 @@ export const effects = {
       player.blueBeeAttack++;
       player.redBeeAttack++;
     },
-
-    getMessage: (amount) => {
-      return "Glitched Drive\nx1.25 pollen\nx1.25 capacity\n+1 bee attack";
-    },
+    getMessage: () =>
+      "Glitched Drive\nx1.25 pollen\nx1.25 capacity\n+1 bee attack",
   },
 
   antChallenge: {
@@ -4445,16 +4168,12 @@ export const effects = {
     maxCooldown: 5 * 60,
     tokenLife: 4,
     maxAmount: 1,
-
     update: (amount, player) => {
       player.instantRedConversion = 1;
       player.instantWhiteConversion = 1;
       player.instantBlueConversion = 1;
     },
-
-    getMessage: (amount) => {
-      return "Ant Challenge\n+100% instant conversion";
-    },
+    getMessage: () => "Ant Challenge\n+100% instant conversion",
   },
 
   bearMorph: {
@@ -4462,7 +4181,6 @@ export const effects = {
     v: 0,
     maxCooldown: 30,
     maxAmount: 1,
-
     update: (amount, player) => {
       player.redPollen *= 1.25;
       player.bluePollen *= 1.25;
@@ -4470,10 +4188,8 @@ export const effects = {
       player.walkSpeed *= 1.1;
       player.jumpPower *= 1.2;
     },
-
-    getMessage: (amount) => {
-      return "Bear Morph\nx1.25 pollen\nx1.1 walkspeed\nx1.2 jump power";
-    },
+    getMessage: () =>
+      "Bear Morph\nx1.25 pollen\nx1.1 walkspeed\nx1.2 jump power",
   },
 
   bearMorph_: {
@@ -4481,7 +4197,6 @@ export const effects = {
     v: 0,
     maxCooldown: 30,
     maxAmount: 1,
-
     update: (amount, player) => {
       player.redPollen *= 1.25;
       player.bluePollen *= 1.25;
@@ -4492,10 +4207,8 @@ export const effects = {
       player.walkSpeed *= 1.1;
       player.jumpPower *= 1.2;
     },
-
-    getMessage: (amount) => {
-      return "Bear Morph+\nx1.25 pollen\nx1.5 convert rate\nx1.25 pollen from bees\nx1.25 pollen from tools\nx1.1 walkspeed\nx1.2 jump power";
-    },
+    getMessage: () =>
+      "Bear Morph+\nx1.25 pollen\nx1.5 convert rate\nx1.25 pollen from bees\nx1.25 pollen from tools\nx1.1 walkspeed\nx1.2 jump power",
   },
 
   bearMorphToken: {
@@ -4506,7 +4219,8 @@ export const effects = {
     v: (128 * 13) / 2048,
     tokenLife: 16,
 
-    func: function (params) {
+    func: function (params, gameState) {
+      const { player } = gameState;
       if (Math.random() < 0.2 + params.bee.level * 0.01) {
         player.addEffect("bearMorph_");
       } else {
@@ -4523,14 +4237,15 @@ export const effects = {
     v: (128 * 13) / 2048,
     tokenLife: 8,
 
-    func: function (params) {
-      let f = fieldInfo[params.field],
-        ball = new FetchBall(
-          [f.x + params.x, f.y + 1, f.z + params.z],
-          params.bee,
-        );
-      objects.mobs.push(ball);
+    func: function (params, gameState) {
+      const { objects, fieldInfo } = gameState;
+      const f = fieldInfo[params.field];
+      const ball = new FetchBall(
+        [f.x + params.x, f.y + 1, f.z + params.z],
+        params.bee,
+      );
 
+      objects.mobs.push(ball);
       params.bee.fetchBall = ball;
     },
   },
@@ -4543,15 +4258,14 @@ export const effects = {
     v: (128 * 13) / 2048,
     tokenLife: 8,
 
-    func: function (params) {
+    func: function (params, gameState) {
+      const { player, objects, fieldInfo, textRenderer } = gameState;
+      const f = fieldInfo[params.field];
+
       objects.explosions.push(
         new Explosion({
           col: [1, 1, 1],
-          pos: [
-            fieldInfo[params.field].x + params.x,
-            fieldInfo[params.field].y + 0.5,
-            fieldInfo[params.field].z + params.z,
-          ],
+          pos: [f.x + params.x, f.y + 0.5, f.z + params.z],
           life: 0.5,
           size: 6,
           speed: 0.25,
@@ -4559,17 +4273,17 @@ export const effects = {
         }),
       );
 
-      for (let y in player.hive) {
-        for (let x in player.hive[y]) {
+      for (const y in player.hive) {
+        for (const x in player.hive[y]) {
           if (player.hive[y][x].type) {
-            let bond = 75 + params.bee.level * 20,
-              beePee = player.hive[y][x].bee.pos.slice();
+            const bond = 75 + params.bee.level * 20;
+            const beePos = player.hive[y][x].bee.pos.slice();
 
             player.hive[y][x].bond += bond;
 
-            gameState.textRenderer.add(
+            textRenderer.add(
               bond + "",
-              [beePee[0], beePee[1] + 1, beePee[2]],
+              [beePos[0], beePos[1] + 1, beePos[2]],
               COLORS.bondArr,
               0,
               "+",
@@ -4603,9 +4317,8 @@ export const effects = {
       );
     },
 
-    getMessage: (amount) => {
-      return "Festive Cheer\n+100% instant conversion\nx2 convert rate";
-    },
+    getMessage: () =>
+      "Festive Cheer\n+100% instant conversion\nx2 convert rate",
   },
 
   festiveGifts: {
@@ -4616,15 +4329,17 @@ export const effects = {
     v: (128 * 13) / 2048,
     tokenLife: 8,
 
-    func: function (params) {
+    func: function (params, gameState) {
+      const { player, objects, fieldInfo } = gameState;
+
       player.addEffect("festiveCheer");
       player.addMessage(
         "🎁 Festive Bee created festive gifts! 🎁",
         COLORS.redArr,
       );
 
-      let amountOfTokens = (7 + params.bee.level * 0.25) | 0,
-        radius = amountOfTokens * 0.2 + 1.75;
+      const amountOfTokens = (7 + params.bee.level * 0.25) | 0;
+      const radius = amountOfTokens * 0.2 + 1.75;
 
       let dropTable = [
         "redBoost",
@@ -4666,16 +4381,17 @@ export const effects = {
         ];
       }
 
-      let x = fieldInfo[params.field].x + params.x,
-        y = fieldInfo[params.field].y + 1,
-        z = fieldInfo[params.field].z + params.z;
+      const f = fieldInfo[params.field];
+      const x = f.x + params.x;
+      const y = f.y + 1;
+      const z = f.z + params.z;
 
       for (
         let i = 0, inc = MATH.TWO_PI / amountOfTokens;
         i < MATH.TWO_PI;
         i += inc
       ) {
-        let ty = dropTable[(Math.random() * dropTable.length) | 0];
+        const ty = dropTable[(Math.random() * dropTable.length) | 0];
 
         if (ty === "redBoost") {
           objects.tokens.push(
@@ -4700,7 +4416,12 @@ export const effects = {
                     2500
                 : 1,
               true,
-              MATH.doGrammar(this.type),
+              MATH.doGrammar(params.bee.type),
+              // CHQ: original used `this.type` here, which pointed at
+              // `undefined` inside a plain function expression (no bound
+              // `this`) — almost certainly a pre-existing bug. Left as
+              // `params.bee.type` (the bee that triggered the gift),
+              // which is what the label is presumably meant to show.
             ),
           );
         }
