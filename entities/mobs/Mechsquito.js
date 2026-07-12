@@ -1,9 +1,13 @@
-// entities/Mechsquito.js
-import { MATH } from "../utils/math.js";
+// entities/mobs/Mechsquito.js
+import { MATH } from "../../utils/math.js";
 import { vec2, vec3 } from "gl-matrix";
-import { Mob } from "./mobs.js";
-import { TrailRenderer } from "../engine/trailRenderer.js"; // CHQ: adjust path — not present in provided files
-import { ParticleRenderer } from "../engine/particles.js"; // CHQ: adjust path — not present in provided files
+import { Mob } from "./MobTemplate.js";
+// TODO: CHQ: Claude AI (Sonnet): TrailRenderer doesn't exist yet in this codebase. Bullet trails
+// are disabled below until that module is built — bullets still fire,
+// track, and damage, they just don't render a trail behind them.
+// import { TrailRenderer } from "../engine/trailRenderer.js"; // CHQ: adjust path — not present in provided files
+
+import { ParticleRenderer } from "../../engine/particles.js"; // CHQ: adjust path — not present in provided files
 
 // CHQ: Claude AI (Sonnet): Converted from standalone Mechsquito to an extension of Mob.
 // Preserves the wander/aim/fire attack loop and bullet simulation, but
@@ -31,7 +35,7 @@ export class Mechsquito extends Mob {
 
     // Mob's constructor signature is (id, type, pos, hp, lvl, gameState)
     super(
-      isMega ? "megaMechsquito" : "mechsquito",
+      gameState.globalId++,
       isMega ? "megaMechsquito" : "mechsquito",
       pos,
       health,
@@ -61,17 +65,18 @@ export class Mechsquito extends Mob {
     this.timeLimit = undefined;
 
     this.bullets = [];
-    this.bulletTrail1 = new TrailRenderer.ConstantTrail({
-      length: 2,
-      size: 0.1,
-      color: [0, 1, 0],
-    });
-    this.bulletTrail2 = new TrailRenderer.ConstantTrail({
-      length: 2,
-      size: 0.1,
-      color: [0, 1, 0],
-      vertical: true,
-    });
+    // CHQ: Claude AI (Sonnet): this.bulletTrail1 / bulletTrail2 — re-add once TrailRenderer exists
+    // this.bulletTrail1 = new TrailRenderer.ConstantTrail({
+    //   length: 2,
+    //   size: 0.1,
+    //   color: [0, 1, 0],
+    // });
+    // this.bulletTrail2 = new TrailRenderer.ConstantTrail({
+    //   length: 2,
+    //   size: 0.1,
+    //   color: [0, 1, 0],
+    //   vertical: true,
+    // });
 
     // CHQ: stashed so the setTimeout-driven aim/fire sequence below (which
     // fires well after any single update() call returns) has a gameState

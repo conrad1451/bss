@@ -1,8 +1,8 @@
-// entities/Cogmower.js
-import { MATH } from "../utils/math.js";
+// entities/mobs/Cogmower.js
+import { MATH } from "../../utils/math.js";
 import { vec2 } from "gl-matrix";
-import { Mob } from "./mobs.js";
-import { collectPollen } from "../engine/flowers.js"; // CHQ: adjust path — not present in provided files
+import { Mob } from "./MobTemplate.js";
+import { collectPollen } from "../../engine/collectPollen.js";
 
 // CHQ: Claude AI (Sonnet): Converted from standalone Cogmower to an extension of Mob.
 // NOTE: despite obvious copy-paste lineage from Mechsquito (identical
@@ -33,7 +33,7 @@ export class Cogmower extends Mob {
 
     // Mob's constructor signature is (id, type, pos, hp, lvl, gameState)
     super(
-      isGold ? "goldenCogmower" : "cogmower",
+      gameState.globalId++,
       isGold ? "goldenCogmower" : "cogmower",
       pos,
       health,
@@ -202,24 +202,27 @@ export class Cogmower extends Mob {
 
             this.damageTimer = 0.5;
 
-            collectPollen({
-              x: Math.round(this.pos[0] - fieldInfo[this.field].x),
-              z: Math.round(this.pos[2] - fieldInfo[this.field].z),
-              field: this.field,
-              pattern: [
-                [0, 0],
-                [1, 1],
-                [1, -1],
-                [-1, 1],
-                [-1, -1],
-                [1, 0],
-                [-1, 0],
-                [0, 1],
-                [0, -1],
-              ],
-              amount: 30 + this.level,
-              multiplier: 0.00000000001,
-            });
+            collectPollen(
+              {
+                x: Math.round(this.pos[0] - fieldInfo[this.field].x),
+                z: Math.round(this.pos[2] - fieldInfo[this.field].z),
+                field: this.field,
+                pattern: [
+                  [0, 0],
+                  [1, 1],
+                  [1, -1],
+                  [-1, 1],
+                  [-1, -1],
+                  [1, 0],
+                  [-1, 0],
+                  [0, 1],
+                  [0, -1],
+                ],
+                amount: 30 + this.level,
+                multiplier: 0.00000000001,
+              },
+              gameState,
+            );
           }
 
           this.pos[3] = TIME * 7;

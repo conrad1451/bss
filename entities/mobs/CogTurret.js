@@ -1,7 +1,8 @@
-// entities/CogTurret.js
-import { MATH } from "../utils/math.js";
-import { Mob } from "./mobs.js";
-import { Token } from "./tokens.js";
+// entities/mobs/CogTurret.js
+import { MATH } from "../../utils/math.js";
+import { Mob } from "./MobTemplate.js";
+import { Token } from "../tokens.js";
+import { collectPollen } from "../../engine/collectPollen.js";
 
 // CHQ: Claude AI (Sonnet): Converted from legacy CogTurret to extend the refactored Mob base class.
 // Key differences from a normal Mob:
@@ -20,7 +21,7 @@ export class CogTurret extends Mob {
    * @param {number} side - Which edge of the field the turret sits on (0-3).
    * @param {Object} gameState - Live game state; must have gameState.fieldInfo populated.
    */
-  constructor(id, field, level, side, gameState) {
+  constructor(gameState, field, level, side) {
     const fieldInfo = gameState.fieldInfo[field];
     const { pos, constraintAxis, constraintRange } = CogTurret.computeSpawn(
       fieldInfo,
@@ -31,7 +32,14 @@ export class CogTurret extends Mob {
 
     // Mob's constructor signature: (id, type, pos, hp, lvl, gameState)
     // pos here is [x, y, z] only — rotation is tracked separately as this.facing
-    super(id, "cogTurret", [pos[0], pos[1], pos[2]], health, level, gameState);
+    super(
+      gameState.globalId++,
+      "cogTurret",
+      [pos[0], pos[1], pos[2]],
+      health,
+      level,
+      gameState,
+    );
 
     this.field = field;
     this.side = side;
@@ -283,16 +291,17 @@ export class CogTurret extends Mob {
 
       if (s._fx !== s.fx || s._fz !== s.fz) {
         // collectPollen is assumed available in engine scope (as in the original)
-        if (typeof collectPollen === "function") {
-          collectPollen({
+        collectPollen(
+          {
             x: s.fx,
             z: s.fz,
             field: this.field,
             pattern: [[0, 0]],
             amount: 1000,
             multiplier: 0.00000000001,
-          });
-        }
+          },
+          gameState,
+        );
       }
 
       s._fx = s.fx;
