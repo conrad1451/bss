@@ -1,6 +1,6 @@
 // data/items.js
 import { MATH } from "../utils/math.js";
-import { beeInfo } from "./data/bees.js";
+import { beeInfo } from "./bees.js";
 
 export const items = {
   //   translator: {
@@ -19,13 +19,13 @@ export const items = {
   //     use: function () {},
   //   },
 
-  //   cog: {
-  //     amount: 0,
-  //     u: (128 * 0) / 2048,
-  //     v: (128 * 0) / 2048,
-  //     value: Infinity,
-  //     use: function () {},
-  //   },
+  cog: {
+    amount: 0,
+    u: (128 * 0) / 2048,
+    v: (128 * 0) / 2048,
+    value: Infinity,
+    use: function () {},
+  },
 
   jellyBeans: {
     amount: 0,
