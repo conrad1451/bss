@@ -4,6 +4,11 @@
 
 import { EventManager } from "./eventManager.js";
 import { MATH } from "../utils/math.js";
+import { Mechsquito } from "../entities/mobs/Mechsquito.js";
+import { Cogmower } from "../entities/mobs/CogMower.js";
+import { CogTurret } from "../entities/mobs/CogTurret.js";
+
+const MOB_CLASSES = { Mechsquito, Cogmower, CogTurret };
 
 // engine/RoboChallengeManager.js
 
@@ -159,10 +164,11 @@ export class RoboChallengeManager {
 
   // ---- lifecycle -------------------------------------------------
 
-  start(player, items, upgrades) {
+  start(gameState, player, items, upgrades) {
     this.isActive = true;
     this.isPlaying = true;
     this.timer = 1.5 * 60;
+    this.gameState = gameState;
 
     this._applyRoundBuff(player, upgrades);
     this._refreshHiveActiveBees(player);
@@ -202,6 +208,7 @@ export class RoboChallengeManager {
   update(dt, gameState) {
     if (!this.isActive || !this.isPlaying) return;
 
+    this.gameState = gameState;
     this.timer -= dt;
     if (this.timer <= 0) {
       this.end(gameState.player, gameState.items);
@@ -259,11 +266,9 @@ export class RoboChallengeManager {
    *   param is gated behind `round > 5` (matches the quest-mob spawn path
    *   in the original, which is stricter than the interval/field-mob paths).
    */
-  _spawnRandomMob(fieldId, ctx, options = {}) {
-    const { MATH, objects, mobClasses } = ctx;
+  _spawnRandomMob(fieldId, options = {}) {
     const className = this._pickMobClass();
-    const MobClass = mobClasses[className];
-
+    const MobClass = MOB_CLASSES[className];
     const level = (this.round * MATH.random(0.5, 0.6) + 1) | 0;
 
     let flagOrTier;
@@ -275,11 +280,12 @@ export class RoboChallengeManager {
       flagOrTier = Math.random() < 0.8;
     }
 
-    objects.mobs.push(new MobClass(fieldId, level, flagOrTier));
+    this.gameState.objects.mobs.push(
+      new MobClass(this.gameState, fieldId, level, flagOrTier),
+    );
   }
-  _spawnQuestMobs(ctx) {
-    const { MATH, fieldInfo } = ctx;
-
+  _spawnQuestMobs() {
+    const fieldInfo = this.gameState.fieldInfo;
     for (const q of this.quest) {
       const isFromQuest = q[0].indexOf("From") > -1;
       const count = isFromQuest ? MATH.random(0, 3) | 0 : MATH.random(1, 4) | 0;
@@ -289,18 +295,18 @@ export class RoboChallengeManager {
           ? q[0].replace("pollenFrom", "")
           : this._pickRandomField(fieldInfo);
 
-        this._spawnRandomMob(fieldId, ctx, { gateFlagByRound: isFromQuest });
+        this._spawnRandomMob(fieldId, { gateFlagByRound: isFromQuest });
       }
     }
   }
 
   /* single owner of setInterval */
-  _startMobSpawnInterval(ctx) {
-    const { fieldInfo } = ctx;
+  _startMobSpawnInterval() {
+    const fieldInfo = this.gameState.fieldInfo;
     this._mobSpawnIntervalID = window.setInterval(() => {
       if (Math.random() < 0.5) return;
 
-      let fieldId = ctx.currentFieldIn; // mirrors out.fieldIn
+      let fieldId = this.gameState.player.fieldIn;
       if (!fieldId) {
         if (Math.random() < 0.8) return;
         fieldId = this._pickRandomField(fieldInfo);
@@ -328,7 +334,7 @@ export class RoboChallengeManager {
    *   ("honey" is included as a pseudo-item key, handled specially by
    *   _grantRewards).
    */
-  _rollEndRewards(MATH) {
+  _rollEndRewards() {
     const round = this.round;
     const rewards = [];
 
@@ -361,7 +367,7 @@ export class RoboChallengeManager {
    * Applies rolled rewards to player/items and emits a message per item,
    * matching the original loop's honey-vs-item branching and addMessage calls.
    */
-  _grantRewards(player, items, rewards, MATH) {
+  _grantRewards(player, items, rewards) {
     for (const [itemKey, amount] of rewards) {
       if (itemKey === "honey") {
         player.honey += amount;
@@ -417,7 +423,7 @@ export class RoboChallengeManager {
    * Replaces the five duplicated switch-case bodies in endRoboChallenge.js
    * with one data-driven pass over AMULET_TIER_CONFIG.
    */
-  _generateAmulet(tier, MATH) {
+  _generateAmulet(tier) {
     const cfg = AMULET_TIER_CONFIG[tier];
     if (!cfg) return [];
 
