@@ -23,6 +23,11 @@ import { FieldManager } from "./engine/FieldManager.js";
 import { EnvManager } from "./engine/EnvManager.js";
 import { FIELD_CONFIGS } from "./data/fieldData.js";
 
+import { collectStatsForPlayer } from "./engine/effectsRegistry.js";
+// import { attachEffectHoverListeners } from "./ui/effectsHud.js";
+// import { EFFECTS_CONFIG } from "./data/effectsConfig.js"; // wherever this now lives
+import { effectsConfig } from "./data/effects.js";
+
 import { RoboChallengeManager } from "./engine/RoboChallengeManager.js";
 
 import { Player } from "./entities/Player.js";
@@ -129,6 +134,9 @@ function main() {
   injectAbilityUI(uiWrapper); // CHQ: Gemini AI added this
 
   // initMainMenu(BeeSwarmSimulator);
+
+  // gameState.statKeys = collectStatsForPlayer(EFFECTS_CONFIG);
+  gameState.statKeys = collectStatsForPlayer(effectsConfig);
 
   // 2. Use a microtask or a timeout to defer the initialization
   // This pushes initMainMenu to the back of the browser's "to-do" list
