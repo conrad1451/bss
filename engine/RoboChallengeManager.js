@@ -10,8 +10,6 @@ import { CogTurret } from "../entities/mobs/CogTurret.js";
 
 const MOB_CLASSES = { Mechsquito, Cogmower, CogTurret };
 
-// engine/RoboChallengeManager.js
-
 // Tier configs extracted from the bronze/silver/gold/diamond/supreme
 // switch cases in the original endRoboChallenge.js. Each entry holds
 // the min/max ranges for that tier so the generator logic only has
