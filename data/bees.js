@@ -2,7 +2,7 @@
 // import { MATH } from "./utils/math.js";
 import { MATH } from "../utils/math.js";
 // import { ParticleRenderer } from "./engine/particles.js";
-import { ParticleRenderer } from "../engine/particles.js"; // ✅
+import { ParticleRenderer } from "../engine/particles.js"; // CHQ: Claude (AI): import ParticleRenderer
 
 // import {objects, player } from
 
