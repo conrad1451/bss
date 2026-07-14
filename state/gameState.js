@@ -2,6 +2,9 @@
 
 import { TRIGGER_ZONES } from "../data/triggers.js";
 import { DEV_TRIGGER_ZONES } from "../data/devTriggers.js";
+
+import { items as itemDefs } from "../data/items.js"; // CHQ: Claude AI (Sonnet) added
+
 // CHQ: Gemini AI refactored file
 // CHQ: Claude AI (Sonnet) provided JSDocs
 
@@ -79,6 +82,24 @@ export function getPollenMultiplier(gameState, type) {
   const base = gameState.player[`${type}Pollen`] || 1;
   const boost = gameState.player.fieldBoosts[type] || 0;
   return base + boost;
+}
+
+// CHQ: Claude AI (Sonnet) created function
+/**
+ * Builds a fresh, per-instance items map from the shared item definitions,
+ * so mutating `amount` on one game instance's items never leaks into
+ * another instance sharing the same imported module.
+ *
+ * @param {Object} defs - Item definitions from data/items.js (shared, read-only).
+ * @param {Object} [savedAmounts] - Optional saved amount map, keyed by item id.
+ * @returns {Object} Per-instance items map.
+ */
+function buildItemsState(defs, savedAmounts = {}) {
+  const out = {};
+  for (const key in defs) {
+    out[key] = { ...defs[key], amount: savedAmounts[key] || 0 };
+  }
+  return out;
 }
 
 /**
@@ -282,7 +303,7 @@ export function createInitialState(saveData = {}) {
 
     statsTick: false, // CHQ: me
 
-    items: {},
+    items: buildItemsState(itemDefs, data.items), // CHQ: Claude AI (Sonnet) added
     pages: [],
   };
 }
