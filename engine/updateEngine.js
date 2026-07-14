@@ -95,6 +95,7 @@ export function updateEngine(gameState, dt) {
   gameState.fieldManager.update(dt, gameState);
   gameState.envManager.update(dt, gameState);
   ParticleRenderer.update(dt); // CHQ: Claude AI: advance/expire GPU-rendered particles (embers, bubble pops, etc.)
+  gameState.roboChallengeManager.update(dt, gameState);
 
   // 3. Entity AI: Bees
   for (let bee of objects.bees) {
