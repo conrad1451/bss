@@ -1,5 +1,6 @@
 // engine/flowerBuilder.js
-import { noise } from "./noise.js"; // If you extract the noise function
+// import { noise, noiseSeed } from "../utils/noise.js";
+import { noise } from "../utils/noise.js";
 import { MATH } from "../utils/math.js";
 
 const TEX_SIZE = 256 / 1024;
