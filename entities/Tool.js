@@ -103,15 +103,15 @@ export class Tool {
       }
     }
 
-    // TODO: call gameState.collectPollen (or import the collectPollen helper)
-    // once that function has been converted to the gameState pattern.
-    // Expected signature:
-    //   collectPollen({
-    //     x: player.flowerIn.x,
-    //     z: player.flowerIn.z,
-    //     pattern: this.collectPattern,
-    //     amount: this.collectAmount,
-    //   }, gameState);
+    collectPollen(
+      {
+        x: player.flowerIn.x,
+        z: player.flowerIn.z,
+        pattern: this.collectPattern,
+        amount: this.collectAmount,
+      },
+      gameState,
+    );
   }
 
   /**
