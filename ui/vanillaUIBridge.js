@@ -1,6 +1,8 @@
 // ui/vanillaUIBridge.js
 import { EventManager } from "../engine/eventManager.js";
 import { updateQuestUI } from "./questRenderer.js";
+import { COLORS } from "../data/colors.js";
+import { upgrades as UPGRADE_DEFS } from "../data/upgrades.js";
 
 // Cache your DOM references ONCE at boot, rather than querying every single frame!
 const pollenEl = document.getElementById("pollenAmount");
@@ -12,6 +14,58 @@ const questPage = document.getElementById("questPage");
 // NEW: Cache a container element where your active buff icons live in the DOM
 const buffsContainer = document.getElementById("activeBuffsContainer");
 
+let activeGameState = null;
+
+import { upgrades as UPGRADE_DEFS } from "../data/upgrades.js";
+
+/**
+ * Renders one upgrade stat token (e.g. "*1.25 pollenFromBees",
+ * "-20% criticalPower") as a colored HTML line: green for buffs,
+ * red for debuffs. Mirrors the color logic from the legacy
+ * updateRoboUI upgrade-choice renderer in stubbedOldIndex.js.
+ */
+function renderStatLine(token) {
+  const spaceIdx = token.indexOf(" ");
+  const numPart = token.substring(1, spaceIdx).replace("%", "");
+  const isDebuff = token[0] === "-" || Number(numPart) < 1;
+  const color = isDebuff ? "rgb(255,50,50)" : "rgb(60,255,60)";
+  return `<div style="color:${color}">${token}</div>`;
+}
+
+// CHQ: Claude AI (Sonnet) modified
+EventManager.on("ROBO_UPGRADE_CHOICES", ({ choices, costs }) => {
+  const choiceContainer = document.getElementById("roboUpgradeChoices");
+  if (!choiceContainer) return;
+  choiceContainer.innerHTML = "";
+
+  choices.forEach((name, index) => {
+    const def = UPGRADE_DEFS[name];
+    if (!def) return; // defensive: shouldn't happen, but a bad name shouldn't crash the whole render
+
+    const cost = costs[index];
+
+    const card = document.createElement("div");
+    card.style.backgroundColor = COLORS.rarityColor[def.rarity];
+    card.className = "upgrade-card";
+
+    const innerStats = def.stats.split(",").map(renderStatLine).join("");
+
+    card.innerHTML = `
+      &nbsp;${name}&nbsp;&nbsp;&nbsp;
+      <i class="cost-indicator">${cost} Cogs</i>
+      &nbsp;&nbsp;&nbsp;&nbsp;<i>Max Lvl:${def.maxStacks}</i>
+      <div class="stat-overlay">${innerStats}</div>
+    `;
+
+    card.onclick = () => {
+      if (!activeGameState) return;
+      const { roboChallengeManager, items } = activeGameState;
+      roboChallengeManager.buyUpgrade(name, items, UPGRADE_DEFS);
+    };
+
+    choiceContainer.appendChild(card);
+  });
+});
 // Listen for pollen changes
 EventManager.on("POLLEN_CHANGED", (data) => {
   const formattedPollen = Math.floor(data.pollenInBag).toLocaleString();
@@ -111,3 +165,15 @@ EventManager.on("EFFECTS_UPDATED", ({ effects }) => {
     }
   });
 });
+
+EventManager.on("ROBO_HIVE_REFRESHED", () => {
+  const menu = document.getElementById("roboQuestMenu");
+  if (menu) menu.style.display = "block";
+});
+
+// CHQ: Claude AI (Sonnet): Live references handed in from index.js once gameState exists.
+// This module is loaded/evaluated before gameState is built, so it
+// can't import gameState directly — it has to be registered.
+export function registerGameState(gameState) {
+  activeGameState = gameState;
+}

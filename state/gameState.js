@@ -17,6 +17,7 @@ import { items as itemDefs } from "../data/items.js"; // CHQ: Claude AI (Sonnet)
  * @param {string} [gameState.player.id] - Unique player identifier.
  * @param {string} gameState.player.name - Display name of the player.
  * @param {number} gameState.player.honey - Current honey count.
+ * @param {number} gameState.player.hive - Current hive count.
  * @param {number} gameState.player.pollenInBag - Pollen currently held in the bag.
  * @param {number} gameState.player.capacity - Max pollen bag capacity.
  * @param {number} gameState.player.criticalChance - Probability of landing a critical hit.
@@ -43,6 +44,9 @@ export function getSaveSnapshot(gameState) {
     data: {
       name: gameState.player.name,
       honey: gameState.player.honey,
+      hive: gameState.player.hive.map((row) =>
+        row.map((cell) => ({ ...cell })),
+      ),
       pollenInBag: gameState.player.pollenInBag,
       capacity: gameState.player.capacity,
       criticalChance: gameState.player.criticalChance,
@@ -112,6 +116,7 @@ function buildItemsState(defs, savedAmounts = {}) {
  * @param {Object} [saveData.data] - Raw serialised player data fields.
  * @param {string} [saveData.data.name] - Player display name.
  * @param {number} [saveData.data.honey] - Saved honey total.
+ * @param {number} [saveData.data.hive] - Saved hive total.
  * @param {number} [saveData.data.pollenInBag] - Saved pollen-in-bag count.
  * @param {number} [saveData.data.capacity] - Saved bag capacity.
  * @param {number} [saveData.data.criticalChance] - Saved critical hit chance.
@@ -177,6 +182,7 @@ export function createInitialState(saveData = {}) {
       id: saveData.id || "player_1",
       name: data.name || "New Explorer",
       honey: data.honey || 0,
+      hive: data.hive || [[]],
       pollenInBag: data.pollenInBag || 0,
       capacity: data.capacity || 100,
 

@@ -14,6 +14,7 @@ import { SHADERS } from "./engine/shaders.js";
 
 import { initMainMenu, setupUserInterfaceListeners } from "./ui/menu.js";
 import { updateQuestUI } from "./ui/questRenderer.js";
+import { registerGameState } from "./ui/vanillaUIBridge.js";
 
 import { initInputHandlers } from "./utils/input.js";
 
@@ -175,6 +176,7 @@ async function BeeSwarmSimulator(saveData) {
   gameState.fieldManager = fieldManager;
   gameState.envManager = envManager;
   gameState.roboChallengeManager = roboChallengeManager;
+  registerGameState(gameState);
 
   gameState.player = new Player(gameState.player);
 

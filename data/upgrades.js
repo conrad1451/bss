@@ -1,3 +1,5 @@
+// data/upgrades.js
+
 export const upgrades = {
   Botnet: {
     stats: "*1.25 pollenFromBees",
