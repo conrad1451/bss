@@ -18,14 +18,18 @@
 import { MATH } from "../utils/math.js";
 import { TOOL_DATA } from "../data/toolData.js";
 
+import { collectPollen } from "../engine/collectPollen.js";
+
 // TODO: import converted entity classes as they become available:
 // import { Flame }             from "./mobs/Flame.js";
 // import { Bubble }            from "./mobs/Bubble.js";
 // import { Scratch }           from "./mobs/Scratch.js";
 // import { PetalShuriken }     from "./mobs/PetalShuriken.js";
-// import { Wave }              from "./mobs/Wave.js";
-// import { DarkScoopingTrail } from "./mobs/DarkScoopingTrail.js";
+import { Wave } from "./projectiles/Wave.js";
+import { DarkScoopingTrail } from "./projectiles/DarkScoopingTrail.js";
 // import { ReverseExplosion }  from "./mobs/ReverseExplosion.js";
+import { ParticleRenderer } from "../engine/particles.js";
+import { vec3 } from "gl-matrix";
 
 // ---------------------------------------------------------------------------
 // Tool class
