@@ -1,3 +1,5 @@
+// state/wordStats.js
+
 export const stats = {
   moonAmulets: 0,
   puffshrooms: 0,
