@@ -1177,8 +1177,10 @@ const TOOL_ABILITIES = {
       }),
     );
 
+    // CHQ: causes PorceleainDipper to collect twice per swing: Once
+    //      from the normal per-swing harvest, and a second time from
+    //      from the ability's explicit burst
     if (player.fieldIn) {
-      // TODO: import / route collectPollen through gameState
       collectPollen(
         {
           x: player.flowerIn.x,
