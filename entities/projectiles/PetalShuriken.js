@@ -80,13 +80,13 @@ export class PetalShuriken extends Projectile {
       const convertRateKey = `${beeInfo[bee.type].color}ConvertRate`;
       const amountToConvert = Math.ceil(
         Math.min(
-          player.pollen,
+          player.pollenInBag,
           10000 + bee.convertAmount * 7.5 * player[convertRateKey],
         ),
       );
 
       if (amountToConvert) {
-        player.pollen -= amountToConvert;
+        player.pollenInBag -= amountToConvert;
         const honeyGained = Math.ceil(amountToConvert * player.honeyPerPollen);
         player.honey += honeyGained;
 

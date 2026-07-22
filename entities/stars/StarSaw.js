@@ -130,11 +130,11 @@ class StarSaw {
             stackHeight: 0.5,
             instantConversion: 1,
           }),
-          player.pollen,
+          player.pollenInBag,
         );
 
       if (a) {
-        player.pollen -= a;
+        player.pollenInBag -= a;
         player.honey += Math.ceil(a * player.honeyPerPollen);
       }
     }

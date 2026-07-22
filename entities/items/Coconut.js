@@ -65,7 +65,9 @@ class Coconut {
         multiplier: player.pollenFromCoconuts,
       });
 
-      let hpt = Math.ceil(Math.min(player.convertTotal, player.pollen) / 5);
+      let hpt = Math.ceil(
+        Math.min(player.convertTotal, player.pollenInBag) / 5,
+      );
 
       if (
         vec3.sqrDist(this.pos, [
@@ -77,8 +79,8 @@ class Coconut {
         player.stats.fallingCoconuts++;
 
         if (hpt) {
-          player.pollen -= Math.ceil(
-            Math.min(player.convertTotal, player.pollen),
+          player.pollenInBag -= Math.ceil(
+            Math.min(player.convertTotal, player.pollenInBag),
           );
 
           for (let i = 0; i < MATH.TWO_PI; i += MATH.TWO_PI / 5) {

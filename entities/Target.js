@@ -48,10 +48,10 @@ class Target {
             player.convertRate *
             player[beeInfo[this.bee.type].color + "ConvertRate"] *
             (player.flameHeatStack * 10),
-        player.pollen,
+        player.pollenInBag,
       );
 
-      player.pollen -= amountToConvert;
+      player.pollenInBag -= amountToConvert;
 
       if (player.extraInfo.enablePollenText)
         textRenderer.add(

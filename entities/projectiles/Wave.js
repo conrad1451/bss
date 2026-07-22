@@ -119,12 +119,12 @@ export class Wave extends Projectile {
       const convertRateKey = `${beeInfo[bee.type].color}ConvertRate`;
       const amountToConvert = Math.ceil(
         Math.min(
-          player.pollen,
+          player.pollenInBag,
           10000 + bee.convertAmount * 10 * player[convertRateKey],
         ),
       );
 
-      player.pollen -= amountToConvert;
+      player.pollenInBag -= amountToConvert;
       const honeyGained = Math.ceil(amountToConvert * player.honeyPerPollen);
       player.honey += honeyGained;
 

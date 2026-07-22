@@ -12,10 +12,10 @@ class DrainingDiamond {
   }
 
   die(index) {
-    let am = Math.ceil(Math.min(player.convertTotal, player.pollen));
+    let am = Math.ceil(Math.min(player.convertTotal, player.pollenInBag));
 
     player.honey += Math.ceil(am * 2 * player.honeyPerPollen);
-    player.pollen -= am;
+    player.pollenInBag -= am;
 
     player.addMessage(
       "+" +

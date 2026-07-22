@@ -540,7 +540,7 @@ export class Bee {
     gameState,
     { player, objects, fieldInfo, instanceData },
   ) {
-    if (player.fieldIn && player.pollen < player.capacity) {
+    if (player.fieldIn && player.pollenInBag < player.capacity) {
       if (fieldInfo[player.fieldIn].planter) {
         const p = fieldInfo[player.fieldIn].planter;
 
@@ -586,7 +586,7 @@ export class Bee {
 
     this._pushInstanceData(instanceData, BEE_FLY);
 
-    if (player.converting && player.pollen) {
+    if (player.converting && player.pollenInBag) {
       this.state = "moveToHiveToConvert";
     } else if (player.convertingBalloon && player.hiveBalloon.pollen) {
       this.state = "moveToHiveToConvertBalloon";
@@ -667,7 +667,7 @@ export class Bee {
 
   // The two convert-hive states share this, distinguished by the `balloon` flag
   _stateMoveToHive(dt, gameState, { player, instanceData }, balloon) {
-    const pollen = balloon ? player.hiveBalloon.pollen : player.pollen;
+    const pollen = balloon ? player.hiveBalloon.pollen : player.pollenInBag;
     const converting = balloon ? player.convertingBalloon : player.converting;
     if (!converting || !pollen) {
       this.state = "moveToPlayer";
@@ -691,7 +691,7 @@ export class Bee {
     const converting = balloon ? player.convertingBalloon : player.converting;
     if (!converting) {
       if (balloon) player.hiveBalloon.pollen += this.pollen;
-      else player.pollen += this.pollen;
+      else player.pollenInBag += this.pollen;
       this.pollen = 0;
       this.state = "moveToPlayer";
       return;

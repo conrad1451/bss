@@ -503,7 +503,7 @@ export const items = {
     value: 16,
     cooldown: 2,
     use: function () {
-      if (player.pollen < 1) {
+      if (player.pollenInBag < 1) {
         player.addMessage(
           "You must have pollen to use a micro-converter!",
           COLORS.redArr,
@@ -514,7 +514,7 @@ export const items = {
       items.microConverter.amount--;
 
       gameState.textRenderer.add(
-        (player.pollen * player.honeyPerPollen) | 0,
+        (player.pollenInBag * player.honeyPerPollen) | 0,
         [
           player.body.position.x,
           player.body.position.y + 2,
@@ -524,8 +524,8 @@ export const items = {
         1,
         "⇆",
       );
-      player.honey += (player.pollen * player.honeyPerPollen) | 0;
-      player.pollen = 0;
+      player.honey += (player.pollenInBag * player.honeyPerPollen) | 0;
+      player.pollenInBag = 0;
     },
   },
 
@@ -537,12 +537,12 @@ export const items = {
     cooldown: 30,
     autoUse: true,
     use: function () {
-      if (player.pollen < player.capacity * 0.9) {
+      if (player.pollenInBag < player.capacity * 0.9) {
         player.addMessage("Your container needs to be full!", COLORS.redArr);
         return;
       }
 
-      let am = Math.min(player.convertTotal * 0.25, player.pollen);
+      let am = Math.min(player.convertTotal * 0.25, player.pollenInBag);
 
       gameState.textRenderer.add(
         (am * player.honeyPerPollen) | 0,
@@ -556,7 +556,7 @@ export const items = {
         "⇆",
       );
       player.honey += (am * player.honeyPerPollen) | 0;
-      player.pollen -= am;
+      player.pollenInBag -= am;
 
       items.honeysuckle.amount--;
     },

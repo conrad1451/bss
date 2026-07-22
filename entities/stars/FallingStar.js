@@ -42,9 +42,12 @@ class FallingStar {
         player.body.position.z,
       ]) <= 6
     ) {
-      let amountToConvert = Math.min(player.convertTotal * 0.1, player.pollen);
+      let amountToConvert = Math.min(
+        player.convertTotal * 0.1,
+        player.pollenInBag,
+      );
 
-      player.pollen -= amountToConvert;
+      player.pollenInBag -= amountToConvert;
 
       if (player.extraInfo.enablePollenText)
         textRenderer.add(

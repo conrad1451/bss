@@ -63,9 +63,9 @@ export class Flame {
 
     const convertCost = Math.min(
       Math.ceil(player.convertTotal * 0.02),
-      player.pollen,
+      player.pollenInBag,
     );
-    player.pollen -= convertCost;
+    player.pollenInBag -= convertCost;
     const honeyGained = Math.ceil(convertCost * player.honeyPerPollen);
     player.honey += honeyGained;
 
@@ -110,9 +110,9 @@ export class Flame {
 
       const convertCost = Math.min(
         Math.ceil(player.convertTotal * 0.02),
-        player.pollen,
+        player.pollenInBag,
       );
-      player.pollen -= convertCost;
+      player.pollenInBag -= convertCost;
       const honeyGained = Math.ceil(convertCost * player.honeyPerPollen);
       player.honey += honeyGained;
 

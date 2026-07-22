@@ -136,10 +136,10 @@ export class Mark {
 
           const amount = Math.min(
             Math.round((convertTotal * 3) / beeCount),
-            player.pollen || 0,
+            player.pollenInBag || 0,
           );
 
-          player.pollen = (player.pollen || 0) - amount;
+          player.pollenInBag = (player.pollenInBag || 0) - amount;
           player.honey =
             (player.honey || 0) + Math.ceil(amount * honeyPerPollen);
 
