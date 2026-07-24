@@ -7,6 +7,7 @@ import { Mesh } from "../Mesh.js";
 
 import { ReverseExplosion } from "../miscEntities/ReverseExplosion.js";
 
+import { DupedToken } from "../miscEntities/DupedToken.js";
 export class Triangulate {
   constructor(bee, tokenPos, gameState) {
     this.gameState = gameState;

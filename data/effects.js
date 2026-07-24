@@ -59,7 +59,7 @@ import { Explosion } from "../entities/fx/Explosion.js";
 import { ReverseExplosion } from "../entities/miscEntities/ReverseExplosion.js";
 import { Token } from "../entities/tokens.js";
 import { LootToken } from "../entities/tokens.js";
-import { DupedToken } from "../entities/tokens.js";
+import { DupedToken } from "../entities/miscEntities/DupedToken.js";
 import { Mark } from "../entities/miscEntities/Mark.js";
 import { Triangulate } from "../entities/beeAbilityProjectiles/Triangulate.js";
 // import { Frog } from "../entities/miscEntities/Frog.js";  // CHQ: must refactor file first

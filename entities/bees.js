@@ -6,6 +6,8 @@ import { beeInfo } from "../data/bees.js";
 
 import { getPositionAheadOfCamera } from "./entityHelpers.js";
 
+import { DupedToken } from "./miscEntities/DupedToken.js";
+
 // CHQ: Claude AI (Sonnet) refactored file
 export class Bee {
   constructor(pos, type, lvl, gifted, x, y, mutation, gameState) {
