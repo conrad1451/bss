@@ -187,6 +187,9 @@ export class TextRenderer {
     this._initStaticBuffers();
   }
 
+  // TODO: CHQ: CLaude (AI):
+  // decalUV atlas offsets - the 0, 128/1024, 256/1024, 384/1024 values are guesses at your decal texture layout. If the HP bars look like wrong icons or garbage, that's the first thing to check.
+  // decal_vertBuffer / decal_indexBuffer - these need to be initialized in textRenderer._initStaticBuffers(). If you haven't confirmed that method actually creates them (it's referenced but the method body wasn't visible during our edits), that's worth checking before expecting decals to draw.
   _initStaticBuffers() {
     const gl = this.gl;
 
