@@ -9,14 +9,10 @@
 import { vec3 } from "gl-matrix";
 import { MATH } from "../../utils/math.js";
 import { ParticleRenderer } from "../../engine/particles.js";
-import { Explosion } from "./Explosion.js";
+import { Explosion } from "../fx/Explosion.js";
 import { collectPollen } from "../../engine/collectPollen.js";
 
-// TODO: LootToken is a separate, richer token type than the Token class in
-// entities/tokens.js (different constructor signature: (life, pos, type,
-// amount, isBoss, label) vs Token's (type, amount, pos, isBossDrop)).
-// Per project owner: implementation exists somewhere else, to be located
-// and wired in later. Left as a bare reference below until then.
+import { LootToken } from "../tokens.js";
 
 export class Bubble {
   /**
@@ -164,14 +160,15 @@ export class Bubble {
 
     if (this.golden && p && Math.random() < 0.25) {
       objects.tokens.push(
-        // eslint-disable-next-line no-undef -- LootToken: see TODO at top of file
         new LootToken(
-          30,
-          [this.pos[0], this.pos[1] + 0.7, this.pos[2]],
-          "honey",
-          Math.ceil(p * 0.5),
-          true,
-          "Gold Bubble",
+          30, // life
+          [this.pos[0], this.pos[1] + 0.7, this.pos[2]], // pos
+          "honey", // type
+          Math.ceil(p * 0.5), // amount
+          true, // canBeLinked
+          "Gold Bubble", // source
+          undefined, // statsToAdd
+          this.gameState, // gameState
         ),
       );
     }
