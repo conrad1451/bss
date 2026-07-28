@@ -128,6 +128,57 @@ export function updateEngine(gameState, dt) {
     }
   }
 
+  // CHQ: Claude AI (Sonnet): Bubbles - field-interactive objects popped by tool swings.
+  // Not adversarial; live in their own array separate from mobs.
+  // Pop logic (and the splice) happens inside Bubble.update when the
+  // player's swing registers a hit; here we only handle natural expiration.
+  if (objects.bubbles) {
+    for (let i = objects.bubbles.length - 1; i >= 0; i--) {
+      const bubble = objects.bubbles[i];
+
+      const expired = bubble.update(dt, gameState);
+
+      if (expired) {
+        bubble.die(i, gameState);
+      }
+    }
+  }
+
+  // CHQ: Claude AI (Sonnet): Flames - environmental field hazards placed by tools or mobs.
+  // Damaging to the player, kept out of objects.mobs
+  // so mob iteration logic never has to skip or special-case them.
+
+  if (objects.flames) {
+    for (let i = objects.flames.length - 1; i >= 0; i--) {
+      const flame = objects.flames[i];
+
+      const expired = flame.update(dt, gameState);
+
+      if (expired || flame.isDead) {
+        flame.die(i, gameState);
+
+        objects.flames.splice(i, 1);
+      }
+    }
+  }
+
+  // Effects - short-lived visual entities with no collision
+  // (ReverseExplosion, Scratch, etc.). Updated for lifetime only.
+
+  if (objects.effects) {
+    for (let i = objects.effects.length - 1; i >= 0; i--) {
+      const effect = objects.effects[i];
+
+      const expired = effect.update(dt, gameState);
+
+      if (expired || effect.isDead) {
+        effect.die(i, gameState);
+
+        objects.effects.splice(i, 1);
+      }
+    }
+  }
+
   // CHQ: Me: player/bee projectiles
 
   // NOTE: unlike the mobs loop above, projectile.die() already splices
@@ -140,6 +191,7 @@ export function updateEngine(gameState, dt) {
       if (isDead || projectile.isDead) {
         projectile.die(i, gameState);
         // no manual splice — Projectile.die() already does it
+        // objects.projectiles.splice(i, 1);
       }
     }
   }

@@ -253,23 +253,59 @@ export function createInitialState(saveData = {}) {
 
     // Transient environment arrays (Cleared/populated during frame execution)
     objects: {
+      // Proximity pickups - drift toward player, collected on contact.
       tokens: [],
+
+      // Bee entities managed by the hive system.
       bees: [],
       tempBees: [],
+
+      // Instanced explosion effects (cylinder + sphere variants).
+      // Populated directly by instanceData.push() in entity update loops.
       explosions: [],
+      cylinder_explosions: [],
+
+      // Environmental field hazards placed by tools or mobs (Flame, FireTrail).
+      // Damaging to the player; kept separate from mobs
+      // so mob iteration never has to skip or special-case them.
       flames: [],
+
+      // Field-interactive objects popped by tool swings (Bubble).
+      // Not adversarial - rewards player on pop. Separate from mobs and tokens.
       bubbles: [],
+
+      // Short-lived visual entities with no collision or AI
+      // (ReverseExplosion, Scratch). Updated for lifetime only.
+      effects: [],
+
+      // Skill marks placed on flowers by bee abilities.
       marks: [],
+
+      // Balloons traveling from field to hive.
       balloons: [],
+
+      // adversarial entities (BugMob, Ant, MondoChick, FireTrail, etc.).
       mobs: [],
-      bears: [], // CHQ: I added so i can see bears on the screen
+
+      // NPC entities (bears, shopkeepers).
+      // CHQ: bears kept separately so renderer can draw them independently.
+      bears: [],
+      npcs: [],
+
+      // Player-launched moving entities (PetalShuriken, Wave, DarkScoopingTrail).
+      // Not adversarial; engine loop owns the splice, same convention as mobs.
+      projectiles: [],
+
       targets: [],
       fuzzBombs: [],
-      projectiles: [],
       trails: [],
     },
     showTheQuests: false,
 
+    // TODO: check if the following is actually a problem:
+    // Gemini AI states "In createInitialState, data.npcProgress is
+    // completely ignored. The game falls back to the hardcoded
+    // starting values every time the loop initializes:"
     npcs: {
       "Brown Bear": { portionsDone: 0 },
       "Polar Bear": { portionsDone: 0 },
